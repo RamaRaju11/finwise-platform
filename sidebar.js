@@ -13,6 +13,13 @@
     'body.fw-sb-page{margin-left:220px!important;padding-top:52px!important}',
     'body.fw-sb-page .hdr{display:none!important}',
 
+    /* convert dark standalone hero sections to a clean light page header */
+    'body.fw-sb-page .hero{background:#fff!important;color:#1e293b!important;padding:18px 24px 14px!important;text-align:left!important;border-bottom:1px solid #e2e8f0!important}',
+    'body.fw-sb-page .hero h1{font-size:1.1rem!important;color:#0f172a!important;font-weight:900!important;background:none!important;-webkit-text-fill-color:unset!important}',
+    'body.fw-sb-page .hero p{color:#64748b!important;font-size:.82rem!important}',
+    'body.fw-sb-page .hero-eyebrow{color:#2563eb!important}',
+    'body.fw-sb-page .hero span.g{color:#4f46e5!important;background:none!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:unset!important}',
+
     /* sidebar */
     '.fw-sidebar{width:220px;background:#0f172a;height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none}',
     '.fw-sidebar::-webkit-scrollbar{display:none}',
