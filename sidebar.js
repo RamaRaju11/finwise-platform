@@ -28,7 +28,7 @@
     'body.fw-sb-page .hero span.g{color:#4f46e5!important;background:none!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:unset!important}',
 
     /* sidebar */
-    '.fw-sidebar{width:220px;background:#0f172a;height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none}',
+    '.fw-sidebar{width:220px;background:#0f172a;height:100vh;position:fixed!important;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none}',
     '.fw-sidebar::-webkit-scrollbar{display:none}',
 
     /* topbar */
