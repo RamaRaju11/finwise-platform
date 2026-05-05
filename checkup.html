@@ -21,7 +21,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* PROGRESS */
 .prog-wrap{background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 24px}
-.steps-row{display:flex;align-items:flex-start;max-width:540px;margin:0 auto}
+.steps-row{display:flex;align-items:flex-start;max-width:700px;margin:0}
 .si{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;position:relative}
 .si:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;width:100%;height:2px;background:#e2e8f0;z-index:0;transition:background .3s}
 .si.done:not(:last-child)::after{background:#2563eb}
@@ -32,7 +32,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .si.active .sl,.si.done .sl{color:#2563eb}
 
 /* MAIN */
-.main{max-width:660px;margin:0 auto;padding:32px 20px 72px}
+.main{max-width:860px;margin:0;padding:28px 24px 72px}
 .screen{display:none;animation:fi .22s ease}
 .screen.active{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
