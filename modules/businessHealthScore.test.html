@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Business Health Score — FinWise</title>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js" defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:14px}}
+h1{font-size:1.45rem;font-weight:800;margin-bottom:4px}
+.subtitle{color:#64748b;font-size:.9rem;margin-bottom:20px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card h2{font-size:.95rem;font-weight:800;margin-bottom:14px;color:#1e293b;display:flex;align-items:center;gap:6px}
+label{display:block;font-size:.82rem;color:#475569;margin-bottom:4px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.9rem;background:#fff;color:#1e293b;outline:none;transition:border .2s}
+input[type=number]:focus{border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+.btn-calc{margin-top:18px;padding:11px 30px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.93rem;cursor:pointer;font-weight:700;transition:background .2s}
+.btn-calc:hover{background:#1d4ed8}
+.field-hint{font-size:.73rem;color:#94a3b8;font-weight:400;margin-left:4px}
+
+/* connections strip */
+.conn-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.conn-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.75rem;font-weight:700;border:1.5px solid}
+.conn-on {background:#f0fdf4;border-color:#86efac;color:#166534}
+.conn-warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.conn-off{background:#f8fafc;border-color:#e2e8f0;color:#94a3b8}
+.conn-dot{width:7px;height:7px;border-radius:50%}
+.cdot-on{background:#22c55e} .cdot-warn{background:#f59e0b} .cdot-off{background:#cbd5e1}
+
+/* grade banner */
+.grade-banner{border-radius:14px;padding:26px;text-align:center;margin-bottom:16px;border:2px solid}
+.grade-A{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac}
+.grade-B{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd}
+.grade-C{background:linear-gradient(135deg,#fffbeb,#fef9c3);border-color:#fde68a}
+.grade-D{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74}
+.grade-F{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5}
+.gb-letter{font-size:4.2rem;font-weight:900;line-height:1}
+.gb-A{color:#16a34a} .gb-B{color:#2563eb} .gb-C{color:#d97706} .gb-D{color:#ea580c} .gb-F{color:#dc2626}
+.gb-score{font-size:1.1rem;font-weight:800;color:#475569;margin-top:5px}
+.gb-label{font-size:.85rem;color:#64748b;margin-top:4px}
+.gb-breakdown{margin-top:12px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.gb-seg{font-size:.75rem;color:#64748b;background:rgba(0,0,0,.04);padding:4px 12px;border-radius:99px}
+
+/* section divider */
+.section-hd{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.section-hd::after{content:'';flex:1;height:1px;background:#e2e8f0}
+
+/* metric cards */
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+@media(max-width:700px){.metrics-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.metrics-grid{grid-template-columns:1fr}}
+.metric-card{border-radius:10px;padding:14px;border:1.5px solid;position:relative}
+.mc-green{background:#f0fdf4;border-color:#86efac}
+.mc-yellow{background:#fffbeb;border-color:#fde68a}
+.mc-red{background:#fef2f2;border-color:#fca5a5}
+.mc-grey{background:#f8fafc;border-color:#e2e8f0}
+.mc-name{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;color:#475569}
+.mc-value{font-size:1.1rem;font-weight:900;margin-bottom:3px}
+.mc-green .mc-value{color:#16a34a} .mc-yellow .mc-value{color:#d97706}
+.mc-red .mc-value{color:#dc2626}   .mc-grey .mc-value{color:#94a3b8}
+.mc-bar-track{background:rgba(0,0,0,.07);border-radius:99px;height:5px;margin-bottom:5px;overflow:hidden}
+.mc-bar-fill{height:100%;border-radius:99px;transition:width .6s}
+.mc-green .mc-bar-fill{background:#16a34a} .mc-yellow .mc-bar-fill{background:#f59e0b}
+.mc-red .mc-bar-fill{background:#dc2626}   .mc-grey .mc-bar-fill{background:#cbd5e1}
+.mc-desc{font-size:.71rem;color:#64748b;line-height:1.4}
+.mc-source{font-size:.64rem;color:#94a3b8;margin-top:5px;font-style:italic}
+.live-chip{position:absolute;top:8px;right:8px;background:#dbeafe;color:#1d4ed8;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em}
+.mc-grey .live-chip{background:#f1f5f9;color:#94a3b8}
+
+/* insight cards */
+.insight-list{display:flex;flex-direction:column;gap:8px}
+.insight{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:9px;border:1.5px solid}
+.insight.good{background:#f0fdf4;border-color:#86efac;color:#166534}
+.insight.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.insight.bad {background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+.insight.info{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+.insight-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.insight-body{flex:1;font-size:.82rem;line-height:1.5}
+.insight-body strong{font-weight:700}
+.insight-link{font-size:.77rem;font-weight:700;text-decoration:none;margin-top:3px;display:inline-block;color:inherit;opacity:.8}
+.insight-link:hover{opacity:1;text-decoration:underline}
+
+/* recs */
+.recs-list{list-style:none;padding:0}
+.recs-list li{padding:9px 12px;margin-bottom:6px;border-radius:7px;font-size:.83rem;line-height:1.5;display:flex;gap:9px;align-items:flex-start}
+.recs-list li.good{background:#f0fdf4;color:#166534}
+.recs-list li.warn{background:#fffbeb;color:#92400e}
+.recs-list li.bad{background:#fef2f2;color:#991b1b}
+
+/* action plan */
+.plan-months{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+@media(max-width:700px){.plan-months{grid-template-columns:1fr}}
+.plan-month{border-radius:10px;padding:16px 18px;border:2px solid #e2e8f0;background:#f8fafc}
+.pm-head{font-size:.67rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:3px}
+.pm-title{font-size:.9rem;font-weight:800;color:#1e293b;margin-bottom:12px}
+.pm-actions{list-style:none;padding:0;margin:0}
+.pm-actions li{font-size:.8rem;line-height:1.5;color:#374151;padding:6px 0;border-bottom:1px solid #e2e8f0;display:flex;gap:7px;align-items:flex-start}
+.pm-actions li:last-child{border-bottom:none}
+.pm-icon{flex-shrink:0;margin-top:1px}
+.pm-actions li strong{color:#1e293b}
+
+/* sparkline */
+.sparkline-wrap{background:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:center;gap:16px}
+.spark-left{flex:1;min-width:0}
+.spark-title{font-size:.75rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+canvas#sparkCanvas{display:block;max-width:100%}
+.spark-months{display:flex;font-size:.63rem;color:#94a3b8;text-align:center;margin-top:3px}
+.spark-months span{flex:1}
+.spark-right{text-align:center;min-width:70px}
+.spark-cur{font-size:2rem;font-weight:900;color:#2563eb;line-height:1}
+.spark-cur-lbl{font-size:.65rem;color:#94a3b8;margin-top:2px}
+
+/* live auto badge */
+.live-auto-badge{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;padding:5px 13px;border-radius:999px;font-size:.75rem;font-weight:700;margin-bottom:12px}
+
+/* share banner */
+.share-banner{display:flex;align-items:center;gap:8px;background:#eff6ff;border:1.5px solid #93c5fd;border-radius:9px;padding:10px 14px;font-size:.8rem;color:#1e40af;margin-top:12px}
+
+/* export btn */
+.export-btn{padding:7px 18px;background:#1e293b;color:#fff;border:none;border-radius:7px;font-size:.82rem;cursor:pointer;font-weight:700}
+.export-btn:hover{background:#0f172a}
+
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+
+/* print */
+@media print{
+  #fwSidebar,.conn-strip,.live-auto-badge,.btn-calc,.export-btn,#actionPlanSection,.share-banner{display:none!important}
+  #mainWrap{margin-left:0!important;padding:8px!important}
+  .card{box-shadow:none!important;border:1px solid #e2e8f0!important;break-inside:avoid}
+  body{background:#fff!important;color:#000!important}
+  #resultsSection{display:block!important}
+  .metrics-grid{grid-template-columns:repeat(3,1fr)!important}
+}
+
+/* dark mode */
+html.dark body{background:#0f172a!important;color:#e2e8f0!important}
+html.dark .card{background:#1e293b!important;border-color:#334155!important}
+html.dark .card h2{color:#cbd5e1!important}
+html.dark h1{color:#f1f5f9!important}
+html.dark .subtitle{color:#94a3b8!important}
+html.dark label{color:#94a3b8!important}
+html.dark input[type=number]{background:#0f172a!important;color:#e2e8f0!important;border-color:#334155!important}
+html.dark .grade-banner{background:#1e293b!important}
+html.dark .metric-card{background:#0f172a!important}
+html.dark .mc-green{border-color:#166534!important;background:#052e16!important}
+html.dark .mc-yellow{border-color:#92400e!important;background:#1c1a0c!important}
+html.dark .mc-red{border-color:#991b1b!important;background:#1a0a0a!important}
+html.dark .mc-grey{border-color:#334155!important;background:#0f172a!important}
+html.dark .plan-month{background:#0f172a!important;border-color:#334155!important}
+html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!important}
+</style>
+</head>
+<body>
+<div id="fwSidebar"></div>
+<div id="mainWrap">
+
+<h1>&#127942; Business Health Score</h1>
+<p class="subtitle">A–F grade across 13 signals — financial ratios + live data from your other tools</p>
+
+<!-- data connections -->
+<div id="connStrip" class="conn-strip"></div>
+
+<!-- live auto-fill badge -->
+<div id="liveAutoBadge" class="live-auto-badge" style="display:none">&#129001; Auto-filled from live modules: <span id="liveAutoSrc"></span></div>
+
+<!-- historical sparkline -->
+<div class="sparkline-wrap" id="sparkWrap" style="display:none">
+  <div class="spark-left">
+    <div class="spark-title">&#128200; Health Score — Last 6 Months</div>
+    <canvas id="sparkCanvas" height="50"></canvas>
+    <div class="spark-months" id="sparkMonths"></div>
+  </div>
+  <div class="spark-right">
+    <div class="spark-cur" id="sparkCurScore">—</div>
+    <div class="spark-cur-lbl">Current Score</div>
+  </div>
+</div>
+
+<!-- inputs -->
+<div class="card">
+  <h2>&#128196; Your Business Numbers</h2>
+  <p style="font-size:.78rem;color:#64748b;margin-bottom:4px">These pre-fill from your profile. Adjust if needed, then click Calculate.</p>
+  <div class="input-grid">
+    <div><label>Monthly Revenue ($)</label><input type="number" id="rev" placeholder="e.g. 22000"/></div>
+    <div><label>Monthly Expenses ($) <span class="field-hint">excluding debt payments</span></label><input type="number" id="exp" placeholder="e.g. 14500"/></div>
+    <div><label>Monthly Debt Payments / EMI ($)</label><input type="number" id="emi" placeholder="e.g. 1500"/></div>
+    <div><label>Cash Reserve ($) <span class="field-hint">money in the bank right now</span></label><input type="number" id="reserve" placeholder="e.g. 32000"/></div>
+    <div><label>Total Business Assets ($) <span class="field-hint">equipment, inventory, receivables</span></label><input type="number" id="assets" placeholder="e.g. 80000"/></div>
+    <div><label>Total Business Liabilities ($) <span class="field-hint">all outstanding loans</span></label><input type="number" id="liabilities" placeholder="e.g. 45000"/></div>
+  </div>
+  <button class="btn-calc" onclick="calculate()">&#127942; Generate Health Score →</button>
+</div>
+
+<div style="text-align:right;margin-bottom:8px">
+  <button class="export-btn" onclick="window.print()">&#128229; Export PDF</button>
+</div>
+
+<div id="resultsSection" style="display:none">
+  <div id="gradeBanner" class="grade-banner grade-A"></div>
+  <div id="shareBanner" class="share-banner" style="display:none">&#128279; Health Score saved — visible in <strong>AI CFO Chat</strong> context and <strong>Loan Decision Engine</strong>. Re-run monthly to track progress.</div>
+
+  <!-- core financials -->
+  <div class="section-hd">Core Financial Ratios <span style="font-weight:400;text-transform:none;letter-spacing:0;font-style:italic">(from your numbers above)</span></div>
+  <div class="metrics-grid" id="coreMetricsGrid"></div>
+
+  <!-- live signals -->
+  <div class="section-hd">Live Data Signals <span style="font-weight:400;text-transform:none;letter-spacing:0;font-style:italic">(from connected modules)</span></div>
+  <div class="metrics-grid" id="liveMetricsGrid"></div>
+
+  <!-- specific insights from live data -->
+  <div id="insightsSection"></div>
+
+  <!-- recommendations -->
+  <div class="card" style="margin-top:4px">
+    <h2>&#128161; Recommendations</h2>
+    <ul class="recs-list" id="recsList"></ul>
+  </div>
+
+  <!-- action plan -->
+  <div id="actionPlanSection" style="display:none">
+    <div class="card">
+      <h2 id="actionPlanTitle">90-Day Action Plan</h2>
+      <p style="font-size:.82rem;color:#64748b;margin-bottom:14px" id="actionPlanSub"></p>
+      <div class="plan-months" id="planMonths"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ── Plain-English Explain Helpers ─────────────────────────────── */
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+/* ══════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════ */
+function fmt(n){ return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function fmtR(n,d){ return Number(n||0).toFixed(d===undefined?2:d); }
+function today(){ var d=new Date(); d.setHours(0,0,0,0); return d; }
+function daysDiff(dateStr){ return Math.round((new Date(dateStr)-today())/86400000); }
+
+/* ══════════════════════════════════════════════════════
+   LIVE DATA READERS
+══════════════════════════════════════════════════════ */
+function readLiveData(rev){
+  var ld = {};
+
+  // ── INVOICES ──
+  var invoices = [];
+  try{ invoices = JSON.parse(localStorage.getItem('fw_invoices')||'[]'); }catch(e){}
+  ld.invoicesConnected = invoices.length > 0;
+  if(ld.invoicesConnected){
+    var t0 = today();
+    var outstanding = invoices.filter(function(i){ return i.status !== 'paid'; });
+    var overdue     = outstanding.filter(function(i){ return i.dueDate && new Date(i.dueDate) < t0; });
+    var ovAmt  = overdue.reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
+    var outAmt = outstanding.reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
+    ld.invoiceOverdueAmt  = ovAmt;
+    ld.invoiceOutstandingAmt = outAmt;
+    ld.invoiceOverdueRate = outAmt > 0 ? (ovAmt/outAmt)*100 : 0;
+    ld.invoiceOverdueCount = overdue.length;
+    ld.invoiceTotalCount   = invoices.length;
+    // DSO: days worth of revenue tied up in receivables
+    var dailyRev = (rev||0) / 30;
+    ld.dso = dailyRev > 0 ? outAmt / dailyRev : 0;
+    // Old invoices (>60 days overdue)
+    ld.badDebt = overdue.filter(function(i){ return i.dueDate && -daysDiff(i.dueDate) > 60; });
+  }
+
+  // ── BILLS ──
+  var bills = [];
+  try{ bills = JSON.parse(localStorage.getItem('fw_bills')||'[]'); }catch(e){}
+  ld.billsConnected = bills.length > 0;
+  if(ld.billsConnected){
+    ld.totalMonthlyBills = bills.reduce(function(s,b){ return s+(parseFloat(b.amount)||0); }, 0);
+    ld.billsToRev = rev > 0 ? (ld.totalMonthlyBills / rev) * 100 : 0;
+    var t0b = today();
+    ld.expiringContracts = bills.filter(function(b){
+      if(!b.contractExpiry) return false;
+      var d = daysDiff(b.contractExpiry);
+      return d >= 0 && d <= 60;
+    });
+    ld.billCategories = bills.length;
+  }
+
+  // ── CONTRACTORS ──
+  var contractors = [], cPmts = [];
+  try{ contractors = JSON.parse(localStorage.getItem('fw_contractors')||'[]'); }catch(e){}
+  try{ cPmts = JSON.parse(localStorage.getItem('fw_contractor_payments')||'[]'); }catch(e){}
+  ld.contractorsConnected = contractors.length > 0;
+  if(ld.contractorsConnected){
+    var yr = new Date().getFullYear();
+    var yrPmts = cPmts.filter(function(p){ return parseInt(p.year||0) === yr; });
+    var totByC = {};
+    yrPmts.forEach(function(p){ totByC[p.cid] = (totByC[p.cid]||0) + (parseFloat(p.amt)||0); });
+    var noW9 = contractors.filter(function(c){ return c.w9 === 'no'; });
+    var nec  = contractors.filter(function(c){
+      var exempt = c.type === 'corp' || c.type === 'llc_corp';
+      return !exempt && (totByC[c.id]||0) >= 600;
+    });
+    ld.noW9 = noW9;
+    ld.necRequired = nec;
+    ld.contractorTotal = contractors.length;
+    ld.w9ComplianceRate = contractors.length > 0 ? ((contractors.length - noW9.length) / contractors.length) * 100 : 100;
+    ld.necApproaching = contractors.filter(function(c){
+      var exempt = c.type === 'corp' || c.type === 'llc_corp';
+      var paid = totByC[c.id]||0;
+      return !exempt && paid >= 400 && paid < 600;
+    });
+  }
+
+  // ── DEDUCTIONS ──
+  var ho = null, trips = [], s179 = [];
+  try{ ho = JSON.parse(localStorage.getItem('fw_ho')||'null'); }catch(e){}
+  try{ trips = JSON.parse(localStorage.getItem('fw_ml_trips')||'[]'); }catch(e){}
+  try{ s179 = JSON.parse(localStorage.getItem('fw_s179')||'[]'); }catch(e){}
+
+  ld.hoSetup = ho && (parseFloat(ho.off)||0) > 0;
+  ld.mlSetup = trips.length > 0;
+  ld.s179Setup = s179.length > 0;
+  ld.deductionsConnected = ld.hoSetup || ld.mlSetup || ld.s179Setup;
+
+  if(ld.deductionsConnected){
+    // Home office
+    var hoD = 0;
+    if(ld.hoSetup){
+      var off=parseFloat(ho.off)||0, tot=parseFloat(ho.tot)||1, inc=parseFloat(ho.inc)||0;
+      if(ho.method==='regular'){
+        var pct = off/tot;
+        var exp = ['rent','ptax','ins','util','rep','oth'].reduce(function(s,k){ return s+(parseFloat(ho[k])||0); },0);
+        hoD = pct*exp; if(inc>0) hoD=Math.min(hoD,inc);
+      } else {
+        hoD = Math.min(off,300)*5; if(inc>0) hoD=Math.min(hoD,inc);
+      }
+    }
+    // Mileage (use pre-stored deduction values)
+    var yr2 = new Date().getFullYear();
+    var mlD = trips.filter(function(t){ return t.cat==='business' && parseInt(t.year||0)===yr2; })
+                   .reduce(function(s,t){ return s+(parseFloat(t.deduction)||0); }, 0);
+    // Section 179
+    var s179yr = s179.filter(function(a){ return parseInt(a.year||0)===yr2; });
+    var ML_RATES2 = {2026:.70,2025:.70,2024:.67,2023:.655};
+    var S179D2 = {2026:{lim:1250000,po:3130000,bon:.20},2025:{lim:1250000,po:3130000,bon:.40},2024:{lim:1220000,po:3050000,bon:.60},2023:{lim:1160000,po:2890000,bon:.80}};
+    var s179D = 0;
+    if(s179yr.length){
+      var lim2 = S179D2[yr2]||S179D2[2025];
+      var totalElig = s179yr.reduce(function(s,a){ return s+(a.cost||0)*(a.bizPct||100)/100; },0);
+      var reduction = Math.max(0, totalElig - lim2.po);
+      var maxS179 = Math.max(0, lim2.lim - reduction);
+      var running = 0;
+      s179yr.forEach(function(a){
+        var elig=(a.cost||0)*(a.bizPct||100)/100;
+        var cap=a.type==='vehicle-light'?12400:a.type==='vehicle-suv'?30500:0;
+        var s179e=cap>0?Math.min(elig,cap):elig;
+        var s179amt=Math.min(s179e,Math.max(0,maxS179-running));
+        running+=s179amt; s179D+=s179amt+(elig-s179amt)*lim2.bon;
+      });
+    }
+    ld.hoDeduction  = hoD;
+    ld.mlDeduction  = mlD;
+    ld.s179Deduction = s179D;
+    ld.totalDeductions = hoD + mlD + s179D;
+  } else {
+    ld.totalDeductions = 0;
+  }
+
+  // ── SAVINGS GOALS ──
+  var savingsGoals = [];
+  try{ savingsGoals = JSON.parse(localStorage.getItem('fw_savings_goals')||'[]'); }catch(e){}
+  ld.savingsConnected = savingsGoals.length > 0;
+  if(ld.savingsConnected){
+    var totalTarget = savingsGoals.reduce(function(s,g){ return s+(parseFloat(g.target)||0); }, 0);
+    var totalSaved  = savingsGoals.reduce(function(s,g){ return s+(parseFloat(g.saved!==undefined?g.saved:g.current)||0); }, 0);
+    ld.savingsGoalCount   = savingsGoals.length;
+    ld.savingsTotalTarget = totalTarget;
+    ld.savingsTotalSaved  = totalSaved;
+    ld.savingsFundedPct   = totalTarget > 0 ? (totalSaved/totalTarget)*100 : 0;
+    ld.savingsDeficit     = Math.max(0, totalTarget - totalSaved);
+    ld.savingsOnTrack     = savingsGoals.filter(function(g){
+      var t=parseFloat(g.target)||0; var sv=parseFloat(g.saved!==undefined?g.saved:g.current)||0;
+      return t > 0 && sv/t >= 0.5;
+    }).length;
+  }
+
+  // ── GOAL TRACKER ──
+  var trackerGoals = [];
+  try{ trackerGoals = JSON.parse(localStorage.getItem('goalTracker_goals')||'[]'); }catch(e){}
+  ld.goalTrackerConnected = trackerGoals.length > 0;
+  if(ld.goalTrackerConnected){
+    var completedGoals = trackerGoals.filter(function(g){
+      return g.completed || g.done || g.status === 'done' || g.status === 'completed';
+    });
+    ld.goalTotal     = trackerGoals.length;
+    ld.goalCompleted = completedGoals.length;
+    ld.goalHitRate   = trackerGoals.length > 0 ? (completedGoals.length/trackerGoals.length)*100 : 0;
+  }
+
+  // ── TAX PAYMENTS ──
+  var yr0 = new Date().getFullYear();
+  var taxPmts = [];
+  try{ taxPmts = JSON.parse(localStorage.getItem('fw_tax_payments_'+yr0)||'[]'); }catch(e){}
+  ld.taxConnected = taxPmts.length > 0;
+  if(ld.taxConnected){
+    var sortedTax = taxPmts.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+    ld.lastTaxPayment = sortedTax[0];
+    var lastTaxDate = new Date(sortedTax[0].date);
+    var now0 = new Date();
+    ld.monthsSinceLastTax = (now0.getFullYear()-lastTaxDate.getFullYear())*12 + (now0.getMonth()-lastTaxDate.getMonth());
+    ld.taxPaymentCount = taxPmts.length;
+    ld.taxTotalPaid = taxPmts.reduce(function(s,p){ return s+(parseFloat(p.amount||p.amt)||0); }, 0);
+  }
+
+  return ld;
+}
+
+/* ══════════════════════════════════════════════════════
+   CONNECTIONS STRIP
+══════════════════════════════════════════════════════ */
+function renderConnStrip(ld){
+  var items = [
+    { label:'Invoice Tracker', on: ld.invoicesConnected,
+      detail: ld.invoicesConnected ? ld.invoiceTotalCount+' invoices' : 'Not set up',
+      warn: ld.invoicesConnected && ld.invoiceOverdueCount > 0 },
+    { label:'Bill Tracker', on: ld.billsConnected,
+      detail: ld.billsConnected ? fmt(ld.totalMonthlyBills)+'/mo' : 'Not set up',
+      warn: ld.billsConnected && ld.billsToRev > 55 },
+    { label:'Contractors', on: ld.contractorsConnected,
+      detail: ld.contractorsConnected ? ld.contractorTotal+' contractors' : 'Not set up',
+      warn: ld.contractorsConnected && ld.noW9.length > 0 },
+    { label:'Key Deductions', on: ld.deductionsConnected,
+      detail: ld.deductionsConnected ? fmt(ld.totalDeductions)+' tracked' : 'Not set up',
+      warn: false },
+    { label:'Savings Goals', on: ld.savingsConnected,
+      detail: ld.savingsConnected ? ld.savingsGoalCount+' goals · '+Math.round(ld.savingsFundedPct)+'% funded' : 'Not set up',
+      warn: ld.savingsConnected && ld.savingsFundedPct < 30 },
+    { label:'Goal Tracker', on: ld.goalTrackerConnected,
+      detail: ld.goalTrackerConnected ? ld.goalCompleted+'/'+ld.goalTotal+' goals met' : 'Not set up',
+      warn: ld.goalTrackerConnected && ld.goalHitRate < 50 },
+    { label:'Tax Payments', on: ld.taxConnected,
+      detail: ld.taxConnected ? ld.taxPaymentCount+' payments · '+fmt(ld.taxTotalPaid) : 'Not set up',
+      warn: ld.taxConnected && ld.monthsSinceLastTax > 3 }
+  ];
+  var html = '';
+  items.forEach(function(it){
+    var cls = it.on ? (it.warn ? 'conn-warn' : 'conn-on') : 'conn-off';
+    var dcls = it.on ? (it.warn ? 'cdot-warn' : 'cdot-on') : 'cdot-off';
+    html += '<span class="conn-pill '+cls+'"><span class="conn-dot '+dcls+'"></span>'+it.label+' — '+it.detail+'</span>';
+  });
+  document.getElementById('connStrip').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════════════
+   SCORE A METRIC
+══════════════════════════════════════════════════════ */
+function scoreM(val, hi, lo){
+  if(val >= hi) return {cls:'mc-green', score:2};
+  if(val >= lo) return {cls:'mc-yellow', score:1};
+  return {cls:'mc-red', score:0};
+}
+function mcCard(name, value, pct, desc, score, source){
+  var cls = score.cls;
+  var barW = Math.min(Math.max(Math.round(pct),2),100);
+  return '<div class="metric-card '+cls+'">'+(source?'<span class="live-chip">Live</span>':'')+
+    '<div class="mc-name">'+name+'</div>'+
+    '<div class="mc-value">'+value+'</div>'+
+    '<div class="mc-bar-track"><div class="mc-bar-fill" style="width:'+barW+'%"></div></div>'+
+    '<div class="mc-desc">'+desc+'</div>'+
+    (source?'<div class="mc-source">from '+source+'</div>':'')+
+    '</div>';
+}
+function mcCardGrey(name, desc, source){
+  return '<div class="metric-card mc-grey"><span class="live-chip">Live</span>'+
+    '<div class="mc-name">'+name+'</div>'+
+    '<div class="mc-value">—</div>'+
+    '<div class="mc-bar-track"><div class="mc-bar-fill" style="width:4%"></div></div>'+
+    '<div class="mc-desc">'+desc+'</div>'+
+    '<div class="mc-source">Set up '+source+' to track this</div>'+
+    '</div>';
+}
+
+/* ══════════════════════════════════════════════════════
+   MAIN CALCULATE
+══════════════════════════════════════════════════════ */
+function calculate(){
+  var rev  = parseFloat(document.getElementById('rev').value)||0;
+  var exp  = parseFloat(document.getElementById('exp').value)||0;
+  var emi  = parseFloat(document.getElementById('emi').value)||0;
+  var res  = parseFloat(document.getElementById('reserve').value)||0;
+  var asst = parseFloat(document.getElementById('assets').value)||0;
+  var liab = parseFloat(document.getElementById('liabilities').value)||0;
+
+  if(!rev||!exp){ alert('Please fill at least Revenue and Expenses.'); return; }
+
+  var netProfit    = rev - exp - emi;
+  var profitMargin = rev > 0 ? (netProfit/rev)*100 : 0;
+  var expenseRatio = rev > 0 ? ((exp+emi)/rev)*100 : 100;
+  var dscr         = emi > 0 ? netProfit/emi : 99;
+  var cashBuffer   = (exp+emi) > 0 ? res/(exp+emi) : 0;
+  var debtToEquity = (asst-liab) > 0 ? liab/(asst-liab) : 99;
+  var currentRatio = liab > 0 ? asst/liab : 99;
+
+  // ── Core 6 metrics ──
+  var coreMetrics = [
+    { name:'Debt Coverage',    label:'Loan Repayment Safety',
+      value: emi>0 ? fmtR(dscr)+'x' : '—', raw:dscr, pct:Math.min(dscr/3*100,100),
+      thresh:[1.5,1.2],
+      desc: dscr>=1.5?'Strong — cash flow comfortably covers debt payments':dscr>=1.2?'Adequate — but not much cushion':'Warning — cash flow barely covers loans' },
+    { name:'Cost Efficiency',  label:'Expense Ratio',
+      value: fmtR(expenseRatio)+'%', raw:100-expenseRatio, pct:Math.max(0,100-expenseRatio),
+      thresh:[30,10],
+      desc: expenseRatio<=70?'Healthy — 30%+ of revenue becomes profit':expenseRatio<=90?'Tight — slim profit margin':'Critical — expenses equal or exceed revenue' },
+    { name:'Profitability',    label:'Profit Margin',
+      value: fmtR(profitMargin)+'%', raw:profitMargin, pct:Math.max(0,Math.min(profitMargin*3,100)),
+      thresh:[15,5],
+      desc: profitMargin>=15?'Strong profit margin':profitMargin>=5?'Moderate — room to grow':'Low or negative — needs urgent attention' },
+    { name:'Survival Runway',  label:'Cash Buffer',
+      value: fmtR(cashBuffer)+' mo', raw:cashBuffer, pct:Math.min(cashBuffer/6*100,100),
+      thresh:[3,1.5],
+      desc: cashBuffer>=3?'3+ months reserve — excellent safety net':cashBuffer>=1.5?'1.5–3 months — acceptable, keep building':'Under 1.5 months — high vulnerability' },
+    { name:'Liquidity',        label:'Current Ratio',
+      value: asst>0 ? fmtR(currentRatio) : '—', raw:currentRatio, pct:asst>0?Math.min(currentRatio/4*100,100):0,
+      thresh:[2,1.2],
+      desc: currentRatio>=2?'Assets comfortably cover liabilities':currentRatio>=1.2?'Adequate liquidity':'Assets barely cover liabilities' },
+    { name:'Leverage',         label:'Debt vs Equity',
+      value: asst>0 ? fmtR(debtToEquity)+'x' : '—',
+      raw: asst>0 ? (debtToEquity<=1?2:debtToEquity<=2?1:0) : 1,
+      pct: asst>0 ? Math.max(0,100-(debtToEquity-0.5)*40) : 50,
+      thresh:[1,0],
+      desc: debtToEquity<=1?'Low leverage — strong equity position':debtToEquity<=2?'Moderate — manageable debt level':'High leverage — debt exceeds equity' }
+  ];
+
+  var coreScore = 0, coreMax = 0;
+  var coreHtml = '';
+  coreMetrics.forEach(function(m){
+    var s = scoreM(m.raw, m.thresh[0], m.thresh[1]);
+    coreScore += s.score; coreMax += 2;
+    coreHtml += mcCard(m.name, m.value, m.pct, m.desc, s, null);
+  });
+  document.getElementById('coreMetricsGrid').innerHTML = coreHtml;
+
+  // ── Live Signals ──
+  var ld = readLiveData(rev);
+  var liveScore = 0, liveMax = 0;
+  var liveHtml = '';
+  var insights = [];
+  var extraRecs = [];
+
+  // AR Health
+  if(ld.invoicesConnected){
+    var arScore = scoreM(100 - ld.invoiceOverdueRate, 100, 75); // green=0% overdue, yellow=<25%, red=25%+
+    liveScore += arScore.score; liveMax += 2;
+    var arDesc = ld.invoiceOverdueRate === 0
+      ? 'All invoices current — no overdue amounts'
+      : fmtR(ld.invoiceOverdueRate,0)+'% of outstanding balance is overdue ('+fmt(ld.invoiceOverdueAmt)+')';
+    liveHtml += mcCard('Receivables Health', fmt(ld.invoiceOutstandingAmt)+' out', Math.max(0,100-ld.invoiceOverdueRate), arDesc, arScore, 'Invoice Tracker');
+    if(ld.invoiceOverdueAmt > 0){
+      insights.push({cls:'bad',ico:'🧾',txt:'<strong>'+fmt(ld.invoiceOverdueAmt)+' overdue</strong> across '+ld.invoiceOverdueCount+' invoice'+(ld.invoiceOverdueCount>1?'s':'')+'. Send payment reminders today — every day delayed reduces collection probability.',href:'invoiceTracker.test.html'});
+      extraRecs.push({cls:'bad', text:'Overdue invoices total '+fmt(ld.invoiceOverdueAmt)+' — contact those clients this week for payment.'});
+    }
+    if(ld.badDebt && ld.badDebt.length > 0){
+      insights.push({cls:'bad',ico:'⚠️',txt:'<strong>'+ld.badDebt.length+' invoice'+(ld.badDebt.length>1?'s are':' is')+' 60+ days overdue</strong> — these are at serious risk of becoming uncollectible. Consider formal follow-up or a collection process.',href:'invoiceTracker.test.html'});
+    }
+    if(ld.dso > 45){
+      insights.push({cls:'warn',ico:'🕐',txt:'Your customers take an average of <strong>~'+Math.round(ld.dso)+' days to pay</strong>. Industry best practice is under 30 days. Consider offering 2% early-payment discounts.',href:'invoiceTracker.test.html'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Receivables Health', 'Track outstanding invoices and overdue amounts', 'Invoice Tracker');
+  }
+
+  // Payables Health
+  if(ld.billsConnected){
+    var payScore = scoreM(100-ld.billsToRev, 45, 25); // green=bills<55%, yellow=55-75%, red=75%+
+    liveScore += payScore.score; liveMax += 2;
+    var payDesc = 'Monthly bills are '+fmtR(ld.billsToRev,0)+'% of your revenue ('+fmt(ld.totalMonthlyBills)+'/mo in '+ld.billCategories+' bill categories)';
+    liveHtml += mcCard('Payables Burden', fmtR(ld.billsToRev,0)+'% of rev', Math.max(0,100-ld.billsToRev), payDesc, payScore, 'Bill Tracker');
+    if(ld.billsToRev > 55){
+      insights.push({cls:'warn',ico:'📋',txt:'Your fixed monthly bills represent <strong>'+fmtR(ld.billsToRev,0)+'% of revenue</strong> ('+fmt(ld.totalMonthlyBills)+'/mo). Any revenue dip leaves little for payroll and profit. Identify bills to reduce or renegotiate.',href:'vendorBillTracker.test.html'});
+      extraRecs.push({cls:'warn', text:'Monthly bills at '+fmtR(ld.billsToRev,0)+'% of revenue — renegotiate 2–3 vendor contracts to reduce fixed costs by 10%.'});
+    }
+    if(ld.expiringContracts.length > 0){
+      var names = ld.expiringContracts.map(function(b){ return b.vendor; }).join(', ');
+      insights.push({cls:'warn',ico:'📅',txt:'<strong>'+ld.expiringContracts.length+' contract'+(ld.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review whether to renew, renegotiate, or switch vendors.',href:'vendorBillTracker.test.html'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Payables Burden', 'Track monthly bills and vendor contracts', 'Bill Tracker');
+  }
+
+  // Contractor Compliance
+  if(ld.contractorsConnected){
+    var compScore;
+    if(ld.noW9.length === 0 && ld.necRequired.length === 0){ compScore = {cls:'mc-green',score:2}; }
+    else if(ld.noW9.length > 0 || ld.necRequired.length > 0){ compScore = {cls:'mc-yellow',score:1}; }
+    else { compScore = {cls:'mc-red',score:0}; }
+    liveScore += compScore.score; liveMax += 2;
+    var compPct = ld.w9ComplianceRate;
+    var compDesc = ld.contractorTotal+' contractor'+(ld.contractorTotal>1?'s':'')+ ' · '+fmtR(ld.w9ComplianceRate,0)+'% W-9 compliance'+(ld.necRequired.length?' · '+ld.necRequired.length+' 1099s required':'');
+    liveHtml += mcCard('Contractor Compliance', fmtR(ld.w9ComplianceRate,0)+'%', compPct, compDesc, compScore, 'Contractor & Payroll');
+    if(ld.noW9.length > 0){
+      insights.push({cls:'bad',ico:'📄',txt:'<strong>'+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s are':' is')+' missing a W-9</strong>: '+ld.noW9.map(function(c){return c.name;}).join(', ')+'. You must withhold 24% of payments without a W-9 — this is an IRS requirement.',href:'contractorPayroll.test.html'});
+      extraRecs.push({cls:'bad', text:'Collect W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' immediately — required before making any payment.'});
+    }
+    if(ld.necRequired.length > 0){
+      insights.push({cls:'warn',ico:'📋',txt:'<strong>'+ld.necRequired.length+' contractor'+(ld.necRequired.length>1?'s':'')+' require 1099-NEC forms</strong> this year (paid $600+). Deadline: January 31. File early to avoid $60–$310 penalty per form.',href:'contractorPayroll.test.html'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Contractor Compliance', 'Track W-9s and 1099-NEC filing requirements', 'Contractor & Payroll');
+  }
+
+  // Tax Deduction Efficiency
+  var annualProfit = netProfit * 12;
+  var dedScore;
+  if(!ld.deductionsConnected){
+    liveHtml += mcCardGrey('Deduction Tracking', 'Log home office, mileage and equipment to reduce your tax bill', 'Key Deductions');
+    if(annualProfit > 15000){
+      insights.push({cls:'info',ico:'💡',txt:'<strong>You haven\'t logged any tax deductions.</strong> Self-employed businesses can typically deduct $5,000–$20,000+ per year in home office, mileage, and equipment costs. Every $1,000 in deductions saves roughly $220–$370 in taxes.',href:'keyDeductions.test.html'});
+    }
+  } else {
+    var dedRate = annualProfit > 0 ? (ld.totalDeductions/annualProfit)*100 : 0;
+    if(dedRate >= 8){ dedScore = {cls:'mc-green',score:2}; }
+    else if(dedRate >= 2 || ld.totalDeductions > 0){ dedScore = {cls:'mc-yellow',score:1}; }
+    else { dedScore = {cls:'mc-red',score:0}; }
+    liveScore += dedScore.score; liveMax += 2;
+    var dedDesc = fmt(ld.totalDeductions)+' deducted this year';
+    if(ld.hoSetup) dedDesc += ' · Home office: '+fmt(ld.hoDeduction);
+    if(ld.mlSetup) dedDesc += ' · Mileage: '+fmt(ld.mlDeduction);
+    if(ld.s179Setup) dedDesc += ' · Equipment: '+fmt(ld.s179Deduction);
+    liveHtml += mcCard('Deduction Tracking', fmt(ld.totalDeductions), Math.min(dedRate*5,100), dedDesc, dedScore, 'Key Deductions');
+    if(dedRate < 3 && annualProfit > 20000){
+      insights.push({cls:'warn',ico:'💰',txt:'Your tracked deductions are only '+fmtR(dedRate,1)+'% of your annual profit. Most businesses can deduct 10–25%+ of profit. Check if you\'re missing home office, mileage, or equipment write-offs.',href:'keyDeductions.test.html'});
+    } else if(dedRate >= 8){
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Strong deduction tracking</strong> — you\'ve logged '+fmt(ld.totalDeductions)+' which is '+fmtR(dedRate,1)+'% of your annual profit. This could save you approximately '+fmt(ld.totalDeductions*0.25)+'–'+fmt(ld.totalDeductions*0.37)+' in taxes.'});
+    }
+  }
+  // Savings Goal Progress
+  if(ld.savingsConnected){
+    var savScore = scoreM(ld.savingsFundedPct, 75, 40);
+    liveScore += savScore.score; liveMax += 2;
+    var savDesc = ld.savingsGoalCount+' goal'+(ld.savingsGoalCount>1?'s':'')+' · '+fmt(ld.savingsTotalSaved)+' saved of '+fmt(ld.savingsTotalTarget)+' target';
+    liveHtml += mcCard('Savings Progress', Math.round(ld.savingsFundedPct)+'%', Math.min(ld.savingsFundedPct,100), savDesc, savScore, 'Savings Goals');
+    if(ld.savingsFundedPct < 40){
+      insights.push({cls:'warn',ico:'🏦',txt:'Savings goals are only <strong>'+Math.round(ld.savingsFundedPct)+'% funded</strong> — deficit of '+fmt(ld.savingsDeficit)+'. Underfunded reserves increase vulnerability to unexpected expenses.',href:'savingsGoals.test.html'});
+      extraRecs.push({cls:'warn', text:'Savings goals '+Math.round(ld.savingsFundedPct)+'% funded ('+fmt(ld.savingsDeficit)+' short) — set up an auto-transfer to close the gap.'});
+    } else if(ld.savingsFundedPct >= 75){
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Savings goals '+Math.round(ld.savingsFundedPct)+'% funded</strong> — '+fmt(ld.savingsTotalSaved)+' saved toward '+fmt(ld.savingsTotalTarget)+' total goal. Strong financial resilience.'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Savings Progress', 'Track savings goals to measure financial resilience', 'Savings Goals');
+  }
+
+  // Goal Hit Rate
+  if(ld.goalTrackerConnected){
+    var gtrScore = scoreM(ld.goalHitRate, 70, 40);
+    liveScore += gtrScore.score; liveMax += 2;
+    var gtrDesc = ld.goalCompleted+' of '+ld.goalTotal+' goals completed — '+Math.round(ld.goalHitRate)+'% execution rate';
+    liveHtml += mcCard('Goal Hit Rate', Math.round(ld.goalHitRate)+'%', Math.min(ld.goalHitRate,100), gtrDesc, gtrScore, 'Goal Tracker');
+    if(ld.goalHitRate < 40){
+      insights.push({cls:'warn',ico:'🎯',txt:'Goal hit rate is <strong>'+Math.round(ld.goalHitRate)+'%</strong> — only '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Break goals into smaller milestones to improve execution.',href:'goalTracker.test.html'});
+      extraRecs.push({cls:'warn', text:'Goal hit rate of '+Math.round(ld.goalHitRate)+'% — set smaller monthly milestones in Goal Tracker to improve execution cadence.'});
+    } else if(ld.goalHitRate >= 70){
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Strong execution: '+Math.round(ld.goalHitRate)+'% goal hit rate</strong> — '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Consistent performance signals operational maturity.'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Goal Hit Rate', 'Track goal completion to measure execution health', 'Goal Tracker');
+  }
+
+  // Tax Payment Compliance
+  if(ld.taxConnected){
+    var taxScore2;
+    if(ld.monthsSinceLastTax <= 3){ taxScore2 = {cls:'mc-green',score:2}; }
+    else if(ld.monthsSinceLastTax <= 5){ taxScore2 = {cls:'mc-yellow',score:1}; }
+    else{ taxScore2 = {cls:'mc-red',score:0}; }
+    liveScore += taxScore2.score; liveMax += 2;
+    var taxBar = Math.max(0, 100 - ld.monthsSinceLastTax*15);
+    var taxDesc = 'Last payment: '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago · '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' · '+fmt(ld.taxTotalPaid)+' total';
+    liveHtml += mcCard('Tax Compliance', ld.monthsSinceLastTax+' mo ago', taxBar, taxDesc, taxScore2, 'Tax Payments');
+    if(ld.monthsSinceLastTax > 3){
+      insights.push({cls:'bad',ico:'🧾',txt:'Last estimated tax payment was <strong>'+ld.monthsSinceLastTax+' months ago</strong>. IRS estimated taxes are due quarterly (Apr 15, Jun 16, Sep 15, Jan 15). Late payments incur underpayment penalties.',href:'taxPayments.test.html'});
+      extraRecs.push({cls:'bad', text:'Estimated tax payment overdue — last payment was '+ld.monthsSinceLastTax+' months ago. Pay this quarter to avoid IRS penalty.'});
+    } else {
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Tax payments current</strong> — last payment '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago. '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' totaling '+fmt(ld.taxTotalPaid)+' this year.'});
+    }
+  } else {
+    liveHtml += mcCardGrey('Tax Compliance', 'Log estimated tax payments to track compliance', 'Tax Payments');
+  }
+
+  document.getElementById('liveMetricsGrid').innerHTML = liveHtml;
+
+  // ── Overall Grade ──
+  var totalScore = coreScore + liveScore;
+  var maxScore   = coreMax  + liveMax;
+  var pctScore   = Math.round(totalScore/maxScore*100);
+  var grade, gradeCls;
+  if(pctScore>=85){grade='A';gradeCls='gb-A';}
+  else if(pctScore>=70){grade='B';gradeCls='gb-B';}
+  else if(pctScore>=55){grade='C';gradeCls='gb-C';}
+  else if(pctScore>=40){grade='D';gradeCls='gb-D';}
+  else{grade='F';gradeCls='gb-F';}
+
+  var banner = document.getElementById('gradeBanner');
+  banner.className = 'grade-banner grade-'+grade;
+  var gradeMsg = {A:'Excellent financial health',B:'Good financial health — minor improvements available',C:'Fair health — a few areas need attention',D:'Weak health — action required soon',F:'Critical — immediate attention needed'}[grade];
+  var liveStr = liveMax > 0 ? ' &nbsp;·&nbsp; Live Signals: '+liveScore+'/'+liveMax+' pts' : '';
+  var dfExplain = '';
+  if(pctScore < 40){
+    dfExplain = explainHtml(
+      ['Critical financial health — immediate action required',
+       'Banks, investors, and lenders will see this as a high-risk business',
+       'Multiple core metrics are in dangerous territory simultaneously'],
+      'A score of '+pctScore+'/100 (Grade '+grade+') means your business has serious issues in cash flow, debt, and/or profitability that need fixing before applying for any funding'
+    );
+  }
+
+  banner.innerHTML =
+    '<div class="gb-letter '+gradeCls+'">'+grade+'</div>'+
+    '<div class="gb-score">Overall Health Score: '+pctScore+' / 100</div>'+
+    '<div class="gb-label">'+gradeMsg+'</div>'+
+    '<div class="gb-breakdown">'+
+      '<span class="gb-seg">Core Financials: '+coreScore+'/'+coreMax+' pts</span>'+
+      (liveMax>0?'<span class="gb-seg">Live Signals: '+liveScore+'/'+liveMax+' pts</span>':'')+
+      '<span class="gb-seg">Based on '+(6+liveMax/2)+' signals</span>'+
+    '</div>'+
+    dfExplain;
+
+  // ── Insights panel ──
+  var insHtml = '';
+  if(insights.length > 0){
+    insHtml += '<div class="card" style="margin-top:4px"><h2>&#128270; Signals from Your Modules</h2><div class="insight-list">';
+    insights.forEach(function(i){
+      insHtml += '<div class="insight '+i.cls+'"><span class="insight-ico">'+i.ico+'</span>'+
+        '<div class="insight-body">'+i.txt+(i.href?'<br><a class="insight-link" href="'+i.href+'">&#8594; Go to module</a>':'')+'</div></div>';
+    });
+    insHtml += '</div></div>';
+  }
+  document.getElementById('insightsSection').innerHTML = insHtml;
+
+  // ── Recommendations ──
+  var recs = [];
+  if(dscr < 1.2 && emi > 0) recs.push({cls:'bad', text:'DSCR is '+fmtR(dscr)+'x — cash flow barely covers debt. Reduce expenses or pay down existing debt before taking on any new loans.'});
+  else if(dscr >= 1.5) recs.push({cls:'good', text:'Strong debt coverage ratio of '+fmtR(dscr)+'x. You can comfortably service existing debt.'});
+  if(cashBuffer < 1.5) recs.push({cls:'bad', text:'Cash reserve covers less than 1.5 months of costs. Build to at least 3 months (target: '+fmt((exp+emi)*3)+').', explain:'cashflow'});
+  else if(cashBuffer >= 3) recs.push({cls:'good', text:'Cash buffer of '+fmtR(cashBuffer)+' months — well protected against revenue surprises.'});
+  if(profitMargin < 5) recs.push({cls:'bad', text:'Profit margin under 5% — review pricing and cut unnecessary expenses. Target 15%+.'});
+  if(expenseRatio > 90) recs.push({cls:'bad', text:'Expenses are '+fmtR(expenseRatio)+'% of revenue. Find 2–3 categories to cut by 10%.'});
+  if(debtToEquity > 2 && asst > 0) recs.push({cls:'warn', text:'Debt-to-equity of '+fmtR(debtToEquity)+'x is high. Focus on reducing liabilities before new borrowing.', explain:'debt', dteVal:fmtR(debtToEquity)});
+  extraRecs.forEach(function(r){ recs.push(r); });
+  if(recs.length === 0) recs.push({cls:'good', text:'All metrics are healthy. Maintain financial discipline and keep reserves growing.'});
+  document.getElementById('recsList').innerHTML = recs.map(function(r){
+    var exBlock = '';
+    if(r.explain === 'cashflow'){
+      exBlock = explainHtml(
+        ['Cash flow is the #1 reason small businesses fail',
+         'Negative or low cash flow means you cannot pay bills, staff, or loan EMIs reliably',
+         'Even a profitable business can fail from poor cash flow timing'],
+        'With only '+fmtR(cashBuffer)+' months of cash reserve (target: 3 months), a single bad month could leave you unable to cover rent, salaries, or loan payments. Target reserve: '+fmt((exp+emi)*3)
+      );
+    } else if(r.explain === 'debt'){
+      exBlock = explainHtml(
+        ['Too much debt relative to income is the #2 business failure cause',
+         'High debt load leaves no room for unexpected expenses or revenue dips',
+         'Focus on paying down existing debt before taking on new loans'],
+        'Debt-to-equity of '+(r.dteVal||fmtR(debtToEquity))+'x means for every $1 of owner equity there is '+(r.dteVal||fmtR(debtToEquity))+' in debt. Lenders prefer this below 2x before approving new credit'
+      );
+    }
+    return '<li class="'+r.cls+'"><span>'+(r.cls==='good'?'✅':r.cls==='warn'?'⚠️':'🚨')+'</span>'+r.text+exBlock+'</li>';
+  }).join('');
+
+  document.getElementById('resultsSection').style.display = 'block';
+  renderActionPlan(grade, {rev,exp,emi,res,asst,liab,netProfit,profitMargin,expenseRatio,dscr,cashBuffer,debtToEquity}, ld);
+
+  // Share score with other modules
+  try{
+    var curMo3=new Date().toISOString().substring(0,7);
+    localStorage.setItem('fw_health_score',JSON.stringify({score:pctScore,grade:grade,coreScore:coreScore,coreMax:coreMax,liveScore:liveScore,liveMax:liveMax,savedAt:new Date().toISOString()}));
+    var snaps3=JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}');
+    if(snaps3[curMo3]){snaps3[curMo3].healthScore=pctScore;snaps3[curMo3].grade=grade;localStorage.setItem('fw_monthly_snapshots',JSON.stringify(snaps3));}
+    document.getElementById('shareBanner').style.display='flex';
+  }catch(e2){}
+  renderSparkline();
+}
+
+/* ══════════════════════════════════════════════════════
+   90-DAY ACTION PLAN
+══════════════════════════════════════════════════════ */
+function renderActionPlan(grade, f, ld){
+  var el = document.getElementById('actionPlanSection');
+  if(grade === 'A'){ el.style.display='none'; return; }
+  var nextGrade = {B:'A',C:'B',D:'C',F:'D'}[grade];
+  document.getElementById('actionPlanTitle').textContent = '90-Day Action Plan — Reach Grade '+nextGrade;
+  document.getElementById('actionPlanSub').textContent = 'Specific actions with your numbers baked in. Work through these three months to improve your grade.';
+
+  var m1=[], m2=[], m3=[];
+  var rev=f.rev, exp=f.exp, emi=f.emi, res=f.res, liab=f.liab, netProfit=f.netProfit;
+
+  // Month 1 — Quick wins
+  if(f.cashBuffer < 1.5){
+    m1.push('Set up an auto-transfer of <strong>'+fmt(Math.round(rev*.10))+'/mo</strong> to a dedicated reserve account. Do this on Day 1.');
+  }
+  if(f.expenseRatio > 90){
+    m1.push('Audit your top 3 expense categories. Target cutting <strong>'+fmt(Math.round(exp*.08))+'/mo</strong> (8% reduction).');
+  }
+  if(f.profitMargin < 5){
+    m1.push('Consider a <strong>5% price increase</strong> — on '+fmt(rev)+'/mo revenue that adds <strong>'+fmt(Math.round(rev*.05))+'/mo</strong> directly to profit.');
+  }
+  if(ld.invoicesConnected && ld.invoiceOverdueAmt > 0){
+    m1.push('Send payment reminders to <strong>'+ld.invoiceOverdueCount+' overdue client'+(ld.invoiceOverdueCount>1?'s':'')+' ('+fmt(ld.invoiceOverdueAmt)+' outstanding)</strong>. Set a 3-day follow-up cadence.');
+  }
+  if(ld.contractorsConnected && ld.noW9.length > 0){
+    m1.push('Collect <strong>W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' ('+ld.noW9.map(function(c){return c.name;}).join(', ')+')</strong> — required by IRS before next payment.');
+  }
+  if(!ld.deductionsConnected && netProfit > 0){
+    m1.push('Open Key Deductions and log your home office and vehicle use. <strong>Most small businesses find $3,000–$10,000+</strong> in previously un-tracked deductions.');
+  }
+  if(ld.taxConnected && ld.monthsSinceLastTax > 3){
+    m1.push('Make your <strong>quarterly estimated tax payment now</strong> — last payment was '+ld.monthsSinceLastTax+' months ago. IRS underpayment penalty accrues at ~3% annually.');
+  }
+  if(m1.length === 0){ m1.push('Review all subscriptions and recurring charges — cancel anything not used in the past 60 days.'); }
+
+  // Month 2 — Build momentum
+  if(f.cashBuffer < 3){
+    var tgt = Math.round((exp+emi)*3);
+    m2.push('Continue building reserves. Goal: <strong>'+fmt(tgt)+'</strong> total (3× monthly costs). Gap: <strong>'+fmt(Math.max(0,tgt-res))+'</strong>.');
+  }
+  if(f.debtToEquity > 2 && liab > 0){
+    m2.push('Make an extra <strong>'+fmt(Math.round(liab*.04))+' payment</strong> toward your highest-interest loan to reduce your leverage ratio.');
+  }
+  if(ld.billsConnected && ld.billsToRev > 50){
+    var topBill = ''; // we don't have sorted bills easily
+    m2.push('Renegotiate with your 2 highest recurring vendors. A <strong>5–10% discount</strong> saves <strong>'+fmt(Math.round(ld.totalMonthlyBills*.075))+'/mo</strong>.');
+  }
+  if(f.profitMargin < 15){
+    m2.push('Launch one upsell offer to existing customers — even a <strong>'+fmt(Math.round(rev*.07))+'/mo</strong> revenue lift meaningfully moves margin.');
+  }
+  if(ld.contractorsConnected && ld.necRequired.length > 0){
+    m2.push('Prepare <strong>'+ld.necRequired.length+' 1099-NEC form'+(ld.necRequired.length>1?'s':'')+' now</strong> for January 31 filing — doing it early avoids the rush and $60–$310 penalties.');
+  }
+  if(ld.savingsConnected && ld.savingsFundedPct < 50){
+    m2.push('Set up automatic savings contributions — current goal deficit is <strong>'+fmt(ld.savingsDeficit)+'</strong>. Start with <strong>'+fmt(Math.max(100,Math.round(ld.savingsDeficit*.1)))+'/mo</strong> auto-transfer.');
+  }
+  if(m2.length === 0){ m2.push('Document your top 3 revenue sources. Double down on the most profitable one.'); }
+
+  // Month 3 — Consolidate
+  if(f.cashBuffer < 3){
+    m3.push('Verify reserve has reached at least <strong>'+fmt(Math.round((exp+emi)*2))+'</strong> (2 months). If not, extend the savings plan one more month.');
+  }
+  if(f.dscr < 1.5 && emi > 0){
+    m3.push('Re-check debt coverage: your net profit needs to reach <strong>'+fmt(Math.round(emi*1.5))+'</strong> for a healthy 1.5x ratio. Current gap: <strong>'+fmt(Math.max(0,Math.round(emi*1.5-netProfit)))+'</strong>.');
+  }
+  if(ld.deductionsConnected){
+    m3.push('File your tax deductions before year-end. Logged so far: <strong>'+fmt(ld.totalDeductions)+'</strong> — verify nothing is missing with your accountant.');
+  }
+  if(ld.goalTrackerConnected && ld.goalHitRate < 70){
+    var pending = ld.goalTotal - ld.goalCompleted;
+    m3.push('Review <strong>'+pending+' pending goal'+(pending!==1?'s':'')+' in Goal Tracker</strong>. Complete or reset each to improve your execution score — target 70%+ hit rate.');
+  }
+  m3.push('Re-run this Health Score on Day 90. Target: move from Grade <strong>'+grade+'</strong> → <strong>'+nextGrade+'</strong>.');
+
+  function mth(n, label, color, acts){
+    return '<div class="plan-month" style="border-color:'+color+'">'+
+      '<div class="pm-head">Month '+n+' · Days '+({1:'1–30',2:'31–60',3:'61–90'}[n])+'</div>'+
+      '<div class="pm-title" style="color:'+color+'">'+label+'</div>'+
+      '<ul class="pm-actions">'+acts.map(function(a){ return '<li><span class="pm-icon">▸</span><span>'+a+'</span></li>'; }).join('')+'</ul>'+
+      '</div>';
+  }
+  document.getElementById('planMonths').innerHTML =
+    mth(1,'Quick Wins','#d97706',m1)+
+    mth(2,'Build Momentum','#2563eb',m2)+
+    mth(3,'Consolidate & Re-score','#16a34a',m3);
+  el.style.display = 'block';
+}
+
+/* ══════════════════════════════════════════════════════
+   SPARKLINE — historical health scores
+══════════════════════════════════════════════════════ */
+function renderSparkline(){
+  var snaps; try{snaps=JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{};}catch(e){snaps={};}
+  var keys=Object.keys(snaps).sort().slice(-6);
+  var scores=keys.map(function(k){return snaps[k].healthScore||0;});
+  var wrap=document.getElementById('sparkWrap');
+  if(keys.length<1){wrap.style.display='none';return;}
+  wrap.style.display='flex';
+  var latestScore=scores[scores.length-1];
+  document.getElementById('sparkCurScore').textContent=latestScore;
+  if(keys.length<2) return;
+  var canvas=document.getElementById('sparkCanvas');
+  var W=Math.max(160, (wrap.clientWidth||360)-110);
+  var H=50;
+  var dpr=window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  var ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  var n=scores.length;
+  var minV=Math.min.apply(null,scores.concat([0]));
+  var maxV=Math.max.apply(null,scores.concat([100]));
+  var range=maxV-minV||1;
+  function tx3(i){return n>1?6+(i/(n-1))*(W-12):W/2;}
+  function ty3(v){return 4+(H-14)*(1-(v-minV)/range);}
+  // Gradient fill
+  var grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'rgba(37,99,235,0.18)');
+  grad.addColorStop(1,'rgba(37,99,235,0)');
+  ctx.beginPath();
+  for(var i=0;i<n;i++) i===0?ctx.moveTo(tx3(i),ty3(scores[i])):ctx.lineTo(tx3(i),ty3(scores[i]));
+  ctx.lineTo(tx3(n-1),H); ctx.lineTo(tx3(0),H); ctx.closePath();
+  ctx.fillStyle=grad; ctx.fill();
+  // Line
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=2; ctx.lineJoin='round';
+  ctx.beginPath();
+  for(var i=0;i<n;i++) i===0?ctx.moveTo(tx3(i),ty3(scores[i])):ctx.lineTo(tx3(i),ty3(scores[i]));
+  ctx.stroke();
+  // Dots + score labels
+  for(var i=0;i<n;i++){
+    var sc=scores[i];
+    ctx.beginPath(); ctx.arc(tx3(i),ty3(sc),3.5,0,Math.PI*2);
+    ctx.fillStyle=sc>=70?'#16a34a':sc>=40?'#d97706':'#dc2626';
+    ctx.fill();
+    ctx.fillStyle='#475569'; ctx.font='bold 9px Arial'; ctx.textAlign='center';
+    ctx.fillText(sc,tx3(i),ty3(sc)-6);
+  }
+  // Month labels
+  document.getElementById('sparkMonths').innerHTML=keys.map(function(k){return'<span>'+k.substring(5)+'</span>';}).join('');
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT: auto-fill profile + render connections
+══════════════════════════════════════════════════════ */
+(function init(){
+  var rev = 0;
+  var sg = function(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} };
+
+  // 1. Load from profile first (baseline)
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p   = (JSON.parse(localStorage.getItem('fw_profiles')||'[]')||[])[idx];
+    if(!p){ p = sg('fw_profile'); }
+    if(p){
+      if(p.rev)     { document.getElementById('rev').value     = p.rev;     rev = parseFloat(p.rev)||0; }
+      if(p.exp)     { document.getElementById('exp').value     = p.exp; }
+      if(p.emi)     { document.getElementById('emi').value     = p.emi; }
+      if(p.reserve) { document.getElementById('reserve').value = p.reserve; }
+    }
+  }catch(e){}
+
+  // 2. Override with live module data (more accurate)
+  var liveSourced = [];
+  var curMo = new Date().toISOString().substring(0,7);
+
+  var invRevD = sg('fw_invoice_revenue');
+  if(invRevD && invRevD.byMonth){
+    var lRev = invRevD.byMonth[curMo] || null;
+    if(!lRev){ var keys=Object.keys(invRevD.byMonth).sort(); if(keys.length) lRev=invRevD.byMonth[keys[keys.length-1]]; }
+    if(lRev){ document.getElementById('rev').value=Math.round(lRev); rev=Math.round(lRev); liveSourced.push('Revenue'); }
+  }
+
+  var expD = sg('fw_expense_by_category');
+  if(expD && expD.totalMonthly){ document.getElementById('exp').value=Math.round(expD.totalMonthly); liveSourced.push('Expenses'); }
+
+  var cashD = sg('fw_cash_runway');
+  if(cashD && cashD.currentBalance){ document.getElementById('reserve').value=Math.round(cashD.currentBalance); liveSourced.push('Cash Reserve'); }
+  if(cashD && cashD.monthlyBurn && !expD){ document.getElementById('exp').value=Math.round(cashD.monthlyBurn); liveSourced.push('Expenses'); }
+
+  if(liveSourced.length){
+    document.getElementById('liveAutoSrc').textContent = liveSourced.join(', ');
+    document.getElementById('liveAutoBadge').style.display = 'inline-flex';
+  }
+
+  var ld = readLiveData(rev);
+  renderConnStrip(ld);
+  renderSparkline();
+
+  // Auto-calculate if we have numbers
+  var r=parseFloat(document.getElementById('rev').value)||0;
+  var e=parseFloat(document.getElementById('exp').value)||0;
+  if(r > 0 && e > 0) calculate();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Referral Tracker — FinWise Advisor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:600px){.summary-row{grid-template-columns:1fr 1fr}}
+.sum-box{background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sum-num{font-size:1.4rem;font-weight:900}
+.sum-num.green{color:#16a34a} .sum-num.blue{color:#2563eb} .sum-num.amber{color:#d97706} .sum-num.purple{color:#7c3aed}
+.sum-lbl{font-size:.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.ref-table{width:100%;border-collapse:collapse}
+.ref-table th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#64748b;border-bottom:2px solid #e2e8f0}
+.ref-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.82rem;vertical-align:middle}
+.ref-table tr:last-child td{border-bottom:none}
+select.inline{padding:4px 8px;border:1px solid #e2e8f0;border-radius:5px;font-size:.78rem;background:#fff;cursor:pointer}
+select.inline:focus{outline:none;border-color:#2563eb}
+.status-badge{padding:.22rem .7rem;border-radius:999px;font-size:.68rem;font-weight:800;white-space:nowrap}
+.s-referred{background:#dbeafe;color:#1d4ed8}
+.s-applied{background:#fef9c3;color:#854d0e}
+.s-approved{background:#dcfce7;color:#166534}
+.s-funded{background:#ede9fe;color:#6d28d9}
+.s-none{background:#f1f5f9;color:#64748b}
+.commission-est{font-size:.74rem;color:#64748b;font-style:italic}
+.lender-select{width:100%;padding:4px 8px;border:1px solid #e2e8f0;border-radius:5px;font-size:.78rem;background:#fff}
+.lender-select:focus{outline:none;border-color:#2563eb}
+.no-clients{text-align:center;padding:32px;color:#94a3b8;font-size:.88rem}
+.earn-box{background:#1e293b;color:#e2e8f0;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.eb-big{font-size:1.8rem;font-weight:900;color:#4ade80}
+.eb-label{font-size:.78rem;color:#94a3b8;margin-top:2px}
+.eb-note{font-size:.76rem;color:#94a3b8;margin-left:auto;max-width:220px;line-height:1.5}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Referral Tracker</h1>
+<p class="subtitle">FinWise Advisor · Track client referrals to lenders and estimated commission earnings</p>
+
+<div class="summary-row" id="summaryRow">
+  <div class="sum-box"><div class="sum-num blue" id="s_total">0</div><div class="sum-lbl">Total Clients</div></div>
+  <div class="sum-box"><div class="sum-num amber" id="s_referred">0</div><div class="sum-lbl">Referred</div></div>
+  <div class="sum-box"><div class="sum-num green" id="s_funded">0</div><div class="sum-lbl">Funded</div></div>
+  <div class="sum-box"><div class="sum-num purple" id="s_earn">$0</div><div class="sum-lbl">Est. Earnings</div></div>
+</div>
+
+<div class="earn-box" id="earnBox" style="margin-bottom:16px">
+  <div>
+    <div class="eb-big" id="eb_total">$0</div>
+    <div class="eb-label">Estimated Total Commission</div>
+  </div>
+  <div class="eb-note">Commissions are estimates based on typical affiliate rates. Actual amounts depend on lender terms and loan approval.</div>
+</div>
+
+<div class="card">
+  <h2>Client Referral Pipeline</h2>
+  <div id="tableWrap"></div>
+</div>
+
+<script>
+var LENDERS_LIST = ['— Not Referred —','SBA 7(a)','SBA Microloan','BlueVine','OnDeck','Funding Circle','Lendio','Kiva'];
+var COMMISSION = {
+  'SBA 7(a)': {referred:50, applied:125, approved:400, funded:800},
+  'SBA Microloan': {referred:25, applied:60, approved:150, funded:300},
+  'BlueVine': {referred:50, applied:100, approved:250, funded:500},
+  'OnDeck': {referred:50, applied:100, approved:200, funded:400},
+  'Funding Circle': {referred:50, applied:125, approved:300, funded:600},
+  'Lendio': {referred:25, applied:125, approved:250, funded:500},
+  'Kiva': {referred:0, applied:0, approved:0, funded:0}
+};
+var STATUS_LIST = ['none','referred','applied','approved','funded'];
+
+var referralData = {};
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function loadReferrals(){
+  try{ referralData = JSON.parse(localStorage.getItem('fw_referrals')||'{}'); }catch(e){ referralData = {}; }
+}
+function saveReferrals(){
+  localStorage.setItem('fw_referrals', JSON.stringify(referralData));
+  refreshSummary();
+}
+
+function setLender(clientId, val){
+  if(!referralData[clientId]) referralData[clientId] = {lender:'',status:'none'};
+  referralData[clientId].lender = val;
+  if(val === '— Not Referred —') referralData[clientId].status = 'none';
+  saveReferrals();
+  renderTable();
+}
+
+function setStatus(clientId, val){
+  if(!referralData[clientId]) referralData[clientId] = {lender:'',status:'none'};
+  referralData[clientId].status = val;
+  saveReferrals();
+  renderTable();
+}
+
+function commissionFor(lender, status){
+  if(!lender || lender === '— Not Referred —') return 0;
+  var c = COMMISSION[lender];
+  if(!c) return 0;
+  return c[status] || 0;
+}
+
+function refreshSummary(){
+  var clients = JSON.parse(localStorage.getItem('fw_clients')||'[]');
+  var referred=0, funded=0, totalEarn=0;
+  clients.forEach(function(c){
+    var r = referralData[c.id]||{};
+    if(r.status && r.status!=='none') referred++;
+    if(r.status === 'funded') funded++;
+    totalEarn += commissionFor(r.lender, r.status);
+  });
+  document.getElementById('s_total').textContent = clients.length;
+  document.getElementById('s_referred').textContent = referred;
+  document.getElementById('s_funded').textContent = funded;
+  document.getElementById('s_earn').textContent = fmt(totalEarn);
+  document.getElementById('eb_total').textContent = fmt(totalEarn);
+}
+
+function renderTable(){
+  var clients = JSON.parse(localStorage.getItem('fw_clients')||'[]');
+  if(!clients.length){
+    document.getElementById('tableWrap').innerHTML = '<div class="no-clients">No clients found. Load the Advisor demo first.</div>';
+    return;
+  }
+  var html = '<table class="ref-table"><thead><tr>'+
+    '<th>Client</th><th>Industry</th><th>Lender</th><th>Status</th><th>Est. Commission</th></tr></thead><tbody>';
+
+  clients.forEach(function(c){
+    var r = referralData[c.id] || {lender:'— Not Referred —', status:'none'};
+    var comm = commissionFor(r.lender, r.status);
+    var statusCls = 's-'+r.status;
+    var statusLabel = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[r.status]||'—';
+
+    var lenderOpts = LENDERS_LIST.map(function(l){
+      return '<option value="'+l+'"'+(r.lender===l?' selected':'')+'>'+l+'</option>';
+    }).join('');
+    var statusOpts = STATUS_LIST.map(function(s){
+      var lbl = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[s];
+      return '<option value="'+s+'"'+(r.status===s?' selected':'')+'>'+lbl+'</option>';
+    }).join('');
+
+    html += '<tr>'+
+      '<td><strong>'+c.name+'</strong></td>'+
+      '<td>'+c.industry+'</td>'+
+      '<td><select class="lender-select" onchange="setLender(\''+c.id+'\',this.value)">'+lenderOpts+'</select></td>'+
+      '<td><select class="inline" onchange="setStatus(\''+c.id+'\',this.value)">'+statusOpts+'</select></td>'+
+      '<td>'+(comm>0?'<strong style="color:#16a34a">'+fmt(comm)+'</strong>':'<span class="commission-est">—</span>')+'</td>'+
+      '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('tableWrap').innerHTML = html;
+  refreshSummary();
+}
+
+/* Check advisor plan */
+(function(){
+  if(!localStorage.getItem('fw_advisor')){
+    document.querySelector('.subtitle').textContent = '⚠️ Advisor plan required. Load the Advisor demo from try.html first.';
+  }
+  loadReferrals();
+  renderTable();
+})();
+</script>
+</body>
+</html>

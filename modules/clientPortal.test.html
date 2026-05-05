@@ -1,0 +1,642 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Client Portal — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
+a{text-decoration:none;color:inherit}
+
+.topnav{background:#0f172a;padding:0 24px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:999}
+.tn-logo{font-size:1rem;font-weight:900;color:#fff}
+.tn-logo span{color:#818cf8}
+.tn-back{font-size:.78rem;color:#94a3b8;margin-left:4px}
+.tn-back:hover{color:#fff}
+.tn-spacer{flex:1}
+.tn-btn{padding:6px 14px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:1px solid #334155;font-family:Arial,sans-serif;background:transparent;color:#94a3b8}
+.tn-btn:hover{color:#fff;border-color:#475569}
+
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);padding:28px 24px 22px;color:#fff}
+.hero-inner{max-width:980px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hero h1{font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.hero p{font-size:.84rem;color:#a5b4fc;line-height:1.5}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:4px 14px;font-size:.72rem;font-weight:700;color:#c7d2fe;margin-top:10px}
+.hero-link{color:#a5b4fc;font-size:.78rem;margin-top:8px;display:block}
+.hero-link:hover{color:#fff}
+
+/* Tabs */
+.tabs{max-width:980px;margin:0 auto;padding:20px 18px 0}
+.tab-nav{display:flex;gap:0;background:#fff;border-radius:10px 10px 0 0;border:1.5px solid #e2e8f0;overflow:hidden;width:fit-content}
+.tab-btn{padding:11px 22px;font-size:.84rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:#64748b;font-family:Arial,sans-serif;border-right:1.5px solid #e2e8f0;transition:all .15s}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:#4f46e5;color:#fff}
+.tab-btn:hover:not(.active){background:#f8fafc;color:#1e293b}
+
+.wrap{max-width:980px;margin:0 auto;padding:0 18px 24px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.card{background:#fff;border-radius:0 10px 10px 10px;padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 5px rgba(0,0,0,.07);border:1.5px solid #e2e8f0;border-top:none}
+.card-plain{background:#fff;border-radius:10px;padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.card-title{font-size:.95rem;font-weight:900;color:#1e293b;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title span{font-size:1.2rem}
+
+label{display:block;font-size:.79rem;font-weight:600;color:#555;margin-bottom:3px;margin-top:12px}
+label:first-of-type{margin-top:0}
+input,select,textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;font-family:inherit;color:#1e293b}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#4f46e5}
+textarea{resize:vertical;min-height:68px}
+.hint{font-size:.7rem;color:#94a3b8;margin-top:3px}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:560px){.g2{grid-template-columns:1fr}}
+
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.check-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:7px;cursor:pointer;transition:border-color .15s,background .15s}
+.check-item:hover{border-color:#4f46e5;background:#f5f3ff}
+.check-item input[type=checkbox]{width:auto;accent-color:#4f46e5}
+.check-item label{font-size:.82rem;font-weight:600;color:#334155;margin:0;cursor:pointer}
+.check-item small{font-size:.7rem;color:#94a3b8;font-weight:400}
+
+.btn{padding:9px 20px;border-radius:7px;font-size:.85rem;font-weight:800;cursor:pointer;border:none;font-family:Arial,sans-serif;transition:background .15s}
+.btn-brand{background:#4f46e5;color:#fff}.btn-brand:hover{background:#4338ca}
+.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
+.btn-sm{padding:5px 12px;font-size:.75rem;border-radius:6px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+
+/* Link result */
+.link-result{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:14px 16px;margin-top:16px;display:none}
+.lr-label{font-size:.72rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.lr-row{display:flex;gap:8px}
+.lr-inp{flex:1;padding:8px 10px;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.78rem;font-family:monospace;background:#fff;color:#166534}
+.lr-copy{padding:8px 14px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap}
+.lr-copy.copied{background:#0f766e}
+.lr-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.lr-action{padding:6px 12px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;border:none;font-family:Arial,sans-serif}
+.lr-wa{background:#25D366;color:#fff}.lr-em{background:#2563eb;color:#fff}
+
+/* Client list */
+.clients-empty{text-align:center;padding:28px;color:#94a3b8;font-size:.85rem}
+.client-row{padding:12px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.client-row:last-child{border-bottom:none}
+.cr-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.88rem;font-weight:900;flex-shrink:0}
+.cr-info{flex:1;min-width:120px}
+.cr-name{font-size:.88rem;font-weight:800;color:#1e293b}
+.cr-email{font-size:.72rem;color:#94a3b8}
+.cr-meta{font-size:.7rem;color:#94a3b8;min-width:80px}
+.cr-views{font-size:.72rem;background:#f0f4ff;color:#4f46e5;padding:3px 8px;border-radius:999px;font-weight:700;white-space:nowrap}
+.cr-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cr-copy{padding:5px 10px;background:#4f46e5;color:#fff;border:none;border-radius:5px;font-size:.72rem;font-weight:700;cursor:pointer}
+.cr-copy.copied{background:#16a34a}
+.cr-del{padding:5px 10px;background:#fff;color:#dc2626;border:1.5px solid #fecaca;border-radius:5px;font-size:.72rem;font-weight:700;cursor:pointer}
+.cr-del:hover{background:#fee2e2}
+
+/* Schedule toggle */
+.sched-wrap{display:flex;align-items:center;gap:6px}
+.sched-label{font-size:.72rem;color:#64748b;font-weight:600}
+.toggle-switch{position:relative;width:36px;height:20px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:#e2e8f0;border-radius:999px;cursor:pointer;transition:.2s}
+.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle-switch input:checked + .toggle-slider{background:#16a34a}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(16px)}
+.sched-sent{font-size:.66rem;color:#94a3b8}
+
+/* ── Bulk Import ── */
+.drop-zone{border:2.5px dashed #c7d2fe;border-radius:10px;padding:40px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;background:#fafbff}
+.drop-zone:hover,.drop-zone.dragover{border-color:#4f46e5;background:#f5f3ff}
+.dz-icon{font-size:2.5rem;margin-bottom:8px}
+.dz-title{font-size:.95rem;font-weight:800;color:#1e293b;margin-bottom:4px}
+.dz-sub{font-size:.78rem;color:#64748b}
+.dz-file{display:none}
+.dz-btn{margin-top:14px;padding:8px 20px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.82rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+
+/* Column mapping */
+.col-map{margin-top:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;display:none}
+.col-map-title{font-size:.8rem;font-weight:800;color:#334155;margin-bottom:10px}
+.col-map-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.col-map-row label{margin:0;min-width:80px;font-size:.78rem}
+.col-map-row select{flex:1;min-width:120px;padding:6px 8px;font-size:.82rem}
+
+/* Import preview table */
+.preview-table-wrap{margin-top:14px;max-height:280px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;display:none}
+.preview-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.preview-table th{background:#f8fafc;padding:8px 10px;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;border-bottom:1px solid #e2e8f0;position:sticky;top:0}
+.preview-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;color:#1e293b}
+.preview-table tr:last-child td{border-bottom:none}
+.badge-ok{background:#dcfce7;color:#166534;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:999px}
+.badge-err{background:#fee2e2;color:#dc2626;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:999px}
+
+/* Import result */
+.import-result{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:14px 16px;margin-top:14px;display:none}
+.import-result h4{font-size:.88rem;font-weight:800;color:#166534;margin-bottom:6px}
+.import-result p{font-size:.78rem;color:#15803d}
+
+/* Lock */
+.lock-msg{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:8px;padding:16px 20px;text-align:center;margin-top:16px}
+.lock-msg h3{font-size:.95rem;font-weight:900;color:#92400e;margin-bottom:6px}
+.lock-msg p{font-size:.82rem;color:#78350f;margin-bottom:12px}
+.lock-msg a{display:inline-block;padding:9px 22px;background:#d97706;color:#fff;border-radius:7px;font-size:.82rem;font-weight:800;text-decoration:none}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="fw-auth.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<nav class="topnav">
+  <a href="../dashboard.html" class="tn-logo">💡 Fin<span>Wise</span></a>
+  <a href="../dashboard.html" class="tn-back">← Dashboard</a>
+  <div class="tn-spacer"></div>
+  <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">🎨 White-Label Settings</a>
+  <button class="tn-btn" onclick="if(window.fwAuth) window.fwAuth.signOut()">Sign Out</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>🔗 Client Portal</h1>
+      <p>Share secure, read-only financial reports with clients — no login needed on their end.</p>
+      <div class="hero-badge">⭐ Advisor Feature</div>
+    </div>
+    <div style="text-align:right">
+      <a href="whiteLabelSettings.test.html" class="hero-link">🎨 Customize your brand →</a>
+    </div>
+  </div>
+</div>
+
+<div id="lockMsg" style="display:none;max-width:980px;margin:20px auto;padding:0 18px">
+  <div class="lock-msg">
+    <h3>🔒 Advisor Plan Required</h3>
+    <p>Client Portal is available on the Advisor plan. Upgrade to share reports with your clients securely.</p>
+    <a href="../pricing.html">Upgrade to Advisor →</a>
+  </div>
+</div>
+
+<div id="portalContent" style="display:none">
+
+<div class="tabs">
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('portals',this)">🔗 Manage Portals</button>
+    <button class="tab-btn" onclick="switchTab('bulk',this)">📥 Bulk Import</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- TAB: Portals -->
+  <div class="tab-panel active" id="tab-portals">
+
+    <div class="card">
+      <div class="card-title"><span>➕</span> Create Client Portal</div>
+
+      <div class="g2">
+        <div>
+          <label>Client Name</label>
+          <input type="text" id="clientName" placeholder="Jane Smith"/>
+        </div>
+        <div>
+          <label>Client Email</label>
+          <input type="email" id="clientEmail" placeholder="jane@example.com"/>
+        </div>
+      </div>
+
+      <label>Personal Message (optional)</label>
+      <textarea id="clientMsg" placeholder="Hi Jane, here's your financial summary for this quarter."></textarea>
+
+      <label style="margin-top:14px">What to Share</label>
+      <div class="check-grid">
+        <div class="check-item">
+          <input type="checkbox" id="shareRevenue" checked/>
+          <div><label for="shareRevenue">Revenue &amp; Expenses <small>Monthly P&amp;L summary</small></label></div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="shareCashflow" checked/>
+          <div><label for="shareCashflow">Cash Runway <small>Months until cash runs out</small></label></div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="shareHealth"/>
+          <div><label for="shareHealth">Business Health Score <small>A–F overall grade</small></label></div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="shareLoan"/>
+          <div><label for="shareLoan">Loan Readiness <small>Borrowing capacity estimate</small></label></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-brand" onclick="createPortal()">Generate Portal Link →</button>
+        <span id="createStatus" style="font-size:.78rem;color:#64748b"></span>
+      </div>
+
+      <div class="link-result" id="linkResult">
+        <div class="lr-label">✅ Portal link ready — share this with your client</div>
+        <div class="lr-row">
+          <input type="text" class="lr-inp" id="generatedLink" readonly/>
+          <button class="lr-copy" id="copyNewBtn" onclick="copyLink('generatedLink','copyNewBtn')">Copy</button>
+        </div>
+        <div class="lr-actions">
+          <button class="lr-action lr-wa" id="waShareBtn">WhatsApp</button>
+          <button class="lr-action lr-em" id="emShareBtn">Email</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-plain">
+      <div class="card-title"><span>👥</span> Active Client Portals</div>
+      <div id="clientList"><div class="clients-empty">No portals created yet. Add your first client above.</div></div>
+    </div>
+
+  </div><!-- /tab-portals -->
+
+  <!-- TAB: Bulk Import -->
+  <div class="tab-panel" id="tab-bulk">
+    <div class="card">
+      <div class="card-title"><span>📥</span> Bulk Import Clients</div>
+      <p style="font-size:.82rem;color:#64748b;margin-bottom:16px">Upload a CSV or Excel file with client Name, Email, and optional Message columns. Up to 200 rows per import.</p>
+
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInp').click()" ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)">
+        <div class="dz-icon">📄</div>
+        <div class="dz-title">Drop your file here</div>
+        <div class="dz-sub">CSV or Excel (.xlsx, .xls) — max 200 clients</div>
+        <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('fileInp').click()">Browse File</button>
+        <input type="file" id="fileInp" class="dz-file" accept=".csv,.xlsx,.xls" onchange="fileSelected(this)"/>
+      </div>
+
+      <div class="col-map" id="colMap">
+        <div class="col-map-title">Map your columns</div>
+        <div class="col-map-row">
+          <label>Name</label>
+          <select id="colName"></select>
+        </div>
+        <div class="col-map-row">
+          <label>Email</label>
+          <select id="colEmail"></select>
+        </div>
+        <div class="col-map-row">
+          <label>Message</label>
+          <select id="colMessage"><option value="">(none)</option></select>
+        </div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-brand btn-sm" onclick="applyMapping()">Apply &amp; Preview →</button>
+        </div>
+      </div>
+
+      <div class="preview-table-wrap" id="previewWrap">
+        <table class="preview-table" id="previewTable"></table>
+      </div>
+
+      <div class="btn-row" id="importBtnRow" style="display:none">
+        <button class="btn btn-green" id="importBtn" onclick="runImport()">Import Clients →</button>
+        <span id="importCount" style="font-size:.82rem;color:#64748b"></span>
+      </div>
+
+      <div class="import-result" id="importResult">
+        <h4 id="importResultTitle"></h4>
+        <p id="importResultDesc"></p>
+      </div>
+    </div>
+  </div><!-- /tab-bulk -->
+
+</div>
+</div><!-- /portalContent -->
+
+<script>
+var SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+var SUPA_KEY = 'sb_publishable_MT6Yw204o8Ho5nY-82IvkA_Ys_00yGO';
+var advisorId = null, advisorName = '', bizName = '', profileData = {}, wlData = {};
+var parsedRows = [], parsedHeaders = [];
+
+/* ── Tab switching ── */
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── Helpers ── */
+function genToken(){
+  var arr = new Uint8Array(16);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function portalURL(token){
+  var base = window.location.href.replace(/modules\/.*$/,'');
+  return base + 'client-view.html?token=' + token;
+}
+
+function getAccessToken(){
+  try{
+    var keys = Object.keys(localStorage).filter(function(k){ return k.indexOf('supabase.auth.token')>-1||k.indexOf('sb-')>-1; });
+    for(var i=0;i<keys.length;i++){
+      var v = JSON.parse(localStorage.getItem(keys[i])||'null');
+      if(v && v.access_token) return v.access_token;
+      if(v && v.session && v.session.access_token) return v.session.access_token;
+    }
+  }catch(e){}
+  return SUPA_KEY;
+}
+
+function copyLink(inputId, btnId){
+  var val = document.getElementById(inputId).value;
+  navigator.clipboard.writeText(val).catch(function(){ var i=document.getElementById(inputId);i.select();document.execCommand('copy'); });
+  var btn = document.getElementById(btnId);
+  btn.textContent='Copied!'; btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent='Copy'; btn.classList.remove('copied'); },2000);
+}
+
+/* ── Create single portal ── */
+function createPortal(){
+  var name  = document.getElementById('clientName').value.trim();
+  var email = document.getElementById('clientEmail').value.trim();
+  var msg   = document.getElementById('clientMsg').value.trim();
+  if(!name||!email){ alert('Please enter client name and email.'); return; }
+  if(!advisorId){ alert('Not signed in.'); return; }
+  document.getElementById('createStatus').textContent = 'Generating…';
+  insertPortal(name, email, msg,
+    document.getElementById('shareRevenue').checked,
+    document.getElementById('shareCashflow').checked,
+    document.getElementById('shareHealth').checked,
+    document.getElementById('shareLoan').checked,
+    false
+  ).then(function(token){
+    document.getElementById('createStatus').textContent = '';
+    var url = portalURL(token);
+    document.getElementById('generatedLink').value = url;
+    document.getElementById('linkResult').style.display = 'block';
+    var waMsg = 'Hi '+name+'! Here is your financial report portal: '+url;
+    var emSubj = 'Your Financial Report — '+(bizName||advisorName);
+    var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by FinWise';
+    document.getElementById('waShareBtn').onclick = function(){ window.open('https://wa.me/?text='+encodeURIComponent(waMsg)); };
+    document.getElementById('emShareBtn').onclick = function(){ window.location.href='mailto:'+email+'?subject='+encodeURIComponent(emSubj)+'&body='+encodeURIComponent(emBody); };
+    document.getElementById('clientName').value='';
+    document.getElementById('clientEmail').value='';
+    document.getElementById('clientMsg').value='';
+    loadClients();
+  }).catch(function(e){ document.getElementById('createStatus').textContent='Error: '+e.message; });
+}
+
+function insertPortal(clientName, clientEmail, msg, incRev, incCash, incHealth, incLoan, schedEnabled){
+  var p = profileData;
+  var sharedData = {
+    sharedAt       : new Date().toISOString(),
+    includeRevenue : incRev,
+    includeCashflow: incCash,
+    includeHealth  : incHealth,
+    includeLoan    : incLoan,
+    rev   : p.rev    || 0,
+    exp   : p.exp    || 0,
+    emi   : p.emi    || 0,
+    reserve: p.reserve||0,
+    bizName  : p.bizName  || bizName,
+    industry : p.industry || '',
+    state    : p.state    || '',
+    wl: wlData
+  };
+  var token = genToken();
+  return fetch(SUPA_URL+'/rest/v1/client_portals',{
+    method:'POST',
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken(),'Content-Type':'application/json','Prefer':'return=minimal' },
+    body: JSON.stringify({
+      advisor_id     : advisorId,
+      client_name    : clientName,
+      client_email   : clientEmail,
+      token          : token,
+      advisor_name   : advisorName,
+      biz_name       : bizName,
+      shared_data    : sharedData,
+      custom_message : msg||null,
+      schedule_enabled: schedEnabled
+    })
+  }).then(function(r){ if(!r.ok) throw new Error('Insert failed'); return token; });
+}
+
+/* ── Load + render client list ── */
+function loadClients(){
+  if(!advisorId) return;
+  fetch(SUPA_URL+'/rest/v1/client_portals?advisor_id=eq.'+advisorId+'&order=created_at.desc',{
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken() }
+  }).then(function(r){ return r.json(); }).then(function(rows){
+    if(!Array.isArray(rows)||rows.length===0){
+      document.getElementById('clientList').innerHTML='<div class="clients-empty">No portals created yet. Add your first client above.</div>';
+      return;
+    }
+    var html = rows.map(function(r){
+      var initials = r.client_name.split(' ').map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
+      var url = portalURL(r.token);
+      var created = new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      var lastViewed = r.last_viewed_at ? 'Viewed '+new Date(r.last_viewed_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Not viewed yet';
+      var lastSent = r.schedule_last_sent ? ' · Sent '+new Date(r.schedule_last_sent).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      var checked = r.schedule_enabled ? 'checked' : '';
+      return '<div class="client-row">' +
+        '<div class="cr-avatar">'+initials+'</div>' +
+        '<div class="cr-info"><div class="cr-name">'+esc(r.client_name)+'</div><div class="cr-email">'+esc(r.client_email)+'</div></div>' +
+        '<span class="cr-views">👁 '+r.view_count+' views</span>' +
+        '<div class="cr-meta" style="min-width:90px">'+created+'<br><span style="color:#94a3b8">'+lastViewed+'</span></div>' +
+        '<div class="sched-wrap">' +
+          '<label class="toggle-switch"><input type="checkbox" '+checked+' onchange="toggleSchedule(\''+r.id+'\',this.checked)"/><span class="toggle-slider"></span></label>' +
+          '<div><div class="sched-label">Monthly email</div><div class="sched-sent">'+lastSent.replace(' · ','')+'</div></div>' +
+        '</div>' +
+        '<div class="cr-actions">' +
+          '<button class="cr-copy" id="cp_'+r.id+'" onclick="copyRowLink(\''+url+'\',\'cp_'+r.id+'\')">Copy Link</button>' +
+          '<button class="cr-del" onclick="deletePortal(\''+r.id+'\')">Delete</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    document.getElementById('clientList').innerHTML = html;
+  }).catch(function(){ document.getElementById('clientList').innerHTML='<div class="clients-empty">Could not load portals.</div>'; });
+}
+
+function toggleSchedule(id, enabled){
+  fetch(SUPA_URL+'/rest/v1/client_portals?id=eq.'+id,{
+    method:'PATCH',
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken(),'Content-Type':'application/json','Prefer':'return=minimal' },
+    body: JSON.stringify({ schedule_enabled: enabled })
+  });
+}
+
+function copyRowLink(url, btnId){
+  navigator.clipboard.writeText(url).catch(function(){
+    var t=document.createElement('input');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+  });
+  var btn=document.getElementById(btnId);
+  btn.textContent='Copied!';btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent='Copy Link';btn.classList.remove('copied'); },2000);
+}
+
+function deletePortal(id){
+  if(!confirm('Delete this client portal? The link will stop working.')) return;
+  fetch(SUPA_URL+'/rest/v1/client_portals?id=eq.'+id,{
+    method:'DELETE',
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken() }
+  }).then(function(){ loadClients(); });
+}
+
+/* ── Bulk Import ── */
+function dzDragOver(e){ e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
+function dzDragLeave(){ document.getElementById('dropZone').classList.remove('dragover'); }
+function dzDrop(e){
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('dragover');
+  var file = e.dataTransfer.files[0];
+  if(file) processFile(file);
+}
+function fileSelected(inp){ if(inp.files[0]) processFile(inp.files[0]); }
+
+function processFile(file){
+  var ext = file.name.split('.').pop().toLowerCase();
+  if(['xlsx','xls'].indexOf(ext) > -1){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        var wb = XLSX.read(e.target.result, {type:'array'});
+        var ws = wb.Sheets[wb.SheetNames[0]];
+        var data = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        if(data.length < 2){ alert('No data rows found.'); return; }
+        parsedHeaders = data[0].map(function(h){ return String(h); });
+        parsedRows = data.slice(1).filter(function(r){ return r.some(function(c){ return c!==''; }); });
+        showColumnMapper();
+      }catch(err){ alert('Could not parse Excel file: '+err.message); }
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var rows = parseCSV(e.target.result);
+      if(rows.length < 2){ alert('No data rows found.'); return; }
+      parsedHeaders = rows[0];
+      parsedRows = rows.slice(1).filter(function(r){ return r.some(function(c){ return c!==''; }); });
+      showColumnMapper();
+    };
+    reader.readAsText(file);
+  }
+}
+
+function parseCSV(text){
+  var rows = [], cur = [], field = '', inQ = false;
+  for(var i=0;i<text.length;i++){
+    var c = text[i];
+    if(c==='"'){ if(inQ && text[i+1]==='"'){ field+='"';i++; } else inQ=!inQ; }
+    else if(c===','&&!inQ){ cur.push(field.trim());field=''; }
+    else if((c==='\n'||c==='\r')&&!inQ){ if(field!==''||cur.length) cur.push(field.trim()); if(cur.length) rows.push(cur); cur=[];field=''; if(c==='\r'&&text[i+1]==='\n') i++; }
+    else field+=c;
+  }
+  if(field!==''||cur.length){ cur.push(field.trim()); if(cur.length) rows.push(cur); }
+  return rows;
+}
+
+function showColumnMapper(){
+  var cm = document.getElementById('colMap');
+  cm.style.display='block';
+  ['colName','colEmail','colMessage'].forEach(function(id){
+    var sel=document.getElementById(id); sel.innerHTML='';
+    if(id==='colMessage') sel.innerHTML='<option value="">(none)</option>';
+    parsedHeaders.forEach(function(h,i){ sel.innerHTML+='<option value="'+i+'">'+esc(h)+'</option>'; });
+  });
+  /* Auto-detect */
+  parsedHeaders.forEach(function(h,i){
+    var hl = h.toLowerCase();
+    if(/name|client|contact|full/.test(hl)) document.getElementById('colName').value = i;
+    if(/email|e-mail|mail/.test(hl)) document.getElementById('colEmail').value = i;
+    if(/message|msg|note|comment/.test(hl)) document.getElementById('colMessage').value = i;
+  });
+  document.getElementById('previewWrap').style.display='none';
+  document.getElementById('importBtnRow').style.display='none';
+  document.getElementById('importResult').style.display='none';
+}
+
+function applyMapping(){
+  var ni = parseInt(document.getElementById('colName').value);
+  var ei = parseInt(document.getElementById('colEmail').value);
+  var mi = document.getElementById('colMessage').value;
+  mi = mi==='' ? -1 : parseInt(mi);
+
+  var mapped = parsedRows.slice(0,200).map(function(r){
+    var name  = (r[ni]||'').toString().trim();
+    var email = (r[ei]||'').toString().trim().toLowerCase();
+    var msg   = mi >= 0 ? (r[mi]||'').toString().trim() : '';
+    var valid = name.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return { name:name, email:email, msg:msg, valid:valid };
+  }).filter(function(r){ return r.name||r.email; });
+
+  var thead = '<tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Status</th></tr>';
+  var tbody = mapped.map(function(r,i){
+    var badge = r.valid ? '<span class="badge-ok">Valid</span>' : '<span class="badge-err">Invalid</span>';
+    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.msg||'—')+'</td><td>'+badge+'</td></tr>';
+  }).join('');
+  document.getElementById('previewTable').innerHTML = thead+tbody;
+  document.getElementById('previewWrap').style.display='block';
+
+  var validCount = mapped.filter(function(r){ return r.valid; }).length;
+  document.getElementById('importCount').textContent = validCount+' valid clients ready to import ('+mapped.filter(function(r){ return !r.valid; }).length+' will be skipped)';
+  document.getElementById('importBtnRow').style.display='flex';
+  document.getElementById('importBtn')._rows = mapped;
+}
+
+function runImport(){
+  var rows = document.getElementById('importBtn')._rows || [];
+  var valid = rows.filter(function(r){ return r.valid; });
+  if(!valid.length){ alert('No valid rows to import.'); return; }
+
+  var btn = document.getElementById('importBtn');
+  btn.textContent='Importing…';btn.disabled=true;
+
+  var promises = valid.map(function(r){
+    return insertPortal(r.name, r.email, r.msg, true, true, false, false, false).then(function(){ return {ok:true}; }).catch(function(){ return {ok:false,email:r.email}; });
+  });
+
+  Promise.all(promises).then(function(results){
+    var ok = results.filter(function(r){ return r.ok; }).length;
+    var fail = results.length - ok;
+    document.getElementById('importResultTitle').textContent = '✅ Import complete — '+ok+' portals created';
+    document.getElementById('importResultDesc').textContent = (fail>0?fail+' rows failed (duplicate email or server error). ':'')+'All clients can now access their report via their unique link.';
+    document.getElementById('importResult').style.display='block';
+    btn.textContent='Import Clients →';btn.disabled=false;
+    loadClients();
+  });
+}
+
+/* ── Drag drop drop zone label update ── */
+function dzDragOver(e){ e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
+function dzDragLeave(){ document.getElementById('dropZone').classList.remove('dragover'); }
+
+/* ── Auth init ── */
+window.addEventListener('load', function(){
+  if(!window.fwAuth){ document.getElementById('lockMsg').style.display='block'; return; }
+  window.fwAuth.init(function(){
+    var auth = window.fwAuth;
+    if(!auth.user){ window.location.href='../auth.html'; return; }
+    var plan = auth.plan||'free';
+    if(localStorage.getItem('fw_advisor')) plan='advisor';
+    if(plan !== 'advisor'){
+      document.getElementById('lockMsg').style.display='block'; return;
+    }
+    document.getElementById('portalContent').style.display='block';
+    advisorId   = auth.user.id;
+    advisorName = auth.displayName();
+    try{ profileData = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+    bizName = profileData.bizName || advisorName;
+
+    /* Load white-label settings from profile */
+    var p = auth.profile || {};
+    wlData = {
+      brand_name  : p.wl_brand_name   || '',
+      tagline     : p.wl_tagline      || '',
+      color       : p.wl_color        || '#4f46e5',
+      logo_url    : p.wl_logo_url     || '',
+      hide_finwise: p.wl_hide_finwise  || false
+    };
+    loadClients();
+  });
+});
+</script>
+</body>
+</html>
+

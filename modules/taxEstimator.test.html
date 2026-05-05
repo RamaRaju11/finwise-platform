@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Quarterly Tax Estimator — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
+
+.page{max-width:900px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.4rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.subtitle{font-size:.88rem;color:#64748b;margin-bottom:24px}
+
+/* cards */
+.card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:16px}
+
+/* meta inputs row */
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 16px}
+@media(max-width:620px){.grid-3{grid-template-columns:1fr}}
+label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+label:first-child{margin-top:0}
+input[type=number],select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif;background:#fff;transition:border-color .15s}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+
+/* quarterly input table */
+.qtr-table{width:100%;border-collapse:collapse;margin-top:4px}
+.qtr-table th{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding:8px 10px;border-bottom:2px solid #f1f5f9;text-align:left}
+.qtr-table th:not(:first-child){text-align:right}
+.qtr-table td{padding:10px;border-bottom:1px solid #f8fafc;vertical-align:middle}
+.qtr-table tr:last-child td{border-bottom:none}
+.q-label-cell{display:flex;flex-direction:column;gap:2px}
+.q-lbl{font-size:.82rem;font-weight:800;color:#1e293b}
+.q-period{font-size:.68rem;color:#94a3b8;font-weight:600}
+.q-months{font-size:.65rem;color:#64748b;background:#f1f5f9;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:2px}
+.qtr-table input[type=number]{padding:7px 10px;font-size:.85rem;min-width:110px}
+.q-profit-cell{text-align:right;font-size:.85rem;font-weight:800;min-width:100px}
+.profit-pos{color:#16a34a}
+.profit-neg{color:#dc2626}
+.profit-zero{color:#94a3b8}
+.copy-btn{font-size:.65rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:2px 6px;border-radius:4px;font-family:Arial,sans-serif;font-weight:700;white-space:nowrap}
+.copy-btn:hover{background:#eff6ff}
+
+/* totals bar */
+.totals-bar{background:#f8fafc;border-radius:8px;padding:12px 16px;margin-top:14px;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.tot-item{display:flex;flex-direction:column;gap:2px}
+.tot-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8}
+.tot-val{font-size:.95rem;font-weight:900;color:#1e293b}
+
+/* button */
+.btn-calc{margin-top:20px;padding:11px 32px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s;font-family:Arial,sans-serif}
+.btn-calc:hover{background:#1d4ed8}
+
+/* results */
+.results{display:none;margin-top:4px}
+
+/* quarterly payment cards */
+.quarters-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:560px){.quarters-grid{grid-template-columns:1fr 1fr}}
+.q-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center}
+.q-card.next{border-color:#2563eb;background:#eff6ff}
+.q-card.q-zero{opacity:.5}
+.q-card-lbl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:3px}
+.q-card-date{font-size:.74rem;font-weight:700;color:#475569;margin-bottom:6px}
+.q-card-amt{font-size:1.2rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.q-card-income{font-size:.68rem;color:#64748b}
+.q-next-tag{font-size:.62rem;font-weight:800;background:#2563eb;color:#fff;padding:2px 8px;border-radius:999px;margin-top:6px;display:inline-block}
+.q-loss-tag{font-size:.62rem;font-weight:800;background:#f1f5f9;color:#94a3b8;padding:2px 8px;border-radius:999px;margin-top:6px;display:inline-block}
+
+/* hero */
+.quarterly-hero{background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:12px;padding:24px 32px;display:flex;align-items:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
+.qh-left{flex:1;min-width:200px}
+.qh-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:6px}
+.qh-amount{font-size:2.8rem;font-weight:900;color:#fff;line-height:1;margin-bottom:4px}
+.qh-sub{font-size:.8rem;color:#64748b}
+.qh-stats{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.qh-stat{text-align:right}
+.qh-stat-val{font-size:1rem;font-weight:900;color:#fff}
+.qh-stat-lbl{font-size:.67rem;color:#475569}
+
+/* breakdown */
+.breakdown{width:100%;border-collapse:collapse;margin-top:4px}
+.breakdown tr{border-bottom:1px solid #f1f5f9}
+.breakdown tr:last-child{border-bottom:none}
+.breakdown td{padding:9px 4px;font-size:.84rem}
+.breakdown td:last-child{text-align:right;font-weight:700;color:#1e293b}
+.breakdown .row-label{color:#64748b}
+.breakdown .row-total td{background:#f8fafc;font-weight:800;padding:11px 8px;border-radius:6px}
+.breakdown .row-highlight td{color:#dc2626}
+.breakdown .row-section td{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;background:#f8fafc;padding:8px 4px;border-bottom:2px solid #e2e8f0}
+
+/* tax bars */
+.tax-bars{margin-top:16px}
+.tax-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.tb-label{font-size:.78rem;color:#64748b;width:130px;flex-shrink:0}
+.tb-track{flex:1;background:#f1f5f9;border-radius:999px;height:10px;overflow:hidden}
+.tb-fill{height:100%;border-radius:999px;transition:width .5s ease}
+.tb-pct{font-size:.75rem;font-weight:700;color:#64748b;width:40px;text-align:right;flex-shrink:0}
+
+/* toast */
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-err{background:#dc2626}
+
+/* disclaimer */
+.disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.6;margin-top:4px;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #e2e8f0}
+
+/* ── Tax Suite integration ── */
+.conn-band{background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:flex-start;gap:12px}
+.conn-band.warn{background:#fffbeb;border-color:#fde68a}
+.cb-ico{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.cb-body{flex:1}
+.cb-ttl{font-size:.85rem;font-weight:800;color:#1e293b;margin-bottom:4px}
+.cb-desc{font-size:.78rem;color:#475569;line-height:1.5;margin-bottom:8px}
+.cb-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.cb-pill{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:999px;border:1.5px solid}
+.cp-green{background:#dcfce7;border-color:#86efac;color:#166534}
+.cp-blue{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}
+.cp-red{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
+.cp-orange{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+.btn-apply-ded{padding:7px 18px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.8rem;font-weight:800;cursor:pointer;transition:background .15s}
+.btn-apply-ded:hover{background:#1d4ed8}
+.btn-apply-ded.applied{background:#16a34a;cursor:default}
+.breakdown .row-ded td{color:#16a34a;font-size:.82rem}
+.breakdown .row-liab td{color:#dc2626;font-size:.82rem}
+.breakdown .row-payroll-hd td{color:#7c3aed;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;background:#faf5ff;padding:8px 4px;border-bottom:2px solid #e9d5ff}
+
+/* tax payment tracker */
+.pay-tracker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:560px){.pay-tracker-grid{grid-template-columns:1fr 1fr}}
+.pt-card{border-radius:8px;padding:12px;border:1.5px solid #e2e8f0;text-align:center;background:#f8fafc}
+.pt-card.paid{background:#f0fdf4;border-color:#86efac}
+.pt-lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:4px}
+.pt-amt{font-size:1.05rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.pt-date{font-size:.68rem;color:#16a34a;font-weight:700;margin-bottom:6px;min-height:14px}
+.btn-mark-paid{padding:5px 12px;border:none;border-radius:6px;font-size:.72rem;font-weight:800;cursor:pointer;background:#2563eb;color:#fff;font-family:Arial,sans-serif}
+.btn-mark-paid:hover{background:#1d4ed8}
+.btn-mark-unpaid{padding:5px 12px;border:none;border-radius:6px;font-size:.72rem;font-weight:800;cursor:pointer;background:#f1f5f9;color:#64748b;font-family:Arial,sans-serif}
+.btn-mark-unpaid:hover{background:#e2e8f0}
+.pay-summary{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:#64748b;padding:10px 0 2px}
+.pay-summary strong{color:#1e293b}
+/* s-corp note */
+.scorp-note{display:none;margin-top:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:10px 14px;font-size:.78rem;color:#1e40af}
+/* state quarterly note */
+.state-qtr-note{margin-top:0;padding:13px 16px;border-radius:8px;font-size:.82rem;line-height:1.6;display:flex;gap:12px;align-items:flex-start}
+.state-qtr-note.notax{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.state-qtr-note.havetax{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.state-qtr-note.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.sqn-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+/* year badge */
+.year-badge{display:inline-block;padding:2px 10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;font-size:.72rem;font-weight:800;color:#1d4ed8;margin-left:8px;vertical-align:middle}
+/* module integration banner */
+.mod-band{background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:13px 18px;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+.mod-band-title{font-size:.78rem;font-weight:800;color:#1e40af;text-transform:uppercase;letter-spacing:.05em}
+.mod-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mod-pill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.mod-import-btn{padding:5px 14px;border:none;border-radius:5px;background:#2563eb;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.mod-import-btn:hover{background:#1d4ed8}
+.mod-import-btn:disabled{background:#94a3b8;cursor:default}
+/* quarterly calendar widget */
+.qcal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+@media(max-width:560px){.qcal-grid{grid-template-columns:1fr 1fr}}
+.qcal-card{border-radius:10px;padding:14px;text-align:center;border:1.5px solid #e2e8f0;background:#f8fafc}
+.qcal-card.qcal-past{opacity:.6;background:#f1f5f9}
+.qcal-card.qcal-next{border-color:#2563eb;background:#eff6ff}
+.qcal-q{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:2px}
+.qcal-date{font-size:.76rem;font-weight:700;color:#475569;margin-bottom:6px}
+.qcal-amt{font-size:1.05rem;font-weight:900;color:#1e293b;margin-bottom:3px}
+.qcal-countdown{font-size:.72rem;font-weight:700}
+.qcal-tag{font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:999px;display:inline-block;margin-top:5px}
+.qcal-tag.next-tag{background:#2563eb;color:#fff}
+.qcal-tag.past-tag{background:#f1f5f9;color:#94a3b8}
+/* QBI */
+.qbi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media(max-width:560px){.qbi-grid{grid-template-columns:1fr}}
+.qbi-box{border-radius:8px;padding:13px;text-align:center;background:#f5f3ff;border:1px solid #ddd6fe}
+.qbi-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:4px;font-weight:700}
+.qbi-val{font-size:1.3rem;font-weight:900;color:#5b21b6;line-height:1}
+.qbi-sub{font-size:.74rem;color:#64748b;margin-top:4px}
+/* export */
+.export-bar{display:flex;gap:10px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin-top:12px}
+.btn-export{padding:9px 20px;border:none;border-radius:7px;background:#7c3aed;color:#fff;font-size:.87rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.btn-export:hover{background:#6d28d9}
+/* print */
+.print-hdr{display:none}
+@media print{
+  .print-hdr{display:block;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #1e293b}
+  .print-hdr h2{font-size:1rem;font-weight:900;margin-bottom:2px}
+  .print-hdr p{font-size:.74rem;color:#64748b}
+  .no-print{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none;border:1px solid #e2e8f0;break-inside:avoid}
+  .quarterly-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<div class="print-hdr" id="printHdr">
+  <h2>Quarterly Tax Estimate — FinWise SmallBiz</h2>
+  <p>Tax Year: <span id="printYear"></span> &nbsp;|&nbsp; Generated: <span id="printDate"></span></p>
+  <p style="font-size:.7rem;color:#94a3b8;margin-top:2px">For CPA review and planning purposes only. Not a tax return or legal advice.</p>
+</div>
+
+<div class="page">
+  <h1>🧾 Quarterly Tax Estimator</h1>
+  <p class="subtitle">Federal + state income tax with progressive brackets for all 50 states — quarterly payments vary by season.</p>
+
+  <!-- Meta inputs -->
+  <div class="card">
+    <div class="card-title">Business Details</div>
+    <div class="grid-3">
+      <div>
+        <label>Business Structure</label>
+        <select id="bizType" onchange="toggleScorp()">
+          <option value="sole">Sole Proprietor / Single LLC</option>
+          <option value="scorp">S-Corporation</option>
+          <option value="partner">Partnership</option>
+        </select>
+      </div>
+      <div>
+        <label>Filing Status</label>
+        <select id="filingStatus">
+          <option value="single">Single</option>
+          <option value="married">Married Filing Jointly</option>
+          <option value="hoh">Head of Household</option>
+        </select>
+      </div>
+      <div>
+        <label>State</label>
+        <select id="state">
+          <optgroup label="No State Income Tax">
+            <option value="AK">Alaska</option>
+            <option value="FL">Florida</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NV">Nevada</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX" selected>Texas</option>
+            <option value="WA">Washington</option>
+            <option value="WY">Wyoming</option>
+          </optgroup>
+          <optgroup label="Flat Tax States">
+            <option value="AZ">Arizona — flat 2.5%</option>
+            <option value="CO">Colorado — flat 4.4%</option>
+            <option value="GA">Georgia — flat 5.49%</option>
+            <option value="ID">Idaho — flat 5.8%</option>
+            <option value="IL">Illinois — flat 4.95%</option>
+            <option value="IN">Indiana — flat 3.05%</option>
+            <option value="KY">Kentucky — flat 4.0%</option>
+            <option value="MA">Massachusetts — flat 5.0%</option>
+            <option value="MI">Michigan — flat 4.05%</option>
+            <option value="MS">Mississippi — flat 5.0%</option>
+            <option value="NC">North Carolina — flat 4.75%</option>
+            <option value="PA">Pennsylvania — flat 3.07%</option>
+            <option value="UT">Utah — flat 4.65%</option>
+          </optgroup>
+          <optgroup label="Progressive Tax States">
+            <option value="AL">Alabama — 2–5%</option>
+            <option value="AR">Arkansas — 2–3.9%</option>
+            <option value="CA">California — 1–13.3%</option>
+            <option value="CT">Connecticut — 3–6.99%</option>
+            <option value="DC">Washington DC — 4–10.75%</option>
+            <option value="DE">Delaware — 0–6.6%</option>
+            <option value="HI">Hawaii — 1.4–11%</option>
+            <option value="IA">Iowa — 4.4–5.7%</option>
+            <option value="KS">Kansas — 3.1–5.7%</option>
+            <option value="LA">Louisiana — 1.85–4.25%</option>
+            <option value="MD">Maryland — 2–5.75%</option>
+            <option value="ME">Maine — 5.8–7.15%</option>
+            <option value="MN">Minnesota — 5.35–9.85%</option>
+            <option value="MO">Missouri — 0–5.4%</option>
+            <option value="MT">Montana — 4.7–5.9%</option>
+            <option value="NE">Nebraska — 2.46–5.84%</option>
+            <option value="NJ">New Jersey — 1.4–10.75%</option>
+            <option value="NM">New Mexico — 1.7–5.9%</option>
+            <option value="NY">New York — 4–10.9%</option>
+            <option value="ND">North Dakota — 0–2.5%</option>
+            <option value="OH">Ohio — 0–3.99%</option>
+            <option value="OK">Oklahoma — 0.25–4.75%</option>
+            <option value="OR">Oregon — 4.75–9.9%</option>
+            <option value="RI">Rhode Island — 3.75–5.99%</option>
+            <option value="SC">South Carolina — 0–6.5%</option>
+            <option value="VA">Virginia — 2–5.75%</option>
+            <option value="VT">Vermont — 3.35–8.75%</option>
+            <option value="WI">Wisconsin — 3.54–7.65%</option>
+            <option value="WV">West Virginia — 2.36–5.12%</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="scorp-note" id="scorpNote">
+      <strong>S-Corp note:</strong> We assume a reasonable owner salary of 40% of net profit for SE tax purposes. Distributions above salary are not subject to SE tax.
+    </div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <label style="margin:0;white-space:nowrap">Tax Year</label>
+      <select id="taxYear" style="width:auto;min-width:130px" onchange="onYearChange()">
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026 (projected)</option>
+      </select>
+      <span class="year-badge" id="yearBadge">2026 (proj.) brackets</span>
+    </div>
+  </div>
+
+  <!-- Tax Suite connected data banner -->
+  <div id="suiteBanner" style="display:none"></div>
+
+  <!-- Module integration banner (invoiceTracker revenue + vendorBillTracker expenses) -->
+  <div id="modBand" class="mod-band no-print" style="display:none">
+    <div class="mod-band-title">📡 Module Data Available — click Import to pre-fill quarterly fields</div>
+    <div class="mod-row" id="revRow" style="display:none">
+      <span class="mod-pill" id="revPill"></span>
+      <button class="mod-import-btn" id="revImportBtn" onclick="importRevenue()">Import as Revenue →</button>
+    </div>
+    <div class="mod-row" id="expRow" style="display:none">
+      <span class="mod-pill" id="expPill"></span>
+      <button class="mod-import-btn" id="expImportBtn" onclick="importExpenses()">Import as Expenses →</button>
+    </div>
+  </div>
+
+  <!-- Quarterly income inputs -->
+  <div class="card">
+    <div class="card-title">Quarterly Income — Enter monthly averages for each IRS period</div>
+
+    <table class="qtr-table">
+      <thead>
+        <tr>
+          <th>Quarter / Period</th>
+          <th style="text-align:right">Monthly Revenue ($)</th>
+          <th style="text-align:right">Monthly Expenses ($)</th>
+          <th style="text-align:right">Period Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="q-label-cell">
+              <span class="q-lbl">Q1 · Jan – Mar</span>
+              <span class="q-period" id="qDue1">Due: Apr 15</span>
+              <span class="q-months">3 months</span>
+            </div>
+          </td>
+          <td style="text-align:right"><input type="number" id="q1rev" placeholder="e.g. 15000" min="0" oninput="updateProfit(1)"/></td>
+          <td style="text-align:right"><input type="number" id="q1exp" placeholder="e.g. 9000"  min="0" oninput="updateProfit(1)"/></td>
+          <td class="q-profit-cell"><span id="q1profit" class="profit-zero">—</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="q-label-cell">
+              <span class="q-lbl">Q2 · Apr – May</span>
+              <span class="q-period" id="qDue2">Due: Jun 16</span>
+              <span class="q-months">2 months</span>
+              <button class="copy-btn" onclick="copyFromQ1(2)">Copy Q1</button>
+            </div>
+          </td>
+          <td style="text-align:right"><input type="number" id="q2rev" placeholder="e.g. 15000" min="0" oninput="updateProfit(2)"/></td>
+          <td style="text-align:right"><input type="number" id="q2exp" placeholder="e.g. 9000"  min="0" oninput="updateProfit(2)"/></td>
+          <td class="q-profit-cell"><span id="q2profit" class="profit-zero">—</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="q-label-cell">
+              <span class="q-lbl">Q3 · Jun – Aug</span>
+              <span class="q-period" id="qDue3">Due: Sep 15</span>
+              <span class="q-months">3 months</span>
+              <button class="copy-btn" onclick="copyFromQ1(3)">Copy Q1</button>
+            </div>
+          </td>
+          <td style="text-align:right"><input type="number" id="q3rev" placeholder="e.g. 15000" min="0" oninput="updateProfit(3)"/></td>
+          <td style="text-align:right"><input type="number" id="q3exp" placeholder="e.g. 9000"  min="0" oninput="updateProfit(3)"/></td>
+          <td class="q-profit-cell"><span id="q3profit" class="profit-zero">—</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="q-label-cell">
+              <span class="q-lbl">Q4 · Sep – Dec</span>
+              <span class="q-period" id="qDue4">Due: Jan 15</span>
+              <span class="q-months">4 months</span>
+              <button class="copy-btn" onclick="copyFromQ1(4)">Copy Q1</button>
+            </div>
+          </td>
+          <td style="text-align:right"><input type="number" id="q4rev" placeholder="e.g. 15000" min="0" oninput="updateProfit(4)"/></td>
+          <td style="text-align:right"><input type="number" id="q4exp" placeholder="e.g. 9000"  min="0" oninput="updateProfit(4)"/></td>
+          <td class="q-profit-cell"><span id="q4profit" class="profit-zero">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Running totals -->
+    <div class="totals-bar">
+      <div class="tot-item">
+        <span class="tot-lbl">Annual Revenue</span>
+        <span class="tot-val" id="totRev">—</span>
+      </div>
+      <div class="tot-item">
+        <span class="tot-lbl">Annual Expenses</span>
+        <span class="tot-val" id="totExp">—</span>
+      </div>
+      <div class="tot-item">
+        <span class="tot-lbl">Annual Net Profit</span>
+        <span class="tot-val" id="totProfit" style="color:#16a34a">—</span>
+      </div>
+    </div>
+
+    <button class="btn-calc" onclick="calculate()">Calculate Quarterly Taxes →</button>
+  </div>
+
+  <!-- Quarterly payment calendar widget — always visible -->
+  <div class="card no-print" id="qtrCalCard">
+    <div class="card-title" id="qtrCalTitle">2026 Quarterly Payment Calendar</div>
+    <div class="qcal-grid" id="qtrCalGrid"></div>
+    <p style="font-size:.72rem;color:#94a3b8;margin-top:10px">💡 Run Calculate to see estimated payment amounts. Highlighted border = next due date.</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <!-- hero -->
+    <div class="quarterly-hero">
+      <div class="qh-left">
+        <div class="qh-label">Avg Quarterly Payment</div>
+        <div class="qh-amount" id="rAvgQtr">$0</div>
+        <div class="qh-sub">Federal + state — payments vary by season</div>
+      </div>
+      <div class="qh-stats">
+        <div class="qh-stat">
+          <div class="qh-stat-val" id="rTotalTaxHero">—</div>
+          <div class="qh-stat-lbl">Total Annual Tax</div>
+        </div>
+        <div class="qh-stat">
+          <div class="qh-stat-val" id="rEffRateHero">—</div>
+          <div class="qh-stat-lbl">Effective Tax Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quarterly payment cards -->
+    <div class="card">
+      <div class="card-title" id="qPayTitle">Your Quarterly Payments</div>
+      <div class="quarters-grid">
+        <div class="q-card" id="q1card">
+          <div class="q-card-lbl">Q1</div>
+          <div class="q-card-date" id="qCardDate1">Apr 15</div>
+          <div class="q-card-amt" id="q1payment">—</div>
+          <div class="q-card-income" id="q1income">Jan – Mar income</div>
+        </div>
+        <div class="q-card" id="q2card">
+          <div class="q-card-lbl">Q2</div>
+          <div class="q-card-date" id="qCardDate2">Jun 16</div>
+          <div class="q-card-amt" id="q2payment">—</div>
+          <div class="q-card-income" id="q2income">Apr – May income</div>
+        </div>
+        <div class="q-card" id="q3card">
+          <div class="q-card-lbl">Q3</div>
+          <div class="q-card-date" id="qCardDate3">Sep 15</div>
+          <div class="q-card-amt" id="q3payment">—</div>
+          <div class="q-card-income" id="q3income">Jun – Aug income</div>
+        </div>
+        <div class="q-card" id="q4card">
+          <div class="q-card-lbl">Q4</div>
+          <div class="q-card-date" id="qCardDate4">Jan 15</div>
+          <div class="q-card-amt" id="q4payment">—</div>
+          <div class="q-card-income" id="q4income">Sep – Dec income</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">
+        💡 Quarters with a loss show $0 — losses reduce annual profit and lower total tax.
+      </div>
+    </div>
+
+    <!-- QBI Deduction -->
+    <div class="card" id="qbiCard" style="display:none">
+      <div class="card-title">QBI Deduction — Qualified Business Income (§199A)</div>
+      <div id="qbiContent"></div>
+    </div>
+
+    <!-- Tax Payment Tracker -->
+    <div class="card" id="payTrackerCard" style="display:none">
+      <div class="card-title">Federal Tax Payment Tracker</div>
+      <div class="pay-tracker-grid" id="payTrackerGrid"></div>
+      <div class="pay-summary" id="paySummary"></div>
+    </div>
+
+    <!-- Tax breakdown -->
+    <div class="card">
+      <div class="card-title">Annual Tax Breakdown</div>
+      <table class="breakdown">
+        <tr class="row-section"><td colspan="2">Federal Taxes</td></tr>
+        <tr><td class="row-label">Annual Net Profit</td><td id="rProfit">—</td></tr>
+        <tbody id="dedSection"></tbody>
+        <tr><td class="row-label">Self-Employment Tax (15.3%)</td><td id="rSE">—</td></tr>
+        <tr><td class="row-label">SE Tax Deduction (½ of SE)</td><td id="rSEDed" style="color:#16a34a">—</td></tr>
+        <tr><td class="row-label">Federal Standard Deduction</td><td id="rStdDed" style="color:#16a34a">—</td></tr>
+        <tr id="qbiRow" style="display:none"><td class="row-label">QBI Deduction (§199A, 20%)</td><td id="rQBIDed" style="color:#16a34a">—</td></tr>
+        <tr><td class="row-label">Federal Taxable Income</td><td id="rFedTaxable">—</td></tr>
+        <tr><td class="row-label">Federal Income Tax</td><td id="rFedTax">—</td></tr>
+        <tr class="row-section"><td colspan="2" id="rStateSectionLabel">State Taxes</td></tr>
+        <tr><td class="row-label" id="rStateStdDedLabel">State Std. Deduction / Exemption</td><td id="rStateStdDed" style="color:#16a34a">—</td></tr>
+        <tr><td class="row-label">State Taxable Income</td><td id="rStateTaxable">—</td></tr>
+        <tr><td class="row-label" id="rStateTaxLabel">State Income Tax</td><td id="rStateTax">—</td></tr>
+        <tr class="row-total"><td><strong>Total Annual Tax</strong></td><td id="rTotalTax">—</td></tr>
+        <tbody id="payrollSection"></tbody>
+      </table>
+      <div class="tax-bars" id="taxBars"></div>
+      <div style="margin-top:14px;font-size:.82rem;color:#64748b">
+        Effective rate: <strong id="rEffRate" style="color:#1e293b">—</strong> &nbsp;|&nbsp;
+        Federal bracket: <strong id="rBracket" style="color:#1e293b">—</strong> &nbsp;|&nbsp;
+        State eff. rate: <strong id="rStateEffRate" style="color:#1e293b">—</strong>
+      </div>
+    </div>
+
+    <!-- State quarterly note -->
+    <div class="card" id="stateQtrCard">
+      <div class="card-title">State Estimated Tax Payments</div>
+      <div class="state-qtr-note" id="stateQtrNote"></div>
+    </div>
+
+    <div class="export-bar no-print">
+      <button class="btn-export" onclick="exportPDF()">📄 Export for CPA</button>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> Estimates use <span id="disclaimerYear">2026</span> projected tax rates for planning purposes only. Does not account for credits, depreciation, retirement contributions, health insurance deductions, AMT, local/city taxes, or prior-year safe harbor rules. Maryland residents may owe additional county tax (2–3.2%). NYC residents owe additional city tax (up to 3.876%). Consult a CPA for your actual obligations.
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── State tax data — 2024 rates ── */
+/* brackets format: [[income_ceiling, rate], ...] cumulative from $0 */
+/* std_single / std_married: state standard deduction or personal exemption */
+
+var STATE_DATA = {
+  /* No income tax */
+  AK:{noTax:true}, FL:{noTax:true}, NV:{noTax:true}, WA:{noTax:true},
+  WY:{noTax:true}, SD:{noTax:true}, TN:{noTax:true},
+  NH:{noTax:true, note:'NH taxes only dividend & interest income, not business profit or wages.'},
+
+  /* Flat tax states */
+  AZ:{flat:.025,  ss:14600, sm:29200},
+  CO:{flat:.044,  ss:14600, sm:29200},
+  GA:{flat:.0549, ss:5400,  sm:7100},
+  ID:{flat:.058,  ss:14600, sm:29200},
+  IL:{flat:.0495, ss:0,     sm:0,    exemption:2425},
+  IN:{flat:.0305, ss:0,     sm:0,    exemption:1000},
+  KY:{flat:.04,   ss:3160,  sm:6320},
+  MA:{flat:.05,   ss:0,     sm:0,    exemption:4400},
+  MI:{flat:.0405, ss:5600,  sm:11200},
+  MS:{flat:.05,   ss:2300,  sm:4600, note:'0% on first $5,000 of taxable income.'},
+  NC:{flat:.0475, ss:12750, sm:25500},
+  PA:{flat:.0307, ss:0,     sm:0},
+  UT:{flat:.0465, ss:816,   sm:1632},
+
+  /* Progressive states */
+  AL:{
+    bs:[[500,.02],[3000,.04],[Infinity,.05]],
+    bm:[[1000,.02],[6000,.04],[Infinity,.05]],
+    ss:3000, sm:8500
+  },
+  AR:{
+    bs:[[5100,.02],[10300,.03],[Infinity,.039]],
+    bm:[[5100,.02],[10300,.03],[Infinity,.039]],
+    ss:2270, sm:4540
+  },
+  CA:{
+    bs:[[10412,.01],[24684,.02],[38959,.04],[54081,.06],[68350,.08],[349137,.093],[418961,.103],[698274,.113],[1000000,.123],[Infinity,.133]],
+    bm:[[20824,.01],[49368,.02],[77918,.04],[108162,.06],[136700,.08],[698274,.093],[837922,.103],[1000000,.113],[1396948,.123],[Infinity,.133]],
+    ss:5202, sm:10404,
+    note:'California Form 540-ES. Due: Apr 15, Jun 15, Sep 15, Jan 15.',
+    qform:'Form 540-ES'
+  },
+  CT:{
+    bs:[[10000,.03],[50000,.05],[100000,.055],[200000,.06],[250000,.065],[500000,.069],[Infinity,.0699]],
+    bm:[[20000,.03],[100000,.05],[200000,.055],[400000,.06],[500000,.065],[1000000,.069],[Infinity,.0699]],
+    ss:0, sm:0, exemption:15000
+  },
+  DC:{
+    bs:[[10000,.04],[40000,.06],[60000,.065],[250000,.085],[500000,.0925],[1000000,.0975],[Infinity,.1075]],
+    bm:[[10000,.04],[40000,.06],[60000,.065],[250000,.085],[500000,.0925],[1000000,.0975],[Infinity,.1075]],
+    ss:14600, sm:29200
+  },
+  DE:{
+    bs:[[2000,0],[5000,.022],[10000,.039],[20000,.048],[25000,.052],[60000,.0555],[Infinity,.066]],
+    bm:[[2000,0],[5000,.022],[10000,.039],[20000,.048],[25000,.052],[60000,.0555],[Infinity,.066]],
+    ss:3250, sm:6500
+  },
+  HI:{
+    bs:[[2400,.014],[4800,.032],[9600,.055],[14400,.064],[19200,.068],[24000,.072],[36000,.076],[48000,.079],[Infinity,.11]],
+    bm:[[4800,.014],[9600,.032],[19200,.055],[28800,.064],[38400,.068],[48000,.072],[72000,.076],[96000,.079],[Infinity,.11]],
+    ss:2200, sm:4400
+  },
+  IA:{
+    bs:[[6210,.044],[31050,.0482],[Infinity,.057]],
+    bm:[[12420,.044],[62100,.0482],[Infinity,.057]],
+    ss:2210, sm:5450
+  },
+  KS:{
+    bs:[[15000,.031],[30000,.0525],[Infinity,.057]],
+    bm:[[30000,.031],[60000,.0525],[Infinity,.057]],
+    ss:3500, sm:8000
+  },
+  LA:{
+    bs:[[12500,.0185],[50000,.035],[Infinity,.0425]],
+    bm:[[25000,.0185],[100000,.035],[Infinity,.0425]],
+    ss:4500, sm:9000
+  },
+  MD:{
+    bs:[[1000,.02],[2000,.03],[3000,.04],[100000,.0475],[125000,.05],[150000,.0525],[250000,.055],[Infinity,.0575]],
+    bm:[[1000,.02],[2000,.03],[3000,.04],[150000,.0475],[175000,.05],[225000,.0525],[300000,.055],[Infinity,.0575]],
+    ss:2400, sm:4850,
+    note:'Maryland also levies a county income tax (2%–3.2% extra) not included here.'
+  },
+  ME:{
+    bs:[[24500,.058],[58050,.0675],[Infinity,.0715]],
+    bm:[[49050,.058],[116100,.0675],[Infinity,.0715]],
+    ss:14600, sm:29200
+  },
+  MN:{
+    bs:[[30070,.0535],[98760,.068],[183340,.0785],[Infinity,.0985]],
+    bm:[[44050,.0535],[175070,.068],[304970,.0785],[Infinity,.0985]],
+    ss:13825, sm:27650
+  },
+  MO:{
+    bs:[[113,0],[1121,.015],[2242,.02],[3363,.025],[4484,.03],[5605,.035],[6726,.04],[7848,.045],[8969,.05],[Infinity,.054]],
+    bm:[[113,0],[1121,.015],[2242,.02],[3363,.025],[4484,.03],[5605,.035],[6726,.04],[7848,.045],[8969,.05],[Infinity,.054]],
+    ss:14600, sm:29200
+  },
+  MT:{
+    bs:[[20500,.047],[Infinity,.059]],
+    bm:[[41000,.047],[Infinity,.059]],
+    ss:14600, sm:29200
+  },
+  NE:{
+    bs:[[3700,.0246],[22170,.0351],[35730,.0501],[Infinity,.0584]],
+    bm:[[7390,.0246],[44350,.0351],[71490,.0501],[Infinity,.0584]],
+    ss:7900, sm:15800
+  },
+  NJ:{
+    bs:[[20000,.014],[35000,.0175],[40000,.0245],[75000,.035],[500000,.05525],[1000000,.0637],[Infinity,.1075]],
+    bm:[[20000,.014],[50000,.0175],[70000,.0245],[80000,.035],[150000,.05525],[500000,.0637],[1000000,.0897],[Infinity,.1075]],
+    ss:0, sm:0, exemption:1000
+  },
+  NM:{
+    bs:[[5500,.017],[11000,.032],[16000,.047],[210000,.049],[Infinity,.059]],
+    bm:[[8000,.017],[16000,.032],[24000,.047],[315000,.049],[Infinity,.059]],
+    ss:14600, sm:29200
+  },
+  NY:{
+    bs:[[17150,.04],[23600,.045],[27900,.0525],[161550,.0585],[323200,.0625],[2155350,.0685],[5000000,.0965],[25000000,.103],[Infinity,.109]],
+    bm:[[21400,.04],[26600,.045],[31200,.0525],[323200,.0585],[2155350,.0625],[5000000,.0685],[25000000,.0965],[Infinity,.109]],
+    ss:8000, sm:16050,
+    note:'NYC residents owe an additional city income tax up to 3.876% — not included here.'
+  },
+  ND:{
+    bs:[[44725,0],[225975,.0195],[Infinity,.025]],
+    bm:[[74750,0],[275100,.0195],[Infinity,.025]],
+    ss:14600, sm:29200
+  },
+  OH:{
+    bs:[[26050,0],[100000,.02765],[115300,.03226],[Infinity,.0399]],
+    bm:[[26050,0],[100000,.02765],[115300,.03226],[Infinity,.0399]],
+    ss:2400, sm:4800
+  },
+  OK:{
+    bs:[[1000,.0025],[2500,.0075],[3750,.0175],[4900,.0275],[7200,.0375],[Infinity,.0475]],
+    bm:[[2000,.0025],[5000,.0075],[7500,.0175],[9800,.0275],[12200,.0375],[Infinity,.0475]],
+    ss:6350, sm:12700
+  },
+  OR:{
+    bs:[[4050,.0475],[10200,.0675],[125000,.0875],[Infinity,.099]],
+    bm:[[8100,.0475],[20400,.0675],[250000,.0875],[Infinity,.099]],
+    ss:2420, sm:4840
+  },
+  RI:{
+    bs:[[77450,.0375],[176050,.0475],[Infinity,.0599]],
+    bm:[[154900,.0375],[352100,.0475],[Infinity,.0599]],
+    ss:9300, sm:18600
+  },
+  SC:{
+    bs:[[3200,0],[16040,.03],[32080,.04],[48120,.05],[64160,.06],[Infinity,.065]],
+    bm:[[3200,0],[16040,.03],[32080,.04],[48120,.05],[64160,.06],[Infinity,.065]],
+    ss:14600, sm:29200
+  },
+  VA:{
+    bs:[[3000,.02],[5000,.03],[17000,.05],[Infinity,.0575]],
+    bm:[[3000,.02],[5000,.03],[17000,.05],[Infinity,.0575]],
+    ss:8000, sm:16000
+  },
+  VT:{
+    bs:[[45400,.0335],[110050,.066],[229550,.076],[Infinity,.0875]],
+    bm:[[75850,.0335],[183400,.066],[279950,.076],[Infinity,.0875]],
+    ss:6500, sm:13000
+  },
+  WI:{
+    bs:[[13810,.0354],[27630,.0465],[304170,.053],[Infinity,.0765]],
+    bm:[[18420,.0354],[36840,.0465],[405550,.053],[Infinity,.0765]],
+    ss:11790, sm:21820
+  },
+  WV:{
+    bs:[[10000,.0236],[25000,.0315],[40000,.0354],[60000,.0472],[Infinity,.0512]],
+    bm:[[10000,.0236],[25000,.0315],[40000,.0354],[60000,.0472],[Infinity,.0512]],
+    ss:0, sm:0, exemption:2000
+  }
+};
+
+/* State quarterly payment info */
+var STATE_QTR = {
+  CA:{form:'Form 540-ES',agency:'California FTB (ftb.ca.gov)',schedule:'Apr 15, Jun 15, Sep 15, Jan 15'},
+  NY:{form:'Form IT-2105',agency:'New York DTF (tax.ny.gov)',schedule:'Apr 15, Jun 17, Sep 15, Jan 15'},
+  NJ:{form:'Form NJ-1040-ES',agency:'NJ Division of Taxation (nj.gov/treasury/taxation)',schedule:'Apr 15, Jun 16, Sep 15, Jan 15'},
+  OR:{form:'Form OR-40-V',agency:'Oregon Revenue (oregon.gov/dor)',schedule:'Apr 15, Jun 16, Sep 15, Jan 15'},
+  MN:{form:'Form M15',agency:'MN Revenue (revenue.state.mn.us)',schedule:'Apr 15, Jun 16, Sep 16, Jan 15'},
+  PA:{form:'Form PA-40 ES',agency:'PA Revenue (revenue.pa.gov)',schedule:'Apr 15, Jun 16, Sep 15, Jan 15'},
+  VA:{form:'Form 760ES',agency:'Virginia Tax (tax.virginia.gov)',schedule:'May 1, Jun 15, Sep 15, Jan 15'}
+};
+
+// ── P1 Calculation: multi-year brackets ──────────────────────────────────────
+var ALL_BRACKETS={
+  2024:{
+    single: [[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[609350,.35],[Infinity,.37]],
+    married:[[23200,.10],[94300,.12],[201050,.22],[383900,.24],[487450,.32],[731200,.35],[Infinity,.37]],
+    hoh:    [[16550,.10],[63100,.12],[100500,.22],[191950,.24],[243700,.32],[609350,.35],[Infinity,.37]]
+  },
+  2025:{
+    single: [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+    married:[[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+    hoh:    [[17000,.10],[64850,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+  },
+  2026:{ // Projected — IRS typically announces October prior year
+    single: [[12200,.10],[49750,.12],[106050,.22],[202600,.24],[257200,.32],[643750,.35],[Infinity,.37]],
+    married:[[24400,.10],[99500,.12],[212100,.22],[405250,.24],[514600,.32],[772750,.35],[Infinity,.37]],
+    hoh:    [[17450,.10],[66650,.12],[106050,.22],[202600,.24],[257150,.32],[643750,.35],[Infinity,.37]]
+  }
+};
+var ALL_STD_DED={
+  2024:{single:14600,married:29200,hoh:21900},
+  2025:{single:15000,married:30000,hoh:22500},
+  2026:{single:15450,married:30900,hoh:23150}
+};
+var QBI_PHASE={
+  2024:{single:191950,married:383900},
+  2025:{single:197300,married:394600},
+  2026:{single:202600,married:405250}
+};
+var YEAR_DUES={
+  2024:['Apr 15, 2024','Jun 17, 2024','Sep 16, 2024','Jan 15, 2025'],
+  2025:['Apr 15, 2025','Jun 16, 2025','Sep 15, 2025','Jan 15, 2026'],
+  2026:['Apr 15, 2026','Jun 17, 2026','Sep 16, 2026','Jan 15, 2027']
+};
+
+function getTaxYear(){ return parseInt(document.getElementById('taxYear').value)||2026; }
+function getBrackets(status){ var yr=getTaxYear(); return (ALL_BRACKETS[yr]||ALL_BRACKETS[2026])[status]||ALL_BRACKETS[2026].single; }
+function getStdDed(status){ var yr=getTaxYear(); var sd=ALL_STD_DED[yr]||ALL_STD_DED[2026]; return status==='married'?sd.married:status==='hoh'?sd.hoh:sd.single; }
+
+function getPeriods(yr){
+  var dues=YEAR_DUES[yr]||YEAR_DUES[2026];
+  return [
+    {n:1,label:'Q1',months:3,due:dues[0],range:'Jan – Mar'},
+    {n:2,label:'Q2',months:2,due:dues[1],range:'Apr – May'},
+    {n:3,label:'Q3',months:3,due:dues[2],range:'Jun – Aug'},
+    {n:4,label:'Q4',months:4,due:dues[3],range:'Sep – Dec'}
+  ];
+}
+var Q_MONTHS=[3,2,3,4]; // quarter lengths — fixed by IRS, year-independent
+
+var _lastTotalTax=0,_lastQd=[];
+
+// Keep legacy PERIODS as default fallback (overridden by getPeriods() at runtime)
+var PERIODS=getPeriods(2026);
+
+var _toast=null;
+function showToast(msg,type){
+  var t=document.getElementById('fwToast');
+  if(!t)return;
+  t.textContent=msg; t.className='fw-toast'+(type?' toast-'+type:'');
+  t.classList.add('show');
+  clearTimeout(_toast);
+  _toast=setTimeout(function(){t.classList.remove('show');},3500);
+}
+
+function fmt(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-US');}
+function fmtPct(n){return (n*100).toFixed(1)+'%';}
+
+/* Calculate tax using progressive brackets */
+function applyBrackets(income, brackets){
+  var prev=0, tax=0;
+  for(var i=0;i<brackets.length;i++){
+    var ceil=brackets[i][0], rate=brackets[i][1];
+    if(income<=0) break;
+    var chunk=Math.min(income, ceil-prev);
+    tax+=chunk*rate; income-=chunk; prev=ceil;
+  }
+  return tax;
+}
+
+/* State tax calculation with proper progressive brackets */
+function calcStateTax(annualProfit, state, filing){
+  var d=STATE_DATA[state];
+  if(!d||d.noTax) return {tax:0, taxable:0, effRate:0, stdDed:0, note:d&&d.note?d.note:'No state income tax.'};
+
+  var stdDed=(filing==='married'?d.sm:d.ss)||0;
+  var exemption=d.exemption||0;
+  var taxable=Math.max(0, annualProfit - stdDed - exemption);
+  var tax=0;
+
+  if(d.flat){
+    /* flat rate state */
+    if(state==='MS'){
+      /* MS: 0% on first $10K, then flat 5% */
+      tax=Math.max(0,taxable-10000)*0.05;
+    } else {
+      tax=taxable*d.flat;
+    }
+  } else {
+    /* progressive */
+    var brackets=(filing==='married'&&d.bm)?d.bm:d.bs;
+    tax=applyBrackets(taxable, brackets);
+  }
+
+  var effRate=annualProfit>0?tax/annualProfit:0;
+  return {tax:tax, taxable:taxable, effRate:effRate, stdDed:stdDed+exemption, note:d.note||''};
+}
+
+/* Federal income tax */
+function calcFedTax(taxable,status){
+  var brackets=getBrackets(status),prev=0,tax=0,bracket='10%';
+  for(var i=0;i<brackets.length;i++){
+    var ceil=brackets[i][0],rate=brackets[i][1];
+    if(taxable<=0)break;
+    var chunk=Math.min(taxable,ceil-prev);
+    tax+=chunk*rate; taxable-=chunk; prev=ceil;
+    if(chunk>0) bracket=Math.round(rate*100)+'%';
+  }
+  return{tax:tax,bracket:bracket};
+}
+
+function getQData(){
+  return getPeriods(getTaxYear()).map(function(p){
+    var rev=parseFloat(document.getElementById('q'+p.n+'rev').value)||0;
+    var exp=parseFloat(document.getElementById('q'+p.n+'exp').value)||0;
+    var profit=(rev-exp)*p.months;
+    return {n:p.n,label:p.label,months:p.months,due:p.due,range:p.range,rev:rev,exp:exp,profit:profit};
+  });
+}
+
+function updateProfit(n){
+  var rev=parseFloat(document.getElementById('q'+n+'rev').value)||0;
+  var exp=parseFloat(document.getElementById('q'+n+'exp').value)||0;
+  var months=Q_MONTHS[n-1];
+  var profit=(rev-exp)*months;
+  var el=document.getElementById('q'+n+'profit');
+  if(rev===0&&exp===0){el.textContent='—';el.className='profit-zero';return;}
+  el.textContent=(profit>=0?'+':'-')+fmt(Math.abs(profit));
+  el.className=profit>0?'profit-pos':profit<0?'profit-neg':'profit-zero';
+  updateTotals();
+  saveTaxInputs();
+}
+
+function updateTotals(){
+  var qd=getQData();
+  var totRev=qd.reduce(function(s,q){return s+q.rev*q.months;},0);
+  var totExp=qd.reduce(function(s,q){return s+q.exp*q.months;},0);
+  var totPro=qd.reduce(function(s,q){return s+q.profit;},0);
+  document.getElementById('totRev').textContent  = totRev>0?fmt(totRev):'—';
+  document.getElementById('totExp').textContent  = totExp>0?fmt(totExp):'—';
+  var tp=document.getElementById('totProfit');
+  if(totPro!==0){
+    tp.textContent=(totPro>=0?'+':'-')+fmt(Math.abs(totPro));
+    tp.style.color=totPro>=0?'#16a34a':'#dc2626';
+  } else {tp.textContent='—';tp.style.color='#94a3b8';}
+}
+
+function copyFromQ1(n){
+  document.getElementById('q'+n+'rev').value=document.getElementById('q1rev').value;
+  document.getElementById('q'+n+'exp').value=document.getElementById('q1exp').value;
+  updateProfit(n);
+}
+
+function toggleScorp(){
+  document.getElementById('scorpNote').style.display=
+    document.getElementById('bizType').value==='scorp'?'block':'none';
+}
+
+/* Get human-readable state name from dropdown */
+function getStateName(code){
+  var sel=document.getElementById('state');
+  var opt=sel.querySelector('option[value="'+code+'"]');
+  if(!opt) return code;
+  return opt.textContent.split('—')[0].trim();
+}
+
+// ── P1 Persistence ───────────────────────────────────────────────────────────
+var TAX_INPUT_KEY='fw_tax_inputs_';
+function saveTaxInputs(){
+  var yr=getTaxYear();
+  try{
+    localStorage.setItem(TAX_INPUT_KEY+yr, JSON.stringify({
+      bizType:     document.getElementById('bizType').value,
+      filingStatus:document.getElementById('filingStatus').value,
+      state:       document.getElementById('state').value,
+      q1rev:document.getElementById('q1rev').value, q1exp:document.getElementById('q1exp').value,
+      q2rev:document.getElementById('q2rev').value, q2exp:document.getElementById('q2exp').value,
+      q3rev:document.getElementById('q3rev').value, q3exp:document.getElementById('q3exp').value,
+      q4rev:document.getElementById('q4rev').value, q4exp:document.getElementById('q4exp').value
+    }));
+  }catch(e){}
+}
+function restoreTaxInputs(){
+  var yr=getTaxYear();
+  try{
+    var s=JSON.parse(localStorage.getItem(TAX_INPUT_KEY+yr)||'null');
+    if(!s) return;
+    if(s.bizType)      document.getElementById('bizType').value=s.bizType;
+    if(s.filingStatus) document.getElementById('filingStatus').value=s.filingStatus;
+    if(s.state){
+      var sel=document.getElementById('state');
+      for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===s.state){sel.selectedIndex=i;break;}}
+    }
+    [1,2,3,4].forEach(function(n){
+      if(s['q'+n+'rev']){document.getElementById('q'+n+'rev').value=s['q'+n+'rev']; updateProfit(n);}
+      if(s['q'+n+'exp']){document.getElementById('q'+n+'exp').value=s['q'+n+'exp']; updateProfit(n);}
+    });
+    toggleScorp();
+  }catch(e){}
+}
+function onYearChange(){
+  var yr=getTaxYear();
+  var sd=ALL_STD_DED[yr]||ALL_STD_DED[2026];
+  document.getElementById('yearBadge').textContent=yr+(yr===2026?' (proj.)':'')+' brackets · Std ded $'+sd.single.toLocaleString();
+  var dues=YEAR_DUES[yr]||YEAR_DUES[2026];
+  document.getElementById('qDue1').textContent='Due: '+dues[0];
+  document.getElementById('qDue2').textContent='Due: '+dues[1];
+  document.getElementById('qDue3').textContent='Due: '+dues[2];
+  document.getElementById('qDue4').textContent='Due: '+dues[3];
+  document.getElementById('qPayTitle').textContent='Your '+yr+' Quarterly Payments';
+  document.getElementById('qCardDate1').textContent=dues[0];
+  document.getElementById('qCardDate2').textContent=dues[1];
+  document.getElementById('qCardDate3').textContent=dues[2];
+  document.getElementById('qCardDate4').textContent=dues[3];
+  var dy=document.getElementById('disclaimerYear');
+  if(dy) dy.textContent=yr+(yr===2026?' projected':'');
+  renderQtrCalendarWidget(null);
+  restoreTaxInputs();
+}
+
+// ── P2 Integration: invoiceTracker revenue + vendorBillTracker expenses ───────
+var _importedRev=0, _importedExp=0;
+function loadRevExpData(){
+  var r={rev:0,revCount:0,revMonthly:0,exp:0,expCount:0,expMonthly:0};
+  try{
+    var inv=JSON.parse(localStorage.getItem('fw_invoices')||'[]');
+    var paid=inv.filter(function(i){return i.status==='paid';});
+    r.revCount=paid.length;
+    r.rev=paid.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    r.revMonthly=Math.round(r.rev/12);
+  }catch(e){}
+  try{
+    var bills=JSON.parse(localStorage.getItem('fw_bills')||'[]');
+    var active=bills.filter(function(b){return !b._dcc;});
+    r.expCount=active.length;
+    r.exp=active.reduce(function(s,b){return s+(parseFloat(b.amount)||0);},0);
+    r.expMonthly=Math.round(r.exp);
+  }catch(e){}
+  return r;
+}
+function renderIntegrationBanner(){
+  var band=document.getElementById('modBand'); if(!band) return;
+  var d=loadRevExpData(); var shown=false;
+  if(d.revMonthly>0){
+    _importedRev=d.revMonthly;
+    document.getElementById('revPill').textContent='📋 Revenue: '+fmt(d.rev)+' paid invoices ('+d.revCount+') → '+fmt(d.revMonthly)+'/mo avg';
+    document.getElementById('revRow').style.display='flex'; shown=true;
+  }
+  if(d.expMonthly>0){
+    _importedExp=d.expMonthly;
+    document.getElementById('expPill').textContent='🗂️ Expenses: '+fmt(d.expMonthly)+'/mo from Vendor Bills ('+d.expCount+' bills)';
+    document.getElementById('expRow').style.display='flex'; shown=true;
+  }
+  if(shown) band.style.display='block';
+}
+function importRevenue(){
+  if(!_importedRev) return;
+  [1,2,3,4].forEach(function(n){
+    if(!document.getElementById('q'+n+'rev').value){document.getElementById('q'+n+'rev').value=_importedRev; updateProfit(n);}
+  });
+  document.getElementById('revImportBtn').textContent='✓ Imported';
+  document.getElementById('revImportBtn').disabled=true;
+  saveTaxInputs();
+}
+function importExpenses(){
+  if(!_importedExp) return;
+  [1,2,3,4].forEach(function(n){
+    if(!document.getElementById('q'+n+'exp').value){document.getElementById('q'+n+'exp').value=_importedExp; updateProfit(n);}
+  });
+  document.getElementById('expImportBtn').textContent='✓ Imported';
+  document.getElementById('expImportBtn').disabled=true;
+  saveTaxInputs();
+}
+
+// ── P2 Feature: QBI deduction (§199A) ────────────────────────────────────────
+function calcQBI(annualProfit, bizType, status, yr){
+  if(bizType==='corp') return 0;
+  var qbiIncome=bizType==='scorp'?annualProfit*0.60:annualProfit;
+  var tentative=Math.round(qbiIncome*0.20);
+  var phase=(QBI_PHASE[yr]||QBI_PHASE[2025])[status==='married'?'married':'single'];
+  var phaseRange=status==='married'?200000:100000;
+  if(annualProfit>=phase+phaseRange) return 0;
+  if(annualProfit>phase){ tentative=Math.round(tentative*(1-(annualProfit-phase)/phaseRange)); }
+  return tentative;
+}
+function renderQBICard(annualProfit, bizType, status, yr){
+  var card=document.getElementById('qbiCard');
+  var el=document.getElementById('qbiContent');
+  if(!card){return;}
+  if(bizType==='corp'){ card.style.display='none'; return; }
+  var qbiDed=calcQBI(annualProfit,bizType,status,yr);
+  var phase=(QBI_PHASE[yr]||QBI_PHASE[2025])[status==='married'?'married':'single'];
+  if(qbiDed<=0){
+    el.innerHTML='<p style="font-size:.84rem;color:#64748b">QBI deduction fully phased out — net profit of '+fmt(annualProfit)+' exceeds the '+yr+' income threshold of '+fmt(phase+(status==='married'?200000:100000))+'.</p>';
+    card.style.display='block'; return;
+  }
+  var qbiIncome=bizType==='scorp'?annualProfit*0.60:annualProfit;
+  var savings=Math.round(qbiDed*0.22);
+  el.innerHTML=
+    '<p style="font-size:.82rem;color:#64748b;margin-bottom:10px">The §199A deduction lets pass-through owners deduct up to <strong>20% of qualified business income</strong> from federal taxable income.</p>'+
+    '<div class="qbi-grid">'+
+      '<div class="qbi-box"><div class="qbi-lbl">QBI Base</div><div class="qbi-val">'+fmt(qbiIncome)+'</div><div class="qbi-sub">'+(bizType==='scorp'?'60% of profit (distribution)':'100% of net profit')+'</div></div>'+
+      '<div class="qbi-box"><div class="qbi-lbl">QBI Deduction (20%)</div><div class="qbi-val" style="color:#16a34a">−'+fmt(qbiDed)+'</div><div class="qbi-sub">Reduces federal taxable income</div></div>'+
+      '<div class="qbi-box"><div class="qbi-lbl">Est. Tax Savings</div><div class="qbi-val" style="color:#16a34a">'+fmt(savings)+'</div><div class="qbi-sub">At 22% marginal rate (illustrative)</div></div>'+
+    '</div>'+
+    '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.8rem;color:#5b21b6">💡 <strong>To claim:</strong> File Form 8995 (simple) or Form 8995-A (above threshold) with your annual return. Retirement contributions (SEP-IRA, Solo 401k) also reduce QBI income, amplifying this deduction.</div>';
+  card.style.display='block';
+}
+
+// ── P3 UX: Quarterly payment calendar widget ──────────────────────────────────
+function parseQDueDate(str){
+  var mo={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  var p=str.split(/[\s,]+/).filter(Boolean);
+  return new Date(parseInt(p[2]),mo[p[0]],parseInt(p[1]));
+}
+function renderQtrCalendarWidget(payments){
+  var grid=document.getElementById('qtrCalGrid'); if(!grid) return;
+  var yr=getTaxYear();
+  var dues=YEAR_DUES[yr]||YEAR_DUES[2026];
+  var today=new Date(); today.setHours(0,0,0,0);
+  var labels=['Q1','Q2','Q3','Q4'];
+  var ranges=['Jan – Mar','Apr – May','Jun – Aug','Sep – Dec'];
+  var nextIdx=-1;
+  for(var i=0;i<4;i++){ if(parseQDueDate(dues[i])>=today){nextIdx=i;break;} }
+  var html='';
+  for(var i=0;i<4;i++){
+    var dd=parseQDueDate(dues[i]);
+    var isPast=dd<today, isNext=i===nextIdx;
+    var diff=Math.round((dd-today)/86400000);
+    var cls=isPast?'qcal-past':isNext?'qcal-next':'';
+    var cntTxt=isPast?'Passed':diff+' day'+(diff===1?'':'s')+' away';
+    var cntCol=isPast?'#94a3b8':diff<=7?'#dc2626':diff<=30?'#d97706':'#16a34a';
+    var amt=payments&&payments[i]!=null?fmt(payments[i]):'—';
+    var tag=isPast?'<span class="qcal-tag past-tag">Passed</span>':isNext?'<span class="qcal-tag next-tag">Due Next</span>':'';
+    html+='<div class="qcal-card '+cls+'">'+
+      '<div class="qcal-q">'+labels[i]+' · '+yr+'</div>'+
+      '<div class="qcal-date">'+dues[i]+'</div>'+
+      '<div class="qcal-amt">'+amt+'</div>'+
+      '<div class="qcal-countdown" style="color:'+cntCol+'">'+cntTxt+'</div>'+
+      '<div style="font-size:.67rem;color:#94a3b8;margin-top:2px">'+ranges[i]+'</div>'+
+      tag+'</div>';
+  }
+  document.getElementById('qtrCalTitle').textContent=yr+' Quarterly Payment Calendar';
+  grid.innerHTML=html;
+}
+
+// ── P2 Export: PDF for CPA ────────────────────────────────────────────────────
+function exportPDF(){
+  var yr=getTaxYear();
+  document.getElementById('printYear').textContent=yr;
+  document.getElementById('printDate').textContent=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(p&&p.name) document.querySelector('#printHdr h2').textContent=p.name+' — Quarterly Tax Estimate '+yr;
+  }catch(e){}
+  window.print();
+}
+
+/* ══════════════════════════════════════════════════════
+   TAX SUITE INTEGRATION — reads fw_ho, fw_s179, fw_ml_trips,
+   fw_employees, fw_futa_setup, fw_sales_tx, fw_sales_filed
+══════════════════════════════════════════════════════ */
+var _appliedDeductions = null; // null = not yet applied
+
+function loadTaxSuiteData(){
+  function sg(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+  var ho       = sg('fw_ho');
+  var s179     = sg('fw_s179')                || [];
+  var trips    = sg('fw_ml_trips')            || [];
+  var employees= sg('fw_employees')           || [];
+  var futaSetup= sg('fw_futa_setup')          || {};
+  var salesSetup = sg('fw_sales_setup');
+  var salesTx  = sg('fw_sales_tx')            || [];
+  var salesFiled = sg('fw_sales_filed')       || {};
+  var yr = new Date().getFullYear();
+
+  // 1. Home office
+  var hoDed = 0;
+  if(ho && ho.off > 0 && ho.tot > 0){
+    var bizPct = ho.off / ho.tot;
+    if(ho.method === 'simplified' || !ho.method){
+      hoDed = Math.min(ho.off, 300) * 5;
+    } else {
+      var totalExp = ['rent','ptax','ins','util','rep','oth'].reduce(function(s,k){ return s+(parseFloat(ho[k])||0); },0);
+      hoDed = totalExp * bizPct;
+    }
+    if(ho.inc > 0) hoDed = Math.min(hoDed, ho.inc);
+  }
+
+  // 2. Section 179 (current year assets + bonus depreciation)
+  var S179_LIMITS = {2026:{lim:1250000,po:3130000,bon:.20},2025:{lim:1250000,po:3130000,bon:.40},2024:{lim:1220000,po:3050000,bon:.60},2023:{lim:1160000,po:2890000,bon:.80}};
+  var yrAssets = s179.filter(function(a){ return parseInt(a.year||0) === yr; });
+  var s179Ded = 0;
+  if(yrAssets.length > 0){
+    var lim = S179_LIMITS[yr] || S179_LIMITS[2025];
+    var totalElig = yrAssets.reduce(function(s,a){ return s+(a.cost||0)*(a.bizPct||100)/100; }, 0);
+    var reduction = Math.max(0, totalElig - lim.po);
+    var maxS179 = Math.max(0, lim.lim - reduction);
+    var running = 0, tot179 = 0, totBonus = 0;
+    yrAssets.forEach(function(a){
+      var elig = (a.cost||0)*(a.bizPct||100)/100;
+      var cap = a.type==='vehicle-light'?12400:a.type==='vehicle-suv'?30500:0;
+      var s179e = cap > 0 ? Math.min(elig,cap) : elig;
+      var s179v = Math.min(s179e, Math.max(0, maxS179-running));
+      running += s179v; tot179 += s179v;
+      totBonus += (elig - s179v) * lim.bon;
+    });
+    s179Ded = tot179 + totBonus;
+  }
+
+  // 3. Mileage (current year business trips)
+  var ML_BIZ = {2026:.70,2025:.70,2024:.67,2023:.655};
+  var bizTrips = trips.filter(function(t){ return t.cat==='business' && parseInt(t.year||0)===yr; });
+  var mlDed = bizTrips.reduce(function(s,t){
+    return s + (t.deduction!=null ? parseFloat(t.deduction)||0 : (parseFloat(t.miles)||0)*(ML_BIZ[yr]||.70));
+  }, 0);
+
+  // 4. FUTA (0.6% net on first $7k per employee) + SUTA (state-specific)
+  var SUTA = {TX:{wb:9000,nr:2.70},CA:{wb:7000,nr:3.40},NY:{wb:12500,nr:2.10},FL:{wb:7000,nr:2.70},IL:{wb:13590,nr:3.40},PA:{wb:10000,nr:2.60},OH:{wb:9000,nr:2.60},GA:{wb:9500,nr:2.70},NC:{wb:29600,nr:1.00},MI:{wb:9500,nr:2.70},NJ:{wb:42300,nr:2.80},VA:{wb:8000,nr:2.50},WA:{wb:72800,nr:1.10},MA:{wb:15000,nr:2.42},AZ:{wb:8000,nr:2.00},CO:{wb:23800,nr:1.70},TN:{wb:7000,nr:2.70},MO:{wb:10500,nr:1.00},IN:{wb:9500,nr:2.50},WI:{wb:14000,nr:3.05},MN:{wb:42200,nr:0.50},SC:{wb:14000,nr:0.98},AL:{wb:8000,nr:2.70},LA:{wb:7700,nr:1.16},KY:{wb:11400,nr:3.00},OR:{wb:52800,nr:2.40},OK:{wb:25700,nr:1.50},CT:{wb:25000,nr:2.60},UT:{wb:47000,nr:1.00},IA:{wb:37800,nr:1.00},NV:{wb:40600,nr:2.95},MS:{wb:14000,nr:1.00},AR:{wb:7000,nr:3.10},KS:{wb:14000,nr:2.70},NM:{wb:31700,nr:1.00},NE:{wb:9000,nr:1.25},ID:{wb:53500,nr:1.05},HI:{wb:61958,nr:3.00},ME:{wb:12000,nr:2.16},NH:{wb:14000,nr:2.70},WV:{wb:9000,nr:2.70},MT:{wb:44800,nr:1.00},RI:{wb:29200,nr:1.11},DE:{wb:16500,nr:1.50},SD:{wb:15000,nr:1.20},ND:{wb:43800,nr:1.10},AK:{wb:47100,nr:2.05},VT:{wb:16500,nr:1.10},WY:{wb:29500,nr:2.00},DC:{wb:9000,nr:2.30},MD:{wb:8500,nr:2.60}};
+  var futaState = futaSetup.state || (salesSetup && salesSetup.state) || 'TX';
+  var suta = SUTA[futaState] || {wb:9000,nr:2.70};
+  var totalFUTA = 0, totalSUTA = 0;
+  employees.forEach(function(e){
+    var w = parseFloat(e.wages)||0;
+    totalFUTA += Math.min(w, 7000) * 0.006;
+    var sr = e.sutaOvr != null ? parseFloat(e.sutaOvr)/100 : suta.nr/100;
+    totalSUTA += Math.min(w, suta.wb) * sr;
+  });
+
+  // 5. Unfiled sales tax liability
+  var unfiledSalesTax = 0;
+  if(salesSetup && salesTx.length > 0){
+    var freq = salesSetup.freq || salesSetup.frequency || 'quarterly';
+    var totalCollected = salesTx.filter(function(t){ return t.date && t.date.startsWith(''+yr); })
+      .reduce(function(s,t){ return s+(parseFloat(t.tax)||0); }, 0);
+    var totalFiled = Object.values(salesFiled).reduce(function(s,v){
+      var amt = (v && typeof v==='object') ? parseFloat(v.amount||v.amt)||0 : parseFloat(v)||0;
+      return s+amt;
+    }, 0);
+    unfiledSalesTax = Math.max(0, totalCollected - totalFiled);
+  }
+
+  return {
+    hoDed     : Math.round(hoDed),
+    s179Ded   : Math.round(s179Ded),
+    mlDed     : Math.round(mlDed),
+    totalDed  : Math.round(hoDed + s179Ded + mlDed),
+    futa      : Math.round(totalFUTA),
+    suta      : Math.round(totalSUTA),
+    unfiledSalesTax: Math.round(unfiledSalesTax),
+    empCount  : employees.length,
+    hasAny    : (hoDed>0||s179Ded>0||mlDed>0||employees.length>0||unfiledSalesTax>0)
+  };
+}
+
+function renderConnectedBanner(){
+  var el = document.getElementById('suiteBanner');
+  if(!el) return;
+  var d = loadTaxSuiteData();
+  if(!d.hasAny){ el.style.display='none'; return; }
+
+  var pills = [];
+  if(d.hoDed>0)    pills.push('<span class="cb-pill cp-green">🏠 Home Office: '+fmt(d.hoDed)+'</span>');
+  if(d.s179Ded>0)  pills.push('<span class="cb-pill cp-green">🖥 Section 179: '+fmt(d.s179Ded)+'</span>');
+  if(d.mlDed>0)    pills.push('<span class="cb-pill cp-green">🚗 Mileage: '+fmt(d.mlDed)+'</span>');
+  if(d.futa>0)     pills.push('<span class="cb-pill cp-blue">👥 FUTA: '+fmt(d.futa)+'</span>');
+  if(d.suta>0)     pills.push('<span class="cb-pill cp-blue">🏛 SUTA: '+fmt(d.suta)+'</span>');
+  if(d.unfiledSalesTax>0) pills.push('<span class="cb-pill cp-red">⚠️ Unfiled Sales Tax: '+fmt(d.unfiledSalesTax)+'</span>');
+
+  var applied = _appliedDeductions !== null;
+  var warnCls  = d.unfiledSalesTax>0 ? ' warn' : '';
+  var btnLabel = applied ? '✅ Deductions Applied' : '↓ Apply Deductions + Payroll Data';
+  var btnCls   = applied ? ' applied' : '';
+  var desc = d.totalDed > 0
+    ? 'Key Deductions found <strong>'+fmt(d.totalDed)+'</strong> in deductible expenses that reduce your taxable income.'
+    : 'Payroll and/or sales tax data found. Apply to see your full tax obligation.';
+
+  el.style.display = 'block';
+  el.innerHTML =
+    '<div class="conn-band'+warnCls+'">'+
+    '<div class="cb-ico">🔗</div>'+
+    '<div class="cb-body">'+
+      '<div class="cb-ttl">Tax Suite Data Connected</div>'+
+      '<div class="cb-desc">'+desc+(d.unfiledSalesTax>0 ? ' <strong style="color:#dc2626">⚠️ Unfiled sales tax detected.</strong>' : '')+'</div>'+
+      '<div class="cb-pills">'+pills.join('')+'</div>'+
+      '<button class="btn-apply-ded'+btnCls+'" onclick="applyDeductionsFromSuite()"'+(applied?' disabled':'')+'>'+btnLabel+'</button>'+
+      (applied ? '&nbsp;<button class="btn-apply-ded" style="background:#64748b" onclick="clearDeductions()">✕ Clear</button>' : '')+
+    '</div>'+
+    '</div>';
+}
+
+function applyDeductionsFromSuite(){
+  _appliedDeductions = loadTaxSuiteData();
+  renderConnectedBanner();
+  showToast('✅ Deductions applied — click Calculate to see updated estimate');
+}
+
+function clearDeductions(){
+  _appliedDeductions = null;
+  renderConnectedBanner();
+  showToast('Deductions cleared');
+}
+
+function calculate(){
+  var qd=getQData();
+  var biz=document.getElementById('bizType').value;
+  var status=document.getElementById('filingStatus').value;
+  var state=document.getElementById('state').value;
+  var stateName=getStateName(state);
+
+  var grossProfit=qd.reduce(function(s,q){return s+q.profit;},0);
+
+  if(grossProfit<=0){
+    showToast('Net annual profit must be positive to estimate taxes','err');
+    return;
+  }
+
+  var ded = _appliedDeductions || {totalDed:0,hoDed:0,s179Ded:0,mlDed:0,futa:0,suta:0,unfiledSalesTax:0};
+  var annualProfit = Math.max(1, grossProfit - ded.totalDed);
+
+  /* Federal calculation */
+  var yr=getTaxYear();
+  var seBase=biz==='scorp'?annualProfit*0.40:annualProfit;
+  var seIncome=seBase*0.9235;
+  var seTax=seIncome*0.153;
+  var seDed=seTax*0.5;
+  var stdDed=getStdDed(status);
+  var qbiDed=calcQBI(annualProfit,biz,status,yr);
+  var fedTaxable=Math.max(0,annualProfit-seDed-stdDed-qbiDed);
+  var fedResult=calcFedTax(fedTaxable,status);
+  var fedTax=fedResult.tax;
+  var bracket=fedResult.bracket;
+
+  /* State calculation — proper progressive brackets */
+  var stResult=calcStateTax(annualProfit, state, status);
+  var stateTax=stResult.tax;
+
+  var totalTax=seTax+fedTax+stateTax;
+  var effRate=totalTax/annualProfit;
+
+  /* Per-quarter payments proportional to positive profit */
+  var posProfit=qd.reduce(function(s,q){return s+(q.profit>0?q.profit:0);},0);
+  qd.forEach(function(q){
+    q.payment=q.profit>0&&posProfit>0?totalTax*(q.profit/posProfit):0;
+  });
+
+  /* Hero */
+  var avgQtr=totalTax/4;
+  document.getElementById('rAvgQtr').textContent=fmt(avgQtr);
+  document.getElementById('rTotalTaxHero').textContent=fmt(totalTax);
+  document.getElementById('rEffRateHero').textContent=fmtPct(effRate);
+
+  /* Quarterly cards */
+  var now=new Date();
+  var dues=(YEAR_DUES[yr]||YEAR_DUES[2026]).map(parseQDueDate);
+  var nextIdx=dues.findIndex(function(d){return d>now;});
+  if(nextIdx===-1)nextIdx=0;
+
+  qd.forEach(function(q,i){
+    var card=document.getElementById('q'+q.n+'card');
+    var old=card.querySelector('.q-next-tag,.q-loss-tag');
+    if(old)old.remove();
+    card.classList.remove('next','q-zero');
+    document.getElementById('q'+q.n+'payment').textContent=fmt(q.payment);
+    document.getElementById('q'+q.n+'income').textContent=
+      q.range+' · '+(q.profit>=0?'+':'-')+fmt(Math.abs(q.profit))+' profit';
+    if(q.profit<=0){
+      card.classList.add('q-zero');
+      var tag=document.createElement('div');tag.className='q-loss-tag';
+      tag.textContent='Loss period'; card.appendChild(tag);
+    } else if(i===nextIdx){
+      card.classList.add('next');
+      var tag=document.createElement('div');tag.className='q-next-tag';
+      tag.textContent='Due Next'; card.appendChild(tag);
+    }
+  });
+
+  /* Breakdown table */
+  document.getElementById('rProfit').textContent =
+    fmt(grossProfit) + (ded.totalDed>0 ? ' (before deductions)' : '');
+
+  /* Inject deduction rows */
+  var dedHtml='';
+  if(ded.totalDed>0){
+    dedHtml += '<tr class="row-section"><td colspan="2" style="color:#16a34a">📉 Key Deductions Applied</td></tr>';
+    if(ded.hoDed>0)   dedHtml += '<tr class="row-ded"><td class="row-label">&nbsp;&nbsp;Home Office</td><td>−'+fmt(ded.hoDed)+'</td></tr>';
+    if(ded.s179Ded>0) dedHtml += '<tr class="row-ded"><td class="row-label">&nbsp;&nbsp;Section 179 / Bonus Depreciation</td><td>−'+fmt(ded.s179Ded)+'</td></tr>';
+    if(ded.mlDed>0)   dedHtml += '<tr class="row-ded"><td class="row-label">&nbsp;&nbsp;Business Mileage ('+new Date().getFullYear()+')</td><td>−'+fmt(ded.mlDed)+'</td></tr>';
+    dedHtml += '<tr><td class="row-label" style="font-weight:800">Adjusted Taxable Profit</td><td style="font-weight:800">'+fmt(annualProfit)+'</td></tr>';
+  }
+  document.getElementById('dedSection').innerHTML = dedHtml;
+
+  /* Inject payroll/sales tax obligation rows after total */
+  var payHtml = '';
+  if(ded.futa>0 || ded.suta>0){
+    payHtml += '<tr class="row-payroll-hd"><td colspan="2">👥 Employer Payroll Tax Obligations</td></tr>';
+    if(ded.futa>0) payHtml += '<tr class="row-liab"><td class="row-label">&nbsp;&nbsp;Federal Unemployment Tax (FUTA)</td><td>+'+fmt(ded.futa)+'</td></tr>';
+    if(ded.suta>0) payHtml += '<tr class="row-liab"><td class="row-label">&nbsp;&nbsp;State Unemployment Tax (SUTA)</td><td>+'+fmt(ded.suta)+'</td></tr>';
+  }
+  if(ded.unfiledSalesTax>0){
+    payHtml += '<tr class="row-payroll-hd" style="color:#dc2626"><td colspan="2">⚠️ Outstanding Sales Tax Liability</td></tr>';
+    payHtml += '<tr class="row-liab"><td class="row-label">&nbsp;&nbsp;Estimated Unfiled Sales Tax</td><td style="color:#dc2626">+'+fmt(ded.unfiledSalesTax)+'</td></tr>';
+  }
+  if(payHtml){
+    var totalObl = totalTax + ded.futa + ded.suta + ded.unfiledSalesTax;
+    payHtml += '<tr class="row-total"><td><strong>Total Tax + Obligations</strong></td><td>'+fmt(totalObl)+'</td></tr>';
+  }
+  document.getElementById('payrollSection').innerHTML = payHtml;
+
+  document.getElementById('rSE').textContent             = fmt(seTax);
+  document.getElementById('rSEDed').textContent          = '−'+fmt(seDed);
+  document.getElementById('rStdDed').textContent         = '−'+fmt(stdDed);
+  var qbiRow=document.getElementById('qbiRow');
+  if(qbiDed>0&&qbiRow){ qbiRow.style.display=''; document.getElementById('rQBIDed').textContent='−'+fmt(qbiDed); }
+  else if(qbiRow){ qbiRow.style.display='none'; }
+  document.getElementById('rFedTaxable').textContent     = fmt(fedTaxable);
+  document.getElementById('rFedTax').textContent         = fmt(fedTax);
+
+  /* State section */
+  document.getElementById('rStateSectionLabel').textContent = stateName+' State Tax';
+  var d=STATE_DATA[state];
+  if(!d||d.noTax){
+    document.getElementById('rStateStdDedLabel').textContent = 'State Deduction';
+    document.getElementById('rStateStdDed').textContent      = 'N/A';
+    document.getElementById('rStateTaxable').textContent     = 'N/A';
+    document.getElementById('rStateTaxLabel').textContent    = stateName+' Income Tax';
+    document.getElementById('rStateTax').textContent         = '$0 — no state income tax';
+    document.getElementById('rStateEffRate').textContent     = '0.0%';
+  } else {
+    var stdLabel = d.exemption&&!d.ss&&!d.sm ? 'Personal Exemption' : 'State Std. Deduction';
+    document.getElementById('rStateStdDedLabel').textContent = stdLabel;
+    document.getElementById('rStateStdDed').textContent      = stResult.stdDed>0?'−'+fmt(stResult.stdDed):'None';
+    document.getElementById('rStateTaxable').textContent     = fmt(stResult.taxable);
+    document.getElementById('rStateTaxLabel').textContent    = stateName+' Income Tax ('+fmtPct(stResult.effRate)+' eff.)';
+    document.getElementById('rStateTax').textContent         = fmt(stateTax);
+    document.getElementById('rStateEffRate').textContent     = fmtPct(stResult.effRate);
+  }
+
+  document.getElementById('rTotalTax').textContent       = fmt(totalTax);
+  document.getElementById('rEffRate').textContent        = fmtPct(effRate);
+  document.getElementById('rBracket').textContent        = bracket+' marginal';
+
+  /* Tax bars */
+  var bars=[
+    {label:'SE Tax (15.3%)',   amt:seTax,    color:'#7c3aed'},
+    {label:'Federal Income',   amt:fedTax,   color:'#2563eb'},
+    {label:stateName+' State', amt:stateTax, color:'#0891b2'}
+  ];
+  document.getElementById('taxBars').innerHTML=bars.map(function(b){
+    var pct=totalTax>0?b.amt/totalTax*100:0;
+    return '<div class="tax-bar-row"><div class="tb-label">'+b.label+'</div>'+
+      '<div class="tb-track"><div class="tb-fill" style="width:'+pct+'%;background:'+b.color+'"></div></div>'+
+      '<div class="tb-pct">'+Math.round(pct)+'%</div></div>';
+  }).join('');
+
+  /* State quarterly note */
+  renderStateQtrNote(state, stateName, stateTax);
+
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+  _lastTotalTax=totalTax;
+  _lastQd=qd;
+  renderPayTracker(totalTax,qd);
+  // P2 Feature: QBI card
+  renderQBICard(annualProfit,biz,status,yr);
+  // P3 UX: update calendar widget with calculated amounts
+  renderQtrCalendarWidget(qd.map(function(q){return q.payment;}));
+  // P1 Persistence: save inputs
+  saveTaxInputs();
+  // P1 Integration: push quarterly dates + amounts to cashFlowCalendar
+  try{
+    var dueToISO=function(s){
+      var mo={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+      var p=s.split(/[\s,]+/).filter(Boolean);
+      return p[2]+'-'+mo[p[0]]+'-'+(p[1].length===1?'0':'')+p[1];
+    };
+    var taxQtr=qd.filter(function(q){return q.payment>0;})
+      .map(function(q){return{n:q.n,label:q.label,due:q.due,dueISO:dueToISO(q.due),payment:Math.round(q.payment),year:yr};});
+    localStorage.setItem('fw_tax_quarterly',JSON.stringify(taxQtr));
+  }catch(e){}
+}
+
+function renderStateQtrNote(state, stateName, stateTax){
+  var d=STATE_DATA[state];
+  var noteEl=document.getElementById('stateQtrNote');
+  var html='';
+
+  if(!d||d.noTax){
+    noteEl.className='state-qtr-note notax';
+    html='<div class="sqn-icon">✅</div><div>'+
+      '<strong>No state estimated tax payments required</strong> — '+stateName+' has no state income tax. '+
+      (d&&d.note?d.note:'Your only quarterly obligation is federal (IRS Form 1040-ES).')+
+    '</div>';
+  } else {
+    var qi=STATE_QTR[state];
+    if(qi){
+      noteEl.className='state-qtr-note warn';
+      html='<div class="sqn-icon">📅</div><div>'+
+        '<strong>'+stateName+' requires separate quarterly estimated payments</strong><br/>'+
+        'File: <strong>'+qi.form+'</strong> with '+qi.agency+'<br/>'+
+        'Due dates: '+qi.schedule+'<br/>'+
+        'Estimated annual state tax: <strong>'+fmt(stateTax)+'</strong> — roughly '+fmt(Math.round(stateTax/4))+'/quarter'+
+        (d.note?'<br/><em style="font-size:.8em">⚠ '+d.note+'</em>':'')+
+      '</div>';
+    } else {
+      noteEl.className='state-qtr-note havetax';
+      html='<div class="sqn-icon">📅</div><div>'+
+        '<strong>'+stateName+' requires quarterly estimated tax payments</strong><br/>'+
+        'Most states follow the federal schedule: Apr 15, Jun 16, Sep 15, Jan 15.<br/>'+
+        'Estimated annual state tax: <strong>'+fmt(stateTax)+'</strong> — roughly '+fmt(Math.round(stateTax/4))+'/quarter.<br/>'+
+        'Search "<em>'+stateName+' estimated tax voucher</em>" on your state\'s revenue website.'+
+        (d.note?'<br/><em style="font-size:.8em">⚠ '+d.note+'</em>':'')+
+      '</div>';
+    }
+  }
+  noteEl.innerHTML=html;
+}
+
+/* Tax Payment Tracker */
+function loadTaxPayments(){
+  var y=new Date().getFullYear();
+  try{return JSON.parse(localStorage.getItem('fw_tax_payments_'+y)||'{}');}catch(e){return{};}
+}
+function saveTaxPayments(data){
+  var y=new Date().getFullYear();
+  localStorage.setItem('fw_tax_payments_'+y,JSON.stringify(data));
+}
+function markTaxPaid(q){
+  var data=loadTaxPayments();
+  data['q'+q]={paid:true,date:new Date().toISOString().slice(0,10)};
+  saveTaxPayments(data);
+  renderPayTracker(_lastTotalTax,_lastQd);
+}
+function markTaxUnpaid(q){
+  var data=loadTaxPayments();
+  delete data['q'+q];
+  saveTaxPayments(data);
+  renderPayTracker(_lastTotalTax,_lastQd);
+}
+function renderPayTracker(totalTax,qd){
+  var card=document.getElementById('payTrackerCard');
+  if(!card||!qd||!qd.length)return;
+  card.style.display='block';
+  var data=loadTaxPayments();
+  var gridHtml='',totalPaid=0;
+  qd.forEach(function(q){
+    var rec=data['q'+q.n];
+    var isPaid=rec&&rec.paid;
+    var amt=q.payment||0;
+    if(isPaid)totalPaid+=amt;
+    gridHtml+='<div class="pt-card'+(isPaid?' paid':'')+'">'+
+      '<div class="pt-lbl">'+q.label+'</div>'+
+      '<div class="pt-amt">'+fmt(amt)+'</div>'+
+      '<div class="pt-date">'+(isPaid?'Paid '+rec.date:'')+'</div>'+
+      (isPaid
+        ?'<button class="btn-mark-unpaid" onclick="markTaxUnpaid('+q.n+')">&#8617; Undo</button>'
+        :'<button class="btn-mark-paid" onclick="markTaxPaid('+q.n+')">&#10003; Mark Paid</button>')+
+      '</div>';
+  });
+  document.getElementById('payTrackerGrid').innerHTML=gridHtml;
+  var owing=Math.max(0,totalTax-totalPaid);
+  document.getElementById('paySummary').innerHTML=
+    '<span>Paid so far: <strong>'+fmt(totalPaid)+'</strong></span>'+
+    '<span>Still owed: <strong style="color:'+(owing>0?'#dc2626':'#16a34a')+'">'+fmt(owing)+'</strong></span>'+
+    '<span>Total tax: <strong>'+fmt(totalTax)+'</strong></span>';
+}
+
+/* Pre-fill from saved inputs → profile fallback */
+window.addEventListener('load',function(){
+  // P1 Persistence: restore saved tax inputs for selected year
+  restoreTaxInputs();
+  // If no saved inputs, fall back to fw_profile defaults
+  if(!document.getElementById('q1rev').value){
+    var prof={};
+    try{prof=JSON.parse(localStorage.getItem('fw_profile')||'{}');}catch(e){}
+    if(prof.rev||prof.exp){
+      [1,2,3,4].forEach(function(n){
+        if(prof.rev) document.getElementById('q'+n+'rev').value=prof.rev;
+        if(prof.exp) document.getElementById('q'+n+'exp').value=prof.exp;
+        updateProfit(n);
+      });
+    }
+    if(prof.state){
+      var sel=document.getElementById('state');
+      var abbr=prof.state.substring(0,2).toUpperCase();
+      for(var i=0;i<sel.options.length;i++){
+        if(sel.options[i].value===abbr){sel.selectedIndex=i;break;}
+      }
+    }
+  }
+  renderConnectedBanner();
+  // P2 Integration: show revenue/expense import banner
+  renderIntegrationBanner();
+  // P3 UX: render calendar widget immediately on load
+  renderQtrCalendarWidget(null);
+});
+
+/* Dynamic tax year — init from year selector value */
+(function(){
+  var yr=getTaxYear();
+  var dues=YEAR_DUES[yr]||YEAR_DUES[2026];
+  document.getElementById('qPayTitle').textContent  = 'Your '+yr+' Quarterly Payments';
+  document.getElementById('qDue1').textContent      = 'Due: '+dues[0];
+  document.getElementById('qDue2').textContent      = 'Due: '+dues[1];
+  document.getElementById('qDue3').textContent      = 'Due: '+dues[2];
+  document.getElementById('qDue4').textContent      = 'Due: '+dues[3];
+  document.getElementById('qCardDate1').textContent = dues[0];
+  document.getElementById('qCardDate2').textContent = dues[1];
+  document.getElementById('qCardDate3').textContent = dues[2];
+  document.getElementById('qCardDate4').textContent = dues[3];
+  var sd=ALL_STD_DED[yr]||ALL_STD_DED[2026];
+  document.getElementById('yearBadge').textContent  = yr+(yr===2026?' (proj.)':'')+' brackets · Std ded $'+sd.single.toLocaleString();
+  var dy=document.getElementById('disclaimerYear'); if(dy) dy.textContent=yr+(yr===2026?' projected':'');
+})();
+</script>
+</body>
+</html>

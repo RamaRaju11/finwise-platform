@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>EMI Calculator — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:600px){.result-grid{grid-template-columns:1fr}}
+.result-box{background:#f8fafc;border-radius:8px;padding:14px;text-align:center;border:1px solid #e2e8f0}
+.rb-label{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.rb-value{font-size:1.2rem;font-weight:900;color:#1e293b}
+.rb-value.green{color:#16a34a}
+.rb-value.red{color:#dc2626}
+.rb-value.blue{color:#2563eb}
+.amort-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.amort-table th{background:#f1f5f9;padding:8px 10px;text-align:right;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0}
+.amort-table th:first-child{text-align:left}
+.amort-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;text-align:right;color:#374151}
+.amort-table td:first-child{text-align:left;font-weight:700}
+.amort-table tr:last-child td{border-bottom:none;font-weight:800;background:#f8fafc}
+.bar-wrap{margin-top:12px}
+.bar-label{display:flex;justify-content:space-between;font-size:.78rem;color:#64748b;margin-bottom:4px}
+.bar-track{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden;display:flex}
+.bar-p{background:#16a34a;height:100%}
+.bar-i{background:#f59e0b;height:100%}
+.bar-legend{display:flex;gap:16px;margin-top:6px;font-size:.74rem;color:#64748b}
+.bar-legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.save-btn{margin-top:12px;padding:9px 22px;background:#f0fdf4;color:#166534;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.87rem;cursor:pointer;font-weight:700}
+.save-btn:hover{background:#dcfce7}
+.fw-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.88rem;cursor:pointer}
+button.print-btn:hover{background:#e2e8f0}
+@media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<a href="loanDecisionScoreEngine.test.html" class="back-link">← Back to Loan Score</a>
+<h1>EMI Calculator</h1>
+<p class="subtitle">FinWise · Calculate your monthly EMI, total interest and full repayment schedule</p>
+
+<div class="card">
+  <div class="input-grid">
+    <div>
+      <label>Loan Amount ($)</label>
+      <input type="number" id="loanAmt" placeholder="e.g. 50000" min="1000"/>
+    </div>
+    <div>
+      <label>Annual Interest Rate (%)</label>
+      <input type="number" id="rate" placeholder="e.g. 11.5" step="0.1" min="0.1"/>
+    </div>
+    <div>
+      <label>Tenure (months)</label>
+      <input type="number" id="tenure" placeholder="e.g. 36" min="1" max="360"/>
+    </div>
+  </div>
+  <button class="primary" onclick="calculate()">Calculate EMI →</button>
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div id="resultsSection" style="display:none">
+
+  <div class="card">
+    <h2 style="font-size:1rem;margin-bottom:12px;color:#444">Repayment Summary</h2>
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="rb-label">Monthly EMI</div>
+        <div class="rb-value blue" id="r_emi">—</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-label">Total Interest</div>
+        <div class="rb-value red" id="r_interest">—</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-label">Total Payment</div>
+        <div class="rb-value" id="r_total">—</div>
+      </div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><span>Principal vs Interest breakdown</span><span id="bar_pct"></span></div>
+      <div class="bar-track">
+        <div class="bar-p" id="barPrincipal"></div>
+        <div class="bar-i" id="barInterest"></div>
+      </div>
+      <div class="bar-legend">
+        <span><span class="dot" style="background:#16a34a"></span>Principal</span>
+        <span><span class="dot" style="background:#f59e0b"></span>Interest</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1rem;margin-bottom:12px;color:#444">Year-by-Year Breakdown</h2>
+    <table class="amort-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Principal Paid</th>
+          <th>Interest Paid</th>
+          <th>Total Paid</th>
+          <th>Balance Remaining</th>
+        </tr>
+      </thead>
+      <tbody id="amortBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card" style="text-align:right">
+    <button class="save-btn" onclick="saveEmiToProfile()">💾 Save Loan Details to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves loan amount, rate &amp; tenure — auto-fills all 40 tools</p>
+  </div>
+
+</div>
+
+<script>
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function saveProfile(updates){
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(p,updates);
+    localStorage.setItem('fw_profile',JSON.stringify(p));
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
+    var t=document.getElementById('fwToast');
+    t.textContent='✅ Saved — all 40 tools updated';
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none';},2500);
+  }catch(e){}
+}
+function saveEmiToProfile(){
+  var P=parseFloat(document.getElementById('loanAmt').value)||0;
+  if(!P) return;
+  saveProfile({loan:P,rate:parseFloat(document.getElementById('rate').value)||0,tenure:parseInt(document.getElementById('tenure').value)||0});
+}
+
+function calculate(){
+  var P = parseFloat(document.getElementById('loanAmt').value)||0;
+  var annualRate = parseFloat(document.getElementById('rate').value)||0;
+  var n = parseInt(document.getElementById('tenure').value)||0;
+  if(!P||!annualRate||!n){ alert('Please fill all 3 fields.'); return; }
+
+  var r = annualRate / 100 / 12;
+  var emi = P * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+  var totalPayment = emi * n;
+  var totalInterest = totalPayment - P;
+
+  document.getElementById('r_emi').textContent = fmt(emi);
+  document.getElementById('r_interest').textContent = fmt(totalInterest);
+  document.getElementById('r_total').textContent = fmt(totalPayment);
+
+  var pPct = Math.round(P/totalPayment*100);
+  var iPct = 100 - pPct;
+  document.getElementById('barPrincipal').style.width = pPct+'%';
+  document.getElementById('barInterest').style.width = iPct+'%';
+  document.getElementById('bar_pct').textContent = pPct+'% principal · '+iPct+'% interest';
+
+  /* Year-by-year */
+  var balance = P;
+  var tbody = '';
+  var totalMonths = n;
+  var year = 1;
+  var monthsDone = 0;
+
+  while(monthsDone < totalMonths){
+    var monthsThisYear = Math.min(12, totalMonths - monthsDone);
+    var yearPrincipal = 0; var yearInterest = 0;
+    for(var m=0; m<monthsThisYear; m++){
+      var intPart = balance * r;
+      var prinPart = emi - intPart;
+      yearInterest += intPart;
+      yearPrincipal += prinPart;
+      balance -= prinPart;
+    }
+    var isLast = (monthsDone + monthsThisYear >= totalMonths);
+    tbody += '<tr'+(isLast?' style="font-weight:800"':'')+'>';
+    tbody += '<td>Year '+year+'</td>';
+    tbody += '<td>'+fmt(yearPrincipal)+'</td>';
+    tbody += '<td>'+fmt(yearInterest)+'</td>';
+    tbody += '<td>'+fmt(yearPrincipal+yearInterest)+'</td>';
+    tbody += '<td>'+fmt(Math.max(0,balance))+'</td>';
+    tbody += '</tr>';
+    monthsDone += monthsThisYear;
+    year++;
+  }
+  document.getElementById('amortBody').innerHTML = tbody;
+  document.getElementById('resultsSection').style.display = 'block';
+}
+</script>
+</body>
+</html>
+

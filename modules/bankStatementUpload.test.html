@@ -1,0 +1,579 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bank Statement Upload — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
+.topnav{background:#0f172a;padding:0 24px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:99}
+.tn-logo{font-size:1rem;font-weight:900;color:#fff;text-decoration:none}.tn-logo span{color:#818cf8}
+.tn-badge{font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;background:#475569;color:#fff}
+.tn-spacer{flex:1}
+.tn-back{color:#94a3b8;font-size:.78rem;text-decoration:none;font-weight:700}.tn-back:hover{color:#fff}
+.page{max-width:900px;margin:0 auto;padding:24px 20px 48px}
+h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
+.subtitle{font-size:.88rem;color:#64748b;margin-bottom:24px}
+.card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:16px}
+label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif;background:#fff}
+select:focus{outline:none;border-color:#2563eb}
+.hint{font-size:.72rem;color:#94a3b8;margin-top:3px}
+
+/* Step indicator */
+.steps{display:flex;gap:0;margin-bottom:24px}
+.step{flex:1;text-align:center;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:#e2e8f0;z-index:0}
+.step.done::after{background:#2563eb}
+.s-dot{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;border:2px solid #e2e8f0;background:#fff;color:#94a3b8;position:relative;z-index:1;transition:all .3s}
+.step.active .s-dot{border-color:#2563eb;background:#2563eb;color:#fff}
+.step.done .s-dot{border-color:#16a34a;background:#16a34a;color:#fff}
+.s-label{font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.step.active .s-label{color:#2563eb}
+.step.done .s-label{color:#16a34a}
+
+/* Upload zone */
+.upload-zone{border:2.5px dashed #cbd5e1;border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc}
+.upload-zone:hover,.upload-zone.dragover{border-color:#2563eb;background:#eff6ff}
+.upload-icon{font-size:2.5rem;margin-bottom:12px}
+.upload-title{font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:6px}
+.upload-sub{font-size:.82rem;color:#64748b;margin-bottom:16px}
+.btn-browse{display:inline-block;padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.84rem;font-weight:800;cursor:pointer}
+.btn-browse:hover{background:#1d4ed8}
+#fileInput{display:none}
+
+/* Bank format pills */
+.bank-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.bank-pill{padding:6px 14px;border:1.5px solid #e2e8f0;border-radius:999px;font-size:.75rem;font-weight:700;cursor:pointer;color:#64748b;transition:all .15s;background:#fff}
+.bank-pill.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
+
+/* Column mapping */
+.col-map{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+@media(max-width:500px){.col-map{grid-template-columns:1fr}}
+
+/* Preview table */
+.preview-wrap{overflow-x:auto;max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;margin-top:12px}
+.preview-wrap table{width:100%;border-collapse:collapse;font-size:.75rem}
+.preview-wrap th{background:#f8fafc;padding:7px 10px;text-align:left;font-size:.68rem;font-weight:700;text-transform:uppercase;color:#94a3b8;border-bottom:1px solid #e2e8f0;white-space:nowrap;position:sticky;top:0}
+.preview-wrap td{padding:6px 10px;border-bottom:1px solid #f8fafc;white-space:nowrap}
+.preview-wrap tr:hover td{background:#fafbfc}
+
+/* Results */
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:560px){.res-grid{grid-template-columns:1fr 1fr}}
+.res-card{background:#f8fafc;border-radius:8px;padding:14px;border:1px solid #e2e8f0;text-align:center}
+.rc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:6px}
+.rc-value{font-size:1.2rem;font-weight:900;color:#1e293b}
+.rc-value.green{color:#16a34a}
+.rc-value.red{color:#dc2626}
+.rc-value.blue{color:#2563eb}
+.rc-sub{font-size:.7rem;color:#94a3b8;margin-top:2px}
+
+/* Category breakdown */
+.cat-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}
+.cat-row:last-child{border-bottom:none}
+.cat-bar-wrap{flex:1;background:#f1f5f9;border-radius:999px;height:8px;overflow:hidden}
+.cat-bar{height:100%;border-radius:999px}
+.cat-name{width:140px;font-weight:600;color:#475569;font-size:.78rem}
+.cat-amt{width:80px;text-align:right;font-weight:700}
+
+.btn-row{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.btn-primary{padding:10px 22px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{padding:10px 22px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:.84rem;font-weight:700;cursor:pointer}
+.btn-secondary:hover{background:#e2e8f0}
+.btn-save-profile{padding:10px 22px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer}
+.btn-save-profile:hover{background:#15803d}
+
+.success-msg{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;font-size:.84rem;color:#166534;font-weight:700;display:none;margin-top:12px}
+.suggest-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}
+.suggest-row:last-child{border-bottom:none}
+.suggest-name{flex:1;font-weight:600;color:#1e293b}
+.suggest-amt{color:#dc2626;font-weight:700;min-width:70px;text-align:right}
+.suggest-months{font-size:.72rem;color:#94a3b8;margin-left:6px}
+.btn-add-bill{padding:5px 13px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-add-bill:hover{background:#1d4ed8}
+.btn-add-bill.added{background:#16a34a;cursor:default}
+.btn-budget-save{padding:8px 18px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer}
+.btn-budget-save:hover{background:#6d28d9}
+@media print{.back-link,button,.bank-pill,.upload-zone{display:none!important}body{background:#fff;padding:8px}.step{display:block!important}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="../modules/fw-auth.js"></script>
+<nav class="topnav">
+  <a href="../dashboard.html" class="tn-logo">💡 Fin<span>Wise</span></a>
+  <span class="tn-badge" id="planBadge">Free</span>
+  <div class="tn-spacer"></div>
+  <a href="../dashboard.html" class="tn-back">← Dashboard</a>
+</nav>
+
+<div class="page">
+  <h1>🏦 Bank Statement Upload</h1>
+  <p class="subtitle">FinWise · Upload your bank CSV → auto-calculate monthly revenue & expenses</p>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step active" id="s1"><div class="s-dot">1</div><div class="s-label">Upload</div></div>
+    <div class="step" id="s2"><div class="s-dot">2</div><div class="s-label">Map Columns</div></div>
+    <div class="step" id="s3"><div class="s-dot">3</div><div class="s-label">Review & Save</div></div>
+  </div>
+
+  <!-- STEP 1: Upload -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-title">Select Your Bank Format</div>
+      <div class="bank-pills">
+        <div class="bank-pill active" onclick="selectBank('chase',this)">Chase</div>
+        <div class="bank-pill" onclick="selectBank('boa',this)">Bank of America</div>
+        <div class="bank-pill" onclick="selectBank('wells',this)">Wells Fargo</div>
+        <div class="bank-pill" onclick="selectBank('capital',this)">Capital One</div>
+        <div class="bank-pill" onclick="selectBank('generic',this)">Other / Generic</div>
+      </div>
+      <div class="hint" id="bankHint">Chase CSV: Date, Description, Amount (negative = expense)</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Upload CSV File</div>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <div class="upload-icon">📂</div>
+        <div class="upload-title">Drop your bank statement here</div>
+        <div class="upload-sub">or click to browse · CSV, OFX, QFX, QBO supported · Your data stays in your browser</div>
+        <button class="btn-browse" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,.txt,.ofx,.qfx,.qbo" onchange="handleFile(event)"/>
+      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">🔒 Your file is processed locally — never uploaded to any server</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Map Columns -->
+  <div id="step2" style="display:none">
+    <div class="card">
+      <div class="card-title">Map Your CSV Columns</div>
+      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Tell us which column means what. We auto-detected a suggestion — adjust if needed.</p>
+      <div class="col-map">
+        <div><label>Date Column</label><select id="mapDate"></select></div>
+        <div><label>Description Column</label><select id="mapDesc"></select></div>
+        <div><label>Amount Column <span style="color:#64748b;font-weight:400">(or use Debit/Credit below)</span></label><select id="mapAmt"><option value="">— Not used —</option></select></div>
+        <div><label>Debit Column (expenses out)</label><select id="mapDebit"><option value="">— Not used —</option></select></div>
+        <div><label>Credit Column (income in)</label><select id="mapCredit"><option value="">— Not used —</option></select></div>
+        <div>
+          <label>Amount Sign Convention</label>
+          <select id="mapSign">
+            <option value="neg_expense">Negative = Expense (Chase/BofA)</option>
+            <option value="pos_expense">Positive = Expense (some banks)</option>
+          </select>
+        </div>
+      </div>
+      <div id="previewWrap" style="margin-top:16px">
+        <div style="font-size:.78rem;font-weight:700;color:#475569;margin-bottom:6px">Preview (first 8 rows)</div>
+        <div class="preview-wrap"><table id="previewTable"></table></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+        <button class="btn-primary" onclick="processData()">Analyze Statement →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Results -->
+  <div id="step3" style="display:none">
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="rc-label">Monthly Avg Income</div>
+        <div class="rc-value green" id="r3Income">$0</div>
+        <div class="rc-sub" id="r3IncomeSub"></div>
+      </div>
+      <div class="res-card">
+        <div class="rc-label">Monthly Avg Expenses</div>
+        <div class="rc-value red" id="r3Expense">$0</div>
+        <div class="rc-sub" id="r3ExpenseSub"></div>
+      </div>
+      <div class="res-card">
+        <div class="rc-label">Net Cash Flow</div>
+        <div class="rc-value blue" id="r3Net">$0</div>
+        <div class="rc-sub" id="r3Months"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Top Expense Categories</div>
+      <div id="catBreakdown"></div>
+    </div>
+
+    <div class="card" id="smartSuggestCard" style="display:none">
+      <div class="card-title">💡 Smart Suggestions from Your Statement</div>
+      <div id="smartSuggestContent"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Save to Your Business Profile</div>
+      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Update your FinWise profile with these numbers so all 30 tools auto-fill with real data.</p>
+      <div style="background:#f8fafc;border-radius:8px;padding:14px 16px;font-size:.84rem;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#64748b">Monthly Revenue will be set to:</span><strong id="saveRevLabel">—</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Monthly Expenses will be set to:</span><strong id="saveExpLabel">—</strong></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goStep(2)">← Back</button>
+        <button class="btn-save-profile" onclick="saveToProfile()">✅ Save to My Profile</button>
+        <button class="btn-budget-save" onclick="saveCategoryDataToBudget()" title="Export expense categories to Budget Tracker">📊 Save Categories to Budget</button>
+        <button style="padding:8px 18px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:8px;font-size:.84rem;cursor:pointer" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-secondary" onclick="goStep(1)">Upload Another</button>
+      </div>
+      <div class="success-msg" id="successMsg">✅ Profile updated! All your tools now use your real bank data.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var bankFormat = 'chase';
+var csvHeaders = [];
+var csvRows = [];
+var analysisResult = {};
+
+var BANK_HINTS = {
+  chase  : 'Chase CSV: Date, Description, Amount (negative = expense)',
+  boa    : 'Bank of America: Date, Description, Amount, Running Balance',
+  wells  : 'Wells Fargo: Date, Amount, *, *, Description',
+  capital: 'Capital One: Transaction Date, Posted Date, Card No, Description, Category, Debit, Credit',
+  generic: 'Generic: map any columns manually below'
+};
+
+var BANK_DEFAULTS = {
+  chase  : {date:0, desc:1, amt:2,  debit:-1, credit:-1, sign:'neg_expense'},
+  boa    : {date:0, desc:1, amt:2,  debit:-1, credit:-1, sign:'neg_expense'},
+  wells  : {date:0, desc:4, amt:1,  debit:-1, credit:-1, sign:'neg_expense'},
+  capital: {date:0, desc:3, amt:-1, debit:5,  credit:6,  sign:'pos_expense'},
+  generic: {date:0, desc:1, amt:2,  debit:-1, credit:-1, sign:'neg_expense'}
+};
+
+function selectBank(b, el){
+  bankFormat = b;
+  document.querySelectorAll('.bank-pill').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('bankHint').textContent = BANK_HINTS[b];
+}
+
+function handleDrag(e){ e.preventDefault(); document.getElementById('uploadZone').classList.add('dragover'); }
+function handleDragLeave(){ document.getElementById('uploadZone').classList.remove('dragover'); }
+function handleDrop(e){ e.preventDefault(); handleDragLeave(); var f=e.dataTransfer.files[0]; if(f) readFile(f); }
+function handleFile(e){ var f=e.target.files[0]; if(f) readFile(f); }
+
+function readFile(file){
+  if(!file.name.match(/\.(csv|txt|ofx|qfx|qbo)$/i)){ alert('Please upload a CSV, TXT, OFX, QFX, or QBO file.'); return; }
+  var isOFX = file.name.match(/\.(ofx|qfx|qbo)$/i);
+  var reader = new FileReader();
+  reader.onload = function(e){ isOFX ? parseOFX(e.target.result) : parseCSV(e.target.result); };
+  reader.readAsText(file);
+}
+
+function parseOFX(text){
+  var transactions = [];
+  /* OFX 2.x / QFX / QBO — try XML first */
+  var xmlStart = text.indexOf('<OFX>');
+  if(xmlStart === -1) xmlStart = text.indexOf('<ofx>');
+  var xmlBody = xmlStart >= 0 ? text.slice(xmlStart) : text;
+  var useXML = false;
+  try{
+    var doc = (new DOMParser()).parseFromString(xmlBody, 'text/xml');
+    var trns = doc.querySelectorAll('STMTTRN');
+    if(trns.length > 0){
+      useXML = true;
+      trns.forEach(function(trn){
+        var dt  = (trn.querySelector('DTPOSTED')||{textContent:''}).textContent;
+        var amt = (trn.querySelector('TRNAMT')||{textContent:''}).textContent;
+        var nm  = (trn.querySelector('NAME')||{textContent:''}).textContent;
+        var mo  = (trn.querySelector('MEMO')||{textContent:''}).textContent;
+        var ds  = dt.slice(0,8);
+        if(ds.length===8) ds=ds.slice(0,4)+'-'+ds.slice(4,6)+'-'+ds.slice(6,8);
+        transactions.push([ds, nm||mo, amt]);
+      });
+    }
+  }catch(e){}
+  /* OFX 1.x SGML fallback */
+  if(!useXML){
+    var re = /<STMTTRN>([\s\S]*?)<\/STMTTRN>/gi;
+    var blk;
+    function tag(t,s){ var m=s.match(new RegExp('<'+t+'>([^<\n\r]+)')); return m?m[1].trim():''; }
+    while((blk=re.exec(text))!==null){
+      var dt=tag('DTPOSTED',blk[1]), amt=tag('TRNAMT',blk[1]);
+      var nm=tag('NAME',blk[1])||tag('MEMO',blk[1]);
+      var ds=dt.slice(0,8);
+      if(ds.length===8) ds=ds.slice(0,4)+'-'+ds.slice(4,6)+'-'+ds.slice(6,8);
+      transactions.push([ds,nm,amt]);
+    }
+  }
+  if(transactions.length===0){ alert('No transactions found in the OFX/QFX file. The format may not be supported.'); return; }
+  csvHeaders = ['Date','Description','Amount'];
+  csvRows = transactions;
+  BANK_DEFAULTS.generic = {date:0,desc:1,amt:2,debit:-1,credit:-1,sign:'neg_expense'};
+  bankFormat = 'generic';
+  buildColumnMapUI();
+  showPreview();
+  goStep(2);
+}
+
+function parseCSV(text){
+  var lines = text.trim().split(/\r?\n/);
+  if(lines.length < 2){ alert('File appears empty or invalid.'); return; }
+  var parse = function(line){
+    var result=[],cur='',inQ=false;
+    for(var i=0;i<line.length;i++){
+      var c=line[i];
+      if(c==='"'){ inQ=!inQ; }
+      else if(c===','&&!inQ){ result.push(cur.trim()); cur=''; }
+      else { cur+=c; }
+    }
+    result.push(cur.trim());
+    return result;
+  };
+  csvHeaders = parse(lines[0]);
+  csvRows = lines.slice(1).filter(function(l){ return l.trim(); }).map(parse);
+  buildColumnMapUI();
+  showPreview();
+  goStep(2);
+}
+
+function buildColumnMapUI(){
+  var selIds = ['mapDate','mapDesc','mapAmt','mapDebit','mapCredit'];
+  var defs = BANK_DEFAULTS[bankFormat];
+  selIds.forEach(function(id, idx){
+    var sel = document.getElementById(id);
+    var cur = sel.innerHTML.match(/Not used/) ? '<option value="">— Not used —</option>' : '';
+    csvHeaders.forEach(function(h,i){ cur += '<option value="'+i+'">'+h+'</option>'; });
+    if(sel.innerHTML.indexOf('Not used')===-1) sel.innerHTML = cur;
+    else sel.innerHTML = cur;
+  });
+  /* Apply bank defaults */
+  var setVal = function(id, idx){ if(idx>=0){ document.getElementById(id).value=String(idx); } };
+  setVal('mapDate',   defs.date);
+  setVal('mapDesc',   defs.desc);
+  setVal('mapAmt',    defs.amt);
+  setVal('mapDebit',  defs.debit);
+  setVal('mapCredit', defs.credit);
+  document.getElementById('mapSign').value = defs.sign;
+}
+
+function showPreview(){
+  var rows = csvRows.slice(0,8);
+  var html = '<tr>'+csvHeaders.map(function(h){ return '<th>'+esc(h)+'</th>'; }).join('')+'</tr>';
+  rows.forEach(function(r){
+    html += '<tr>'+r.map(function(c){ return '<td>'+esc(c)+'</td>'; }).join('')+'</tr>';
+  });
+  document.getElementById('previewTable').innerHTML = html;
+}
+
+function parseAmt(str){
+  if(!str||str.trim()==='') return NaN;
+  str = str.replace(/[$,\s]/g,'').replace(/\(([0-9.]+)\)/,'-$1');
+  return parseFloat(str);
+}
+
+function processData(){
+  var dateIdx   = parseInt(document.getElementById('mapDate').value);
+  var descIdx   = parseInt(document.getElementById('mapDesc').value);
+  var amtIdx    = document.getElementById('mapAmt').value !== '' ? parseInt(document.getElementById('mapAmt').value) : -1;
+  var debitIdx  = document.getElementById('mapDebit').value !== '' ? parseInt(document.getElementById('mapDebit').value) : -1;
+  var creditIdx = document.getElementById('mapCredit').value !== '' ? parseInt(document.getElementById('mapCredit').value) : -1;
+  var sign      = document.getElementById('mapSign').value;
+
+  var totalIncome=0, totalExpense=0;
+  var months = {};
+  var cats = {};
+  var descByMonth = {}; // for recurring detection
+
+  csvRows.forEach(function(row){
+    var income=0, expense=0;
+
+    if(amtIdx >= 0){
+      var amt = parseAmt(row[amtIdx]);
+      if(isNaN(amt)) return;
+      if(sign === 'neg_expense'){ if(amt < 0) expense = Math.abs(amt); else income = amt; }
+      else { if(amt > 0) expense = amt; else income = Math.abs(amt); }
+    } else {
+      if(debitIdx >= 0){ var d=parseAmt(row[debitIdx]); if(!isNaN(d)&&d>0) expense=d; }
+      if(creditIdx >= 0){ var c=parseAmt(row[creditIdx]); if(!isNaN(c)&&c>0) income=c; }
+    }
+
+    totalIncome  += income;
+    totalExpense += expense;
+
+    /* Track months */
+    var dateStr = row[dateIdx]||'';
+    var mo = dateStr.substring(0,7);
+    if(!months[mo]) months[mo]={income:0,expense:0};
+    months[mo].income  += income;
+    months[mo].expense += expense;
+
+    /* Categorize expenses */
+    if(expense > 0){
+      var desc = (row[descIdx]||'').toUpperCase();
+      var cat = 'Other';
+      if(/AMAZON|AMZN|SHOPIFY|SQUARE/.test(desc)) cat='Inventory/Supplies';
+      else if(/RENT|LEASE|PROPERTY/.test(desc)) cat='Rent';
+      else if(/PAYROLL|ADP|PAYCHEX|GUSTO/.test(desc)) cat='Payroll';
+      else if(/INSURANCE|INSUR/.test(desc)) cat='Insurance';
+      else if(/GOOGLE|FACEBOOK|META|INSTAGRAM|TWITTER|LINKEDIN/.test(desc)) cat='Marketing';
+      else if(/AT&T|VERIZON|COMCAST|XFINITY|INTERNET|PHONE/.test(desc)) cat='Utilities';
+      else if(/STRIPE|PAYPAL|SQUARE|CLOVER/.test(desc)) cat='Merchant Fees';
+      else if(/UBER|LYFT|GAS|FUEL|PARKING/.test(desc)) cat='Travel';
+      else if(/RESTAURANT|FOOD|CAFE|COFFEE/.test(desc)) cat='Meals';
+      if(!cats[cat]) cats[cat]=0;
+      cats[cat]+=expense;
+
+      /* Recurring detection: track unique months per normalized vendor key */
+      var rawDesc = row[descIdx]||'';
+      var dKey = rawDesc.toUpperCase().replace(/[^A-Z0-9\s]/g,'').trim().slice(0,22);
+      if(dKey){
+        if(!descByMonth[dKey]) descByMonth[dKey]={name:rawDesc.slice(0,35),months:[],amounts:[]};
+        if(descByMonth[dKey].months.indexOf(mo)===-1) descByMonth[dKey].months.push(mo);
+        descByMonth[dKey].amounts.push(expense);
+      }
+    }
+  });
+
+  /* Build recurring list */
+  var recurringDetected = Object.keys(descByMonth)
+    .filter(function(k){ return descByMonth[k].months.length>=2; })
+    .map(function(k){
+      var d=descByMonth[k];
+      var avg=d.amounts.reduce(function(s,v){return s+v;},0)/d.amounts.length;
+      return {name:d.name, avgAmt:Math.round(avg), months:d.months.length};
+    })
+    .sort(function(a,b){ return b.avgAmt-a.avgAmt; })
+    .slice(0,8);
+
+  var numMonths = Math.max(1, Object.keys(months).length);
+  var avgIncome  = totalIncome  / numMonths;
+  var avgExpense = totalExpense / numMonths;
+
+  analysisResult = { avgIncome, avgExpense, numMonths, totalIncome, totalExpense, cats, recurringDetected };
+
+  /* Render */
+  var fmt = function(n){ return '$'+Math.round(n).toLocaleString('en-US'); };
+  document.getElementById('r3Income').textContent   = fmt(avgIncome);
+  document.getElementById('r3Expense').textContent  = fmt(avgExpense);
+  document.getElementById('r3Net').textContent      = fmt(avgIncome-avgExpense);
+  document.getElementById('r3Net').className        = 'rc-value '+(avgIncome>=avgExpense?'blue':'red');
+  document.getElementById('r3IncomeSub').textContent = fmt(totalIncome)+' total · '+numMonths+' months';
+  document.getElementById('r3ExpenseSub').textContent= fmt(totalExpense)+' total';
+  document.getElementById('r3Months').textContent   = 'Avg over '+numMonths+' month'+(numMonths!==1?'s':'');
+  document.getElementById('saveRevLabel').textContent = fmt(avgIncome)+'/mo';
+  document.getElementById('saveExpLabel').textContent = fmt(avgExpense)+'/mo';
+
+  /* Categories */
+  var sortedCats = Object.entries(cats).sort(function(a,b){ return b[1]-a[1]; }).slice(0,6);
+  var maxCat = sortedCats[0] ? sortedCats[0][1] : 1;
+  var COLORS = ['#dc2626','#d97706','#7c3aed','#2563eb','#0891b2','#64748b'];
+  var catHtml = '';
+  sortedCats.forEach(function(e,i){
+    var pct = e[1]/totalExpense*100;
+    catHtml += '<div class="cat-row">'+
+      '<div class="cat-name">'+e[0]+'</div>'+
+      '<div class="cat-bar-wrap"><div class="cat-bar" style="width:'+Math.round(e[1]/maxCat*100)+'%;background:'+COLORS[i]+'"></div></div>'+
+      '<div style="width:40px;text-align:right;font-size:.72rem;color:#94a3b8">'+Math.round(pct)+'%</div>'+
+      '<div class="cat-amt" style="color:'+COLORS[i]+'">'+fmt(e[1]/numMonths)+'/mo</div>'+
+    '</div>';
+  });
+  document.getElementById('catBreakdown').innerHTML = catHtml || '<div style="color:#94a3b8;font-size:.84rem">No expense categories detected</div>';
+
+  renderSmartSuggestions(recurringDetected);
+  goStep(3);
+}
+
+function renderSmartSuggestions(recurring){
+  var card = document.getElementById('smartSuggestCard');
+  var content = document.getElementById('smartSuggestContent');
+  if(!recurring||!recurring.length){ card.style.display='none'; return; }
+  var existingBills = [];
+  try{ existingBills=JSON.parse(localStorage.getItem('fw_bills')||'[]'); }catch(e){}
+  var existingNames = existingBills.map(function(b){ return b.vendor.toUpperCase().slice(0,15); });
+  var fmt2=function(n){ return '$'+Math.round(n).toLocaleString('en-US'); };
+  var html='<p style="font-size:.84rem;color:#64748b;margin-bottom:12px">Detected <strong>'+recurring.length+' potential recurring payments</strong> appearing in multiple months. Add them to Bill Tracker to track and forecast these expenses.</p>';
+  html+='<div>';
+  recurring.forEach(function(r,i){
+    var alreadyAdded = existingNames.indexOf(r.name.toUpperCase().slice(0,15)) > -1;
+    html+='<div class="suggest-row">'+
+      '<span class="suggest-name">'+esc(r.name)+'</span>'+
+      '<span class="suggest-months">'+r.months+' months</span>'+
+      '<span class="suggest-amt">~'+fmt2(r.avgAmt)+'/mo</span>'+
+      '<button class="btn-add-bill'+(alreadyAdded?' added':'')
+        +'" id="addBillBtn'+i+'" onclick="addRecurringToBills('+i+',this)" '+(alreadyAdded?'disabled':'')+'>'+
+        (alreadyAdded?'✓ In Bills':'+ Add to Bills')+
+      '</button>'+
+    '</div>';
+  });
+  html+='</div>';
+  content.innerHTML=html;
+  card.style.display='block';
+}
+
+function addRecurringToBills(idx, btn){
+  var r = analysisResult.recurringDetected[idx];
+  if(!r) return;
+  var bills=[];
+  try{ bills=JSON.parse(localStorage.getItem('fw_bills')||'[]'); }catch(e){}
+  bills.push({
+    id:'bill_'+Date.now(),
+    vendor:r.name.slice(0,60),
+    amount:r.avgAmt,
+    dueDay:1,
+    category:'Imported',
+    autoPay:false,
+    note:'Auto-detected from bank statement ('+r.months+' months)'
+  });
+  localStorage.setItem('fw_bills',JSON.stringify(bills));
+  btn.textContent='✓ Added!'; btn.classList.add('added'); btn.disabled=true;
+}
+
+function saveCategoryDataToBudget(){
+  var cats = analysisResult.cats||{};
+  var numMo = analysisResult.numMonths||1;
+  var budgetCats = {};
+  Object.keys(cats).forEach(function(cat){ budgetCats[cat]=Math.round(cats[cat]/numMo); });
+  localStorage.setItem('fw_budget_categories',JSON.stringify(budgetCats));
+  var msg=document.getElementById('successMsg');
+  msg.textContent='✅ Category data saved to Budget Tracker! Open Budget vs Actual Tracker to see it.';
+  msg.style.display='block';
+  setTimeout(function(){ msg.style.display='none'; },4000);
+}
+
+function saveToProfile(){
+  var p={};
+  try{ p=JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  p.rev = Math.round(analysisResult.avgIncome);
+  p.exp = Math.round(analysisResult.avgExpense);
+  localStorage.setItem('fw_profile', JSON.stringify(p));
+  document.getElementById('successMsg').textContent='✅ Profile updated! All your tools now use your real bank data.';
+  document.getElementById('successMsg').style.display = 'block';
+}
+
+function goStep(n){
+  document.getElementById('step1').style.display = n===1?'block':'none';
+  document.getElementById('step2').style.display = n===2?'block':'none';
+  document.getElementById('step3').style.display = n===3?'block':'none';
+  [1,2,3].forEach(function(i){
+    var el=document.getElementById('s'+i);
+    el.className = 'step'+(i<n?' done':i===n?' active':'');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+window.addEventListener('load', function(){
+  if(!window.fwAuth) return;
+  window.fwAuth.init(function(){
+    var plan=window.fwAuth.plan||'free';
+    var b=document.getElementById('planBadge');
+    b.textContent=plan.charAt(0).toUpperCase()+plan.slice(1)+' Plan';
+    b.style.background=plan==='advisor'?'#be185d':plan==='pro'?'#7c3aed':plan==='starter'?'#0891b2':'#475569';
+  });
+});
+</script>
+</body>
+</html>
+

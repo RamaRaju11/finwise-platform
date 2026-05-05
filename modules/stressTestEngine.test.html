@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stress Testing Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+    .panel { display: none; } .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 6px; color: #444; }
+    .desc { font-size: 0.83rem; color: #666; margin-bottom: 14px; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number] { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:5px; font-size:0.95rem; }
+    input:focus { outline:none; border-color:#7c3aed; }
+    .input-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+    .input-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 16px; }
+
+    button.primary { margin-top:16px; padding:10px 24px; background:#7c3aed; color:#fff; border:none; border-radius:6px; font-size:0.95rem; cursor:pointer; }
+    button.primary:hover { background:#6d28d9; }
+
+    hr { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
+    .section-title { font-size:0.75rem; font-weight:bold; text-transform:uppercase; color:#94a3b8; margin:14px 0 6px; letter-spacing:0.05em; }
+
+    /* Scenario card */
+    .scenario-card { border-radius:8px; padding:16px; margin-bottom:14px; border:1px solid #e2e8f0; }
+    .scenario-card.pass    { border-left:5px solid #16a34a; background:#f0fdf4; }
+    .scenario-card.warning { border-left:5px solid #d97706; background:#fffbeb; }
+    .scenario-card.fail    { border-left:5px solid #dc2626; background:#fef2f2; }
+
+    .scenario-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .scenario-name   { font-weight:bold; font-size:1rem; }
+    .scenario-desc   { font-size:0.82rem; color:#64748b; }
+
+    .outcome-badge { padding:3px 12px; border-radius:99px; font-weight:bold; font-size:0.8rem; }
+    .outcome-pass    { background:#dcfce7; color:#15803d; }
+    .outcome-warning { background:#fef9c3; color:#92400e; }
+    .outcome-fail    { background:#fee2e2; color:#991b1b; }
+
+    /* Comparison table */
+    .compare-table { width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:10px; }
+    .compare-table th { background:#1e293b; color:#fff; padding:7px 10px; text-align:left; }
+    .compare-table td { padding:7px 10px; border-bottom:1px solid #f1f5f9; }
+    .compare-table tr:hover td { background:#f8fafc; }
+    .val-base    { color:#2563eb; font-weight:bold; }
+    .val-stress  { font-weight:bold; }
+    .val-stress.negative { color:#dc2626; }
+    .val-stress.positive { color:#16a34a; }
+    .val-delta.negative  { color:#dc2626; font-size:0.82rem; }
+    .val-delta.positive  { color:#16a34a; font-size:0.82rem; }
+
+    /* Alert list */
+    .alert-item { padding:8px 12px; border-radius:5px; margin-bottom:6px; font-size:0.85rem; }
+    .alert-fail { background:#fee2e2; border-left:3px solid #dc2626; }
+    .alert-warn { background:#fef9c3; border-left:3px solid #f59e0b; }
+
+    /* Overall banner */
+    .overall-banner { border-radius:8px; padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:14px; }
+    .overall-banner.pass    { background:#dcfce7; border:1px solid #86efac; }
+    .overall-banner.warning { background:#fef9c3; border:1px solid #fde68a; }
+    .overall-banner.fail    { background:#fee2e2; border:1px solid #fca5a5; }
+    .overall-icon { font-size:2rem; }
+    .overall-title { font-weight:bold; font-size:1.1rem; }
+    .overall-sub   { font-size:0.85rem; color:#555; margin-top:2px; }
+
+    /* Pill */
+    .pill { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.75rem; font-weight:bold; margin-left:4px; }
+    .pill-strong    { background:#dcfce7; color:#15803d; }
+    .pill-adequate  { background:#dbeafe; color:#1d4ed8; }
+    .pill-caution   { background:#fef9c3; color:#92400e; }
+    .pill-danger    { background:#fee2e2; color:#991b1b; }
+    .pill-excellent { background:#dcfce7; color:#15803d; }
+    .pill-good      { background:#dbeafe; color:#1d4ed8; }
+    .pill-moderate  { background:#fef9c3; color:#92400e; }
+    .pill-high-risk { background:#fee2e2; color:#991b1b; }
+
+    /* ── Plain-English Explain Blocks ── */
+    .explain-block { margin-top:7px; }
+    .explain-toggle { font-size:0.76rem; color:#2563eb; cursor:pointer; background:none; border:none; padding:0; font-weight:700; display:inline-flex; align-items:center; gap:4px; font-family:Arial,sans-serif; }
+    .explain-toggle:hover { text-decoration:underline; }
+    .explain-body { display:none; background:#f8fafc; border:1px solid #dbeafe; border-radius:6px; padding:10px 14px; margin-top:6px; }
+    .explain-body.open { display:block; }
+    .explain-body p { font-size:0.8rem; color:#374151; margin-bottom:5px; font-weight:600; }
+    .explain-body ul { padding-left:18px; margin-bottom:6px; }
+    .explain-body li { font-size:0.8rem; color:#374151; margin-bottom:3px; line-height:1.45; }
+    .explain-example { background:#fffbeb; border-left:3px solid #f59e0b; padding:8px 11px; border-radius:0 5px 5px 0; margin-top:6px; font-size:0.8rem; color:#78350f; line-height:1.5; }
+
+    /* Unit tests */
+    .test-result { font-family:monospace; font-size:0.88rem; padding:4px 0; }
+    .test-result.pass { color:#15803d; } .test-result.fail { color:#dc2626; font-weight:bold; }
+    .test-summary { margin-top:12px; font-weight:bold; font-size:0.95rem; padding:10px; border-radius:6px; }
+    .test-summary.all-pass { background:#dcfce7; color:#15803d; }
+    .test-summary.has-fail  { background:#fee2e2; color:#dc2626; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Stress Testing Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Revenue Drop · Expense Spike · Rate Increase</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('all')">Run All Scenarios</button>
+  <button class="tab" onclick="showTab('revenue')">Revenue Drop</button>
+  <button class="tab" onclick="showTab('expense')">Expense Increase</button>
+  <button class="tab" onclick="showTab('rate')">Rate Increase</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Shared Baseline Inputs (reused across single-scenario tabs) ─────── -->
+<template id="baseline-tpl">
+  <div class="card">
+    <h2>Business Baseline</h2>
+    <div class="input-grid">
+      <div><label>Monthly Revenue ($)</label><input type="number" class="b-revenue" value="100000" /></div>
+      <div><label>Fixed Expenses ($/mo) <span class="hint">excl. debt</span></label><input type="number" class="b-fixed" value="30000" min="0" /></div>
+      <div><label>Variable Expenses ($/mo)</label><input type="number" class="b-variable" value="20000" min="0" /></div>
+      <div><label>Total Debt Service ($/mo) <span class="hint">all EMIs</span></label><input type="number" class="b-debt" value="25000" min="0" /></div>
+      <div><label>Loan Principal ($) <span class="hint">for rate stress</span></label><input type="number" class="b-principal" value="1500000" min="0" /></div>
+      <div><label>Current Rate (%) <span class="hint">annual</span></label><input type="number" class="b-rate" value="10" min="0" step="0.1" /></div>
+      <div><label>Remaining Tenure (months)</label><input type="number" class="b-tenure" value="60" min="1" step="1" /></div>
+    </div>
+  </div>
+</template>
+
+<!-- ─── All Scenarios Panel ───────────────────────────────────────────── -->
+<div id="panel-all" class="panel active">
+  <div class="card">
+    <h2>Run All Stress Scenarios</h2>
+    <p class="desc">Tests three shocks simultaneously against your baseline financials.</p>
+    <div class="input-grid">
+      <div><label>Monthly Revenue ($)</label><input type="number" id="al-revenue" value="100000" /></div>
+      <div><label>Fixed Expenses ($/mo)</label><input type="number" id="al-fixed" value="30000" min="0" /></div>
+      <div><label>Variable Expenses ($/mo)</label><input type="number" id="al-variable" value="20000" min="0" /></div>
+      <div><label>Total Debt Service ($/mo)</label><input type="number" id="al-debt" value="25000" min="0" /></div>
+      <div><label>Loan Principal ($)</label><input type="number" id="al-principal" value="1500000" min="0" /></div>
+      <div><label>Current Rate (%)</label><input type="number" id="al-rate" value="10" min="0" step="0.1" /></div>
+      <div><label>Remaining Tenure (months)</label><input type="number" id="al-tenure" value="60" min="1" /></div>
+    </div>
+    <hr/>
+    <div class="section-title">Shock Parameters</div>
+    <div class="input-grid-3">
+      <div><label>Revenue Drop (%)</label><input type="number" id="al-rdrop" value="20" min="1" max="99" /></div>
+      <div><label>Expense Increase (%)</label><input type="number" id="al-einc" value="15" min="1" /></div>
+      <div><label>Rate Increase (pp)</label><input type="number" id="al-rinc" value="2" min="0.1" step="0.1" /></div>
+    </div>
+    <button class="primary" onclick="runAll()">Run All Scenarios</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="all-result"></div>
+</div>
+
+<!-- ─── Revenue Drop Panel ────────────────────────────────────────────── -->
+<div id="panel-revenue" class="panel">
+  <div class="card">
+    <h2>Revenue Drop Scenario</h2>
+    <div class="input-grid">
+      <div><label>Monthly Revenue ($)</label><input type="number" id="rv-revenue" value="100000" /></div>
+      <div><label>Fixed Expenses ($/mo)</label><input type="number" id="rv-fixed" value="30000" min="0" /></div>
+      <div><label>Variable Expenses ($/mo)</label><input type="number" id="rv-variable" value="20000" min="0" /></div>
+      <div><label>Total Debt Service ($/mo)</label><input type="number" id="rv-debt" value="25000" min="0" /></div>
+      <div><label>Revenue Drop (%)</label><input type="number" id="rv-drop" value="20" min="1" max="99" /></div>
+    </div>
+    <button class="primary" onclick="runRevenue()">Simulate</button>
+  </div>
+  <div id="revenue-result"></div>
+</div>
+
+<!-- ─── Expense Increase Panel ────────────────────────────────────────── -->
+<div id="panel-expense" class="panel">
+  <div class="card">
+    <h2>Expense Increase Scenario</h2>
+    <div class="input-grid">
+      <div><label>Monthly Revenue ($)</label><input type="number" id="ex-revenue" value="100000" /></div>
+      <div><label>Fixed Expenses ($/mo)</label><input type="number" id="ex-fixed" value="30000" min="0" /></div>
+      <div><label>Variable Expenses ($/mo)</label><input type="number" id="ex-variable" value="20000" min="0" /></div>
+      <div><label>Total Debt Service ($/mo)</label><input type="number" id="ex-debt" value="25000" min="0" /></div>
+      <div><label>Expense Increase (%)</label><input type="number" id="ex-inc" value="15" min="1" /></div>
+    </div>
+    <button class="primary" onclick="runExpense()">Simulate</button>
+  </div>
+  <div id="expense-result"></div>
+</div>
+
+<!-- ─── Rate Increase Panel ───────────────────────────────────────────── -->
+<div id="panel-rate" class="panel">
+  <div class="card">
+    <h2>Interest Rate Increase Scenario</h2>
+    <div class="input-grid">
+      <div><label>Monthly Revenue ($)</label><input type="number" id="rt-revenue" value="100000" /></div>
+      <div><label>Fixed Expenses ($/mo)</label><input type="number" id="rt-fixed" value="30000" min="0" /></div>
+      <div><label>Variable Expenses ($/mo)</label><input type="number" id="rt-variable" value="20000" min="0" /></div>
+      <div><label>Total Debt Service ($/mo)</label><input type="number" id="rt-debt" value="25000" min="0" /></div>
+      <div><label>Loan Principal ($)</label><input type="number" id="rt-principal" value="1500000" min="1" /></div>
+      <div><label>Current Annual Rate (%)</label><input type="number" id="rt-rate" value="10" min="0" step="0.1" /></div>
+      <div><label>Remaining Tenure (months)</label><input type="number" id="rt-tenure" value="60" min="1" /></div>
+      <div><label>Rate Increase (percentage points)</label><input type="number" id="rt-inc" value="2" min="0.1" step="0.1" /></div>
+    </div>
+    <button class="primary" onclick="runRate()">Simulate</button>
+  </div>
+  <div id="rate-result"></div>
+</div>
+
+<!-- ─── Unit Tests ────────────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Module 5: Stress Testing Engine ─────────────────────────────────────
+
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function _calcEMI(principal, annualRate, tenureMonths) {
+  const r = annualRate / 12 / 100;
+  if (r === 0) return _r(principal / tenureMonths);
+  const f = Math.pow(1 + r, tenureMonths);
+  return _r((principal * r * f) / (f - 1));
+}
+
+function _dscrStatus(d) {
+  if (d === null) return "no-debt";
+  if (d >= 1.5)   return "strong";
+  if (d >= 1.25)  return "adequate";
+  if (d >= 1.0)   return "caution";
+  return "danger";
+}
+function _dtiStatus(d) {
+  if (d < 20) return "excellent";
+  if (d < 35) return "good";
+  if (d < 50) return "moderate";
+  return "high-risk";
+}
+
+function buildBaseline({ revenue, fixedExpenses, variableExpenses, totalDebtService, loanPrincipal = 0, annualRate = 0, tenureMonths = 0 }) {
+  if (revenue <= 0)         throw new Error("revenue must be greater than 0.");
+  if (fixedExpenses < 0)    throw new Error("fixedExpenses cannot be negative.");
+  if (variableExpenses < 0) throw new Error("variableExpenses cannot be negative.");
+  if (totalDebtService < 0) throw new Error("totalDebtService cannot be negative.");
+  const totalExpenses      = _r(fixedExpenses + variableExpenses);
+  const netCashFlow        = _r(revenue - totalExpenses);
+  const cashAfterDebt      = _r(netCashFlow - totalDebtService);
+  const dscr               = totalDebtService > 0 ? _r(netCashFlow / totalDebtService) : null;
+  const dti                = _r((totalDebtService / revenue) * 100);
+  return { revenue, fixedExpenses, variableExpenses, totalExpenses, netCashFlow,
+           totalDebtService, cashAfterDebt, dscr, dti,
+           annualRate, loanPrincipal, tenureMonths,
+           dscrStatus: _dscrStatus(dscr), dtiStatus: _dtiStatus(dti) };
+}
+
+function _stressSnap(baseline, ov) {
+  const revenue          = ov.revenue          ?? baseline.revenue;
+  const fixedExpenses    = ov.fixedExpenses    ?? baseline.fixedExpenses;
+  const variableExpenses = ov.variableExpenses ?? baseline.variableExpenses;
+  const totalDebtService = ov.totalDebtService ?? baseline.totalDebtService;
+  const totalExpenses    = _r(fixedExpenses + variableExpenses);
+  const netCashFlow      = _r(revenue - totalExpenses);
+  const cashAfterDebt    = _r(netCashFlow - totalDebtService);
+  const dscr             = totalDebtService > 0 ? _r(netCashFlow / totalDebtService) : null;
+  const dti              = _r((totalDebtService / revenue) * 100);
+  return { revenue, fixedExpenses, variableExpenses, totalExpenses, netCashFlow,
+           totalDebtService, cashAfterDebt, dscr, dti,
+           dscrStatus: _dscrStatus(dscr), dtiStatus: _dtiStatus(dti) };
+}
+
+function _buildResult(name, desc, baseline, stressed, extras = {}) {
+  const delta = {
+    revenue:          _r(stressed.revenue - baseline.revenue),
+    totalExpenses:    _r(stressed.totalExpenses - baseline.totalExpenses),
+    netCashFlow:      _r(stressed.netCashFlow - baseline.netCashFlow),
+    totalDebtService: _r(stressed.totalDebtService - baseline.totalDebtService),
+    cashAfterDebt:    _r(stressed.cashAfterDebt - baseline.cashAfterDebt),
+    dscr:             stressed.dscr !== null && baseline.dscr !== null ? _r(stressed.dscr - baseline.dscr) : null,
+    dti:              _r(stressed.dti - baseline.dti),
+  };
+  let outcome = "pass";
+  if (stressed.cashAfterDebt < 0 || (stressed.dscr !== null && stressed.dscr < 1.0)) outcome = "fail";
+  else if (stressed.dscr !== null && stressed.dscr < 1.25) outcome = "warning";
+
+  const alerts = [];
+  if (stressed.cashAfterDebt < 0)
+    alerts.push({ type:"fail", msg:"🔴 Cash After Debt is negative — cannot meet debt obligations.", explain:{
+      bullets:[
+        "Miss loan EMI payments (lender may charge penalties or declare default)",
+        "Delay or skip employee salaries",
+        "Use personal savings or credit cards just to keep the business open",
+        "Take on more debt to cover the monthly gap — a dangerous spiral"
+      ],
+      example: "You earn <strong>" + fmt(stressed.revenue) + "</strong> but expenses + debt payments = <strong>" + fmt(stressed.totalExpenses + stressed.totalDebtService) + "</strong> → you're short <strong style='color:#dc2626'>" + fmt(Math.abs(stressed.cashAfterDebt)) + " every month</strong>"
+    }});
+  if (stressed.dscr !== null && stressed.dscr < 1.0)
+    alerts.push({ type:"fail", msg:"🔴 DSCR drops to " + stressed.dscr.toFixed(2) + " — income no longer covers debt.", explain:{
+      bullets:[
+        "Banks see DSCR below 1.0 as a hard red flag — any new loan application will be rejected",
+        "For every $1.00 you owe to the bank, you only generate $" + stressed.dscr.toFixed(2) + " in cash",
+        "High risk of loan default if this scenario actually happens"
+      ],
+      example: "DSCR = Net Cash Flow ÷ Debt Payments = <strong>" + fmt(stressed.netCashFlow) + " ÷ " + fmt(stressed.totalDebtService) + " = " + stressed.dscr.toFixed(2) + "</strong>. A healthy score is 1.25 or above — you're <strong style='color:#dc2626'>" + (1.25 - stressed.dscr).toFixed(2) + " below the safe zone</strong>"
+    }});
+  else if (stressed.dscr !== null && stressed.dscr < 1.25)
+    alerts.push({ type:"warn", msg:"⚠️ DSCR drops to " + stressed.dscr.toFixed(2) + " — dangerously close to threshold.", explain:{
+      bullets:[
+        "Most US lenders require DSCR ≥ 1.25 to approve a business loan",
+        "You have very little buffer — one bad month could push you into default territory",
+        "A small unexpected expense or short-term revenue dip will break this"
+      ],
+      example: "Safe zone is DSCR ≥ 1.25. You're at <strong>" + stressed.dscr.toFixed(2) + "</strong> — just <strong style='color:#d97706'>" + (1.25 - stressed.dscr).toFixed(2) + " points below</strong> what lenders want to see"
+    }});
+  if (stressed.dti > 50)
+    alerts.push({ type:"warn", msg:"⚠️ DTI rises to " + stressed.dti.toFixed(1) + "% — exceeds 50% threshold.", explain:{
+      bullets:[
+        "More than half your revenue is going straight to debt repayments",
+        "Lenders typically reject applicants with DTI above 40–50%",
+        "Any dip in revenue will immediately create a cash crunch"
+      ],
+      example: "DTI of <strong>" + stressed.dti.toFixed(1) + "%</strong> means: out of every $100 you earn, <strong style='color:#d97706'>$" + stressed.dti.toFixed(0) + " goes to debt repayments</strong> — only $" + (100 - stressed.dti).toFixed(0) + " left for everything else"
+    }});
+  if (stressed.netCashFlow < 0)
+    alerts.push({ type:"fail", msg:"🔴 Business operating at a loss under this scenario.", explain:{
+      bullets:[
+        "Your expenses are greater than your revenue — you're losing money before even paying loans",
+        "This cannot continue long-term without new funding or immediate cost cuts",
+        "Every month you operate at a loss, you're draining your cash reserves"
+      ],
+      example: "Revenue <strong>" + fmt(stressed.revenue) + "</strong> − Expenses <strong>" + fmt(stressed.totalExpenses) + "</strong> = <strong style='color:#dc2626'>" + fmt(stressed.netCashFlow) + "</strong> → spending more than you make"
+    }});
+
+  return { name, description: desc, outcome, baseline, stressed, delta, alerts, ...extras };
+}
+
+function runRevenueDrop(baseline, dropPercent) {
+  if (dropPercent <= 0 || dropPercent >= 100) throw new Error("dropPercent must be between 0 and 100.");
+  const stressed = _stressSnap(baseline, { revenue: _r(baseline.revenue * (1 - dropPercent / 100)) });
+  return _buildResult("Revenue Drop", `Revenue falls by ${dropPercent}%`, baseline, stressed);
+}
+
+function runExpenseIncrease(baseline, increasePercent) {
+  if (increasePercent <= 0) throw new Error("increasePercent must be > 0.");
+  const stressed = _stressSnap(baseline, {
+    fixedExpenses:    _r(baseline.fixedExpenses    * (1 + increasePercent / 100)),
+    variableExpenses: _r(baseline.variableExpenses * (1 + increasePercent / 100)),
+  });
+  return _buildResult("Expense Increase", `Expenses rise by ${increasePercent}%`, baseline, stressed);
+}
+
+function runRateIncrease(baseline, rateIncreasePP) {
+  if (rateIncreasePP <= 0)           throw new Error("rateIncreasePP must be > 0.");
+  if (!baseline.loanPrincipal > 0)   throw new Error("loanPrincipal must be set.");
+  if (!baseline.tenureMonths > 0)    throw new Error("tenureMonths must be set.");
+  const newRate = _r(baseline.annualRate + rateIncreasePP);
+  const newEMI  = _calcEMI(baseline.loanPrincipal, newRate, baseline.tenureMonths);
+  const stressed = _stressSnap(baseline, { totalDebtService: newEMI });
+  return _buildResult("Rate Increase", `Rate rises by ${rateIncreasePP}pp (${baseline.annualRate}% → ${newRate}%)`, baseline, stressed,
+    { newRate, newEMI, emiChange: _r(newEMI - baseline.totalDebtService) });
+}
+
+function runAllScenarios(baseline, { revenueDrop = 20, expenseIncrease = 15, rateIncrease = 2 } = {}) {
+  const scenarios = [
+    runRevenueDrop(baseline, revenueDrop),
+    runExpenseIncrease(baseline, expenseIncrease),
+  ];
+  if (baseline.loanPrincipal > 0 && baseline.tenureMonths > 0)
+    scenarios.push(runRateIncrease(baseline, rateIncrease));
+
+  const overallOutcome = scenarios.every(s => s.outcome === "pass") ? "pass"
+    : scenarios.some(s => s.outcome === "fail") ? "fail" : "warning";
+  return { baseline, scenarios, overallOutcome };
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────
+const fmt  = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+const fmtD = n => (n >= 0 ? "+" : "") + "$" + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+const fmtN = n => (n >= 0 ? "+" : "") + n.toFixed(2);
+
+function toggleExplain(btn) {
+  var body = btn.nextElementSibling;
+  var open = body.classList.toggle('open');
+  btn.innerHTML = '[Why this matters] ' + (open ? '▲' : '▼');
+}
+function explainHtml(bullets, example) {
+  return '<div class="explain-block">' +
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>' +
+    '<div class="explain-body">' +
+    '<p>Your business may:</p>' +
+    '<ul>' + bullets.map(function(b){ return '<li>' + b + '</li>'; }).join('') + '</ul>' +
+    '<div class="explain-example">📌 Example: ' + example + '</div>' +
+    '</div></div>';
+}
+
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function getInt(id) { return parseInt(document.getElementById(id).value) || 0; }
+function errBox(e)  { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;">❌ ${e.message}</div>`; }
+
+const pillCls = { strong:"pill-strong", adequate:"pill-adequate", caution:"pill-caution", danger:"pill-danger",
+                  excellent:"pill-excellent", good:"pill-good", moderate:"pill-moderate", "high-risk":"pill-high-risk", "no-debt":"pill-adequate" };
+const outIcon = { pass:"✅", warning:"⚠️", fail:"❌" };
+const outLabel = { pass:"PASS", warning:"WARNING", fail:"FAIL" };
+
+function scenarioCard(s) {
+  const alertsHtml = s.alerts.length
+    ? s.alerts.map(function(a) {
+        return '<div class="alert-item ' + (a.type==='fail'?'alert-fail':'alert-warn') + '">' +
+          a.msg +
+          (a.explain ? explainHtml(a.explain.bullets, a.explain.example) : '') +
+          '</div>';
+      }).join("")
+    : `<div class="alert-item" style="background:#f0fdf4;border-left:3px solid #86efac;">✅ No issues under this scenario.</div>`;
+
+  const rows = [
+    ["Revenue",           fmt(s.baseline.revenue),          fmt(s.stressed.revenue),          fmtD(s.delta.revenue),          s.delta.revenue],
+    ["Total Expenses",    fmt(s.baseline.totalExpenses),     fmt(s.stressed.totalExpenses),     fmtD(s.delta.totalExpenses),     -s.delta.totalExpenses],
+    ["Net Cash Flow",     fmt(s.baseline.netCashFlow),       fmt(s.stressed.netCashFlow),       fmtD(s.delta.netCashFlow),       s.delta.netCashFlow],
+    ["Debt Service",      fmt(s.baseline.totalDebtService),  fmt(s.stressed.totalDebtService),  fmtD(s.delta.totalDebtService),  -s.delta.totalDebtService],
+    ["Cash After Debt",   fmt(s.baseline.cashAfterDebt),     fmt(s.stressed.cashAfterDebt),     fmtD(s.delta.cashAfterDebt),     s.delta.cashAfterDebt],
+    ["DSCR",              s.baseline.dscr?.toFixed(2) ?? "N/A", s.stressed.dscr?.toFixed(2) ?? "N/A", s.delta.dscr !== null ? fmtN(s.delta.dscr) : "—", s.delta.dscr],
+    ["DTI",               s.baseline.dti.toFixed(1)+"%",    s.stressed.dti.toFixed(1)+"%",     (s.delta.dti>=0?"+":"")+s.delta.dti.toFixed(1)+"%", -s.delta.dti],
+  ];
+
+  const tableRows = rows.map(([label, base, stress, delta, sign]) => {
+    const stressCls = sign < 0 ? "negative" : sign > 0 ? "positive" : "";
+    const deltaCls  = sign < 0 ? "negative" : sign > 0 ? "positive" : "";
+    return `<tr>
+      <td>${label}</td>
+      <td class="val-base">${base}</td>
+      <td class="val-stress ${stressCls}">${stress}
+        <span class="pill ${pillCls[label==='DSCR'?s.stressed.dscrStatus:label==='DTI'?s.stressed.dtiStatus:'']||''}" style="font-size:0.65rem;">${label==='DSCR'?s.stressed.dscrStatus:label==='DTI'?s.stressed.dtiStatus:''}</span>
+      </td>
+      <td class="val-delta ${deltaCls}">${delta}</td>
+    </tr>`;
+  }).join("");
+
+  const extraHtml = s.emiChange !== undefined
+    ? `<div style="font-size:0.83rem;color:#555;margin-bottom:10px;">New EMI: <strong>${fmt(s.newEMI)}</strong> &nbsp;|&nbsp; EMI increase: <strong style="color:#dc2626">${fmt(s.emiChange)}/mo</strong> &nbsp;|&nbsp; New Rate: <strong>${s.newRate}%</strong></div>`
+    : "";
+
+  return `<div class="scenario-card ${s.outcome}">
+    <div class="scenario-header">
+      <span style="font-size:1.3rem;">${outIcon[s.outcome]}</span>
+      <div>
+        <div class="scenario-name">${s.name} <span class="outcome-badge outcome-${s.outcome}">${outLabel[s.outcome]}</span></div>
+        <div class="scenario-desc">${s.description}</div>
+      </div>
+    </div>
+    ${extraHtml}
+    <table class="compare-table">
+      <thead><tr><th>Metric</th><th>Baseline</th><th>Stressed</th><th>Delta</th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    ${alertsHtml}
+  </div>`;
+}
+
+// ─── Run All ──────────────────────────────────────────────────────────────
+function runAll() {
+  const out = document.getElementById("all-result");
+  try {
+    const baseline = buildBaseline({
+      revenue: getNum("al-revenue"), fixedExpenses: getNum("al-fixed"),
+      variableExpenses: getNum("al-variable"), totalDebtService: getNum("al-debt"),
+      loanPrincipal: getNum("al-principal"), annualRate: getNum("al-rate"),
+      tenureMonths: getInt("al-tenure"),
+    });
+    const result = runAllScenarios(baseline, {
+      revenueDrop:      getNum("al-rdrop"),
+      expenseIncrease:  getNum("al-einc"),
+      rateIncrease:     getNum("al-rinc"),
+    });
+
+    const bannerText = {
+      pass:    { title:"✅ Business passes all stress tests", sub:"Your financials remain healthy under all three shock scenarios." },
+      warning: { title:"⚠️ Business shows strain under stress", sub:"One or more scenarios bring DSCR dangerously close to the threshold." },
+      fail:    { title:"❌ Business fails one or more stress tests", sub:"Cash flow or DSCR breaks down under the tested scenarios." },
+    }[result.overallOutcome];
+
+    const baselineRow = `<div style="font-size:0.85rem;color:#555;margin-bottom:4px;">
+      Baseline → Revenue: <strong>${fmt(baseline.revenue)}</strong> &nbsp;|&nbsp;
+      Net Cash Flow: <strong>${fmt(baseline.netCashFlow)}</strong> &nbsp;|&nbsp;
+      Cash After Debt: <strong>${fmt(baseline.cashAfterDebt)}</strong> &nbsp;|&nbsp;
+      DSCR: <strong>${baseline.dscr?.toFixed(2) ?? 'N/A'}</strong> &nbsp;|&nbsp;
+      DTI: <strong>${baseline.dti.toFixed(1)}%</strong>
+    </div>`;
+
+    out.innerHTML = `
+      <div class="overall-banner ${result.overallOutcome}">
+        <div class="overall-icon">${outIcon[result.overallOutcome]}</div>
+        <div><div class="overall-title">${bannerText.title}</div><div class="overall-sub">${bannerText.sub}</div></div>
+      </div>
+      <div class="card" style="padding:12px 16px;">${baselineRow}</div>
+      ${result.scenarios.map(scenarioCard).join("")}`;
+    saveST();
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Individual Scenarios ─────────────────────────────────────────────────
+function runRevenue() {
+  const out = document.getElementById("revenue-result");
+  try {
+    const b = buildBaseline({ revenue: getNum("rv-revenue"), fixedExpenses: getNum("rv-fixed"), variableExpenses: getNum("rv-variable"), totalDebtService: getNum("rv-debt") });
+    out.innerHTML = scenarioCard(runRevenueDrop(b, getNum("rv-drop")));
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+function runExpense() {
+  const out = document.getElementById("expense-result");
+  try {
+    const b = buildBaseline({ revenue: getNum("ex-revenue"), fixedExpenses: getNum("ex-fixed"), variableExpenses: getNum("ex-variable"), totalDebtService: getNum("ex-debt") });
+    out.innerHTML = scenarioCard(runExpenseIncrease(b, getNum("ex-inc")));
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+function runRate() {
+  const out = document.getElementById("rate-result");
+  try {
+    const b = buildBaseline({ revenue: getNum("rt-revenue"), fixedExpenses: getNum("rt-fixed"), variableExpenses: getNum("rt-variable"), totalDebtService: getNum("rt-debt"), loanPrincipal: getNum("rt-principal"), annualRate: getNum("rt-rate"), tenureMonths: getInt("rt-tenure") });
+    out.innerHTML = scenarioCard(runRateIncrease(b, getNum("rt-inc")));
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, cond) { results.push({ label, pass: !!cond }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass: false, note: "expected error not thrown" }); }
+    catch(e) { results.push({ label, pass: true }); }
+  }
+
+  const base = buildBaseline({ revenue:100000, fixedExpenses:30000, variableExpenses:20000, totalDebtService:25000, loanPrincipal:1500000, annualRate:10, tenureMonths:60 });
+  assert("Baseline: netCashFlow = 100000 - 50000 = 50000", base.netCashFlow === 50000);
+  assert("Baseline: cashAfterDebt = 50000 - 25000 = 25000", base.cashAfterDebt === 25000);
+  assert("Baseline: dscr = 50000/25000 = 2.0", base.dscr === 2.0);
+  assert("Baseline: dti = 25000/100000×100 = 25%", base.dti === 25);
+  assert("Baseline: dscrStatus = strong", base.dscrStatus === "strong");
+  assert("Baseline: dtiStatus = good", base.dtiStatus === "good");
+
+  // Revenue Drop
+  const rd = runRevenueDrop(base, 20);
+  assert("RevDrop: stressed revenue = 80000", rd.stressed.revenue === 80000);
+  assert("RevDrop: netCashFlow = 80000 - 50000 = 30000", rd.stressed.netCashFlow === 30000);
+  assert("RevDrop: cashAfterDebt = 30000 - 25000 = 5000", rd.stressed.cashAfterDebt === 5000);
+  assert("RevDrop: delta.revenue = -20000", rd.delta.revenue === -20000);
+  assert("RevDrop: outcome = pass (cashAfterDebt > 0, dscr > 1.25)", rd.outcome === "pass");
+
+  const rd2 = runRevenueDrop(base, 60);
+  assert("RevDrop 60%: outcome = fail", rd2.outcome === "fail");
+  assert("RevDrop 60%: alerts not empty", rd2.alerts.length > 0);
+
+  assertThrows("RevDrop: throws on 0% drop", () => runRevenueDrop(base, 0));
+  assertThrows("RevDrop: throws on 100% drop", () => runRevenueDrop(base, 100));
+
+  // Expense Increase
+  const ei = runExpenseIncrease(base, 15);
+  assert("ExpInc: fixed expenses up 15%", ei.stressed.fixedExpenses === _r(30000 * 1.15));
+  assert("ExpInc: delta.totalExpenses > 0", ei.delta.totalExpenses > 0);
+
+  assertThrows("ExpInc: throws on 0% increase", () => runExpenseIncrease(base, 0));
+
+  // Rate Increase
+  const ri = runRateIncrease(base, 2);
+  assert("RateInc: newRate = 12%", ri.newRate === 12);
+  assert("RateInc: new EMI > old debt service", ri.newEMI > base.totalDebtService);
+  assert("RateInc: emiChange > 0", ri.emiChange > 0);
+  assert("RateInc: cashAfterDebt decreases", ri.stressed.cashAfterDebt < base.cashAfterDebt);
+
+  assertThrows("RateInc: throws on 0pp increase", () => runRateIncrease(base, 0));
+
+  // Run All
+  const all = runAllScenarios(base, { revenueDrop:20, expenseIncrease:15, rateIncrease:2 });
+  assert("RunAll: returns 3 scenarios", all.scenarios.length === 3);
+  assert("RunAll: overallOutcome defined", ["pass","warning","fail"].includes(all.overallOutcome));
+
+  function _r(n) { return Math.round(n * 100) / 100; } // local shadow for tests
+
+  const passed = results.filter(r => r.pass).length;
+  const failed = results.filter(r => !r.pass).length;
+  const html = results.map(r =>
+    `<div class="test-result ${r.pass?'pass':'fail'}">${r.pass?'✓':'✗'} ${r.label}${r.note?' — '+r.note:''}</div>`
+  ).join("");
+  document.getElementById("test-output").innerHTML = html +
+    `<div class="test-summary ${failed===0?'all-pass':'has-fail'}">${failed===0?`✅ All ${passed} tests passed`:`❌ ${failed} failed / ${passed} passed`}</div>`;
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────
+var ST_KEY = 'fw_stress_test_inputs';
+function saveST(){
+  try{
+    var fields = ['al-revenue','al-fixed','al-variable','al-debt','al-principal','al-rate','al-tenure','al-rdrop','al-einc','al-rinc'];
+    var obj = {};
+    fields.forEach(function(id){ obj[id] = document.getElementById(id).value; });
+    localStorage.setItem(ST_KEY, JSON.stringify(obj));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(ST_KEY)||'null');
+    if(s){
+      ['al-revenue','al-fixed','al-variable','al-debt','al-principal','al-rate','al-tenure','al-rdrop','al-einc','al-rinc'].forEach(function(id){
+        if(s[id]!==undefined && s[id]!=='') document.getElementById(id).value = s[id];
+      });
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.rev)  document.getElementById('al-revenue').value   = Math.round((parseFloat(p.rev)||0)/12);
+    if(p.exp)  document.getElementById('al-fixed').value     = Math.round((parseFloat(p.exp)||0)/12);
+    if(p.emi)  document.getElementById('al-debt').value      = p.emi;
+    if(p.loan) document.getElementById('al-principal').value = p.loan;
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

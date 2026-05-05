@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Working Capital Calculator — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0}
+@media(max-width:600px){.metric-grid{grid-template-columns:1fr}}
+.metric-box{background:#f8fafc;border-radius:8px;padding:16px;border:1px solid #e2e8f0;text-align:center}
+.mb-label{font-size:.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.mb-big{font-size:1.7rem;font-weight:900;line-height:1.1;margin-bottom:4px}
+.mb-sub{font-size:.78rem;color:#64748b}
+.badge{display:inline-block;padding:.2rem .7rem;border-radius:999px;font-size:.72rem;font-weight:800}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-yellow{background:#fef9c3;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.bm-table{width:100%;border-collapse:collapse}
+.bm-table th{background:#f1f5f9;padding:9px 12px;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0}
+.bm-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.85rem;vertical-align:middle}
+.bm-table tr:last-child td{border-bottom:none}
+.coverage-bar-track{background:#e2e8f0;border-radius:99px;height:8px;overflow:hidden;margin-top:5px}
+.coverage-bar-fill{height:100%;border-radius:99px;transition:width .3s}
+.gap-box{border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:14px}
+.gap-box.surplus{background:#f0fdf4;border:1px solid #bbf7d0}
+.gap-box.shortfall{background:#fff1f2;border:1px solid #fecdd3}
+.gap-icon{font-size:2rem}
+.gap-title{font-size:.95rem;font-weight:800;margin-bottom:3px}
+.gap-desc{font-size:.82rem;color:#64748b;line-height:1.5}
+.insight-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.insight-item{border-left:4px solid #2563eb;background:#eff6ff;padding:11px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#1e40af;line-height:1.6}
+.insight-item.warn{border-color:#f59e0b;background:#fffbeb;color:#92400e}
+.insight-item.good{border-color:#16a34a;background:#f0fdf4;color:#166534}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.divider{height:1px;background:#e2e8f0;margin:16px 0}
+.save-btn{margin-top:12px;padding:9px 22px;background:#f0fdf4;color:#166534;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.87rem;cursor:pointer;font-weight:700}
+.save-btn:hover{background:#dcfce7}
+.fw-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+.conn-band{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:16px}
+.conn-band-title{font-size:.78rem;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.conn-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.conn-pill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.import-btn{padding:5px 14px;border:none;border-radius:5px;background:#2563eb;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer}
+.import-btn:hover{background:#1d4ed8}
+.import-btn:disabled{background:#94a3b8;cursor:default}
+.ccc-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media(max-width:600px){.ccc-breakdown{grid-template-columns:1fr}}
+.ccc-box{border-radius:8px;padding:13px;text-align:center}
+.ccc-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-weight:700}
+.ccc-val{font-size:1.5rem;font-weight:900;line-height:1}
+.ccc-name{font-size:.75rem;color:#64748b;margin-top:4px}
+.ccc-formula{text-align:center;margin-top:14px;font-size:.82rem;color:#64748b;padding:10px;background:#f8fafc;border-radius:7px;line-height:1.7}
+.export-bar{display:flex;gap:10px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.btn-export{padding:9px 20px;border:none;border-radius:6px;background:#7c3aed;color:#fff;font-size:.87rem;font-weight:700;cursor:pointer}
+.btn-export:hover{background:#6d28d9}
+.print-hdr{display:none}
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+@media print{
+  .print-hdr{display:block;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #1e293b}
+  .print-hdr h2{font-size:1.1rem;font-weight:900;margin-bottom:2px}
+  .print-hdr p{font-size:.78rem;color:#64748b}
+  .no-print{display:none!important}
+  body{padding:12px}
+  .card{box-shadow:none;border:1px solid #e2e8f0;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<div class="print-hdr" id="printHdr">
+  <h2>Working Capital Report — FinWise SmallBiz Platform</h2>
+  <p>Prepared for bank loan application purposes &nbsp;|&nbsp; Generated: <span id="printDate"></span></p>
+  <p style="font-size:.72rem;color:#94a3b8;margin-top:2px">All figures based on inputs provided. Verify with your accountant or CPA before submission.</p>
+</div>
+
+<a href="../try.html" class="back-link no-print">← Back to Demo</a>
+<h1>💧 Working Capital Calculator</h1>
+<p class="subtitle">FinWise · Measure your 30/60/90-day cash coverage and spot funding gaps before they hit.</p>
+
+<div class="conn-band no-print" id="connBand" style="display:none">
+  <div class="conn-band-title">📡 Module Data Available — click Import to pre-fill fields</div>
+  <div class="conn-row" id="arRow" style="display:none">
+    <span class="conn-pill" id="arPill"></span>
+    <button class="import-btn" id="arImportBtn" onclick="importAR()">Import to Current Assets →</button>
+  </div>
+  <div class="conn-row" id="apRow" style="display:none">
+    <span class="conn-pill" id="apPill"></span>
+    <button class="import-btn" id="apImportBtn" onclick="importAP()">Import to Current Liabilities →</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Balance Sheet Inputs</h2>
+  <div class="input-grid">
+    <div>
+      <label>Current Assets ($) <span style="font-weight:400;color:#94a3b8">cash, AR, inventory</span></label>
+      <input type="number" id="assets" placeholder="e.g. 120000" min="0" oninput="saveInputs()"/>
+    </div>
+    <div>
+      <label>Current Liabilities ($) <span style="font-weight:400;color:#94a3b8">AP, short-term debt</span></label>
+      <input type="number" id="liabilities" placeholder="e.g. 60000" min="0" oninput="saveInputs()"/>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <h2 style="margin-bottom:0">Cash Conversion Cycle Inputs</h2>
+  <div class="input-grid">
+    <div>
+      <label>Annual COGS / Direct Costs ($)</label>
+      <input type="number" id="annualCogs" placeholder="e.g. 360000" min="0" oninput="saveInputs()"/>
+    </div>
+    <div>
+      <label>Inventory Days <span style="font-weight:400;color:#94a3b8">avg days to sell stock</span></label>
+      <input type="number" id="invDays" placeholder="e.g. 30" min="0" oninput="saveInputs()"/>
+    </div>
+    <div>
+      <label>Receivable Days <span style="font-weight:400;color:#94a3b8">avg days to collect payment</span></label>
+      <input type="number" id="recDays" placeholder="e.g. 45" min="0" oninput="saveInputs()"/>
+    </div>
+    <div>
+      <label>Payable Days <span style="font-weight:400;color:#94a3b8">avg days you take to pay suppliers</span></label>
+      <input type="number" id="payDays" placeholder="e.g. 20" min="0" oninput="saveInputs()"/>
+    </div>
+  </div>
+  <button class="primary" onclick="calculate()">Calculate Working Capital →</button>
+</div>
+
+<div id="results" style="display:none">
+
+  <div class="card">
+    <h2>Key Metrics</h2>
+    <div class="metric-grid" id="keyMetrics"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cash Conversion Cycle (DIO + DSO − DPO)</h2>
+    <div id="cccDetail"></div>
+  </div>
+
+  <div class="card">
+    <h2>30 / 60 / 90-Day Cash Coverage</h2>
+    <table class="bm-table">
+      <thead>
+        <tr><th>Horizon</th><th>Cash Needed</th><th>Current WC</th><th>Coverage</th><th>Status</th></tr>
+      </thead>
+      <tbody id="coverageBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card" id="gapCard">
+    <h2>Gap Analysis</h2>
+    <div id="gapBox"></div>
+  </div>
+
+  <div class="card">
+    <h2>Insights</h2>
+    <ul class="insight-list" id="insightList"></ul>
+  </div>
+
+  <div class="card no-print">
+    <div class="export-bar">
+      <button class="btn-export" onclick="exportPDF()">🏦 Export for Bank Loan</button>
+      <button class="save-btn" onclick="saveWCToProfile()">💾 Save to Profile</button>
+    </div>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;text-align:right">Bank export: printable working capital report &nbsp;·&nbsp; Save to Profile: updates reserve &amp; COGS across 40 tools</p>
+  </div>
+
+</div>
+
+<script>
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function safe(n){ return isNaN(n)||!isFinite(n)?0:n; }
+
+// ── P1 Persistence ─────────────────────────────────────────────────────────
+var WC_KEY = 'fw_wc_inputs';
+
+function saveInputs(){
+  try{
+    localStorage.setItem(WC_KEY, JSON.stringify({
+      assets      : document.getElementById('assets').value,
+      liabilities : document.getElementById('liabilities').value,
+      annualCogs  : document.getElementById('annualCogs').value,
+      invDays     : document.getElementById('invDays').value,
+      recDays     : document.getElementById('recDays').value,
+      payDays     : document.getElementById('payDays').value
+    }));
+  }catch(e){}
+}
+
+// ── P2 Integration: AR from invoiceTracker, AP from vendorBillTracker ───────
+var _arAmount = 0, _apAmount = 0;
+
+function loadIntegrations(){
+  var band = document.getElementById('connBand');
+  var shown = false;
+  try{
+    var invoices    = JSON.parse(localStorage.getItem('fw_invoices')||'[]');
+    var outstanding = invoices.filter(function(i){ return i.status !== 'paid'; });
+    var arTotal     = outstanding.reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
+    if(arTotal > 0){
+      _arAmount = Math.round(arTotal);
+      document.getElementById('arPill').textContent = '📋 AR: '+fmt(_arAmount)+' from Invoice Tracker ('+outstanding.length+' outstanding)';
+      document.getElementById('arRow').style.display = 'flex';
+      shown = true;
+    }
+  }catch(e){}
+  try{
+    var bills  = JSON.parse(localStorage.getItem('fw_bills')||'[]');
+    var active = bills.filter(function(b){ return !b._dcc; });
+    var apTotal = active.reduce(function(s,b){ return s+(parseFloat(b.amount)||0); }, 0);
+    if(apTotal > 0){
+      _apAmount = Math.round(apTotal);
+      document.getElementById('apPill').textContent = '🗂️ AP: '+fmt(_apAmount)+'/mo from Vendor Bills ('+active.length+' bills)';
+      document.getElementById('apRow').style.display = 'flex';
+      shown = true;
+    }
+  }catch(e){}
+  if(shown) band.style.display = 'block';
+}
+
+function importAR(){
+  if(!_arAmount) return;
+  var cur = parseFloat(document.getElementById('assets').value)||0;
+  document.getElementById('assets').value = cur + _arAmount;
+  document.getElementById('arImportBtn').textContent = '✓ Imported';
+  document.getElementById('arImportBtn').disabled = true;
+  saveInputs();
+}
+
+function importAP(){
+  if(!_apAmount) return;
+  var cur = parseFloat(document.getElementById('liabilities').value)||0;
+  document.getElementById('liabilities').value = cur + _apAmount;
+  document.getElementById('apImportBtn').textContent = '✓ Imported';
+  document.getElementById('apImportBtn').disabled = true;
+  saveInputs();
+}
+
+// ── P3 Export: bank loan PDF ────────────────────────────────────────────────
+function exportPDF(){
+  document.getElementById('printDate').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p   = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+    if(!p)  p = JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(p && p.name) document.querySelector('#printHdr h2').textContent = p.name+' — Working Capital Report';
+  }catch(e){}
+  window.print();
+}
+
+// ── P2 Feature: CCC detail card ─────────────────────────────────────────────
+function renderCCCDetail(inv, rec, pay, ccc, daily){
+  var cccColor  = ccc<=0?'#7c3aed':ccc<=30?'#16a34a':ccc<=60?'#ca8a04':'#dc2626';
+  var cccStatus = ccc<=0?'Excellent — negative cycle':ccc<=30?'Good — lean cycle':ccc<=60?'Moderate — monitor terms':'High — capital tied up';
+  var tied      = Math.round(daily * Math.max(0, ccc));
+  document.getElementById('cccDetail').innerHTML =
+    '<div class="ccc-breakdown">'+
+      '<div class="ccc-box" style="background:#eff6ff;border:1px solid #bfdbfe">'+
+        '<div class="ccc-lbl" style="color:#1e40af">DIO</div>'+
+        '<div class="ccc-val" style="color:#2563eb">'+inv+'d</div>'+
+        '<div class="ccc-name">Days Inventory<br>Outstanding</div>'+
+      '</div>'+
+      '<div class="ccc-box" style="background:#fef9c3;border:1px solid #fde68a">'+
+        '<div class="ccc-lbl" style="color:#92400e">DSO</div>'+
+        '<div class="ccc-val" style="color:#d97706">'+rec+'d</div>'+
+        '<div class="ccc-name">Days Sales<br>Outstanding</div>'+
+      '</div>'+
+      '<div class="ccc-box" style="background:#f0fdf4;border:1px solid #bbf7d0">'+
+        '<div class="ccc-lbl" style="color:#166534">DPO</div>'+
+        '<div class="ccc-val" style="color:#16a34a">'+pay+'d</div>'+
+        '<div class="ccc-name">Days Payable<br>Outstanding</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="ccc-formula">'+
+      '<strong style="font-size:.95rem;color:'+cccColor+'">CCC = DIO + DSO − DPO &nbsp;=&nbsp; '+inv+' + '+rec+' − '+pay+' &nbsp;=&nbsp; '+ccc+' days</strong>'+
+      '<br>'+cccStatus+
+      (ccc > 0 ? ' &nbsp;·&nbsp; Capital tied up in cycle: <strong>'+fmt(tied)+'</strong>' : ' &nbsp;·&nbsp; Suppliers finance your operations — a powerful competitive advantage')+
+    '</div>'+
+    (ccc <= 0 ? '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.82rem;color:#5b21b6">🏆 <strong>Negative CCC:</strong> You collect cash from customers before paying suppliers — the same structural advantage used by Amazon and Costco to fund growth without additional debt.</div>' : '')+
+    (ccc > 60 ? '<div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;font-size:.82rem;color:#92400e">⚠️ <strong>Action items:</strong> Offer 2/10 net-30 early-pay discounts to reduce DSO. Negotiate net-45 supplier terms to raise DPO. Each 10-day improvement frees approximately <strong>'+fmt(daily*10)+'</strong> in working capital.</div>' : '');
+}
+
+function saveProfile(updates){
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(p,updates);
+    localStorage.setItem('fw_profile',JSON.stringify(p));
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
+    var t=document.getElementById('fwToast');
+    t.textContent='✅ Saved — all 40 tools updated';
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none';},2500);
+  }catch(e){}
+}
+function saveWCToProfile(){
+  var assets=parseFloat(document.getElementById('assets').value)||0;
+  var liabs=parseFloat(document.getElementById('liabilities').value)||0;
+  var cogs=parseFloat(document.getElementById('annualCogs').value)||0;
+  if(!assets) return;
+  saveProfile({reserve:Math.max(0,assets-liabs), exp:Math.round(cogs/12)});
+}
+
+function calculate(){
+  var assets = parseFloat(document.getElementById('assets').value)||0;
+  var liabs  = parseFloat(document.getElementById('liabilities').value)||0;
+  var cogs   = parseFloat(document.getElementById('annualCogs').value)||0;
+  var inv    = parseFloat(document.getElementById('invDays').value)||0;
+  var rec    = parseFloat(document.getElementById('recDays').value)||0;
+  var pay    = parseFloat(document.getElementById('payDays').value)||0;
+
+  if(!assets && !cogs){ alert('Please enter at least Current Assets and Annual COGS.'); return; }
+
+  var wc   = assets - liabs;
+  var wcr  = liabs > 0 ? assets/liabs : null;
+  var ccc  = inv + rec - pay;
+  var daily = cogs / 365;
+  var wcRequired = safe(daily * ccc);
+
+  var need30 = daily * 30;
+  var need60 = daily * 60;
+  var need90 = daily * 90;
+
+  /* Key metrics */
+  var wcrColor = wcr===null?'#2563eb':wcr>1.5?'#16a34a':wcr>=1?'#ca8a04':'#dc2626';
+  var wcrLabel = wcr===null?'N/A':wcr.toFixed(2)+'x';
+  var wcrBadge = wcr===null?'':wcr>1.5?'badge-green':wcr>=1?'badge-yellow':'badge-red';
+  var wcrText  = wcr===null?'':wcr>1.5?'Healthy':wcr>=1?'Caution':'Critical';
+
+  var cccColor = ccc<=30?'#16a34a':ccc<=60?'#ca8a04':'#dc2626';
+
+  document.getElementById('keyMetrics').innerHTML = [
+    {label:'Working Capital',      val:fmt(wc),              sub:wc>=0?'Positive':'Negative',              col:wc>=0?'#16a34a':'#dc2626'},
+    {label:'WC Ratio (Assets/Liab)',val:wcrLabel,             sub:wcrText,                                  col:wcrColor},
+    {label:'Cash Conversion Cycle', val:ccc+' days',          sub:'Inv '+inv+' + Rec '+rec+' − Pay '+pay, col:cccColor},
+    {label:'Daily COGS',            val:fmt(daily),           sub:'Annual ÷ 365',                           col:'#2563eb'},
+    {label:'WC Required (CCC)',     val:fmt(wcRequired),      sub:'Daily COGS × CCC',                       col:'#7c3aed'},
+    {label:'WC Surplus / Gap',      val:fmt(wc - wcRequired), sub:wc>=wcRequired?'Surplus':'Shortfall',     col:wc>=wcRequired?'#16a34a':'#dc2626'}
+  ].map(function(m){
+    return '<div class="metric-box">'+
+      '<div class="mb-label">'+m.label+'</div>'+
+      '<div class="mb-big" style="color:'+m.col+'">'+m.val+'</div>'+
+      '<div class="mb-sub">'+m.sub+'</div>'+
+      '</div>';
+  }).join('');
+
+  /* Coverage table */
+  var rows = [[30,need30],[60,need60],[90,need90]];
+  document.getElementById('coverageBody').innerHTML = rows.map(function(r){
+    var horizon=r[0], need=r[1];
+    var pct = need>0 ? Math.min(safe(wc/need*100),200) : 100;
+    var status = pct>=100?'Covered':pct>=70?'Tight':'Shortfall';
+    var bc = pct>=100?'badge-green':pct>=70?'badge-yellow':'badge-red';
+    var barColor = pct>=100?'#16a34a':pct>=70?'#f59e0b':'#dc2626';
+    var barW = Math.min(Math.round(pct/2), 100);
+    return '<tr>'+
+      '<td style="font-weight:700">'+horizon+'-Day</td>'+
+      '<td style="font-weight:800">'+fmt(need)+'</td>'+
+      '<td>'+fmt(wc)+'</td>'+
+      '<td>'+
+        '<div style="font-size:.85rem;font-weight:700;color:'+barColor+'">'+Math.round(pct)+'%</div>'+
+        '<div class="coverage-bar-track"><div class="coverage-bar-fill" style="width:'+barW+'%;background:'+barColor+'"></div></div>'+
+      '</td>'+
+      '<td><span class="badge '+bc+'">'+status+'</span></td>'+
+      '</tr>';
+  }).join('');
+
+  /* Gap box */
+  var gap = wc - wcRequired;
+  var isGood = gap >= 0;
+  var gapExplain = '';
+  if(wc < 0){
+    gapExplain = explainHtml([
+      'You owe more in short-term bills than you have in liquid assets to pay them',
+      'Suppliers, landlords, and short-term lenders may not extend further credit',
+      'This is a common early warning sign before a business cash crisis'
+    ], 'Current Assets '+fmt(assets)+' − Current Liabilities '+fmt(liabs)+' = Working Capital of ('+fmt(Math.abs(wc))+') (negative). You need '+fmt(Math.abs(wc))+' more in liquid assets to be in balance');
+  }
+  document.getElementById('gapBox').innerHTML =
+    '<div class="gap-box '+(isGood?'surplus':'shortfall')+'">'+
+    '<div class="gap-icon">'+(isGood?'✅':'⚠️')+'</div>'+
+    '<div>'+
+      '<div class="gap-title" style="color:'+(isGood?'#166534':'#991b1b')+'">'+
+        (isGood ? 'Surplus: '+fmt(gap) : 'Shortfall: '+fmt(Math.abs(gap)))+
+      '</div>'+
+      '<div class="gap-desc">'+
+        (isGood
+          ? 'Your current working capital covers the '+ccc+'-day cycle requirement with '+fmt(gap)+' to spare. You are well-positioned to handle normal operations.'
+          : 'Your current working capital falls '+fmt(Math.abs(gap))+' short of the '+ccc+'-day cycle need ('+fmt(wcRequired)+'). Consider drawing on a credit line or accelerating collections to close this gap.'
+        )+
+      '</div>'+
+      gapExplain+
+    '</div></div>';
+
+  /* Insights */
+  var items = [];
+  if(ccc > 60) items.push({cls:'warn', text:'Your Cash Conversion Cycle of '+ccc+' days is high. Try reducing inventory days by tightening reorder points, or shortening payment terms for customers from '+rec+' to '+Math.max(rec-10,15)+' days.'});
+  else if(ccc <= 30) items.push({cls:'good', text:'Cash Conversion Cycle of '+ccc+' days is lean — money cycles back quickly. Maintain supplier payment terms of '+pay+' days or longer to preserve this advantage.'});
+
+  if(wcr !== null && wcr < 1) {
+    items.push({cls:'warn', text:'Working Capital Ratio of '+wcrLabel+' means current liabilities exceed current assets — a sign of near-term liquidity stress. Prioritize collecting receivables and deferring non-essential purchases.'+
+      explainHtml([
+        'You cannot cover all short-term obligations with available liquid assets',
+        'Banks and suppliers view current ratio below 1.0 as a credit risk',
+        'Target ratio: 1.5–2.0 for healthy small businesses'
+      ], 'Current ratio of '+wcr.toFixed(2)+'x means: for every $1 you owe in the next 12 months, you only have $'+wcr.toFixed(2)+' to pay it')
+    });
+  } else if(wcr !== null && wcr > 1.5) items.push({cls:'good', text:'WC Ratio of '+wcrLabel+' is healthy. You have adequate buffer to meet short-term obligations without emergency financing.'});
+
+  if(pay < 30) items.push({cls:'', text:'You\'re paying suppliers in '+pay+' days. Negotiating net-30 or net-45 terms could free up significant working capital without increasing costs.'});
+
+  if(!items.length) items.push({cls:'', text:'Working capital appears balanced. Review quarterly to catch seasonal cash flow shifts before they strain operations.'});
+
+  document.getElementById('insightList').innerHTML = items.map(function(i){
+    return '<li class="insight-item'+(i.cls?' '+i.cls:'')+'">'+i.text+'</li>';
+  }).join('');
+
+  renderCCCDetail(inv, rec, pay, ccc, daily);
+  saveInputs();
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* Init: restore saved inputs → fallback to profile → show integration banner */
+(function(){
+  // P1 Persistence: restore saved inputs first
+  try{
+    var saved = JSON.parse(localStorage.getItem(WC_KEY)||'null');
+    if(saved){
+      if(saved.assets)      document.getElementById('assets').value      = saved.assets;
+      if(saved.liabilities) document.getElementById('liabilities').value = saved.liabilities;
+      if(saved.annualCogs)  document.getElementById('annualCogs').value  = saved.annualCogs;
+      if(saved.invDays)     document.getElementById('invDays').value     = saved.invDays;
+      if(saved.recDays)     document.getElementById('recDays').value     = saved.recDays;
+      if(saved.payDays)     document.getElementById('payDays').value     = saved.payDays;
+    }
+  }catch(e){}
+  // Fallback: auto-populate annualCogs from profile if still empty
+  if(!document.getElementById('annualCogs').value){
+    try{
+      var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+      var p   = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+      if(!p)  p = JSON.parse(localStorage.getItem('fw_profile')||'null');
+      if(p && p.exp){
+        var exp = parseFloat(p.exp)||0;
+        if(exp) document.getElementById('annualCogs').value = Math.round(exp * 0.5 * 12)||'';
+      }
+    }catch(e){}
+  }
+  // P2 Integration: show AR/AP banner if module data exists
+  loadIntegrations();
+})();
+</script>
+</body>
+</html>

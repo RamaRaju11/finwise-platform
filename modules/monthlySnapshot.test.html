@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Monthly Snapshot — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
+#mainWrap{margin-left:220px;padding:28px 24px}
+
+@media print{
+  body{background:#fff}
+  #mainWrap{margin-left:0;padding:16px}
+  .share-actions,.back-link,h1,.subtitle,.int-strip,.save-bar{display:none!important}
+  .snapshot-card{box-shadow:none!important;max-width:100%!important}
+  #snapshotCanvas,.toast{display:none!important}
+}
+
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:16px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+
+.int-strip{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 14px;margin-bottom:14px;font-size:.78rem;color:#15803d;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.int-strip b{color:#166534}
+
+.no-data{background:#fff;border-radius:8px;padding:40px 24px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08);max-width:520px;margin:0 auto}
+.no-data .nd-icon{font-size:3rem;margin-bottom:16px}
+.no-data p{color:#64748b;margin-bottom:20px;line-height:1.5}
+.no-data a{display:inline-block;padding:10px 28px;background:#2563eb;color:#fff;border-radius:6px;font-size:.9rem;font-weight:700;text-decoration:none}
+.no-data a:hover{background:#1d4ed8}
+
+.snapshot-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.12);max-width:920px;margin:0 auto 20px}
+
+.snap-header{background:#1e293b;padding:0;position:relative;overflow:hidden}
+.snap-gradient-bar{height:5px;background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777)}
+.snap-header-inner{padding:20px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.snap-logo{font-size:1rem;font-weight:900;color:#fff;letter-spacing:.03em}
+.snap-logo span{color:#60a5fa}
+.snap-title{font-size:1.1rem;font-weight:800;color:#fff;margin-top:4px}
+.snap-period{font-size:.78rem;color:rgba(255,255,255,.5);margin-top:3px}
+.snap-header-right{text-align:right}
+.snap-date{font-size:.78rem;color:rgba(255,255,255,.55)}
+.snap-bizname{font-size:.9rem;font-weight:700;color:rgba(255,255,255,.9);margin-top:4px}
+
+.snap-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid #f1f5f9}
+@media(max-width:780px){.snap-metrics{grid-template-columns:1fr 1fr}}
+.metric-tile{padding:16px 12px;border-right:1px solid #f1f5f9;text-align:center}
+.metric-tile:last-child{border-right:none}
+.mt-icon{font-size:1.25rem;margin-bottom:5px}
+.mt-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:5px;font-weight:700}
+.mt-value{font-size:1.45rem;font-weight:900;line-height:1;margin-bottom:5px}
+.mt-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:3px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.06em}
+
+.badge-safe{background:#dcfce7;color:#16a34a}
+.badge-caution{background:#fef9c3;color:#a16207}
+.badge-risky{background:#fed7aa;color:#c2410c}
+.badge-dangerous{background:#fee2e2;color:#dc2626}
+.badge-strong{background:#dcfce7;color:#15803d}
+.badge-moderate{background:#dbeafe;color:#1d4ed8}
+.badge-low{background:#fef9c3;color:#a16207}
+.badge-critical{background:#fee2e2;color:#dc2626}
+.badge-pos{background:#dcfce7;color:#16a34a}
+.badge-neg{background:#fee2e2;color:#dc2626}
+.badge-excellent{background:#dcfce7;color:#15803d}
+.badge-good{background:#dbeafe;color:#1d4ed8}
+.badge-fair{background:#fef9c3;color:#a16207}
+.badge-poor{background:#fee2e2;color:#dc2626}
+
+.mt-value.safe{color:#16a34a}
+.mt-value.caution{color:#d97706}
+.mt-value.risky{color:#c2410c}
+.mt-value.dangerous{color:#dc2626}
+.mt-value.pos{color:#16a34a}
+.mt-value.neg{color:#dc2626}
+.mt-value.grade-a{color:#16a34a}
+.mt-value.grade-b{color:#2563eb}
+.mt-value.grade-c{color:#d97706}
+.mt-value.grade-d{color:#ea580c}
+.mt-value.grade-f{color:#dc2626}
+.mt-value.strong{color:#15803d}
+.mt-value.moderate{color:#1d4ed8}
+.mt-value.low{color:#d97706}
+.mt-value.critical{color:#dc2626}
+.mt-value.excellent{color:#15803d}
+.mt-value.good{color:#1d4ed8}
+.mt-value.fair{color:#d97706}
+.mt-value.poor{color:#dc2626}
+
+.snap-trend{padding:12px 28px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.trend-label{font-size:.68rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.07em;flex-shrink:0}
+.trend-item{display:flex;align-items:center;gap:5px;font-size:.78rem}
+.trend-name{color:#64748b}
+.trend-delta{font-weight:800}
+.trend-up{color:#16a34a}
+.trend-down{color:#dc2626}
+.trend-flat{color:#94a3b8}
+.mom-pct{font-size:.68rem;font-weight:800;padding:2px 6px;border-radius:4px}
+.mom-up{background:#dcfce7;color:#16a34a}
+.mom-down{background:#fee2e2;color:#dc2626}
+.mom-flat{background:#f1f5f9;color:#94a3b8}
+
+.snap-footer{padding:12px 28px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.snap-footer-text{font-size:.72rem;color:#94a3b8}
+.snap-footer-brand{font-size:.72rem;font-weight:700;color:#64748b}
+
+.share-actions{display:flex;flex-wrap:wrap;gap:10px;max-width:920px;margin:0 auto 24px}
+.share-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;transition:opacity .15s;text-decoration:none}
+.share-btn:hover{opacity:.85}
+.btn-download{background:#2563eb;color:#fff}
+.btn-print{background:#475569;color:#fff}
+.btn-whatsapp{background:#25d366;color:#fff}
+.btn-copy{background:#64748b;color:#fff}
+.btn-email{background:#0ea5e9;color:#fff}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+#snapshotCanvas{display:none}
+
+.snap-activity{padding:12px 28px;background:#f8faff;border-top:1px solid #eef0f8;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.sa-label{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-right:2px;flex-shrink:0}
+.sa-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:700;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.sa-chip.green{background:#dcfce7;color:#16a34a;border-color:#bbf7d0}
+.sa-chip.yellow{background:#fef9c3;color:#854d0e;border-color:#fde68a}
+.sa-chip.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+.sa-chip.blue{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}
+
+.save-bar{max-width:920px;margin:0 auto 12px;font-size:.75rem;color:#64748b;text-align:right}
+.save-bar b{color:#15803d}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div id="mainWrap">
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>📊 Monthly Financial Snapshot</h1>
+<p class="subtitle">FinWise · One-click shareable summary of your business finances</p>
+
+<div id="intStrip"></div>
+<div id="appRoot"></div>
+<div id="saveBar" class="save-bar"></div>
+<canvas id="snapshotCanvas" width="800" height="450"></canvas>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+
+  function safeJson(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+  function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function fmt(n){ return '$'+Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:0}); }
+
+  var now      = new Date();
+  var curMo    = now.toISOString().slice(0,7);
+  var curYr    = now.getFullYear();
+  var todayStr = now.toISOString().slice(0,10);
+
+  // ── Load ──────────────────────────────────────────────────────
+  var profile        = safeJson('fw_profile')             || {};
+  var checkup        = safeJson('fw_last_checkup')        || {};
+  var history        = safeJson('fw_score_history')       || [];
+  var bills          = safeJson('fw_bills')               || [];
+  var invoices       = safeJson('fw_invoices')            || [];
+  var trackerGoals   = safeJson('goalTracker_goals')      || [];
+  var taxPayments    = safeJson('fw_tax_payments_'+curYr) || [];
+  var hoData         = safeJson('fw_ho');
+  var mlTrips        = safeJson('fw_ml_trips')            || [];
+  var cPmts          = safeJson('fw_contractor_payments') || [];
+  var invRevData     = safeJson('fw_invoice_revenue');
+  var expData        = safeJson('fw_expense_by_category');
+  var payrollData    = safeJson('fw_payroll_totals');
+  var cashRunData    = safeJson('fw_cash_runway');
+  var snapshots      = safeJson('fw_monthly_snapshots')   || {};
+
+  var root     = document.getElementById('appRoot');
+  var intEl    = document.getElementById('intStrip');
+
+  // ── No-data guard (loosened) ──────────────────────────────────
+  var hasData = invRevData || expData || checkup.loanScore || checkup.runway;
+  if(!hasData){
+    root.innerHTML = '<div class="no-data"><div class="nd-icon">📋</div><h2 style="margin-bottom:10px;font-size:1.1rem">No data yet</h2><p>Run your Financial Checkup or use Invoice Tracker to generate your snapshot.</p><a href="../checkup.html">Go to Financial Checkup →</a></div>';
+    return;
+  }
+
+  // ── Revenue ───────────────────────────────────────────────────
+  var revenue = 0;
+  var revSrc  = 'Profile';
+  if(invRevData && invRevData.byMonth && invRevData.byMonth[curMo]){
+    revenue = Number(invRevData.byMonth[curMo]);
+    revSrc  = 'Invoice Tracker';
+  } else if(invRevData && invRevData.byYear && invRevData.byYear[String(curYr)]){
+    revenue = Number(invRevData.byYear[String(curYr)]) / 12;
+    revSrc  = 'Invoice Tracker (avg)';
+  } else {
+    revenue = Number(profile.rev || 0);
+  }
+
+  // ── Expenses ─────────────────────────────────────────────────
+  var expenses = 0;
+  var expSrc   = 'Profile';
+  if(expData && expData.totalMonthly){
+    expenses = Number(expData.totalMonthly);
+    expSrc   = 'Vendor Tracker';
+  } else {
+    expenses = Number(profile.exp || 0);
+  }
+
+  // ── Payroll ───────────────────────────────────────────────────
+  var payroll = 0;
+  if(payrollData && payrollData.currentYearTotal){
+    payroll = Number(payrollData.currentYearTotal) / 12;
+  } else {
+    payroll = Number(profile.emi || 0);
+  }
+
+  // ── Net Profit ────────────────────────────────────────────────
+  var netProfit = revenue - expenses;
+
+  // ── Runway ────────────────────────────────────────────────────
+  var runway = 0;
+  if(cashRunData && cashRunData.runway){ runway = Number(cashRunData.runway); }
+  else if(checkup.runway){ runway = Number(checkup.runway); }
+
+  // ── Scores / grade ────────────────────────────────────────────
+  var loanScore = Number(checkup.loanScore || checkup.healthScore || 0);
+  var verdict   = (checkup.loanVerdict || '').toUpperCase() || scoreToVerdict(loanScore);
+  var runwaySt  = checkup.runwayStatus || runwayLabel(runway);
+  var grade     = ((checkup.grade || 'C')+'').toUpperCase().charAt(0);
+  var grantCt   = Number(checkup.grantCount || 0);
+  var bizName   = profile.bizName || 'My Business';
+  var monthStr  = monthName();
+
+  // ── Invoice signals ───────────────────────────────────────────
+  var invPaidMo      = invoices.filter(function(i){ return i.status==='paid' && i.paidDate && i.paidDate.slice(0,7)===curMo; });
+  var invCollected   = invPaidMo.reduce(function(s,i){ return s+Number(i.amount||0); }, 0);
+  var invOverdue     = invoices.filter(function(i){ return i.status!=='paid' && i.dueDate && i.dueDate < todayStr; });
+  var goalsTotal     = trackerGoals.length;
+  var goalsDone      = trackerGoals.filter(function(g){ return g.completed||g.done||g.status==='done'||g.status==='completed'; }).length;
+  var taxTotal       = taxPayments.reduce(function(s,p){ return s+Number(p.amount||p.amt||0); }, 0);
+  var totalBills     = bills.reduce(function(s,b){ return s+Number(b.amount||b.amt||0); }, 0);
+
+  var totalDed = 0;
+  if(hoData && (parseFloat(hoData.off)||0) > 0){
+    var hd=hoData, off=parseFloat(hd.off)||0, tot=parseFloat(hd.tot)||1, inc=parseFloat(hd.inc)||0;
+    if(hd.method==='regular'){
+      var hexp=['rent','ptax','ins','util','rep','oth'].reduce(function(s,k){ return s+(parseFloat(hd[k])||0); },0);
+      var hd2=off/tot*hexp; if(inc>0) hd2=Math.min(hd2,inc); totalDed+=hd2;
+    } else { var hd3=Math.min(off,300)*5; if(inc>0) hd3=Math.min(hd3,inc); totalDed+=hd3; }
+  }
+  totalDed += mlTrips.filter(function(t){ return t.cat==='business'&&parseInt(t.year||0)===curYr; }).reduce(function(s,t){ return s+(parseFloat(t.deduction)||0); },0);
+  var cPayYTD = cPmts.filter(function(p){ return parseInt(p.year||(p.date&&p.date.slice(0,4))||curYr)===curYr; }).reduce(function(s,p){ return s+(parseFloat(p.amt||p.amount)||0); },0);
+
+  // ── MoM comparison ────────────────────────────────────────────
+  var prevMoKey = getPrevMonthKey(curMo);
+  var prevSnap  = snapshots[prevMoKey] || null;
+  var momRevPct = (prevSnap && prevSnap.revenue > 0) ? ((revenue - prevSnap.revenue) / prevSnap.revenue * 100) : null;
+  var momExpPct = (prevSnap && prevSnap.expenses > 0) ? ((expenses - prevSnap.expenses) / prevSnap.expenses * 100) : null;
+  var momNetAbs = (prevSnap && prevSnap.netProfit !== undefined) ? (netProfit - prevSnap.netProfit) : null;
+
+  // ── Score history trend ───────────────────────────────────────
+  var hist = Array.isArray(history) ? history : [];
+  var trendLoan = null, trendRunway = null;
+  if(hist.length >= 2){
+    var hp = hist[hist.length - 2];
+    trendLoan   = loanScore - Number(hp.loanScore || hp.healthScore || loanScore);
+    trendRunway = runway    - Number(hp.runway || runway);
+  }
+
+  // ── Health Score ──────────────────────────────────────────────
+  var healthScore = computeHealthScore();
+  var healthLbl   = getHealthLabel(healthScore);
+  var healthCls   = getHealthCls(healthScore);
+
+  // ── Save snapshot ─────────────────────────────────────────────
+  saveSnapshot();
+  renderIntStrip();
+
+  // ── Build DOM ─────────────────────────────────────────────────
+  var verdCls = verdictClass(verdict);
+  var runCls  = runwayClass(runwaySt);
+  var netCls  = netProfit >= 0 ? 'pos' : 'neg';
+
+  // MoM trend row
+  var trendHtml2 = '';
+  if(momRevPct !== null || momExpPct !== null || trendLoan !== null){
+    trendHtml2 = '<div class="snap-trend"><span class="trend-label">vs prior month</span>';
+    if(momRevPct !== null){
+      var rc = momRevPct > 0 ? 'mom-up' : momRevPct < 0 ? 'mom-down' : 'mom-flat';
+      trendHtml2 += '<span class="trend-item"><span class="trend-name">Revenue</span>&nbsp;<span class="mom-pct '+rc+'">'+(momRevPct>=0?'+':'')+momRevPct.toFixed(1)+'%</span></span>';
+    }
+    if(momExpPct !== null){
+      var ec = momExpPct > 0 ? 'mom-down' : momExpPct < 0 ? 'mom-up' : 'mom-flat';
+      trendHtml2 += '<span class="trend-item"><span class="trend-name">Expenses</span>&nbsp;<span class="mom-pct '+ec+'">'+(momExpPct>=0?'+':'')+momExpPct.toFixed(1)+'%</span></span>';
+    }
+    if(momNetAbs !== null){
+      var nc = momNetAbs >= 0 ? 'mom-up' : 'mom-down';
+      trendHtml2 += '<span class="trend-item"><span class="trend-name">Net Profit</span>&nbsp;<span class="mom-pct '+nc+'">'+(momNetAbs>=0?'+':'')+fmt(momNetAbs)+'</span></span>';
+    }
+    if(trendLoan !== null) trendHtml2 += trendDelta(trendLoan,'Loan Score');
+    trendHtml2 += '</div>';
+  }
+
+  // Activity chips
+  var chips = '';
+  if(invCollected>0) chips += '<span class="sa-chip green">💰 '+fmt(invCollected)+' collected this mo</span>';
+  if(invOverdue.length>0) chips += '<span class="sa-chip red">⚠️ '+invOverdue.length+' overdue invoice'+(invOverdue.length>1?'s':'')+'</span>';
+  if(goalsTotal>0){ var gc=goalsDone/goalsTotal>=0.7?'green':goalsDone/goalsTotal>=0.4?'yellow':'red'; chips+='<span class="sa-chip '+gc+'">🎯 '+goalsDone+'/'+goalsTotal+' goals hit</span>'; }
+  if(taxTotal>0) chips += '<span class="sa-chip blue">🧾 '+fmt(taxTotal)+' tax paid this yr</span>';
+  if(totalDed>0) chips += '<span class="sa-chip blue">💡 '+fmt(totalDed)+' deductions logged</span>';
+  if(cPayYTD>0) chips += '<span class="sa-chip">🔧 '+fmt(cPayYTD)+' contractor YTD</span>';
+  var activityHtml = chips ? '<div class="snap-activity"><span class="sa-label">Live</span>'+chips+'</div>' : '';
+
+  var cardHTML =
+    '<div class="snapshot-card" id="snapCard">'+
+      '<div class="snap-header">'+
+        '<div class="snap-gradient-bar"></div>'+
+        '<div class="snap-header-inner">'+
+          '<div class="snap-header-left">'+
+            '<div class="snap-logo">Fin<span>Wise</span></div>'+
+            '<div class="snap-title">📊 Monthly Financial Snapshot</div>'+
+            '<div class="snap-period">'+monthStr+'</div>'+
+          '</div>'+
+          '<div class="snap-header-right">'+
+            '<div class="snap-date">'+now.toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric'})+'</div>'+
+            '<div class="snap-bizname">'+escHtml(bizName)+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="snap-metrics">'+
+        '<div class="metric-tile">'+
+          '<div class="mt-icon">🏦</div>'+
+          '<div class="mt-label">Loan Safety</div>'+
+          '<div class="mt-value '+verdCls+'">'+loanScore+'<span style="font-size:.82rem;font-weight:600">/100</span></div>'+
+          '<span class="mt-badge badge-'+verdCls+'">'+verdict+'</span>'+
+        '</div>'+
+        '<div class="metric-tile">'+
+          '<div class="mt-icon">⛽</div>'+
+          '<div class="mt-label">Cash Runway</div>'+
+          '<div class="mt-value '+runCls+'">'+runway.toFixed(1)+'<span style="font-size:.82rem;font-weight:600"> mo</span></div>'+
+          '<span class="mt-badge badge-'+runCls+'">'+runwaySt+'</span>'+
+        '</div>'+
+        '<div class="metric-tile">'+
+          '<div class="mt-icon">🏥</div>'+
+          '<div class="mt-label">Health Grade</div>'+
+          '<div class="mt-value '+gradeClass(grade)+'">'+grade+'</div>'+
+          '<span class="mt-badge" style="background:#f1f5f9;color:#475569">'+gradeLbl(grade)+'</span>'+
+        '</div>'+
+        '<div class="metric-tile">'+
+          '<div class="mt-icon">💰</div>'+
+          '<div class="mt-label">Net Profit</div>'+
+          '<div class="mt-value '+netCls+'">'+(netProfit<0?'-':'+')+fmt(netProfit)+'</div>'+
+          '<span class="mt-badge badge-'+netCls+'">'+(netProfit>=0?'POSITIVE':'NEGATIVE')+'</span>'+
+        '</div>'+
+        '<div class="metric-tile">'+
+          '<div class="mt-icon">💪</div>'+
+          '<div class="mt-label">Health Score</div>'+
+          '<div class="mt-value '+healthCls+'">'+healthScore+'<span style="font-size:.82rem;font-weight:600">/100</span></div>'+
+          '<span class="mt-badge badge-'+healthCls+'">'+healthLbl+'</span>'+
+        '</div>'+
+      '</div>'+
+      trendHtml2+
+      activityHtml+
+      '<div class="snap-footer">'+
+        '<span class="snap-footer-text">'+
+          (grantCt?'🎯 '+grantCt+'+ funding programs matched':'')+
+          (totalBills?'&nbsp;·&nbsp; 📋 Monthly bills: '+fmt(totalBills):'')+
+        '</span>'+
+        '<span class="snap-footer-brand">Generated by FinWise · finwise.app</span>'+
+      '</div>'+
+    '</div>';
+
+  var actionsHTML =
+    '<div class="share-actions">'+
+      '<button class="share-btn btn-download" onclick="downloadPNG()">⬇️ Download PNG</button>'+
+      '<button class="share-btn btn-print" onclick="window.print()">🖨️ Print / PDF</button>'+
+      '<button class="share-btn btn-whatsapp" onclick="shareWhatsApp()">💬 Share on WhatsApp</button>'+
+      '<button class="share-btn btn-copy" onclick="copySummary()">📋 Copy Summary</button>'+
+      '<button class="share-btn btn-email" onclick="emailSummary()">✉️ Email Summary</button>'+
+    '</div>';
+
+  root.innerHTML = cardHTML + actionsHTML;
+
+  var snapCount = Object.keys(safeJson('fw_monthly_snapshots')||{}).length;
+  document.getElementById('saveBar').innerHTML = '<b>✓ Snapshot saved</b> for '+monthStr+' · History: '+snapCount+' month'+(snapCount!==1?'s':'');
+
+  // ── Functions ─────────────────────────────────────────────────
+
+  function computeHealthScore(){
+    var s = 0;
+    // Revenue trend (25 pts)
+    if(momRevPct !== null){
+      if(momRevPct > 5) s += 25;
+      else if(momRevPct >= 0) s += 18;
+      else if(momRevPct >= -10) s += 10;
+    } else { s += 15; }
+    // Expense ratio (25 pts)
+    if(revenue > 0){
+      var r = expenses / revenue;
+      if(r < 0.5) s += 25;
+      else if(r < 0.7) s += 20;
+      else if(r < 0.85) s += 12;
+      else if(r < 1.0) s += 5;
+    } else { s += 10; }
+    // Cash runway (25 pts)
+    if(runway >= 6) s += 25;
+    else if(runway >= 3) s += 15;
+    else if(runway >= 1) s += 8;
+    // Receivables health (25 pts)
+    var ov = invOverdue.length;
+    if(ov === 0) s += 25;
+    else if(ov <= 1) s += 18;
+    else if(ov <= 3) s += 10;
+    return Math.min(100, Math.max(0, s));
+  }
+
+  function getHealthLabel(s){
+    if(s >= 80) return 'EXCELLENT';
+    if(s >= 60) return 'GOOD';
+    if(s >= 40) return 'FAIR';
+    return 'POOR';
+  }
+
+  function getHealthCls(s){
+    if(s >= 80) return 'excellent';
+    if(s >= 60) return 'good';
+    if(s >= 40) return 'fair';
+    return 'poor';
+  }
+
+  function saveSnapshot(){
+    var snaps = safeJson('fw_monthly_snapshots') || {};
+    snaps[curMo] = {
+      month: monthStr,
+      bizName: bizName,
+      revenue: revenue,
+      expenses: expenses,
+      payroll: payroll,
+      netProfit: netProfit,
+      runway: runway,
+      loanScore: loanScore,
+      healthScore: healthScore,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem('fw_monthly_snapshots', JSON.stringify(snaps));
+  }
+
+  function renderIntStrip(){
+    var srcs = [];
+    if(invRevData)  srcs.push('📈 Invoice Tracker ('+revSrc+')');
+    if(expData)     srcs.push('📋 Vendor Tracker');
+    if(payrollData) srcs.push('👥 Payroll Estimator');
+    if(cashRunData) srcs.push('💵 Cash Runway');
+    if(checkup.loanScore) srcs.push('🏥 Financial Checkup');
+    if(srcs.length){
+      intEl.className = 'int-strip';
+      intEl.innerHTML = '<b>Live data from:</b> '+srcs.join(' · ');
+    }
+  }
+
+  function getPrevMonthKey(mo){
+    var p = mo.split('-'), yr = parseInt(p[0]), m = parseInt(p[1]) - 1;
+    if(m < 1){ m = 12; yr--; }
+    return yr + '-' + (m < 10 ? '0'+m : ''+m);
+  }
+
+  function scoreToVerdict(s){
+    if(s >= 70) return 'SAFE';
+    if(s >= 45) return 'CAUTION';
+    if(s >= 25) return 'RISKY';
+    return 'DANGEROUS';
+  }
+  function runwayLabel(r){
+    if(r >= 6) return 'STRONG';
+    if(r >= 3) return 'MODERATE';
+    if(r >= 1) return 'LOW';
+    return 'CRITICAL';
+  }
+  function monthName(){
+    return now.toLocaleString('default',{month:'long'})+' '+now.getFullYear();
+  }
+  function gradeLbl(g){
+    return {A:'Excellent',B:'Good',C:'Average',D:'Poor',F:'Critical'}[g]||'';
+  }
+  function verdictClass(v){
+    if(v==='SAFE') return 'safe';
+    if(v==='CAUTION') return 'caution';
+    if(v==='RISKY') return 'risky';
+    return 'dangerous';
+  }
+  function runwayClass(r){
+    if(r==='STRONG') return 'strong';
+    if(r==='MODERATE') return 'moderate';
+    if(r==='LOW') return 'low';
+    return 'critical';
+  }
+  function gradeClass(g){
+    return {A:'grade-a',B:'grade-b',C:'grade-c',D:'grade-d',F:'grade-f'}[g]||'grade-c';
+  }
+  function trendDelta(delta, label){
+    if(delta===null) return '';
+    var abs=Math.abs(delta).toFixed(1);
+    if(Math.abs(delta)<0.05) return '<span class="trend-item"><span class="trend-name">'+label+'</span><span class="trend-delta trend-flat">→ no change</span></span>';
+    var dir=delta>0?'▲':'▼', cls=delta>0?'trend-up':'trend-down';
+    return '<span class="trend-item"><span class="trend-name">'+label+'</span><span class="trend-delta '+cls+'">'+dir+' '+abs+'</span></span>';
+  }
+
+  // ── Text summary ───────────────────────────────────────────────
+  function buildTextSummary(){
+    var lines = [
+      '📊 '+bizName+' — Monthly Snapshot — '+monthStr,
+      '',
+      '💰 Revenue: '+fmt(revenue)+'/mo'+(momRevPct!==null?' ('+(momRevPct>=0?'+':'')+momRevPct.toFixed(1)+'% MoM)':''),
+      '📋 Expenses: '+fmt(expenses)+'/mo'+(momExpPct!==null?' ('+(momExpPct>=0?'+':'')+momExpPct.toFixed(1)+'% MoM)':''),
+      '💵 Net Profit: '+(netProfit>=0?'+':'')+fmt(netProfit)+'/mo',
+      '🏦 Loan Safety: '+loanScore+'/100 ('+verdict+')',
+      '⛽ Cash Runway: '+runway.toFixed(1)+' months ('+runwaySt+')',
+      '🏥 Health Grade: '+grade+' ('+gradeLbl(grade)+')',
+      '💪 Health Score: '+healthScore+'/100 ('+healthLbl+')',
+      grantCt?'🎯 Funding Matches: '+grantCt+'+ programs':null
+    ];
+    if(invCollected>0||invOverdue.length>0){
+      lines.push(''); lines.push('📋 This Month:');
+      if(invCollected>0) lines.push('   Invoices collected: +'+fmt(invCollected));
+      if(invOverdue.length>0) lines.push('   Overdue invoices: '+invOverdue.length);
+    }
+    if(goalsTotal>0) lines.push('   Goals hit: '+goalsDone+'/'+goalsTotal);
+    if(taxTotal>0) lines.push('   Tax paid this year: '+fmt(taxTotal));
+    if(totalDed>0) lines.push('   Deductions logged: '+fmt(Math.round(totalDed)));
+    if(cPayYTD>0) lines.push('   Contractor payments YTD: '+fmt(cPayYTD));
+    lines.push(''); lines.push('Generated by FinWise — Free financial tools for small businesses');
+    return lines.filter(function(l){ return l!==null; }).join('\n');
+  }
+
+  // ── Share actions ─────────────────────────────────────────────
+  window.shareWhatsApp = function(){
+    window.open('https://wa.me/?text='+encodeURIComponent(buildTextSummary()),'_blank');
+  };
+  window.copySummary = function(){
+    var txt = buildTextSummary();
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){ showToast('✅ Copied to clipboard!'); });
+    } else {
+      var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      showToast('✅ Copied to clipboard!');
+    }
+  };
+  window.emailSummary = function(){
+    window.location.href='mailto:?subject='+encodeURIComponent('📊 '+bizName+' — Monthly Financial Snapshot — '+monthStr)+'&body='+encodeURIComponent(buildTextSummary());
+  };
+
+  // ── Canvas PNG download ────────────────────────────────────────
+  window.downloadPNG = function(){
+    var canvas = document.getElementById('snapshotCanvas');
+    var ctx = canvas.getContext('2d');
+    var W=800, H=450;
+
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+
+    var gBar=ctx.createLinearGradient(0,0,W,0);
+    gBar.addColorStop(0,'#2563eb'); gBar.addColorStop(0.5,'#7c3aed'); gBar.addColorStop(1,'#db2777');
+    ctx.fillStyle=gBar; ctx.fillRect(0,0,W,6);
+
+    ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.fillRect(0,6,W,80);
+
+    ctx.font='bold 20px Arial'; ctx.fillStyle='#fff'; ctx.fillText('Fin',28,42);
+    ctx.fillStyle='#60a5fa'; ctx.fillText('Wise',28+ctx.measureText('Fin').width,42);
+
+    ctx.font='13px Arial'; ctx.fillStyle='rgba(255,255,255,0.45)';
+    ctx.textAlign='right'; ctx.fillText(now.toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric'}),W-28,38); ctx.textAlign='left';
+
+    ctx.font='bold 22px Arial'; ctx.fillStyle='#fff';
+    ctx.fillText(bizName.length>36?bizName.substring(0,36)+'…':bizName,28,72);
+    ctx.font='13px Arial'; ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.fillText('Monthly Snapshot — '+monthStr,28,94);
+
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,106); ctx.lineTo(W,106); ctx.stroke();
+
+    var tiles=[
+      {icon:'🏦',label:'LOAN SAFETY',  value:loanScore+'/100',         badge:verdict,              color:tileColor(verdCls)},
+      {icon:'⛽',label:'CASH RUNWAY',  value:runway.toFixed(1)+' mo',  badge:runwaySt,             color:tileColor(runCls)},
+      {icon:'🏥',label:'HEALTH GRADE', value:grade,                    badge:gradeLbl(grade),      color:gradeColor(grade)},
+      {icon:'💰',label:'NET PROFIT',   value:(netProfit>=0?'+':'-')+fmt(netProfit), badge:netProfit>=0?'POSITIVE':'NEGATIVE', color:netProfit>=0?'#15803d':'#b91c1c'},
+      {icon:'💪',label:'HEALTH SCORE', value:healthScore+'/100',       badge:healthLbl,            color:tileColorH(healthScore)}
+    ];
+
+    var tW=Math.floor((W-56-40)/5), tH=185, tTop=120, gap=10, sx=28;
+
+    tiles.forEach(function(t,i){
+      var tx=sx+i*(tW+gap);
+      ctx.fillStyle='rgba(255,255,255,0.06)'; roundRect(ctx,tx,tTop,tW,tH,10); ctx.fill();
+      ctx.fillStyle=t.color; roundRect(ctx,tx,tTop,tW,4,{tl:10,tr:10,br:0,bl:0}); ctx.fill();
+      ctx.font='18px Arial'; ctx.textAlign='center'; ctx.fillStyle='#fff'; ctx.fillText(t.icon,tx+tW/2,tTop+32);
+      ctx.font='bold 8.5px Arial'; ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.fillText(t.label,tx+tW/2,tTop+50);
+      ctx.font='bold 20px Arial'; ctx.fillStyle='#fff'; ctx.fillText(t.value,tx+tW/2,tTop+85);
+      var bw=Math.min(tW-12,ctx.measureText(t.badge).width+18), bh=19, bx=tx+(tW-bw)/2, by=tTop+100;
+      ctx.fillStyle=t.color+'33'; roundRect(ctx,bx,by,bw,bh,99); ctx.fill();
+      ctx.font='bold 8px Arial'; ctx.fillStyle='#fff'; ctx.fillText(t.badge,tx+tW/2,by+13);
+      ctx.textAlign='left';
+    });
+
+    var fy=tTop+tH+16;
+    if(momRevPct!==null){
+      ctx.font='bold 10px Arial'; ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fillText('VS PRIOR MONTH',28,fy);
+      var tx2=185;
+      if(momRevPct!==null){ ctx.fillStyle=momRevPct>0?'#4ade80':'#f87171'; ctx.fillText('Rev '+(momRevPct>=0?'+':'')+momRevPct.toFixed(1)+'%',tx2,fy); tx2+=115; }
+      if(momExpPct!==null){ ctx.fillStyle=momExpPct<0?'#4ade80':'#f87171'; ctx.fillText('Exp '+(momExpPct>=0?'+':'')+momExpPct.toFixed(1)+'%',tx2,fy); tx2+=115; }
+      if(momNetAbs!==null){ ctx.fillStyle=momNetAbs>=0?'#4ade80':'#f87171'; ctx.fillText('Net '+(momNetAbs>=0?'+':'')+fmt(momNetAbs),tx2,fy); }
+      fy+=18;
+    }
+
+    ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fillRect(0,H-36,W,36);
+    ctx.font='11px Arial'; ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.fillText('Generated by FinWise · finwise.app · Free financial tools for small businesses',28,H-12);
+
+    var link=document.createElement('a');
+    link.download='FinWise-Snapshot-'+bizName.replace(/[^a-zA-Z0-9]/g,'-')+'-'+monthStr.replace(/\s/g,'-')+'.png';
+    link.href=canvas.toDataURL('image/png'); link.click();
+  };
+
+  function roundRect(ctx,x,y,w,h,r){
+    if(typeof r==='number') r={tl:r,tr:r,br:r,bl:r};
+    ctx.beginPath();
+    ctx.moveTo(x+r.tl,y); ctx.lineTo(x+w-r.tr,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+    ctx.lineTo(x+w,y+h-r.br); ctx.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h);
+    ctx.lineTo(x+r.bl,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r.bl);
+    ctx.lineTo(x,y+r.tl); ctx.quadraticCurveTo(x,y,x+r.tl,y); ctx.closePath();
+  }
+  function tileColor(cls){
+    return {safe:'#15803d',caution:'#a16207',risky:'#c2410c',dangerous:'#b91c1c',strong:'#15803d',moderate:'#1d4ed8',low:'#a16207',critical:'#b91c1c'}[cls]||'#2563eb';
+  }
+  function gradeColor(g){ return {A:'#15803d',B:'#1d4ed8',C:'#a16207',D:'#c2410c',F:'#b91c1c'}[g]||'#475569'; }
+  function tileColorH(s){ return s>=80?'#15803d':s>=60?'#1d4ed8':s>=40?'#a16207':'#b91c1c'; }
+
+  function showToast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); },2800);
+  }
+
+})();
+</script>
+</body>
+</html>

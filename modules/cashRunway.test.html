@@ -1,0 +1,586 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cash Runway Calculator — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:600px){.scenario-grid{grid-template-columns:1fr}}
+.scenario-box{border-radius:10px;padding:16px;text-align:center;border:2px solid transparent}
+.scenario-box.danger{background:#fef2f2;border-color:#fca5a5}
+.scenario-box.warn{background:#fffbeb;border-color:#fde68a}
+.scenario-box.safe{background:#f0fdf4;border-color:#86efac}
+.sc-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.sc-label.danger{color:#dc2626}
+.sc-label.warn{color:#d97706}
+.sc-label.safe{color:#16a34a}
+.sc-months{font-size:2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.sc-months.danger{color:#dc2626}
+.sc-months.warn{color:#d97706}
+.sc-months.safe{color:#16a34a}
+.sc-sub{font-size:.74rem;color:#64748b}
+.runway-bar-wrap{margin:14px 0}
+.runway-bar-label{font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;display:flex;justify-content:space-between}
+.runway-track{background:#e2e8f0;border-radius:99px;height:12px;overflow:hidden;margin-bottom:8px}
+.runway-fill{height:100%;border-radius:99px;transition:width .5s}
+.threshold-box{background:#f8fafc;border-radius:8px;padding:14px;border:1px solid #e2e8f0;margin-top:4px}
+.th-label{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.th-value{font-size:1.1rem;font-weight:900;color:#1e293b}
+.th-sub{font-size:.78rem;color:#64748b;margin-top:2px}
+.rec-box{border-left:4px solid #2563eb;background:#eff6ff;padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#1e40af;line-height:1.6}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.save-btn{margin-top:12px;padding:9px 22px;background:#f0fdf4;color:#166534;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.87rem;cursor:pointer;font-weight:700}
+.save-btn:hover{background:#dcfce7}
+.fw-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+.exp-cut-wrap{margin-bottom:14px;padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}
+.exp-cut-label{font-size:.84rem;font-weight:700;color:#475569;display:flex;justify-content:space-between;margin-bottom:8px}
+.exp-cut-label .cut-val{color:#2563eb;font-weight:900}
+.conn-band{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:none}
+.conn-band.has-data{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.cb-icon{font-size:1.3rem;flex-shrink:0}
+.cb-body{flex:1;min-width:0}
+.cb-title{font-size:.82rem;font-weight:700;color:#0369a1;margin-bottom:4px}
+.cb-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.cb-pill{display:inline-flex;align-items:center;padding:.18rem .55rem;border-radius:999px;font-size:.72rem;font-weight:700;background:#e0f2fe;color:#0369a1;border:1.5px solid #7dd3fc}
+.cb-btn{padding:5px 14px;background:#0369a1;color:#fff;border:none;border-radius:5px;font-size:.78rem;font-weight:700;cursor:pointer;margin-top:4px}
+.cb-btn:hover{background:#0c4a6e}
+
+/* Runway status alert */
+.runway-alert{padding:14px 20px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;gap:14px;font-weight:700;border:2px solid}
+.runway-alert.danger{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+.runway-alert.warn{background:#fffbeb;border-color:#fde68a;color:#d97706}
+.runway-alert.safe{background:#f0fdf4;border-color:#86efac;color:#16a34a}
+.ra-icon{font-size:1.8rem;flex-shrink:0}
+.ra-title{font-size:1rem;font-weight:900;line-height:1.2}
+.ra-sub{font-size:.82rem;font-weight:400;margin-top:3px;opacity:.9}
+
+/* Revenue drop section */
+.rev-drop-wrap{margin-bottom:14px;padding:12px 14px;background:#fff5f5;border-radius:8px;border:1px solid #fecaca}
+.rev-drop-result{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px;margin-top:8px;font-size:.88rem;border:1.5px solid}
+
+/* Fundraising card */
+.fund-result-box{border-radius:8px;padding:14px 18px;margin-top:10px}
+.fund-result-box.needs-funds{background:#fffbeb;border:1.5px solid #fde68a}
+.fund-result-box.no-funds{background:#f0fdf4;border:1.5px solid #86efac}
+.fund-result-val{font-size:1.5rem;font-weight:900;margin-bottom:6px}
+.fund-result-desc{font-size:.83rem;color:#475569;line-height:1.6}
+button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.88rem;cursor:pointer}
+button.print-btn:hover{background:#e2e8f0}
+@media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Cash Runway Calculator</h1>
+<p class="subtitle">FinWise · How many months can your business survive if revenue drops?</p>
+
+<div class="conn-band" id="bankBanner"></div>
+<div class="conn-band" id="calendarBanner"></div>
+
+<div class="card">
+  <h2>Your Business Numbers</h2>
+  <div class="input-grid">
+    <div>
+      <label>Monthly Fixed Costs ($) <span style="font-weight:400;color:#94a3b8">rent, salaries, subscriptions</span></label>
+      <input type="number" id="fixedCosts" placeholder="e.g. 4000" oninput="saveCRInputs()"/>
+    </div>
+    <div>
+      <label>Monthly Variable Costs ($) <span style="font-weight:400;color:#94a3b8">supplies, commissions, delivery</span></label>
+      <input type="number" id="varCosts" placeholder="e.g. 1500" oninput="saveCRInputs()"/>
+    </div>
+    <div>
+      <label>Total EMI Obligations ($/mo) <span style="font-weight:400;color:#94a3b8">all existing loans</span></label>
+      <input type="number" id="emiTotal" placeholder="e.g. 800" oninput="saveCRInputs()"/>
+    </div>
+    <div>
+      <label>Current Cash Reserve ($) <span style="font-weight:400;color:#94a3b8">bank balance available</span></label>
+      <input type="number" id="cashReserve" placeholder="e.g. 12000" oninput="saveCRInputs()"/>
+    </div>
+    <div>
+      <label>Current Monthly Revenue ($)</label>
+      <input type="number" id="revenue" placeholder="e.g. 8500" oninput="saveCRInputs()"/>
+    </div>
+    <div>
+      <label>Owner Monthly Pay ($)</label>
+      <input type="number" id="ownerPay" placeholder="e.g. 2000" oninput="saveCRInputs()"/>
+    </div>
+  </div>
+  <button class="primary" onclick="calculate()">Calculate Runway →</button>
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div id="resultsSection" style="display:none">
+
+  <div id="runwayAlert" style="display:none"></div>
+
+  <div class="card">
+    <h2>Runway Scenarios</h2>
+    <div class="exp-cut-wrap">
+      <div class="exp-cut-label"><span>✂️ Cut Expenses By</span><span class="cut-val" id="expCutVal">0%</span></div>
+      <input type="range" id="expCutSlider" min="0" max="30" step="5" value="0" style="width:100%;accent-color:#2563eb" oninput="updateExpCut()"/>
+      <div style="font-size:.7rem;color:#94a3b8;display:flex;justify-content:space-between;margin-top:2px"><span>No cuts</span><span>30% reduction</span></div>
+    </div>
+    <div class="rev-drop-wrap">
+      <div class="exp-cut-label"><span>&#128201; Revenue Drops By</span><span class="cut-val" id="revDropVal">20%</span></div>
+      <input type="range" id="revDropSlider" min="0" max="50" step="5" value="20" style="width:100%;accent-color:#dc2626" oninput="updateRevDrop()"/>
+      <div style="font-size:.7rem;color:#94a3b8;display:flex;justify-content:space-between;margin-top:2px"><span>No drop</span><span>50% revenue drop</span></div>
+      <div id="revDropResult"></div>
+    </div>
+    <div class="scenario-grid" id="scenarioGrid"></div>
+    <div class="runway-bar-wrap" id="barSection"></div>
+  </div>
+
+  <div class="card">
+    <h2>Survival Threshold</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" id="thresholdGrid"></div>
+  </div>
+
+  <div class="card">
+    <div class="rec-box" id="recBox"></div>
+  </div>
+
+  <div class="card">
+    <h2>&#128176; Fundraising / Capital Needed Calculator</h2>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:14px">How much additional capital do you need to reach a target runway?</p>
+    <div style="max-width:300px">
+      <label>Target Runway (months)</label>
+      <input type="number" id="targetRunway" value="12" min="1" max="60" oninput="renderFundraisingCalc()" style="max-width:160px"/>
+      <p style="font-size:.73rem;color:#94a3b8;margin-top:3px">Investors and lenders typically want 12+ months of runway</p>
+    </div>
+    <div id="fundResult"></div>
+  </div>
+
+  <div class="card" style="text-align:right">
+    <button class="save-btn" onclick="saveCashRunwayToProfile()">&#128190; Save Numbers to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, expenses, EMI &amp; reserve — auto-fills all 40 tools</p>
+  </div>
+
+</div>
+
+<script>
+// ── Plain-English Explain Helpers ────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+var CR_KEY = 'fw_cash_runway';
+function saveCRInputs(){
+  try{
+    localStorage.setItem(CR_KEY, JSON.stringify({
+      fixedCosts : document.getElementById('fixedCosts').value,
+      varCosts   : document.getElementById('varCosts').value,
+      emiTotal   : document.getElementById('emiTotal').value,
+      cashReserve: document.getElementById('cashReserve').value,
+      revenue    : document.getElementById('revenue').value,
+      ownerPay   : document.getElementById('ownerPay').value
+    }));
+  }catch(e){}
+}
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function loadCalendarData(){
+  try{
+    var bills=JSON.parse(localStorage.getItem('fw_bills')||'[]');
+    var events=JSON.parse(localStorage.getItem('fw_cf_events')||'[]');
+    var emps=JSON.parse(localStorage.getItem('fw_employees')||'[]');
+    var totalBills=bills.reduce(function(s,b){return s+(parseFloat(b.amount)||0);},0);
+    var billCount=bills.length;
+    var monthlyIncome=events.filter(function(e){return e.type==='income'&&e.recur==='monthly';})
+      .reduce(function(s,e){return s+(parseFloat(e.amount)||0);},0);
+    var incomeEvents=events.filter(function(e){return e.type==='income';}).length;
+    var monthlyWages=emps.reduce(function(s,e){return s+(parseFloat(e.wages)||0);},0)/12;
+    var empCount=emps.length;
+    return{totalBills:totalBills,billCount:billCount,monthlyIncome:monthlyIncome,incomeEvents:incomeEvents,
+           monthlyWages:monthlyWages,empCount:empCount};
+  }catch(e){return{totalBills:0,billCount:0,monthlyIncome:0,incomeEvents:0,monthlyWages:0,empCount:0};}
+}
+
+function renderCalendarBanner(){
+  var d=loadCalendarData();
+  var el=document.getElementById('calendarBanner');
+  if(!d.billCount&&!d.incomeEvents&&!d.empCount){el.className='conn-band';return;}
+  var pills='';
+  if(d.billCount) pills+='<span class="cb-pill">🧾 '+d.billCount+' bills · '+fmt(d.totalBills)+'/mo</span>';
+  if(d.empCount) pills+='<span class="cb-pill">👤 '+d.empCount+' employees · '+fmt(d.monthlyWages)+'/mo wages</span>';
+  if(d.incomeEvents) pills+='<span class="cb-pill">💵 '+d.incomeEvents+' income events · '+fmt(d.monthlyIncome)+'/mo</span>';
+  el.className='conn-band has-data';
+  el.innerHTML='<div class="cb-icon">🗓️</div>'
+    +'<div class="cb-body">'
+    +'<div class="cb-title">Connected data available — import for accurate runway</div>'
+    +'<div class="cb-pills">'+pills+'</div>'
+    +'<button class="cb-btn" onclick="importFromCalendar()">⬇️ Import bills + wages + revenue</button>'
+    +'</div>';
+}
+
+function importFromCalendar(){
+  var d=loadCalendarData();
+  var msg=[];
+  var totalFixed=d.totalBills+d.monthlyWages;
+  if(totalFixed>0){document.getElementById('fixedCosts').value=Math.round(totalFixed);msg.push('Fixed Costs = '+fmt(totalFixed)+' (bills + wages)');}
+  if(d.monthlyIncome){document.getElementById('revenue').value=Math.round(d.monthlyIncome);msg.push('Revenue = '+fmt(d.monthlyIncome));}
+  var t=document.getElementById('fwToast');
+  t.textContent='✅ Imported: '+msg.join(', ');
+  t.style.display='block';
+  setTimeout(function(){t.style.display='none';},3000);
+}
+
+function saveProfile(updates){
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(p,updates);
+    localStorage.setItem('fw_profile',JSON.stringify(p));
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
+    var t=document.getElementById('fwToast');
+    t.textContent='✅ Saved — all 40 tools updated';
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none';},2500);
+  }catch(e){}
+}
+function saveCashRunwayToProfile(){
+  var fixed=parseFloat(document.getElementById('fixedCosts').value)||0;
+  var varC=parseFloat(document.getElementById('varCosts').value)||0;
+  saveProfile({rev:parseFloat(document.getElementById('revenue').value)||0,exp:fixed+varC,emi:parseFloat(document.getElementById('emiTotal').value)||0,reserve:parseFloat(document.getElementById('cashReserve').value)||0});
+}
+
+var _cf_fixed=0,_cf_variable=0,_cf_emi=0,_cf_reserve=0,_cf_revenue=0,_cf_owner=0;
+
+function runwayMonths(monthlyCost, reserve, monthlyIncome){
+  if(monthlyCost <= 0) return -1; // sentinel: zero burn
+  if(monthlyIncome >= monthlyCost) return 999;
+  var deficit = monthlyCost - monthlyIncome;
+  if(deficit <= 0) return 999;
+  return Math.floor(reserve / deficit);
+}
+
+function fmtRunway(months){
+  if(months === -1) return 'N/A';
+  if(months >= 999) return '&#8734;';
+  return months;
+}
+function fmtRunwayText(months){
+  if(months === -1) return 'N/A — no burn';
+  if(months >= 999) return 'indefinite';
+  return months + ' months';
+}
+
+function getColor(months){
+  if(months >= 6) return 'safe';
+  if(months >= 3) return 'warn';
+  return 'danger';
+}
+
+function calculate(){
+  _cf_fixed   = parseFloat(document.getElementById('fixedCosts').value)||0;
+  _cf_variable= parseFloat(document.getElementById('varCosts').value)||0;
+  _cf_emi     = parseFloat(document.getElementById('emiTotal').value)||0;
+  _cf_reserve = parseFloat(document.getElementById('cashReserve').value)||0;
+  _cf_revenue = parseFloat(document.getElementById('revenue').value)||0;
+  _cf_owner   = parseFloat(document.getElementById('ownerPay').value)||0;
+
+  if(!_cf_fixed||!_cf_reserve||!_cf_revenue){ alert('Please fill Fixed Costs, Cash Reserve and Revenue.'); return; }
+
+  document.getElementById('expCutSlider').value = 0;
+  document.getElementById('expCutVal').textContent = '0%';
+  document.getElementById('resultsSection').style.display = 'block';
+  renderScenarios(0);
+}
+
+function updateExpCut(){
+  var pct = parseInt(document.getElementById('expCutSlider').value)||0;
+  document.getElementById('expCutVal').textContent = pct + '%';
+  renderScenarios(pct);
+}
+
+function renderScenarios(expCutPct){
+  var cutFactor = 1 - expCutPct/100;
+  var origMonthly = _cf_fixed + _cf_variable + _cf_emi + _cf_owner;
+  var totalMonthly = origMonthly * cutFactor;
+  var revenue = _cf_revenue;
+  var reserve = _cf_reserve;
+
+  /* P1 Bug: zero burn guard */
+  if(totalMonthly <= 0){
+    document.getElementById('runwayAlert').style.display = 'none';
+    document.getElementById('scenarioGrid').innerHTML =
+      '<div style="grid-column:1/-1" class="scenario-box safe">' +
+        '<div class="sc-label safe">No Monthly Burn</div>' +
+        '<div class="sc-months safe">N/A</div>' +
+        '<div class="sc-sub">Monthly expenses are zero — cash reserve is not being consumed</div>' +
+      '</div>';
+    document.getElementById('barSection').innerHTML =
+      '<div style="padding:10px 0;color:#16a34a;font-weight:700">&#10003; No monthly burn recorded — runway is indefinite.</div>';
+    document.getElementById('thresholdGrid').innerHTML = '';
+    document.getElementById('recBox').textContent = 'Zero burn rate detected. If correct, your cash reserve lasts indefinitely. Verify that all costs are entered above.';
+    document.getElementById('revDropResult').innerHTML = '';
+    document.getElementById('fundResult').innerHTML = '';
+    return;
+  }
+
+  var scenarios = [
+    {label:'Zero Revenue',     income:0},
+    {label:'50% Revenue Drop', income:revenue*0.5},
+    {label:'20% Revenue Drop', income:revenue*0.8}
+  ];
+
+  var sgHtml = '';
+  scenarios.forEach(function(s){
+    var months = runwayMonths(totalMonthly, reserve, s.income);
+    var col = getColor(months);
+    sgHtml += '<div class="scenario-box '+col+'">';
+    sgHtml += '<div class="sc-label '+col+'">'+s.label+(expCutPct>0?' <span style="font-size:.65rem;font-weight:400">&minus;'+expCutPct+'% costs</span>':'')+'</div>';
+    sgHtml += '<div class="sc-months '+col+'">'+fmtRunway(months)+'</div>';
+    sgHtml += '<div class="sc-sub">'+(months>=999?'Business survives indefinitely':months===-1?'N/A — no burn':months+' months of runway')+'</div>';
+    sgHtml += '</div>';
+  });
+  document.getElementById('scenarioGrid').innerHTML = sgHtml;
+
+  /* P2 UX: color-coded runway alert */
+  var zeroR = runwayMonths(totalMonthly, reserve, 0);
+  renderRunwayAlert(zeroR, totalMonthly);
+
+  /* Bar for zero-revenue runway */
+  var zeroMonthsCapped = Math.min(zeroR >= 999 ? 24 : zeroR, 24);
+  var barPct = Math.min(Math.round(zeroMonthsCapped/12*100), 100);
+  var barCol = zeroMonthsCapped>=6?'#16a34a':zeroMonthsCapped>=3?'#f59e0b':'#dc2626';
+  document.getElementById('barSection').innerHTML =
+    '<div class="runway-bar-label"><span>Worst-case runway (zero revenue)</span><span>'+fmtRunwayText(zeroR)+'</span></div>'+
+    '<div class="runway-track"><div class="runway-fill" style="width:'+barPct+'%;background:'+barCol+'"></div></div>'+
+    '<div style="font-size:.72rem;color:#94a3b8;display:flex;justify-content:space-between"><span>0 mo</span><span>6 mo (target)</span><span>12 mo</span></div>';
+
+  /* Threshold */
+  document.getElementById('thresholdGrid').innerHTML =
+    '<div class="threshold-box"><div class="th-label">Minimum Revenue to Survive</div><div class="th-value">'+fmt(totalMonthly)+'/mo</div><div class="th-sub">Covers all costs'+(expCutPct>0?' after '+expCutPct+'% cut':'')+'</div></div>'+
+    '<div class="threshold-box"><div class="th-label">Safe Revenue Target (20% buffer)</div><div class="th-value">'+fmt(totalMonthly*1.2)+'/mo</div><div class="th-sub">Costs + 20% safety margin</div></div>'+
+    '<div class="threshold-box"><div class="th-label">Monthly Burn</div><div class="th-value">'+fmt(totalMonthly)+'/mo</div><div class="th-sub">'+(expCutPct>0?'After '+expCutPct+'% cut (was '+fmt(origMonthly)+')':'Fixed + Variable + EMI + Owner Pay')+'</div></div>'+
+    '<div class="threshold-box"><div class="th-label">Monthly Surplus / Deficit</div><div class="th-value" style="color:'+(revenue>=totalMonthly?'#16a34a':'#dc2626')+'">'+fmt(revenue-totalMonthly)+'/mo</div><div class="th-sub">'+(revenue>=totalMonthly?'Cash positive — healthy':'Cash negative — monitor closely')+'</div></div>';
+
+  /* Recommendation */
+  var rec = '';
+  if(zeroR < 3)        rec = '&#9888;&#65039; Critical: Cash reserve covers less than 3 months at zero revenue. Build at least '+fmt(totalMonthly*3)+' reserve before new debt.';
+  else if(zeroR < 6)   rec = '&#9888;&#65039; Caution: '+zeroR+' months runway. Target 6+. Avoid large new loans until reserve reaches '+fmt(totalMonthly*6)+'.';
+  else if(zeroR < 12)  rec = '&#10003; Healthy: '+zeroR+' months runway is solid. New loan is manageable — keep reserve above '+fmt(totalMonthly*3)+' after EMI starts.';
+  else if(zeroR < 999) rec = '&#10003; Strong: '+zeroR+'+ months runway. Excellent financial resilience. New financing poses low risk.';
+  else                  rec = '&#10003; Profitable: Revenue exceeds burn rate — reserves grow each month. Excellent position.';
+  document.getElementById('recBox').innerHTML = rec;
+
+  /* P2 Feature: revenue drop scenario */
+  var revDropPct = parseInt(document.getElementById('revDropSlider').value) || 20;
+  document.getElementById('revDropVal').textContent = revDropPct + '%';
+  renderRevDrop(revDropPct, totalMonthly, reserve);
+
+  /* P3: fundraising calc */
+  renderFundraisingCalc();
+}
+
+/* P2 UX: runway status alert */
+function renderRunwayAlert(zeroR, totalMonthly){
+  var el = document.getElementById('runwayAlert');
+  if(!el) return;
+  var cls, icon, title, sub;
+  if(zeroR < 3){
+    cls = 'danger'; icon = '&#128308;';
+    title = 'Critical: Less than 3 months of runway at zero revenue';
+    sub = 'Immediate action required — cut costs or secure emergency funding. Target minimum: '+fmt(totalMonthly*3)+' cash reserve.';
+  } else if(zeroR < 6){
+    cls = 'warn'; icon = '&#128993;';
+    title = 'Caution: ' + zeroR + ' months runway — below the 6-month safety target';
+    sub = 'Build reserves to '+fmt(totalMonthly*6)+' before taking on new debt or major commitments.';
+  } else {
+    var displayR = zeroR >= 999 ? 'Profitable (indefinite)' : zeroR + ' months';
+    cls = 'safe'; icon = '&#128994;';
+    title = 'Healthy runway: ' + displayR + ' at zero revenue';
+    sub = 'Strong financial cushion. Well above the 6-month safety benchmark.';
+  }
+  el.className = 'runway-alert ' + cls;
+  el.style.display = 'flex';
+  var explainBlock = '';
+  if(zeroR < 3){
+    explainBlock = explainHtml(
+      ['Less than 3 months of cash means you could close before a loan is even approved (takes 2–8 weeks)',
+       'Payroll, rent, and supplier payments will be missed within weeks',
+       'Investors and lenders treat under-3-month runway as a crisis signal'],
+      'You have '+fmt(_cf_reserve)+' in cash and burn '+fmt(totalMonthly)+'/month → only '+zeroR+' months until $0. Loan approval alone takes 2–6 weeks'
+    );
+  } else if(zeroR < 6){
+    explainBlock = explainHtml(
+      ['Below the recommended 6-month safety buffer',
+       'An unexpected expense or slow month could push you into crisis',
+       'Now is the right time to cut non-essential costs and build reserves'],
+      'You have '+zeroR+' months of runway at zero revenue and burn '+fmt(totalMonthly)+'/month — you need at least 6 months to be considered safe'
+    );
+  }
+  el.innerHTML = '<div class="ra-icon">'+icon+'</div><div><div class="ra-title">'+title+'</div><div class="ra-sub">'+sub+'</div>'+explainBlock+'</div>';
+}
+
+/* P2 Feature: revenue drop scenario */
+function updateRevDrop(){
+  var pct = parseInt(document.getElementById('revDropSlider').value) || 0;
+  document.getElementById('revDropVal').textContent = pct + '%';
+  var expCutPct = parseInt(document.getElementById('expCutSlider').value) || 0;
+  var totalMonthly = (_cf_fixed + _cf_variable + _cf_emi + _cf_owner) * (1 - expCutPct/100);
+  renderRevDrop(pct, totalMonthly, _cf_reserve);
+}
+
+function renderRevDrop(pct, totalMonthly, reserve){
+  var el = document.getElementById('revDropResult');
+  if(!el) return;
+  var reducedIncome = _cf_revenue * (1 - pct/100);
+  var months = runwayMonths(totalMonthly, reserve, reducedIncome);
+  var col = getColor(months);
+  var bgMap   = {danger:'#fef2f2', warn:'#fffbeb', safe:'#f0fdf4'};
+  var bdrMap  = {danger:'#fca5a5', warn:'#fde68a', safe:'#86efac'};
+  var clrMap  = {danger:'#dc2626', warn:'#d97706', safe:'#16a34a'};
+  el.innerHTML =
+    '<div class="rev-drop-result" style="background:'+bgMap[col]+';border-color:'+bdrMap[col]+'">' +
+      '<span style="font-size:1.3rem;font-weight:900;color:'+clrMap[col]+'">'+fmtRunway(months)+(months<999&&months!==-1?' mo':'')+'</span>' +
+      '<span style="font-size:.88rem;color:#475569">runway if revenue drops '+pct+'%' +
+        (pct===0?' (current revenue, no change)':'') +
+        ' &mdash; monthly income would be '+fmt(Math.round(reducedIncome))+'</span>' +
+    '</div>';
+}
+
+/* P3 Feature: fundraising / capital needed */
+function renderFundraisingCalc(){
+  var el = document.getElementById('fundResult');
+  if(!el) return;
+  var targetMonths = parseInt(document.getElementById('targetRunway').value) || 12;
+  var expCutPct    = parseInt(document.getElementById('expCutSlider').value) || 0;
+  var totalMonthly = (_cf_fixed + _cf_variable + _cf_emi + _cf_owner) * (1 - expCutPct/100);
+  if(totalMonthly <= 0){
+    el.innerHTML = '<div class="fund-result-box no-funds"><div class="fund-result-val" style="color:#16a34a">$0 needed &#10003;</div><div class="fund-result-desc">No monthly burn — no additional capital required.</div></div>';
+    return;
+  }
+  var monthlyNetBurn = totalMonthly - _cf_revenue;
+  var capitalNeeded  = monthlyNetBurn <= 0 ? 0 : Math.max(0, monthlyNetBurn * targetMonths - _cf_reserve);
+  var currentRunway  = runwayMonths(totalMonthly, _cf_reserve, _cf_revenue);
+  if(capitalNeeded <= 0){
+    el.innerHTML =
+      '<div class="fund-result-box no-funds">' +
+        '<div class="fund-result-val" style="color:#16a34a">$0 needed &#10003;</div>' +
+        '<div class="fund-result-desc">Your current cash flow and reserves are sufficient for <strong>'+targetMonths+' months</strong>.<br>' +
+        'Current actual runway: <strong>'+fmtRunwayText(currentRunway)+'</strong>. No additional capital required.</div>' +
+      '</div>';
+  } else {
+    el.innerHTML =
+      '<div class="fund-result-box needs-funds">' +
+        '<div class="fund-result-val" style="color:#d97706">'+fmt(capitalNeeded)+' needed</div>' +
+        '<div class="fund-result-desc">Additional capital to reach <strong>'+targetMonths+' months</strong> of runway at current revenue.<br>' +
+        'Current reserve: <strong>'+fmt(_cf_reserve)+'</strong> &rarr; covers <strong>'+fmtRunwayText(currentRunway)+'</strong>.<br>' +
+        'Net monthly burn: <strong>'+fmt(monthlyNetBurn)+'/mo</strong> (costs &minus; revenue).<br>' +
+        '<span style="font-size:.78rem;color:#94a3b8">Formula: ('+fmt(monthlyNetBurn)+' &times; '+targetMonths+' mo) &minus; '+fmt(_cf_reserve)+' reserve = '+fmt(capitalNeeded)+'</span>' +
+      '</div>';
+  }
+}
+
+/* P1 Integration: pull cash balance from bankStatementUpload or monthlySnapshot */
+function renderBankBanner(){
+  var el = document.getElementById('bankBanner');
+  if(!el) return;
+  var cashBal = null, source = '';
+  try{
+    var bankData = JSON.parse(localStorage.getItem('fw_bank_statement')||'null');
+    if(bankData && (bankData.closingBalance || bankData.cashBalance)){
+      cashBal = bankData.closingBalance || bankData.cashBalance;
+      source = 'Bank Statement Upload';
+    }
+  }catch(e){}
+  try{
+    if(cashBal === null){
+      var snap = JSON.parse(localStorage.getItem('fw_monthly_snapshot')||'null');
+      if(snap && snap.cashBalance){ cashBal = snap.cashBalance; source = 'Monthly Snapshot'; }
+    }
+  }catch(e){}
+  if(cashBal === null){ el.className = 'conn-band'; return; }
+  el.className = 'conn-band has-data';
+  el.innerHTML = '<div class="cb-icon">&#127970;</div>'+
+    '<div class="cb-body">'+
+    '<div class="cb-title">Cash balance found in '+source+'</div>'+
+    '<div class="cb-pills"><span class="cb-pill">&#128181; Cash Reserve: '+fmt(cashBal)+'</span></div>'+
+    '<button class="cb-btn" onclick="importCashBalance('+cashBal+')">&#11015;&#65039; Use this cash balance</button>'+
+    '</div>';
+}
+
+function importCashBalance(amount){
+  document.getElementById('cashReserve').value = Math.round(amount);
+  saveCRInputs();
+  var t = document.getElementById('fwToast');
+  t.textContent = '&#10003; Cash balance imported: '+fmt(amount);
+  t.style.display = 'block';
+  setTimeout(function(){ t.style.display='none'; }, 2500);
+}
+
+/* Auto-load: saved inputs first, then profile fallback */
+(function(){
+  try{
+    var saved = JSON.parse(localStorage.getItem(CR_KEY)||'null');
+    if(saved){
+      document.getElementById('fixedCosts').value  = saved.fixedCosts ||'';
+      document.getElementById('varCosts').value    = saved.varCosts   ||'';
+      document.getElementById('emiTotal').value    = saved.emiTotal   ||'';
+      document.getElementById('cashReserve').value = saved.cashReserve||'';
+      document.getElementById('revenue').value     = saved.revenue    ||'';
+      document.getElementById('ownerPay').value    = saved.ownerPay   ||'';
+    }
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+    if(!p){ p = JSON.parse(localStorage.getItem('fw_profile')||'null'); }
+    if(p){
+      if(!document.getElementById('fixedCosts').value)  document.getElementById('fixedCosts').value  = Math.round((p.exp||0) * 0.65)||'';
+      if(!document.getElementById('varCosts').value)    document.getElementById('varCosts').value    = Math.round((p.exp||0) * 0.35)||'';
+      if(!document.getElementById('emiTotal').value)    document.getElementById('emiTotal').value    = p.emi||'';
+      if(!document.getElementById('cashReserve').value) document.getElementById('cashReserve').value = p.reserve||'';
+      if(!document.getElementById('revenue').value)     document.getElementById('revenue').value     = p.rev||'';
+    }
+  }catch(e){}
+})();
+renderBankBanner();
+renderCalendarBanner();
+</script>
+</body>
+</html>
+

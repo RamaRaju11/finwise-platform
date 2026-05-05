@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cash Flow Statement</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; font-size: 14px; }
+
+  /* ── Header ── */
+  .header { background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); color: #fff; padding: 20px 28px; }
+  .header h1 { font-size: 1.4rem; font-weight: 700; }
+  .header p  { opacity: .8; font-size: .85rem; margin-top: 4px; }
+  .breadcrumb { font-size: .75rem; opacity: .65; margin-bottom: 6px; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; background: #fff; padding: 0 28px; }
+  .tab  { padding: 12px 20px; cursor: pointer; font-size: .85rem; font-weight: 500; color: #64748b;
+          border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .15s; }
+  .tab.active { color: #0369a1; border-bottom-color: #0369a1; }
+  .tab:hover:not(.active) { color: #0f172a; }
+
+  /* ── Layout ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 28px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Cards ── */
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-weight: 600; font-size: .9rem; color: #0f172a; margin-bottom: 14px;
+                padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+  .card-title .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* ── Form grid ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .form-group label { display: block; font-size: .78rem; color: #64748b; margin-bottom: 4px; font-weight: 500; }
+  .form-group input  { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px;
+                       font-size: .85rem; outline: none; transition: border-color .15s; }
+  .form-group input:focus { border-color: #0369a1; box-shadow: 0 0 0 3px rgba(3,105,161,.1); }
+  .form-group .hint { font-size: .7rem; color: #94a3b8; margin-top: 3px; }
+
+  /* ── Buttons ── */
+  .btn { padding: 10px 22px; border: none; border-radius: 7px; font-weight: 600; cursor: pointer;
+         font-size: .88rem; transition: transform .1s, box-shadow .1s; }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: #0369a1; color: #fff; }
+  .btn-primary:hover { background: #0284c7; box-shadow: 0 2px 8px rgba(3,105,161,.25); }
+  .btn-secondary { background: #f1f5f9; color: #475569; }
+  .btn-secondary:hover { background: #e2e8f0; }
+  .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+
+  /* ── Waterfall ── */
+  .waterfall { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+  .wf-header { background: #f8fafc; padding: 12px 20px; font-weight: 600; font-size: .85rem; color: #475569;
+               display: grid; grid-template-columns: 1fr 100px 100px; border-bottom: 1px solid #e2e8f0; }
+  .wf-row { display: grid; grid-template-columns: 1fr 100px 100px; padding: 9px 20px; border-bottom: 1px solid #f8fafc;
+            align-items: center; font-size: .85rem; }
+  .wf-row:hover { background: #fafcfe; }
+  .wf-row.section-header { background: #f1f5f9; font-weight: 600; font-size: .82rem; color: #64748b; }
+  .wf-row.subtotal { font-weight: 600; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+  .wf-row.grand-total { font-weight: 700; background: #eff6ff; border-top: 2px solid #bfdbfe; font-size: .9rem; }
+  .wf-row.opening-row { background: #f0fdf4; font-weight: 600; border-bottom: 2px solid #bbf7d0; }
+  .wf-row.closing-row { background: #eff6ff; font-weight: 700; border-top: 2px solid #bfdbfe; font-size: .95rem; }
+  .wf-indent { padding-left: 32px; }
+  .num { text-align: right; font-family: 'Courier New', monospace; }
+  .pos { color: #16a34a; }
+  .neg { color: #dc2626; }
+  .zero { color: #94a3b8; }
+
+  /* ── Summary strip ── */
+  .summary-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .sum-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .sum-val  { font-size: 1.2rem; font-weight: 700; }
+  .sum-label { font-size: .72rem; color: #64748b; margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ── Health bar ── */
+  .health-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .health-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .health-title { font-weight: 600; font-size: .9rem; }
+  .health-badge { padding: 4px 12px; border-radius: 20px; font-size: .78rem; font-weight: 700; text-transform: uppercase; }
+  .badge-healthy  { background: #dcfce7; color: #166534; }
+  .badge-moderate { background: #fef9c3; color: #854d0e; }
+  .badge-stressed { background: #fee2e2; color: #991b1b; }
+  .health-bar-bg { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+  .health-bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+  .alert-list { list-style: none; }
+  .alert-list li { padding: 5px 0; font-size: .82rem; display: flex; gap: 6px; }
+  .alert-item::before  { content: "⚠️"; }
+  .strength-item::before { content: "✅"; }
+
+  /* ── Multi-period ── */
+  .period-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
+  .period-inputs { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; flex: 1; min-width: 600px; }
+  .mp-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .mp-table th { background: #f1f5f9; padding: 8px 12px; text-align: right; font-weight: 600; color: #475569; border: 1px solid #e2e8f0; }
+  .mp-table th:first-child { text-align: left; }
+  .mp-table td { padding: 7px 12px; border: 1px solid #f1f5f9; text-align: right; }
+  .mp-table td:first-child { text-align: left; font-weight: 500; }
+  .mp-table tr:nth-child(even) { background: #fafcfe; }
+  .mp-table tr.subtotal td { background: #f8fafc; font-weight: 600; border-top: 1px solid #e2e8f0; }
+  .mp-table tr.total-row td { background: #eff6ff; font-weight: 700; border-top: 2px solid #bfdbfe; }
+  .mp-table .cash-row td { background: #f0fdf4; font-weight: 700; }
+
+  /* ── Reconcile ── */
+  .recon-result { padding: 14px 18px; border-radius: 8px; font-size: .9rem; font-weight: 600; margin-top: 12px; }
+  .recon-ok  { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .recon-err { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+  /* ── Unit tests ── */
+  .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .test-item { border-radius: 8px; padding: 12px 14px; font-size: .82rem; border: 1px solid transparent; }
+  .test-pass { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .test-fail { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+  .test-name { font-weight: 600; margin-bottom: 2px; }
+  .test-detail { opacity: .8; }
+
+  .err-box { background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px;
+             color: #991b1b; font-size: .85rem; margin-bottom: 12px; display: none; }
+  .section-label { font-size: .8rem; font-weight: 600; color: #64748b; text-transform: uppercase;
+                   letter-spacing: .05em; margin: 16px 0 8px; }
+  @media print {
+    .tabs, button { display:none !important; }
+    body { background:#fff; padding:8px; }
+    .panel { display:block !important; }
+    #panel-tests { display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="breadcrumb">← <a href="../index.html" style="color:#bae6fd;">SmallBiz Platform</a> › Financial Statements</div>
+  <h1>💧 Cash Flow Statement</h1>
+  <p>Operating + Investing + Financing flows · Indirect Method · Links to P&amp;L Engine &amp; Balance Sheet Engine</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('single')">Single Period</div>
+  <div class="tab" onclick="switchTab('multi')">Multi-Period</div>
+  <div class="tab" onclick="switchTab('reconcile')">Reconcile with BS</div>
+  <div class="tab" onclick="switchTab('tests')">Unit Tests</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PANEL 1 — Single Period
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="panel-single" class="main panel active">
+  <div id="single-error" class="err-box"></div>
+
+  <!-- Opening cash -->
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#0369a1"></span>Period &amp; Opening Position</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Period Label</label>
+        <input id="s-period" type="text" value="FY 2024" />
+      </div>
+      <div class="form-group">
+        <label>Opening Cash ($)</label>
+        <input id="s-openingCash" type="number" value="50000" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Operating -->
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#16a34a"></span>Operating Activities</div>
+    <div class="section-label">Starting point (from P&L Engine)</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Net Profit / (Loss) ($)</label>
+        <input id="s-netProfit" type="number" value="120000" />
+        <div class="hint">Can be negative</div>
+      </div>
+    </div>
+    <div class="section-label">Non-cash add-backs</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Depreciation ($)</label>
+        <input id="s-depreciation" type="number" value="15000" />
+      </div>
+      <div class="form-group">
+        <label>Amortization ($)</label>
+        <input id="s-amortization" type="number" value="0" />
+      </div>
+    </div>
+    <div class="section-label">Working capital changes (positive = went UP)</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Change in Accounts Receivable ($)</label>
+        <input id="s-arChange" type="number" value="20000" />
+        <div class="hint">+ve = AR increased (cash used)</div>
+      </div>
+      <div class="form-group">
+        <label>Change in Inventory ($)</label>
+        <input id="s-invChange" type="number" value="10000" />
+        <div class="hint">+ve = Inventory increased (cash used)</div>
+      </div>
+      <div class="form-group">
+        <label>Change in Accounts Payable ($)</label>
+        <input id="s-apChange" type="number" value="8000" />
+        <div class="hint">+ve = AP increased (cash retained)</div>
+      </div>
+      <div class="form-group">
+        <label>Other Working Capital ($)</label>
+        <input id="s-otherWC" type="number" value="0" />
+        <div class="hint">+ve = net inflow</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Investing -->
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#7c3aed"></span>Investing Activities</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Equipment Purchases ($)</label>
+        <input id="s-equip" type="number" value="30000" />
+        <div class="hint">Enter positive → treated as outflow</div>
+      </div>
+      <div class="form-group">
+        <label>Property Purchases ($)</label>
+        <input id="s-property" type="number" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Asset Sales Proceeds ($)</label>
+        <input id="s-assetSales" type="number" value="5000" />
+      </div>
+      <div class="form-group">
+        <label>Other Investing Inflows ($)</label>
+        <input id="s-otherInvIn" type="number" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Other Investing Outflows ($)</label>
+        <input id="s-otherInvOut" type="number" value="0" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Financing -->
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#0369a1"></span>Financing Activities</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>New Loan Drawdowns ($)</label>
+        <input id="s-loanIn" type="number" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Principal Repayments ($)</label>
+        <input id="s-principal" type="number" value="36000" />
+        <div class="hint">From Loan Engine</div>
+      </div>
+      <div class="form-group">
+        <label>Owner Capital Injections ($)</label>
+        <input id="s-ownerIn" type="number" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Owner Drawings ($)</label>
+        <input id="s-ownerOut" type="number" value="24000" />
+      </div>
+      <div class="form-group">
+        <label>Other Financing Inflows ($)</label>
+        <input id="s-otherFinIn" type="number" value="0" />
+      </div>
+      <div class="form-group">
+        <label>Other Financing Outflows ($)</label>
+        <input id="s-otherFinOut" type="number" value="0" />
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="buildSingle()">Generate Cash Flow Statement</button>
+    <button class="btn btn-secondary" onclick="clearSingle()">Clear</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+
+  <div id="single-output" style="margin-top:20px;"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PANEL 2 — Multi-Period
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="panel-multi" class="main panel">
+  <div class="card">
+    <div class="card-title">Multi-Period Cash Flow Statement</div>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:14px;">
+      Enter key figures for each period. Opening cash auto-chains from the previous period's closing balance.
+    </p>
+    <div id="mp-periods"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="addMPPeriod()">+ Add Period</button>
+      <button class="btn btn-primary" onclick="buildMulti()">Generate Multi-Period CFS</button>
+    </div>
+  </div>
+  <div id="multi-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PANEL 3 — Reconcile
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="panel-reconcile" class="main panel">
+  <div class="card">
+    <div class="card-title">Reconcile Cash Flow Statement with Balance Sheet</div>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:16px;">
+      The closing cash from the Cash Flow Statement must equal the cash balance on the Balance Sheet (Balance Sheet Engine). Enter both values to verify.
+    </p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>CFS Closing Cash ($)</label>
+        <input id="r-cfsCash" type="number" value="78000" />
+      </div>
+      <div class="form-group">
+        <label>Balance Sheet Cash ($)</label>
+        <input id="r-bsCash" type="number" value="78000" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="runReconcile()">Check Reconciliation</button>
+    </div>
+    <div id="recon-output"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How the three statements connect</div>
+    <div style="font-size:.83rem;color:#475569;line-height:1.7;">
+      <strong>P&L → Cash Flow Statement:</strong> Net Profit is the starting point for Operating CF (indirect method).<br>
+      <strong>Loan → Cash Flow Statement:</strong> Monthly principal repayments from the amortization schedule feed into Financing CF.<br>
+      <strong>Cash Flow Statement → Balance Sheet:</strong> Closing Cash from the CFS must match the Cash line on the Balance Sheet.<br>
+      <strong>Balance Sheet → Cash Flow Statement:</strong> Changes in Balance Sheet working capital items (AR, Inventory, AP) drive the operating adjustments.<br>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PANEL 4 — Unit Tests
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="panel-tests" class="main panel">
+  <div class="card">
+    <div class="card-title">Automated Unit Tests</div>
+    <button class="btn btn-primary" onclick="runTests()" style="margin-bottom:14px;">Run All Tests</button>
+    <div id="test-output" class="test-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ENGINE (inlined) ═══════════════════════════════ -->
+<script>
+/* ── Engine ── */
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function _validateCFS(fields) {
+  const nonNeg = ["openingCash","depreciation","amortization",
+    "equipmentPurchases","propertyPurchases","assetSalesProceeds",
+    "newLoanDrawdowns","principalRepayments","ownerCapitalInjections","ownerDrawings"];
+  for (const key of nonNeg) {
+    if (fields[key] !== undefined && (typeof fields[key] !== "number" || fields[key] < 0))
+      throw new Error(`${key} must be a non-negative number. Got: ${fields[key]}`);
+  }
+}
+
+function _assessHealth(operating, investing, financing, netChange, closingCash, netProfit) {
+  const alerts = [], strengths = [];
+  let score = 100;
+
+  if (operating > 0) {
+    strengths.push("Positive operating cash flow — business generates real cash.");
+  } else if (operating < 0 && netProfit > 0) {
+    alerts.push("Operating CF negative despite reported profit — working capital consuming cash.");
+    score -= 20;
+  } else if (operating < 0) {
+    alerts.push("Negative operating cash flow — business is burning cash from operations.");
+    score -= 35;
+  }
+
+  if (investing < 0) strengths.push("Investing outflows — business reinvesting in assets.");
+  else if (investing > 0) alerts.push("Net asset disposals — may indicate downsizing.");
+
+  if (financing > 0 && operating < 0) {
+    alerts.push("Financing covers operating shortfalls — unsustainable long-term."); score -= 15;
+  }
+  if (financing < 0 && operating > 0)
+    strengths.push("Using operational surplus to repay debt or return capital.");
+
+  if (closingCash <= 0) { alerts.push("Closing cash ≤ 0 — immediate liquidity risk."); score -= 30; }
+  else if (closingCash < Math.abs(operating) * 0.5) {
+    alerts.push("Cash reserves thin relative to operating CF — limited buffer."); score -= 10;
+  }
+
+  if (netChange > 0) strengths.push("Net positive cash movement this period.");
+  else if (netChange < 0) { alerts.push("Net cash decreased this period."); score -= 5; }
+
+  score = Math.max(0, score);
+  const status = score >= 80 ? "healthy" : score >= 55 ? "moderate" : "stressed";
+  return { score, status, alerts, strengths };
+}
+
+function buildCashFlowStatement({
+  period="", openingCash=0,
+  netProfit=0, depreciation=0, amortization=0,
+  changeInAccountsReceivable=0, changeInInventory=0,
+  changeInAccountsPayable=0, changeInOtherWorkingCapital=0,
+  equipmentPurchases=0, propertyPurchases=0, assetSalesProceeds=0,
+  otherInvestingInflows=0, otherInvestingOutflows=0,
+  newLoanDrawdowns=0, principalRepayments=0,
+  ownerCapitalInjections=0, ownerDrawings=0,
+  otherFinancingInflows=0, otherFinancingOutflows=0,
+}={}) {
+  _validateCFS({ openingCash, depreciation, amortization,
+    equipmentPurchases, propertyPurchases, assetSalesProceeds,
+    newLoanDrawdowns, principalRepayments, ownerCapitalInjections, ownerDrawings });
+
+  const nonCashAdjustments    = _r(depreciation + amortization);
+  const workingCapitalChanges = _r(
+    -changeInAccountsReceivable - changeInInventory
+    + changeInAccountsPayable + changeInOtherWorkingCapital
+  );
+  const netCashFromOperating  = _r(netProfit + nonCashAdjustments + workingCapitalChanges);
+
+  const totalInvestingInflows  = _r(assetSalesProceeds + otherInvestingInflows);
+  const totalInvestingOutflows = _r(equipmentPurchases + propertyPurchases + otherInvestingOutflows);
+  const netCashFromInvesting   = _r(totalInvestingInflows - totalInvestingOutflows);
+
+  const totalFinancingInflows  = _r(newLoanDrawdowns + ownerCapitalInjections + otherFinancingInflows);
+  const totalFinancingOutflows = _r(principalRepayments + ownerDrawings + otherFinancingOutflows);
+  const netCashFromFinancing   = _r(totalFinancingInflows - totalFinancingOutflows);
+
+  const netCashChange = _r(netCashFromOperating + netCashFromInvesting + netCashFromFinancing);
+  const closingCash   = _r(openingCash + netCashChange);
+
+  return {
+    period, openingCash,
+    operating: { netProfit, depreciation, amortization, nonCashAdjustments,
+      changeInAccountsReceivable, changeInInventory, changeInAccountsPayable,
+      changeInOtherWorkingCapital, workingCapitalChanges, netCashFromOperating },
+    investing: { equipmentPurchases, propertyPurchases, assetSalesProceeds,
+      otherInvestingInflows, otherInvestingOutflows,
+      totalInvestingInflows, totalInvestingOutflows, netCashFromInvesting },
+    financing: { newLoanDrawdowns, principalRepayments, ownerCapitalInjections,
+      ownerDrawings, otherFinancingInflows, otherFinancingOutflows,
+      totalFinancingInflows, totalFinancingOutflows, netCashFromFinancing },
+    summary: { openingCash, netCashFromOperating, netCashFromInvesting,
+               netCashFromFinancing, netCashChange, closingCash },
+    health: _assessHealth(netCashFromOperating, netCashFromInvesting,
+                          netCashFromFinancing, netCashChange, closingCash, netProfit),
+  };
+}
+
+function generateMultiPeriodCFS(periods) {
+  if (!Array.isArray(periods) || periods.length === 0)
+    throw new Error("periods must be a non-empty array.");
+  const results = [];
+  let runningCash = periods[0].openingCash ?? 0;
+  for (const p of periods) {
+    const r = buildCashFlowStatement({ ...p, openingCash: runningCash });
+    results.push(r);
+    runningCash = r.summary.closingCash;
+  }
+  const n = results.length;
+  const sumS = key => _r(results.reduce((s, r) => s + (r.summary[key]||0), 0));
+  const totalOperating = sumS("netCashFromOperating");
+  const totalInvesting = sumS("netCashFromInvesting");
+  const totalFinancing = sumS("netCashFromFinancing");
+  return {
+    periods: results,
+    summary: {
+      openingCash: results[0].openingCash,
+      closingCash: results[n-1].summary.closingCash,
+      totalOperating, totalInvesting, totalFinancing,
+      totalNetChange: _r(totalOperating + totalInvesting + totalFinancing),
+    },
+    stats: {
+      operatingPositive: results.filter(r=>r.operating.netCashFromOperating>0).length,
+      operatingNegative: results.filter(r=>r.operating.netCashFromOperating<=0).length,
+      bestOperating:  results.reduce((a,b)=>a.operating.netCashFromOperating>b.operating.netCashFromOperating?a:b),
+      worstOperating: results.reduce((a,b)=>a.operating.netCashFromOperating<b.operating.netCashFromOperating?a:b),
+    },
+  };
+}
+
+function reconcileCashBalance(statement, balanceSheetCash) {
+  if (typeof balanceSheetCash !== "number" || balanceSheetCash < 0)
+    throw new Error("balanceSheetCash must be a non-negative number.");
+  const difference   = _r(statement.summary.closingCash - balanceSheetCash);
+  const isReconciled = Math.abs(difference) < 0.02;
+  return {
+    statementClosingCash: statement.summary.closingCash,
+    balanceSheetCash, difference, isReconciled,
+    note: isReconciled
+      ? "✅ Cash position reconciles with the balance sheet."
+      : `❌ Discrepancy of ${Math.abs(difference).toFixed(2)} — check for missing entries.`,
+  };
+}
+
+/* ── Formatting helpers ── */
+function fmt(n) {
+  if (n === null || n === undefined) return "—";
+  const abs = Math.abs(n);
+  const str = abs.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (n < 0) return `(${str})`;
+  return str;
+}
+function cls(n) { return n > 0 ? "pos" : n < 0 ? "neg" : "zero"; }
+function badgeCls(s) { return s === "healthy" ? "badge-healthy" : s === "moderate" ? "badge-moderate" : "badge-stressed"; }
+function barColor(s) { return s === "healthy" ? "#16a34a" : s === "moderate" ? "#ca8a04" : "#dc2626"; }
+
+/* ── Render waterfall ── */
+function renderWaterfall(s) {
+  const o = s.operating, inv = s.investing, fin = s.financing, sm = s.summary;
+  const row = (label, val, indent, cls_extra="") =>
+    `<div class="wf-row ${indent?"wf-indent":""} ${cls_extra}">
+       <span>${label}</span>
+       <span></span>
+       <span class="num ${cls(val)}">${fmt(val)}</span>
+     </div>`;
+  const subtotal = (label, val, cls_extra="subtotal") =>
+    `<div class="wf-row ${cls_extra}">
+       <span>${label}</span>
+       <span></span>
+       <span class="num ${cls(val)}">${fmt(val)}</span>
+     </div>`;
+
+  let html = `
+  <div class="waterfall">
+    <div class="wf-header"><span>Description</span><span></span><span class="num">Amount ($)</span></div>
+
+    <div class="wf-row opening-row"><span>Opening Cash Balance</span><span></span><span class="num pos">${fmt(s.openingCash)}</span></div>
+
+    <div class="wf-row section-header"><span>🟢 OPERATING ACTIVITIES</span><span></span><span></span></div>
+    ${row("Net Profit / (Loss)", o.netProfit, true)}
+    ${o.depreciation||o.amortization ? row("Depreciation &amp; Amortization", o.nonCashAdjustments, true) : ""}
+    ${o.changeInAccountsReceivable !== 0 ? row("Change in Accounts Receivable", -o.changeInAccountsReceivable, true) : ""}
+    ${o.changeInInventory !== 0 ? row("Change in Inventory", -o.changeInInventory, true) : ""}
+    ${o.changeInAccountsPayable !== 0 ? row("Change in Accounts Payable", o.changeInAccountsPayable, true) : ""}
+    ${o.changeInOtherWorkingCapital !== 0 ? row("Other Working Capital Changes", o.changeInOtherWorkingCapital, true) : ""}
+    ${subtotal("Net Cash from Operating Activities", o.netCashFromOperating)}
+
+    <div class="wf-row section-header"><span>🟣 INVESTING ACTIVITIES</span><span></span><span></span></div>
+    ${inv.equipmentPurchases ? row("Equipment Purchases", -inv.equipmentPurchases, true) : ""}
+    ${inv.propertyPurchases  ? row("Property Purchases",  -inv.propertyPurchases,  true) : ""}
+    ${inv.assetSalesProceeds ? row("Asset Sales Proceeds", inv.assetSalesProceeds, true) : ""}
+    ${inv.otherInvestingInflows  ? row("Other Investing Inflows",  inv.otherInvestingInflows,   true) : ""}
+    ${inv.otherInvestingOutflows ? row("Other Investing Outflows", -inv.otherInvestingOutflows, true) : ""}
+    ${subtotal("Net Cash from Investing Activities", inv.netCashFromInvesting)}
+
+    <div class="wf-row section-header"><span>🔵 FINANCING ACTIVITIES</span><span></span><span></span></div>
+    ${fin.newLoanDrawdowns       ? row("New Loan Drawdowns",       fin.newLoanDrawdowns,       true) : ""}
+    ${fin.principalRepayments    ? row("Principal Repayments",     -fin.principalRepayments,   true) : ""}
+    ${fin.ownerCapitalInjections ? row("Owner Capital Injections", fin.ownerCapitalInjections, true) : ""}
+    ${fin.ownerDrawings          ? row("Owner Drawings",           -fin.ownerDrawings,         true) : ""}
+    ${fin.otherFinancingInflows  ? row("Other Financing Inflows",  fin.otherFinancingInflows,  true) : ""}
+    ${fin.otherFinancingOutflows ? row("Other Financing Outflows", -fin.otherFinancingOutflows,true) : ""}
+    ${subtotal("Net Cash from Financing Activities", fin.netCashFromFinancing)}
+
+    ${subtotal("NET CHANGE IN CASH", sm.netCashChange, "grand-total")}
+    <div class="wf-row closing-row">
+      <span>Closing Cash Balance</span><span></span>
+      <span class="num ${cls(sm.closingCash)}">${fmt(sm.closingCash)}</span>
+    </div>
+  </div>`;
+  return html;
+}
+
+/* ── Render summary strip ── */
+function renderSummary(s) {
+  const sm = s.summary;
+  const card = (label, val, color) =>
+    `<div class="sum-card">
+       <div class="sum-val" style="color:${color}">${fmt(val)}</div>
+       <div class="sum-label">${label}</div>
+     </div>`;
+  return `<div class="summary-strip">
+    ${card("Opening Cash",      sm.openingCash,          "#0369a1")}
+    ${card("Operating CF",      sm.netCashFromOperating, sm.netCashFromOperating>=0?"#16a34a":"#dc2626")}
+    ${card("Investing CF",      sm.netCashFromInvesting, sm.netCashFromInvesting>=0?"#16a34a":"#dc2626")}
+    ${card("Financing CF",      sm.netCashFromFinancing, sm.netCashFromFinancing>=0?"#16a34a":"#dc2626")}
+    ${card("Net Cash Change",   sm.netCashChange,        sm.netCashChange>=0?"#16a34a":"#dc2626")}
+    ${card("Closing Cash",      sm.closingCash,          sm.closingCash>0?"#0369a1":"#dc2626")}
+  </div>`;
+}
+
+/* ── Render health ── */
+function renderHealth(h) {
+  const bc = badgeCls(h.status);
+  const bf = barColor(h.status);
+  const items = [
+    ...h.strengths.map(t=>`<li class="alert-list strength-item">${t}</li>`),
+    ...h.alerts.map(t=>`<li class="alert-list alert-item">${t}</li>`),
+  ].join("");
+  return `<div class="health-card">
+    <div class="health-header">
+      <div class="health-title">Cash Flow Health</div>
+      <div class="health-badge ${bc}">${h.status.toUpperCase()} · ${h.score}/100</div>
+    </div>
+    <div class="health-bar-bg"><div class="health-bar-fill" style="width:${h.score}%;background:${bf}"></div></div>
+    ${items ? `<ul class="alert-list">${items}</ul>` : ""}
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Panel 1 — Single Period
+══════════════════════════════════════════════════════════════════════════ */
+function g(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function gs(id){ return document.getElementById(id).value.trim(); }
+
+function buildSingle() {
+  const errEl = document.getElementById("single-error");
+  errEl.style.display = "none";
+  try {
+    const s = buildCashFlowStatement({
+      period:                        gs("s-period"),
+      openingCash:                   g("s-openingCash"),
+      netProfit:                     g("s-netProfit"),
+      depreciation:                  g("s-depreciation"),
+      amortization:                  g("s-amortization"),
+      changeInAccountsReceivable:    g("s-arChange"),
+      changeInInventory:             g("s-invChange"),
+      changeInAccountsPayable:       g("s-apChange"),
+      changeInOtherWorkingCapital:   g("s-otherWC"),
+      equipmentPurchases:            g("s-equip"),
+      propertyPurchases:             g("s-property"),
+      assetSalesProceeds:            g("s-assetSales"),
+      otherInvestingInflows:         g("s-otherInvIn"),
+      otherInvestingOutflows:        g("s-otherInvOut"),
+      newLoanDrawdowns:              g("s-loanIn"),
+      principalRepayments:           g("s-principal"),
+      ownerCapitalInjections:        g("s-ownerIn"),
+      ownerDrawings:                 g("s-ownerOut"),
+      otherFinancingInflows:         g("s-otherFinIn"),
+      otherFinancingOutflows:        g("s-otherFinOut"),
+    });
+    document.getElementById("single-output").innerHTML =
+      (s.period ? `<h3 style="font-weight:600;font-size:1rem;margin-bottom:12px;">${s.period} — Cash Flow Statement</h3>` : "") +
+      renderSummary(s) +
+      renderWaterfall(s) +
+      renderHealth(s.health);
+    saveCFSE();
+  } catch(e) {
+    errEl.textContent = "Error: " + e.message;
+    errEl.style.display = "block";
+  }
+}
+
+function clearSingle() {
+  ["s-period","s-openingCash","s-netProfit","s-depreciation","s-amortization",
+   "s-arChange","s-invChange","s-apChange","s-otherWC",
+   "s-equip","s-property","s-assetSales","s-otherInvIn","s-otherInvOut",
+   "s-loanIn","s-principal","s-ownerIn","s-ownerOut","s-otherFinIn","s-otherFinOut"]
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = id === "s-period" ? "" : "0";
+  });
+  document.getElementById("single-output").innerHTML = "";
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Panel 2 — Multi-Period
+══════════════════════════════════════════════════════════════════════════ */
+let mpCount = 0;
+
+function addMPPeriod(defaults) {
+  const i = mpCount++;
+  const d = defaults || {};
+  const container = document.getElementById("mp-periods");
+  const div = document.createElement("div");
+  div.className = "card";
+  div.id = "mp-period-" + i;
+  div.innerHTML = `
+    <div class="card-title" style="margin-bottom:10px;">
+      Period ${i+1}
+      ${i>0?`<button onclick="removeMPPeriod(${i})" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.8rem;">✕ Remove</button>`:""}
+    </div>
+    <div class="period-inputs">
+      <div class="form-group"><label>Period Label</label>
+        <input id="mp-${i}-period" value="${d.period||('Period '+(i+1))}" /></div>
+      ${i===0?`<div class="form-group"><label>Opening Cash ($)</label>
+        <input id="mp-${i}-open" type="number" value="${d.openingCash||50000}" /></div>`:""}
+      <div class="form-group"><label>Net Profit ($)</label>
+        <input id="mp-${i}-np" type="number" value="${d.netProfit||0}" /></div>
+      <div class="form-group"><label>Depreciation ($)</label>
+        <input id="mp-${i}-dep" type="number" value="${d.depreciation||0}" /></div>
+      <div class="form-group"><label>Change in AR ($)</label>
+        <input id="mp-${i}-ar" type="number" value="${d.changeInAccountsReceivable||0}" /></div>
+      <div class="form-group"><label>Change in Inventory ($)</label>
+        <input id="mp-${i}-inv" type="number" value="${d.changeInInventory||0}" /></div>
+      <div class="form-group"><label>Change in AP ($)</label>
+        <input id="mp-${i}-ap" type="number" value="${d.changeInAccountsPayable||0}" /></div>
+      <div class="form-group"><label>Equip Purchases ($)</label>
+        <input id="mp-${i}-eq" type="number" value="${d.equipmentPurchases||0}" /></div>
+      <div class="form-group"><label>Principal Repaid ($)</label>
+        <input id="mp-${i}-pr" type="number" value="${d.principalRepayments||0}" /></div>
+      <div class="form-group"><label>Owner Drawings ($)</label>
+        <input id="mp-${i}-od" type="number" value="${d.ownerDrawings||0}" /></div>
+      <div class="form-group"><label>New Loan Drawdown ($)</label>
+        <input id="mp-${i}-ld" type="number" value="${d.newLoanDrawdowns||0}" /></div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function removeMPPeriod(i) {
+  const el = document.getElementById("mp-period-" + i);
+  if (el) el.remove();
+}
+
+function buildMulti() {
+  const out = document.getElementById("multi-output");
+  const periods = [];
+  for (let i = 0; i < mpCount; i++) {
+    const el = document.getElementById("mp-period-" + i);
+    if (!el) continue;
+    const gv = id => parseFloat(document.getElementById(id)?.value) || 0;
+    const gs2 = id => document.getElementById(id)?.value?.trim() || "";
+    periods.push({
+      period: gs2(`mp-${i}-period`),
+      openingCash: gv(`mp-${i}-open`),
+      netProfit: gv(`mp-${i}-np`),
+      depreciation: gv(`mp-${i}-dep`),
+      changeInAccountsReceivable: gv(`mp-${i}-ar`),
+      changeInInventory: gv(`mp-${i}-inv`),
+      changeInAccountsPayable: gv(`mp-${i}-ap`),
+      equipmentPurchases: gv(`mp-${i}-eq`),
+      principalRepayments: gv(`mp-${i}-pr`),
+      ownerDrawings: gv(`mp-${i}-od`),
+      newLoanDrawdowns: gv(`mp-${i}-ld`),
+    });
+  }
+  if (periods.length === 0) { out.innerHTML = "<p>No periods added.</p>"; return; }
+
+  try {
+    const mp = generateMultiPeriodCFS(periods);
+    const sm = mp.summary;
+    const st = mp.stats;
+
+    // Summary cards
+    let html = `
+    <div class="summary-strip">
+      <div class="sum-card"><div class="sum-val" style="color:#0369a1">${fmt(sm.openingCash)}</div><div class="sum-label">Opening Cash</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.totalOperating>=0?'#16a34a':'#dc2626'}">${fmt(sm.totalOperating)}</div><div class="sum-label">Total Operating</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.totalInvesting>=0?'#16a34a':'#dc2626'}">${fmt(sm.totalInvesting)}</div><div class="sum-label">Total Investing</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.totalFinancing>=0?'#16a34a':'#dc2626'}">${fmt(sm.totalFinancing)}</div><div class="sum-label">Total Financing</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.totalNetChange>=0?'#16a34a':'#dc2626'}">${fmt(sm.totalNetChange)}</div><div class="sum-label">Net Change</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.closingCash>0?'#0369a1':'#dc2626'}">${fmt(sm.closingCash)}</div><div class="sum-label">Closing Cash</div></div>
+    </div>
+
+    <div class="summary-strip" style="margin-bottom:16px;">
+      <div class="sum-card"><div class="sum-val" style="color:#16a34a">${st.operatingPositive}</div><div class="sum-label">CF Positive Periods</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#dc2626">${st.operatingNegative}</div><div class="sum-label">CF Negative Periods</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#16a34a;font-size:.9rem;">${st.bestOperating.period}</div><div class="sum-label">Best Period</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#dc2626;font-size:.9rem;">${st.worstOperating.period}</div><div class="sum-label">Worst Period</div></div>
+    </div>`;
+
+    // Table
+    html += `<div class="card"><div class="card-title">Period-by-Period Breakdown</div>
+    <div style="overflow-x:auto;"><table class="mp-table">
+      <thead><tr>
+        <th style="text-align:left">Period</th>
+        ${mp.periods.map(p=>`<th>${p.period||'—'}</th>`).join("")}
+        <th>Total</th>
+      </tr></thead>
+      <tbody>
+        <tr class="cash-row"><td>Opening Cash</td>${mp.periods.map(p=>`<td>${fmt(p.openingCash)}</td>`).join("")}<td>${fmt(sm.openingCash)}</td></tr>
+        <tr><td>Net Profit</td>${mp.periods.map(p=>`<td class="${cls(p.operating.netProfit)}">${fmt(p.operating.netProfit)}</td>`).join("")}<td></td></tr>
+        <tr><td>+ Depreciation</td>${mp.periods.map(p=>`<td>${fmt(p.operating.nonCashAdjustments)}</td>`).join("")}<td></td></tr>
+        <tr><td>+ WC Changes</td>${mp.periods.map(p=>`<td class="${cls(p.operating.workingCapitalChanges)}">${fmt(p.operating.workingCapitalChanges)}</td>`).join("")}<td></td></tr>
+        <tr class="subtotal"><td>Net Operating CF</td>${mp.periods.map(p=>`<td class="${cls(p.operating.netCashFromOperating)}">${fmt(p.operating.netCashFromOperating)}</td>`).join("")}<td class="${cls(sm.totalOperating)}">${fmt(sm.totalOperating)}</td></tr>
+        <tr class="subtotal"><td>Net Investing CF</td>${mp.periods.map(p=>`<td class="${cls(p.investing.netCashFromInvesting)}">${fmt(p.investing.netCashFromInvesting)}</td>`).join("")}<td class="${cls(sm.totalInvesting)}">${fmt(sm.totalInvesting)}</td></tr>
+        <tr class="subtotal"><td>Net Financing CF</td>${mp.periods.map(p=>`<td class="${cls(p.financing.netCashFromFinancing)}">${fmt(p.financing.netCashFromFinancing)}</td>`).join("")}<td class="${cls(sm.totalFinancing)}">${fmt(sm.totalFinancing)}</td></tr>
+        <tr class="total-row"><td>Net Cash Change</td>${mp.periods.map(p=>`<td class="${cls(p.summary.netCashChange)}">${fmt(p.summary.netCashChange)}</td>`).join("")}<td class="${cls(sm.totalNetChange)}">${fmt(sm.totalNetChange)}</td></tr>
+        <tr class="cash-row"><td>Closing Cash</td>${mp.periods.map(p=>`<td class="${cls(p.summary.closingCash)}">${fmt(p.summary.closingCash)}</td>`).join("")}<td class="${cls(sm.closingCash)}">${fmt(sm.closingCash)}</td></tr>
+      </tbody>
+    </table></div></div>`;
+
+    out.innerHTML = html;
+  } catch(e) {
+    out.innerHTML = `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Panel 3 — Reconcile
+══════════════════════════════════════════════════════════════════════════ */
+function runReconcile() {
+  const cfs = parseFloat(document.getElementById("r-cfsCash").value) || 0;
+  const bs  = parseFloat(document.getElementById("r-bsCash").value)  || 0;
+  const diff = _r(cfs - bs);
+  const ok   = Math.abs(diff) < 0.02;
+  document.getElementById("recon-output").innerHTML = `
+    <div class="recon-result ${ok?'recon-ok':'recon-err'}">
+      ${ok
+        ? `✅ Reconciled — Both show $${fmt(cfs)}`
+        : `❌ Discrepancy of $${fmt(Math.abs(diff))} — CFS shows $${fmt(cfs)}, Balance Sheet shows $${fmt(bs)}`}
+    </div>
+    <div style="margin-top:10px;font-size:.83rem;color:#64748b;">
+      ${ok
+        ? "The financial statements are internally consistent."
+        : "Check for: missing transactions, timing differences, or data entry errors."}
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Panel 4 — Unit Tests
+══════════════════════════════════════════════════════════════════════════ */
+function assert(name, condition, detail) {
+  return { name, pass: !!condition, detail: detail || "" };
+}
+
+function runTests() {
+  const results = [];
+
+  // T1 — Basic positive operating CF
+  {
+    const s = buildCashFlowStatement({ netProfit: 100000, depreciation: 10000,
+      changeInAccountsReceivable: 5000, changeInAccountsPayable: 2000 });
+    // netCashFromOperating = 100000 + 10000 - 5000 + 2000 = 107000
+    results.push(assert("T1: Basic operating CF", s.operating.netCashFromOperating === 107000,
+      `Expected 107,000 · Got ${s.operating.netCashFromOperating}`));
+  }
+
+  // T2 — Opening cash rolls to closing
+  {
+    const s = buildCashFlowStatement({ openingCash: 50000, netProfit: 20000 });
+    results.push(assert("T2: Closing = Opening + Net Change",
+      s.summary.closingCash === 70000, `Got ${s.summary.closingCash}`));
+  }
+
+  // T3 — Investing outflows are negative
+  {
+    const s = buildCashFlowStatement({ equipmentPurchases: 30000, assetSalesProceeds: 5000 });
+    results.push(assert("T3: Investing CF = 5000 - 30000 = -25000",
+      s.investing.netCashFromInvesting === -25000, `Got ${s.investing.netCashFromInvesting}`));
+  }
+
+  // T4 — Financing: loan in vs principal repaid
+  {
+    const s = buildCashFlowStatement({ newLoanDrawdowns: 100000, principalRepayments: 36000, ownerDrawings: 24000 });
+    // 100000 - 36000 - 24000 = 40000
+    results.push(assert("T4: Financing CF = 40,000",
+      s.financing.netCashFromFinancing === 40000, `Got ${s.financing.netCashFromFinancing}`));
+  }
+
+  // T5 — Multi-period cash chain
+  {
+    const mp = generateMultiPeriodCFS([
+      { openingCash: 10000, netProfit: 5000 },
+      { netProfit: 8000 },
+      { netProfit: -3000 },
+    ]);
+    const p0 = mp.periods[0], p1 = mp.periods[1], p2 = mp.periods[2];
+    results.push(assert("T5: Multi-period cash chains correctly",
+      p1.openingCash === 15000 && p2.openingCash === 23000,
+      `P1 open=${p1.openingCash}, P2 open=${p2.openingCash}`));
+  }
+
+  // T6 — Negative working capital changes are handled
+  {
+    const s = buildCashFlowStatement({ netProfit: 50000, changeInInventory: -10000 });
+    // WC changes = -(-10000) = +10000 → operating = 50000 + 10000 = 60000
+    results.push(assert("T6: Inventory decrease increases operating CF",
+      s.operating.netCashFromOperating === 60000, `Got ${s.operating.netCashFromOperating}`));
+  }
+
+  // T7 — All-zero inputs don't throw
+  {
+    let ok = false;
+    try { buildCashFlowStatement({}); ok = true; } catch(e) { ok = false; }
+    results.push(assert("T7: All-zero inputs work without error", ok));
+  }
+
+  // T8 — Negative principal throws
+  {
+    let threw = false;
+    try { buildCashFlowStatement({ principalRepayments: -500 }); }
+    catch(e) { threw = true; }
+    results.push(assert("T8: Negative principalRepayments throws", threw));
+  }
+
+  // T9 — Reconcile — equal values
+  {
+    const s = buildCashFlowStatement({ openingCash: 50000, netProfit: 28000 });
+    const r = reconcileCashBalance(s, s.summary.closingCash);
+    results.push(assert("T9: Reconcile detects matching balances", r.isReconciled, r.note));
+  }
+
+  // T10 — Reconcile — mismatch
+  {
+    const s = buildCashFlowStatement({ openingCash: 50000, netProfit: 28000 });
+    const r = reconcileCashBalance(s, 100);
+    results.push(assert("T10: Reconcile detects mismatch", !r.isReconciled && Math.abs(r.difference) > 0.01,
+      `Diff=${r.difference}`));
+  }
+
+  // T11 — Health: negative operating CF → not healthy
+  {
+    const s = buildCashFlowStatement({ openingCash: 200000, netProfit: -50000, depreciation: 0 });
+    results.push(assert("T11: Negative operating CF → stressed/moderate",
+      s.health.status !== "healthy", `Got ${s.health.status}`));
+  }
+
+  // T12 — Rounding helper
+  {
+    const s = buildCashFlowStatement({ netProfit: 10000.999, depreciation: 0.001 });
+    results.push(assert("T12: Values rounded to 2 decimal places",
+      Number.isInteger(s.operating.netCashFromOperating * 100),
+      `Got ${s.operating.netCashFromOperating}`));
+  }
+
+  const passed = results.filter(r => r.pass).length;
+  document.getElementById("test-output").innerHTML = `
+    <div style="grid-column:1/-1;margin-bottom:10px;font-weight:600;font-size:.9rem;color:#475569;">
+      ${passed}/${results.length} tests passed
+    </div>
+    ${results.map(r => `
+      <div class="test-item ${r.pass?'test-pass':'test-fail'}">
+        <div class="test-name">${r.pass?'✅':'❌'} ${r.name}</div>
+        ${r.detail ? `<div class="test-detail">${r.detail}</div>` : ""}
+      </div>`).join("")}`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Init
+══════════════════════════════════════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll(".tab").forEach((t,i) => {
+    const names = ["single","multi","reconcile","tests"];
+    t.classList.toggle("active", names[i] === tab);
+  });
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-" + tab).classList.add("active");
+}
+
+// Seed multi-period with 3 sample months
+(function init() {
+  addMPPeriod({ period:"Jan 2025", openingCash:50000, netProfit:35000, depreciation:5000,
+    changeInAccountsReceivable:8000, changeInInventory:4000, changeInAccountsPayable:3000,
+    equipmentPurchases:0, principalRepayments:12000, ownerDrawings:8000 });
+  addMPPeriod({ period:"Feb 2025", netProfit:42000, depreciation:5000,
+    changeInAccountsReceivable:-5000, changeInInventory:2000, changeInAccountsPayable:1000,
+    principalRepayments:12000, ownerDrawings:8000 });
+  addMPPeriod({ period:"Mar 2025", netProfit:28000, depreciation:5000,
+    changeInAccountsReceivable:10000, changeInInventory:-3000, changeInAccountsPayable:2000,
+    equipmentPurchases:15000, principalRepayments:12000, ownerDrawings:8000 });
+})();
+
+/* ── Persistence ── */
+var CFSE_KEY = 'fw_cfs_engine';
+var CFSE_FIELDS = ["s-period","s-openingCash","s-netProfit","s-depreciation","s-amortization",
+  "s-arChange","s-invChange","s-apChange","s-otherWC",
+  "s-equip","s-property","s-assetSales","s-otherInvIn","s-otherInvOut",
+  "s-loanIn","s-principal","s-ownerIn","s-ownerOut","s-otherFinIn","s-otherFinOut"];
+function saveCFSE(){
+  try{
+    var obj={};
+    CFSE_FIELDS.forEach(function(id){ var el=document.getElementById(id); if(el) obj[id]=el.value; });
+    localStorage.setItem(CFSE_KEY, JSON.stringify(obj));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s=JSON.parse(localStorage.getItem(CFSE_KEY)||'null');
+    if(s){ CFSE_FIELDS.forEach(function(id){ var el=document.getElementById(id); if(el&&s[id]!==undefined&&s[id]!=='') el.value=s[id]; }); return; }
+  }catch(e){}
+  try{
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p=JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx]||JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.loan) document.getElementById('s-principal').value = Math.round((parseFloat(p.loan)||0)/12);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

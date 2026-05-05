@@ -1,0 +1,1209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Financial Statements — FinWise Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
+a{text-decoration:none;color:inherit}
+
+.page-header{background:linear-gradient(135deg,#0891b2,#4f46e5);padding:18px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:20px}
+.page-header h1{font-size:1.15rem;font-weight:800}
+.page-header p{font-size:.8rem;color:rgba(255,255,255,.75);margin-top:.15rem}
+.ph-back{font-size:.78rem;color:rgba(255,255,255,.7);display:block;margin-bottom:.2rem}
+.ph-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3rem .9rem;font-size:.75rem;font-weight:700;white-space:nowrap}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 18px}
+.card{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.card h2{font-size:.95rem;font-weight:700;margin-bottom:.4rem;color:#1e293b}
+.card-desc{font-size:.8rem;color:#64748b;margin-bottom:14px}
+label{display:block;font-size:.79rem;font-weight:600;color:#555;margin-bottom:2px;margin-top:9px}
+input,select{width:100%;padding:7px 9px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:.88rem}
+input:focus,select:focus{outline:none;border-color:#4f46e5}
+.hint{font-size:.69rem;color:#94a3b8;margin-top:1px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0 12px}
+@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.section-divider{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#4f46e5;margin:16px 0 4px;border-bottom:1.5px solid #e0e7ff;padding-bottom:4px}
+.toggle-row{display:flex;align-items:center;gap:8px;margin:12px 0 4px;cursor:pointer;font-size:.82rem;font-weight:600;color:#4f46e5}
+.toggle-row input[type=checkbox]{width:auto;accent-color:#4f46e5}
+
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.btn{padding:9px 22px;border-radius:7px;font-size:.88rem;font-weight:700;cursor:pointer;border:none}
+.btn-blue{background:#4f46e5;color:#fff}.btn-blue:hover{background:#3730a3}
+.btn-outline{background:#fff;color:#4f46e5;border:2px solid #4f46e5}.btn-outline:hover{background:#eef2ff}
+.btn-green{background:#16a34a;color:#fff}
+.btn-gray{background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0}
+
+/* ── Statement tabs ── */
+.stmt-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.stmt-tab{padding:7px 16px;border-radius:999px;font-size:.8rem;font-weight:700;cursor:pointer;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;transition:all .15s}
+.stmt-tab.active{background:#1e293b;color:#fff;border-color:#1e293b}
+
+/* ── Financial Statement tables ── */
+.stmt-wrap{background:#fff;border-radius:10px;padding:0;box-shadow:0 1px 5px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden}
+.stmt-header{background:#1e293b;color:#fff;padding:20px 28px;text-align:center}
+.stmt-company{font-size:1.1rem;font-weight:900;letter-spacing:.04em;margin-bottom:3px}
+.stmt-title{font-size:.85rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.stmt-period{font-size:.75rem;color:#64748b}
+.stmt-note{font-size:.68rem;color:#475569;font-style:italic;margin-top:4px}
+.stmt-body{padding:20px 28px}
+
+table.fs{width:100%;border-collapse:collapse;font-size:.83rem}
+table.fs td{padding:4px 8px;vertical-align:top}
+table.fs td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:90px}
+table.fs td.num2{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:90px}
+table.fs .fs-head td{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding-top:14px;padding-bottom:4px;border-bottom:1px solid #f1f5f9}
+table.fs .fs-section{font-weight:800;color:#1e293b;padding-top:10px}
+table.fs .fs-item td{padding-left:22px;color:#334155}
+table.fs .fs-item2 td{padding-left:36px;color:#64748b}
+table.fs .fs-sub td{font-weight:700;color:#1e293b;border-top:1px solid #e2e8f0;padding-top:5px;padding-bottom:5px}
+table.fs .fs-total td{font-weight:900;color:#1e293b;border-top:2px solid #1e293b;border-bottom:3px double #1e293b;padding-top:6px;padding-bottom:6px}
+table.fs .fs-blank td{padding-top:6px}
+table.fs .pos{color:#10b981;font-weight:700}
+table.fs .neg{color:#dc2626;font-weight:700}
+table.fs .muted{color:#94a3b8}
+
+/* Ratios grid */
+.ratios-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.ratio-card{background:#f8fafc;border-radius:9px;padding:14px 16px;border-left:4px solid #4f46e5}
+.ratio-label{font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.ratio-val{font-size:1.3rem;font-weight:900;color:#1e293b;line-height:1}
+.ratio-bench{font-size:.68rem;color:#94a3b8;margin-top:3px}
+.ratio-status{font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:999px;margin-top:4px;display:inline-block}
+.rs-good{background:#dcfce7;color:#166534}
+.rs-warn{background:#fef9c3;color:#854d0e}
+.rs-bad{background:#fee2e2;color:#991b1b}
+
+/* Paywall */
+.pw-overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);backdrop-filter:blur(4px);z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}
+.pw-box{background:#fff;border-radius:14px;padding:28px 24px;max-width:440px;width:100%;text-align:center}
+.pw-box h2{font-size:1.15rem;font-weight:800;margin:.5rem 0 .4rem}
+.pw-box p{font-size:.84rem;color:#64748b;margin-bottom:14px;line-height:1.55}
+.pw-feats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px;text-align:left}
+.pw-feat{background:#f8fafc;border-radius:7px;padding:8px 10px;font-size:.77rem;color:#334155}
+.pw-btn{display:block;width:100%;padding:11px;background:linear-gradient(135deg,#0891b2,#4f46e5);color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:800;cursor:pointer;margin-bottom:10px}
+.pw-or{display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:.75rem;margin:8px 0}
+.pw-or::before,.pw-or::after{content:'';flex:1;height:1px;background:#e2e8f0}
+.pw-row{display:flex;gap:7px}
+.pw-inp{flex:1;padding:7px 10px;border:2px solid #e2e8f0;border-radius:7px;font-size:.85rem;text-align:center;text-transform:uppercase;letter-spacing:.08em;width:0}
+.pw-inp:focus{outline:none;border-color:#4f46e5}
+.pw-unlock{padding:7px 14px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer}
+.pw-err{color:#dc2626;font-size:.75rem;margin-top:5px;display:none}
+.pw-hint{font-size:.72rem;color:#94a3b8;margin-top:5px}
+.pw-hint code{background:#f1f5f9;padding:1px 5px;border-radius:3px;color:#4f46e5;font-family:monospace}
+.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* ── Live data badge ── */
+.live-badge{display:none;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;margin-bottom:12px}
+.live-src-item{display:inline-flex;align-items:center;gap:4px;margin-right:8px}
+.ldot{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block}
+
+/* ── Comparison statements ── */
+.compare-section{margin-top:16px}
+.compare-hd{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:10px;border-bottom:1px solid #f1f5f9;padding-bottom:4px}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:4px}
+.cmp-col{background:#f8fafc;border-radius:9px;padding:12px 14px;border-top:3px solid #e2e8f0}
+.cmp-col.cur-col{border-top-color:#4f46e5;background:#eef2ff}
+.cmp-col.pri-col{border-top-color:#94a3b8}
+.cmp-col-mo{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:8px}
+.cmp-item{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid #e2e8f0}
+.cmp-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.cmp-label{color:#64748b}
+.cmp-val{font-weight:800;color:#1e293b}
+.cmp-val.pos{color:#10b981}.cmp-val.neg{color:#dc2626}
+.cmp-delta{font-size:.67rem;font-weight:700;padding:1px 5px;border-radius:999px;margin-left:5px}
+.delta-up{background:#dcfce7;color:#166534}
+.delta-dn{background:#fee2e2;color:#991b1b}
+.delta-flat{background:#f1f5f9;color:#64748b}
+.no-compare{font-size:.8rem;color:#94a3b8;padding:12px 0;font-style:italic}
+
+/* ── Footnote editor ── */
+.footnote-section{margin-top:14px;border-top:1px dashed #e2e8f0;padding-top:12px}
+.footnote-toggle{font-size:.73rem;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600;background:none;border:none;padding:0}
+.footnote-toggle:hover{color:#4f46e5}
+.footnote-area{margin-top:8px;font-size:.78rem}
+.footnote-area textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.77rem;font-family:inherit;resize:vertical;min-height:60px;color:#334155}
+.footnote-area textarea:focus{outline:none;border-color:#4f46e5}
+.footnote-save-btn{margin-top:5px;padding:5px 13px;font-size:.73rem;background:#4f46e5;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700}
+.footnote-display{font-size:.73rem;color:#475569;background:#f8fafc;border-radius:7px;padding:10px 12px;margin-top:8px;line-height:1.6;white-space:pre-wrap;border-left:3px solid #e2e8f0}
+
+/* ── Print ── */
+@media print{
+  body{background:#fff;font-size:11pt}
+  .pw-overlay,.page-header,.card,.stmt-tabs,.btn-row,.btn,.toast{display:none!important}
+  #statementsSection{display:block!important}
+  .stmt-panel{display:block!important;page-break-after:always}
+  .stmt-wrap{box-shadow:none;border:1px solid #ccc;margin-bottom:0}
+  .stmt-body{padding:16px 20px}
+  .ratios-grid{grid-template-columns:repeat(3,1fr)}
+  @page{margin:15mm;size:A4 portrait}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<!-- Paywall -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div style="font-size:2.2rem">📑</div>
+    <h2>Full Financial Statements</h2>
+    <p>Generate bank-ready P&amp;L, Balance Sheet, and Cash Flow Statement from your business numbers in seconds.</p>
+    <div class="pw-feats">
+      <div class="pw-feat">📈 Profit &amp; Loss Statement</div>
+      <div class="pw-feat">⚖️ Balance Sheet</div>
+      <div class="pw-feat">💧 Cash Flow Statement</div>
+      <div class="pw-feat">📊 12 Key Financial Ratios</div>
+      <div class="pw-feat">🖨️ Print-ready A4 format</div>
+      <div class="pw-feat">🔢 Monthly + Annual view</div>
+    </div>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <div class="pw-or">or enter promo code</div>
+    <div class="pw-row">
+      <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
+      <button class="pw-unlock" onclick="tryUnlock()">Unlock</button>
+    </div>
+    <div class="pw-err" id="pwErr">Invalid code. Try FINWISE29</div>
+    <div class="pw-hint">Demo code: <code>FINWISE29</code></div>
+  </div>
+</div>
+
+<!-- Header -->
+<div class="page-header">
+  <div>
+    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <h1>📑 Full Financial Statements</h1>
+    <p>P&amp;L · Balance Sheet · Cash Flow · Key Ratios</p>
+  </div>
+  <div class="ph-badge">Pro · $29/month</div>
+</div>
+
+<div class="wrap">
+
+<!-- INPUT FORM -->
+<div class="card" id="inputCard">
+  <h2>📋 Business Setup</h2>
+  <p class="card-desc">Auto-loaded from your saved profile. All figures are monthly unless noted.</p>
+
+  <!-- Business info -->
+  <div class="g3">
+    <div>
+      <label>Business Name</label>
+      <input type="text" id="fs_name" placeholder="Acme Consulting"/>
+    </div>
+    <div>
+      <label>Financial Year</label>
+      <select id="fs_fy"></select>
+    </div>
+    <div>
+      <label>FY Ending</label>
+      <select id="fs_fyend">
+        <option value="March 31">March 31 (India)</option>
+        <option value="December 31">December 31</option>
+        <option value="June 30">June 30</option>
+        <option value="September 30">September 30</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Revenue -->
+  <div class="section-divider">Revenue (Monthly)</div>
+  <div class="g2">
+    <div>
+      <label>Primary Business Revenue</label>
+      <input type="number" id="fs_rev" placeholder="15000" min="0"/>
+    </div>
+    <div>
+      <label>Other Income (interest, rental, etc.)</label>
+      <input type="number" id="fs_otherinc" placeholder="0" min="0"/>
+    </div>
+  </div>
+
+  <!-- Expenses toggle -->
+  <div class="section-divider">Expenses (Monthly)</div>
+  <label class="toggle-row">
+    <input type="checkbox" id="fs_detailed" onchange="toggleDetailed()"/>
+    Use detailed expense breakdown (recommended for accurate P&amp;L)
+  </label>
+
+  <!-- Simple expenses (default) -->
+  <div id="simpleExp">
+    <div class="g2">
+      <div>
+        <label>Total Operating Expenses</label>
+        <input type="number" id="fs_exp" placeholder="9000" min="0"/>
+        <div class="hint">All costs except loan EMI</div>
+      </div>
+      <div>
+        <label>Monthly Loan EMI</label>
+        <input type="number" id="fs_emi" placeholder="0" min="0"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed expenses (shown when checkbox ticked) -->
+  <div id="detailedExp" style="display:none">
+    <div class="g3">
+      <div>
+        <label>Cost of Goods / Direct Costs</label>
+        <input type="number" id="fs_cogs" placeholder="0" min="0"/>
+        <div class="hint">Raw material, purchases</div>
+      </div>
+      <div>
+        <label>Salaries &amp; Wages</label>
+        <input type="number" id="fs_sal" placeholder="0" min="0"/>
+      </div>
+      <div>
+        <label>Rent &amp; Office Expenses</label>
+        <input type="number" id="fs_rent" placeholder="0" min="0"/>
+      </div>
+    </div>
+    <div class="g3">
+      <div>
+        <label>Marketing &amp; Advertising</label>
+        <input type="number" id="fs_mkt" placeholder="0" min="0"/>
+      </div>
+      <div>
+        <label>Utilities &amp; Subscriptions</label>
+        <input type="number" id="fs_util" placeholder="0" min="0"/>
+      </div>
+      <div>
+        <label>Other Operating Expenses</label>
+        <input type="number" id="fs_other" placeholder="0" min="0"/>
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <label>Depreciation (monthly)</label>
+        <input type="number" id="fs_dep" placeholder="0" min="0"/>
+        <div class="hint">Fixed asset write-down</div>
+      </div>
+      <div>
+        <label>Monthly Loan EMI</label>
+        <input type="number" id="fs_emi2" placeholder="0" min="0"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balance Sheet items -->
+  <div class="section-divider">Balance Sheet (Current figures)</div>
+  <div class="g4">
+    <div>
+      <label>Cash &amp; Bank Balance</label>
+      <input type="number" id="fs_cash" placeholder="20000" min="0"/>
+      <div class="hint">Auto-filled from reserve</div>
+    </div>
+    <div>
+      <label>Accounts Receivable</label>
+      <input type="number" id="fs_rec" placeholder="0" min="0"/>
+      <div class="hint">Money owed to you</div>
+    </div>
+    <div>
+      <label>Inventory</label>
+      <input type="number" id="fs_inv" placeholder="0" min="0"/>
+    </div>
+    <div>
+      <label>Accounts Payable</label>
+      <input type="number" id="fs_pay" placeholder="0" min="0"/>
+      <div class="hint">Money you owe suppliers</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div>
+      <label>Fixed Assets (Gross)</label>
+      <input type="number" id="fs_fixed" placeholder="0" min="0"/>
+      <div class="hint">Equipment, machinery, etc.</div>
+    </div>
+    <div>
+      <label>Accumulated Depreciation</label>
+      <input type="number" id="fs_accdep" placeholder="0" min="0"/>
+    </div>
+    <div>
+      <label>Outstanding Loan Balance</label>
+      <input type="number" id="fs_loanbal" placeholder="0" min="0"/>
+    </div>
+  </div>
+  <div class="g2">
+    <div>
+      <label>Loan Annual Interest Rate %</label>
+      <input type="number" id="fs_loanrate" placeholder="12" min="0" step="0.1"/>
+      <div class="hint">Used to split EMI into interest + principal</div>
+    </div>
+    <div>
+      <label>Owner's Capital Invested</label>
+      <input type="number" id="fs_capital" placeholder="0" min="0"/>
+      <div class="hint">Initial/additional funds brought in by owner</div>
+    </div>
+  </div>
+
+  <div id="liveBadge" class="live-badge"></div>
+  <div class="btn-row">
+    <button class="btn btn-blue" onclick="generate()">📑 Generate Financial Statements</button>
+    <button class="btn btn-gray" onclick="clearForm()">Clear</button>
+    <button class="btn" style="background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d" onclick="fillTechBridge()">🧪 Fill TechBridge Sample Data</button>
+  </div>
+</div>
+
+<!-- STATEMENTS SECTION -->
+<div id="statementsSection" style="display:none">
+
+  <div class="btn-row" style="margin-bottom:12px">
+    <button class="btn btn-green" onclick="window.print()">&#128424; Export PDF (All Statements)</button>
+    <button class="btn btn-blue" onclick="exportForCA()">📤 Export for CA</button>
+    <button class="btn btn-gray" onclick="document.getElementById('inputCard').scrollIntoView({behavior:'smooth'})">✏️ Edit Inputs</button>
+  </div>
+
+  <!-- Tab selector -->
+  <div class="stmt-tabs">
+    <button class="stmt-tab active" onclick="switchTab('pl',this)">📈 P&amp;L Statement</button>
+    <button class="stmt-tab" onclick="switchTab('bs',this)">⚖️ Balance Sheet</button>
+    <button class="stmt-tab" onclick="switchTab('cf',this)">💧 Cash Flow</button>
+    <button class="stmt-tab" onclick="switchTab('ratios',this)">📊 Key Ratios</button>
+  </div>
+
+  <!-- P&L Panel -->
+  <div class="stmt-panel" id="panel_pl">
+    <div class="stmt-wrap">
+      <div class="stmt-header">
+        <div class="stmt-company" id="pl_company">—</div>
+        <div class="stmt-title">Profit &amp; Loss Statement</div>
+        <div class="stmt-period" id="pl_period">—</div>
+        <div class="stmt-note">Projected based on current monthly run rate · All amounts in <span id="pl_cur">USD</span></div>
+      </div>
+      <div class="stmt-body">
+        <table class="fs" id="pl_table"></table>
+        <div class="compare-section" id="pl_compare"></div>
+        <div class="footnote-section">
+          <button class="footnote-toggle" onclick="toggleFn('pl')">&#128196; Add Footnotes / Notes to Auditor</button>
+          <div class="footnote-area" id="fn_pl" style="display:none">
+            <textarea id="fn_pl_text" placeholder="E.g.: Revenue includes one-time project milestone payment of $8,000 in April. Depreciation calculated on straight-line basis over 5 years."></textarea>
+            <button class="footnote-save-btn" onclick="saveFn('pl')">Save Note</button>
+            <div class="footnote-display" id="fn_pl_display" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balance Sheet Panel -->
+  <div class="stmt-panel" id="panel_bs" style="display:none">
+    <div class="stmt-wrap">
+      <div class="stmt-header">
+        <div class="stmt-company" id="bs_company">—</div>
+        <div class="stmt-title">Balance Sheet</div>
+        <div class="stmt-period" id="bs_period">—</div>
+        <div class="stmt-note">As at the balance sheet date · All amounts in <span id="bs_cur">USD</span></div>
+      </div>
+      <div class="stmt-body">
+        <table class="fs" id="bs_table"></table>
+        <div class="footnote-section">
+          <button class="footnote-toggle" onclick="toggleFn('bs')">&#128196; Add Footnotes / Notes to Auditor</button>
+          <div class="footnote-area" id="fn_bs" style="display:none">
+            <textarea id="fn_bs_text" placeholder="E.g.: Fixed assets include computers, networking equipment, and office furniture. Accumulated depreciation as at year end."></textarea>
+            <button class="footnote-save-btn" onclick="saveFn('bs')">Save Note</button>
+            <div class="footnote-display" id="fn_bs_display" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cash Flow Panel -->
+  <div class="stmt-panel" id="panel_cf" style="display:none">
+    <div class="stmt-wrap">
+      <div class="stmt-header">
+        <div class="stmt-company" id="cf_company">—</div>
+        <div class="stmt-title">Statement of Cash Flows</div>
+        <div class="stmt-period" id="cf_period">—</div>
+        <div class="stmt-note">Indirect method · Projected from current run rate · Operating / Investing / Financing</div>
+      </div>
+      <div class="stmt-body">
+        <table class="fs" id="cf_table"></table>
+        <div class="footnote-section">
+          <button class="footnote-toggle" onclick="toggleFn('cf')">&#128196; Add Footnotes / Notes to Auditor</button>
+          <div class="footnote-area" id="fn_cf" style="display:none">
+            <textarea id="fn_cf_text" placeholder="E.g.: Capital expenditure represents purchase of server equipment. Financing activities exclude owner drawings."></textarea>
+            <button class="footnote-save-btn" onclick="saveFn('cf')">Save Note</button>
+            <div class="footnote-display" id="fn_cf_display" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ratios Panel -->
+  <div class="stmt-panel" id="panel_ratios" style="display:none">
+    <div class="card">
+      <h2>📊 Key Financial Ratios</h2>
+      <p class="card-desc" id="ratios_period">—</p>
+      <div class="ratios-grid" id="ratios_grid"></div>
+    </div>
+  </div>
+
+</div><!-- /statementsSection -->
+</div><!-- /wrap -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════
+   LIVE DATA AUTO-POPULATE (P1)
+════════════════════════════════════════════════ */
+function sg(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
+
+function loadLiveData(){
+  var curMo=new Date().toISOString().substring(0,7);
+  var sourced=[];
+
+  // Revenue from Invoice Tracker
+  var invRevD=sg('fw_invoice_revenue');
+  if(invRevD&&invRevD.byMonth){
+    var lRev=invRevD.byMonth[curMo]||null;
+    if(!lRev){var ks=Object.keys(invRevD.byMonth).sort();if(ks.length)lRev=invRevD.byMonth[ks[ks.length-1]];}
+    if(lRev){document.getElementById('fs_rev').value=Math.round(lRev);sourced.push({icon:'🧾',src:'Invoice Tracker',field:'Revenue'});}
+  }
+
+  // Payroll from Payroll Estimator → fs_sal
+  var prD=sg('fw_payroll_totals');
+  if(prD&&prD.currentYearTotal){
+    var moPayroll=Math.round(prD.currentYearTotal/12);
+    if(moPayroll>0){
+      document.getElementById('fs_sal').value=moPayroll;
+      // switch to detailed mode so payroll shows
+      if(!document.getElementById('fs_detailed').checked){
+        document.getElementById('fs_detailed').checked=true;
+        toggleDetailed();
+      }
+      sourced.push({icon:'👥',src:'Payroll Estimator',field:'Salaries'});
+    }
+  }
+
+  // Expenses from Bill Tracker
+  var expD=sg('fw_expense_by_category');
+  if(expD&&expD.totalMonthly){
+    // Try detailed mapping
+    if(expD.byCat){
+      var byCat=expD.byCat;
+      var rentVal=0,mktVal=0,utilVal=0,otherVal=0;
+      Object.keys(byCat).forEach(function(cat){
+        var c=cat.toLowerCase(),v=byCat[cat]||0;
+        if(/rent|office|lease|space/.test(c)) rentVal+=v;
+        else if(/market|advert|ads|promo/.test(c)) mktVal+=v;
+        else if(/util|subscri|software|tech|cloud|tool|saas/.test(c)) utilVal+=v;
+        else otherVal+=v;
+      });
+      if(document.getElementById('fs_detailed').checked){
+        if(rentVal) document.getElementById('fs_rent').value=Math.round(rentVal);
+        if(mktVal)  document.getElementById('fs_mkt').value=Math.round(mktVal);
+        if(utilVal) document.getElementById('fs_util').value=Math.round(utilVal);
+        if(otherVal)document.getElementById('fs_other').value=Math.round(otherVal);
+      } else {
+        document.getElementById('fs_exp').value=Math.round(expD.totalMonthly);
+      }
+    } else {
+      document.getElementById('fs_exp').value=Math.round(expD.totalMonthly);
+    }
+    sourced.push({icon:'📋',src:'Bill Tracker',field:'Expenses'});
+  }
+
+  // Cash balance from Cash Runway
+  var cashD=sg('fw_cash_runway');
+  if(cashD&&cashD.currentBalance){
+    document.getElementById('fs_cash').value=Math.round(cashD.currentBalance);
+    sourced.push({icon:'🏃',src:'Cash Runway',field:'Cash Balance'});
+  }
+
+  // Outstanding invoices → Accounts Receivable
+  var invs=sg('fw_invoices')||[];
+  if(invs.length){
+    var openAmt=invs.filter(function(i){return i.status!=='paid';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    if(openAmt>0){document.getElementById('fs_rec').value=Math.round(openAmt);sourced.push({icon:'🧾',src:'Invoice Tracker',field:'Receivables'});}
+  }
+
+  // Show live badge
+  if(sourced.length){
+    var badge=document.getElementById('liveBadge');
+    badge.innerHTML='<span class="ldot"></span> Auto-filled from live modules: '
+      +sourced.map(function(s){return '<span class="live-src-item">'+s.icon+' '+s.field+' ('+s.src+')</span>';}).join('');
+    badge.style.display='block';
+  }
+}
+
+/* ════════════════════════════════════════════════
+   COMPARATIVE STATEMENTS (P2)
+════════════════════════════════════════════════ */
+function renderComparison(currentData){
+  var snaps=sg('fw_monthly_snapshots')||{};
+  var keys=Object.keys(snaps).sort().slice(-6);
+  var el=document.getElementById('pl_compare');
+  if(!el) return;
+  if(keys.length<2){el.innerHTML='<p class="no-compare">No prior month snapshots found — save Monthly Snapshots over time to enable comparative statements.</p>';return;}
+
+  var cur=currentData;
+  var cols=keys.map(function(k){
+    var s=snaps[k];
+    return {mo:k,rev:s.revenue||0,exp:s.expenses||0,net:s.netProfit||0,hs:s.healthScore||null};
+  });
+
+  function delta(cur,prior){
+    if(!prior||prior===0) return null;
+    return Math.round((cur-prior)/Math.abs(prior)*100);
+  }
+  function deltaBadge(pct,invertColor){
+    if(pct===null) return '';
+    var cls=invertColor?(pct>0?'delta-dn':'delta-up'):(pct>0?'delta-up':'delta-dn');
+    if(Math.abs(pct)<1) cls='delta-flat';
+    return '<span class="cmp-delta '+cls+'">'+(pct>0?'+':'')+pct+'%</span>';
+  }
+
+  var html='<div class="compare-hd">📊 Comparative P&amp;L — Last '+keys.length+' Months (from Monthly Snapshots)</div>'
+    +'<div class="compare-grid">';
+
+  cols.forEach(function(col,i){
+    var prior=i>0?cols[i-1]:null;
+    var isCur=i===keys.length-1;
+    var revD=prior?delta(col.rev,prior.rev):null;
+    var expD2=prior?delta(col.exp,prior.exp):null;
+    var netD=prior?delta(col.net,prior.net):null;
+    html+='<div class="cmp-col '+(isCur?'cur-col':'pri-col')+'">'
+      +'<div class="cmp-col-mo">'+col.mo+(isCur?' <span style="color:#4f46e5;font-weight:900">(Current)</span>':'')+'</div>'
+      +'<div class="cmp-item"><span class="cmp-label">Revenue</span><span class="cmp-val">'+CUR_SYM+Math.round(col.rev).toLocaleString()+deltaBadge(revD,false)+'</span></div>'
+      +'<div class="cmp-item"><span class="cmp-label">Expenses</span><span class="cmp-val">'+CUR_SYM+Math.round(col.exp).toLocaleString()+deltaBadge(expD2,true)+'</span></div>'
+      +'<div class="cmp-item"><span class="cmp-label">Net Profit</span><span class="cmp-val '+(col.net>=0?'pos':'neg')+'">'+CUR_SYM+Math.round(Math.abs(col.net)).toLocaleString()+(col.net<0?' (loss)':'')+deltaBadge(netD,false)+'</span></div>'
+      +(col.hs!=null?'<div class="cmp-item"><span class="cmp-label">Health</span><span class="cmp-val">'+col.hs+'/100</span></div>':'')
+      +'</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+/* ════════════════════════════════════════════════
+   FOOTNOTE EDITOR (P3)
+════════════════════════════════════════════════ */
+var FN_KEY='fw_fs_footnotes';
+var _footnotes={};
+
+function loadFootnotes(){
+  try{_footnotes=JSON.parse(localStorage.getItem(FN_KEY)||'{}');}catch(e){_footnotes={};}
+  ['pl','bs','cf'].forEach(function(id){
+    if(_footnotes[id]){
+      var ta=document.getElementById('fn_'+id+'_text');
+      var disp=document.getElementById('fn_'+id+'_display');
+      if(ta) ta.value=_footnotes[id];
+      if(disp&&_footnotes[id]){disp.textContent='Notes: '+_footnotes[id];disp.style.display='block';}
+    }
+  });
+}
+
+function toggleFn(id){
+  var area=document.getElementById('fn_'+id);
+  if(area) area.style.display=area.style.display==='none'?'block':'none';
+}
+
+function saveFn(id){
+  var ta=document.getElementById('fn_'+id+'_text');
+  var disp=document.getElementById('fn_'+id+'_display');
+  if(!ta) return;
+  _footnotes[id]=ta.value.trim();
+  localStorage.setItem(FN_KEY,JSON.stringify(_footnotes));
+  if(disp){
+    if(_footnotes[id]){disp.textContent='Notes: '+_footnotes[id];disp.style.display='block';}
+    else disp.style.display='none';
+  }
+  showToast('Note saved.');
+}
+
+/* ── Helpers ── */
+function showToast(m){
+  var t=document.getElementById('toast');
+  t.textContent=m; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2800);
+}
+
+var CUR_SYM=(function(){
+  var s=localStorage.getItem('finwise_currency')||'USD';
+  return '$';
+})();
+var CUR_NAME=(function(){
+  var s=localStorage.getItem('finwise_currency')||'USD';
+  return 'USD';
+})();
+
+function fmtN(n){
+  /* Format number with commas, no symbol */
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  var abs=Math.round(Math.abs(n));
+  return (n<0?'('+abs.toLocaleString()+')':abs.toLocaleString());
+}
+function fmtNS(n){
+  /* With sign: (negative in brackets) */
+  return fmtN(n);
+}
+function pct(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(1)+'%'; }
+function x(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(2)+'x'; }
+
+/* ── FY dropdown ── */
+(function(){
+  var sel=document.getElementById('fs_fy');
+  var yr=new Date().getFullYear();
+  for(var y=yr-2;y<=yr+2;y++){
+    var opt=document.createElement('option');
+    opt.value=(y)+'-'+(y+1);
+    opt.textContent=(y)+'-'+String(y+1).slice(-2);
+    if(y===yr) opt.selected=true;
+    sel.appendChild(opt);
+  }
+})();
+
+/* ── Toggle detailed expense ── */
+function toggleDetailed(){
+  var on=document.getElementById('fs_detailed').checked;
+  document.getElementById('simpleExp').style.display=on?'none':'block';
+  document.getElementById('detailedExp').style.display=on?'block':'none';
+}
+
+/* ── Load profile ── */
+function loadProfile(){
+  try{
+    var profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(!profiles.length) return;
+    var stored=localStorage.getItem('fw_active_idx');
+    var idx=stored!==null?parseInt(stored):profiles.length-1;
+    if(idx<0||idx>=profiles.length) idx=profiles.length-1;
+    var p=profiles[idx];
+    if(p.name)    document.getElementById('fs_name').value=p.name;
+    if(p.rev)     document.getElementById('fs_rev').value=p.rev;
+    if(p.exp)     document.getElementById('fs_exp').value=p.exp;
+    if(p.emi)  { document.getElementById('fs_emi').value=p.emi; document.getElementById('fs_emi2').value=p.emi; }
+    if(p.reserve) document.getElementById('fs_cash').value=p.reserve;
+    if(p.loan)    document.getElementById('fs_loanbal').value=p.loan;
+  }catch(e){}
+}
+
+/* ── EMI split helper ── */
+function calcMonthlyInterest(balance, annualRate){
+  if(!balance||!annualRate) return 0;
+  return balance * (annualRate/100/12);
+}
+
+/* ── Tab switcher ── */
+var panels=['pl','bs','cf','ratios'];
+function switchTab(tab, btn){
+  for(var i=0;i<panels.length;i++){
+    var el=document.getElementById('panel_'+panels[i]);
+    if(el) el.style.display='none';
+  }
+  document.getElementById('panel_'+tab).style.display='block';
+  var tabs=document.querySelectorAll('.stmt-tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  if(btn) btn.classList.add('active');
+}
+
+/* ══════════════════════════════
+   GENERATE
+══════════════════════════════ */
+function generate(){
+  var name  = document.getElementById('fs_name').value.trim()||'My Business';
+  var fy    = document.getElementById('fs_fy').value;
+  var fyend = document.getElementById('fs_fyend').value;
+  var detailed = document.getElementById('fs_detailed').checked;
+
+  var rev     = parseFloat(document.getElementById('fs_rev').value)||0;
+  var otherInc= parseFloat(document.getElementById('fs_otherinc').value)||0;
+
+  /* Expenses */
+  var cogs,sal,rent,mkt,util,otherExp,dep,emi;
+  if(detailed){
+    cogs     = parseFloat(document.getElementById('fs_cogs').value)||0;
+    sal      = parseFloat(document.getElementById('fs_sal').value)||0;
+    rent     = parseFloat(document.getElementById('fs_rent').value)||0;
+    mkt      = parseFloat(document.getElementById('fs_mkt').value)||0;
+    util     = parseFloat(document.getElementById('fs_util').value)||0;
+    otherExp = parseFloat(document.getElementById('fs_other').value)||0;
+    dep      = parseFloat(document.getElementById('fs_dep').value)||0;
+    emi      = parseFloat(document.getElementById('fs_emi2').value)||0;
+  } else {
+    cogs=sal=rent=mkt=util=dep=0;
+    otherExp = parseFloat(document.getElementById('fs_exp').value)||0;
+    emi      = parseFloat(document.getElementById('fs_emi').value)||0;
+  }
+
+  if(!rev){ showToast('Enter Monthly Revenue first.'); return; }
+
+  /* Balance sheet */
+  var cash     = parseFloat(document.getElementById('fs_cash').value)||0;
+  var rec      = parseFloat(document.getElementById('fs_rec').value)||0;
+  var inv      = parseFloat(document.getElementById('fs_inv').value)||0;
+  var payables = parseFloat(document.getElementById('fs_pay').value)||0;
+  var fixedGross = parseFloat(document.getElementById('fs_fixed').value)||0;
+  var accDep   = parseFloat(document.getElementById('fs_accdep').value)||0;
+  var loanBal  = parseFloat(document.getElementById('fs_loanbal').value)||0;
+  var loanRate = parseFloat(document.getElementById('fs_loanrate').value)||12;
+  var capital  = parseFloat(document.getElementById('fs_capital').value)||0;
+
+  /* Derived P&L */
+  var totalRev   = rev + otherInc;
+  var grossProfit= totalRev - cogs;
+  var totalOpEx  = sal+rent+mkt+util+otherExp+dep;
+  var ebitda     = grossProfit - sal - rent - mkt - util - otherExp;
+  var ebit       = ebitda - dep;
+  var intExp     = calcMonthlyInterest(loanBal, loanRate);
+  var pbt        = ebit - intExp;
+  var totalExpenses = cogs + totalOpEx + intExp; /* for simple mode */
+  var netProfit  = pbt;
+  /* If no detailed breakdown, recalculate */
+  if(!detailed){
+    grossProfit = totalRev - 0; /* no COGS split */
+    ebitda      = totalRev - otherExp;
+    ebit        = ebitda - dep;
+    pbt         = ebit - intExp;
+    netProfit   = pbt;
+  }
+
+  /* Derived Balance Sheet */
+  var netFixed      = fixedGross - accDep;
+  var totalCurrAssets = cash + rec + inv;
+  var totalAssets   = totalCurrAssets + netFixed;
+  var totalCurrLiab = payables;
+  var totalLTLiab   = loanBal;
+  var totalLiab     = totalCurrLiab + totalLTLiab;
+  var retainedEarnings = totalAssets - totalLiab - capital;
+  var totalEquity   = capital + retainedEarnings;
+
+  /* Derived Cash Flow */
+  var principalPmt  = Math.max(0, emi - intExp);
+  var netCashOps    = netProfit + dep; /* indirect: add back non-cash */
+  var netCashInv    = 0;
+  var netCashFin    = -(principalPmt); /* principal repayment */
+  var netCash       = netCashOps + netCashInv + netCashFin;
+  var closingCash   = cash + netCash*12; /* projected annual closing */
+
+  /* Period strings */
+  var period = 'For the Year Ended '+fyend+', '+fy.split('-')[1];
+  var asPeriod = 'As at '+fyend+', '+fy.split('-')[1];
+
+  /* Render */
+  renderPL(name, period, totalRev, rev, otherInc, cogs, grossProfit, sal, rent, mkt, util, otherExp, dep, ebitda, ebit, intExp, emi, pbt, netProfit, detailed);
+  renderBS(name, asPeriod, cash, rec, inv, netFixed, totalCurrAssets, totalAssets, payables, loanBal, totalCurrLiab, totalLTLiab, totalLiab, capital, retainedEarnings, totalEquity);
+  renderCF(name, period, netProfit, dep, rec, inv, payables, netCashOps, netCashInv, principalPmt, intExp, netCashFin, netCash, cash, closingCash);
+  renderRatios(name, period, totalRev, cogs, grossProfit, netProfit, ebitda, ebit, totalAssets, totalCurrAssets, totalLiab, totalCurrLiab, totalEquity, loanBal, cash, rec, payables, emi);
+
+  /* Store computed data for CA Export */
+  window._fsData={
+    name:name, fy:fy, fyend:fyend, period:period, asPeriod:asPeriod,
+    currency:CUR_SYM, currencyName:CUR_NAME, detailed:detailed,
+    exportedAt:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}),
+    rev:rev, otherInc:otherInc, totalRev:totalRev,
+    cogs:cogs, sal:sal, rent:rent, mkt:mkt, util:util, otherExp:otherExp, dep:dep,
+    emi:emi, intExp:intExp, grossProfit:grossProfit, ebitda:ebitda, ebit:ebit, pbt:pbt, netProfit:netProfit,
+    cash:cash, rec:rec, inv:inv, payables:payables,
+    fixedGross:fixedGross, accDep:accDep, netFixed:netFixed,
+    loanBal:loanBal, loanRate:loanRate, capital:capital,
+    totalCurrAssets:totalCurrAssets, totalAssets:totalAssets,
+    totalCurrLiab:totalCurrLiab, totalLTLiab:totalLTLiab, totalLiab:totalLiab,
+    retainedEarnings:retainedEarnings, totalEquity:totalEquity,
+    principalPmt:principalPmt, netCashOps:netCashOps,
+    netCashInv:netCashInv, netCashFin:netCashFin, netCash:netCash, closingCash:closingCash
+  };
+
+  document.getElementById('statementsSection').style.display='block';
+  document.getElementById('statementsSection').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Comparative statements from snapshots
+  renderComparison({rev:totalRev,exp:cogs+sal+rent+mkt+util+otherExp,net:netProfit});
+
+  // Load any saved footnotes
+  loadFootnotes();
+}
+
+/* ── TechBridge sample data fill (temp test helper) ── */
+function fillTechBridge(){
+  /* Business info */
+  document.getElementById('fs_name').value    = 'TechBridge IT Solutions';
+  document.getElementById('fs_fy').value      = (function(){
+    var yr=new Date().getFullYear(); return yr+'-'+(yr+1);
+  })();
+  document.getElementById('fs_fyend').value   = 'March 31';
+
+  /* Revenue */
+  document.getElementById('fs_rev').value     = 22000;  /* monthly revenue */
+  document.getElementById('fs_otherinc').value= 200;    /* interest on FD */
+
+  /* Switch to detailed breakdown */
+  document.getElementById('fs_detailed').checked = true;
+  toggleDetailed();
+
+  /* Detailed expenses — IT services company, 4 full-time staff */
+  document.getElementById('fs_cogs').value    = 4400;   /* contractor fees + project software licences */
+  document.getElementById('fs_sal').value     = 6800;   /* 4 employees incl. Marcus's own salary draw */
+  document.getElementById('fs_rent').value    = 1200;   /* co-working + office lease */
+  document.getElementById('fs_mkt').value     = 500;    /* Google Ads + LinkedIn */
+  document.getElementById('fs_util').value    = 900;    /* AWS/Azure cloud + internet + SaaS tools */
+  document.getElementById('fs_other').value   = 400;    /* travel, misc */
+  document.getElementById('fs_dep').value     = 300;    /* 6 laptops + networking gear, ~5yr life */
+  document.getElementById('fs_emi2').value    = 1500;   /* existing term loan EMI */
+
+  /* Balance sheet */
+  document.getElementById('fs_cash').value    = 32000;  /* current bank balance */
+  document.getElementById('fs_rec').value     = 18000;  /* ~1 month outstanding client invoices */
+  document.getElementById('fs_inv').value     = 0;      /* service business — no inventory */
+  document.getElementById('fs_pay').value     = 5200;   /* pending vendor + contractor payments */
+  document.getElementById('fs_fixed').value   = 48000;  /* 6 laptops + server + networking (gross) */
+  document.getElementById('fs_accdep').value  = 14400;  /* 4 years of depreciation */
+  document.getElementById('fs_loanbal').value = 85000;  /* expansion loan outstanding */
+  document.getElementById('fs_loanrate').value= 11;     /* 11% p.a. */
+  document.getElementById('fs_capital').value = 50000;  /* owner's initial capital investment */
+
+  showToast('✅ TechBridge IT Solutions data loaded — click Generate to view statements.');
+}
+
+/* ── Export for CA ── */
+function exportForCA(){
+  if(!window._fsData){ showToast('Generate statements first.'); return; }
+  localStorage.setItem('fw_ca_export', JSON.stringify(window._fsData));
+  window.open('caExport.test.html','_blank');
+}
+
+/* ── row builder helpers ── */
+function row(cls, label, mo, ann, bold, colorClass){
+  var bc=bold?'font-weight:900':'';
+  var cc=colorClass||'';
+  return '<tr class="'+cls+'"><td style="'+bc+'">'+label+'</td>'
+    +'<td class="num '+(cc&&mo<0&&cc!=='pos'?'neg':cc)+'" style="'+bc+'">'+fmtN(mo)+'</td>'
+    +'<td class="num '+(cc&&mo<0&&cc!=='pos'?'neg':cc)+'" style="'+bc+'">'+fmtN(ann)+'</td></tr>';
+}
+function blankRow(){ return '<tr class="fs-blank"><td colspan="3">&nbsp;</td></tr>'; }
+function headRow(label){ return '<tr class="fs-head"><td>'+label+'</td><td class="num">Monthly</td><td class="num">Annual</td></tr>'; }
+function subRow(label, mo, ann, cc){
+  return '<tr class="fs-sub"><td>'+label+'</td>'
+    +'<td class="num '+(cc||'')+'" style="font-weight:900">'+fmtN(mo)+'</td>'
+    +'<td class="num '+(cc||'')+'" style="font-weight:900">'+fmtN(ann)+'</td></tr>';
+}
+function totalRow(label, mo, ann, cc){
+  return '<tr class="fs-total"><td>'+label+'</td>'
+    +'<td class="num '+(cc||'')+'" >'+fmtN(mo)+'</td>'
+    +'<td class="num '+(cc||'')+'">'+fmtN(ann)+'</td></tr>';
+}
+function bsRow(cls, label, val, bold){
+  var bc=bold?'font-weight:900':'';
+  var cc=val<0?'neg':'';
+  return '<tr class="'+cls+'"><td style="'+bc+'">'+label+'</td><td></td><td class="num '+(val<0?'neg':'')+'" style="'+bc+'">'+fmtN(val)+'</td></tr>';
+}
+function bsSub(label, val){ return bsRow('fs-sub',label,val,true); }
+function bsTotal(label, val){ return '<tr class="fs-total"><td>'+label+'</td><td></td><td class="num '+(val<0?'neg':'')+'" >'+fmtN(val)+'</td></tr>'; }
+
+/* ══════════════════════════════
+   P&L STATEMENT
+══════════════════════════════ */
+function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mkt,util,otherExp,dep,ebitda,ebit,intExp,emi,pbt,netProfit,detailed){
+  document.getElementById('pl_company').textContent=name;
+  document.getElementById('pl_period').textContent=period;
+  document.getElementById('pl_cur').textContent=CUR_NAME;
+
+  var html=headRow('Description');
+
+  /* Revenue */
+  html+='<tr class="fs-section"><td colspan="3">A. INCOME</td></tr>';
+  html+=row('fs-item','Revenue from Operations',rev,rev*12);
+  if(otherInc) html+=row('fs-item','Other Income',otherInc,otherInc*12);
+  html+=subRow('Total Income (A)',totalRev,totalRev*12);
+  html+=blankRow();
+
+  /* Expenses */
+  html+='<tr class="fs-section"><td colspan="3">B. EXPENSES</td></tr>';
+  if(detailed){
+    if(cogs)     html+=row('fs-item','Cost of Goods Sold / Direct Costs',cogs,cogs*12);
+    if(sal)      html+=row('fs-item','Salaries & Wages',sal,sal*12);
+    if(rent)     html+=row('fs-item','Rent & Office Expenses',rent,rent*12);
+    if(mkt)      html+=row('fs-item','Marketing & Advertising',mkt,mkt*12);
+    if(util)     html+=row('fs-item','Utilities & Subscriptions',util,util*12);
+    if(otherExp) html+=row('fs-item','Other Operating Expenses',otherExp,otherExp*12);
+    if(dep)      html+=row('fs-item','Depreciation & Amortisation',dep,dep*12);
+    var totalOp=sal+rent+mkt+util+otherExp+dep+(cogs||0);
+    html+=subRow('Total Operating Expenses (B)',totalOp,totalOp*12);
+  } else {
+    html+=row('fs-item','Total Operating Expenses',otherExp,otherExp*12);
+    html+=subRow('Total Expenses (B)',otherExp,otherExp*12);
+  }
+  html+=blankRow();
+
+  /* EBITDA / EBIT */
+  if(detailed){
+    html+=row('fs-sub','Gross Profit (A − COGS)',grossProfit,grossProfit*12,'',grossProfit>=0?'pos':'neg');
+    html+=blankRow();
+    html+=row('fs-sub','EBITDA',ebitda,ebitda*12,'',ebitda>=0?'pos':'neg');
+    if(dep) html+=row('fs-item','Less: Depreciation',-dep,-dep*12);
+    html+=row('fs-sub','EBIT (Earnings Before Interest & Tax)',ebit,ebit*12,'',ebit>=0?'pos':'neg');
+  } else {
+    var grossOpProfit=totalRev-otherExp;
+    html+=row('fs-sub','Operating Profit (A − B)',grossOpProfit,grossOpProfit*12,'',grossOpProfit>=0?'pos':'neg');
+  }
+  html+=blankRow();
+
+  /* Interest & Tax */
+  html+='<tr class="fs-section"><td colspan="3">C. FINANCING COSTS</td></tr>';
+  if(intExp>0){
+    html+=row('fs-item','Interest Expense on Loans',intExp,intExp*12);
+    var princ=Math.max(0,emi-intExp);
+    if(princ>0) html+=row('fs-item2','  (of which principal repayment — Balance Sheet item)',princ,princ*12);
+  } else if(emi>0){
+    html+=row('fs-item','Loan EMI (interest portion unknown — enter loan rate for split)',emi,emi*12);
+  } else {
+    html+=row('fs-item','Interest Expense',0,0);
+  }
+  html+=blankRow();
+
+  /* PBT / Net */
+  html+=subRow('Profit Before Tax (PBT)',pbt,pbt*12,pbt>=0?'pos':'neg');
+  html+=row('fs-item','Provision for Tax',0,0);
+  html+=blankRow();
+  html+=totalRow('NET PROFIT / (LOSS)',netProfit,netProfit*12,netProfit>=0?'pos':'neg');
+  html+=blankRow();
+
+  /* Margin summary */
+  html+='<tr class="fs-head"><td>PROFITABILITY SUMMARY</td><td class="num">Monthly</td><td class="num">Annual</td></tr>';
+  html+=row('fs-item','Net Profit Margin',totalRev>0?pct(netProfit/totalRev*100):'—',totalRev>0?pct(netProfit/totalRev*100):'—');
+  if(detailed && cogs) html+=row('fs-item','Gross Profit Margin',totalRev>0?pct(grossProfit/totalRev*100):'—',totalRev>0?pct(grossProfit/totalRev*100):'—');
+  html+=row('fs-item','EBITDA Margin',totalRev>0?pct(ebitda/totalRev*100):'—',totalRev>0?pct(ebitda/totalRev*100):'—');
+
+  document.getElementById('pl_table').innerHTML=html;
+}
+
+/* ══════════════════════════════
+   BALANCE SHEET
+══════════════════════════════ */
+function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,payables,loanBal,totalCurrLiab,totalLTLiab,totalLiab,capital,retained,totalEquity){
+  document.getElementById('bs_company').textContent=name;
+  document.getElementById('bs_period').textContent=period;
+  document.getElementById('bs_cur').textContent=CUR_NAME;
+
+  var html='<tr class="fs-head"><td>Description</td><td></td><td class="num">Amount</td></tr>';
+
+  /* Assets */
+  html+='<tr class="fs-section"><td colspan="3">ASSETS</td></tr>';
+  html+='<tr class="fs-section"><td style="padding-left:12px;font-size:.8rem">Current Assets</td><td colspan="2"></td></tr>';
+  html+=bsRow('fs-item','Cash & Bank Balance',cash);
+  html+=bsRow('fs-item','Accounts Receivable',rec);
+  html+=bsRow('fs-item','Inventory',inv);
+  html+=bsSub('Total Current Assets',totalCurrAssets);
+  html+=blankRow();
+  html+='<tr class="fs-section"><td style="padding-left:12px;font-size:.8rem">Fixed Assets</td><td colspan="2"></td></tr>';
+  var accDepVal=parseFloat(document.getElementById('fs_accdep').value)||0;
+  var fixedGross_=netFixed+accDepVal;
+  html+=bsRow('fs-item','Gross Block (Equipment, Machinery, etc.)',fixedGross_);
+  html+=bsRow('fs-item','Less: Accumulated Depreciation',-accDepVal);
+  html+=bsSub('Net Fixed Assets',netFixed);
+  html+=blankRow();
+  html+=bsTotal('TOTAL ASSETS (A)',totalAssets);
+  html+=blankRow();
+
+  /* Liabilities */
+  html+='<tr class="fs-section"><td colspan="3">LIABILITIES</td></tr>';
+  html+='<tr class="fs-section"><td style="padding-left:12px;font-size:.8rem">Current Liabilities</td><td colspan="2"></td></tr>';
+  html+=bsRow('fs-item','Accounts Payable',payables);
+  html+=bsSub('Total Current Liabilities',totalCurrLiab);
+  html+=blankRow();
+  html+='<tr class="fs-section"><td style="padding-left:12px;font-size:.8rem">Long-term Liabilities</td><td colspan="2"></td></tr>';
+  html+=bsRow('fs-item','Outstanding Loan Balance',loanBal);
+  html+=bsSub('Total Long-term Liabilities',totalLTLiab);
+  html+=blankRow();
+  html+=bsSub('Total Liabilities (B)',totalLiab);
+  html+=blankRow();
+
+  /* Equity */
+  html+='<tr class="fs-section"><td colspan="3">OWNER\'S EQUITY</td></tr>';
+  html+=bsRow('fs-item','Owner\'s Capital',capital);
+  html+=bsRow('fs-item',retained>=0?'Retained Earnings':'Accumulated Deficit',retained);
+  html+=bsSub('Total Owner\'s Equity (C)',totalEquity);
+  html+=blankRow();
+  html+=bsTotal('TOTAL LIABILITIES & EQUITY (B+C)',totalLiab+totalEquity);
+  html+=blankRow();
+
+  /* Balance check */
+  var diff=totalAssets-(totalLiab+totalEquity);
+  var balanced=Math.abs(diff)<1;
+  if(balanced){
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">✓ Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
+  } else {
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">⚠ Difference of '+fmtN(Math.abs(diff))+' — check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
+  }
+  if(totalEquity<0){
+    html+=blankRow();
+    html+='<tr><td colspan="3" style="font-size:.72rem;color:#64748b;padding:6px;font-style:italic">Note: Negative equity indicates liabilities exceed assets. This is common for businesses with significant loans. Ensure loan proceeds are reflected in assets (fixed assets, cash, or inventory).</td></tr>';
+  }
+
+  document.getElementById('bs_table').innerHTML=html;
+}
+
+/* ══════════════════════════════
+   CASH FLOW STATEMENT
+══════════════════════════════ */
+function renderCF(name,period,netProfit,dep,rec,inv,payables,netCashOps,netCashInv,principalPmt,intExp,netCashFin,netCash,openCash,closeCash){
+  document.getElementById('cf_company').textContent=name;
+  document.getElementById('cf_period').textContent=period;
+
+  /* Annual figures */
+  var html=headRow('Description');
+
+  /* Operating */
+  html+='<tr class="fs-section"><td colspan="3">A. CASH FLOW FROM OPERATING ACTIVITIES</td></tr>';
+  html+=row('fs-item','Net Profit for the Period',netProfit,netProfit*12);
+  html+='<tr class="fs-item"><td style="padding-left:22px;color:#94a3b8;font-size:.78rem" colspan="3">Adjustments for non-cash items:</td></tr>';
+  html+=row('fs-item','  Add: Depreciation & Amortisation',dep,dep*12);
+  html+='<tr class="fs-item"><td style="padding-left:22px;color:#94a3b8;font-size:.78rem" colspan="3">Changes in Working Capital:</td></tr>';
+  html+=row('fs-item2','  (Increase)/Decrease in Receivables',0,0);
+  html+=row('fs-item2','  Increase/(Decrease) in Payables',0,0);
+  html+=subRow('Net Cash from Operating Activities (A)',netCashOps,netCashOps*12,netCashOps>=0?'pos':'neg');
+  html+=blankRow();
+
+  /* Investing */
+  html+='<tr class="fs-section"><td colspan="3">B. CASH FLOW FROM INVESTING ACTIVITIES</td></tr>';
+  html+=row('fs-item','Capital Expenditure (Purchase of Assets)',0,0);
+  html+=row('fs-item','Proceeds from Sale of Assets',0,0);
+  html+=subRow('Net Cash from Investing Activities (B)',0,0,'muted');
+  html+=blankRow();
+
+  /* Financing */
+  html+='<tr class="fs-section"><td colspan="3">C. CASH FLOW FROM FINANCING ACTIVITIES</td></tr>';
+  if(principalPmt>0||intExp>0){
+    html+=row('fs-item','Loan EMI Paid (Total)',-principalPmt-intExp,(-principalPmt-intExp)*12);
+    if(intExp>0){
+      html+=row('fs-item2','  of which: Interest Payment',-intExp,-intExp*12);
+      html+=row('fs-item2','  of which: Principal Repayment',-principalPmt,-principalPmt*12);
+    }
+  } else {
+    html+=row('fs-item','Loan Repayments',0,0);
+  }
+  html+=row('fs-item','New Borrowings / Capital Injection',0,0);
+  html+=subRow('Net Cash from Financing Activities (C)',netCashFin,netCashFin*12,netCashFin>=0?'pos':'neg');
+  html+=blankRow();
+
+  /* Net change */
+  var netAnn=netCashOps*12+netCashInv*12+netCashFin*12;
+  html+=totalRow('NET CHANGE IN CASH (A+B+C)',netCash,netAnn,netCash>=0?'pos':'neg');
+  html+=blankRow();
+  html+='<tr class="fs-head"><td>RECONCILIATION</td><td class="num">Monthly</td><td class="num">Annual</td></tr>';
+  html+=row('fs-item','Opening Cash Balance',openCash,openCash);
+  html+=row('fs-item','Add: Net Cash Flow',netCash,netAnn);
+  html+=subRow('Closing Cash Balance (Projected)',openCash+netAnn,openCash+netAnn,(openCash+netAnn)>=0?'pos':'neg');
+
+  document.getElementById('cf_table').innerHTML=html;
+}
+
+/* ══════════════════════════════
+   KEY RATIOS
+══════════════════════════════ */
+function renderRatios(name,period,totalRev,cogs,grossProfit,netProfit,ebitda,ebit,totalAssets,totalCurrAssets,totalLiab,totalCurrLiab,totalEquity,loanBal,cash,rec,payables,emi){
+  document.getElementById('ratios_period').textContent=name+' · '+period;
+
+  var ratios=[];
+
+  /* 1. Net Profit Margin */
+  var npm=totalRev>0?netProfit/totalRev*100:0;
+  ratios.push({label:'Net Profit Margin',val:pct(npm),bench:'>10% is healthy',ok:npm>=10,warn:npm>=0});
+
+  /* 2. Gross Profit Margin */
+  if(cogs>0){
+    var gpm=totalRev>0?grossProfit/totalRev*100:0;
+    ratios.push({label:'Gross Profit Margin',val:pct(gpm),bench:'>30% is good',ok:gpm>=30,warn:gpm>=15});
+  }
+
+  /* 3. EBITDA Margin */
+  var em=totalRev>0?ebitda/totalRev*100:0;
+  ratios.push({label:'EBITDA Margin',val:pct(em),bench:'>15% is healthy',ok:em>=15,warn:em>=5});
+
+  /* 4. Current Ratio */
+  var cr=totalCurrLiab>0?totalCurrAssets/totalCurrLiab:99;
+  ratios.push({label:'Current Ratio',val:cr>=99?'N/A (no curr liab)':x(cr),bench:'>1.5x is safe',ok:cr>=1.5||cr>=99,warn:cr>=1});
+
+  /* 5. Debt-to-Equity */
+  var de=totalEquity!==0?totalLiab/totalEquity:null;
+  ratios.push({label:'Debt-to-Equity Ratio',val:de===null?'N/A':de<0?'Neg Equity':(de.toFixed(2)+'x'),bench:'<2x is acceptable',ok:de!==null&&de>=0&&de<=2,warn:de!==null&&de<=3});
+
+  /* 6. Debt-to-Assets */
+  var da=totalAssets>0?totalLiab/totalAssets*100:0;
+  ratios.push({label:'Debt-to-Assets',val:pct(da),bench:'<60% is manageable',ok:da<=60,warn:da<=80});
+
+  /* 7. Return on Assets */
+  var roa=totalAssets>0?netProfit*12/totalAssets*100:0;
+  ratios.push({label:'Return on Assets (ROA)',val:pct(roa)+' p.a.',bench:'>5% is good',ok:roa>=5,warn:roa>=0});
+
+  /* 8. Return on Equity */
+  if(totalEquity>0){
+    var roe=netProfit*12/totalEquity*100;
+    ratios.push({label:'Return on Equity (ROE)',val:pct(roe)+' p.a.',bench:'>15% is strong',ok:roe>=15,warn:roe>=5});
+  }
+
+  /* 9. DSCR */
+  var dscr=emi>0?ebit/emi:99;
+  ratios.push({label:'Debt Service Coverage (DSCR)',val:dscr>=99?'No debt':x(dscr),bench:'>1.25x required by lenders',ok:dscr>=1.25||dscr>=99,warn:dscr>=1});
+
+  /* 10. EMI-to-Revenue */
+  var emr=totalRev>0?emi/totalRev*100:0;
+  ratios.push({label:'EMI-to-Revenue Ratio',val:pct(emr),bench:'<40% is safe',ok:emr<=40||emr===0,warn:emr<=55});
+
+  /* 11. Cash Ratio */
+  var cashR=totalCurrLiab>0?cash/totalCurrLiab:99;
+  ratios.push({label:'Cash Ratio',val:cashR>=99?'No curr liab':x(cashR),bench:'>0.5x is adequate',ok:cashR>=0.5||cashR>=99,warn:cashR>=0.2});
+
+  /* 12. Working Capital */
+  var wc=totalCurrAssets-totalCurrLiab;
+  ratios.push({label:'Working Capital',val:CUR_SYM+Math.round(Math.abs(wc)).toLocaleString()+(wc<0?' (deficit)':''),bench:'Positive is essential',ok:wc>=0,warn:wc>=-5000});
+
+  var html='';
+  for(var i=0;i<ratios.length;i++){
+    var r=ratios[i];
+    var scls=r.ok?'rs-good':r.warn?'rs-warn':'rs-bad';
+    var slabel=r.ok?'✓ Good':r.warn?'⚠ Marginal':'✗ Weak';
+    html+='<div class="ratio-card">'
+      +'<div class="ratio-label">'+r.label+'</div>'
+      +'<div class="ratio-val">'+r.val+'</div>'
+      +'<div class="ratio-bench">'+r.bench+'</div>'
+      +'<div class="ratio-status '+scls+'">'+slabel+'</div>'
+      +'</div>';
+  }
+  document.getElementById('ratios_grid').innerHTML=html;
+}
+
+function clearForm(){
+  var ids=['fs_rev','fs_otherinc','fs_exp','fs_emi','fs_emi2','fs_cogs','fs_sal','fs_rent','fs_mkt','fs_util','fs_other','fs_dep','fs_cash','fs_rec','fs_inv','fs_pay','fs_fixed','fs_accdep','fs_loanbal','fs_loanrate','fs_capital','fs_name'];
+  for(var i=0;i<ids.length;i++) document.getElementById(ids[i]).value='';
+  document.getElementById('statementsSection').style.display='none';
+}
+
+/* ── Paywall ── */
+function tryUnlock(){
+  var code=document.getElementById('pwCode').value.trim().toUpperCase();
+  if(code==='FINWISE29'){
+    localStorage.setItem('fw_pro','1');
+    document.getElementById('pwOverlay').style.display='none';
+    document.getElementById('pwErr').style.display='none';
+    loadProfile();
+    loadLiveData();
+  } else {
+    document.getElementById('pwErr').style.display='block';
+  }
+}
+document.getElementById('pwCode').addEventListener('keydown',function(e){
+  if(e.key==='Enter') tryUnlock();
+});
+
+/* ── Boot ── */
+if(localStorage.getItem('fw_pro')==='1'){
+  document.getElementById('pwOverlay').style.display='none';
+  loadProfile();
+  loadLiveData();
+}
+</script>
+</body>
+</html>

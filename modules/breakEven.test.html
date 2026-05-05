@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Break-Even Analyzer — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.metric-grid{grid-template-columns:1fr}}
+.metric-box{background:#f8fafc;border-radius:8px;padding:14px;border:1px solid #e2e8f0;text-align:center}
+.metric-box.highlight{background:#eff6ff;border-color:#bfdbfe}
+.mb-label{font-size:.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.mb-value{font-size:1.1rem;font-weight:900;color:#1e293b}
+.mb-value.green{color:#16a34a}
+.mb-value.red{color:#dc2626}
+.mb-value.blue{color:#2563eb}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th{background:#f1f5f9;padding:9px 12px;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0}
+.compare-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.85rem}
+.compare-table tr:last-child td{border-bottom:none}
+.badge-before{background:#dcfce7;color:#166534;padding:.2rem .6rem;border-radius:999px;font-size:.72rem;font-weight:800}
+.badge-after{background:#dbeafe;color:#1d4ed8;padding:.2rem .6rem;border-radius:999px;font-size:.72rem;font-weight:800}
+.bar-section{margin-top:14px}
+.bar-row{margin-bottom:10px}
+.br-label{font-size:.78rem;font-weight:700;color:#475569;margin-bottom:3px;display:flex;justify-content:space-between}
+.br-track{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden}
+.br-fill{height:100%;border-radius:99px}
+.rec-box{border-left:4px solid #2563eb;background:#eff6ff;padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#1e40af;line-height:1.6}
+.rec-box.warn{border-color:#f59e0b;background:#fffbeb;color:#92400e}
+.rec-box.danger{border-color:#dc2626;background:#fef2f2;color:#991b1b}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.save-btn{margin-top:12px;padding:9px 22px;background:#f0fdf4;color:#166534;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.87rem;cursor:pointer;font-weight:700}
+.save-btn:hover{background:#dcfce7}
+.fw-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.88rem;cursor:pointer}
+button.print-btn:hover{background:#e2e8f0}
+@media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Break-Even Analyzer</h1>
+<p class="subtitle">FinWise · How much extra revenue does your new loan require to stay profitable?</p>
+
+<div class="card">
+  <h2>Your Business Numbers</h2>
+  <div class="input-grid">
+    <div>
+      <label>Current Monthly Revenue ($)</label>
+      <input type="number" id="revenue" placeholder="e.g. 8500"/>
+    </div>
+    <div>
+      <label>Monthly Fixed Costs ($) <span style="font-weight:400;color:#94a3b8">rent, salaries, insurance</span></label>
+      <input type="number" id="fixedCosts" placeholder="e.g. 4000"/>
+    </div>
+    <div>
+      <label>Variable Cost (% of Revenue) <span style="font-weight:400;color:#94a3b8">COGS, commissions</span></label>
+      <input type="number" id="varPct" placeholder="e.g. 35" min="0" max="99" step="1"/>
+    </div>
+    <div>
+      <label>Existing Monthly EMI ($)</label>
+      <input type="number" id="existingEmi" placeholder="e.g. 500"/>
+    </div>
+    <div>
+      <label>New Loan EMI ($/mo) <span style="font-weight:400;color:#94a3b8">the loan you're considering</span></label>
+      <input type="number" id="newEmi" placeholder="e.g. 900"/>
+    </div>
+  </div>
+  <button class="primary" onclick="calculate()">Analyze Break-Even →</button>
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div id="resultsSection" style="display:none">
+
+  <div class="card">
+    <h2>Break-Even Comparison</h2>
+    <div class="metric-grid" id="metricGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Before vs After New Loan</h2>
+    <table class="compare-table">
+      <thead><tr><th>Metric</th><th><span class="badge-before">Before Loan</span></th><th><span class="badge-after">After Loan</span></th></tr></thead>
+      <tbody id="compareBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Revenue Targets</h2>
+    <div class="bar-section" id="barSection"></div>
+  </div>
+
+  <div class="card">
+    <div class="rec-box" id="recBox"></div>
+  </div>
+
+  <div class="card" style="text-align:right">
+    <button class="save-btn" onclick="saveBreakEvenToProfile()">💾 Save Numbers to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, fixed costs &amp; EMI — auto-fills all 40 tools</p>
+  </div>
+
+</div>
+
+<script>
+// ── Plain-English Explain Helpers ────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function pct(n){ return n.toFixed(1)+'%'; }
+
+function saveProfile(updates){
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(p,updates);
+    localStorage.setItem('fw_profile',JSON.stringify(p));
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
+    var t=document.getElementById('fwToast');
+    t.textContent='✅ Saved — all 40 tools updated';
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none';},2500);
+  }catch(e){}
+}
+function saveBreakEvenToProfile(){
+  var rev=parseFloat(document.getElementById('revenue').value)||0;
+  if(!rev) return;
+  saveProfile({rev:rev,exp:parseFloat(document.getElementById('fixedCosts').value)||0,emi:parseFloat(document.getElementById('existingEmi').value)||0});
+}
+
+function calculate(){
+  var rev      = parseFloat(document.getElementById('revenue').value)||0;
+  var fixed    = parseFloat(document.getElementById('fixedCosts').value)||0;
+  var varPct   = parseFloat(document.getElementById('varPct').value)||0;
+  var exEmi    = parseFloat(document.getElementById('existingEmi').value)||0;
+  var newEmi   = parseFloat(document.getElementById('newEmi').value)||0;
+
+  if(!rev||!fixed){ alert('Please fill Revenue and Fixed Costs at minimum.'); return; }
+
+  var varRate = varPct / 100;
+  var contribMargin = 1 - varRate; // contribution margin ratio
+
+  /* Break-even without new loan */
+  var fixedTotalBefore = fixed + exEmi;
+  var beBefore = contribMargin > 0 ? fixedTotalBefore / contribMargin : 0;
+
+  /* Break-even with new loan */
+  var fixedTotalAfter = fixed + exEmi + newEmi;
+  var beAfter = contribMargin > 0 ? fixedTotalAfter / contribMargin : 0;
+
+  var extraRevNeeded = beAfter - beBefore;
+  var safetyMarginBefore = rev - beBefore;
+  var safetyMarginAfter  = rev - beAfter;
+  var safetyPctBefore = rev > 0 ? safetyMarginBefore / rev * 100 : 0;
+  var safetyPctAfter  = rev > 0 ? safetyMarginAfter  / rev * 100 : 0;
+
+  /* Current profit */
+  var varCostAmt = rev * varRate;
+  var profitBefore = rev - varCostAmt - fixedTotalBefore;
+  var profitAfter  = rev - varCostAmt - fixedTotalAfter;
+
+  /* Metrics */
+  document.getElementById('metricGrid').innerHTML =
+    '<div class="metric-box"><div class="mb-label">Break-Even Before</div><div class="mb-value">'+fmt(beBefore)+'/mo</div></div>'+
+    '<div class="metric-box highlight"><div class="mb-label">Break-Even After Loan</div><div class="mb-value blue">'+fmt(beAfter)+'/mo</div></div>'+
+    '<div class="metric-box"><div class="mb-label">Extra Revenue Needed</div><div class="mb-value '+(extraRevNeeded>rev*0.2?'red':'green')+'">'+fmt(extraRevNeeded)+'/mo</div></div>';
+
+  /* Compare table */
+  document.getElementById('compareBody').innerHTML =
+    '<tr><td>Monthly Fixed + EMI</td><td>'+fmt(fixedTotalBefore)+'</td><td>'+fmt(fixedTotalAfter)+'</td></tr>'+
+    '<tr><td>Break-Even Revenue</td><td>'+fmt(beBefore)+'</td><td>'+fmt(beAfter)+'</td></tr>'+
+    '<tr><td>Monthly Profit / Loss</td><td style="color:'+(profitBefore>=0?'#16a34a':'#dc2626')+';font-weight:800">'+fmt(profitBefore)+'</td><td style="color:'+(profitAfter>=0?'#16a34a':'#dc2626')+';font-weight:800">'+fmt(profitAfter)+'</td></tr>'+
+    '<tr><td>Safety Margin</td><td style="color:'+(safetyMarginBefore>=0?'#16a34a':'#dc2626')+'">'+fmt(safetyMarginBefore)+' ('+pct(safetyPctBefore)+')</td><td style="color:'+(safetyMarginAfter>=0?'#16a34a':'#dc2626')+'">'+fmt(safetyMarginAfter)+' ('+pct(safetyPctAfter)+')</td></tr>';
+
+  /* Bars */
+  var maxRev = Math.max(rev, beAfter) * 1.1;
+  function barRow(label, value, color){
+    var w = Math.min(Math.round(value/maxRev*100),100);
+    return '<div class="bar-row"><div class="br-label"><span>'+label+'</span><span>'+fmt(value)+'/mo</span></div>'+
+           '<div class="br-track"><div class="br-fill" style="width:'+w+'%;background:'+color+'"></div></div></div>';
+  }
+  document.getElementById('barSection').innerHTML =
+    barRow('Current Revenue', rev, '#2563eb') +
+    barRow('Break-Even Before Loan', beBefore, '#16a34a') +
+    barRow('Break-Even After Loan', beAfter, '#f59e0b');
+
+  /* Recommendation */
+  var recCls = 'rec-box';
+  var recText = '';
+  var recExplain = '';
+  if(contribMargin <= 0){
+    recCls += ' danger';
+    var varCostPerSale = rev > 0 ? rev * varRate : 0;
+    var lossPerSale = varCostPerSale - rev;
+    recText = '🚨 Danger: Your variable costs exceed your revenue — you are losing money on every sale.';
+    recExplain = explainHtml(
+      ['You\'re losing money on every single sale — selling more makes things worse, not better',
+       'Variable costs (materials, commission, delivery) exceed your selling price',
+       'You must either raise your price or reduce per-unit costs before scaling'],
+      'Each sale at '+fmt(rev)+' costs '+fmt(varCostAmt)+' in variable costs → you lose on every transaction'
+    );
+  } else if(safetyMarginAfter < 0){
+    recCls += ' danger';
+    recText = '🚨 Danger: At your current revenue of '+fmt(rev)+'/mo, you cannot cover the new loan. Your break-even rises to '+fmt(beAfter)+'/mo. You need '+fmt(Math.abs(safetyMarginAfter))+'/mo more revenue just to survive.';
+    recExplain = explainHtml(
+      ['You need to earn more than you currently do just to cover costs — you\'re operating at a loss',
+       'Every unit/dollar of revenue below break-even means you\'re losing money',
+       'Options: raise prices, cut fixed costs, or reduce variable cost per unit'],
+      'You currently earn '+fmt(rev)+'/month but need '+fmt(beAfter)+' to break even → you\'re '+fmt(Math.abs(safetyMarginAfter))+' short every month'
+    );
+    var fixedPctOfRev = rev > 0 ? (fixedTotalAfter / rev * 100) : 0;
+    if(fixedPctOfRev > 60){
+      recExplain += explainHtml(
+        ['Fixed costs consume most of your revenue before you earn a profit',
+         'Reducing fixed costs (rent, subscriptions, staff) has the highest impact on profitability',
+         'Even a 10% cut in fixed costs can move you from loss to profit'],
+        'Your fixed costs are '+pct(fixedPctOfRev)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') — reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
+      );
+    }
+  } else if(safetyPctAfter < 15){
+    recCls += ' warn';
+    recText = '⚠️ Caution: Only '+pct(safetyPctAfter)+' safety margin after the new loan. A small revenue dip could push you into loss. Consider a smaller loan or wait until revenue reaches '+fmt(beAfter*1.2)+'/mo.';
+    var fixedPctOfRevWarn = rev > 0 ? (fixedTotalAfter / rev * 100) : 0;
+    if(fixedPctOfRevWarn > 50){
+      recExplain = explainHtml(
+        ['Fixed costs consume most of your revenue before you earn a profit',
+         'Reducing fixed costs (rent, subscriptions, staff) has the highest impact on profitability',
+         'Even a 10% cut in fixed costs can move you from loss to profit'],
+        'Your fixed costs are '+pct(fixedPctOfRevWarn)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') — reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
+      );
+    }
+  } else {
+    recText = '✅ Safe: After the new loan your safety margin is '+pct(safetyPctAfter)+'. Your revenue comfortably exceeds the new break-even of '+fmt(beAfter)+'/mo. The loan is financially sound.';
+  }
+  document.getElementById('recBox').className = recCls;
+  document.getElementById('recBox').innerHTML = recText + recExplain;
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+(function(){
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+    if(!p){ p = JSON.parse(localStorage.getItem('fw_profile')||'null'); }
+    if(p){
+      document.getElementById('revenue').value     = p.rev||'';
+      document.getElementById('fixedCosts').value  = Math.round((p.exp||0)*0.65)||'';
+      document.getElementById('varPct').value      = '35';
+      document.getElementById('existingEmi').value = p.emi||'';
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
+

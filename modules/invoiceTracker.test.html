@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Tracker — FinWise</title>
+<script src="../sidebar.js" defer></script>
+<link rel="manifest" href="../manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:12px}}
+h1{font-size:1.45rem;font-weight:700;margin-bottom:4px}
+.sub{color:#64748b;font-size:.9rem;margin-bottom:16px}
+
+/* Summary cards */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:640px){.summary-row{grid-template-columns:1fr 1fr}}
+.sum-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sum-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:6px}
+.sum-value{font-size:1.5rem;font-weight:900;line-height:1;margin-bottom:2px}
+.sum-value.red{color:#dc2626}.sum-value.amber{color:#d97706}
+.sum-value.green{color:#16a34a}.sum-value.blue{color:#2563eb}
+.sum-sub{font-size:.7rem;color:#94a3b8}
+
+/* Integration strip */
+.int-strip{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 14px;font-size:.78rem;color:#166534;margin-bottom:14px}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.filter-tabs{display:flex;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
+.ftab{padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:#64748b;transition:all .15s;white-space:nowrap}
+.ftab.active{background:#2563eb;color:#fff}
+.spacer{flex:1}
+.btn-add{padding:9px 18px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-add:hover{background:#1d4ed8}
+
+/* Table */
+.table-wrap{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:#f8fafc;border-bottom:2px solid #e2e8f0}
+th{padding:10px 14px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;text-align:left;white-space:nowrap}
+td{padding:10px 14px;font-size:.84rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfc}
+.td-client{font-weight:700;color:#1e293b}
+.td-num{font-size:.75rem;color:#94a3b8;margin-top:2px}
+.td-amount{font-weight:800;font-size:.93rem}
+.td-amount.overdue{color:#dc2626}
+.td-days{font-size:.72rem;margin-top:2px;font-weight:600}
+.td-days.overdue{color:#dc2626}.td-days.soon{color:#d97706}.td-days.ok{color:#64748b}
+.recurring-badge{font-size:.65rem;background:#eff6ff;color:#2563eb;border-radius:999px;padding:2px 7px;font-weight:700;margin-left:4px}
+
+/* Status badge */
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.badge-pending{background:#fef3c7;color:#92400e}
+.badge-overdue{background:#fee2e2;color:#991b1b}
+.badge-paid{background:#dcfce7;color:#166534}
+
+/* Actions */
+.actions{display:flex;gap:4px;flex-wrap:wrap}
+.act-btn{padding:4px 9px;border:none;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.act-btn:hover{opacity:.8}
+.btn-paid{background:#dcfce7;color:#166534}
+.btn-edit{background:#eff6ff;color:#1d4ed8}
+.btn-del{background:#fee2e2;color:#991b1b}
+.btn-email{background:#fef3c7;color:#92400e}
+.btn-pdf{background:#f5f3ff;color:#7c3aed}
+
+/* Empty state */
+.empty{text-align:center;padding:40px 20px}
+.empty-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-text{font-size:.88rem;color:#94a3b8;font-weight:600;margin-bottom:16px}
+.empty-btn{padding:10px 24px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer}
+
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:24px 24px 20px;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.modal-title{font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:16px}
+label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:12px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=number],input[type=date],input[type=email],select,textarea{width:100%;padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:'Segoe UI',sans-serif;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#2563eb}
+textarea{resize:vertical;min-height:54px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:480px){.modal-grid{grid-template-columns:1fr}}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.btn-save{flex:1;padding:10px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:800;cursor:pointer}
+.btn-save:hover{background:#1d4ed8}
+.btn-cancel{padding:10px 18px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer}
+.hint{font-size:.72rem;color:#94a3b8;margin-top:3px}
+.divider{border:none;border-top:1px solid #f1f5f9;margin:14px 0 0}
+.section-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-top:14px;margin-bottom:4px}
+.recurring-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.toggle-wrap{display:flex;align-items:center;gap:6px;font-size:.84rem;font-weight:600;color:#475569}
+input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
+
+/* Aging section */
+.aging-section{margin-top:24px}
+.section-title{font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:12px}
+.aging-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:600px){.aging-cards{grid-template-columns:1fr 1fr}}
+.age-card{background:#fff;border-radius:10px;padding:14px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.age-card.current{border-top:3px solid #16a34a}
+.age-card.late1{border-top:3px solid #f59e0b}
+.age-card.late2{border-top:3px solid #f97316}
+.age-card.late3{border-top:3px solid #dc2626}
+.age-card-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:5px}
+.age-card-val{font-size:1.3rem;font-weight:900;color:#1e293b;margin-bottom:1px}
+.age-card-count{font-size:.7rem;color:#94a3b8}
+.aging-kpi{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:600px){.aging-kpi{grid-template-columns:1fr}}
+.kpi-box{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);text-align:center}
+.kpi-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:5px}
+.kpi-val{font-size:1.5rem;font-weight:900}
+.kpi-sub{font-size:.7rem;color:#94a3b8;margin-top:2px}
+.aging-wrap{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.client-table{width:100%;border-collapse:collapse}
+.client-table th{background:#f8fafc;padding:9px 12px;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:2px solid #e2e8f0;text-align:left}
+.client-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.83rem;vertical-align:middle}
+.client-table tr:last-child td{border-bottom:none}
+.risk-high{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.67rem;font-weight:800;text-transform:uppercase;background:#fee2e2;color:#991b1b}
+.risk-med{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.67rem;font-weight:800;text-transform:uppercase;background:#fef3c7;color:#92400e}
+.risk-low{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.67rem;font-weight:800;text-transform:uppercase;background:#dcfce7;color:#166534}
+.dso-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.dso-row label{margin:0;font-size:.82rem;color:#64748b;font-weight:600}
+.dso-row input{padding:6px 10px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:.85rem;width:160px}
+.dso-row input:focus{outline:none;border-color:#2563eb}
+.aging-empty{text-align:center;padding:28px 20px;color:#94a3b8;font-size:.88rem;font-weight:600}
+
+/* Toast */
+#fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
+#fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Print invoice overlay */
+#invoicePrintWrap{display:none}
+@media print{
+  #fwSidebar,#mainWrap{display:none!important}
+  #invoicePrintWrap{display:block!important;font-family:'Segoe UI',sans-serif;padding:40px;max-width:720px;margin:0 auto}
+  .inv-logo{font-size:1.4rem;font-weight:900;color:#2563eb;margin-bottom:4px}
+  .inv-biz{font-size:.85rem;color:#64748b;margin-bottom:20px}
+  .inv-header{display:flex;justify-content:space-between;margin-bottom:24px;border-bottom:2px solid #1e293b;padding-bottom:16px}
+  .inv-from{font-size:.85rem;line-height:1.6}
+  .inv-to-block{text-align:right;font-size:.85rem;line-height:1.6}
+  .inv-num{font-size:1.2rem;font-weight:900;color:#1e293b}
+  .inv-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+  .inv-table th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:.82rem;font-weight:700;border-bottom:2px solid #e2e8f0}
+  .inv-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.88rem}
+  .inv-total-row{border-top:2px solid #1e293b!important;font-weight:900!important;font-size:1rem!important}
+  .inv-notes{background:#f8fafc;padding:14px;border-radius:6px;font-size:.82rem;color:#475569;margin-bottom:16px}
+  .inv-footer{font-size:.72rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:12px}
+}
+</style>
+</head>
+<body>
+<div id="invoicePrintWrap"></div>
+<div id="fwSidebar"></div>
+<div id="mainWrap">
+  <h1>&#128203; Invoice Tracker</h1>
+  <p class="sub">Track outstanding invoices, send reminders, and sync revenue to all modules</p>
+
+  <div id="intStrip" class="int-strip" style="display:none"></div>
+
+  <!-- SUMMARY -->
+  <div class="summary-row">
+    <div class="sum-card"><div class="sum-label">Total Outstanding</div><div class="sum-value blue" id="sumOutstanding">$0</div><div class="sum-sub" id="sumOutstandingCount">0 invoices</div></div>
+    <div class="sum-card"><div class="sum-label">Overdue</div><div class="sum-value red" id="sumOverdue">$0</div><div class="sum-sub" id="sumOverdueCount">0 invoices</div></div>
+    <div class="sum-card"><div class="sum-label">Due This Week</div><div class="sum-value amber" id="sumDueWeek">$0</div><div class="sum-sub" id="sumDueWeekCount">0 invoices</div></div>
+    <div class="sum-card"><div class="sum-label">Paid This Month</div><div class="sum-value green" id="sumPaid">$0</div><div class="sum-sub" id="sumPaidCount">0 invoices</div></div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="setFilter('all',this)">All</button>
+      <button class="ftab" onclick="setFilter('pending',this)">Pending</button>
+      <button class="ftab" onclick="setFilter('overdue',this)">Overdue</button>
+      <button class="ftab" onclick="setFilter('paid',this)">Paid</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn-add" onclick="openModal()">&#65291; Add Invoice</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Client / Invoice #</th><th>Amount</th><th>Issued</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="invoiceBody"></tbody>
+    </table>
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-icon">&#128203;</div>
+      <div class="empty-text">No invoices yet — add your first one</div>
+      <button class="empty-btn" onclick="openModal()">&#65291; Add Invoice</button>
+    </div>
+  </div>
+
+  <!-- AGING REPORT -->
+  <div class="aging-section" id="agingSection">
+    <div class="section-title">&#128200; Invoice Aging Report</div>
+    <div class="dso-row">
+      <label>Annual Revenue ($) — for DSO calculation:</label>
+      <input type="number" id="dsoRevInput" placeholder="e.g. 600000" min="0" oninput="renderAgingReport()"/>
+    </div>
+    <div class="aging-cards" id="agingCards"></div>
+    <div class="aging-kpi" id="agingKpi"></div>
+    <div class="aging-wrap">
+      <table class="client-table">
+        <thead><tr><th>Client</th><th>Total Invoiced</th><th>Collected</th><th>Outstanding</th><th>Oldest Overdue</th><th>Risk</th></tr></thead>
+        <tbody id="clientBody"></tbody>
+      </table>
+      <div class="aging-empty" id="agingEmpty" style="display:none">Add invoices above to see the aging report.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-title" id="modalTitle">Add Invoice</div>
+
+    <div class="section-label">Template</div>
+    <select id="fTemplate" onchange="applyTemplate(this.value)">
+      <option value="">— Select template (optional) —</option>
+      <option value="consulting">Consulting Services</option>
+      <option value="product">Product Sale</option>
+      <option value="retainer">Monthly Retainer</option>
+      <option value="project">Project Milestone</option>
+    </select>
+
+    <hr class="divider">
+    <label>Client Name *</label>
+    <input type="text" id="fClient" placeholder="e.g. Acme Corp"/>
+    <label>Client Email (for reminders)</label>
+    <input type="email" id="fClientEmail" placeholder="client@company.com"/>
+
+    <div class="modal-grid">
+      <div><label>Invoice Number</label><input type="text" id="fInvNo" placeholder="e.g. INV-001"/></div>
+      <div><label>Amount ($) *</label><input type="number" id="fAmount" placeholder="e.g. 3500" min="0"/></div>
+    </div>
+    <div class="modal-grid">
+      <div><label>Issue Date</label><input type="date" id="fIssued"/></div>
+      <div><label>Due Date *</label><input type="date" id="fDue"/></div>
+    </div>
+    <label>Notes / Terms</label>
+    <textarea id="fNotes" placeholder="e.g. Net 30, project milestone 2..."></textarea>
+
+    <hr class="divider">
+    <div class="section-label">Recurring Invoice</div>
+    <div class="recurring-row">
+      <label class="toggle-wrap"><input type="checkbox" id="fRecurring" onchange="toggleRecurring()"/> Auto-generate recurring invoice</label>
+    </div>
+    <div id="recurringFields" style="display:none">
+      <div class="modal-grid" style="margin-top:8px">
+        <div>
+          <label>Frequency</label>
+          <select id="fRecurFreq">
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+          </select>
+        </div>
+        <div>
+          <label>Repeat Until</label>
+          <input type="date" id="fRecurEnd"/>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:4px">Next invoice auto-generated when due date passes</div>
+    </div>
+
+    <input type="hidden" id="fEditId"/>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveInvoice()">Save Invoice</button>
+    </div>
+  </div>
+</div>
+
+<div id="fwToast"></div>
+
+<script>
+var filter = 'all';
+var KEY = 'fw_invoices';
+
+// ── STORAGE ──────────────────────────────────────────────────────────────────
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+function save(inv){ localStorage.setItem(KEY,JSON.stringify(inv)); }
+
+// ── UTC DATE HELPERS (P1 Calculation: timezone-safe) ─────────────────────────
+function parseUTCDate(str){
+  if(!str) return null;
+  var p=str.split('-');
+  return new Date(Date.UTC(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])));
+}
+function todayUTC(){
+  var n=new Date();
+  return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()));
+}
+
+// ── FORMATTING ───────────────────────────────────────────────────────────────
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtDate(d){ if(!d) return '—'; var p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
+function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },3000); }
+
+// ── STATUS / DAYS ─────────────────────────────────────────────────────────────
+function getStatus(inv){
+  if(inv.status==='paid') return 'paid';
+  var today=todayUTC();
+  var due=parseUTCDate(inv.dueDate);
+  if(!due) return 'pending';
+  return due<today?'overdue':'pending';
+}
+
+function daysInfo(inv){
+  var today=todayUTC();
+  var due=parseUTCDate(inv.dueDate);
+  if(!due) return {text:'—',cls:'ok'};
+  var diff=Math.round((due-today)/86400000);
+  var st=getStatus(inv);
+  if(st==='paid') return {text:'Paid',cls:'ok'};
+  if(st==='overdue') return {text:Math.abs(diff)+' day'+(Math.abs(diff)!==1?'s':'')+' overdue',cls:'overdue'};
+  if(diff===0) return {text:'Due today',cls:'soon'};
+  if(diff<=7)  return {text:'Due in '+diff+' day'+(diff!==1?'s':''),cls:'soon'};
+  return {text:'Due in '+diff+' days',cls:'ok'};
+}
+
+function isThisMonth(dateStr){
+  if(!dateStr) return false;
+  var d=parseUTCDate(dateStr);
+  var n=new Date();
+  return d&&d.getUTCMonth()===n.getMonth()&&d.getUTCFullYear()===n.getFullYear();
+}
+
+function isThisWeek(dueStr){
+  var today=todayUTC();
+  var due=parseUTCDate(dueStr);
+  if(!due) return false;
+  var diff=Math.round((due-today)/86400000);
+  return diff>=0&&diff<=7;
+}
+
+// ── P1 INTEGRATION: PUSH INVOICE TOTALS ──────────────────────────────────────
+function pushInvoiceTotals(){
+  var invs=load();
+  var byMonth={}, byYear={};
+
+  invs.filter(function(i){ return i.status==='paid'; }).forEach(function(i){
+    var d=parseUTCDate(i.paidDate||i.dueDate);
+    if(!d) return;
+    var yr=d.getUTCFullYear();
+    var mo=d.getUTCMonth()+1;
+    var key=yr+'-'+String(mo).padStart(2,'0');
+    byMonth[key]=(byMonth[key]||0)+parseFloat(i.amount||0);
+    byYear[yr]=(byYear[yr]||0)+parseFloat(i.amount||0);
+  });
+
+  // Revenue for taxEstimator, budgetActualTracker, monthlySnapshot
+  localStorage.setItem('fw_invoice_revenue', JSON.stringify({
+    byMonth:byMonth, byYear:byYear, updatedAt:Date.now()
+  }));
+
+  // Expected inflows for cashFlowCalendar
+  var inflows=invs.filter(function(i){ return i.status!=='paid'; }).map(function(i){
+    return {date:i.dueDate, amount:parseFloat(i.amount||0), client:i.client, invoiceId:i.id,
+            description:'Invoice '+(i.invNo||i.id)};
+  });
+  localStorage.setItem('fw_invoice_inflows', JSON.stringify({inflows:inflows, updatedAt:Date.now()}));
+
+  // Update integration strip
+  var strip=document.getElementById('intStrip');
+  var yr=new Date().getFullYear();
+  var paidYr=byYear[yr]||0;
+  strip.style.display='';
+  strip.innerHTML='&#128202; Revenue synced &mdash; <strong>'+yr+' paid: '+fmt(paidYr)+'</strong> pushed to Tax Estimator &amp; Budget Tracker &nbsp;|&nbsp; '+
+    inflows.length+' pending inflow'+(inflows.length!==1?'s':'')+' pushed to Cash Flow Calendar';
+}
+
+// ── RENDER SUMMARY ────────────────────────────────────────────────────────────
+function renderSummary(invoices){
+  var outstanding=invoices.filter(function(i){ return getStatus(i)!=='paid'; });
+  var overdue    =invoices.filter(function(i){ return getStatus(i)==='overdue'; });
+  var dueWeek    =invoices.filter(function(i){ return getStatus(i)==='pending'&&isThisWeek(i.dueDate); });
+  var paidMonth  =invoices.filter(function(i){ return i.status==='paid'&&isThisMonth(i.paidDate||i.dueDate); });
+  var sumArr=function(arr){ return arr.reduce(function(s,i){ return s+parseFloat(i.amount||0); },0); };
+
+  document.getElementById('sumOutstanding').textContent     =fmt(sumArr(outstanding));
+  document.getElementById('sumOutstandingCount').textContent=outstanding.length+' invoice'+(outstanding.length!==1?'s':'');
+  document.getElementById('sumOverdue').textContent         =fmt(sumArr(overdue));
+  document.getElementById('sumOverdueCount').textContent    =overdue.length+' invoice'+(overdue.length!==1?'s':'');
+  document.getElementById('sumDueWeek').textContent         =fmt(sumArr(dueWeek));
+  document.getElementById('sumDueWeekCount').textContent    =dueWeek.length+' invoice'+(dueWeek.length!==1?'s':'');
+  document.getElementById('sumPaid').textContent            =fmt(sumArr(paidMonth));
+  document.getElementById('sumPaidCount').textContent       =paidMonth.length+' this month';
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────────────────────────
+function renderTable(){
+  var invoices=load();
+  renderSummary(invoices);
+  renderAgingReport();
+  pushInvoiceTotals();
+
+  invoices=invoices.map(function(inv){
+    inv._computed=inv.status==='paid'?'paid':getStatus(inv);
+    return inv;
+  });
+
+  var filtered=filter==='all'?invoices:invoices.filter(function(i){ return i._computed===filter; });
+  filtered.sort(function(a,b){
+    var order={overdue:0,pending:1,paid:2};
+    if(order[a._computed]!==order[b._computed]) return order[a._computed]-order[b._computed];
+    var da=parseUTCDate(a.dueDate), db=parseUTCDate(b.dueDate);
+    return (da||0)-(db||0);
+  });
+
+  var body=document.getElementById('invoiceBody');
+  var empty=document.getElementById('emptyState');
+
+  if(!filtered.length){ body.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  var html='';
+  filtered.forEach(function(inv){
+    var st=inv._computed;
+    var di=daysInfo(inv);
+    var bdg='<span class="badge badge-'+st+'">'+st.charAt(0).toUpperCase()+st.slice(1)+'</span>';
+    var recurBadge=inv.recurring?'<span class="recurring-badge">&#128260; '+inv.recurring+'</span>':'';
+    var amtCls=st==='overdue'?'td-amount overdue':'td-amount';
+    var paidBtn=st!=='paid'
+      ?'<button class="act-btn btn-paid" onclick="markPaid(\''+inv.id+'\')">&#10003; Paid</button>'
+      :'<button class="act-btn btn-paid" style="opacity:.4" disabled>&#10003; Paid</button>';
+    var remBtn=st==='overdue'
+      ?'<button class="act-btn btn-email" onclick="sendReminder(\''+inv.id+'\')" title="Send reminder email">&#128231; Remind</button>':'' ;
+    var pdfBtn='<button class="act-btn btn-pdf" onclick="printInvoice(\''+inv.id+'\')" title="Export PDF">&#128438; PDF</button>';
+    html+='<tr>'+
+      '<td><div class="td-client">'+esc(inv.client)+recurBadge+'</div><div class="td-num">'+(inv.invNo||'—')+'</div></td>'+
+      '<td><div class="'+amtCls+'">'+fmt(inv.amount)+'</div></td>'+
+      '<td>'+fmtDate(inv.issued)+'</td>'+
+      '<td><div>'+fmtDate(inv.dueDate)+'</div><div class="td-days '+di.cls+'">'+di.text+'</div></td>'+
+      '<td>'+bdg+'</td>'+
+      '<td><div class="actions">'+paidBtn+
+        '<button class="act-btn btn-edit" onclick="editInvoice(\''+inv.id+'\')">Edit</button>'+
+        '<button class="act-btn btn-del" onclick="deleteInvoice(\''+inv.id+'\')">&#10005;</button>'+
+        remBtn+pdfBtn+
+      '</div></td>'+
+    '</tr>';
+  });
+  body.innerHTML=html;
+}
+
+function setFilter(f,btn){
+  filter=f;
+  document.querySelectorAll('.ftab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderTable();
+}
+
+// ── P2 FEATURE: SEND REMINDER (mailto:) ──────────────────────────────────────
+function sendReminder(id){
+  var inv=load().find(function(i){ return i.id===id; });
+  if(!inv) return;
+  var email=inv.clientEmail||'';
+  var p={};
+  try{ p=JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  var from=p.bizName||p.name||'[Your Business]';
+  var invNum=inv.invNo||'#';
+  var subj=encodeURIComponent('Follow-up: Invoice '+invNum+' — Payment Past Due');
+  var body=encodeURIComponent(
+    'Dear '+(inv.client||'Client')+',\n\n'+
+    'I hope this finds you well. This is a friendly reminder that Invoice '+invNum+' for '+
+    fmt(inv.amount)+' was due on '+fmtDate(inv.dueDate)+' and remains outstanding.\n\n'+
+    'Please arrange payment at your earliest convenience, or reply if there is anything I can help resolve.\n\n'+
+    'Thank you,\n'+from
+  );
+  window.location.href='mailto:'+email+'?subject='+subj+'&body='+body;
+}
+
+// ── P2 FEATURE: INVOICE TEMPLATES ────────────────────────────────────────────
+var TEMPLATES={
+  consulting:{notes:'Professional consulting services as discussed. Net 30.', amount:''},
+  product:   {notes:'Products per attached order. Payment due on receipt.',   amount:''},
+  retainer:  {notes:'Monthly retainer fee for ongoing services. Due on 1st.', amount:''},
+  project:   {notes:'Project milestone payment per Statement of Work.',        amount:''}
+};
+
+function applyTemplate(type){
+  if(!type||!TEMPLATES[type]) return;
+  var t=TEMPLATES[type];
+  if(t.notes) document.getElementById('fNotes').value=t.notes;
+}
+
+// ── P2 EXPORT: PRINT INDIVIDUAL INVOICE PDF ───────────────────────────────────
+function printInvoice(id){
+  var inv=load().find(function(i){ return i.id===id; });
+  if(!inv) return;
+  var p={};
+  try{ p=JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+
+  var bizName=p.bizName||p.name||'Your Business';
+  var bizAddr=p.address||'';
+  var bizEmail=p.email||'';
+  var daysInfo_txt=daysInfo(inv).text;
+
+  document.getElementById('invoicePrintWrap').innerHTML=
+    '<div class="inv-logo">&#128203; FinWise Invoice</div>'+
+    '<div class="inv-biz">'+esc(bizName)+(bizAddr?' &bull; '+esc(bizAddr):'')+(bizEmail?' &bull; '+esc(bizEmail):'')+'</div>'+
+    '<div class="inv-header">'+
+      '<div class="inv-from">'+
+        '<div class="inv-num">INVOICE '+(inv.invNo||'#')+'</div>'+
+        '<div style="margin-top:6px;font-size:.8rem;color:#64748b">Bill To:</div>'+
+        '<div style="font-weight:700">'+esc(inv.client)+'</div>'+
+        (inv.clientEmail?'<div style="font-size:.82rem;color:#64748b">'+esc(inv.clientEmail)+'</div>':'')+
+      '</div>'+
+      '<div class="inv-to-block">'+
+        '<div style="font-size:.8rem;color:#64748b">Issue Date</div>'+
+        '<div style="font-weight:700">'+fmtDate(inv.issued)+'</div>'+
+        '<div style="font-size:.8rem;color:#64748b;margin-top:6px">Due Date</div>'+
+        '<div style="font-weight:700">'+fmtDate(inv.dueDate)+'</div>'+
+        '<div style="font-size:.78rem;color:'+(inv._computed==='overdue'?'#dc2626':'#16a34a')+';margin-top:4px">'+daysInfo_txt+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<table class="inv-table">'+
+      '<thead><tr><th>Description</th><th style="text-align:right">Amount</th></tr></thead>'+
+      '<tbody>'+
+        '<tr><td>'+(inv.notes||'Professional services')+'</td><td style="text-align:right;font-weight:700">'+fmt(inv.amount)+'</td></tr>'+
+      '</tbody>'+
+      '<tfoot>'+
+        '<tr class="inv-total-row"><td style="padding:12px;font-size:1rem;font-weight:900">TOTAL DUE</td>'+
+        '<td style="padding:12px;text-align:right;font-size:1.1rem;font-weight:900;color:'+(inv.status==='paid'?'#16a34a':'#2563eb')+'">'+
+          fmt(inv.amount)+(inv.status==='paid'?' ✓ PAID':'')+'</td></tr>'+
+      '</tfoot>'+
+    '</table>'+
+    (inv.notes?'<div class="inv-notes"><strong>Notes / Terms:</strong> '+esc(inv.notes)+'</div>':'')+
+    '<div class="inv-footer">Generated by FinWise &bull; This is not a tax invoice &bull; Please retain for your records</div>';
+
+  window.print();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function toggleRecurring(){
+  var on=document.getElementById('fRecurring').checked;
+  document.getElementById('recurringFields').style.display=on?'':'none';
+}
+
+function openModal(){
+  document.getElementById('fEditId').value='';
+  document.getElementById('modalTitle').textContent='Add Invoice';
+  document.getElementById('fTemplate').value='';
+  document.getElementById('fClient').value='';
+  document.getElementById('fClientEmail').value='';
+  document.getElementById('fInvNo').value='';
+  document.getElementById('fAmount').value='';
+  document.getElementById('fNotes').value='';
+  document.getElementById('fRecurring').checked=false;
+  document.getElementById('fRecurFreq').value='monthly';
+  document.getElementById('fRecurEnd').value='';
+  document.getElementById('recurringFields').style.display='none';
+
+  var today=new Date();
+  document.getElementById('fIssued').value=today.toISOString().split('T')[0];
+  var due30=new Date(Date.UTC(today.getFullYear(),today.getMonth(),today.getDate()+30));
+  document.getElementById('fDue').value=due30.toISOString().split('T')[0];
+  var num=load().length+1;
+  document.getElementById('fInvNo').value='INV-'+String(num).padStart(3,'0');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('fClient').focus();
+}
+
+function editInvoice(id){
+  var inv=load().find(function(i){ return i.id===id; });
+  if(!inv) return;
+  document.getElementById('fEditId').value=id;
+  document.getElementById('modalTitle').textContent='Edit Invoice';
+  document.getElementById('fTemplate').value='';
+  document.getElementById('fClient').value=inv.client;
+  document.getElementById('fClientEmail').value=inv.clientEmail||'';
+  document.getElementById('fInvNo').value=inv.invNo||'';
+  document.getElementById('fAmount').value=inv.amount;
+  document.getElementById('fIssued').value=inv.issued||'';
+  document.getElementById('fDue').value=inv.dueDate;
+  document.getElementById('fNotes').value=inv.notes||'';
+  document.getElementById('fRecurring').checked=!!(inv.recurring);
+  document.getElementById('fRecurFreq').value=inv.recurring||'monthly';
+  document.getElementById('fRecurEnd').value=inv.recurringEnd||'';
+  document.getElementById('recurringFields').style.display=inv.recurring?'':'none';
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+function handleOverlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
+
+function saveInvoice(){
+  var client=document.getElementById('fClient').value.trim();
+  var amount=parseFloat(document.getElementById('fAmount').value);
+  var due=document.getElementById('fDue').value;
+  if(!client){ toast('Enter client name'); return; }
+  if(!amount||amount<=0){ toast('Enter a valid amount'); return; }
+  if(!due){ toast('Enter due date'); return; }
+
+  var isRecurring=document.getElementById('fRecurring').checked;
+  var recurFreq=document.getElementById('fRecurFreq').value;
+  var recurEnd=document.getElementById('fRecurEnd').value;
+
+  var invs=load();
+  var editId=document.getElementById('fEditId').value;
+  var patch={
+    client:      client,
+    clientEmail: document.getElementById('fClientEmail').value.trim(),
+    invNo:       document.getElementById('fInvNo').value.trim(),
+    amount:      amount,
+    issued:      document.getElementById('fIssued').value,
+    dueDate:     due,
+    notes:       document.getElementById('fNotes').value.trim(),
+    recurring:   isRecurring?recurFreq:null,
+    recurringEnd:isRecurring?recurEnd:null
+  };
+
+  if(editId){
+    invs=invs.map(function(i){ return i.id===editId?Object.assign({},i,patch):i; });
+  } else {
+    invs.push(Object.assign({id:Date.now().toString(), status:'pending', createdAt:new Date().toISOString()}, patch));
+  }
+
+  save(invs);
+  closeModal();
+  renderTable();
+  toast('Invoice saved');
+}
+
+function markPaid(id){
+  var paidDate=new Date().toISOString().split('T')[0];
+  var invs=load().map(function(i){
+    return i.id===id?Object.assign({},i,{status:'paid',paidDate:paidDate}):i;
+  });
+  save(invs);
+  renderTable();
+  toast('Marked as paid');
+}
+
+function deleteInvoice(id){
+  if(!confirm('Delete this invoice?')) return;
+  save(load().filter(function(i){ return i.id!==id; }));
+  renderTable();
+}
+
+// ── P3 FEATURE: RECURRING INVOICE GENERATION ─────────────────────────────────
+function generateRecurring(){
+  var invs=load();
+  var today=todayUTC();
+  var added=0;
+
+  var newInvs=[];
+  invs.forEach(function(inv){
+    newInvs.push(inv);
+    if(!inv.recurring||inv.status==='paid') return;
+    var endDate=inv.recurringEnd?parseUTCDate(inv.recurringEnd):null;
+    if(endDate&&endDate<today) return;
+
+    var due=parseUTCDate(inv.dueDate);
+    if(!due||due>=today) return; // not yet overdue from recurring perspective
+
+    var months=inv.recurring==='quarterly'?3:1;
+    var nextDue=new Date(Date.UTC(due.getUTCFullYear(),due.getUTCMonth()+months,due.getUTCDate()));
+    if(nextDue>today) return; // next due is in future — wait
+
+    // Check if we haven't already generated this next invoice
+    var nextStr=nextDue.toISOString().split('T')[0];
+    var exists=invs.some(function(x){ return x.recurringParentId===inv.id&&x.dueDate===nextStr; });
+    if(exists) return;
+
+    var nextIssued=new Date(Date.UTC(nextDue.getUTCFullYear(),nextDue.getUTCMonth(),1));
+    newInvs.push({
+      id: Date.now().toString()+'-r'+(++added),
+      client:       inv.client,
+      clientEmail:  inv.clientEmail||'',
+      invNo:        (inv.invNo||'INV')+'-R'+(new Date().getFullYear()+''+(nextDue.getUTCMonth()+1)),
+      amount:       inv.amount,
+      issued:       nextIssued.toISOString().split('T')[0],
+      dueDate:      nextStr,
+      notes:        inv.notes,
+      status:       'pending',
+      recurring:    inv.recurring,
+      recurringEnd: inv.recurringEnd||null,
+      recurringParentId: inv.id,
+      createdAt:    new Date().toISOString()
+    });
+  });
+
+  if(added>0){
+    save(newInvs);
+    toast(added+' recurring invoice'+(added>1?'s':'')+' generated');
+    return true;
+  }
+  return false;
+}
+
+// ── P3 UX: AGING REPORT ───────────────────────────────────────────────────────
+function renderAgingReport(){
+  var invoices=load();
+  var today=todayUTC();
+  var sumArr=function(arr){ return arr.reduce(function(s,i){ return s+parseFloat(i.amount||0); },0); };
+
+  var unpaid=invoices.filter(function(i){ return i.status!=='paid'; });
+  var paid  =invoices.filter(function(i){ return i.status==='paid'; });
+
+  var bCurrent=[],b1_30=[],b31_60=[],b61plus=[];
+  unpaid.forEach(function(inv){
+    var due=parseUTCDate(inv.dueDate);
+    if(!due){ bCurrent.push(inv); return; }
+    var days=Math.round((today-due)/86400000);
+    if(days<=0)       bCurrent.push(inv);
+    else if(days<=30) b1_30.push(inv);
+    else if(days<=60) b31_60.push(inv);
+    else              b61plus.push(inv);
+  });
+
+  var bDefs=[
+    {cls:'current',label:'Current',       arr:bCurrent},
+    {cls:'late1',  label:'1–30 Days',     arr:b1_30},
+    {cls:'late2',  label:'31–60 Days',    arr:b31_60},
+    {cls:'late3',  label:'60+ Days',      arr:b61plus}
+  ];
+  document.getElementById('agingCards').innerHTML=bDefs.map(function(b){
+    var s=sumArr(b.arr);
+    return '<div class="age-card '+b.cls+'">'+
+      '<div class="age-card-label">'+b.label+'</div>'+
+      '<div class="age-card-val">'+fmt(s)+'</div>'+
+      '<div class="age-card-count">'+b.arr.length+' invoice'+(b.arr.length!==1?'s':'')+'</div>'+
+      '</div>';
+  }).join('');
+
+  var totalInvoiced=sumArr(invoices);
+  var totalOutstanding=sumArr(unpaid);
+  var totalCollected=sumArr(paid);
+  var collRate=totalInvoiced>0?(totalCollected/totalInvoiced*100):0;
+  var annualRev=parseFloat(document.getElementById('dsoRevInput').value)||0;
+  var dso=annualRev>0?(totalOutstanding/annualRev*365):null;
+  var dsoText=dso!==null?dso.toFixed(0)+' days':'Enter revenue →';
+  var dsoColor=dso===null?'#64748b':dso<=30?'#16a34a':dso<=60?'#ca8a04':'#dc2626';
+  var crColor=collRate>=90?'#16a34a':collRate>=70?'#ca8a04':'#dc2626';
+
+  document.getElementById('agingKpi').innerHTML=[
+    {label:'DSO',              val:dsoText,                 sub:'Days Sales Outstanding',           col:dsoColor},
+    {label:'Collection Rate',  val:collRate.toFixed(1)+'%', sub:'Paid / Total Invoiced',            col:crColor},
+    {label:'Total Outstanding',val:fmt(totalOutstanding),   sub:unpaid.length+' open invoice'+(unpaid.length!==1?'s':''), col:'#2563eb'}
+  ].map(function(k){
+    return '<div class="kpi-box">'+
+      '<div class="kpi-label">'+k.label+'</div>'+
+      '<div class="kpi-val" style="color:'+k.col+'">'+k.val+'</div>'+
+      '<div class="kpi-sub">'+k.sub+'</div>'+
+      '</div>';
+  }).join('');
+
+  // Per-client risk table
+  var clients={};
+  invoices.forEach(function(inv){
+    var c=inv.client||'Unknown';
+    if(!clients[c]) clients[c]={invoiced:0,collected:0,outstanding:0,maxOverdue:0};
+    var amt=parseFloat(inv.amount||0);
+    clients[c].invoiced+=amt;
+    if(inv.status==='paid'){
+      clients[c].collected+=amt;
+    } else {
+      clients[c].outstanding+=amt;
+      var due=parseUTCDate(inv.dueDate);
+      if(due){ var days=Math.round((today-due)/86400000); if(days>clients[c].maxOverdue) clients[c].maxOverdue=days; }
+    }
+  });
+
+  var clientArr=Object.keys(clients).map(function(name){ return Object.assign({name:name},clients[name]); })
+    .sort(function(a,b){ return b.outstanding-a.outstanding; });
+
+  var emptyEl=document.getElementById('agingEmpty');
+  var bodyEl=document.getElementById('clientBody');
+  if(!clientArr.length){ emptyEl.style.display='block'; bodyEl.innerHTML=''; return; }
+  emptyEl.style.display='none';
+
+  bodyEl.innerHTML=clientArr.map(function(c){
+    var riskCls,riskLabel;
+    if(c.maxOverdue>60||(c.outstanding>0&&c.outstanding/c.invoiced>0.5)){ riskCls='risk-high'; riskLabel='High'; }
+    else if(c.maxOverdue>30||(c.outstanding>0&&c.outstanding/c.invoiced>0.25)){ riskCls='risk-med'; riskLabel='Medium'; }
+    else { riskCls='risk-low'; riskLabel='Low'; }
+    return '<tr>'+
+      '<td style="font-weight:700">'+esc(c.name)+'</td>'+
+      '<td>'+fmt(c.invoiced)+'</td>'+
+      '<td style="color:#16a34a;font-weight:700">'+fmt(c.collected)+'</td>'+
+      '<td style="font-weight:800;color:'+(c.outstanding>0?'#dc2626':'#64748b')+'">'+fmt(c.outstanding)+'</td>'+
+      '<td style="color:'+(c.maxOverdue>60?'#dc2626':c.maxOverdue>30?'#f59e0b':'#64748b')+'">'+(c.maxOverdue>0?c.maxOverdue+' days':'—')+'</td>'+
+      '<td><span class="'+riskCls+'">'+riskLabel+'</span></td>'+
+      '</tr>';
+  }).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+(function init(){
+  generateRecurring();
+  renderTable();
+})();
+</script>
+</body>
+</html>

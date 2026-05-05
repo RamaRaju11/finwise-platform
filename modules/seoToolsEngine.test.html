@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SEO Tools Engine</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#f1f5f9;color:#1e293b}
+  header{background:linear-gradient(135deg,#0f172a,#065f46);color:#fff;padding:24px 32px}
+  header h1{font-size:1.5rem}
+  header p{font-size:.85rem;opacity:.75;margin-top:4px}
+  .tabs{display:flex;gap:4px;background:#e2e8f0;padding:8px;flex-wrap:wrap}
+  .tab{padding:8px 18px;border:none;border-radius:6px;cursor:pointer;background:transparent;font-size:.9rem;color:#475569}
+  .tab.active{background:#fff;color:#0f172a;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+  .panel{display:none;padding:24px;max-width:1000px;margin:0 auto}
+  .panel.active{display:block}
+  .card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.07);margin-bottom:16px}
+  .card h3{font-size:1rem;margin-bottom:12px}
+  label{display:block;font-size:.82rem;color:#64748b;margin-bottom:4px;margin-top:10px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:.9rem}
+  textarea{resize:vertical;min-height:80px;font-family:monospace;font-size:.82rem}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  button.btn{margin-top:14px;padding:9px 22px;background:#065f46;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem}
+  button.btn:hover{background:#047857}
+  button.copy-btn{padding:6px 14px;background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;border-radius:6px;cursor:pointer;font-size:.8rem;margin-top:8px}
+  .output-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-top:12px;font-family:monospace;font-size:.8rem;white-space:pre-wrap;word-break:break-all;color:#1e293b}
+  .kw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}
+  .kw-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px}
+  .kw-card .kw{font-weight:600;font-size:.9rem;color:#1e293b}
+  .vol-high{color:#16a34a;font-size:.75rem;font-weight:600}
+  .vol-medium{color:#d97706;font-size:.75rem;font-weight:600}
+  .vol-low{color:#94a3b8;font-size:.75rem;font-weight:600}
+  .diff-low{color:#16a34a;font-size:.75rem}
+  .diff-medium{color:#d97706;font-size:.75rem}
+  .diff-high{color:#dc2626;font-size:.75rem}
+  .mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:8px}
+  .mod-opt{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;cursor:pointer;font-size:.82rem}
+  .mod-opt:hover{border-color:#065f46;background:#f0fdf4}
+  .mod-opt.selected{border-color:#065f46;background:#f0fdf4;font-weight:600}
+  #unitResults .pass{color:#16a34a}
+  #unitResults .fail{color:#dc2626}
+  #unitResults li{padding:4px 0;font-size:.85rem;border-bottom:1px solid #f1f5f9}
+  .utm-url{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;margin-top:12px;word-break:break-all;font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>SEO Tools Engine</h1>
+  <p>Embed codes · SEO metadata · Schema.org markup · UTM links · Keyword ideas</p>
+</header>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('meta')">🏷️ Meta Tags</button>
+  <button class="tab" onclick="showTab('schema')">📐 Schema Markup</button>
+  <button class="tab" onclick="showTab('utm')">🔗 UTM Builder</button>
+  <button class="tab" onclick="showTab('keywords')">🔍 Keyword Ideas</button>
+  <button class="tab" onclick="showTab('embed')">🧩 Embed Widget</button>
+  <button class="tab" onclick="showTab('tests')">✅ Unit Tests</button>
+</div>
+
+<!-- META TAGS -->
+<div id="tab-meta" class="panel active">
+  <div class="card">
+    <h3>SEO Meta Tags Generator</h3>
+    <div class="row2">
+      <div>
+        <label>Calculator Module</label>
+        <select id="mt-module">
+          <option value="cashFlowEngine">Cash Flow Calculator</option>
+          <option value="loanEngine">Loan EMI Calculator</option>
+          <option value="loanAffordabilityEngine">Loan Affordability</option>
+          <option value="riskDebtEngine">Debt Risk Analyzer</option>
+          <option value="stressTestEngine">Business Stress Test</option>
+          <option value="forecastingEngine">Business Forecasting</option>
+          <option value="loanMarketplaceEngine">Loan Marketplace</option>
+          <option value="aiAdvisorEngine">AI Financial Advisor</option>
+          <option value="industryBenchmarksEngine">Industry Benchmarks</option>
+        </select>
+      </div>
+      <div>
+        <label>Base URL</label>
+        <input type="text" id="mt-url" value="https://smallbiz.app">
+      </div>
+      <div>
+        <label>Site Name</label>
+        <input type="text" id="mt-site" value="SmallBiz Financial Platform">
+      </div>
+    </div>
+    <button class="btn" onclick="doMetaTags()">Generate Meta Tags</button>
+  </div>
+  <div id="meta-output"></div>
+</div>
+
+<!-- SCHEMA -->
+<div id="tab-schema" class="panel">
+  <div class="card">
+    <h3>Schema.org JSON-LD Generator</h3>
+    <div class="row2">
+      <div>
+        <label>Module</label>
+        <select id="sc-module">
+          <option value="cashFlowEngine">Cash Flow Calculator</option>
+          <option value="loanEngine">Loan EMI Calculator</option>
+          <option value="forecastingEngine">Business Forecasting</option>
+          <option value="aiAdvisorEngine">AI Financial Advisor</option>
+          <option value="industryBenchmarksEngine">Industry Benchmarks</option>
+        </select>
+      </div>
+      <div>
+        <label>Base URL</label>
+        <input type="text" id="sc-url" value="https://smallbiz.app">
+      </div>
+    </div>
+    <button class="btn" onclick="doSchema()">Generate Schema</button>
+  </div>
+  <div id="schema-output"></div>
+</div>
+
+<!-- UTM BUILDER -->
+<div id="tab-utm" class="panel">
+  <div class="card">
+    <h3>UTM Campaign Link Builder</h3>
+    <div class="row3">
+      <div>
+        <label>Page URL</label>
+        <input type="text" id="utm-url" value="https://smallbiz.app/calculators/loan-emi-calculator">
+      </div>
+      <div>
+        <label>Source</label>
+        <input type="text" id="utm-source" value="google">
+      </div>
+      <div>
+        <label>Medium</label>
+        <input type="text" id="utm-medium" value="cpc">
+      </div>
+      <div>
+        <label>Campaign</label>
+        <input type="text" id="utm-campaign" value="loan-calc-q1-2025">
+      </div>
+      <div>
+        <label>Term (optional)</label>
+        <input type="text" id="utm-term" value="business loan calculator">
+      </div>
+      <div>
+        <label>Content (optional)</label>
+        <input type="text" id="utm-content" value="banner-v2">
+      </div>
+    </div>
+    <button class="btn" onclick="doUTM()">Build UTM Link</button>
+    <div id="utm-output"></div>
+  </div>
+</div>
+
+<!-- KEYWORDS -->
+<div id="tab-keywords" class="panel">
+  <div class="card">
+    <h3>Keyword Suggestions</h3>
+    <div class="row2">
+      <div>
+        <label>Topic</label>
+        <select id="kw-topic" onchange="doKeywords()">
+          <option value="loan">Loan & EMI</option>
+          <option value="cashflow">Cash Flow</option>
+          <option value="risk">Risk & Debt</option>
+          <option value="financial_statements">Financial Statements</option>
+          <option value="benchmarks">Benchmarks</option>
+          <option value="general">General / Platform</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="keywords-output"></div>
+</div>
+
+<!-- EMBED WIDGET -->
+<div id="tab-embed" class="panel">
+  <div class="card">
+    <h3>Embeddable Widget Code Generator</h3>
+    <div class="row3">
+      <div>
+        <label>Module</label>
+        <select id="em-module">
+          <option value="cashFlowEngine">Cash Flow Calculator</option>
+          <option value="loanEngine">Loan EMI Calculator</option>
+          <option value="loanAffordabilityEngine">Loan Affordability</option>
+          <option value="forecastingEngine">Business Forecasting</option>
+          <option value="aiAdvisorEngine">AI Financial Advisor</option>
+          <option value="industryBenchmarksEngine">Industry Benchmarks</option>
+        </select>
+      </div>
+      <div>
+        <label>Width (px)</label>
+        <input type="number" id="em-width" value="800">
+      </div>
+      <div>
+        <label>Height (px)</label>
+        <input type="number" id="em-height" value="600">
+      </div>
+      <div>
+        <label>Theme</label>
+        <select id="em-theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="minimal">Minimal</option>
+        </select>
+      </div>
+      <div>
+        <label>Base URL</label>
+        <input type="text" id="em-url" value="https://smallbiz.app">
+      </div>
+    </div>
+    <button class="btn" onclick="doEmbed()">Generate Embed Code</button>
+  </div>
+  <div id="embed-output"></div>
+</div>
+
+<!-- UNIT TESTS -->
+<div id="tab-tests" class="panel">
+  <div class="card">
+    <h3>Automated Unit Tests</h3>
+    <button class="btn" onclick="runTests()">Run All Tests</button>
+    <ul id="unitResults" style="margin-top:16px;list-style:none"></ul>
+  </div>
+</div>
+
+<script>
+// ═══ SEO TOOLS ENGINE (embedded) ═══════════════════════════════════════════
+const MODULE_CATALOG = {
+  cashFlowEngine:          {id:"cashFlowEngine",name:"Cash Flow Calculator",slug:"cash-flow-calculator",description:"Calculate monthly net cash flow, identify surplus and deficit periods."},
+  loanEngine:              {id:"loanEngine",name:"Loan EMI Calculator",slug:"loan-emi-calculator",description:"Compute EMI, full amortization schedule, and prepayment simulation."},
+  loanAffordabilityEngine: {id:"loanAffordabilityEngine",name:"Loan Affordability Calculator",slug:"loan-affordability-calculator",description:"Find the maximum loan amount your business cash flow can safely support."},
+  riskDebtEngine:          {id:"riskDebtEngine",name:"Debt Risk Analyzer",slug:"debt-risk-analyzer",description:"Calculate DSCR, DTI, and risk level for your current debt load."},
+  stressTestEngine:        {id:"stressTestEngine",name:"Business Stress Test",slug:"business-stress-test",description:"Simulate revenue drops, expense spikes, and rate hikes on loan viability."},
+  forecastingEngine:       {id:"forecastingEngine",name:"Business Forecasting Tool",slug:"business-forecasting",description:"Project cash flow and P&L up to 36 months with scenario analysis."},
+  loanMarketplaceEngine:   {id:"loanMarketplaceEngine",name:"Business Loan Marketplace",slug:"loan-marketplace",description:"Compare loan offers from multiple lenders by EMI and total cost."},
+  aiAdvisorEngine:         {id:"aiAdvisorEngine",name:"AI Financial Advisor",slug:"ai-financial-advisor",description:"Get rule-based financial health scores, loan readiness, and action plans."},
+  industryBenchmarksEngine:{id:"industryBenchmarksEngine",name:"Industry Benchmarks Tool",slug:"industry-benchmarks",description:"Compare your financial ratios against industry averages and percentiles."},
+};
+
+const KEYWORD_DATABASE = {
+  loan:[{keyword:"business loan calculator",volume:"high",difficulty:"medium"},{keyword:"EMI calculator for business",volume:"high",difficulty:"low"},{keyword:"business loan eligibility",volume:"high",difficulty:"medium"},{keyword:"how to calculate EMI",volume:"high",difficulty:"low"},{keyword:"small business loan rates",volume:"medium",difficulty:"medium"},{keyword:"loan affordability check",volume:"medium",difficulty:"low"},{keyword:"prepayment benefit calculator",volume:"medium",difficulty:"low"}],
+  cashflow:[{keyword:"cash flow calculator",volume:"high",difficulty:"medium"},{keyword:"business cash flow analysis",volume:"high",difficulty:"medium"},{keyword:"monthly cash flow template",volume:"medium",difficulty:"low"},{keyword:"cash flow forecast tool",volume:"medium",difficulty:"medium"},{keyword:"operating cash flow formula",volume:"medium",difficulty:"low"},{keyword:"working capital calculator",volume:"medium",difficulty:"low"}],
+  risk:[{keyword:"DSCR calculator",volume:"medium",difficulty:"low"},{keyword:"debt service coverage ratio",volume:"medium",difficulty:"low"},{keyword:"DTI calculator business",volume:"medium",difficulty:"low"},{keyword:"business debt risk analysis",volume:"low",difficulty:"low"},{keyword:"loan stress test calculator",volume:"low",difficulty:"low"}],
+  financial_statements:[{keyword:"profit and loss calculator",volume:"high",difficulty:"medium"},{keyword:"P&L statement template",volume:"high",difficulty:"low"},{keyword:"balance sheet builder",volume:"medium",difficulty:"low"},{keyword:"cash flow statement tool",volume:"medium",difficulty:"medium"},{keyword:"gross margin calculator",volume:"high",difficulty:"medium"},{keyword:"net profit margin formula",volume:"high",difficulty:"low"}],
+  benchmarks:[{keyword:"industry profit margin averages",volume:"medium",difficulty:"low"},{keyword:"small business financial benchmarks",volume:"medium",difficulty:"low"},{keyword:"average DSCR by industry",volume:"low",difficulty:"low"},{keyword:"retail gross margin benchmark",volume:"medium",difficulty:"low"}],
+  general:[{keyword:"small business financial tools",volume:"high",difficulty:"high"},{keyword:"free business financial calculator",volume:"high",difficulty:"medium"},{keyword:"SMB financial planning tools",volume:"medium",difficulty:"medium"},{keyword:"business financial health check",volume:"medium",difficulty:"low"}],
+};
+
+function generateMetaTags({moduleId,baseUrl="https://smallbiz.app",siteName="SmallBiz Financial Platform"}){
+  const mod=MODULE_CATALOG[moduleId];
+  if(!mod)throw new Error(`Unknown moduleId: "${moduleId}"`);
+  const url=`${baseUrl}/calculators/${mod.slug}`;
+  const title=`${mod.name} — Free Small Business Tool | ${siteName}`;
+  const desc=`${mod.description} Free, no sign-up required.`;
+  const keywords=[mod.name.toLowerCase(),"small business","free calculator","financial tool"].join(", ");
+  const og={"og:title":title,"og:description":desc,"og:url":url,"og:type":"website","og:site_name":siteName};
+  const tc={"twitter:card":"summary_large_image","twitter:title":title,"twitter:description":desc};
+  const html=[`<title>${title}</title>`,`<meta name="description" content="${desc}">`,`<meta name="keywords" content="${keywords}">`,`<link rel="canonical" href="${url}">`,
+    ...Object.entries(og).map(([k,v])=>`<meta property="${k}" content="${v}">`),
+    ...Object.entries(tc).map(([k,v])=>`<meta name="${k}" content="${v}">`),
+  ].join("\n");
+  return {title,description:desc,keywords,canonical:url,openGraph:og,twitterCard:tc,html};
+}
+
+function generateSchemaOrg({moduleId,baseUrl="https://smallbiz.app",businessName="SmallBiz Financial Platform"}){
+  const mod=MODULE_CATALOG[moduleId];
+  if(!mod)throw new Error(`Unknown moduleId: "${moduleId}"`);
+  const schema={"@context":"https://schema.org","@type":"WebApplication","name":mod.name,"url":`${baseUrl}/calculators/${mod.slug}`,"description":mod.description,"applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"provider":{"@type":"Organization","name":businessName,"url":baseUrl}};
+  const scriptTag=`<script type="application/ld+json">\n${JSON.stringify(schema,null,2)}\n<\/script>`;
+  return {schema,scriptTag};
+}
+
+function buildUTMLink(baseUrl,{source,medium,campaign,term="",content=""}){
+  if(!source||!medium||!campaign)throw new Error("source, medium, and campaign are required.");
+  const params={utm_source:source,utm_medium:medium,utm_campaign:campaign,...(term?{utm_term:term}:{}),...(content?{utm_content:content}:{})};
+  const qs=Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&");
+  return{url:`${baseUrl}${baseUrl.includes("?")?`&`:`?`}${qs}`,params};
+}
+
+function suggestKeywords(topic="general"){
+  const kws=KEYWORD_DATABASE[topic]||KEYWORD_DATABASE.general;
+  return kws.map((k,i)=>({rank:i+1,...k}));
+}
+
+function getCalculatorEmbedCode(moduleId,{width=800,height=600,theme="light",baseUrl="https://smallbiz.app"}={}){
+  const mod=MODULE_CATALOG[moduleId];
+  if(!mod)throw new Error(`Unknown moduleId: "${moduleId}"`);
+  const url=`${baseUrl}/embed/${mod.slug}?theme=${theme}`;
+  const iframeTag=`<iframe src="${url}" width="${width}" height="${height}" frameborder="0" allowfullscreen loading="lazy" title="${mod.name}"></iframe>`;
+  const fullSnippet=`<!-- SmallBiz ${mod.name} Widget -->\n<div style="max-width:${width}px;margin:0 auto;">\n  ${iframeTag}\n  <p style="font-size:12px;text-align:center;color:#94a3b8;">Powered by <a href="${baseUrl}" target="_blank">SmallBiz</a></p>\n</div>`;
+  return{iframeTag,fullSnippet,url,moduleId,width,height,theme};
+}
+
+// ═══ UI ═══════════════════════════════════════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='keywords')doKeywords();
+}
+
+function copyText(id){const el=document.getElementById(id);navigator.clipboard?.writeText(el.innerText||el.value);}
+
+function doMetaTags(){
+  const result=generateMetaTags({moduleId:document.getElementById('mt-module').value,baseUrl:document.getElementById('mt-url').value,siteName:document.getElementById('mt-site').value});
+  document.getElementById('meta-output').innerHTML=`
+    <div class="card"><h3>Title</h3><div class="output-box">${result.title}</div></div>
+    <div class="card"><h3>Meta Description</h3><div class="output-box">${result.description}</div></div>
+    <div class="card"><h3>Canonical URL</h3><div class="output-box">${result.canonical}</div></div>
+    <div class="card"><h3>Full HTML Tags</h3>
+      <div class="output-box" id="meta-html-out">${result.html.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <button class="copy-btn" onclick="navigator.clipboard?.writeText(document.getElementById('meta-html-out').innerText)">📋 Copy HTML</button>
+    </div>`;
+}
+
+function doSchema(){
+  const result=generateSchemaOrg({moduleId:document.getElementById('sc-module').value,baseUrl:document.getElementById('sc-url').value});
+  document.getElementById('schema-output').innerHTML=`
+    <div class="card"><h3>JSON-LD Script Tag</h3>
+      <div class="output-box" id="schema-out">${result.scriptTag.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <button class="copy-btn" onclick="navigator.clipboard?.writeText(document.getElementById('schema-out').innerText)">📋 Copy</button>
+    </div>`;
+}
+
+function doUTM(){
+  const result=buildUTMLink(document.getElementById('utm-url').value,{
+    source:document.getElementById('utm-source').value,
+    medium:document.getElementById('utm-medium').value,
+    campaign:document.getElementById('utm-campaign').value,
+    term:document.getElementById('utm-term').value,
+    content:document.getElementById('utm-content').value,
+  });
+  document.getElementById('utm-output').innerHTML=`
+    <div class="utm-url"><b>UTM URL:</b><br><br>${result.url}</div>
+    <button class="copy-btn" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">📋 Copy URL</button>
+    <div style="margin-top:12px;font-size:.82rem;color:#64748b">
+      Parameters added: ${Object.keys(result.params).join(', ')}
+    </div>`;
+}
+
+function doKeywords(){
+  const topic=document.getElementById('kw-topic').value;
+  const kws=suggestKeywords(topic);
+  document.getElementById('keywords-output').innerHTML=`<div class="card">
+    <h3>${kws.length} Keywords — ${document.getElementById('kw-topic').options[document.getElementById('kw-topic').selectedIndex].text}</h3>
+    <div class="kw-grid">${kws.map(k=>`
+      <div class="kw-card">
+        <div class="kw">${k.rank}. ${k.keyword}</div>
+        <div style="margin-top:4px">
+          <span class="vol-${k.volume}">Volume: ${k.volume}</span>
+          &nbsp;·&nbsp;
+          <span class="diff-${k.difficulty}">Difficulty: ${k.difficulty}</span>
+        </div>
+      </div>`).join('')}
+    </div></div>`;
+}
+
+function doEmbed(){
+  const result=getCalculatorEmbedCode(document.getElementById('em-module').value,{
+    width:parseInt(document.getElementById('em-width').value),
+    height:parseInt(document.getElementById('em-height').value),
+    theme:document.getElementById('em-theme').value,
+    baseUrl:document.getElementById('em-url').value,
+  });
+  document.getElementById('embed-output').innerHTML=`
+    <div class="card"><h3>Widget Snippet</h3>
+      <div class="output-box" id="embed-out">${result.fullSnippet.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <button class="copy-btn" onclick="navigator.clipboard?.writeText(document.getElementById('embed-out').innerText)">📋 Copy Snippet</button>
+    </div>
+    <div class="card"><h3>Embed Details</h3>
+      <div style="font-size:.85rem">
+        <div>Module: <b>${result.moduleId}</b></div>
+        <div>Size: <b>${result.width}×${result.height}px</b></div>
+        <div>Theme: <b>${result.theme}</b></div>
+        <div style="margin-top:8px;word-break:break-all">URL: <code style="font-size:.8rem">${result.url}</code></div>
+      </div>
+    </div>`;
+}
+
+// ═══ Unit Tests ═══════════════════════════════════════════════════════════════
+function runTests(){
+  const results=[];
+  function test(n,fn){try{fn();results.push({n,ok:true});}catch(e){results.push({n,ok:false,err:e.message});}}
+  function assert(c,m){if(!c)throw new Error(m||"fail");}
+
+  test("generateMetaTags returns title+description",()=>{
+    const r=generateMetaTags({moduleId:"loanEngine"});
+    assert(r.title.includes("Loan EMI"));
+    assert(r.description.length>20);
+    assert(r.canonical.includes("loan-emi-calculator"));
+  });
+  test("generateMetaTags — html includes <title> tag",()=>{
+    const r=generateMetaTags({moduleId:"cashFlowEngine"});
+    assert(r.html.includes("<title>"));
+    assert(r.html.includes("og:title"));
+  });
+  test("generateMetaTags — throws on unknown module",()=>{
+    let threw=false;try{generateMetaTags({moduleId:"xyz"});}catch{threw=true;}
+    assert(threw);
+  });
+  test("generateSchemaOrg returns schema with @type WebApplication",()=>{
+    const r=generateSchemaOrg({moduleId:"forecastingEngine"});
+    assert(r.schema["@type"]==="WebApplication");
+    assert(r.schema.offers.price==="0");
+    assert(r.scriptTag.includes("application/ld+json"));
+  });
+  test("buildUTMLink appends utm_source/medium/campaign",()=>{
+    const r=buildUTMLink("https://x.com/page",{source:"google",medium:"cpc",campaign:"test"});
+    assert(r.url.includes("utm_source=google"));
+    assert(r.url.includes("utm_medium=cpc"));
+    assert(r.url.includes("utm_campaign=test"));
+  });
+  test("buildUTMLink — optional term/content included when provided",()=>{
+    const r=buildUTMLink("https://x.com",{source:"fb",medium:"social",campaign:"c1",term:"loan",content:"banner"});
+    assert(r.url.includes("utm_term=loan"));
+    assert(r.url.includes("utm_content=banner"));
+  });
+  test("buildUTMLink throws if source missing",()=>{
+    let threw=false;try{buildUTMLink("https://x.com",{medium:"cpc",campaign:"c"});}catch{threw=true;}
+    assert(threw);
+  });
+  test("suggestKeywords returns array for loan topic",()=>{
+    const kws=suggestKeywords("loan");
+    assert(Array.isArray(kws)&&kws.length>0);
+    assert(kws[0].hasOwnProperty("keyword")&&kws[0].hasOwnProperty("volume"));
+  });
+  test("suggestKeywords defaults to general for unknown topic",()=>{
+    const kws=suggestKeywords("unknown_topic");
+    assert(Array.isArray(kws)&&kws.length>0);
+  });
+  test("getCalculatorEmbedCode returns iframeTag with src",()=>{
+    const r=getCalculatorEmbedCode("loanEngine",{width:800,height:600,theme:"light"});
+    assert(r.iframeTag.includes("<iframe"));
+    assert(r.iframeTag.includes("800"));
+    assert(r.url.includes("loan-emi-calculator"));
+  });
+  test("getCalculatorEmbedCode fullSnippet includes attribution",()=>{
+    const r=getCalculatorEmbedCode("cashFlowEngine");
+    assert(r.fullSnippet.includes("SmallBiz"));
+  });
+  test("getCalculatorEmbedCode throws on unknown module",()=>{
+    let threw=false;try{getCalculatorEmbedCode("xyz");}catch{threw=true;}
+    assert(threw);
+  });
+
+  const ul=document.getElementById('unitResults');
+  const pass=results.filter(r=>r.ok).length;
+  ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+window.onload=()=>doKeywords();
+</script>
+</body>
+</html>

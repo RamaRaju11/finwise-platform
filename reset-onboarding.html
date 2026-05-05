@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/><title>Reset Onboarding</title></head>
+<body style="font-family:Arial,sans-serif;padding:40px;text-align:center">
+<h2>Reset Onboarding for Testing</h2>
+<p style="color:#666;margin-bottom:24px">Click the button to reset — then onboarding will show again.</p>
+<button onclick="reset()" style="padding:14px 32px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">
+  Reset &amp; Open Onboarding
+</button>
+<p id="msg" style="margin-top:16px;color:#16a34a;font-weight:700"></p>
+<script>
+function reset(){
+  localStorage.removeItem('fw_onboarded');
+  document.getElementById('msg').textContent = '✅ Reset done! Opening onboarding...';
+  setTimeout(function(){ window.location.href = 'onboarding.html'; }, 800);
+}
+</script>
+</body>
+</html>

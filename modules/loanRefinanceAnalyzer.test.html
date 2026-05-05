@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Loan Refinance Analyzer — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:14px;color:#444;display:flex;align-items:center;gap:8px}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus{outline:none;border-color:#2563eb}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+
+.loan-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0}
+@media(max-width:640px){.loan-cards{grid-template-columns:1fr}}
+.loan-card{background:#f8fafc;border-radius:8px;padding:16px;border:2px solid #e2e8f0}
+.loan-card.existing{border-color:#fca5a5}
+.loan-card.refin{border-color:#86efac}
+.lc-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.lc-title.existing{color:#dc2626}
+.lc-title.refin{color:#16a34a}
+.lc-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:.84rem}
+.lc-row:last-child{border-bottom:none}
+.lc-label{color:#64748b}
+.lc-val{font-weight:800;color:#1e293b}
+
+/* Key result metrics */
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:640px){.result-grid{grid-template-columns:1fr}}
+.rbox{background:#f8fafc;border-radius:8px;padding:16px;border:1px solid #e2e8f0;text-align:center}
+.rb-label{font-size:.68rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.rb-big{font-size:1.6rem;font-weight:900;line-height:1.1;margin-bottom:3px}
+.rb-sub{font-size:.75rem;color:#64748b}
+
+/* Break-even bar */
+.be-track{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden;margin:8px 0}
+.be-fill{height:100%;border-radius:99px;transition:width .4s}
+
+/* Verdict */
+.verdict{border-radius:10px;padding:16px 20px;display:flex;gap:14px;align-items:flex-start}
+.verdict.good{background:#f0fdf4;border:1px solid #bbf7d0}
+.verdict.bad{background:#fff1f2;border:1px solid #fecdd3}
+.verdict.neutral{background:#fffbeb;border:1px solid #fde68a}
+.v-icon{font-size:2rem;flex-shrink:0;margin-top:2px}
+.v-title{font-size:.95rem;font-weight:800;margin-bottom:4px}
+.v-desc{font-size:.83rem;line-height:1.6;color:#475569}
+
+.insight-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.insight-item{border-left:4px solid #2563eb;background:#eff6ff;padding:11px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#1e40af;line-height:1.6}
+.insight-item.warn{border-color:#f59e0b;background:#fffbeb;color:#92400e}
+.insight-item.good{border-color:#16a34a;background:#f0fdf4;color:#166534}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.save-btn{margin-top:12px;padding:9px 22px;background:#f0fdf4;color:#166534;border:1.5px solid #bbf7d0;border-radius:6px;font-size:.87rem;cursor:pointer;font-weight:700}
+.save-btn:hover{background:#dcfce7}
+.fw-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 22px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+
+/* Monthly payment comparison */
+.pay-compare{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.pc-box{flex:1;min-width:110px;border-radius:8px;padding:14px 16px;text-align:center}
+.pc-box.old{background:#fff1f2;border:2px solid #fca5a5}
+.pc-box.new-r{background:#f0fdf4;border:2px solid #86efac}
+.pc-box.save-r{background:#eff6ff;border:2px solid #93c5fd}
+.pc-arrow{font-size:1.4rem;color:#94a3b8;flex-shrink:0}
+.pc-lbl{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:4px}
+.pc-amt{font-size:1.5rem;font-weight:900;line-height:1.1}
+.pc-sub{font-size:.72rem;color:#64748b;margin-top:3px}
+/* Break-even warning */
+.be-warn{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:7px;padding:10px 14px;font-size:.84rem;color:#991b1b;margin-top:10px;line-height:1.5}
+/* Print */
+.print-hdr{display:none;font-size:.78rem;color:#64748b;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin-bottom:16px}
+.btn-print{margin-top:0;margin-left:10px;padding:10px 22px;background:#475569;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+.btn-print:hover{background:#334155}
+/* Fee total row */
+.fee-total{font-size:.8rem;color:#475569;margin-top:6px;padding:6px 10px;background:#f8fafc;border-radius:5px;border:1px solid #e2e8f0}
+@media print{
+  body{background:#fff;padding:12px}
+  .back-link,.primary,.btn-print,.save-btn,#fwToast,.two-col>:last-child{display:none!important}
+  .card{box-shadow:none;border:1px solid #e2e8f0;break-inside:avoid}
+  .print-hdr{display:block!important}
+  #results{display:block!important}
+  .two-col{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="print-hdr" id="printHdr"><strong>FinWise Loan Refinance Analysis</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span></div>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>🔄 Loan Refinance Analyzer</h1>
+<p class="subtitle">FinWise · Compare your existing loan against a refinance offer — monthly savings, break-even, and net benefit.</p>
+
+<!-- Input panel -->
+<div class="two-col">
+
+  <div class="card">
+    <h2><span style="color:#dc2626">●</span> Existing Loan</h2>
+    <label>Outstanding Balance ($)</label>
+    <input type="number" id="eBal" placeholder="e.g. 150000" min="0" oninput="save()"/>
+    <label>Annual Interest Rate (%)</label>
+    <input type="number" id="eRate" placeholder="e.g. 9.5" step="0.01" min="0" oninput="save()"/>
+    <label>Current Monthly EMI ($)</label>
+    <input type="number" id="eEmi" placeholder="e.g. 3200" min="0" oninput="save()"/>
+    <label>Remaining Months</label>
+    <input type="number" id="eMos" placeholder="e.g. 60" min="1" oninput="save()"/>
+  </div>
+
+  <div class="card">
+    <h2><span style="color:#16a34a">●</span> Refinance Offer</h2>
+    <label>New Annual Interest Rate (%)</label>
+    <input type="number" id="rRate" placeholder="e.g. 7.0" step="0.01" min="0" oninput="save()"/>
+    <label>New Loan Term (months)</label>
+    <input type="number" id="rTerm" placeholder="e.g. 72" min="1" oninput="save()"/>
+    <label>Origination / Lender Fee ($)</label>
+    <input type="number" id="rFees" placeholder="e.g. 1500" min="0" oninput="save();updateFeeTotal()"/>
+    <label>Appraisal &amp; Other Fees ($)</label>
+    <input type="number" id="rAppr" placeholder="e.g. 500" min="0" oninput="save();updateFeeTotal()"/>
+    <div class="fee-total" id="feeTotal" style="display:none"></div>
+  </div>
+
+</div>
+
+<div style="text-align:center;margin-bottom:16px">
+  <button class="primary" onclick="analyze()">Compare Loans →</button>
+  <button class="btn-print" onclick="printAnalysis()">🖨️ Print / Save PDF</button>
+</div>
+
+<div id="results" style="display:none">
+
+  <div class="card" id="payCompareCard">
+    <h2>Monthly Payment Comparison</h2>
+    <div class="pay-compare" id="payCompare"></div>
+  </div>
+
+  <div class="card">
+    <h2>Side-by-Side Comparison</h2>
+    <div class="loan-cards">
+      <div class="loan-card existing">
+        <div class="lc-title existing">Existing Loan</div>
+        <div id="existingCard"></div>
+      </div>
+      <div class="loan-card refin">
+        <div class="lc-title refin">Refinanced Loan</div>
+        <div id="refinCard"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Key Results</h2>
+    <div class="result-grid" id="resultGrid"></div>
+    <div id="beBar"></div>
+  </div>
+
+  <div class="card">
+    <h2>Verdict</h2>
+    <div id="verdict"></div>
+  </div>
+
+  <div class="card">
+    <h2>Insights</h2>
+    <ul class="insight-list" id="insightList"></ul>
+  </div>
+
+  <div class="card" style="text-align:right">
+    <button class="save-btn" onclick="saveRefinanceToProfile()">💾 Save Loan Details to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term — auto-fills all 40 tools</p>
+  </div>
+
+</div>
+
+<script>
+// ── Persistence ──────────────────────────────────────────────────
+var LRA_KEY = 'fw_lra';
+function save(){
+  try{
+    localStorage.setItem(LRA_KEY, JSON.stringify({
+      eBal:  document.getElementById('eBal').value,
+      eRate: document.getElementById('eRate').value,
+      eEmi:  document.getElementById('eEmi').value,
+      eMos:  document.getElementById('eMos').value,
+      rRate: document.getElementById('rRate').value,
+      rTerm: document.getElementById('rTerm').value,
+      rFees: document.getElementById('rFees').value,
+      rAppr: document.getElementById('rAppr').value,
+    }));
+  }catch(e){}
+}
+
+function updateFeeTotal(){
+  var f = parseFloat(document.getElementById('rFees').value)||0;
+  var a = parseFloat(document.getElementById('rAppr').value)||0;
+  var el = document.getElementById('feeTotal');
+  if(f+a > 0){
+    el.style.display='block';
+    el.textContent = 'Total closing costs: $' + (f+a).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+  } else {
+    el.style.display='none';
+  }
+}
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function safe(n){ return isNaN(n)||!isFinite(n)?0:n; }
+
+function saveProfile(updates){
+  try{
+    var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(p,updates);
+    localStorage.setItem('fw_profile',JSON.stringify(p));
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
+    var t=document.getElementById('fwToast');
+    t.textContent='✅ Saved — all 40 tools updated';
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none';},2500);
+  }catch(e){}
+}
+function saveRefinanceToProfile(){
+  var bal=parseFloat(document.getElementById('eBal').value)||0;
+  if(!bal) return;
+  saveProfile({loan:bal,rate:parseFloat(document.getElementById('eRate').value)||0,tenure:parseInt(document.getElementById('eMos').value)||0});
+}
+
+/* PMT: monthly payment for principal P, monthly rate r, n months */
+function pmt(P, annualRatePct, n){
+  if(annualRatePct <= 0) return P / n;
+  var r = annualRatePct / 100 / 12;
+  return safe(P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1));
+}
+
+function lcRow(label, val){
+  return '<div class="lc-row"><span class="lc-label">'+label+'</span><span class="lc-val">'+val+'</span></div>';
+}
+
+function analyze(){
+  var eBal  = parseFloat(document.getElementById('eBal').value)||0;
+  var eRate = parseFloat(document.getElementById('eRate').value)||0;
+  var eEmi  = parseFloat(document.getElementById('eEmi').value)||0;
+  var eMos  = parseInt(document.getElementById('eMos').value)||0;
+  var rRate = parseFloat(document.getElementById('rRate').value)||0;
+  var rTerm = parseInt(document.getElementById('rTerm').value)||0;
+  var rFees = (parseFloat(document.getElementById('rFees').value)||0) +
+              (parseFloat(document.getElementById('rAppr').value)||0);
+
+  if(!eBal || !eMos || !rRate || !rTerm){ alert('Please fill in all required fields.'); return; }
+
+  /* If no EMI provided, calculate from existing rate */
+  if(!eEmi && eRate) eEmi = pmt(eBal, eRate, eMos);
+
+  var newEmi     = pmt(eBal, rRate, rTerm);
+  var monthlySav = eEmi - newEmi;
+
+  var eTotalPaid = eEmi * eMos;
+  var eTotalInt  = eTotalPaid - eBal;
+  var rTotalPaid = newEmi * rTerm;
+  var rTotalInt  = rTotalPaid - eBal;
+
+  var intSavings    = eTotalInt - rTotalInt;
+  var breakEvenMos  = monthlySav > 0 ? safe(rFees / monthlySav) : Infinity;
+  var netBenefit    = intSavings - rFees;
+
+  /* Side-by-side cards */
+  document.getElementById('existingCard').innerHTML =
+    lcRow('Balance', fmt(eBal))+
+    lcRow('Annual Rate', eRate+'%')+
+    lcRow('Monthly EMI', fmt(eEmi))+
+    lcRow('Remaining Term', eMos+' months')+
+    lcRow('Total Remaining Payments', fmt(eTotalPaid))+
+    lcRow('Total Interest Remaining', '<span style="color:#dc2626">'+fmt(eTotalInt)+'</span>');
+
+  document.getElementById('refinCard').innerHTML =
+    lcRow('New Balance', fmt(eBal))+
+    lcRow('New Annual Rate', rRate+'%')+
+    lcRow('New Monthly EMI', fmt(newEmi))+
+    lcRow('New Term', rTerm+' months')+
+    lcRow('Total Payments', fmt(rTotalPaid))+
+    lcRow('Total Interest', '<span style="color:#16a34a">'+fmt(rTotalInt)+'</span>');
+
+  /* Result grid */
+  var savColor  = monthlySav > 0 ? '#16a34a' : '#dc2626';
+  var benColor  = netBenefit > 0 ? '#16a34a' : '#dc2626';
+  document.getElementById('resultGrid').innerHTML = [
+    {label:'Monthly Savings',   val:fmt(Math.abs(monthlySav)), sub:monthlySav>0?'Saved per month':'Extra per month', col:savColor},
+    {label:'Break-even',        val:breakEvenMos===Infinity?'Never':Math.ceil(breakEvenMos)+' months', sub:'Fees recovered in', col:'#7c3aed'},
+    {label:'Net Benefit',       val:fmt(Math.abs(netBenefit)), sub:netBenefit>=0?'Total savings after fees':'Net cost after fees', col:benColor},
+    {label:'Interest Savings',  val:fmt(Math.abs(intSavings)), sub:intSavings>=0?'Less interest total':'More interest total', col:intSavings>=0?'#16a34a':'#dc2626'},
+    {label:'Closing Fees',      val:fmt(rFees),                sub:'One-time cost',                                              col:'#64748b'},
+    {label:'Rate Reduction',    val:(eRate-rRate).toFixed(2)+'%', sub:eRate>rRate?'Lower rate':'Rate increase',               col:eRate>rRate?'#16a34a':'#dc2626'}
+  ].map(function(r){
+    return '<div class="rbox">'+
+      '<div class="rb-label">'+r.label+'</div>'+
+      '<div class="rb-big" style="color:'+r.col+'">'+r.val+'</div>'+
+      '<div class="rb-sub">'+r.sub+'</div>'+
+      '</div>';
+  }).join('');
+
+  /* Monthly payment comparison card (P3 UX) */
+  var savColor = monthlySav > 0 ? '#16a34a' : '#dc2626';
+  var savSign  = monthlySav > 0 ? '↓ Saving ' : '↑ Costing extra ';
+  document.getElementById('payCompare').innerHTML =
+    '<div class="pc-box old">'+
+      '<div class="pc-lbl">You Pay Now</div>'+
+      '<div class="pc-amt" style="color:#dc2626">'+fmt(Math.round(eEmi))+'</div>'+
+      '<div class="pc-sub">per month</div>'+
+    '</div>'+
+    '<div class="pc-arrow">→</div>'+
+    '<div class="pc-box new-r">'+
+      '<div class="pc-lbl">After Refi</div>'+
+      '<div class="pc-amt" style="color:#16a34a">'+fmt(Math.round(newEmi))+'</div>'+
+      '<div class="pc-sub">per month</div>'+
+    '</div>'+
+    '<div class="pc-arrow">=</div>'+
+    '<div class="pc-box save-r">'+
+      '<div class="pc-lbl">Monthly Change</div>'+
+      '<div class="pc-amt" style="color:'+savColor+'">'+fmt(Math.abs(Math.round(monthlySav)))+'</div>'+
+      '<div class="pc-sub">'+savSign+fmt(Math.abs(Math.round(monthlySav)))+'/mo</div>'+
+    '</div>';
+
+  /* Break-even bar */
+  var beHtml = '';
+  if(breakEvenMos !== Infinity && monthlySav > 0){
+    var beW = Math.min(Math.round(breakEvenMos / rTerm * 100), 100);
+    var beColor = breakEvenMos <= 12 ? '#16a34a' : breakEvenMos <= 24 ? '#f59e0b' : '#dc2626';
+    beHtml = '<div style="font-size:.8rem;color:#64748b;margin-top:4px">Break-even at month '+Math.ceil(breakEvenMos)+' of '+rTerm+'</div>'+
+      '<div class="be-track"><div class="be-fill" style="width:'+beW+'%;background:'+beColor+'"></div></div>'+
+      '<div style="font-size:.72rem;color:#94a3b8">After break-even, every month saves you '+fmt(monthlySav)+'</div>';
+    /* P1 Calculation: warn if break-even is beyond remaining term */
+    if(breakEvenMos > eMos){
+      beHtml += '<div class="be-warn">⚠️ <strong>Break-even warning:</strong> Refinancing does not break even within your current loan term. '+
+        'You need '+Math.ceil(breakEvenMos)+' months to recover closing costs, but only '+eMos+' months remain on your existing loan. '+
+        'This refinance costs you money overall unless you extend your repayment period intentionally.</div>';
+    }
+  } else if(monthlySav <= 0){
+    beHtml = '<div class="be-warn">⚠️ Monthly payment increases with this refinance — no break-even point exists. Review the new rate and term.</div>';
+  }
+  document.getElementById('beBar').innerHTML = beHtml;
+
+  /* Verdict */
+  var vHtml = '';
+  if(monthlySav <= 0){
+    vHtml = '<div class="verdict bad"><div class="v-icon">❌</div><div>'+
+      '<div class="v-title" style="color:#dc2626">Refinance Not Recommended</div>'+
+      '<div class="v-desc">The new loan has a higher monthly payment ('+fmt(newEmi)+' vs '+fmt(eEmi)+'). Unless you specifically need to extend the term for cash-flow reasons, keeping your existing loan is better.</div>'+
+      '</div></div>';
+  } else if(netBenefit > 0 && breakEvenMos <= 24){
+    vHtml = '<div class="verdict good"><div class="v-icon">✅</div><div>'+
+      '<div class="v-title" style="color:#166534">Refinance Recommended</div>'+
+      '<div class="v-desc">You\'ll save '+fmt(monthlySav)+'/month and break even in '+Math.ceil(breakEvenMos)+' months. Total net benefit after fees: '+fmt(netBenefit)+'. Proceed if your credit score supports the new rate.</div>'+
+      '</div></div>';
+  } else if(netBenefit > 0){
+    vHtml = '<div class="verdict neutral"><div class="v-icon">⚠️</div><div>'+
+      '<div class="v-title" style="color:#92400e">Possibly Worth It</div>'+
+      '<div class="v-desc">Monthly savings of '+fmt(monthlySav)+' exist, but break-even takes '+Math.ceil(breakEvenMos)+' months. If you plan to keep the loan for at least that long, net benefit is '+fmt(netBenefit)+'.</div>'+
+      '</div></div>';
+  } else {
+    vHtml = '<div class="verdict bad"><div class="v-icon">❌</div><div>'+
+      '<div class="v-title" style="color:#dc2626">Net Loss After Fees</div>'+
+      '<div class="v-desc">Even with monthly savings, the closing fees ('+fmt(rFees)+') exceed the total interest savings over the loan term. Negotiate lower fees or a better rate before proceeding.</div>'+
+      '</div></div>';
+  }
+  document.getElementById('verdict').innerHTML = vHtml;
+
+  /* Insights */
+  var items = [];
+  if(eRate - rRate >= 1.5) items.push({cls:'good', text:'A rate reduction of '+(eRate-rRate).toFixed(2)+'% is significant. Over the life of the refinanced loan, you\'ll pay '+fmt(Math.abs(intSavings))+' less in interest.'});
+  if(rTerm > eMos) items.push({cls:'warn', text:'The new term ('+rTerm+' months) is longer than your remaining term ('+eMos+' months). Lower monthly payments come at the cost of paying interest for longer — make sure the net benefit still holds.'});
+  if(rFees > monthlySav * 12 * 2) items.push({cls:'warn', text:'Closing fees of '+fmt(rFees)+' are high relative to savings. Try negotiating a fee waiver or lender credit — even reducing fees by 50% would cut break-even from '+Math.ceil(breakEvenMos)+' to '+Math.ceil(breakEvenMos/2)+' months.'});
+  if(monthlySav > 0 && breakEvenMos <= 6) items.push({cls:'good', text:'Break-even in only '+Math.ceil(breakEvenMos)+' months is excellent. Any savings beyond that point flow directly to your bottom line.'});
+  if(!items.length) items.push({cls:'', text:'Review your credit report before applying — each 0.5% rate improvement on '+fmt(eBal)+' saves you roughly '+fmt(eBal*0.005/12)+'/month.'});
+
+  document.getElementById('insightList').innerHTML = items.map(function(i){
+    return '<li class="insight-item'+(i.cls?' '+i.cls:'')+'">'+i.text+'</li>';
+  }).join('');
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function printAnalysis(){
+  document.getElementById('printDate').textContent = new Date().toLocaleDateString();
+  window.print();
+}
+
+(function(){
+  // 1. Restore from LRA_KEY (user's own previous inputs — highest priority)
+  var restoredFromSave = false;
+  try{
+    var saved = JSON.parse(localStorage.getItem(LRA_KEY)||'null');
+    if(saved){
+      if(saved.eBal)  document.getElementById('eBal').value  = saved.eBal;
+      if(saved.eRate) document.getElementById('eRate').value = saved.eRate;
+      if(saved.eEmi)  document.getElementById('eEmi').value  = saved.eEmi;
+      if(saved.eMos)  document.getElementById('eMos').value  = saved.eMos;
+      if(saved.rRate) document.getElementById('rRate').value = saved.rRate;
+      if(saved.rTerm) document.getElementById('rTerm').value = saved.rTerm;
+      if(saved.rFees) document.getElementById('rFees').value = saved.rFees;
+      if(saved.rAppr) document.getElementById('rAppr').value = saved.rAppr;
+      updateFeeTotal();
+      restoredFromSave = true;
+    }
+  }catch(e){}
+
+  // 2. Fall back to fw_profile for existing loan fields only
+  if(!restoredFromSave){
+    try{
+      var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+      var p=JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+      if(!p) p=JSON.parse(localStorage.getItem('fw_profile')||'null');
+      if(p){
+        if(p.loan)   document.getElementById('eBal').value  = p.loan;
+        if(p.rate)   document.getElementById('eRate').value = p.rate;
+        if(p.tenure) document.getElementById('eMos').value  = p.tenure;
+      }
+    }catch(e){}
+  }
+
+  // 3. Check fw_lro (Loan Repayment Optimizer) for importable loan data
+  try{
+    var lro = JSON.parse(localStorage.getItem('fw_lro')||'null');
+    if(lro && lro.loans && lro.loans.length > 0){
+      // Find the largest loan by balance
+      var biggest = lro.loans.reduce(function(a,b){ return (parseFloat(b.balance)||0) > (parseFloat(a.balance)||0) ? b : a; });
+      if(parseFloat(biggest.balance) > 0){
+        var banner = document.createElement('div');
+        banner.style.cssText = 'background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
+        banner.innerHTML = '📊 <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
+          ' found in Repayment Optimizer</strong> — largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
+          ' $' + Number(biggest.balance).toLocaleString() + ' @ ' + biggest.rate + '% ' +
+          '&mdash; <button onclick="importFromOptimizer(this)" style="background:#2563eb;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Use as Existing Loan</button>' +
+          ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">✕</button>';
+        var firstCard = document.querySelector('.card');
+        if(firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
+      }
+    }
+  }catch(e){}
+})();
+
+function importFromOptimizer(btn){
+  try{
+    var lro = JSON.parse(localStorage.getItem('fw_lro')||'null');
+    if(!lro || !lro.loans || !lro.loans.length) return;
+    var biggest = lro.loans.reduce(function(a,b){ return (parseFloat(b.balance)||0) > (parseFloat(a.balance)||0) ? b : a; });
+    if(biggest.balance)  document.getElementById('eBal').value  = biggest.balance;
+    if(biggest.rate)     document.getElementById('eRate').value = biggest.rate;
+    if(biggest.minPay)   document.getElementById('eEmi').value  = biggest.minPay;
+    // Estimate remaining months from balance, rate, minPay if possible
+    var bal = parseFloat(biggest.balance)||0, r = parseFloat(biggest.rate)||0, pay = parseFloat(biggest.minPay)||0;
+    if(bal > 0 && r > 0 && pay > 0){
+      var mr = r/100/12;
+      var n = pay > bal*mr ? Math.ceil(-Math.log(1 - (bal*mr/pay)) / Math.log(1+mr)) : 0;
+      if(n > 0 && n < 600) document.getElementById('eMos').value = n;
+    }
+    save();
+    if(btn && btn.parentNode) btn.parentNode.remove();
+  }catch(e){}
+}
+</script>
+</body>
+</html>

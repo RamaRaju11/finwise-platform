@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cash Flow Engine Tester</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 14px; color: #444; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 10px; }
+    input[type=number], input[type=text] {
+      width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem;
+    }
+    input:focus { outline: none; border-color: #2563eb; }
+
+    button.primary {
+      margin-top: 16px; padding: 10px 24px; background: #2563eb; color: #fff;
+      border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer;
+    }
+    button.primary:hover { background: #1d4ed8; }
+    button.secondary {
+      margin-top: 16px; padding: 10px 24px; background: #16a34a; color: #fff;
+      border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; margin-left: 8px;
+    }
+    button.secondary:hover { background: #15803d; }
+    button.danger {
+      padding: 6px 12px; background: #dc2626; color: #fff;
+      border: none; border-radius: 5px; font-size: 0.8rem; cursor: pointer;
+    }
+
+    .result-box { margin-top: 16px; padding: 14px; border-radius: 6px; font-size: 0.95rem; }
+    .result-box.surplus { background: #dcfce7; border: 1px solid #86efac; }
+    .result-box.deficit { background: #fee2e2; border: 1px solid #fca5a5; }
+    .result-box .label { font-weight: bold; font-size: 1rem; }
+    .result-box .row { display: flex; justify-content: space-between; margin-top: 6px; }
+    .result-box .key { color: #555; }
+    .result-box .val { font-weight: bold; }
+
+    .period-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 10px; }
+    .period-row input { flex: 1; }
+    .period-row .month-input { max-width: 90px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.88rem; }
+    th { background: #f1f5f9; text-align: left; padding: 8px; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 7px 8px; border-bottom: 1px solid #f1f5f9; }
+    td.surplus { color: #15803d; font-weight: bold; }
+    td.deficit { color: #dc2626; font-weight: bold; }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .summary-item { background: #f8fafc; border-radius: 6px; padding: 10px 14px; }
+    .summary-item .s-label { font-size: 0.78rem; color: #64748b; }
+    .summary-item .s-val { font-size: 1.1rem; font-weight: bold; margin-top: 2px; }
+
+    /* Unit test panel */
+    .test-result { font-family: monospace; font-size: 0.88rem; padding: 4px 0; }
+    .test-result.pass { color: #15803d; }
+    .test-result.fail { color: #dc2626; font-weight: bold; }
+    .test-summary { margin-top: 12px; font-weight: bold; font-size: 0.95rem; padding: 10px; border-radius: 6px; }
+    .test-summary.all-pass { background: #dcfce7; color: #15803d; }
+    .test-summary.has-fail { background: #fee2e2; color: #dc2626; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+
+    /* Plain-English Explain Blocks */
+    .explain-block{margin-top:7px}
+    .explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+    .explain-toggle:hover{text-decoration:underline}
+    .explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+    .explain-body.open{display:block}
+    .explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+    .explain-body ul{padding-left:18px;margin-bottom:6px}
+    .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+    .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+  </style>
+</head>
+<body>
+
+<h1>Cash Flow Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Interactive Tester</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('single')">Single Period</button>
+  <button class="tab" onclick="showTab('multi')">Multi-Period</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Single Period Panel ─────────────────────────────────────────── -->
+<div id="panel-single" class="panel active">
+  <div class="card">
+    <h2>Single Period Cash Flow</h2>
+    <label>Revenue ($)</label>
+    <input type="number" id="s-revenue" placeholder="e.g. 50000" min="0" />
+    <label>Fixed Expenses ($) <span style="color:#999;font-size:0.78rem">rent, salaries…</span></label>
+    <input type="number" id="s-fixed" placeholder="e.g. 20000" min="0" />
+    <label>Variable Expenses ($) <span style="color:#999;font-size:0.78rem">supplies, commissions…</span></label>
+    <input type="number" id="s-variable" placeholder="e.g. 10000" min="0" />
+    <button class="primary" onclick="calcSingle()">Calculate</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="single-result"></div>
+</div>
+
+<!-- ─── Multi-Period Panel ──────────────────────────────────────────── -->
+<div id="panel-multi" class="panel">
+  <div class="card">
+    <h2>Multi-Period Cash Flow</h2>
+    <div id="period-rows"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="primary" onclick="addPeriodRow()">+ Add Month</button>
+      <button class="secondary" onclick="calcMulti()">Calculate All</button>
+    </div>
+  </div>
+  <div id="multi-result"></div>
+</div>
+
+<!-- ─── Unit Tests Panel ────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">Runs all validation checks against the engine logic.</p>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Plain-English Explain Helpers ───────────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+// ─── Cash Flow Engine (Module 1) ──────────────────────────────────────────
+function calculatePeriodCashFlow(revenue, fixedExpenses, variableExpenses) {
+  if (typeof revenue !== "number" || typeof fixedExpenses !== "number" || typeof variableExpenses !== "number")
+    throw new Error("All inputs must be numbers.");
+  if (revenue < 0 || fixedExpenses < 0 || variableExpenses < 0)
+    throw new Error("Inputs cannot be negative.");
+  const totalExpenses = fixedExpenses + variableExpenses;
+  const netCashFlow = revenue - totalExpenses;
+  const status = netCashFlow >= 0 ? "surplus" : "deficit";
+  return { netCashFlow, totalExpenses, status };
+}
+
+function calculateMultiPeriodCashFlow(periods) {
+  if (!Array.isArray(periods) || periods.length === 0)
+    throw new Error("periods must be a non-empty array.");
+  const results = periods.map((p, i) => {
+    const label = p.month || `Period ${i + 1}`;
+    const { netCashFlow, totalExpenses, status } = calculatePeriodCashFlow(p.revenue, p.fixedExpenses, p.variableExpenses);
+    return { month: label, revenue: p.revenue, fixedExpenses: p.fixedExpenses, variableExpenses: p.variableExpenses, totalExpenses, netCashFlow, status };
+  });
+  const totalRevenue = results.reduce((s, r) => s + r.revenue, 0);
+  const totalExpenses = results.reduce((s, r) => s + r.totalExpenses, 0);
+  const totalNetCashFlow = results.reduce((s, r) => s + r.netCashFlow, 0);
+  const averageMonthlyNetCashFlow = totalNetCashFlow / results.length;
+  const surplusMonths = results.filter(r => r.status === "surplus").length;
+  const deficitMonths = results.filter(r => r.status === "deficit").length;
+  return { periods: results, totalRevenue, totalExpenses, totalNetCashFlow, averageMonthlyNetCashFlow, surplusMonths, deficitMonths, status: totalNetCashFlow >= 0 ? "surplus" : "deficit" };
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────
+const fmt = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  event.target.classList.add("active");
+}
+
+// ─── Single Period ────────────────────────────────────────────────────────
+function calcSingle() {
+  const revenue = parseFloat(document.getElementById("s-revenue").value);
+  const fixed   = parseFloat(document.getElementById("s-fixed").value);
+  const variable = parseFloat(document.getElementById("s-variable").value);
+  const out = document.getElementById("single-result");
+  try {
+    const r = calculatePeriodCashFlow(revenue, fixed, variable);
+    const singleDeficitExplain = r.status === 'deficit'
+      ? explainHtml(
+          ['Your business is spending more than it earns this month','Cannot pay bills, salaries, or loan EMIs from current revenue','Continued negative cash flow drains reserves and forces borrowing'],
+          'You earn ' + fmt(revenue) + ' but spend ' + fmt(r.totalExpenses) + ' → shortfall of ' + fmt(Math.abs(r.netCashFlow)) + ' per month'
+        )
+      : '';
+    out.innerHTML = `
+      <div class="result-box ${r.status}">
+        <div class="label">${r.status === "surplus" ? "✅ Surplus" : "⚠️ Deficit"}</div>
+        <div class="row"><span class="key">Revenue</span><span class="val">${fmt(revenue)}</span></div>
+        <div class="row"><span class="key">Fixed Expenses</span><span class="val">${fmt(fixed)}</span></div>
+        <div class="row"><span class="key">Variable Expenses</span><span class="val">${fmt(variable)}</span></div>
+        <div class="row"><span class="key">Total Expenses</span><span class="val">${fmt(r.totalExpenses)}</span></div>
+        <hr style="margin:10px 0;border:none;border-top:1px solid #ccc"/>
+        <div class="row"><span class="key">Net Cash Flow</span><span class="val" style="font-size:1.1rem">${fmt(r.netCashFlow)}</span></div>
+        ${singleDeficitExplain}
+      </div>`;
+    saveCFE();
+  } catch(e) {
+    out.innerHTML = `<div class="result-box deficit">❌ Error: ${e.message}</div>`;
+  }
+}
+
+// ─── Multi-Period ─────────────────────────────────────────────────────────
+const defaultMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let periodCount = 0;
+
+function addPeriodRow(month="", revenue="", fixed="", variable="") {
+  const container = document.getElementById("period-rows");
+  const idx = periodCount++;
+  const div = document.createElement("div");
+  div.className = "period-row";
+  div.id = `pr-${idx}`;
+  div.innerHTML = `
+    <input type="text" class="month-input" placeholder="Month" value="${month || defaultMonths[idx % 12] || ''}" />
+    <input type="number" placeholder="Revenue" min="0" value="${revenue}" />
+    <input type="number" placeholder="Fixed Exp." min="0" value="${fixed}" />
+    <input type="number" placeholder="Variable Exp." min="0" value="${variable}" />
+    <button class="danger" onclick="document.getElementById('pr-${idx}').remove()">✕</button>`;
+  container.appendChild(div);
+}
+
+function calcMulti() {
+  const rows = document.querySelectorAll(".period-row");
+  const periods = [];
+  for (const row of rows) {
+    const inputs = row.querySelectorAll("input");
+    periods.push({
+      month: inputs[0].value || "?",
+      revenue: parseFloat(inputs[1].value) || 0,
+      fixedExpenses: parseFloat(inputs[2].value) || 0,
+      variableExpenses: parseFloat(inputs[3].value) || 0,
+    });
+  }
+  const out = document.getElementById("multi-result");
+  try {
+    const r = calculateMultiPeriodCashFlow(periods);
+    const rows_html = r.periods.map(p => `
+      <tr>
+        <td>${p.month}</td>
+        <td>${fmt(p.revenue)}</td>
+        <td>${fmt(p.fixedExpenses)}</td>
+        <td>${fmt(p.variableExpenses)}</td>
+        <td>${fmt(p.totalExpenses)}</td>
+        <td class="${p.status}">${fmt(p.netCashFlow)}</td>
+        <td class="${p.status}">${p.status === "surplus" ? "✅ Surplus" : "⚠️ Deficit"}</td>
+      </tr>`).join("");
+    const multiNetExplain = r.status === 'deficit'
+      ? explainHtml(
+          ['Your business is spending more than it earns this month','Cannot pay bills, salaries, or loan EMIs from current revenue','Continued negative cash flow drains reserves and forces borrowing'],
+          'You earn ' + fmt(r.totalRevenue) + ' but spend ' + fmt(r.totalExpenses) + ' → shortfall of ' + fmt(Math.abs(r.totalNetCashFlow)) + ' per month'
+        )
+      : '';
+    const multiTrendExplain = r.deficitMonths >= 2
+      ? explainHtml(
+          ['Multiple negative months signal a structural problem, not a one-off','Lenders look at 6-month cash flow history — consistent deficits will hurt loan applications','Time to review which expense categories are driving the overspend'],
+          r.deficitMonths + ' out of ' + r.periods.length + ' months are in deficit. Avg monthly cash flow: ' + fmt(r.averageMonthlyNetCashFlow) + '. Total shortfall: ' + fmt(Math.abs(r.totalNetCashFlow))
+        )
+      : '';
+    out.innerHTML = `
+      <div class="card">
+        <h2>Period Breakdown</h2>
+        <table>
+          <thead><tr><th>Month</th><th>Revenue</th><th>Fixed</th><th>Variable</th><th>Total Exp.</th><th>Net Cash Flow</th><th>Status</th></tr></thead>
+          <tbody>${rows_html}</tbody>
+        </table>
+        <div class="summary-grid">
+          <div class="summary-item"><div class="s-label">Total Revenue</div><div class="s-val">${fmt(r.totalRevenue)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Expenses</div><div class="s-val">${fmt(r.totalExpenses)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Net Cash Flow</div><div class="s-val" style="color:${r.status==='surplus'?'#15803d':'#dc2626'}">${fmt(r.totalNetCashFlow)}</div></div>
+          <div class="summary-item"><div class="s-label">Avg Monthly Net Cash Flow</div><div class="s-val">${fmt(r.averageMonthlyNetCashFlow)}</div></div>
+          <div class="summary-item"><div class="s-label">Surplus Months</div><div class="s-val" style="color:#15803d">${r.surplusMonths}</div></div>
+          <div class="summary-item"><div class="s-label">Deficit Months</div><div class="s-val" style="color:#dc2626">${r.deficitMonths}</div></div>
+        </div>
+        ${multiNetExplain}
+        ${multiTrendExplain}
+      </div>`;
+  } catch(e) {
+    out.innerHTML = `<div class="result-box deficit">❌ Error: ${e.message}</div>`;
+  }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+
+  function assert(label, condition) {
+    results.push({ label, pass: !!condition });
+  }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass: false, note: "expected error not thrown" }); }
+    catch(e) { results.push({ label, pass: true }); }
+  }
+
+  // Single period
+  const s1 = calculatePeriodCashFlow(50000, 20000, 10000);
+  assert("Surplus: netCashFlow = 20000", s1.netCashFlow === 20000);
+  assert("Surplus: totalExpenses = 30000", s1.totalExpenses === 30000);
+  assert("Surplus: status = 'surplus'", s1.status === "surplus");
+
+  const s2 = calculatePeriodCashFlow(25000, 20000, 10000);
+  assert("Deficit: netCashFlow = -5000", s2.netCashFlow === -5000);
+  assert("Deficit: status = 'deficit'", s2.status === "deficit");
+
+  const s3 = calculatePeriodCashFlow(30000, 20000, 10000);
+  assert("Break-even: netCashFlow = 0, status = surplus", s3.netCashFlow === 0 && s3.status === "surplus");
+
+  assertThrows("Throws on negative revenue", () => calculatePeriodCashFlow(-1000, 500, 200));
+  assertThrows("Throws on non-number input", () => calculatePeriodCashFlow("abc", 500, 200));
+
+  // Multi-period
+  const periods = [
+    { month: "Jan", revenue: 50000, fixedExpenses: 20000, variableExpenses: 10000 },
+    { month: "Feb", revenue: 60000, fixedExpenses: 20000, variableExpenses: 15000 },
+    { month: "Mar", revenue: 30000, fixedExpenses: 20000, variableExpenses: 15000 },
+  ];
+  const m = calculateMultiPeriodCashFlow(periods);
+  assert("Multi: totalRevenue = 140000", m.totalRevenue === 140000);
+  assert("Multi: totalExpenses = 100000", m.totalExpenses === 100000);
+  assert("Multi: totalNetCashFlow = 40000", m.totalNetCashFlow === 40000);
+  assert("Multi: avgMonthly ≈ 13333", Math.round(m.averageMonthlyNetCashFlow) === 13333);
+  assert("Multi: surplusMonths = 2", m.surplusMonths === 2);
+  assert("Multi: deficitMonths = 1", m.deficitMonths === 1);
+  assert("Multi: overall status = surplus", m.status === "surplus");
+  assert("Multi: period count = 3", m.periods.length === 3);
+  assert("Multi: Mar is deficit", m.periods[2].status === "deficit");
+
+  assertThrows("Throws on empty array", () => calculateMultiPeriodCashFlow([]));
+  assertThrows("Throws on null", () => calculateMultiPeriodCashFlow(null));
+
+  // Render
+  const passed = results.filter(r => r.pass).length;
+  const failed = results.filter(r => !r.pass).length;
+  const html = results.map(r =>
+    `<div class="test-result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.label}${r.note ? ' — ' + r.note : ''}</div>`
+  ).join("");
+  const summaryClass = failed === 0 ? "all-pass" : "has-fail";
+  const summaryText = failed === 0
+    ? `✅ All ${passed} tests passed`
+    : `❌ ${failed} failed / ${passed} passed`;
+
+  document.getElementById("test-output").innerHTML =
+    html + `<div class="test-summary ${summaryClass}">${summaryText}</div>`;
+}
+
+// ─── Init: seed 3 default rows ─────────────────────────────────────────────
+addPeriodRow("Jan", 50000, 20000, 10000);
+addPeriodRow("Feb", 60000, 20000, 15000);
+addPeriodRow("Mar", 30000, 20000, 15000);
+
+// ─── Persistence ─────────────────────────────────────────────────────────────
+var CFE_KEY = 'fw_cashflow_engine';
+function saveCFE(){
+  try{
+    localStorage.setItem(CFE_KEY, JSON.stringify({
+      's-revenue': document.getElementById('s-revenue').value,
+      's-fixed':   document.getElementById('s-fixed').value,
+      's-variable':document.getElementById('s-variable').value,
+    }));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(CFE_KEY)||'null');
+    if(s){
+      ['s-revenue','s-fixed','s-variable'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el && s[id]!==undefined && s[id]!=='') el.value = s[id];
+      });
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.rev) document.getElementById('s-revenue').value = Math.round((parseFloat(p.rev)||0)/12);
+    if(p.exp) document.getElementById('s-fixed').value   = Math.round((parseFloat(p.exp)||0)/12);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

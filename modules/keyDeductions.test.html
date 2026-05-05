@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Key Deductions Calculator — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
+.page{max-width:940px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.4rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.subtitle{font-size:.88rem;color:#64748b;margin-bottom:20px}
+.tab-bar{display:flex;background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tab-btn{flex:1;padding:14px 8px;border:none;background:none;font-size:.88rem;font-weight:700;color:#64748b;cursor:pointer;font-family:Arial,sans-serif;border-right:1px solid #e2e8f0;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:#2563eb;color:#fff}
+.tab-btn:not(.active):hover{background:#f1f5f9}
+.card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:16px}
+.panel{display:none}.panel.active{display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 16px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0 14px}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.g2,.g3,.g4{grid-template-columns:1fr}}
+label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+label:first-child{margin-top:0}
+input[type=text],input[type=number],input[type=date],select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif;background:#fff;transition:border-color .15s}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.method-toggle{display:inline-flex;border:1.5px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:16px}
+.mt-btn{padding:9px 18px;border:none;background:#f8fafc;font-size:.82rem;font-weight:700;color:#64748b;cursor:pointer;font-family:Arial,sans-serif;transition:background .15s,color .15s}
+.mt-btn.active{background:#7c3aed;color:#fff}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr 1fr}}
+.stat-box{background:#f8fafc;border-radius:8px;padding:12px;text-align:center;border:1px solid #e2e8f0}
+.stat-box.hl{background:#eff6ff;border-color:#bfdbfe}.stat-box.hl .stat-val{color:#2563eb}
+.stat-box.hl2{background:#f0fdf4;border-color:#bbf7d0}.stat-box.hl2 .stat-val{color:#16a34a}
+.stat-box.hl3{background:#fdf4ff;border-color:#e9d5ff}.stat-box.hl3 .stat-val{color:#7c3aed}
+.stat-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
+.stat-val{font-size:1rem;font-weight:900;color:#1e293b}
+.btn-add{padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.btn-add:hover{background:#1d4ed8}
+.btn-sm{padding:5px 12px;border:none;border-radius:6px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.btn-danger{background:#fee2e2;color:#dc2626}.btn-danger:hover{background:#fecaca}
+.btn-neutral{background:#f1f5f9;color:#475569}.btn-neutral:hover{background:#e2e8f0}
+.data-table{width:100%;border-collapse:collapse;margin-top:4px}
+.data-table th{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding:8px 10px;border-bottom:2px solid #f1f5f9;text-align:left}
+.data-table th.r,.data-table td.r{text-align:right}
+.data-table td{padding:9px 10px;border-bottom:1px solid #f8fafc;font-size:.83rem;vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.breakdown{width:100%;border-collapse:collapse}
+.breakdown td{padding:8px 6px;font-size:.84rem;border-bottom:1px solid #f1f5f9}
+.breakdown tr:last-child td{border-bottom:none}
+.breakdown td:last-child{text-align:right;font-weight:700}
+.breakdown .lbl{color:#64748b}
+.total-row td{font-weight:900;font-size:.9rem;background:#f8fafc;padding:11px 8px;border-radius:6px}
+.sec-row td{font-size:.7rem;font-weight:800;text-transform:uppercase;color:#94a3b8;background:#f8fafc;padding:7px 6px;border-bottom:2px solid #e2e8f0;letter-spacing:.07em}
+.empty{text-align:center;padding:28px;color:#94a3b8;font-size:.85rem}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;font-size:.80rem;color:#1e40af;line-height:1.6;margin-top:12px}
+.warn-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:.80rem;color:#92400e;line-height:1.6;margin-top:12px}
+.rate-badge{display:inline-block;background:#eff6ff;color:#2563eb;padding:3px 9px;border-radius:6px;font-size:.78rem;font-weight:800;margin-left:6px}
+.cat-biz{display:inline-block;background:#eff6ff;color:#2563eb;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:999px}
+.cat-med{display:inline-block;background:#fdf4ff;color:#7c3aed;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:999px}
+.cat-cha{display:inline-block;background:#f0fdf4;color:#16a34a;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:999px}
+.asset-tag{display:inline-block;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:999px}
+.at-eq{background:#eff6ff;color:#2563eb}.at-veh{background:#fefce8;color:#ca8a04}
+.at-soft{background:#f0fdf4;color:#16a34a}.at-impr{background:#fdf4ff;color:#7c3aed}
+.cmp-box{padding:14px;border-radius:8px;border-width:1.5px;border-style:solid}
+.save-card{background:#f8fafc;border:1px dashed #cbd5e1}
+.save-btn{padding:10px 24px;background:#10b981;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.save-btn:hover{background:#059669}
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-err{background:#dc2626}
+.disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.6;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #e2e8f0}
+
+/* ── SYNC BANNER ── */
+.sync-band{background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:9px 16px;margin-bottom:16px;font-size:.8rem;color:#166534;align-items:center;gap:10px;flex-wrap:wrap}
+.sync-pill{background:#dcfce7;border-radius:999px;padding:2px 10px;font-weight:800;font-size:.72rem;color:#166534;border:1px solid #86efac;white-space:nowrap}
+
+/* ── VEHICLE COMPARISON ── */
+.veh-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:580px){.veh-cmp{grid-template-columns:1fr}}
+.veh-box{border-radius:10px;padding:18px;border:2px solid #e2e8f0;text-align:center;background:#f8fafc}
+.veh-box.winner{border-color:#86efac;background:#f0fdf4}
+.veh-lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:6px}
+.veh-amt{font-size:1.25rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.veh-box.winner .veh-amt{color:#16a34a}
+.veh-sub{font-size:.74rem;color:#64748b;margin-bottom:8px}
+.veh-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800}
+.vb-win{background:#22c55e;color:#fff}.vb-lose{background:#e2e8f0;color:#94a3b8}
+
+/* ── PRINT / EXPORT ── */
+.print-hdr{display:none}
+.btn-export{padding:9px 22px;background:#7c3aed;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif;margin-left:12px}
+.btn-export:hover{background:#6d28d9}
+@media print{
+  .print-hdr{display:block;padding:14px 0 10px;border-bottom:2px solid #1e293b;margin-bottom:18px}
+  .print-hdr-name{font-size:1.1rem;font-weight:800;color:#1e293b}
+  .print-hdr-meta{font-size:.78rem;color:#64748b;margin-top:3px}
+  .no-print{display:none!important}
+  .tab-bar,.save-card,.sync-band{display:none!important}
+  .panel{display:block!important}
+  .page{padding:8px}
+  body{background:#fff}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<div class="page">
+<div class="print-hdr" id="printHdr">
+  <div class="print-hdr-name" id="printBizName">Key Deductions Report</div>
+  <div class="print-hdr-meta" id="printMeta"></div>
+</div>
+<h1>💼 Key Deductions Calculator</h1>
+<p class="subtitle">Home office, mileage log, and Section 179 equipment deductions — maximize your Schedule C write-offs.</p>
+<div id="syncBand" class="sync-band no-print" style="display:none">
+  <span>✓ Deductions synced to Tax Estimator &amp; Tax Command Center:</span>
+  <span id="syncPills" style="display:flex;gap:6px;flex-wrap:wrap"></span>
+  <span style="margin-left:auto;font-size:.7rem;color:#94a3b8">Updates automatically as you enter data</span>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('home')" id="tbtn-home">🏠 Home Office</button>
+  <button class="tab-btn" onclick="switchTab('mileage')" id="tbtn-mileage">🚗 Mileage Log</button>
+  <button class="tab-btn" onclick="switchTab('s179')" id="tbtn-s179">🏭 Section 179</button>
+</div>
+
+<!-- ══════════════ HOME OFFICE ══════════════ -->
+<div id="panel-home" class="panel active">
+  <div class="card">
+    <div class="card-title">Home Office Setup</div>
+    <div style="margin-bottom:16px">
+      <span style="font-size:.82rem;font-weight:700;color:#475569;margin-right:10px">Method:</span>
+      <div class="method-toggle">
+        <button class="mt-btn active" id="hm-simp" onclick="setHOMethod('simplified')">Simplified ($5/sq ft)</button>
+        <button class="mt-btn" id="hm-reg" onclick="setHOMethod('regular')">Regular (Actual Expenses)</button>
+      </div>
+    </div>
+    <div class="g3">
+      <div>
+        <label>Home Office Size (sq ft)</label>
+        <input type="number" id="ho-off" placeholder="e.g. 150" min="1" oninput="calcHO()"/>
+      </div>
+      <div>
+        <label>Total Home Size (sq ft)</label>
+        <input type="number" id="ho-tot" placeholder="e.g. 1800" min="1" oninput="calcHO()"/>
+      </div>
+      <div>
+        <label>Annual Business Net Income ($)</label>
+        <input type="number" id="ho-inc" placeholder="e.g. 80000" min="0" oninput="calcHO()"/>
+      </div>
+    </div>
+    <div id="ho-reg-inputs" style="display:none;margin-top:18px">
+      <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:10px">Annual Home Expenses</div>
+      <div class="g3">
+        <div><label>Rent / Mortgage</label><input type="number" id="ho-rent" placeholder="0" min="0" oninput="calcHO()"/></div>
+        <div><label>Property Taxes</label><input type="number" id="ho-ptax" placeholder="0" min="0" oninput="calcHO()"/></div>
+        <div><label>Home Insurance</label><input type="number" id="ho-ins" placeholder="0" min="0" oninput="calcHO()"/></div>
+        <div><label>Utilities (electric, gas, water)</label><input type="number" id="ho-util" placeholder="0" min="0" oninput="calcHO()"/></div>
+        <div><label>Repairs &amp; Maintenance</label><input type="number" id="ho-rep" placeholder="0" min="0" oninput="calcHO()"/></div>
+        <div><label>Other Home Expenses</label><input type="number" id="ho-oth" placeholder="0" min="0" oninput="calcHO()"/></div>
+      </div>
+    </div>
+  </div>
+  <div id="ho-results" style="display:none">
+    <div class="card">
+      <div class="card-title">Deduction Summary</div>
+      <div class="stat-row" id="ho-stats"></div>
+      <table class="breakdown" id="ho-bk"></table>
+    </div>
+    <div class="card" id="ho-cmp"></div>
+  </div>
+  <div class="info-box">ℹ️ <strong>Exclusive &amp; Regular Use required.</strong> The space must be used only for business, every working day. Simplified method: no depreciation recapture. Regular method (Form 8829): larger deduction but requires tracking actual expenses.</div>
+</div>
+
+<!-- ══════════════ MILEAGE ══════════════ -->
+<div id="panel-mileage" class="panel">
+  <div class="card no-print">
+    <div class="card-title">Vehicle Method Comparison</div>
+    <p style="font-size:.8rem;color:#64748b;margin-bottom:14px">Compare <strong>Standard Mileage Rate</strong> (IRS cents/mile × business miles) vs. <strong>Actual Cost Method</strong> (real vehicle expenses × business-use %). Take whichever is larger — but you must pick one method per vehicle and stick with it.</p>
+    <div class="g3">
+      <div><label>Total Miles Driven (all purposes)</label><input type="number" id="vc-total" placeholder="e.g. 15000" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Business Miles</label><input type="number" id="vc-biz" placeholder="e.g. 6000" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Tax Year</label>
+        <select id="vc-yr" onchange="calcVehicle()">
+          <option value="2026">2026</option><option value="2025">2025</option>
+          <option value="2024">2024</option><option value="2023">2023</option>
+        </select>
+      </div>
+    </div>
+    <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin:14px 0 8px">Annual Vehicle Expenses — Actual Cost Method</div>
+    <div class="g3">
+      <div><label>Gas / Fuel ($)</label><input type="number" id="vc-gas" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Insurance ($)</label><input type="number" id="vc-ins" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Repairs &amp; Maintenance ($)</label><input type="number" id="vc-rep" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Registration / Fees ($)</label><input type="number" id="vc-reg" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Lease Payments ($)</label><input type="number" id="vc-lease" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+      <div><label>Depreciation / Loan Interest ($)</label><input type="number" id="vc-dep" placeholder="0" min="0" oninput="calcVehicle()"/></div>
+    </div>
+    <div id="vc-result" style="margin-top:16px"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Mileage Log Setup</div>
+    <div class="g3">
+      <div>
+        <label>Tax Year</label>
+        <select id="ml-yr" onchange="renderMileage()">
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024" selected>2024</option>
+          <option value="2023">2023</option>
+        </select>
+      </div>
+      <div><label>Vehicle</label><input type="text" id="ml-veh" placeholder="e.g. 2022 Toyota Camry" oninput="saveMLSetup()"/></div>
+      <div><label>Odometer (Jan 1)</label><input type="number" id="ml-odo" placeholder="e.g. 24500" min="0" oninput="saveMLSetup()"/></div>
+    </div>
+    <div id="ml-rates" style="margin-top:14px"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Add Trip</div>
+    <div class="g4">
+      <div><label>Date</label><input type="date" id="ml-date"/></div>
+      <div><label>Miles</label><input type="number" id="ml-mi" placeholder="e.g. 45" min="0.1" step="0.1" onkeydown="if(event.key==='Enter')addTrip()"/></div>
+      <div><label>Purpose / Destination</label><input type="text" id="ml-pur" placeholder="e.g. Client meeting" onkeydown="if(event.key==='Enter')addTrip()"/></div>
+      <div><label>Category</label>
+        <select id="ml-cat">
+          <option value="business">Business</option>
+          <option value="medical">Medical / Military</option>
+          <option value="charitable">Charitable</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:14px"><button class="btn-add" onclick="addTrip()">+ Add Trip</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Year Summary</div>
+    <div class="stat-row" id="ml-stats"></div>
+    <div id="ml-table"></div>
+  </div>
+</div>
+
+<!-- ══════════════ SECTION 179 ══════════════ -->
+<div id="panel-s179" class="panel">
+  <div class="card">
+    <div class="card-title">Section 179 Setup</div>
+    <div class="g3">
+      <div>
+        <label>Tax Year</label>
+        <select id="s179-yr" onchange="updateS179Limits();renderS179()">
+          <option value="2026">2026 (est.)</option>
+          <option value="2025">2025</option>
+          <option value="2024" selected>2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div><label>Business Taxable Income ($)</label><input type="number" id="s179-inc" placeholder="e.g. 120000" min="0" oninput="renderS179()"/></div>
+      <div id="s179-limits" style="display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:4px"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Add Asset / Equipment</div>
+    <div class="g4">
+      <div><label>Description</label><input type="text" id="s179-desc" placeholder="e.g. MacBook Pro" onkeydown="if(event.key==='Enter')addAsset()"/></div>
+      <div><label>Total Cost ($)</label><input type="number" id="s179-cost" placeholder="e.g. 3500" min="0" oninput="previewAsset()"/></div>
+      <div><label>Business Use %</label><input type="number" id="s179-biz" placeholder="100" min="1" max="100" value="100" oninput="previewAsset()"/></div>
+      <div><label>Asset Type</label>
+        <select id="s179-type" onchange="previewAsset()">
+          <option value="equipment">Equipment / Machinery</option>
+          <option value="computer">Computer / Technology</option>
+          <option value="software">Software</option>
+          <option value="furniture">Office Furniture</option>
+          <option value="improvement">Qualified Improvement</option>
+          <option value="vehicle-light">Vehicle ≤6,000 lbs (passenger)</option>
+          <option value="vehicle-suv">Heavy SUV (6,001–14,000 lbs)</option>
+          <option value="vehicle-work">Work Truck / Cargo Van (&gt;6,000 lbs)</option>
+        </select>
+      </div>
+    </div>
+    <div id="s179-preview" style="margin-top:12px"></div>
+    <div style="margin-top:12px"><button class="btn-add" onclick="addAsset()">+ Add Asset</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Deduction Summary — <span id="s179-yr-lbl"></span></div>
+    <div class="stat-row" id="s179-stats"></div>
+    <div id="s179-tbl"></div>
+    <div id="s179-bk" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<!-- SAVE / EXPORT -->
+<div class="card save-card">
+  <button class="save-btn" onclick="saveToProfile()">💾 Save Deduction Summary to Profile</button>
+  <button class="btn-export no-print" onclick="exportPDF()">📄 Export for CPA</button>
+  <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves estimated deduction totals to your FinWise profile. Export creates a print-ready PDF for your CPA.</p>
+</div>
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> IRS rates: 2024 mileage 67¢/mi, 2025 70¢/mi. Section 179 limits change annually. Home office requires exclusive/regular business use. Vehicle luxury-auto caps and bonus depreciation phase-down (60% in 2024, 40% in 2025, 20% in 2026) apply. Not tax advice — consult a CPA.
+</div>
+</div>
+
+<script>
+/* ── CONSTANTS ── */
+var ML_RATES = {
+  2026:{biz:.70,med:.21,cha:.14},
+  2025:{biz:.70,med:.21,cha:.14},
+  2024:{biz:.67,med:.21,cha:.14},
+  2023:{biz:.655,med:.22,cha:.14}
+};
+// UPDATE ANNUALLY: IRS adjusts Sec 179 limit (lim), phase-out threshold (po),
+// bonus depreciation % (bon), and luxury auto caps (vlight/vsuv) each year.
+// Source: IRS Rev. Proc. and IRS Publication 946. Last verified: 2026 est.
+var S179 = {
+  2026:{lim:1250000,po:3130000,bon:.20,vlight:12400,vsuv:30500},
+  2025:{lim:1250000,po:3130000,bon:.40,vlight:12400,vsuv:30500},
+  2024:{lim:1220000,po:3050000,bon:.60,vlight:12400,vsuv:28900},
+  2023:{lim:1160000,po:2890000,bon:.80,vlight:12200,vsuv:28900},
+  2022:{lim:1080000,po:2700000,bon:1.00,vlight:11200,vsuv:27000}
+};
+
+/* ── STATE ── */
+var _hoMethod = 'simplified';
+var _hoSetup = {};
+var _mlTrips = [];
+var _mlSetup = {year:2024,vehicle:'',startOdo:0};
+var _assets = [];
+var _s179Setup = {year:2024,income:0};
+var _vcSetup = {};
+var _toastTimer = null;
+
+/* ── INIT ── */
+window.onload = function(){
+  var curYr = new Date().getFullYear();
+  try{var s=localStorage.getItem('fw_ho'); if(s){_hoSetup=JSON.parse(s);_hoMethod=_hoSetup.method||'simplified';}}catch(e){}
+  try{var t=localStorage.getItem('fw_ml_trips'); if(t)_mlTrips=JSON.parse(t);}catch(e){}
+  try{var u=localStorage.getItem('fw_ml_setup'); if(u)_mlSetup=JSON.parse(u);}catch(e){}
+  try{var v=localStorage.getItem('fw_s179'); if(v)_assets=JSON.parse(v);}catch(e){}
+  try{var w=localStorage.getItem('fw_s179_setup'); if(w)_s179Setup=JSON.parse(w);}catch(e){}
+  try{var x=localStorage.getItem('fw_vc_setup'); if(x)_vcSetup=JSON.parse(x);}catch(e){}
+  applyHOToUI();
+  applyMLToUI();
+  // Restore Section 179 setup
+  var s179Sel = document.getElementById('s179-yr');
+  s179Sel.value = _s179Setup.year || curYr;
+  if(_s179Setup.income) document.getElementById('s179-inc').value = _s179Setup.income;
+  // Restore vehicle calc
+  var vcYr = document.getElementById('vc-yr');
+  if(_vcSetup.yr) vcYr.value = _vcSetup.yr; else vcYr.value = curYr;
+  ['total','biz','gas','ins','rep','reg','lease','dep'].forEach(function(k){
+    if(_vcSetup[k]) document.getElementById('vc-'+k).value = _vcSetup[k];
+  });
+  setTodayDate();
+  renderMileage();
+  updateS179Limits();
+  renderS179();
+  calcVehicle();
+  pushDeductions();
+};
+
+function persist(){
+  _hoSetup.method=_hoMethod;
+  localStorage.setItem('fw_ho',JSON.stringify(_hoSetup));
+  localStorage.setItem('fw_ml_trips',JSON.stringify(_mlTrips));
+  localStorage.setItem('fw_ml_setup',JSON.stringify(_mlSetup));
+  localStorage.setItem('fw_s179',JSON.stringify(_assets));
+  _s179Setup.year = parseInt(document.getElementById('s179-yr').value)||new Date().getFullYear();
+  _s179Setup.income = parseFloat(document.getElementById('s179-inc').value)||0;
+  localStorage.setItem('fw_s179_setup',JSON.stringify(_s179Setup));
+}
+
+/* ── TABS ── */
+function switchTab(n){
+  ['home','mileage','s179'].forEach(function(t){
+    document.getElementById('panel-'+t).classList.remove('active');
+    document.getElementById('tbtn-'+t).classList.remove('active');
+  });
+  document.getElementById('panel-'+n).classList.add('active');
+  document.getElementById('tbtn-'+n).classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   HOME OFFICE
+══════════════════════════════════════════ */
+function setHOMethod(m){
+  _hoMethod=m;
+  document.getElementById('hm-simp').classList.toggle('active',m==='simplified');
+  document.getElementById('hm-reg').classList.toggle('active',m==='regular');
+  document.getElementById('ho-reg-inputs').style.display=m==='regular'?'block':'none';
+  calcHO();
+}
+
+function applyHOToUI(){
+  if(_hoSetup.off) document.getElementById('ho-off').value=_hoSetup.off;
+  if(_hoSetup.tot) document.getElementById('ho-tot').value=_hoSetup.tot;
+  if(_hoSetup.inc) document.getElementById('ho-inc').value=_hoSetup.inc;
+  if(_hoSetup.rent)document.getElementById('ho-rent').value=_hoSetup.rent;
+  if(_hoSetup.ptax)document.getElementById('ho-ptax').value=_hoSetup.ptax;
+  if(_hoSetup.ins) document.getElementById('ho-ins').value=_hoSetup.ins;
+  if(_hoSetup.util)document.getElementById('ho-util').value=_hoSetup.util;
+  if(_hoSetup.rep) document.getElementById('ho-rep').value=_hoSetup.rep;
+  if(_hoSetup.oth) document.getElementById('ho-oth').value=_hoSetup.oth;
+  setHOMethod(_hoMethod);
+}
+
+function calcHO(){
+  var s={
+    off:parseFloat(document.getElementById('ho-off').value)||0,
+    tot:parseFloat(document.getElementById('ho-tot').value)||0,
+    inc:parseFloat(document.getElementById('ho-inc').value)||0,
+    rent:parseFloat(document.getElementById('ho-rent').value)||0,
+    ptax:parseFloat(document.getElementById('ho-ptax').value)||0,
+    ins:parseFloat(document.getElementById('ho-ins').value)||0,
+    util:parseFloat(document.getElementById('ho-util').value)||0,
+    rep:parseFloat(document.getElementById('ho-rep').value)||0,
+    oth:parseFloat(document.getElementById('ho-oth').value)||0
+  };
+  Object.assign(_hoSetup,s);
+  persist();
+  pushDeductions();
+
+  if(!s.off){document.getElementById('ho-results').style.display='none';return;}
+  document.getElementById('ho-results').style.display='block';
+
+  var bizPct=s.tot>0?s.off/s.tot:0;
+  var simp=Math.min(s.off,300)*5;
+  if(s.inc>0) simp=Math.min(simp,s.inc);
+
+  var totalExp=s.rent+s.ptax+s.ins+s.util+s.rep+s.oth;
+  var reg=totalExp*bizPct;
+  if(s.inc>0) reg=Math.min(reg,s.inc);
+
+  var active=_hoMethod==='simplified'?simp:reg;
+  var better=reg>simp?'regular':'simplified';
+
+  document.getElementById('ho-stats').innerHTML=
+    sb('Office Sq Ft',s.off+'')+
+    sb('Business Use %',(bizPct*100).toFixed(1)+'%')+
+    sb('Deduction',fmtD(active),'hl2')+
+    sb('Est. Tax Savings*',fmtD(active*.25),'hl');
+
+  var bk='';
+  if(_hoMethod==='simplified'){
+    bk+=br('Eligible sq ft (max 300)',Math.min(s.off,300)+' sq ft');
+    bk+=br('IRS rate','$5.00 / sq ft');
+    bk+=br('Gross deduction',fmtD(Math.min(s.off,300)*5));
+    if(s.inc>0&&Math.min(s.off,300)*5>s.inc) bk+=br('Limited to net income',fmtD(s.inc));
+    bk+=bt('Simplified Deduction',fmtD(simp));
+  } else {
+    bk+=br('Office / Total sq ft',s.off+' / '+s.tot+' sq ft');
+    bk+=br('Business use %',(bizPct*100).toFixed(2)+'%');
+    bk+=bs('Annual Home Expenses');
+    if(s.rent>0) bk+=br('Rent / Mortgage',fmtD(s.rent));
+    if(s.ptax>0) bk+=br('Property Taxes',fmtD(s.ptax));
+    if(s.ins>0)  bk+=br('Home Insurance',fmtD(s.ins));
+    if(s.util>0) bk+=br('Utilities',fmtD(s.util));
+    if(s.rep>0)  bk+=br('Repairs & Maintenance',fmtD(s.rep));
+    if(s.oth>0)  bk+=br('Other',fmtD(s.oth));
+    bk+=br('Total Home Expenses',fmtD(totalExp));
+    bk+=br('× Business Use %','× '+(bizPct*100).toFixed(2)+'%');
+    if(s.inc>0&&totalExp*bizPct>s.inc) bk+=br('Limited to net income',fmtD(s.inc));
+    bk+=bt('Regular Method Deduction',fmtD(reg));
+  }
+  document.getElementById('ho-bk').innerHTML=bk;
+
+  var mkBox=function(title,val,hl){
+    return '<div class="cmp-box" style="border-color:'+(hl?'#86efac':'#e2e8f0')+';background:'+(hl?'#f0fdf4':'#f8fafc')+'">'+
+      '<div style="font-size:.75rem;font-weight:800;color:'+(hl?'#16a34a':'#94a3b8')+';margin-bottom:6px">'+title+(hl?' ← Better':'')+
+      '</div><div style="font-size:1rem;font-weight:900;color:#1e293b">'+val+'</div></div>';
+  };
+  document.getElementById('ho-cmp').innerHTML=
+    '<div style="font-size:.82rem;font-weight:800;color:#475569;margin-bottom:12px">Method Comparison</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
+    mkBox('Simplified','$5 × '+Math.min(s.off,300)+' sq ft = '+fmtD(simp),better==='simplified')+
+    mkBox('Regular Method',bizPct>0?(bizPct*100).toFixed(1)+'% × expenses = '+fmtD(reg):'Enter expenses →',better==='regular')+
+    '</div>'+
+    '<div style="font-size:.75rem;color:#64748b;margin-top:10px">'+
+    (better==='simplified'?'✓ Simplified gives you a larger deduction in this scenario.':'✓ Regular method gives you a larger deduction — use Form 8829.')+
+    '</div><div style="font-size:.72rem;color:#94a3b8;margin-top:6px">* Est. tax savings based on 25% marginal rate. Actual varies by your effective rate.</div>';
+}
+
+/* ══════════════════════════════════════════
+   MILEAGE LOG
+══════════════════════════════════════════ */
+function applyMLToUI(){
+  document.getElementById('ml-yr').value=_mlSetup.year||2024;
+  document.getElementById('ml-veh').value=_mlSetup.vehicle||'';
+  if(_mlSetup.startOdo) document.getElementById('ml-odo').value=_mlSetup.startOdo;
+}
+function saveMLSetup(){
+  _mlSetup.vehicle=document.getElementById('ml-veh').value;
+  _mlSetup.startOdo=parseFloat(document.getElementById('ml-odo').value)||0;
+  persist();
+}
+function setTodayDate(){
+  var n=new Date();
+  document.getElementById('ml-date').value=n.getFullYear()+'-'+zz(n.getMonth()+1)+'-'+zz(n.getDate());
+}
+
+function addTrip(){
+  var date=document.getElementById('ml-date').value;
+  var mi=parseFloat(document.getElementById('ml-mi').value);
+  var pur=document.getElementById('ml-pur').value.trim();
+  var cat=document.getElementById('ml-cat').value;
+  var yr=parseInt(document.getElementById('ml-yr').value)||2024;
+  if(!date){showToast('Select a date','err');return;}
+  if(!mi||mi<=0){showToast('Enter miles','err');return;}
+  var r=ML_RATES[yr]||ML_RATES[2024];
+  var rate=cat==='business'?r.biz:cat==='medical'?r.med:r.cha;
+  var ded=parseFloat((mi*rate).toFixed(2));
+  _mlTrips.push({
+    id:Date.now().toString(36)+Math.random().toString(36).slice(2,4),
+    date:date,miles:mi,purpose:pur||'Business trip',cat:cat,rate:rate,deduction:ded,year:yr
+  });
+  _mlTrips.sort(function(a,b){return b.date.localeCompare(a.date);});
+  persist();
+  pushDeductions();
+  document.getElementById('ml-pur').value='';
+  document.getElementById('ml-mi').value='';
+  renderMileage();
+  showToast('Trip added — '+fmtD(ded)+' deduction');
+}
+
+function delTrip(id){
+  _mlTrips=_mlTrips.filter(function(t){return t.id!==id;});
+  persist(); renderMileage();
+}
+
+function renderMileage(){
+  var yr=parseInt(document.getElementById('ml-yr').value)||2024;
+  _mlSetup.year=yr; persist();
+  var r=ML_RATES[yr]||ML_RATES[2024];
+  document.getElementById('ml-rates').innerHTML=
+    '<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;font-weight:700;color:#475569">'+
+    'Business: <span class="rate-badge">'+c(r.biz)+'/mi</span>'+
+    '&nbsp; Medical: <span class="rate-badge" style="background:#fdf4ff;color:#7c3aed">'+c(r.med)+'/mi</span>'+
+    '&nbsp; Charitable: <span class="rate-badge" style="background:#f0fdf4;color:#16a34a">'+c(r.cha)+'/mi</span>'+
+    '</div>';
+
+  var trips=_mlTrips.filter(function(t){return t.year===yr;});
+  var bMi=0,bDed=0,mMi=0,mDed=0,cMi=0,cDed=0;
+  trips.forEach(function(t){
+    if(t.cat==='business'){bMi+=t.miles;bDed+=t.deduction;}
+    else if(t.cat==='medical'){mMi+=t.miles;mDed+=t.deduction;}
+    else{cMi+=t.miles;cDed+=t.deduction;}
+  });
+
+  document.getElementById('ml-stats').innerHTML=
+    sb('Business Miles',bMi.toLocaleString(),'hl')+
+    sb('Business Deduction',fmtD(bDed),'hl2')+
+    sb('Other Miles',(mMi+cMi).toLocaleString())+
+    sb('Total Deduction',fmtD(bDed+mDed+cDed),'hl');
+
+  if(!trips.length){
+    document.getElementById('ml-table').innerHTML='<div class="empty">No trips logged for '+yr+'. Add your first trip above.</div>';
+    return;
+  }
+  var tbl='<div style="max-height:420px;overflow-y:auto">'+
+    '<table class="data-table"><thead><tr>'+
+    '<th>Date</th><th>Purpose</th><th>Cat.</th><th class="r">Miles</th><th class="r">Rate</th><th class="r">Deduction</th><th></th>'+
+    '</tr></thead><tbody>';
+  trips.forEach(function(t){
+    var cl=t.cat==='business'?'cat-biz':t.cat==='medical'?'cat-med':'cat-cha';
+    var lb=t.cat==='business'?'Business':t.cat==='medical'?'Medical':'Charitable';
+    tbl+='<tr>'+
+      '<td>'+dd(t.date)+'</td>'+
+      '<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(t.purpose)+'</td>'+
+      '<td><span class="'+cl+'">'+lb+'</span></td>'+
+      '<td class="r">'+t.miles+'</td>'+
+      '<td class="r">'+c(t.rate)+'/mi</td>'+
+      '<td class="r">'+fmtD(t.deduction)+'</td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delTrip(\''+t.id+'\')">✕</button></td>'+
+      '</tr>';
+  });
+  tbl+='</tbody></table></div>';
+  if(bMi>0) tbl+='<div class="info-box">📋 <strong>IRS Log:</strong> This log satisfies IRS requirements — date, destination, purpose, and miles per trip. Total: '+bMi.toLocaleString()+' mi × '+c(r.biz)+'/mi = '+fmtD(bDed)+'.</div>';
+  document.getElementById('ml-table').innerHTML=tbl;
+}
+
+/* ══════════════════════════════════════════
+   SECTION 179
+══════════════════════════════════════════ */
+function updateS179Limits(){
+  var yr=parseInt(document.getElementById('s179-yr').value)||2024;
+  var lim=S179[yr]||S179[2024];
+  document.getElementById('s179-yr-lbl').textContent=yr;
+  document.getElementById('s179-limits').innerHTML=
+    '<div style="font-size:.75rem;font-weight:700;color:#475569;line-height:1.9">'+
+    '179 Limit: <strong>'+fmtBig(lim.lim)+'</strong><br/>'+
+    'Phase-out at: <strong>'+fmtBig(lim.po)+'</strong><br/>'+
+    'Bonus Depreciation: <strong>'+(lim.bon*100)+'%</strong></div>';
+}
+
+function previewAsset(){
+  var cost=parseFloat(document.getElementById('s179-cost').value)||0;
+  var bizPct=parseFloat(document.getElementById('s179-biz').value)||100;
+  var type=document.getElementById('s179-type').value;
+  var yr=parseInt(document.getElementById('s179-yr').value)||2024;
+  var lim=S179[yr]||S179[2024];
+  var el=document.getElementById('s179-preview');
+  if(!cost){el.innerHTML='';return;}
+  var elig=cost*bizPct/100;
+  var cap=vcap(type,yr);
+  var s179e=cap>0?Math.min(elig,cap):elig;
+  var s179=Math.min(s179e,lim.lim);
+  var bonus=(elig-s179)*lim.bon;
+  el.innerHTML='<div style="background:#f8fafc;border-radius:8px;padding:10px 14px;font-size:.80rem;color:#475569;display:flex;gap:20px;flex-wrap:wrap">'+
+    '<span>Business cost: <strong>'+fmtD(elig)+'</strong></span>'+
+    '<span>Sec 179: <strong style="color:#2563eb">'+fmtD(s179)+'</strong></span>'+
+    '<span>Bonus depr.: <strong style="color:#7c3aed">'+fmtD(bonus)+'</strong></span>'+
+    '<span>Year-1 total: <strong style="color:#16a34a">'+fmtD(s179+bonus)+'</strong></span>'+
+    (cap>0?'<span style="color:#dc2626;font-size:.72rem">Vehicle cap: '+fmtD(cap)+'</span>':'')+
+    '</div>';
+}
+
+function vcap(type, yr){
+  var lim = S179[yr||2024] || S179[2024];
+  if(type==='vehicle-light') return lim.vlight;
+  if(type==='vehicle-suv') return lim.vsuv;
+  return 0;
+}
+
+function addAsset(){
+  var desc=document.getElementById('s179-desc').value.trim();
+  var cost=parseFloat(document.getElementById('s179-cost').value);
+  var bizPct=parseFloat(document.getElementById('s179-biz').value)||100;
+  var type=document.getElementById('s179-type').value;
+  var yr=parseInt(document.getElementById('s179-yr').value)||2024;
+  if(!cost||cost<=0){showToast('Enter asset cost','err');return;}
+  _assets.push({
+    id:Date.now().toString(36)+Math.random().toString(36).slice(2,4),
+    desc:desc||'Equipment',cost:cost,bizPct:bizPct,type:type,year:yr
+  });
+  persist();
+  document.getElementById('s179-desc').value='';
+  document.getElementById('s179-cost').value='';
+  document.getElementById('s179-biz').value='100';
+  document.getElementById('s179-preview').innerHTML='';
+  renderS179();
+  showToast('Asset added');
+}
+
+function delAsset(id){
+  _assets=_assets.filter(function(a){return a.id!==id;});
+  persist(); renderS179();
+}
+
+function renderS179(){
+  var yr=parseInt(document.getElementById('s179-yr').value)||2024;
+  var lim=S179[yr]||S179[2024];
+  var income=parseFloat(document.getElementById('s179-inc').value)||0;
+  var assets=_assets.filter(function(a){return a.year===yr;});
+
+  if(!assets.length){
+    document.getElementById('s179-stats').innerHTML='';
+    document.getElementById('s179-tbl').innerHTML='<div class="empty">No assets for '+yr+'. Add equipment above.</div>';
+    document.getElementById('s179-bk').innerHTML='';
+    return;
+  }
+
+  var totalElig=assets.reduce(function(s,a){return s+a.cost*a.bizPct/100;},0);
+  var reduction=Math.max(0,totalElig-lim.po);
+  var maxS179=Math.max(0,lim.lim-reduction);
+  if(income>0) maxS179=Math.min(maxS179,income);
+
+  var running=0;
+  var calcs=assets.map(function(a){
+    var elig=a.cost*a.bizPct/100;
+    var cap=vcap(a.type,yr);
+    var s179e=cap>0?Math.min(elig,cap):elig;
+    var s179=Math.min(s179e,Math.max(0,maxS179-running));
+    running+=s179;
+    var bonus=(elig-s179)*lim.bon;
+    return {a:a,elig:elig,s179:s179,bonus:bonus,yr1:s179+bonus};
+  });
+
+  var tot179=calcs.reduce(function(s,c){return s+c.s179;},0);
+  var totBonus=calcs.reduce(function(s,c){return s+c.bonus;},0);
+  var totYr1=tot179+totBonus;
+  var afterBonus=totalElig-tot179-totBonus;
+
+  /* Asset table */
+  var tbl='<table class="data-table"><thead><tr>'+
+    '<th>Description</th><th>Type</th>'+
+    '<th class="r">Cost</th><th class="r">Biz %</th>'+
+    '<th class="r">Eligible</th><th class="r" style="color:#2563eb">Sec 179</th>'+
+    '<th class="r" style="color:#7c3aed">Bonus</th><th></th></tr></thead><tbody>';
+  calcs.forEach(function(c){
+    tbl+='<tr>'+
+      '<td>'+esc(c.a.desc)+'</td>'+
+      '<td><span class="asset-tag '+atag(c.a.type)+'">'+albl(c.a.type)+'</span></td>'+
+      '<td class="r">'+fmtD(c.a.cost)+'</td>'+
+      '<td class="r">'+c.a.bizPct+'%</td>'+
+      '<td class="r">'+fmtD(c.elig)+'</td>'+
+      '<td class="r" style="color:#2563eb;font-weight:800">'+fmtD(c.s179)+'</td>'+
+      '<td class="r" style="color:#7c3aed;font-weight:800">'+fmtD(c.bonus)+'</td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delAsset(\''+c.a.id+'\')">✕</button></td>'+
+      '</tr>';
+  });
+  tbl+='</tbody></table>';
+  document.getElementById('s179-tbl').innerHTML=tbl;
+
+  document.getElementById('s179-stats').innerHTML=
+    sb('Total Asset Cost',fmtD(assets.reduce(function(s,a){return s+a.cost;},0)))+
+    sb('Section 179',fmtD(tot179),'hl')+
+    sb('Bonus Depr. '+(lim.bon*100)+'%',fmtD(totBonus),'hl3')+
+    sb('Year-1 Total',fmtD(totYr1),'hl2');
+
+  var bk='';
+  bk+=br('Total eligible business cost',fmtD(totalElig));
+  if(reduction>0) bk+=br('Phase-out reduction','-'+fmtD(reduction));
+  bk+=br('Max Section 179 available',fmtD(maxS179));
+  if(income>0&&income<lim.lim) bk+=br('Limited to business income',fmtD(Math.min(maxS179,income)));
+  bk+=bs('Year-1 Deductions');
+  bk+=br('Section 179 deduction',fmtD(tot179));
+  bk+=br('Bonus depreciation ('+(lim.bon*100)+'%)',fmtD(totBonus));
+  bk+=bt('Total Year-1 Deduction',fmtD(totYr1));
+  bk+=br('Remaining basis (regular MACRS)',fmtD(afterBonus));
+
+  var extra='';
+  if(income>0&&totYr1>0)
+    extra+='<div class="info-box" style="margin-top:10px">💰 Estimated tax savings at 25% marginal rate: <strong>'+fmtD(totYr1*.25)+'</strong>.</div>';
+  if(reduction>0)
+    extra+='<div class="warn-box" style="margin-top:8px">⚠️ Phase-out: total eligible cost exceeds '+yr+' threshold of '+fmtBig(lim.po)+'. Section 179 reduced dollar-for-dollar.</div>';
+
+  document.getElementById('s179-bk').innerHTML='<table class="breakdown">'+bk+'</table>'+extra;
+  pushDeductions();
+}
+
+function atag(t){
+  if(t.indexOf('vehicle')>-1) return 'at-veh';
+  if(t==='software') return 'at-soft';
+  if(t==='improvement') return 'at-impr';
+  return 'at-eq';
+}
+function albl(t){
+  return {equipment:'Equipment',computer:'Computer',software:'Software',furniture:'Furniture',
+    improvement:'Building','vehicle-light':'Vehicle <6K','vehicle-suv':'Heavy SUV','vehicle-work':'Work Truck'}[t]||t;
+}
+
+/* ── PROFILE ── */
+function saveProfile(u){
+  try{
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var ps=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    var p=ps[idx]||{}; Object.assign(p,u); ps[idx]=p;
+    localStorage.setItem('fw_profiles',JSON.stringify(ps));
+    var base=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(base,u); localStorage.setItem('fw_profile',JSON.stringify(base));
+  }catch(e){}
+}
+function saveToProfile(){
+  var s=_hoSetup, bizPct=s.tot>0?s.off/s.tot:0;
+  var simp=Math.min(s.off||0,300)*5;
+  if(s.inc>0) simp=Math.min(simp,s.inc);
+  var totalExp=(s.rent||0)+(s.ptax||0)+(s.ins||0)+(s.util||0)+(s.rep||0)+(s.oth||0);
+  var reg=totalExp*bizPct;
+  if(s.inc>0) reg=Math.min(reg,s.inc);
+  var hoDed=_hoMethod==='simplified'?simp:reg;
+  var yr=parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
+  var mlDed=_mlTrips.filter(function(t){return t.year===yr&&t.cat==='business';}).reduce(function(s,t){return s+t.deduction;},0);
+  var s179Ded=_assets.filter(function(a){return a.year===yr;}).reduce(function(s,a){
+    var elig=a.cost*a.bizPct/100,cap=vcap(a.type,a.year);
+    return s+(cap>0?Math.min(elig,cap):elig);
+  },0);
+  saveProfile({homeOfficeDed:Math.round(hoDed),mileageDed:Math.round(mlDed),s179Ded:Math.round(s179Ded)});
+  pushDeductions();
+  showToast('Deduction totals saved to profile');
+}
+
+/* ══════════════════════════════════════════
+   VEHICLE METHOD COMPARISON
+══════════════════════════════════════════ */
+function calcVehicle(){
+  var total = parseFloat(document.getElementById('vc-total').value)||0;
+  var biz   = parseFloat(document.getElementById('vc-biz').value)||0;
+  var yr    = parseInt(document.getElementById('vc-yr').value)||new Date().getFullYear();
+  var gas   = parseFloat(document.getElementById('vc-gas').value)||0;
+  var ins   = parseFloat(document.getElementById('vc-ins').value)||0;
+  var rep   = parseFloat(document.getElementById('vc-rep').value)||0;
+  var reg   = parseFloat(document.getElementById('vc-reg').value)||0;
+  var lease = parseFloat(document.getElementById('vc-lease').value)||0;
+  var dep   = parseFloat(document.getElementById('vc-dep').value)||0;
+  var el    = document.getElementById('vc-result');
+
+  _vcSetup = {yr:yr,total:total,biz:biz,gas:gas,ins:ins,rep:rep,reg:reg,lease:lease,dep:dep};
+  try{ localStorage.setItem('fw_vc_setup', JSON.stringify(_vcSetup)); }catch(e){}
+
+  if(!biz){ el.innerHTML=''; return; }
+  var r = ML_RATES[yr]||ML_RATES[2024];
+  var stdDed = biz * r.biz;
+  var bizPct = total > 0 ? biz/total : 1;
+  var totalExp = gas+ins+rep+reg+lease+dep;
+  var actualDed = totalExp * bizPct;
+  var winner = stdDed >= actualDed ? 'standard' : 'actual';
+  var diff = Math.abs(stdDed - actualDed);
+
+  var html = '<div class="veh-cmp">'+
+    '<div class="veh-box '+(winner==='standard'?'winner':'')+'">'+
+    '<div class="veh-lbl">Standard Mileage Rate</div>'+
+    '<div class="veh-amt">'+fmtD(stdDed)+'</div>'+
+    '<div class="veh-sub">'+biz.toLocaleString()+' mi × '+c(r.biz)+'/mi</div>'+
+    '<span class="veh-badge '+(winner==='standard'?'vb-win':'vb-lose')+'">'+(winner==='standard'?'✓ Better':'—')+'</span>'+
+    '</div>'+
+    '<div class="veh-box '+(winner==='actual'?'winner':'')+'">'+
+    '<div class="veh-lbl">Actual Cost Method</div>'+
+    '<div class="veh-amt">'+fmtD(actualDed)+'</div>'+
+    '<div class="veh-sub">'+(bizPct*100).toFixed(1)+'% × '+fmtD(totalExp)+' expenses</div>'+
+    '<span class="veh-badge '+(winner==='actual'?'vb-win':'vb-lose')+'">'+(winner==='actual'?'✓ Better':'—')+'</span>'+
+    '</div></div>';
+
+  if(diff > 0){
+    html += '<div class="info-box" style="margin-top:12px">'+
+      '💡 <strong>'+(winner==='standard'?'Standard mileage rate':'Actual cost method')+
+      ' saves you an extra '+fmtD(diff)+'</strong> this year. '+
+      (winner==='standard'?'Just log your miles — no receipts needed for fuel or repairs.':
+      'Keep receipts for gas, insurance, maintenance, registration, and depreciation. Once you choose actual cost for a vehicle, you must use it for the life of the vehicle.')+
+      ' Est. tax savings at 25%: '+fmtD(Math.max(stdDed,actualDed)*0.25)+'.</div>';
+  }
+  el.innerHTML = html;
+}
+
+/* ══════════════════════════════════════════
+   PUSH DEDUCTIONS TO SHARED KEY
+══════════════════════════════════════════ */
+function pushDeductions(){
+  var s = _hoSetup;
+  var bizPct = s.tot>0 ? s.off/s.tot : 0;
+  var simp = Math.min(s.off||0, 300)*5;
+  if(s.inc>0) simp = Math.min(simp, s.inc);
+  var totalExp = (s.rent||0)+(s.ptax||0)+(s.ins||0)+(s.util||0)+(s.rep||0)+(s.oth||0);
+  var reg = totalExp*bizPct;
+  if(s.inc>0) reg = Math.min(reg, s.inc);
+  var hoDed = Math.round(_hoMethod==='simplified' ? simp : reg);
+
+  var byYear = {};
+  _mlTrips.forEach(function(t){
+    if(!byYear[t.year]) byYear[t.year]={mileage:0,s179:0};
+    if(t.cat==='business') byYear[t.year].mileage = Math.round((byYear[t.year].mileage||0)+t.deduction);
+  });
+  _assets.forEach(function(a){
+    if(!byYear[a.year]) byYear[a.year]={mileage:0,s179:0};
+    var elig=a.cost*a.bizPct/100, cap=vcap(a.type,a.year);
+    byYear[a.year].s179 = Math.round((byYear[a.year].s179||0)+(cap>0?Math.min(elig,cap):elig));
+  });
+
+  try{ localStorage.setItem('fw_deductions', JSON.stringify({ho:hoDed, byYear:byYear, updatedAt:Date.now()})); }catch(e){}
+
+  var band = document.getElementById('syncBand');
+  if(!band) return;
+  var pills = [];
+  if(hoDed>0) pills.push('<span class="sync-pill">🏠 Home Office '+fmtD(hoDed)+'</span>');
+  var mlYr = parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
+  if(byYear[mlYr]&&byYear[mlYr].mileage>0) pills.push('<span class="sync-pill">🚗 Mileage '+fmtD(byYear[mlYr].mileage)+'</span>');
+  var s179Yr = parseInt(document.getElementById('s179-yr').value)||mlYr;
+  if(byYear[s179Yr]&&byYear[s179Yr].s179>0) pills.push('<span class="sync-pill">💻 Equipment '+fmtD(byYear[s179Yr].s179)+'</span>');
+  if(pills.length>0){
+    document.getElementById('syncPills').innerHTML = pills.join('');
+    band.style.display = 'flex';
+  }
+}
+
+/* ══════════════════════════════════════════
+   EXPORT PDF
+══════════════════════════════════════════ */
+function exportPDF(){
+  try{
+    var p = JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    document.getElementById('printBizName').textContent = (p.name||p.biz||'My Business')+' — Key Deductions Report';
+  }catch(e){ document.getElementById('printBizName').textContent = 'Key Deductions Report'; }
+  var yr = parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
+  document.getElementById('printMeta').textContent = 'Tax Year: '+yr+' | Generated: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  window.print();
+}
+
+/* ── UTILS ── */
+function fmtD(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-US');}
+function fmtBig(n){return n>=1000000?'$'+(n/1000000).toFixed(2)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n;}
+function c(r){return Math.round(r*100)+'¢';}
+function zz(n){return String(n).padStart(2,'0');}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function dd(d){var p=d.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function sb(l,v,c){return '<div class="stat-box'+(c?' '+c:'')+'"><div class="stat-lbl">'+l+'</div><div class="stat-val">'+v+'</div></div>';}
+function br(l,v){return '<tr><td class="lbl">'+l+'</td><td>'+v+'</td></tr>';}
+function bt(l,v){return '<tr class="total-row"><td>'+l+'</td><td>'+v+'</td></tr>';}
+function bs(l){return '<tr class="sec-row"><td colspan="2">'+l+'</td></tr>';}
+function showToast(msg,type){
+  var t=document.getElementById('fwToast');
+  t.textContent=msg;t.className='fw-toast'+(type?' toast-'+type:'');
+  t.classList.add('show');clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(function(){t.classList.remove('show');},3500);
+}
+</script>
+</body>
+</html>

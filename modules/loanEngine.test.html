@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loan Engine Tester</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 14px; color: #444; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number], select {
+      width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem;
+    }
+    input:focus, select:focus { outline: none; border-color: #2563eb; }
+
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+    button.primary {
+      margin-top: 16px; padding: 10px 24px; background: #2563eb; color: #fff;
+      border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer;
+    }
+    button.primary:hover { background: #1d4ed8; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .summary-item { background: #f8fafc; border-radius: 6px; padding: 12px 14px; border: 1px solid #e2e8f0; }
+    .summary-item .s-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; }
+    .summary-item .s-val { font-size: 1.15rem; font-weight: bold; margin-top: 4px; color: #1e293b; }
+    .summary-item.highlight .s-val { color: #2563eb; font-size: 1.4rem; }
+    .summary-item.interest .s-val { color: #dc2626; }
+    .summary-item.saved .s-val { color: #16a34a; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    th { background: #1e293b; color: #fff; text-align: right; padding: 8px 10px; position: sticky; top: 0; }
+    th:first-child { text-align: center; }
+    td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; text-align: right; }
+    td:first-child { text-align: center; font-weight: bold; color: #475569; }
+    tr:hover td { background: #f8fafc; }
+    tr.prepay-row td { background: #fef9c3; }
+    .tfoot td { font-weight: bold; background: #f1f5f9; border-top: 2px solid #e2e8f0; }
+
+    .scroll-table { max-height: 420px; overflow-y: auto; border-radius: 6px; border: 1px solid #e2e8f0; }
+
+    /* Unit tests */
+    .test-result { font-family: monospace; font-size: 0.88rem; padding: 4px 0; }
+    .test-result.pass { color: #15803d; }
+    .test-result.fail { color: #dc2626; font-weight: bold; }
+    .test-summary { margin-top: 12px; font-weight: bold; font-size: 0.95rem; padding: 10px; border-radius: 6px; }
+    .test-summary.all-pass { background: #dcfce7; color: #15803d; }
+    .test-summary.has-fail  { background: #fee2e2; color: #dc2626; }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-left: 6px; }
+    .badge.prepay { background: #fef9c3; color: #92400e; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Loan Engine</h1>
+<p class="subtitle">Small Business Financial Platform · EMI · Amortization · Prepayment</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('emi')">EMI Calculator</button>
+  <button class="tab" onclick="showTab('amort')">Amortization Schedule</button>
+  <button class="tab" onclick="showTab('prepay')">Prepayment Simulator</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── EMI Panel ──────────────────────────────────────────────────────── -->
+<div id="panel-emi" class="panel active">
+  <div class="card">
+    <h2>EMI Calculator</h2>
+    <div class="input-grid">
+      <div>
+        <label>Loan Principal ($)</label>
+        <input type="number" id="e-principal" value="500000" min="1" />
+      </div>
+      <div>
+        <label>Annual Interest Rate (%) <span class="hint">e.g. 12 for 12%</span></label>
+        <input type="number" id="e-rate" value="12" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>Tenure (Months)</label>
+        <input type="number" id="e-tenure" value="60" min="1" step="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcEMI()">Calculate EMI</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="emi-result"></div>
+</div>
+
+<!-- ─── Amortization Panel ─────────────────────────────────────────────── -->
+<div id="panel-amort" class="panel">
+  <div class="card">
+    <h2>Amortization Schedule</h2>
+    <div class="input-grid">
+      <div>
+        <label>Loan Principal ($)</label>
+        <input type="number" id="a-principal" value="500000" min="1" />
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="a-rate" value="12" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>Tenure (Months)</label>
+        <input type="number" id="a-tenure" value="60" min="1" step="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcAmort()">Generate Schedule</button>
+  </div>
+  <div id="amort-result"></div>
+</div>
+
+<!-- ─── Prepayment Panel ───────────────────────────────────────────────── -->
+<div id="panel-prepay" class="panel">
+  <div class="card">
+    <h2>Prepayment Simulator</h2>
+    <div class="input-grid">
+      <div>
+        <label>Loan Principal ($)</label>
+        <input type="number" id="p-principal" value="500000" min="1" />
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="p-rate" value="12" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>Tenure (Months)</label>
+        <input type="number" id="p-tenure" value="60" min="1" step="1" />
+      </div>
+      <div>
+        <label>Prepayment in Month #</label>
+        <input type="number" id="p-month" value="12" min="1" />
+      </div>
+      <div>
+        <label>Prepayment Amount ($)</label>
+        <input type="number" id="p-amount" value="50000" min="1" />
+      </div>
+      <div>
+        <label>Strategy</label>
+        <select id="p-strategy">
+          <option value="reduce-tenure">Reduce Tenure (keep EMI same)</option>
+          <option value="reduce-emi">Reduce EMI (keep tenure same)</option>
+        </select>
+      </div>
+    </div>
+    <button class="primary" onclick="calcPrepay()">Simulate Prepayment</button>
+  </div>
+  <div id="prepay-result"></div>
+</div>
+
+<!-- ─── Unit Tests Panel ───────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Loan Engine (Module 2) ───────────────────────────────────────────────
+
+function _round(n) { return Math.round(n * 100) / 100; }
+
+function _validate(principal, annualRate, tenureMonths) {
+  if (typeof principal !== "number" || typeof annualRate !== "number" || typeof tenureMonths !== "number")
+    throw new Error("All inputs must be numbers.");
+  if (principal <= 0) throw new Error("principal must be greater than 0.");
+  if (annualRate < 0) throw new Error("annualRate cannot be negative.");
+  if (tenureMonths <= 0 || !Number.isInteger(tenureMonths)) throw new Error("tenureMonths must be a positive integer.");
+}
+
+function calculateEMI(principal, annualRate, tenureMonths) {
+  _validate(principal, annualRate, tenureMonths);
+  const r = annualRate / 12 / 100;
+  let emi;
+  if (r === 0) {
+    emi = principal / tenureMonths;
+  } else {
+    const factor = Math.pow(1 + r, tenureMonths);
+    emi = (principal * r * factor) / (factor - 1);
+  }
+  return { emi: _round(emi), totalPayment: _round(emi * tenureMonths), totalInterest: _round(emi * tenureMonths - principal) };
+}
+
+function generateAmortizationSchedule(principal, annualRate, tenureMonths) {
+  _validate(principal, annualRate, tenureMonths);
+  const { emi } = calculateEMI(principal, annualRate, tenureMonths);
+  const r = annualRate / 12 / 100;
+  const schedule = [];
+  let balance = principal;
+  for (let month = 1; month <= tenureMonths; month++) {
+    const openingBalance = balance;
+    const interest = _round(balance * r);
+    let principalPaid = month === tenureMonths ? _round(balance) : _round(emi - interest);
+    const closingBalance = _round(Math.max(0, balance - principalPaid));
+    balance = closingBalance;
+    schedule.push({ month, openingBalance: _round(openingBalance), emi: _round(emi), principal: principalPaid, interest, closingBalance });
+    if (balance <= 0) break;
+  }
+  const totalInterest = _round(schedule.reduce((s, r) => s + r.interest, 0));
+  return { emi: _round(emi), totalPayment: _round(principal + totalInterest), totalInterest, schedule };
+}
+
+function applyPrepayment(principal, annualRate, tenureMonths, prepayMonth, prepayAmount, strategy = "reduce-tenure") {
+  _validate(principal, annualRate, tenureMonths);
+  if (prepayMonth < 1 || prepayMonth > tenureMonths) throw new Error("prepayMonth out of range.");
+  if (prepayAmount <= 0) throw new Error("prepayAmount must be positive.");
+  const { emi: originalEmi } = calculateEMI(principal, annualRate, tenureMonths);
+  const r = annualRate / 12 / 100;
+  const schedule = [];
+  let balance = principal;
+  let currentEmi = originalEmi;
+  for (let month = 1; month <= tenureMonths + 120; month++) {
+    if (balance <= 0) break;
+    const openingBalance = balance;
+    const interest = _round(balance * r);
+    let principalPaid = _round(currentEmi - interest);
+    let prepaid = 0;
+    if (month === prepayMonth) {
+      prepaid = _round(Math.min(prepayAmount, Math.max(0, balance - principalPaid)));
+      const remainingBalance = _round(balance - principalPaid - prepaid);
+      const remainingMonths = tenureMonths - month;
+      if (remainingBalance > 0 && remainingMonths > 0 && strategy === "reduce-emi") {
+        const { emi: newEmi } = calculateEMI(remainingBalance, annualRate, remainingMonths);
+        currentEmi = newEmi;
+      }
+    }
+    const closingBalance = _round(Math.max(0, balance - principalPaid - prepaid));
+    balance = closingBalance;
+    schedule.push({ month, openingBalance: _round(openingBalance), emi: _round(principalPaid + interest), principal: principalPaid, interest, prepayment: prepaid, closingBalance });
+    if (balance <= 0) break;
+  }
+  const totalInterest = _round(schedule.reduce((s, r) => s + r.interest, 0));
+  const totalPayment = _round(principal + totalInterest + schedule.reduce((s, r) => s + r.prepayment, 0));
+  const orig = generateAmortizationSchedule(principal, annualRate, tenureMonths);
+  return {
+    originalEmi: _round(originalEmi), newEmi: _round(currentEmi),
+    newTenure: schedule.length, monthsSaved: tenureMonths - schedule.length,
+    interestSaved: _round(orig.totalInterest - totalInterest),
+    totalInterest, totalPayment, schedule,
+  };
+}
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────
+const fmt  = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtN = n => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  event.target.classList.add("active");
+}
+
+function getNum(id) { return parseFloat(document.getElementById(id).value); }
+function getInt(id) { return parseInt(document.getElementById(id).value); }
+
+// ─── EMI ──────────────────────────────────────────────────────────────────
+function calcEMI() {
+  const out = document.getElementById("emi-result");
+  try {
+    const r = calculateEMI(getNum("e-principal"), getNum("e-rate"), getInt("e-tenure"));
+    out.innerHTML = `
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item highlight"><div class="s-label">Monthly EMI</div><div class="s-val">${fmt(r.emi)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Payment</div><div class="s-val">${fmt(r.totalPayment)}</div></div>
+          <div class="summary-item interest"><div class="s-label">Total Interest</div><div class="s-val">${fmt(r.totalInterest)}</div></div>
+        </div>
+      </div>`;
+    saveLE();
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Amortization ─────────────────────────────────────────────────────────
+function calcAmort() {
+  const out = document.getElementById("amort-result");
+  try {
+    const r = generateAmortizationSchedule(getNum("a-principal"), getNum("a-rate"), getInt("a-tenure"));
+    const rows = r.schedule.map(s => `
+      <tr>
+        <td>${s.month}</td>
+        <td>${fmt(s.openingBalance)}</td>
+        <td>${fmt(s.emi)}</td>
+        <td>${fmt(s.principal)}</td>
+        <td>${fmt(s.interest)}</td>
+        <td>${fmt(s.closingBalance)}</td>
+      </tr>`).join("");
+    const totP = _round(r.schedule.reduce((s,x)=>s+x.principal,0));
+    const totI = r.totalInterest;
+    out.innerHTML = `
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item highlight"><div class="s-label">Monthly EMI</div><div class="s-val">${fmt(r.emi)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Payment</div><div class="s-val">${fmt(r.totalPayment)}</div></div>
+          <div class="summary-item interest"><div class="s-label">Total Interest</div><div class="s-val">${fmt(r.totalInterest)}</div></div>
+        </div>
+        <div class="scroll-table">
+          <table>
+            <thead><tr>
+              <th>Month</th><th>Opening Balance</th><th>EMI</th>
+              <th>Principal</th><th>Interest</th><th>Closing Balance</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+            <tfoot><tr class="tfoot">
+              <td>Total</td><td></td><td>${fmt(r.totalPayment)}</td>
+              <td>${fmt(totP)}</td><td>${fmt(totI)}</td><td>$0.00</td>
+            </tr></tfoot>
+          </table>
+        </div>
+      </div>`;
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Prepayment ───────────────────────────────────────────────────────────
+function calcPrepay() {
+  const out = document.getElementById("prepay-result");
+  try {
+    const strategy = document.getElementById("p-strategy").value;
+    const r = applyPrepayment(
+      getNum("p-principal"), getNum("p-rate"), getInt("p-tenure"),
+      getInt("p-month"), getNum("p-amount"), strategy
+    );
+    const rows = r.schedule.map(s => `
+      <tr ${s.prepayment > 0 ? 'class="prepay-row"' : ''}>
+        <td>${s.month}${s.prepayment > 0 ? ' <span class="badge prepay">PREPAY</span>' : ''}</td>
+        <td>${fmt(s.openingBalance)}</td>
+        <td>${fmt(s.emi)}</td>
+        <td>${fmt(s.principal)}</td>
+        <td>${fmt(s.interest)}</td>
+        <td>${s.prepayment > 0 ? fmt(s.prepayment) : '-'}</td>
+        <td>${fmt(s.closingBalance)}</td>
+      </tr>`).join("");
+    const strategyLabel = strategy === "reduce-tenure"
+      ? `Tenure reduced by <b>${r.monthsSaved} months</b>`
+      : `EMI reduced from <b>${fmt(r.originalEmi)}</b> to <b>${fmt(r.newEmi)}</b>`;
+    out.innerHTML = `
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item highlight"><div class="s-label">Original EMI</div><div class="s-val">${fmt(r.originalEmi)}</div></div>
+          <div class="summary-item highlight"><div class="s-label">New EMI</div><div class="s-val">${fmt(r.newEmi)}</div></div>
+          <div class="summary-item"><div class="s-label">New Tenure</div><div class="s-val">${r.newTenure} months</div></div>
+          <div class="summary-item saved"><div class="s-label">Months Saved</div><div class="s-val">${r.monthsSaved}</div></div>
+          <div class="summary-item saved"><div class="s-label">Interest Saved</div><div class="s-val">${fmt(r.interestSaved)}</div></div>
+          <div class="summary-item interest"><div class="s-label">Total Interest Paid</div><div class="s-val">${fmt(r.totalInterest)}</div></div>
+        </div>
+        <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">Strategy: ${strategyLabel}</p>
+        <div class="scroll-table">
+          <table>
+            <thead><tr>
+              <th>Month</th><th>Opening Balance</th><th>EMI</th>
+              <th>Principal</th><th>Interest</th><th>Prepayment</th><th>Closing Balance</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, condition) { results.push({ label, pass: !!condition }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass: false, note: "expected error not thrown" }); }
+    catch(e) { results.push({ label, pass: true }); }
+  }
+
+  // EMI
+  const e1 = calculateEMI(500000, 12, 60);
+  assert("EMI: principal=500k, 12%, 60m → emi≈11122", Math.abs(e1.emi - 11122.22) < 1);
+  assert("EMI: totalPayment = emi × tenure", Math.abs(e1.totalPayment - e1.emi * 60) < 1);
+  assert("EMI: totalInterest = totalPayment - principal", Math.abs(e1.totalInterest - (e1.totalPayment - 500000)) < 1);
+
+  // 0% interest
+  const e0 = calculateEMI(120000, 0, 12);
+  assert("EMI: 0% rate → emi = principal / tenure", e0.emi === 10000);
+  assert("EMI: 0% rate → totalInterest = 0", e0.totalInterest === 0);
+
+  assertThrows("EMI: throws on negative principal", () => calculateEMI(-1000, 12, 60));
+  assertThrows("EMI: throws on negative rate", () => calculateEMI(100000, -1, 60));
+  assertThrows("EMI: throws on non-integer tenure", () => calculateEMI(100000, 12, 12.5));
+
+  // Amortization
+  const a = generateAmortizationSchedule(500000, 12, 60);
+  assert("Amort: schedule has 60 rows", a.schedule.length === 60);
+  assert("Amort: closing balance of last row ≈ 0", a.schedule[59].closingBalance <= 1);
+  assert("Amort: month 1 interest = principal × monthly rate", Math.abs(a.schedule[0].interest - _round(500000 * 0.01)) < 1);
+  assert("Amort: principal increases each month", a.schedule[1].principal > a.schedule[0].principal);
+  assert("Amort: interest decreases each month", a.schedule[1].interest < a.schedule[0].interest);
+  assert("Amort: totalInterest matches sum of schedule interests", Math.abs(a.totalInterest - a.schedule.reduce((s,r)=>s+r.interest,0)) < 1);
+
+  // Prepayment – reduce tenure
+  const pt = applyPrepayment(500000, 12, 60, 12, 50000, "reduce-tenure");
+  assert("Prepay(reduce-tenure): newTenure < 60", pt.newTenure < 60);
+  assert("Prepay(reduce-tenure): monthsSaved > 0", pt.monthsSaved > 0);
+  assert("Prepay(reduce-tenure): interestSaved > 0", pt.interestSaved > 0);
+  assert("Prepay(reduce-tenure): originalEmi = newEmi", pt.originalEmi === pt.newEmi);
+
+  // Prepayment – reduce EMI
+  const pe = applyPrepayment(500000, 12, 60, 12, 50000, "reduce-emi");
+  assert("Prepay(reduce-emi): newEmi < originalEmi", pe.newEmi < pe.originalEmi);
+  assert("Prepay(reduce-emi): interestSaved > 0", pe.interestSaved > 0);
+
+  assertThrows("Prepay: throws on invalid month", () => applyPrepayment(500000, 12, 60, 0, 50000));
+  assertThrows("Prepay: throws on zero amount", () => applyPrepayment(500000, 12, 60, 12, 0));
+
+  const passed = results.filter(r => r.pass).length;
+  const failed = results.filter(r => !r.pass).length;
+  const html = results.map(r =>
+    `<div class="test-result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.label}${r.note ? ' — ' + r.note : ''}</div>`
+  ).join("");
+  const sc = failed === 0 ? "all-pass" : "has-fail";
+  const st = failed === 0 ? `✅ All ${passed} tests passed` : `❌ ${failed} failed / ${passed} passed`;
+  document.getElementById("test-output").innerHTML = html + `<div class="test-summary ${sc}">${st}</div>`;
+}
+
+function err(e) { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;">❌ ${e.message}</div>`; }
+
+// ─── Persistence ──────────────────────────────────────────────────────────
+var LE_KEY2 = 'fw_loan_engine';
+function saveLE(){
+  try{
+    localStorage.setItem(LE_KEY2, JSON.stringify({
+      'e-principal':document.getElementById('e-principal').value,
+      'e-rate':document.getElementById('e-rate').value,
+      'e-tenure':document.getElementById('e-tenure').value,
+      'a-principal':document.getElementById('a-principal').value,
+      'a-rate':document.getElementById('a-rate').value,
+      'a-tenure':document.getElementById('a-tenure').value,
+      'p-principal':document.getElementById('p-principal').value,
+      'p-rate':document.getElementById('p-rate').value,
+      'p-tenure':document.getElementById('p-tenure').value,
+      'p-month':document.getElementById('p-month').value,
+      'p-amount':document.getElementById('p-amount').value,
+      'p-strategy':document.getElementById('p-strategy').value,
+    }));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(LE_KEY2)||'null');
+    if(s){
+      ['e-principal','e-rate','e-tenure','a-principal','a-rate','a-tenure','p-principal','p-rate','p-tenure','p-month','p-amount'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el && s[id]!==undefined && s[id]!=='') el.value = s[id];
+      });
+      var ps = document.getElementById('p-strategy');
+      if(ps && s['p-strategy']) ps.value = s['p-strategy'];
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.loan) { ['e-principal','a-principal','p-principal'].forEach(function(id){ document.getElementById(id).value=p.loan; }); }
+    if(p.tenure) { ['e-tenure','a-tenure','p-tenure'].forEach(function(id){ document.getElementById(id).value=p.tenure; }); }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

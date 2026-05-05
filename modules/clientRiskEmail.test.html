@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Client Risk Summary Email — FinWise Advisor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+select,input[type=text],textarea{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem;font-family:Arial,sans-serif}
+select:focus,input:focus,textarea:focus{outline:none;border-color:#2563eb}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-row{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+button.copy-btn{padding:9px 22px;background:#f1f5f9;color:#1e293b;border:1px solid #e2e8f0;border-radius:6px;font-size:.86rem;cursor:pointer;font-weight:700;margin-top:10px}
+button.copy-btn:hover{background:#e2e8f0}
+.email-preview{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin-top:12px;font-size:.88rem;line-height:1.7;white-space:pre-wrap;color:#374151;font-family:'Courier New',monospace;max-height:480px;overflow-y:auto}
+.copy-toast{display:none;background:#16a34a;color:#fff;font-size:.78rem;padding:4px 12px;border-radius:99px;margin-left:10px;font-weight:700}
+.copy-toast.show{display:inline-block}
+.score-badge{display:inline-block;padding:.18rem .6rem;border-radius:999px;font-size:.72rem;font-weight:800}
+.score-safe{background:#dcfce7;color:#166534}
+.score-risky{background:#fef9c3;color:#854d0e}
+.score-danger{background:#fee2e2;color:#991b1b}
+.client-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:4px}
+.cs-btn{padding:10px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:left;transition:all .15s}
+.cs-btn:hover{border-color:#2563eb;background:#eff6ff}
+.cs-btn.active{border-color:#2563eb;background:#eff6ff}
+.cs-name{font-size:.84rem;font-weight:800;color:#1e293b}
+.cs-score{font-size:.72rem;color:#64748b;margin-top:2px}
+.no-clients{color:#94a3b8;font-size:.86rem;padding:16px 0}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Client Risk Summary Email</h1>
+<p class="subtitle">FinWise Advisor · Generate a white-labelled risk summary email for any client — one click</p>
+
+<div class="card">
+  <h2>Select Client</h2>
+  <div class="client-selector" id="clientSelector">
+    <div class="no-clients">No clients found. Load the Advisor demo from try.html first.</div>
+  </div>
+</div>
+
+<div id="emailForm" style="display:none">
+  <div class="card">
+    <h2>Email Settings</h2>
+    <div class="input-row">
+      <div>
+        <label>Client's Email Address</label>
+        <input type="text" id="clientEmail" placeholder="client@example.com"/>
+      </div>
+      <div>
+        <label>Your Name / Firm</label>
+        <input type="text" id="advisorName" placeholder="e.g. CPA Lisa Chen"/>
+      </div>
+    </div>
+    <div>
+      <label>Additional Notes (optional)</label>
+      <textarea id="extraNotes" rows="2" placeholder="Any specific advice or meeting request..."></textarea>
+    </div>
+    <button class="primary" onclick="generateEmail()">Generate Email →</button>
+  </div>
+
+  <div id="emailOutput" style="display:none">
+    <div class="card">
+      <h2>Email Preview
+        <button class="copy-btn" onclick="copyEmail()" style="margin-left:10px;font-size:.78rem;padding:5px 14px">📋 Copy Email</button>
+        <span class="copy-toast" id="copyToast">✅ Copied!</span>
+      </h2>
+      <div class="email-preview" id="emailText"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var selectedClient = null;
+
+function calcScore(p){
+  var rev=p.rev||0, exp=p.exp||0, emi=p.emi||0, reserve=p.reserve||0, loan=p.loan||0;
+  var netFlow = rev - exp - emi;
+  if(!rev) return {score:0,cls:'UNKNOWN',label:'Unknown'};
+  var newEMI = loan>0 ? loan/36 : 0; /* rough estimate */
+  var dscr = emi>0 ? netFlow/emi : 2;
+  var bufferPct = (netFlow/rev)*100;
+  var score = 50;
+  if(dscr>=1.5) score+=15; else if(dscr>=1.2) score+=8; else score-=15;
+  if(bufferPct>=20) score+=15; else if(bufferPct>=10) score+=8; else score-=10;
+  if(reserve>=(exp+emi)*3) score+=10; else if(reserve>=(exp+emi)) score+=5; else score-=10;
+  score = Math.max(0,Math.min(100,score));
+  var cls = score>=70?'SAFE':score>=45?'RISKY':'DANGEROUS';
+  return {score:score,cls:cls};
+}
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function selectClient(idx){
+  var clients = JSON.parse(localStorage.getItem('fw_clients')||'[]');
+  selectedClient = clients[idx];
+  document.querySelectorAll('.cs-btn').forEach(function(b,i){ b.className='cs-btn'+(i===idx?' active':''); });
+  document.getElementById('emailForm').style.display='block';
+  document.getElementById('emailOutput').style.display='none';
+  /* Pre-fill advisor name from white-label */
+  try{
+    var wl = JSON.parse(localStorage.getItem('fw_wl')||'{}');
+    if(wl.brand) document.getElementById('advisorName').value = wl.brand;
+  }catch(e){}
+}
+
+function generateEmail(){
+  if(!selectedClient){ alert('Please select a client first.'); return; }
+  var clientEmail  = document.getElementById('clientEmail').value.trim() || 'client@example.com';
+  var advisorName  = document.getElementById('advisorName').value.trim() || 'Your Financial Advisor';
+  var notes        = document.getElementById('extraNotes').value.trim();
+  var p = selectedClient;
+  var s = calcScore(p);
+  var rev=p.rev||0, exp=p.exp||0, emi=p.emi||0, reserve=p.reserve||0;
+  var netFlow = rev-exp-emi;
+  var dscr = emi>0?(netFlow/emi):0;
+  var runway = (exp+emi)>0?Math.floor(reserve/(exp+emi)):0;
+
+  var verdict='', action='';
+  if(s.cls==='SAFE'){
+    verdict = 'Your business finances are in a SAFE position. Cash flow is healthy and debt obligations are well-covered.';
+    action  = 'You may proceed with your current loan plan. I recommend maintaining your cash reserve above 3 months of expenses.';
+  } else if(s.cls==='RISKY'){
+    verdict = 'Your business finances show RISKY indicators. While the business is operational, the loan adds measurable stress to cash flow.';
+    action  = 'I recommend we review your expense structure and consider a smaller loan amount or longer repayment tenure before proceeding.';
+  } else {
+    verdict = 'Your business finances are in a DANGEROUS position. Current cash flow is insufficient to safely service additional debt.';
+    action  = 'I strongly advise against taking on new loans at this time. Please schedule a call to discuss a recovery plan before proceeding.';
+  }
+
+  var date = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  var email =
+'To: '+clientEmail+'\n'+
+'Subject: Your Business Financial Risk Summary — '+p.name+'\n\n'+
+'Dear '+p.name.split(' ')[0]+',\n\n'+
+'I have completed a financial risk review for '+p.name+' as of '+date+'. Please find the summary below.\n\n'+
+'─────────────────────────────────────\n'+
+'FINANCIAL RISK ASSESSMENT\n'+
+'Business: '+p.name+'\n'+
+'Industry: '+(p.industry||'—')+'\n'+
+'Assessment Date: '+date+'\n'+
+'─────────────────────────────────────\n\n'+
+'RISK VERDICT: '+s.cls+' (Score: '+s.score+' / 100)\n\n'+
+verdict+'\n\n'+
+'KEY METRICS:\n'+
+'  Monthly Revenue:       '+fmt(rev)+'\n'+
+'  Monthly Expenses:      '+fmt(exp)+'\n'+
+'  Monthly EMI / Debt:    '+fmt(emi)+'\n'+
+'  Net Monthly Cash Flow: '+fmt(netFlow)+'\n'+
+'  Cash Reserve:          '+fmt(reserve)+'\n'+
+'  Debt Coverage Ratio:   '+(emi>0?dscr.toFixed(2):'N/A — no existing debt')+'\n'+
+'  Cash Runway:           '+runway+' months\n\n'+
+'RECOMMENDED ACTION:\n'+
+action+'\n'+
+(notes?'\nADDITIONAL NOTES:\n'+notes+'\n':'')+
+'\nPlease do not hesitate to reach out if you have any questions. I am available for a call to discuss this assessment in detail.\n\n'+
+'Best regards,\n'+
+advisorName+'\n\n'+
+'─────────────────────────────────────\n'+
+'This assessment is generated by FinWise and reviewed by '+advisorName+'.\n'+
+'For advisory purposes only. Not a guarantee of loan approval or financial outcome.\n'+
+'─────────────────────────────────────';
+
+  document.getElementById('emailText').textContent = email;
+  document.getElementById('emailOutput').style.display = 'block';
+  document.getElementById('emailOutput').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyEmail(){
+  var text = document.getElementById('emailText').textContent;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      var t = document.getElementById('copyToast');
+      t.classList.add('show');
+      setTimeout(function(){ t.classList.remove('show'); }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    alert('Email copied to clipboard!');
+  }
+}
+
+(function(){
+  var clients = JSON.parse(localStorage.getItem('fw_clients')||'[]');
+  var sel = document.getElementById('clientSelector');
+  if(!clients.length) return;
+  sel.innerHTML = '';
+  clients.forEach(function(c,i){
+    var s = calcScore(c);
+    var btn = document.createElement('button');
+    btn.className = 'cs-btn';
+    btn.innerHTML = '<div class="cs-name">'+c.name+'</div><div class="cs-score">'+c.industry+' · Score: '+s.score+' '+s.cls+'</div>';
+    btn.onclick = function(){ selectClient(i); };
+    sel.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

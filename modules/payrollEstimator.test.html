@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll Estimator (W-2) — FinWise</title>
+<script src="../sidebar.js" defer></script>
+<link rel="manifest" href="../manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:12px}}
+h1{font-size:1.45rem;font-weight:700;margin-bottom:4px}
+.sub{color:#64748b;font-size:.9rem;margin-bottom:20px}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:9px 18px;border:none;border-radius:8px;background:#e2e8f0;color:#475569;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:#2563eb;color:#fff}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card h2{font-size:1rem;font-weight:700;margin-bottom:14px;color:#1e293b}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+label{display:block;font-size:.82rem;font-weight:600;color:#475569;margin-bottom:4px}
+input[type=number],input[type=text],input[type=date],select{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.9rem;background:#fff;color:#1e293b;outline:none;transition:border .2s}
+input:focus,select:focus{border-color:#2563eb}
+.btn{padding:9px 18px;border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
+.btn-red{background:#ef4444;color:#fff}.btn-red:hover{background:#dc2626}
+.btn-sm{padding:5px 11px;font-size:.8rem}
+.stat-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center}
+.stat-box .val{font-size:1.5rem;font-weight:800;color:#2563eb}
+.stat-box .lbl{font-size:.78rem;color:#64748b;margin-top:2px}
+.row-form{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.row-form>div{flex:1;min-width:120px}
+.row-form>.btn{flex:none;margin-bottom:0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:#f1f5f9;padding:9px 10px;text-align:left;font-weight:700;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:8px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+tr:hover td{background:#f8fafc}
+.hint{font-size:.72rem;color:#94a3b8;margin-top:3px}
+.range-row{display:flex;align-items:center;gap:12px;margin-top:4px}
+input[type=range]{flex:1;accent-color:#2563eb}
+.range-val{font-size:.85rem;font-weight:700;color:#2563eb;width:44px;text-align:right}
+.warn-box{background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:.82rem;color:#92400e;margin-bottom:16px;display:none}
+
+/* hero result */
+.hero-result{background:linear-gradient(135deg,#166534,#15803d);border-radius:12px;padding:28px 32px;text-align:center;margin-bottom:16px;color:#fff}
+.hr-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbf7d0;margin-bottom:8px}
+.hr-amount{font-size:3.2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.hr-sub{font-size:.85rem;color:#bbf7d0}
+.hr-sub2{font-size:.78rem;color:#4ade80;margin-top:10px;background:rgba(0,0,0,.2);border-radius:6px;padding:6px 14px;display:inline-block}
+
+/* gauge */
+.gauge-track{background:#f1f5f9;border-radius:999px;height:12px;overflow:hidden;margin:8px 0}
+.gauge-fill{height:100%;border-radius:999px;transition:width .6s ease;background:linear-gradient(90deg,#16a34a,#4ade80)}
+.gauge-fill.warn{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.gauge-fill.danger{background:linear-gradient(90deg,#dc2626,#f87171)}
+.gauge-label{display:flex;justify-content:space-between;font-size:.72rem;color:#64748b}
+
+/* result cards */
+.row-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:560px){.row-grid{grid-template-columns:1fr}}
+.result-card{background:#f8fafc;border-radius:8px;padding:14px 16px;border:1px solid #e2e8f0}
+.rc-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:6px}
+.rc-value{font-size:1.2rem;font-weight:900;color:#1e293b}
+.rc-sub{font-size:.72rem;color:#64748b;margin-top:2px}
+
+/* breakdown table */
+.breakdown{width:100%;border-collapse:collapse}
+.breakdown td{padding:9px 4px;font-size:.84rem;border-bottom:1px solid #f1f5f9}
+.breakdown tr:last-child td{border-bottom:none}
+.breakdown td:last-child{text-align:right;font-weight:700}
+.breakdown .tot td{font-weight:800;font-size:.9rem;border-top:2px solid #e2e8f0;padding-top:12px}
+.breakdown .tot.green td:last-child{color:#16a34a}
+.breakdown .tot.red td:last-child{color:#dc2626}
+
+/* headcount cards */
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:4px}
+.emp-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center}
+.emp-num{font-size:1.4rem;margin-bottom:4px}
+.emp-salary{font-size:1rem;font-weight:900;color:#1e293b;margin-bottom:2px}
+.emp-label{font-size:.68rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.emp-cost{font-size:.75rem;color:#dc2626;margin-top:4px;font-weight:700}
+
+/* fica rates note */
+.rates-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;font-size:.78rem;color:#1e40af;margin-bottom:0}
+.ben-divider{padding-top:14px;margin-top:14px;border-top:1px solid #f1f5f9}
+.ben-title{font-size:.82rem;font-weight:700;color:#475569;margin-bottom:10px}
+
+/* integration strip */
+.int-strip{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 14px;font-size:.78rem;color:#166534;margin-bottom:14px}
+
+/* print / export */
+.print-hdr{display:none}
+.btn-csv{padding:7px 14px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer}
+.btn-csv:hover{background:#15803d}
+#fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
+#fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media print{
+  .print-hdr{display:block;padding:14px 0 10px;border-bottom:2px solid #1e293b;margin-bottom:18px}
+  .print-hdr-name{font-size:1.1rem;font-weight:800;color:#1e293b}
+  .print-hdr-meta{font-size:.78rem;color:#64748b;margin-top:3px}
+  .no-print{display:none!important}
+  #fwSidebar{display:none!important}
+  #mainWrap{margin-left:0!important}
+  .tabs{display:none!important}
+  .panel{display:block!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  .btn,.btn-red,.btn-csv,.btn-blue{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="print-hdr" id="printHdr">
+  <div class="print-hdr-name" id="printBizName">Payroll Summary</div>
+  <div class="print-hdr-meta" id="printMeta"></div>
+</div>
+<div id="fwSidebar"></div>
+<div id="mainWrap">
+  <h1>&#128101; Payroll Estimator (W-2)</h1>
+  <p class="sub">Budget planner &bull; Employee roster &bull; FICA / FUTA by year</p>
+  <div id="intStrip" class="int-strip no-print" style="display:none"></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('budget')">&#128200; Budget Planner</button>
+    <button class="tab-btn" onclick="switchTab('roster')">&#128101; Employee Roster</button>
+  </div>
+
+  <!-- BUDGET PLANNER TAB -->
+  <div class="panel active" id="panel-budget">
+    <div class="card">
+      <h2>Monthly Financials</h2>
+      <div class="grid2">
+        <div><label>Monthly Revenue ($)</label><input type="number" id="revenue" placeholder="e.g. 20000" min="0" onchange="saveSetup()"/></div>
+        <div><label>Monthly Fixed Expenses ($)</label><input type="number" id="expenses" placeholder="Rent, utilities, supplies" min="0" onchange="saveSetup()"/><div class="hint">Exclude payroll — we calculate that</div></div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div><label>Monthly Loan EMI ($)</label><input type="number" id="emi" placeholder="e.g. 1500" min="0" onchange="saveSetup()"/></div>
+        <div><label>Owner's Monthly Draw ($)</label><input type="number" id="ownerDraw" placeholder="What you pay yourself" min="0" onchange="saveSetup()"/></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Hiring Parameters</h2>
+      <div class="grid2">
+        <div><label>Number of Employees to Hire</label><input type="number" id="numEmp" placeholder="e.g. 3" min="1" max="50" value="1" onchange="saveSetup()"/></div>
+        <div>
+          <label>Tax Year (FICA / FUTA rates)</label>
+          <select id="taxYear" onchange="updateFicaNote()"><!-- populated JS --></select>
+        </div>
+      </div>
+      <div id="ficaNote" class="rates-note" style="margin-top:12px"></div>
+
+      <div class="ben-divider">
+        <div class="ben-title">Benefits Cost Estimator (employer share, per employee / month)</div>
+        <div class="grid3">
+          <div><label>Health Insurance ($)</label><input type="number" id="bHealth" placeholder="e.g. 600" min="0" onchange="saveSetup()"/><div class="hint">Employer premium share</div></div>
+          <div><label>401k Match (%)</label><input type="number" id="b401k" placeholder="e.g. 3" min="0" max="100" step="0.5" onchange="saveSetup()"/><div class="hint">% of employee gross salary</div></div>
+          <div><label>Other Benefits ($)</label><input type="number" id="bOther" placeholder="Dental, PTO, etc." min="0" onchange="saveSetup()"/></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <label>Profit Safety Buffer — keep this % of revenue as cushion</label>
+        <div class="range-row">
+          <input type="range" id="buffer" min="5" max="40" value="20" oninput="document.getElementById('bufferVal').textContent=this.value+'%';saveSetup()"/>
+          <span class="range-val" id="bufferVal">20%</span>
+        </div>
+        <div class="hint">Recommended: 20–30% to cover slow months and taxes</div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="btn btn-blue" onclick="calculate()">Calculate Payroll Budget &rarr;</button>
+        <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">🖨️ Print</button>
+      </div>
+    </div>
+
+    <div class="warn-box" id="warningBox"></div>
+
+    <div id="results" style="display:none">
+      <div class="hero-result" id="heroResult">
+        <div class="hr-label">Max Safe Total Payroll Budget</div>
+        <div class="hr-amount" id="rTotalPayroll">$0</div>
+        <div class="hr-sub">per month across all employees</div>
+        <div class="hr-sub2" id="rPerEmp"></div>
+      </div>
+
+      <div class="row-grid">
+        <div class="result-card"><div class="rc-label">Per Employee Gross Salary</div><div class="rc-value" id="rSalary">$0</div><div class="rc-sub" id="rSalarySub"></div></div>
+        <div class="result-card"><div class="rc-label">Annual Salary Per Employee</div><div class="rc-value" id="rAnnual">$0</div><div class="rc-sub">before employer taxes &amp; benefits</div></div>
+        <div class="result-card"><div class="rc-label">Total Employer Cost / Month</div><div class="rc-value" id="rTotalCost">$0</div><div class="rc-sub">salary + FICA + FUTA + benefits</div></div>
+        <div class="result-card"><div class="rc-label">Remaining Profit After Payroll</div><div class="rc-value" id="rRemaining">$0</div><div class="rc-sub" id="rRemainingPct"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>Payroll as % of Revenue</h2>
+        <div class="gauge-label"><span>0%</span><span id="gaugeLabel">—</span><span>100%</span></div>
+        <div class="gauge-track"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+        <div style="font-size:.78rem;color:#64748b;margin-top:8px">&#10003; <strong>Healthy:</strong> under 30% &nbsp;|&nbsp; &#9888; <strong>Tight:</strong> 30–40% &nbsp;|&nbsp; &#128680; <strong>High risk:</strong> over 40%</div>
+      </div>
+
+      <div class="card">
+        <h2>Monthly Cash Flow Breakdown</h2>
+        <table class="breakdown">
+          <tr><td style="color:#64748b">Monthly Revenue</td><td id="bRev">—</td></tr>
+          <tr><td style="color:#64748b">Fixed Expenses</td><td style="color:#dc2626" id="bExp">—</td></tr>
+          <tr><td style="color:#64748b">Loan EMI</td><td style="color:#dc2626" id="bEmi">—</td></tr>
+          <tr><td style="color:#64748b">Owner's Draw</td><td style="color:#dc2626" id="bOwner">—</td></tr>
+          <tr><td style="color:#64748b">Safety Buffer (<span id="bBufPct"></span>)</td><td style="color:#d97706" id="bBuffer">—</td></tr>
+          <tr class="tot green"><td><strong>Available for Payroll</strong></td><td id="bAvail">—</td></tr>
+          <tr class="tot red"><td><strong>Total Employer Payroll Cost</strong></td><td id="bPayrollCost">—</td></tr>
+          <tr class="tot"><td><strong>Remaining Cash</strong></td><td id="bCash">—</td></tr>
+        </table>
+      </div>
+
+      <div class="card" id="benefitsCostCard" style="display:none">
+        <h2>Per-Employee Benefits &amp; Tax Breakdown</h2>
+        <table class="breakdown" id="benefitsBreakdown"></table>
+      </div>
+
+      <div class="card">
+        <h2>Salary By Headcount</h2>
+        <div class="emp-grid" id="empGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE ROSTER TAB -->
+  <div class="panel" id="panel-roster">
+    <div class="card">
+      <h2>Add Employee</h2>
+      <div class="row-form">
+        <div><label>Name</label><input type="text" id="eName" placeholder="Jane Smith"/></div>
+        <div><label>Annual Salary ($)</label><input type="number" id="eSalary" min="0" step="100" placeholder="55000"/></div>
+        <div><label>Role / Title</label><input type="text" id="eRole" placeholder="e.g. Marketing Mgr"/></div>
+        <div><label>Start Date</label><input type="date" id="eStart"/></div>
+        <button class="btn btn-blue" onclick="addEmployee()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <h2 style="margin:0">Employee Roster</h2>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label style="margin:0;font-size:.82rem">Year:</label>
+          <select id="rosterYear" onchange="renderRoster()" style="width:90px"></select>
+          <button class="btn-csv no-print" onclick="exportCSV()">&#8595; Export CSV</button>
+        </div>
+      </div>
+      <div id="rosterStats" class="grid3" style="margin-bottom:16px"></div>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Annual Salary</th><th>Employer FICA</th><th>FUTA</th><th>Benefits/yr</th><th>Total Cost</th><th></th></tr></thead>
+        <tbody id="rosterTbody"></tbody>
+      </table>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:10px">FICA = SS 6.2% (wage base capped) + Medicare 1.45%. Benefits use inputs from Budget Planner tab.</p>
+    </div>
+  </div>
+</div>
+<div id="fwToast"></div>
+
+<script>
+// UPDATE ANNUALLY: IRS adjusts SS wage base each year. FUTA base is statutory $7,000.
+// ficaRate: employer share (SS 6.2% + Medicare 1.45% = 7.65%)
+// ficaWB: Social Security wage base (Medicare has no cap)
+// futaRate: net FUTA after 5.4% state credit
+var PAYROLL_RATES = {
+  2026:{ficaRate:.0765,ficaWB:176100,futaRate:.006,futaWB:7000},
+  2025:{ficaRate:.0765,ficaWB:176100,futaRate:.006,futaWB:7000},
+  2024:{ficaRate:.0765,ficaWB:168600,futaRate:.006,futaWB:7000},
+  2023:{ficaRate:.0765,ficaWB:160200,futaRate:.006,futaWB:7000},
+  2022:{ficaRate:.0765,ficaWB:147000,futaRate:.006,futaWB:7000}
+};
+
+var SETUP_KEY = 'fw_payroll_setup';
+
+// ── STORAGE ──────────────────────────────────────────────────────────────────
+function getEmployees(){ return JSON.parse(localStorage.getItem('fw_employees')||'[]'); }
+function setEmployees(a){ localStorage.setItem('fw_employees',JSON.stringify(a)); }
+function getSetup(){ return JSON.parse(localStorage.getItem(SETUP_KEY)||'{}'); }
+
+function saveSetup(){
+  localStorage.setItem(SETUP_KEY, JSON.stringify({
+    revenue:   document.getElementById('revenue').value,
+    expenses:  document.getElementById('expenses').value,
+    emi:       document.getElementById('emi').value,
+    ownerDraw: document.getElementById('ownerDraw').value,
+    numEmp:    document.getElementById('numEmp').value,
+    taxYear:   document.getElementById('taxYear').value,
+    bHealth:   document.getElementById('bHealth').value,
+    b401k:     document.getElementById('b401k').value,
+    bOther:    document.getElementById('bOther').value,
+    buffer:    document.getElementById('buffer').value
+  }));
+}
+
+function restoreSetup(){
+  var s = getSetup();
+  var p = {};
+  try{ p = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  if(s.revenue||p.rev)   document.getElementById('revenue').value   = s.revenue||p.rev||'';
+  if(s.expenses||p.exp)  document.getElementById('expenses').value  = s.expenses||p.exp||'';
+  if(s.emi||p.emi)       document.getElementById('emi').value       = s.emi||p.emi||'';
+  if(s.ownerDraw)        document.getElementById('ownerDraw').value = s.ownerDraw;
+  if(s.numEmp)           document.getElementById('numEmp').value    = s.numEmp;
+  if(s.taxYear)          document.getElementById('taxYear').value   = s.taxYear;
+  if(s.bHealth)          document.getElementById('bHealth').value   = s.bHealth;
+  if(s.b401k)            document.getElementById('b401k').value     = s.b401k;
+  if(s.bOther)           document.getElementById('bOther').value    = s.bOther;
+  if(s.buffer){
+    document.getElementById('buffer').value = s.buffer;
+    document.getElementById('bufferVal').textContent = s.buffer+'%';
+  }
+}
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg){
+  var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },3500);
+}
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn')[{budget:0,roster:1}[id]].classList.add('active');
+  if(id==='roster') renderRoster();
+}
+
+// ── FICA NOTE ────────────────────────────────────────────────────────────────
+function updateFicaNote(){
+  var yr = parseInt(document.getElementById('taxYear').value)||new Date().getFullYear();
+  var r = PAYROLL_RATES[yr]||PAYROLL_RATES[2024];
+  document.getElementById('ficaNote').innerHTML =
+    '<strong>'+yr+' rates:</strong> Employer FICA '+
+    (r.ficaRate*100).toFixed(2)+'% (SS 6.2% capped at $'+r.ficaWB.toLocaleString()+
+    ' + Medicare 1.45% uncapped) &nbsp;|&nbsp; FUTA '+
+    (r.futaRate*100).toFixed(1)+'% net on first $'+r.futaWB.toLocaleString()+'/employee';
+  saveSetup();
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function fmt(n){ return '$'+Math.max(0,Math.round(n)).toLocaleString('en-US'); }
+function fmtD(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtPct(n){ return (n*100).toFixed(1)+'%'; }
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function stat(val,lbl){ return '<div class="stat-box"><div class="val">'+val+'</div><div class="lbl">'+lbl+'</div></div>'; }
+
+// ── BUDGET CALCULATOR ────────────────────────────────────────────────────────
+function calcFica(annSal, rates){
+  var ss = Math.min(annSal,rates.ficaWB)*0.062;
+  var mc = annSal*0.0145;
+  return ss+mc;
+}
+
+function calculate(){
+  var rev    = parseFloat(document.getElementById('revenue').value)||0;
+  var exp    = parseFloat(document.getElementById('expenses').value)||0;
+  var emi    = parseFloat(document.getElementById('emi').value)||0;
+  var owner  = parseFloat(document.getElementById('ownerDraw').value)||0;
+  var numEmp = parseInt(document.getElementById('numEmp').value)||1;
+  var bufPct = parseFloat(document.getElementById('buffer').value)/100;
+  var yr     = parseInt(document.getElementById('taxYear').value)||new Date().getFullYear();
+  var rates  = PAYROLL_RATES[yr]||PAYROLL_RATES[2024];
+
+  var bHealth  = parseFloat(document.getElementById('bHealth').value)||0;
+  var b401kPct = parseFloat(document.getElementById('b401k').value)||0;
+  var bOther   = parseFloat(document.getElementById('bOther').value)||0;
+
+  saveSetup();
+  if(!rev){ toast('Enter monthly revenue'); return; }
+
+  var buffer    = rev*bufPct;
+  var available = rev-exp-emi-owner-buffer;
+
+  var warn = document.getElementById('warningBox');
+  if(available<=0){
+    warn.textContent = 'After expenses, EMI, owner draw and safety buffer there is no payroll budget. Reduce expenses or owner draw first.';
+    warn.style.display='block';
+    document.getElementById('results').style.display='none';
+    return;
+  }
+  warn.style.display='none';
+
+  // Fixed benefits per employee per month
+  var fixedBenMo = bHealth+bOther;
+  // 401k is salary-dependent; FICA is salary-dependent; FUTA is salary-dependent (small)
+  // Solve: perEmpSalary * (1 + ficaRate + 401k%) + fixedBen = budgetPerEmp
+  var budgetPerEmp = available/numEmp;
+  var salMult = 1 + rates.ficaRate + b401kPct/100;
+  var perEmpSalary = (budgetPerEmp-fixedBenMo)/salMult;
+  if(perEmpSalary<0) perEmpSalary=0;
+
+  var ficaMo   = perEmpSalary*rates.ficaRate;
+  var k401mo   = perEmpSalary*b401kPct/100;
+  var futaMo   = Math.min(perEmpSalary*12,rates.futaWB)*rates.futaRate/12;
+  var perEmpCost = perEmpSalary+ficaMo+futaMo+bHealth+k401mo+bOther;
+  var totalEmpCost = perEmpCost*numEmp;
+  var remaining    = available-totalEmpCost;
+  var payrollPct   = totalEmpCost/rev;
+
+  // Hero
+  document.getElementById('rTotalPayroll').textContent = fmt(perEmpSalary*numEmp);
+  document.getElementById('rPerEmp').textContent = 'Per employee: '+fmt(perEmpSalary)+'/mo = '+fmt(perEmpSalary*12)+'/yr';
+  document.getElementById('rSalary').textContent  = fmt(perEmpSalary);
+  document.getElementById('rSalarySub').textContent = 'Gross / '+fmt(perEmpSalary/160)+' per hr (40hr wk)';
+  document.getElementById('rAnnual').textContent  = fmt(perEmpSalary*12);
+  document.getElementById('rTotalCost').textContent = fmt(totalEmpCost);
+  document.getElementById('rRemaining').textContent = fmt(remaining);
+  document.getElementById('rRemainingPct').textContent = fmtPct(remaining/rev)+' of revenue';
+
+  // Gauge
+  var pct = Math.min(100,payrollPct*100);
+  var fill = document.getElementById('gaugeFill');
+  fill.style.width = pct+'%';
+  fill.className = 'gauge-fill'+(payrollPct>.4?' danger':payrollPct>.3?' warn':'');
+  document.getElementById('gaugeLabel').textContent = fmtPct(payrollPct)+' of revenue';
+
+  // Breakdown
+  document.getElementById('bRev').textContent       = fmt(rev);
+  document.getElementById('bExp').textContent       = '−'+fmt(exp);
+  document.getElementById('bEmi').textContent       = '−'+fmt(emi);
+  document.getElementById('bOwner').textContent     = '−'+fmt(owner);
+  document.getElementById('bBufPct').textContent    = Math.round(bufPct*100)+'%';
+  document.getElementById('bBuffer').textContent    = '−'+fmt(buffer);
+  document.getElementById('bAvail').textContent     = fmt(available);
+  document.getElementById('bPayrollCost').textContent='−'+fmt(totalEmpCost);
+  document.getElementById('bCash').textContent      = fmt(remaining);
+
+  // Benefits detail
+  if(bHealth||b401kPct||bOther){
+    document.getElementById('benefitsBreakdown').innerHTML =
+      '<tr><td>Gross Salary</td><td>'+fmt(perEmpSalary)+'/mo</td></tr>'+
+      '<tr><td>Employer FICA ('+fmtPct(rates.ficaRate)+')</td><td>'+fmt(ficaMo)+'/mo</td></tr>'+
+      '<tr><td>FUTA (est.)</td><td>'+fmt(futaMo)+'/mo</td></tr>'+
+      '<tr><td>Health Insurance</td><td>'+fmt(bHealth)+'/mo</td></tr>'+
+      (b401kPct?'<tr><td>401k Match ('+b401kPct+'%)</td><td>'+fmt(k401mo)+'/mo</td></tr>':'')+
+      (bOther?'<tr><td>Other Benefits</td><td>'+fmt(bOther)+'/mo</td></tr>':'')+
+      '<tr style="font-weight:800;border-top:2px solid #e2e8f0"><td>Total Cost per Employee</td><td>'+fmt(perEmpCost)+'/mo</td></tr>';
+    document.getElementById('benefitsCostCard').style.display='';
+  } else {
+    document.getElementById('benefitsCostCard').style.display='none';
+  }
+
+  // Headcount cards
+  var grid='';
+  for(var n=1; n<=Math.min(numEmp+3,10); n++){
+    var bpe = available/n;
+    var sal = (bpe-fixedBenMo)/salMult;
+    if(sal<0) sal=0;
+    var cost=(sal*(1+rates.ficaRate+b401kPct/100)+fixedBenMo)*n;
+    var active=(n===numEmp);
+    grid+='<div class="emp-card" style="'+(active?'border-color:#2563eb;background:#eff6ff':'')+'">' +
+      '<div class="emp-num">'+(active?'&#11088;':'&#128100;')+'</div>'+
+      '<div class="emp-salary">'+fmt(sal)+'<span style="font-size:.7rem;font-weight:600;color:#64748b">/mo</span></div>'+
+      '<div class="emp-label">'+n+' employee'+(n>1?'s':'')+' @ '+fmt(sal*12)+'/yr</div>'+
+      '<div class="emp-cost">Total cost: '+fmt(cost)+'/mo</div>'+
+    '</div>';
+  }
+  document.getElementById('empGrid').innerHTML=grid;
+
+  // Hero color
+  var hero=document.getElementById('heroResult');
+  if(payrollPct>.4) hero.style.background='linear-gradient(135deg,#991b1b,#dc2626)';
+  else if(payrollPct>.3) hero.style.background='linear-gradient(135deg,#92400e,#d97706)';
+  else hero.style.background='linear-gradient(135deg,#166534,#15803d)';
+
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Push integration
+  pushPayrollTotals(totalEmpCost*12, numEmp, yr);
+}
+
+// ── INTEGRATION ──────────────────────────────────────────────────────────────
+function pushPayrollTotals(annualCost, count, yr){
+  var byYear = {};
+  byYear[yr] = annualCost;
+  localStorage.setItem('fw_payroll_totals', JSON.stringify({
+    byYear: byYear, currentYear: yr, currentYearTotal: annualCost,
+    employeeCount: count, updatedAt: Date.now()
+  }));
+  var strip=document.getElementById('intStrip');
+  strip.style.display='';
+  strip.innerHTML='&#128101; Payroll synced &mdash; <strong>'+yr+' est. annual payroll: $'+fmtD(annualCost)+'</strong> shared with Tax Estimator &amp; Owner\'s Pay';
+}
+
+// ── EMPLOYEE ROSTER ──────────────────────────────────────────────────────────
+function addEmployee(){
+  var name   = document.getElementById('eName').value.trim();
+  var salary = parseFloat(document.getElementById('eSalary').value);
+  var role   = document.getElementById('eRole').value.trim();
+  var start  = document.getElementById('eStart').value;
+  if(!name||isNaN(salary)||salary<=0){ toast('Enter name and annual salary'); return; }
+  var emps=getEmployees();
+  emps.push({id:Date.now(),name:name,salary:salary,role:role,start:start});
+  setEmployees(emps);
+  document.getElementById('eName').value='';
+  document.getElementById('eSalary').value='';
+  document.getElementById('eRole').value='';
+  renderRoster();
+  pushRosterTotals(emps);
+  toast('Employee added');
+}
+
+function deleteEmployee(id){
+  if(!confirm('Remove this employee?')) return;
+  var emps=getEmployees().filter(function(e){ return e.id!==id; });
+  setEmployees(emps);
+  renderRoster();
+  pushRosterTotals(emps);
+  toast('Employee removed');
+}
+
+function renderRoster(){
+  var emps  = getEmployees();
+  var yr    = parseInt(document.getElementById('rosterYear').value)||new Date().getFullYear();
+  var rates = PAYROLL_RATES[yr]||PAYROLL_RATES[2024];
+  var s     = getSetup();
+  var bHealth  = parseFloat(s.bHealth)||0;
+  var b401kPct = parseFloat(s.b401k)||0;
+  var bOther   = parseFloat(s.bOther)||0;
+
+  var tSal=0,tCost=0;
+  var rows='';
+  if(!emps.length){
+    rows='<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:20px">No employees yet — add one above</td></tr>';
+  } else {
+    emps.forEach(function(e){
+      var annSal = e.salary;
+      var fica   = calcFica(annSal, rates);
+      var futa   = Math.min(annSal,rates.futaWB)*rates.futaRate;
+      var benAnn = (bHealth+bOther)*12 + annSal*b401kPct/100;
+      var total  = annSal+fica+futa+benAnn;
+      tSal+=annSal; tCost+=total;
+      rows+='<tr>'+
+        '<td><strong>'+esc(e.name)+'</strong>'+(e.start?'<br><span style="font-size:.72rem;color:#94a3b8">Since '+e.start+'</span>':'')+' </td>'+
+        '<td>'+(e.role||'—')+'</td>'+
+        '<td>$'+fmtD(annSal)+'/yr</td>'+
+        '<td>$'+fmtD(fica)+'/yr</td>'+
+        '<td>$'+fmtD(futa)+'/yr</td>'+
+        '<td>'+(bHealth||b401kPct||bOther?'$'+fmtD(benAnn)+'/yr':'—')+'</td>'+
+        '<td><strong>$'+fmtD(total)+'/yr</strong></td>'+
+        '<td><button class="btn btn-sm btn-red" onclick="deleteEmployee('+e.id+')">&#128465;</button></td>'+
+        '</tr>';
+    });
+  }
+  document.getElementById('rosterTbody').innerHTML=rows;
+  document.getElementById('rosterStats').innerHTML=
+    stat('$'+fmtD(tSal/12)+'/mo','Total Monthly Salaries')+
+    stat('$'+fmtD(tCost/12)+'/mo','Total Employer Cost/Mo')+
+    stat(emps.length,'Employees');
+}
+
+function pushRosterTotals(emps){
+  var yr     = new Date().getFullYear();
+  var total  = emps.reduce(function(s,e){ return s+e.salary; },0);
+  var byYear = {};
+  byYear[yr] = total;
+  localStorage.setItem('fw_payroll_totals', JSON.stringify({
+    byYear: byYear, currentYear: yr, currentYearTotal: total,
+    employeeCount: emps.length, updatedAt: Date.now()
+  }));
+  var strip=document.getElementById('intStrip');
+  if(emps.length){
+    strip.style.display='';
+    strip.innerHTML='&#128101; Payroll roster synced &mdash; <strong>'+emps.length+' employees, $'+fmtD(total)+'/yr total salary</strong> shared with Tax Estimator &amp; Owner\'s Pay';
+  }
+}
+
+// ── EXPORT CSV ───────────────────────────────────────────────────────────────
+function exportCSV(){
+  var emps  = getEmployees();
+  var yr    = parseInt(document.getElementById('rosterYear').value)||new Date().getFullYear();
+  var rates = PAYROLL_RATES[yr]||PAYROLL_RATES[2024];
+  var s     = getSetup();
+  var bHealth  = parseFloat(s.bHealth)||0;
+  var b401kPct = parseFloat(s.b401k)||0;
+  var bOther   = parseFloat(s.bOther)||0;
+
+  var rows=[['Payroll Summary — '+yr],[]];
+  rows.push(['Name','Role','Start Date','Annual Salary','Employer FICA','FUTA','Benefits/yr','Total Employer Cost/yr']);
+  var tSal=0,tCost=0;
+  emps.forEach(function(e){
+    var annSal=e.salary;
+    var fica=calcFica(annSal,rates);
+    var futa=Math.min(annSal,rates.futaWB)*rates.futaRate;
+    var ben=(bHealth+bOther)*12+annSal*b401kPct/100;
+    var total=annSal+fica+futa+ben;
+    tSal+=annSal; tCost+=total;
+    rows.push([e.name,e.role||'',e.start||'',
+      annSal.toFixed(2),fica.toFixed(2),futa.toFixed(2),ben.toFixed(2),total.toFixed(2)]);
+  });
+  rows.push([],['TOTAL','','',tSal.toFixed(2),'','','',tCost.toFixed(2)]);
+  var csv=rows.map(function(r){
+    return r.map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\r\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download='payroll_'+yr+'.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV downloaded');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+(function init(){
+  var yr=new Date().getFullYear();
+  ['taxYear','rosterYear'].forEach(function(id){
+    var el=document.getElementById(id);
+    [yr,yr-1,yr-2].forEach(function(y){
+      var o=document.createElement('option'); o.value=y; o.textContent=y; el.appendChild(o);
+    });
+  });
+
+  document.getElementById('eStart').value=new Date().toISOString().split('T')[0];
+
+  restoreSetup();
+  updateFicaNote();
+  renderRoster();
+
+  // Push existing roster totals on load
+  var emps=getEmployees();
+  if(emps.length) pushRosterTotals(emps);
+})();
+</script>
+</body>
+</html>

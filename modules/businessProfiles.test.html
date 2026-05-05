@@ -1,0 +1,868 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Business Profiles — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
+a{text-decoration:none;color:inherit}
+
+.page-header{background:linear-gradient(135deg,#0891b2,#4f46e5);padding:18px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:20px}
+.page-header h1{font-size:1.15rem;font-weight:800}
+.page-header p{font-size:.8rem;color:rgba(255,255,255,.75);margin-top:.15rem}
+.ph-back{font-size:.78rem;color:rgba(255,255,255,.7);display:block;margin-bottom:.2rem}
+.ph-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3rem .9rem;font-size:.75rem;font-weight:700;white-space:nowrap}
+
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px}
+.card{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.card h2{font-size:.95rem;font-weight:700;margin-bottom:.4rem;color:#1e293b}
+.card-desc{font-size:.8rem;color:#64748b;margin-bottom:14px}
+
+/* ── Usage bar ── */
+.usage-bar{background:#fff;border-radius:10px;padding:14px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.usage-dots{display:flex;gap:6px}
+.dot{width:22px;height:22px;border-radius:50%;background:#e2e8f0;border:2px solid #e2e8f0;transition:all .2s}
+.dot.used{background:#4f46e5;border-color:#4f46e5}
+.dot.unlimited{background:linear-gradient(135deg,#0891b2,#4f46e5);border-color:#4f46e5}
+.usage-label{font-size:.85rem;font-weight:700;color:#1e293b;flex:1}
+.usage-sub{font-size:.74rem;color:#64748b}
+.btn-new{padding:9px 20px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-new:hover{background:#3730a3}
+.btn-new:disabled{background:#c7d2fe;cursor:not-allowed}
+
+/* ── Upgrade banner ── */
+.upgrade-banner{background:linear-gradient(135deg,#fef9c3,#fde68a);border:1.5px solid #f59e0b;border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ub-text h3{font-size:.9rem;font-weight:800;color:#92400e;margin-bottom:3px}
+.ub-text p{font-size:.78rem;color:#b45309;line-height:1.5}
+.ub-form{display:flex;gap:7px;margin-left:auto;flex-wrap:wrap;align-items:center}
+.ub-inp{padding:7px 10px;border:2px solid #f59e0b;border-radius:7px;font-size:.82rem;text-align:center;text-transform:uppercase;letter-spacing:.06em;width:140px;background:#fffbeb}
+.ub-inp:focus{outline:none;border-color:#d97706}
+.ub-btn{padding:7px 16px;background:#d97706;color:#fff;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.ub-hint{font-size:.7rem;color:#92400e;margin-top:4px}
+.ub-hint code{background:rgba(0,0,0,.08);padding:1px 4px;border-radius:3px;font-family:monospace}
+
+/* ── Profile grid ── */
+.profiles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:16px}
+.profile-card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 5px rgba(0,0,0,.07);border:2px solid #e2e8f0;transition:border-color .15s;position:relative}
+.profile-card.active{border-color:#10b981}
+.active-badge{position:absolute;top:12px;right:14px;background:#dcfce7;color:#166534;font-size:.66rem;font-weight:800;padding:.2rem .55rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.pc-name{font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:10px;padding-right:60px;line-height:1.3}
+.pc-metrics{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-bottom:12px}
+.pc-metric{background:#f8fafc;border-radius:6px;padding:6px 10px}
+.pc-metric-label{font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+.pc-metric-val{font-size:.9rem;font-weight:800;color:#1e293b}
+.pc-metric-val.pos{color:#10b981}
+.pc-metric-val.neg{color:#dc2626}
+.pc-date{font-size:.68rem;color:#94a3b8;margin-bottom:10px}
+.pc-actions{display:flex;gap:6px}
+.btn-sm{padding:5px 13px;border-radius:6px;font-size:.76rem;font-weight:700;cursor:pointer;border:none}
+.btn-active{background:#10b981;color:#fff}
+.btn-active:hover{background:#059669}
+.btn-active.already{background:#dcfce7;color:#166534;cursor:default}
+.btn-edit{background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0}
+.btn-edit:hover{background:#e2e8f0}
+.btn-del{background:#fff5f5;color:#dc2626;border:1.5px solid #fecaca}
+.btn-del:hover{background:#fee2e2}
+
+.empty-state{text-align:center;padding:40px 20px;color:#94a3b8}
+.empty-state .es-icon{font-size:2.8rem;display:block;margin-bottom:10px}
+.empty-state p{font-size:.85rem;line-height:1.6}
+
+/* ── Create / Edit Form ── */
+.form-panel{background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07);border-top:4px solid #4f46e5}
+.form-panel h3{font-size:.92rem;font-weight:800;color:#1e293b;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 14px}
+@media(max-width:600px){.g2,.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.g2,.g3{grid-template-columns:1fr}}
+label{display:block;font-size:.79rem;font-weight:600;color:#555;margin-bottom:2px;margin-top:10px}
+input{width:100%;padding:7px 9px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:.88rem}
+input:focus{outline:none;border-color:#4f46e5}
+.hint{font-size:.69rem;color:#94a3b8;margin-top:1px}
+.form-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.btn-save{padding:9px 24px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:700;cursor:pointer}
+.btn-save:hover{background:#3730a3}
+.btn-cancel{padding:9px 18px;background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+
+/* ── Paywall ── */
+.pw-overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);backdrop-filter:blur(4px);z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}
+.pw-box{background:#fff;border-radius:14px;padding:28px 24px;max-width:440px;width:100%;text-align:center}
+.pw-box h2{font-size:1.15rem;font-weight:800;margin:.5rem 0 .4rem}
+.pw-box p{font-size:.84rem;color:#64748b;margin-bottom:14px;line-height:1.55}
+.pw-feats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px;text-align:left}
+.pw-feat{background:#f8fafc;border-radius:7px;padding:8px 10px;font-size:.77rem;color:#334155}
+.pw-btn{display:block;width:100%;padding:11px;background:linear-gradient(135deg,#0891b2,#4f46e5);color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:800;cursor:pointer;margin-bottom:10px}
+.pw-or{display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:.75rem;margin:8px 0}
+.pw-or::before,.pw-or::after{content:'';flex:1;height:1px;background:#e2e8f0}
+.pw-row{display:flex;gap:7px}
+.pw-inp{flex:1;padding:7px 10px;border:2px solid #e2e8f0;border-radius:7px;font-size:.85rem;text-align:center;text-transform:uppercase;letter-spacing:.08em;width:0}
+.pw-inp:focus{outline:none;border-color:#4f46e5}
+.pw-unlock{padding:7px 14px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer}
+.pw-err{color:#dc2626;font-size:.75rem;margin-top:5px;display:none}
+.pw-hint{font-size:.72rem;color:#94a3b8;margin-top:5px}
+.pw-hint code{background:#f1f5f9;padding:1px 5px;border-radius:3px;color:#4f46e5;font-family:monospace}
+
+.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* confirm overlay */
+.confirm-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:100;display:none;align-items:center;justify-content:center}
+.confirm-overlay.show{display:flex}
+.confirm-box{background:#fff;border-radius:12px;padding:24px;max-width:340px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.confirm-box h3{font-size:.95rem;font-weight:800;margin-bottom:8px}
+.confirm-box p{font-size:.82rem;color:#64748b;margin-bottom:16px;line-height:1.5}
+.confirm-actions{display:flex;gap:8px;justify-content:center}
+.btn-confirm-del{padding:8px 20px;background:#dc2626;color:#fff;border:none;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer}
+.btn-confirm-cancel{padding:8px 16px;background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer}
+
+@media print{.pw-overlay,.form-panel,.page-header .ph-back,.usage-bar .btn-new,.pc-actions,.upgrade-banner{display:none!important}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<!-- Paywall -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div style="font-size:2.2rem">💼</div>
+    <h2>Business Profiles Manager</h2>
+    <p>Save, switch, and manage multiple business profiles. No more re-entering numbers every time.</p>
+    <div class="pw-feats">
+      <div class="pw-feat">💾 Save up to 3 profiles</div>
+      <div class="pw-feat">⚡ One-click switch</div>
+      <div class="pw-feat">✏️ Edit anytime</div>
+      <div class="pw-feat">🔗 Shared across all tools</div>
+    </div>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <div class="pw-or">or enter promo code</div>
+    <div class="pw-row">
+      <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
+      <button class="pw-unlock" onclick="tryUnlock()">Unlock</button>
+    </div>
+    <div class="pw-err" id="pwErr">Invalid code. Try FINWISE29</div>
+    <div class="pw-hint">Demo code: <code>FINWISE29</code></div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Delete Profile?</h3>
+    <p id="confirmMsg">This profile will be permanently removed.</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm-del" onclick="confirmDelete()">Yes, Delete</button>
+      <button class="btn-confirm-cancel" onclick="closeConfirm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<div class="page-header">
+  <div>
+    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <h1>💼 Business Profiles Manager</h1>
+    <p>Save and switch between business profiles across all FinWise tools</p>
+  </div>
+  <div class="ph-badge" id="planBadge">Pro · $29/month</div>
+</div>
+
+<div class="wrap">
+  <!-- Usage indicator -->
+  <div class="usage-bar" id="usageBar"></div>
+
+  <!-- Upgrade to unlimited banner -->
+  <div class="upgrade-banner" id="upgradeBanner" style="display:none">
+    <div>⭐</div>
+    <div class="ub-text">
+      <h3>Profile limit reached — Upgrade to Unlimited</h3>
+      <p>Pro plan allows 3 profiles. Unlock unlimited profiles for teams managing multiple businesses.</p>
+      <div class="ub-hint">Demo code: <code>FWUNLIMITED</code></div>
+    </div>
+    <div class="ub-form">
+      <div>
+        <input type="text" class="ub-inp" id="unlimitedCode" placeholder="PROMO CODE" maxlength="14"/>
+        <button class="ub-btn" onclick="tryUnlimited()">Unlock Unlimited</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile grid -->
+  <div class="profiles-grid" id="profilesGrid"></div>
+
+  <!-- Create / Edit form -->
+  <div class="form-panel" id="formPanel" style="display:none">
+    <h3 id="formTitle">➕ Create New Profile</h3>
+    <div>
+      <label>Business Name</label>
+      <input type="text" id="f_name" placeholder="e.g. Acme Consulting"/>
+    </div>
+    <div class="g3">
+      <div>
+        <label>Monthly Revenue</label>
+        <input type="number" id="f_rev" placeholder="15000" min="0"/>
+      </div>
+      <div>
+        <label>Monthly Expenses</label>
+        <input type="number" id="f_exp" placeholder="9000" min="0"/>
+      </div>
+      <div>
+        <label>Monthly EMI (if any)</label>
+        <input type="number" id="f_emi" placeholder="0" min="0"/>
+        <div class="hint">Leave 0 if no active loan</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <label>Cash Reserve</label>
+        <input type="number" id="f_res" placeholder="20000" min="0"/>
+        <div class="hint">Total savings / buffer funds</div>
+      </div>
+      <div>
+        <label>Loan Amount (if any)</label>
+        <input type="number" id="f_loan" placeholder="0" min="0"/>
+        <div class="hint">Outstanding loan principal</div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="saveProfile()">💾 Save Profile</button>
+      <button class="btn-cancel" onclick="closeForm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Toast ── */
+function showToast(m){
+  var t=document.getElementById('toast');
+  t.textContent=m; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2800);
+}
+
+/* ── Currency ── */
+var CUR_SYM=(function(){
+  var s=localStorage.getItem('finwise_currency')||'USD';
+  return '
+})();
+function fmt(n){
+  if(!n||isNaN(n)) return CUR_SYM+'0';
+  return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();
+}
+
+/* ── Profile store ── */
+function getProfiles(){
+  try{ return JSON.parse(localStorage.getItem('fw_profiles')||'[]'); }
+  catch(e){ return []; }
+}
+function putProfiles(arr){
+  localStorage.setItem('fw_profiles',JSON.stringify(arr));
+}
+
+/* Active profile = last item in array.
+   fw_active_idx stores explicit index if user set active manually. */
+function getActiveIdx(profiles){
+  var stored=localStorage.getItem('fw_active_idx');
+  if(stored!==null){
+    var idx=parseInt(stored);
+    if(idx>=0 && idx<profiles.length) return idx;
+  }
+  return profiles.length-1;
+}
+function setActiveIdx(idx){
+  localStorage.setItem('fw_active_idx', String(idx));
+}
+
+/* ── Tier logic ── */
+function isUnlimited(){ return localStorage.getItem('fw_unlimited')==='1'; }
+function isPro()      { return localStorage.getItem('fw_pro')==='1'; }
+function getLimit(){
+  if(isUnlimited()) return Infinity;
+  return 3; // Pro
+}
+
+/* ── Render usage bar ── */
+function renderUsageBar(profiles){
+  var limit=getLimit();
+  var used=profiles.length;
+  var unlimited=isUnlimited();
+  var bar=document.getElementById('usageBar');
+
+  var dotsHtml='';
+  if(unlimited){
+    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">∞</div>';
+  } else {
+    for(var i=0;i<limit;i++){
+      dotsHtml+='<div class="dot'+(i<used?' used':'')+'"></div>';
+    }
+  }
+
+  var labelText=unlimited
+    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
+    : used+' of '+limit+' profiles used';
+  var subText=unlimited
+    ? 'Unlimited tier active'
+    : (used>=limit?'Limit reached · Upgrade for more':'Add up to '+limit+' business profiles');
+
+  var atLimit=(!unlimited && used>=limit);
+
+  bar.innerHTML='<div class="usage-dots">'+dotsHtml+'</div>'
+    +'<div><div class="usage-label">'+labelText+'</div>'
+    +'<div class="usage-sub">'+subText+'</div></div>'
+    +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
+    +(atLimit?'🔒 Limit Reached':'➕ New Profile')
+    +'</button>';
+
+  /* Update plan badge */
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro · 3 Profiles';
+
+  /* Show/hide upgrade banner */
+  document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
+}
+
+function showUpgradeBanner(){
+  document.getElementById('upgradeBanner').style.display='flex';
+  document.getElementById('upgradeBanner').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ── Render profile cards ── */
+function renderGrid(){
+  var profiles=getProfiles();
+  var activeIdx=getActiveIdx(profiles);
+  var grid=document.getElementById('profilesGrid');
+
+  renderUsageBar(profiles);
+
+  if(!profiles.length){
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
+      +'<span class="es-icon">💼</span>'
+      +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
+      +'</div>';
+    return;
+  }
+
+  var html='';
+  for(var i=0;i<profiles.length;i++){
+    var p=profiles[i];
+    var isActive=(i===activeIdx);
+    var rev=parseFloat(p.rev)||0;
+    var exp=parseFloat(p.exp)||0;
+    var emi=parseFloat(p.emi)||0;
+    var res=parseFloat(p.reserve||p.res)||0;
+    var net=rev-exp-emi;
+    var netCls=net>=0?'pos':'neg';
+    var netStr=(net<0?'-':'')+fmt(net);
+    var dscr=(emi>0)?((rev-exp)/emi).toFixed(2)+'x':'N/A';
+    var resMo=(emi>0&&emi>0)?(res/emi).toFixed(1):(exp>0?(res/exp).toFixed(1):'N/A');
+
+    var savedAt=p.savedAt?'Saved '+p.savedAt:'';
+
+    html+='<div class="profile-card'+(isActive?' active':'')+'">'
+      +(isActive?'<div class="active-badge">✓ Active</div>':'')
+      +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
+      +'<div class="pc-metrics">'
+        +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Monthly Expenses</div><div class="pc-metric-val">'+fmt(exp)+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Net Cash Flow</div><div class="pc-metric-val '+netCls+'">'+netStr+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Cash Reserve</div><div class="pc-metric-val">'+fmt(res)+'</div></div>'
+        +(emi>0?'<div class="pc-metric"><div class="pc-metric-label">Monthly EMI</div><div class="pc-metric-val">'+fmt(emi)+'</div></div>':'')
+        +(emi>0?'<div class="pc-metric"><div class="pc-metric-label">DSCR</div><div class="pc-metric-val">'+dscr+'</div></div>':'')
+        +(emi===0?'<div class="pc-metric"><div class="pc-metric-label">Reserve Cover</div><div class="pc-metric-val">'+resMo+' mo</div></div>':'')
+      +'</div>'
+      +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
+      +'<div class="pc-actions">'
+        +(isActive
+          ?'<button class="btn-sm btn-active already" disabled>✓ Active</button>'
+          :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">✏️ Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">🗑 Delete</button>'
+      +'</div>'
+      +'</div>';
+  }
+  grid.innerHTML=html;
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Set active ── */
+function setActive(idx){
+  setActiveIdx(idx);
+  renderGrid();
+  showToast('✅ Profile set as active — all tools will load this profile.');
+}
+
+/* ── Open create form ── */
+var editIdx=-1;
+function openNewForm(){
+  var profiles=getProfiles();
+  if(!isUnlimited() && profiles.length>=getLimit()){
+    showUpgradeBanner();
+    showToast('Profile limit reached. Upgrade to Unlimited.');
+    return;
+  }
+  editIdx=-1;
+  document.getElementById('formTitle').textContent='➕ Create New Profile';
+  clearForm();
+  document.getElementById('formPanel').style.display='block';
+  document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── Open edit form ── */
+function openEditForm(idx){
+  var profiles=getProfiles();
+  var p=profiles[idx];
+  editIdx=idx;
+  document.getElementById('formTitle').textContent='✏️ Edit Profile';
+  document.getElementById('f_name').value=p.name||'';
+  document.getElementById('f_rev').value=p.rev||'';
+  document.getElementById('f_exp').value=p.exp||'';
+  document.getElementById('f_emi').value=p.emi||'';
+  document.getElementById('f_res').value=p.reserve||p.res||'';
+  document.getElementById('f_loan').value=p.loan||'';
+  document.getElementById('formPanel').style.display='block';
+  document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeForm(){
+  document.getElementById('formPanel').style.display='none';
+  editIdx=-1;
+}
+
+function clearForm(){
+  ['f_name','f_rev','f_exp','f_emi','f_res','f_loan'].forEach(function(id){
+    document.getElementById(id).value='';
+  });
+}
+
+/* ── Save profile ── */
+function saveProfile(){
+  var name=document.getElementById('f_name').value.trim();
+  if(!name){ showToast('Please enter a Business Name.'); return; }
+  var rev=parseFloat(document.getElementById('f_rev').value)||0;
+  var exp=parseFloat(document.getElementById('f_exp').value)||0;
+  if(!rev){ showToast('Please enter Monthly Revenue.'); return; }
+
+  var profiles=getProfiles();
+
+  /* Limit check for new profiles */
+  if(editIdx===-1 && !isUnlimited() && profiles.length>=getLimit()){
+    showToast('Profile limit reached. Upgrade to Unlimited.');
+    showUpgradeBanner();
+    return;
+  }
+
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  var profile={
+    id: 'fw_'+Date.now(),
+    name: name,
+    rev:  rev,
+    exp:  exp,
+    emi:  parseFloat(document.getElementById('f_emi').value)||0,
+    reserve: parseFloat(document.getElementById('f_res').value)||0,
+    loan: parseFloat(document.getElementById('f_loan').value)||0,
+    savedAt: dateStr
+  };
+
+  if(editIdx>=0){
+    /* Preserve original id and savedAt on edit */
+    profile.id=profiles[editIdx].id||profile.id;
+    profile.savedAt=profiles[editIdx].savedAt||dateStr;
+    profiles[editIdx]=profile;
+    if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
+    showToast('✅ Profile updated.');
+  } else {
+    profiles.push(profile);
+    /* Auto-set new profile as active */
+    setActiveIdx(profiles.length-1);
+    showToast('✅ Profile saved and set as active.');
+  }
+
+  putProfiles(profiles);
+  closeForm();
+  renderGrid();
+}
+
+/* ── Delete ── */
+var deleteIdx=-1;
+function askDelete(idx){
+  var profiles=getProfiles();
+  var name=profiles[idx]&&profiles[idx].name?profiles[idx].name:'this profile';
+  deleteIdx=idx;
+  document.getElementById('confirmMsg').textContent='Delete "'+escHtml(name)+'"? This cannot be undone.';
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+function closeConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  deleteIdx=-1;
+}
+function confirmDelete(){
+  if(deleteIdx<0){ closeConfirm(); return; }
+  var profiles=getProfiles();
+  var activeIdx=getActiveIdx(profiles);
+  profiles.splice(deleteIdx,1);
+  putProfiles(profiles);
+  /* Fix active index if needed */
+  if(activeIdx>=profiles.length) setActiveIdx(Math.max(0,profiles.length-1));
+  else if(activeIdx===deleteIdx) setActiveIdx(Math.max(0,deleteIdx-1));
+  closeConfirm();
+  renderGrid();
+  showToast('Profile deleted.');
+}
+
+/* ── Unlock Unlimited ── */
+function tryUnlimited(){
+  var code=document.getElementById('unlimitedCode').value.trim().toUpperCase();
+  if(code==='FWUNLIMITED'){
+    localStorage.setItem('fw_unlimited','1');
+    document.getElementById('upgradeBanner').style.display='none';
+    showToast('🎉 Unlimited profiles unlocked!');
+    renderGrid();
+  } else {
+    showToast('Invalid code. Try FWUNLIMITED');
+  }
+}
+
+/* ── Paywall ── */
+function tryUnlock(){
+  var code=document.getElementById('pwCode').value.trim().toUpperCase();
+  if(code==='FINWISE29'||code==='FWUNLIMITED'){
+    localStorage.setItem('fw_pro','1');
+    if(code==='FWUNLIMITED') localStorage.setItem('fw_unlimited','1');
+    document.getElementById('pwOverlay').style.display='none';
+    document.getElementById('pwErr').style.display='none';
+    renderGrid();
+  } else {
+    document.getElementById('pwErr').style.display='block';
+  }
+}
+document.getElementById('pwCode').addEventListener('keydown',function(e){
+  if(e.key==='Enter') tryUnlock();
+});
+document.getElementById('unlimitedCode').addEventListener('keydown',function(e){
+  if(e.key==='Enter') tryUnlimited();
+});
+
+/* ── Boot ── */
+if(isPro()||isUnlimited()){
+  document.getElementById('pwOverlay').style.display='none';
+  renderGrid();
+}
+</script>
+</body>
+</html>
+;
+})();
+function fmt(n){
+  if(!n||isNaN(n)) return CUR_SYM+'0';
+  return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();
+}
+
+/* ── Profile store ── */
+function getProfiles(){
+  try{ return JSON.parse(localStorage.getItem('fw_profiles')||'[]'); }
+  catch(e){ return []; }
+}
+function putProfiles(arr){
+  localStorage.setItem('fw_profiles',JSON.stringify(arr));
+}
+
+/* Active profile = last item in array.
+   fw_active_idx stores explicit index if user set active manually. */
+function getActiveIdx(profiles){
+  var stored=localStorage.getItem('fw_active_idx');
+  if(stored!==null){
+    var idx=parseInt(stored);
+    if(idx>=0 && idx<profiles.length) return idx;
+  }
+  return profiles.length-1;
+}
+function setActiveIdx(idx){
+  localStorage.setItem('fw_active_idx', String(idx));
+}
+
+/* ── Tier logic ── */
+function isUnlimited(){ return localStorage.getItem('fw_unlimited')==='1'; }
+function isPro()      { return localStorage.getItem('fw_pro')==='1'; }
+function getLimit(){
+  if(isUnlimited()) return Infinity;
+  return 3; // Pro
+}
+
+/* ── Render usage bar ── */
+function renderUsageBar(profiles){
+  var limit=getLimit();
+  var used=profiles.length;
+  var unlimited=isUnlimited();
+  var bar=document.getElementById('usageBar');
+
+  var dotsHtml='';
+  if(unlimited){
+    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">∞</div>';
+  } else {
+    for(var i=0;i<limit;i++){
+      dotsHtml+='<div class="dot'+(i<used?' used':'')+'"></div>';
+    }
+  }
+
+  var labelText=unlimited
+    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
+    : used+' of '+limit+' profiles used';
+  var subText=unlimited
+    ? 'Unlimited tier active'
+    : (used>=limit?'Limit reached · Upgrade for more':'Add up to '+limit+' business profiles');
+
+  var atLimit=(!unlimited && used>=limit);
+
+  bar.innerHTML='<div class="usage-dots">'+dotsHtml+'</div>'
+    +'<div><div class="usage-label">'+labelText+'</div>'
+    +'<div class="usage-sub">'+subText+'</div></div>'
+    +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
+    +(atLimit?'🔒 Limit Reached':'➕ New Profile')
+    +'</button>';
+
+  /* Update plan badge */
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro · 3 Profiles';
+
+  /* Show/hide upgrade banner */
+  document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
+}
+
+function showUpgradeBanner(){
+  document.getElementById('upgradeBanner').style.display='flex';
+  document.getElementById('upgradeBanner').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ── Render profile cards ── */
+function renderGrid(){
+  var profiles=getProfiles();
+  var activeIdx=getActiveIdx(profiles);
+  var grid=document.getElementById('profilesGrid');
+
+  renderUsageBar(profiles);
+
+  if(!profiles.length){
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
+      +'<span class="es-icon">💼</span>'
+      +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
+      +'</div>';
+    return;
+  }
+
+  var html='';
+  for(var i=0;i<profiles.length;i++){
+    var p=profiles[i];
+    var isActive=(i===activeIdx);
+    var rev=parseFloat(p.rev)||0;
+    var exp=parseFloat(p.exp)||0;
+    var emi=parseFloat(p.emi)||0;
+    var res=parseFloat(p.reserve||p.res)||0;
+    var net=rev-exp-emi;
+    var netCls=net>=0?'pos':'neg';
+    var netStr=(net<0?'-':'')+fmt(net);
+    var dscr=(emi>0)?((rev-exp)/emi).toFixed(2)+'x':'N/A';
+    var resMo=(emi>0&&emi>0)?(res/emi).toFixed(1):(exp>0?(res/exp).toFixed(1):'N/A');
+
+    var savedAt=p.savedAt?'Saved '+p.savedAt:'';
+
+    html+='<div class="profile-card'+(isActive?' active':'')+'">'
+      +(isActive?'<div class="active-badge">✓ Active</div>':'')
+      +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
+      +'<div class="pc-metrics">'
+        +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Monthly Expenses</div><div class="pc-metric-val">'+fmt(exp)+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Net Cash Flow</div><div class="pc-metric-val '+netCls+'">'+netStr+'</div></div>'
+        +'<div class="pc-metric"><div class="pc-metric-label">Cash Reserve</div><div class="pc-metric-val">'+fmt(res)+'</div></div>'
+        +(emi>0?'<div class="pc-metric"><div class="pc-metric-label">Monthly EMI</div><div class="pc-metric-val">'+fmt(emi)+'</div></div>':'')
+        +(emi>0?'<div class="pc-metric"><div class="pc-metric-label">DSCR</div><div class="pc-metric-val">'+dscr+'</div></div>':'')
+        +(emi===0?'<div class="pc-metric"><div class="pc-metric-label">Reserve Cover</div><div class="pc-metric-val">'+resMo+' mo</div></div>':'')
+      +'</div>'
+      +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
+      +'<div class="pc-actions">'
+        +(isActive
+          ?'<button class="btn-sm btn-active already" disabled>✓ Active</button>'
+          :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">✏️ Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">🗑 Delete</button>'
+      +'</div>'
+      +'</div>';
+  }
+  grid.innerHTML=html;
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Set active ── */
+function setActive(idx){
+  setActiveIdx(idx);
+  renderGrid();
+  showToast('✅ Profile set as active — all tools will load this profile.');
+}
+
+/* ── Open create form ── */
+var editIdx=-1;
+function openNewForm(){
+  var profiles=getProfiles();
+  if(!isUnlimited() && profiles.length>=getLimit()){
+    showUpgradeBanner();
+    showToast('Profile limit reached. Upgrade to Unlimited.');
+    return;
+  }
+  editIdx=-1;
+  document.getElementById('formTitle').textContent='➕ Create New Profile';
+  clearForm();
+  document.getElementById('formPanel').style.display='block';
+  document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── Open edit form ── */
+function openEditForm(idx){
+  var profiles=getProfiles();
+  var p=profiles[idx];
+  editIdx=idx;
+  document.getElementById('formTitle').textContent='✏️ Edit Profile';
+  document.getElementById('f_name').value=p.name||'';
+  document.getElementById('f_rev').value=p.rev||'';
+  document.getElementById('f_exp').value=p.exp||'';
+  document.getElementById('f_emi').value=p.emi||'';
+  document.getElementById('f_res').value=p.reserve||p.res||'';
+  document.getElementById('f_loan').value=p.loan||'';
+  document.getElementById('formPanel').style.display='block';
+  document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeForm(){
+  document.getElementById('formPanel').style.display='none';
+  editIdx=-1;
+}
+
+function clearForm(){
+  ['f_name','f_rev','f_exp','f_emi','f_res','f_loan'].forEach(function(id){
+    document.getElementById(id).value='';
+  });
+}
+
+/* ── Save profile ── */
+function saveProfile(){
+  var name=document.getElementById('f_name').value.trim();
+  if(!name){ showToast('Please enter a Business Name.'); return; }
+  var rev=parseFloat(document.getElementById('f_rev').value)||0;
+  var exp=parseFloat(document.getElementById('f_exp').value)||0;
+  if(!rev){ showToast('Please enter Monthly Revenue.'); return; }
+
+  var profiles=getProfiles();
+
+  /* Limit check for new profiles */
+  if(editIdx===-1 && !isUnlimited() && profiles.length>=getLimit()){
+    showToast('Profile limit reached. Upgrade to Unlimited.');
+    showUpgradeBanner();
+    return;
+  }
+
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  var profile={
+    id: 'fw_'+Date.now(),
+    name: name,
+    rev:  rev,
+    exp:  exp,
+    emi:  parseFloat(document.getElementById('f_emi').value)||0,
+    reserve: parseFloat(document.getElementById('f_res').value)||0,
+    loan: parseFloat(document.getElementById('f_loan').value)||0,
+    savedAt: dateStr
+  };
+
+  if(editIdx>=0){
+    /* Preserve original id and savedAt on edit */
+    profile.id=profiles[editIdx].id||profile.id;
+    profile.savedAt=profiles[editIdx].savedAt||dateStr;
+    profiles[editIdx]=profile;
+    if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
+    showToast('✅ Profile updated.');
+  } else {
+    profiles.push(profile);
+    /* Auto-set new profile as active */
+    setActiveIdx(profiles.length-1);
+    showToast('✅ Profile saved and set as active.');
+  }
+
+  putProfiles(profiles);
+  closeForm();
+  renderGrid();
+}
+
+/* ── Delete ── */
+var deleteIdx=-1;
+function askDelete(idx){
+  var profiles=getProfiles();
+  var name=profiles[idx]&&profiles[idx].name?profiles[idx].name:'this profile';
+  deleteIdx=idx;
+  document.getElementById('confirmMsg').textContent='Delete "'+escHtml(name)+'"? This cannot be undone.';
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+function closeConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  deleteIdx=-1;
+}
+function confirmDelete(){
+  if(deleteIdx<0){ closeConfirm(); return; }
+  var profiles=getProfiles();
+  var activeIdx=getActiveIdx(profiles);
+  profiles.splice(deleteIdx,1);
+  putProfiles(profiles);
+  /* Fix active index if needed */
+  if(activeIdx>=profiles.length) setActiveIdx(Math.max(0,profiles.length-1));
+  else if(activeIdx===deleteIdx) setActiveIdx(Math.max(0,deleteIdx-1));
+  closeConfirm();
+  renderGrid();
+  showToast('Profile deleted.');
+}
+
+/* ── Unlock Unlimited ── */
+function tryUnlimited(){
+  var code=document.getElementById('unlimitedCode').value.trim().toUpperCase();
+  if(code==='FWUNLIMITED'){
+    localStorage.setItem('fw_unlimited','1');
+    document.getElementById('upgradeBanner').style.display='none';
+    showToast('🎉 Unlimited profiles unlocked!');
+    renderGrid();
+  } else {
+    showToast('Invalid code. Try FWUNLIMITED');
+  }
+}
+
+/* ── Paywall ── */
+function tryUnlock(){
+  var code=document.getElementById('pwCode').value.trim().toUpperCase();
+  if(code==='FINWISE29'||code==='FWUNLIMITED'){
+    localStorage.setItem('fw_pro','1');
+    if(code==='FWUNLIMITED') localStorage.setItem('fw_unlimited','1');
+    document.getElementById('pwOverlay').style.display='none';
+    document.getElementById('pwErr').style.display='none';
+    renderGrid();
+  } else {
+    document.getElementById('pwErr').style.display='block';
+  }
+}
+document.getElementById('pwCode').addEventListener('keydown',function(e){
+  if(e.key==='Enter') tryUnlock();
+});
+document.getElementById('unlimitedCode').addEventListener('keydown',function(e){
+  if(e.key==='Enter') tryUnlimited();
+});
+
+/* ── Boot ── */
+if(isPro()||isUnlimited()){
+  document.getElementById('pwOverlay').style.display='none';
+  renderGrid();
+}
+</script>
+</body>
+</html>

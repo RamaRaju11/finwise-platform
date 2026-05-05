@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Accept Invitation — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:16px;padding:40px 36px;max-width:440px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
+.logo{font-size:1.6rem;font-weight:900;color:#0f172a;margin-bottom:24px}
+.logo span{color:#a5b4fc}
+.icon{font-size:3rem;margin-bottom:16px}
+h2{font-size:1.2rem;font-weight:900;color:#0f172a;margin-bottom:8px}
+p{font-size:.88rem;color:#64748b;line-height:1.6;margin-bottom:24px}
+.btn{display:block;width:100%;padding:13px;background:#6366f1;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:800;cursor:pointer;text-decoration:none;margin-bottom:10px}
+.btn:hover{background:#4f46e5}
+.btn-sec{display:block;width:100%;padding:11px;background:#f8fafc;color:#475569;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;text-decoration:none}
+.status{padding:14px;border-radius:8px;font-size:.85rem;font-weight:700;margin-bottom:20px}
+.status.success{background:#dcfce7;color:#15803d}
+.status.error{background:#fee2e2;color:#dc2626}
+.status.loading{background:#f1f5f9;color:#64748b}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">💡 Fin<span>Wise</span></div>
+  <div id="content">
+    <div class="icon">📩</div>
+    <h2>You've been invited!</h2>
+    <p>Your advisor has invited you to connect on FinWise. Sign in or create a free account to accept.</p>
+    <div id="statusMsg" class="status loading">Checking invite…</div>
+    <a href="index.html" class="btn" id="mainBtn">Sign In to Accept →</a>
+    <a href="index.html" class="btn-sec">Create Free Account</a>
+  </div>
+</div>
+
+<script src="modules/fw-auth.js"></script>
+<script>
+const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co'
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ'
+
+const token = new URLSearchParams(location.search).get('token')
+const statusMsg = document.getElementById('statusMsg')
+const mainBtn = document.getElementById('mainBtn')
+
+if (!token) {
+  statusMsg.className = 'status error'
+  statusMsg.textContent = 'Invalid invite link — no token found.'
+} else {
+  // Store token for after sign-in
+  localStorage.setItem('fw_pending_invite', token)
+
+  // If already signed in, accept immediately
+  setTimeout(async () => {
+    if (window.fwAuth && window.fwAuth.user) {
+      await acceptInvite()
+    } else {
+      statusMsg.className = 'status loading'
+      statusMsg.textContent = 'Sign in to accept this invitation.'
+      mainBtn.href = 'index.html'
+    }
+  }, 800)
+}
+
+async function acceptInvite() {
+  statusMsg.className = 'status loading'
+  statusMsg.textContent = 'Accepting invitation…'
+  const res = await window.fwAuth.client.auth.getSession()
+  const jwt = res?.data?.session?.access_token
+  if (!jwt) { statusMsg.className='status error'; statusMsg.textContent='Please sign in first.'; return }
+
+  const r = await fetch(SUPA_URL + '/functions/v1/advisor-clients?action=accept', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + jwt, 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+    body: JSON.stringify({ token })
+  })
+  const data = await r.json().catch(() => ({}))
+
+  if (data.ok) {
+    localStorage.removeItem('fw_pending_invite')
+    statusMsg.className = 'status success'
+    statusMsg.textContent = '✓ Invitation accepted! Your advisor can now see your health score.'
+    mainBtn.textContent = 'Go to Dashboard →'
+    mainBtn.href = 'dashboard.html'
+  } else {
+    statusMsg.className = 'status error'
+    statusMsg.textContent = data.error || 'Failed to accept invite.'
+  }
+}
+
+// Check for pending invite after sign-in
+window.addEventListener('fw-auth-ready', function() {
+  const pending = localStorage.getItem('fw_pending_invite')
+  if (pending && window.fwAuth && window.fwAuth.user) acceptInvite()
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Bill Tracker — FinWise</title>
+<script src="../sidebar.js" defer></script>
+<link rel="manifest" href="../manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:12px}}
+h1{font-size:1.45rem;font-weight:700;margin-bottom:4px}
+.sub{color:#64748b;font-size:.9rem;margin-bottom:14px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card h2{font-size:1rem;font-weight:700;margin-bottom:14px;color:#1e293b}
+label{display:block;font-size:.82rem;font-weight:600;color:#475569;margin-bottom:4px;margin-top:10px}
+label:first-of-type{margin-top:0}
+input[type=number],input[type=text],input[type=date],select{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.9rem;font-family:'Segoe UI',sans-serif;color:#1e293b;background:#fff;outline:none;transition:border .2s}
+input:focus,select:focus{border-color:#2563eb}
+.input-row-5{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:0 12px;align-items:end}
+@media(max-width:800px){.input-row-5{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:500px){.input-row-5{grid-template-columns:1fr}}
+.autopay-wrap{display:flex;align-items:center;gap:8px;margin-top:12px}
+.autopay-wrap input[type=checkbox]{width:16px;height:16px;accent-color:#2563eb;cursor:pointer}
+.autopay-wrap span{font-size:.85rem;font-weight:600;color:#374151}
+.btn-primary{margin-top:14px;padding:9px 24px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.88rem;cursor:pointer;font-weight:700}
+.btn-primary:hover{background:#1d4ed8}
+.btn-csv{padding:7px 14px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer}
+.btn-csv:hover{background:#15803d}
+
+/* Integration strip */
+.int-strip{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 14px;font-size:.78rem;color:#166534;margin-bottom:12px}
+
+/* Due-this-week banner */
+.due-banner{background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:12px 16px;font-size:.84rem;color:#92400e;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.due-banner-icon{font-size:1.2rem;flex-shrink:0}
+.due-banner strong{font-size:.9rem}
+
+/* Summary bar */
+.summary-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:700px){.summary-bar{grid-template-columns:1fr 1fr}}
+.sum-box{background:#1e293b;color:#fff;border-radius:10px;padding:14px 16px}
+.sum-box .sum-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;font-weight:700;margin-bottom:4px}
+.sum-box .sum-value{font-size:1.3rem;font-weight:900}
+.sum-box.accent{background:#2563eb}
+
+/* Timeline table */
+.tl-table{width:100%;border-collapse:collapse}
+.tl-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;font-weight:700;padding:9px 10px;border-bottom:2px solid #e2e8f0;text-align:left;background:#f8fafc;white-space:nowrap}
+.tl-table td{padding:9px 10px;border-bottom:1px solid #f1f5f9;font-size:.84rem;vertical-align:middle}
+.tl-table tr:last-child td{border-bottom:none}
+.tl-table tr.row-overdue td{background:#fff5f5}
+.tl-table tr.row-week td{background:#fffbeb}
+.tl-table tr.row-today td{background:#f0fdf4}
+.tl-table tr.row-autopay td:first-child{border-left:3px solid #16a34a}
+
+/* Status badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.68rem;font-weight:800;white-space:nowrap}
+.status-overdue{background:#fee2e2;color:#991b1b}
+.status-today{background:#dcfce7;color:#166534}
+.status-week{background:#fef3c7;color:#92400e}
+.status-upcoming{background:#e0e7ff;color:#3730a3}
+
+/* Scheduled payment badge */
+.sched-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;background:#eff6ff;color:#1d4ed8;white-space:nowrap}
+.sched-input{width:130px;padding:3px 8px;font-size:.75rem;border:1.5px solid #bfdbfe;border-radius:5px;background:#eff6ff;color:#1d4ed8}
+
+/* Category badges */
+.cat-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.7rem;font-weight:700;background:#e0e7ff;color:#3730a3}
+.cat-Rent{background:#fce7f3;color:#9d174d}
+.cat-Utilities{background:#e0f2fe;color:#0c4a6e}
+.cat-Payroll{background:#dcfce7;color:#14532d}
+.cat-Subscriptions{background:#ede9fe;color:#4c1d95}
+.cat-Insurance{background:#fef3c7;color:#78350f}
+.cat-LoanEMI{background:#fee2e2;color:#7f1d1d}
+.cat-Supplies{background:#f0fdf4;color:#166534}
+.cat-Marketing{background:#fff7ed;color:#7c2d12}
+.cat-Other{background:#f1f5f9;color:#475569}
+
+/* Auto-pay */
+.ap-chip{display:inline-flex;align-items:center;gap:3px;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#dcfce7;color:#166534}
+.ap-off{background:#f1f5f9;color:#94a3b8}
+.expiry-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:800;background:#fee2e2;color:#991b1b;white-space:nowrap}
+.expiry-ok{background:#f1f5f9;color:#64748b}
+
+/* Category bar chart */
+.cat-row{margin-bottom:10px}
+.cat-row-header{display:flex;justify-content:space-between;font-size:.83rem;margin-bottom:4px}
+.cat-bar-track{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:99px;background:#2563eb;transition:width .6s}
+.cat-pct{font-size:.72rem;color:#64748b;font-weight:600}
+
+/* Bills list */
+.bill-row{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #f1f5f9;flex-wrap:wrap}
+.bill-row:last-child{border-bottom:none}
+.bill-name{font-weight:700;font-size:.88rem;flex:1;min-width:120px}
+.bill-meta{font-size:.75rem;color:#64748b;white-space:nowrap}
+.btn-del-sm{background:#fee2e2;color:#991b1b;border:none;border-radius:5px;padding:4px 9px;font-size:.74rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-del-sm:hover{background:#fecaca}
+.section-note{font-size:.78rem;color:#64748b;margin-bottom:10px}
+.empty-msg{color:#94a3b8;font-size:.88rem;text-align:center;padding:24px}
+
+#fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
+#fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="fwSidebar"></div>
+<div id="mainWrap">
+  <h1>&#128203; Vendor Bill Tracker</h1>
+  <p class="sub">Track recurring bills, schedule payments, and sync outflows to Cash Flow Calendar</p>
+
+  <div id="intStrip" class="int-strip" style="display:none"></div>
+  <div id="dueBanner" class="due-banner" style="display:none">
+    <span class="due-banner-icon">&#9888;&#65039;</span>
+    <span id="dueBannerText"></span>
+  </div>
+
+  <!-- ADD BILL -->
+  <div class="card">
+    <h2>Add Recurring Bill</h2>
+    <div class="input-row-5">
+      <div><label>Vendor Name</label><input type="text" id="vendorName" placeholder="e.g. Office Rent"/></div>
+      <div><label>Amount ($/mo)</label><input type="number" id="billAmount" placeholder="e.g. 1200" min="0" step="0.01"/></div>
+      <div><label>Due Day (1–31)</label><input type="number" id="dueDay" placeholder="e.g. 1" min="1" max="31"/></div>
+      <div>
+        <label>Category</label>
+        <select id="billCategory">
+          <option value="Rent">Rent</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Payroll">Payroll</option>
+          <option value="Subscriptions">Subscriptions</option>
+          <option value="Insurance">Insurance</option>
+          <option value="Loan/EMI">Loan/EMI</option>
+          <option value="Supplies">Supplies</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Contract Expiry</label>
+        <input type="date" id="contractExpiry"/>
+      </div>
+    </div>
+    <div class="autopay-wrap">
+      <input type="checkbox" id="autoPay"/>
+      <span>Auto-pay (ACH / scheduled)</span>
+    </div>
+    <button class="btn-primary" onclick="addBill()">Add Bill</button>
+  </div>
+
+  <!-- SUMMARY + DATA (shown once bills exist) -->
+  <div id="summarySection" style="display:none">
+
+    <!-- Summary bar -->
+    <div class="summary-bar">
+      <div class="sum-box accent"><div class="sum-label">Total Monthly Bills</div><div class="sum-value" id="sumTotal">$0</div></div>
+      <div class="sum-box"><div class="sum-label">Due This Week</div><div class="sum-value" id="sumWeek">0 bills</div></div>
+      <div class="sum-box"><div class="sum-label">Overdue This Month</div><div class="sum-value" id="sumOverdue">0</div></div>
+      <div class="sum-box"><div class="sum-label">Auto-Pay Total</div><div class="sum-value" id="sumAutoPay">$0</div></div>
+    </div>
+
+    <!-- 30-Day Timeline -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <h2 style="margin:0" id="timelineHeading">Next 30 Days</h2>
+        <button class="btn-csv" onclick="exportCSV()">&#8595; Export CSV</button>
+      </div>
+      <p class="section-note"><span style="color:#991b1b;font-weight:700">&#9632; Red</span> = Overdue &nbsp; <span style="color:#92400e;font-weight:700">&#9632; Amber</span> = Due This Week &nbsp; <span style="color:#166534;font-weight:700">&#9632; Green</span> = Due Today &nbsp; Green left border = Auto-pay</p>
+      <div style="overflow-x:auto">
+        <table class="tl-table">
+          <thead><tr><th>Due Date</th><th>Vendor</th><th>Amount</th><th>Category</th><th>Auto-Pay</th><th>Scheduled Payment</th><th>Expiry</th><th>Status</th></tr></thead>
+          <tbody id="timelineBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="card">
+      <h2>Expense by Category</h2>
+      <div id="categoryChart"></div>
+    </div>
+
+    <!-- All Bills (manage + schedule payments) -->
+    <div class="card">
+      <h2>All Recurring Bills</h2>
+      <div id="billsList"></div>
+    </div>
+  </div>
+</div>
+<div id="fwToast"></div>
+
+<script>
+var STORAGE_KEY = 'fw_bills';
+
+var DEFAULT_BILLS = [
+  {id:uid(), vendor:'Office Rent',           amount:2500, dueDay:1,  category:'Rent',          autoPay:true,  contractExpiry:null, scheduledPayDate:null},
+  {id:uid(), vendor:'Electricity & Internet', amount:380, dueDay:5,  category:'Utilities',      autoPay:false, contractExpiry:null, scheduledPayDate:null},
+  {id:uid(), vendor:'Payroll — Staff',        amount:4800, dueDay:15, category:'Payroll',       autoPay:false, contractExpiry:null, scheduledPayDate:null},
+  {id:uid(), vendor:'SaaS Subscriptions',     amount:290, dueDay:20, category:'Subscriptions',  autoPay:true,  contractExpiry:null, scheduledPayDate:null},
+  {id:uid(), vendor:'Business Insurance',     amount:450, dueDay:28, category:'Insurance',      autoPay:true,  contractExpiry:null, scheduledPayDate:null}
+];
+
+function uid(){ return Math.random().toString(36).slice(2,10); }
+
+function loadBills(){
+  var raw=localStorage.getItem(STORAGE_KEY);
+  if(raw===null){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(DEFAULT_BILLS));
+    return JSON.parse(JSON.stringify(DEFAULT_BILLS));
+  }
+  try{ return JSON.parse(raw); }catch(e){ return []; }
+}
+function saveBills(bills){ localStorage.setItem(STORAGE_KEY,JSON.stringify(bills)); }
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function fmt$(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2}); }
+function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },3000); }
+
+function catBadge(cat){
+  var cls='cat-'+String(cat).replace(/[^a-zA-Z]/g,'');
+  return '<span class="cat-badge '+cls+'">'+esc(cat)+'</span>';
+}
+function apChip(autoPay){ return autoPay?'<span class="ap-chip">&#10003; Auto</span>':'<span class="ap-chip ap-off">Manual</span>'; }
+function expiryBadge(expiry){
+  if(!expiry) return '';
+  var today=new Date(); today.setHours(0,0,0,0);
+  var exp=new Date(expiry); exp.setHours(0,0,0,0);
+  var diff=Math.round((exp-today)/86400000);
+  if(diff<0)   return '<span class="expiry-badge">Expired</span>';
+  if(diff<=60) return '<span class="expiry-badge">Expires '+diff+'d</span>';
+  return '<span class="expiry-badge expiry-ok">Exp '+expiry+'</span>';
+}
+
+function getDayStatus(dueDay,todayDay){
+  if(dueDay<todayDay) return 'overdue';
+  if(dueDay===todayDay) return 'today';
+  if(dueDay<=todayDay+6) return 'week';
+  return 'upcoming';
+}
+function statusBadge(s){
+  var m={overdue:['Overdue','status-overdue'],today:['Due Today','status-today'],week:['Due This Week','status-week'],upcoming:['Upcoming','status-upcoming']};
+  var p=m[s]||m.upcoming;
+  return '<span class="badge '+p[1]+'">'+p[0]+'</span>';
+}
+
+// Compute this-month due date string
+function billDueDate(dueDay){
+  var now=new Date();
+  var yr=now.getFullYear();
+  var mo=String(now.getMonth()+1).padStart(2,'0');
+  var d=String(Math.min(dueDay,28)).padStart(2,'0'); // cap at 28 for safety
+  return yr+'-'+mo+'-'+d;
+}
+
+// ── P1 INTEGRATION: PUSH OUTFLOWS + AP BALANCE ───────────────────────────────
+function pushIntegration(bills){
+  var now=new Date();
+  var todayDay=now.getDate();
+
+  // Build outflow events for cashFlowCalendar
+  var outflows=bills.map(function(b){
+    return {
+      date: billDueDate(b.dueDay),
+      amount: parseFloat(b.amount||0),
+      vendor: b.vendor,
+      category: b.category,
+      billId: b.id,
+      description: b.vendor+' ('+b.category+')'
+    };
+  });
+  localStorage.setItem('fw_bill_outflows', JSON.stringify({outflows:outflows, updatedAt:Date.now()}));
+
+  // AP balance for workingCapitalCalc
+  var totalMonthly=bills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  var unpaidBills=bills.filter(function(b){ return b.dueDay<=todayDay; }); // current + overdue
+  var unpaidTotal=unpaidBills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  localStorage.setItem('fw_ap_balance', JSON.stringify({
+    totalMonthly:totalMonthly, unpaidTotal:unpaidTotal,
+    billCount:bills.length, updatedAt:Date.now()
+  }));
+
+  // Expense by category for reports
+  var byCat={};
+  bills.forEach(function(b){ byCat[b.category]=(byCat[b.category]||0)+parseFloat(b.amount||0); });
+  localStorage.setItem('fw_expense_by_category', JSON.stringify({byCat:byCat, totalMonthly:totalMonthly, updatedAt:Date.now()}));
+
+  // Integration strip
+  var strip=document.getElementById('intStrip');
+  strip.style.display='';
+  strip.innerHTML='&#128202; Bills synced &mdash; <strong>'+outflows.length+' monthly outflows</strong> pushed to Cash Flow Calendar &nbsp;|&nbsp; AP balance <strong>'+fmt$(unpaidTotal)+'</strong> shared with Working Capital Calculator';
+}
+
+// ── P3 UX: DUE-THIS-WEEK BANNER ──────────────────────────────────────────────
+function renderDueBanner(bills,todayDay){
+  var dueThisWeek=bills.filter(function(b){
+    var s=getDayStatus(b.dueDay,todayDay);
+    return s==='week'||s==='today'||s==='overdue';
+  });
+  var banner=document.getElementById('dueBanner');
+  var bannerText=document.getElementById('dueBannerText');
+  if(!dueThisWeek.length){ banner.style.display='none'; return; }
+  var total=dueThisWeek.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  banner.style.display='flex';
+  bannerText.innerHTML='<strong>'+dueThisWeek.length+' bill'+(dueThisWeek.length!==1?'s':'')+' totaling '+fmt$(total)+'</strong> are overdue or due within 7 days &mdash; review the timeline below';
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────────────────────
+function renderAll(){
+  var bills=loadBills();
+  var now=new Date();
+  var todayDay=now.getDate();
+  var yr=now.getFullYear();
+  var moStr=String(now.getMonth()+1).padStart(2,'0');
+
+  var section=document.getElementById('summarySection');
+  if(!bills.length){ section.style.display='none'; renderDueBanner([],todayDay); return; }
+  section.style.display='block';
+
+  pushIntegration(bills);
+  renderDueBanner(bills,todayDay);
+
+  // Summary
+  var totalMonthly=bills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  var overdueBills=bills.filter(function(b){ return getDayStatus(b.dueDay,todayDay)==='overdue'; });
+  var weekBills=bills.filter(function(b){ var s=getDayStatus(b.dueDay,todayDay); return s==='week'||s==='today'; });
+  var autoPayTotal=bills.filter(function(b){ return b.autoPay; }).reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+
+  document.getElementById('sumTotal').textContent   =fmt$(totalMonthly);
+  document.getElementById('sumWeek').textContent    =weekBills.length+' bill'+(weekBills.length!==1?'s':'');
+  document.getElementById('sumOverdue').textContent =overdueBills.length;
+  document.getElementById('sumAutoPay').textContent =fmt$(autoPayTotal);
+
+  // Timeline
+  document.getElementById('timelineHeading').textContent='Next 30 Days — '+now.toLocaleString('en-US',{month:'long'})+' '+yr;
+  var sorted=bills.slice().sort(function(a,b){
+    var order={overdue:0,today:1,week:2,upcoming:3};
+    var sa=getDayStatus(a.dueDay,todayDay), sb=getDayStatus(b.dueDay,todayDay);
+    if(order[sa]!==order[sb]) return order[sa]-order[sb];
+    return a.dueDay-b.dueDay;
+  });
+
+  var tbody=document.getElementById('timelineBody');
+  tbody.innerHTML=sorted.map(function(b){
+    var status=getDayStatus(b.dueDay,todayDay);
+    var rowCls=(status==='overdue'?'row-overdue':status==='today'?'row-today':status==='week'?'row-week':'');
+    if(b.autoPay) rowCls+=' row-autopay';
+    var dayStr=String(Math.min(b.dueDay,28)).padStart(2,'0');
+    var dateDisp=moStr+'/'+dayStr+'/'+yr;
+    var schedCell=b.scheduledPayDate
+      ?'<span class="sched-badge">&#128197; '+b.scheduledPayDate+'</span>'
+      :'<span style="color:#cbd5e1;font-size:.75rem">—</span>';
+    return '<tr class="'+rowCls.trim()+'">'+
+      '<td>'+dateDisp+'</td>'+
+      '<td><strong>'+esc(b.vendor)+'</strong></td>'+
+      '<td><strong>'+fmt$(b.amount)+'</strong></td>'+
+      '<td>'+catBadge(b.category)+'</td>'+
+      '<td>'+apChip(b.autoPay)+'</td>'+
+      '<td>'+schedCell+'</td>'+
+      '<td>'+(b.contractExpiry?expiryBadge(b.contractExpiry):'<span style="color:#cbd5e1">—</span>')+'</td>'+
+      '<td>'+statusBadge(status)+'</td>'+
+    '</tr>';
+  }).join('');
+
+  // Category breakdown
+  var catTotals={};
+  bills.forEach(function(b){ catTotals[b.category]=(catTotals[b.category]||0)+parseFloat(b.amount||0); });
+  var catSorted=Object.keys(catTotals).map(function(k){ return {cat:k,val:catTotals[k]}; }).sort(function(a,b){ return b.val-a.val; });
+  document.getElementById('categoryChart').innerHTML=catSorted.length?catSorted.map(function(c){
+    var pct=totalMonthly>0?Math.round(c.val/totalMonthly*100):0;
+    return '<div class="cat-row">'+
+      '<div class="cat-row-header"><span>'+catBadge(c.cat)+'</span><span>'+fmt$(c.val)+' <span class="cat-pct">'+pct+'%</span></span></div>'+
+      '<div class="cat-bar-track"><div class="cat-bar-fill" style="width:'+pct+'%"></div></div>'+
+    '</div>';
+  }).join(''):'<p class="empty-msg">No data</p>';
+
+  // Bills list (with schedule payment input)
+  var listEl=document.getElementById('billsList');
+  var billsSorted=bills.slice().sort(function(a,b){ return a.dueDay-b.dueDay; });
+  listEl.innerHTML=billsSorted.length?billsSorted.map(function(b){
+    var schedVal=b.scheduledPayDate||'';
+    return '<div class="bill-row">'+
+      '<div class="bill-name">'+esc(b.vendor)+(b.contractExpiry?expiryBadge(b.contractExpiry):'')+'</div>'+
+      '<div>'+catBadge(b.category)+'</div>'+
+      '<div class="bill-meta">Due: Day '+b.dueDay+'</div>'+
+      '<div>'+apChip(b.autoPay)+'</div>'+
+      '<div style="font-weight:800;font-size:.9rem;white-space:nowrap">'+fmt$(b.amount)+'/mo</div>'+
+      '<div style="display:flex;align-items:center;gap:5px">'+
+        '<span style="font-size:.72rem;color:#475569;font-weight:600;white-space:nowrap">Pay on:</span>'+
+        '<input type="date" class="sched-input" value="'+schedVal+'" onchange="schedulePayment(\''+b.id+'\',this.value)" title="Schedule payment date"/>'+
+      '</div>'+
+      '<button class="btn-del-sm" onclick="deleteBill(\''+b.id+'\')">&#10005; Delete</button>'+
+    '</div>';
+  }).join(''):'<p class="empty-msg">No bills added yet.</p>';
+}
+
+// ── P2 FEATURE: SCHEDULE PAYMENT ─────────────────────────────────────────────
+function schedulePayment(id, date){
+  var bills=loadBills().map(function(b){
+    return b.id===id?Object.assign({},b,{scheduledPayDate:date||null}):b;
+  });
+  saveBills(bills);
+  renderAll();
+  if(date) toast('Payment scheduled for '+date);
+}
+
+// ── P2 EXPORT: CSV ────────────────────────────────────────────────────────────
+function exportCSV(){
+  var bills=loadBills();
+  var now=new Date();
+  var yr=now.getFullYear();
+  var mo=String(now.getMonth()+1).padStart(2,'0');
+
+  var rows=[['Vendor Bill Tracker Export — '+now.toLocaleDateString()],[]];
+  rows.push(['Due Date','Vendor','Amount','Category','Auto-Pay','Scheduled Payment Date','Contract Expiry','Status']);
+
+  var todayDay=now.getDate();
+  bills.slice().sort(function(a,b){ return a.dueDay-b.dueDay; }).forEach(function(b){
+    var dayStr=String(Math.min(b.dueDay,28)).padStart(2,'0');
+    var dueDate=yr+'-'+mo+'-'+dayStr;
+    var status=getDayStatus(b.dueDay,todayDay);
+    rows.push([
+      dueDate, b.vendor, parseFloat(b.amount||0).toFixed(2),
+      b.category, b.autoPay?'Yes':'No',
+      b.scheduledPayDate||'', b.contractExpiry||'',
+      status.charAt(0).toUpperCase()+status.slice(1)
+    ]);
+  });
+  rows.push([]);
+  rows.push(['TOTAL','',''+bills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0).toFixed(2)]);
+
+  var csv=rows.map(function(r){
+    return r.map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\r\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download='vendor_bills_'+yr+'_'+mo+'.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exported');
+}
+
+// ── ADD / DELETE ──────────────────────────────────────────────────────────────
+function addBill(){
+  var vendor  =document.getElementById('vendorName').value.trim();
+  var amount  =parseFloat(document.getElementById('billAmount').value);
+  var dueDay  =parseInt(document.getElementById('dueDay').value,10);
+  var category=document.getElementById('billCategory').value;
+  var autoPay =document.getElementById('autoPay').checked;
+  var expiry  =document.getElementById('contractExpiry').value||null;
+
+  if(!vendor){ toast('Enter vendor name'); return; }
+  if(isNaN(amount)||amount<0){ toast('Enter a valid amount'); return; }
+  if(isNaN(dueDay)||dueDay<1||dueDay>31){ toast('Due day must be 1–31'); return; }
+
+  var bills=loadBills();
+  bills.push({id:uid(),vendor:vendor,amount:amount,dueDay:dueDay,category:category,
+              autoPay:autoPay,contractExpiry:expiry,scheduledPayDate:null});
+  saveBills(bills);
+
+  document.getElementById('vendorName').value='';
+  document.getElementById('billAmount').value='';
+  document.getElementById('dueDay').value='';
+  document.getElementById('billCategory').selectedIndex=0;
+  document.getElementById('autoPay').checked=false;
+  document.getElementById('contractExpiry').value='';
+  renderAll();
+  toast('Bill added');
+}
+
+function deleteBill(id){
+  var bills=loadBills().filter(function(b){ return b.id!==id; });
+  saveBills(bills);
+  renderAll();
+  toast('Bill removed');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>

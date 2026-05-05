@@ -1,0 +1,1178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AI CFO Advisor — FinWise Pro</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,system-ui,sans-serif;background:#f4f6f9;color:#222;min-height:100vh}
+    a{text-decoration:none;color:inherit}
+
+    /* ── Page header ── */
+    .page-header{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:20px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+    .ph-left h1{font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
+    .ph-left p{font-size:.82rem;color:rgba(255,255,255,.7);margin-top:.2rem}
+    .ph-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.35rem 1rem;font-size:.78rem;font-weight:700}
+    .ph-back{font-size:.8rem;color:rgba(255,255,255,.7);margin-bottom:.25rem;display:inline-block}
+    .ph-back:hover{color:#fff}
+
+    /* ── Layout ── */
+    .layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 72px)}
+    @media(max-width:768px){.layout{grid-template-columns:1fr;height:auto}}
+
+    /* ── Left sidebar ── */
+    .sidebar{background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-section{padding:1rem 1.1rem;border-bottom:1px solid #f1f5f9}
+    .sidebar-section h3{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:.75rem}
+
+    /* API key input */
+    .api-key-wrap{position:relative}
+    .api-key-input{width:100%;padding:.55rem .9rem;padding-right:2.5rem;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.82rem;font-family:monospace;background:#f8fafc}
+    .api-key-input:focus{outline:none;border-color:#4f46e5}
+    .api-key-toggle{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.9rem;color:#64748b}
+    .api-status{font-size:.72rem;margin-top:.4rem;display:flex;align-items:center;gap:.35rem;font-weight:600}
+    .api-status.set{color:#16a34a}
+    .api-status.unset{color:#94a3b8}
+    .btn-save-key{width:100%;margin-top:.5rem;padding:.5rem;background:#4f46e5;color:#fff;border:none;border-radius:6px;font-size:.82rem;font-weight:700;cursor:pointer}
+    .btn-save-key:hover{background:#3730a3}
+
+    /* Business context */
+    .ctx-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+    .ctx-field label{font-size:.7rem;color:#64748b;display:block;margin-bottom:2px}
+    .ctx-field input{width:100%;padding:.4rem .6rem;border:1.5px solid #e2e8f0;border-radius:5px;font-size:.8rem}
+    .ctx-field input:focus{outline:none;border-color:#4f46e5}
+    .ctx-field.full{grid-column:1/-1}
+    .btn-update-ctx{width:100%;margin-top:.6rem;padding:.5rem;background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0;border-radius:6px;font-size:.8rem;font-weight:700;cursor:pointer}
+    .btn-update-ctx:hover{background:#e2e8f0}
+
+    /* Quick questions */
+    .quick-list{display:flex;flex-direction:column;gap:.4rem}
+    .quick-btn{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:7px;padding:.5rem .7rem;font-size:.78rem;color:#334155;cursor:pointer;text-align:left;transition:all .15s;line-height:1.4}
+    .quick-btn:hover{background:#eef2ff;border-color:#c7d2fe;color:#4f46e5}
+
+    /* Conversation history list */
+    .history-list{display:flex;flex-direction:column;gap:.35rem}
+    .history-item{font-size:.78rem;color:#64748b;padding:.4rem .6rem;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid transparent}
+    .history-item:hover{background:#f1f5f9;border-color:#e2e8f0;color:#334155}
+    .no-history{font-size:.78rem;color:#94a3b8;padding:.25rem 0}
+
+    /* ── Chat area ── */
+    .chat-area{display:flex;flex-direction:column;height:calc(100vh - 72px);background:#f8fafc}
+    @media(max-width:768px){.chat-area{height:600px}}
+
+    /* Messages */
+    .messages{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:1rem}
+    .msg{display:flex;gap:.75rem;align-items:flex-start;max-width:82%}
+    .msg.user{align-self:flex-end;flex-direction:row-reverse}
+    .msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .msg.ai .msg-avatar{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
+    .msg.user .msg-avatar{background:#e2e8f0;color:#64748b}
+    .msg-bubble{padding:.75rem 1rem;border-radius:12px;font-size:.88rem;line-height:1.6;max-width:100%}
+    .msg.ai .msg-bubble{background:#fff;border:1px solid #e2e8f0;border-radius:4px 12px 12px 12px;color:#1e293b}
+    .msg.user .msg-bubble{background:#4f46e5;color:#fff;border-radius:12px 4px 12px 12px}
+    .msg-bubble strong{font-weight:700}
+    .msg-bubble ul{margin:.4rem 0 .4rem 1.1rem}
+    .msg-bubble li{margin-bottom:.2rem}
+    .msg-time{font-size:.67rem;color:#94a3b8;margin-top:.3rem;text-align:right}
+    .msg.ai .msg-time{text-align:left}
+
+    /* Typing indicator */
+    .typing{display:none;align-self:flex-start}
+    .typing.show{display:flex}
+    .typing-dots{display:flex;gap:4px;padding:.6rem .9rem;background:#fff;border:1px solid #e2e8f0;border-radius:4px 12px 12px 12px}
+    .typing-dot{width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:bounce .9s infinite}
+    .typing-dot:nth-child(2){animation-delay:.15s}
+    .typing-dot:nth-child(3){animation-delay:.3s}
+    @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+    /* Input bar */
+    .input-bar{padding:1rem 1.25rem;background:#fff;border-top:1px solid #e2e8f0;display:flex;gap:.75rem;align-items:flex-end}
+    .chat-input{flex:1;padding:.7rem 1rem;border:2px solid #e2e8f0;border-radius:10px;font-size:.9rem;font-family:inherit;resize:none;max-height:120px;line-height:1.5;outline:none;transition:border-color .15s}
+    .chat-input:focus{border-color:#4f46e5}
+    .btn-send{padding:.7rem 1.25rem;background:#4f46e5;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:background .15s}
+    .btn-send:hover{background:#3730a3}
+    .btn-send:disabled{background:#c7d2fe;cursor:not-allowed}
+    .btn-clear-chat{padding:.7rem .85rem;background:#f8fafc;color:#64748b;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.85rem;cursor:pointer;flex-shrink:0}
+    .btn-clear-chat:hover{background:#fee2e2;color:#dc2626;border-color:#fecaca}
+
+    /* Welcome card */
+    .welcome-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.5rem;margin:auto;max-width:480px;text-align:center}
+    .welcome-card .wc-icon{font-size:3rem;margin-bottom:.75rem}
+    .welcome-card h2{font-size:1.1rem;font-weight:800;margin-bottom:.4rem}
+    .welcome-card p{font-size:.85rem;color:#64748b;line-height:1.6;margin-bottom:1.25rem}
+    .wc-suggestions{display:flex;flex-direction:column;gap:.5rem;text-align:left}
+    .wc-suggestion{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.6rem .85rem;font-size:.82rem;color:#334155;cursor:pointer;transition:all .15s}
+    .wc-suggestion:hover{background:#eef2ff;border-color:#c7d2fe;color:#4f46e5}
+
+    /* Paywall overlay */
+    .paywall-overlay{position:fixed;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(4px);z-index:50;display:flex;align-items:center;justify-content:center;padding:1rem}
+    .paywall-box{background:#fff;border-radius:16px;padding:2rem;max-width:480px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+    .paywall-box h2{font-size:1.25rem;font-weight:800;margin:.75rem 0 .4rem}
+    .paywall-box p{font-size:.87rem;color:#64748b;line-height:1.6;margin-bottom:1.25rem}
+    .pw-features{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;text-align:left}
+    .pw-feat{background:#f8fafc;border-radius:8px;padding:.65rem .8rem;font-size:.8rem;color:#334155;display:flex;align-items:flex-start;gap:.5rem}
+    .pw-feat .fi{font-size:1rem;flex-shrink:0}
+    .btn-stripe-pro{display:inline-block;width:100%;padding:.8rem;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:.75rem}
+    .pw-divider{display:flex;align-items:center;gap:.75rem;margin:.75rem 0;color:#94a3b8;font-size:.78rem}
+    .pw-divider::before,.pw-divider::after{content:'';flex:1;height:1px;background:#e2e8f0}
+    .unlock-row{display:flex;gap:.5rem}
+    .pw-code-input{flex:1;padding:.55rem .9rem;border:2px solid #e2e8f0;border-radius:8px;font-size:.88rem;text-align:center;text-transform:uppercase;letter-spacing:.1em;width:0}
+    .pw-code-input:focus{outline:none;border-color:#4f46e5}
+    .btn-pw-unlock{padding:.55rem 1.1rem;background:#4f46e5;color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap}
+    .pw-error{color:#dc2626;font-size:.78rem;margin-top:.4rem;display:none}
+    .pw-hint{font-size:.75rem;color:#94a3b8;margin-top:.4rem}
+    .pw-hint code{background:#f1f5f9;padding:.1rem .4rem;border-radius:4px;color:#4f46e5;font-family:monospace}
+
+    /* Toast */
+    .toast{position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:.65rem 1.15rem;border-radius:8px;font-size:.83rem;font-weight:600;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none}
+    .toast.show{opacity:1}
+
+    /* Copy button per AI message */
+    .msg-actions{margin-top:.3rem}
+    .btn-copy-msg{background:none;border:1px solid #e2e8f0;border-radius:5px;color:#94a3b8;font-size:.7rem;padding:.2rem .55rem;cursor:pointer;transition:all .15s}
+    .btn-copy-msg:hover{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
+
+    /* Action items button */
+    .btn-action-items{padding:.7rem .85rem;background:#f0fdf4;color:#15803d;border:1.5px solid #86efac;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:background .15s}
+    .btn-action-items:hover{background:#dcfce7}
+    .btn-action-items:disabled{opacity:.5;cursor:not-allowed}
+
+    /* Context turn badge */
+    #contextBadge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.25rem .75rem;color:#fff;margin-left:.5rem}
+
+    /* Live data chip in sidebar */
+    .ctx-live-badge{font-size:.68rem;font-weight:700;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:.18rem .55rem;margin-left:.35rem}
+
+    /* Saved conversation history */
+    .conv-item{font-size:.76rem;padding:.4rem .55rem;border-radius:6px;cursor:pointer;border:1px solid transparent;line-height:1.4}
+    .conv-item:hover{background:#f1f5f9;border-color:#e2e8f0}
+    .conv-item-date{font-size:.63rem;color:#94a3b8}
+    .conv-item-title{color:#334155;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .conv-item.active{background:#eef2ff;border-color:#c7d2fe}
+
+    /* Score badge in sidebar */
+    .score-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:999px;font-size:.75rem;font-weight:800}
+    .score-badge.safe{background:#dcfce7;color:#166534}
+    .score-badge.risky{background:#fef3c7;color:#92400e}
+    .score-badge.danger{background:#fee2e2;color:#991b1b}
+    /* Module data chips */
+    .mod-chips{display:flex;flex-wrap:wrap;gap:.3rem;margin:.5rem 0}
+    .mod-chip{display:inline-flex;align-items:center;padding:.22rem .55rem;border-radius:999px;font-size:.68rem;font-weight:700;border:1.5px solid}
+    .mod-chip.has-data{background:#dcfce7;border-color:#86efac;color:#166534}
+    .mod-chip.no-data{background:#f8fafc;border-color:#e2e8f0;color:#cbd5e1}
+    .ctx-data-count{font-size:.72rem;color:#64748b;margin-top:.35rem;line-height:1.5}
+  </style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<!-- Paywall overlay -->
+<div class="paywall-overlay" id="paywallOverlay">
+  <div class="paywall-box">
+    <div style="font-size:2.5rem">🤖</div>
+    <h2>AI CFO Advisor</h2>
+    <p>Ask any financial question about your business in plain English. Get expert answers powered by Claude AI — your personal CFO, available 24/7.</p>
+    <div class="pw-features">
+      <div class="pw-feat"><span class="fi">💬</span>Ask anything — loans, cash flow, growth</div>
+      <div class="pw-feat"><span class="fi">📊</span>Answers based on your actual numbers</div>
+      <div class="pw-feat"><span class="fi">🧠</span>Powered by Claude AI (Anthropic)</div>
+      <div class="pw-feat"><span class="fi">🔒</span>Private — data stays in your browser</div>
+    </div>
+    <button class="btn-stripe-pro" onclick="showToast('💳 Stripe coming soon! Use FINWISE29 to demo free.');return false;">
+      💳 Subscribe Pro — $29/month
+    </button>
+    <div class="pw-divider">or enter promo code</div>
+    <div class="unlock-row">
+      <input type="text" class="pw-code-input" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
+      <button class="btn-pw-unlock" onclick="tryUnlock()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pwError">Invalid code.</div>
+    <div class="pw-hint">Demo code: <code>FINWISE29</code></div>
+  </div>
+</div>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="ph-left">
+    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <h1>🤖 AI CFO Advisor</h1>
+    <p>Ask anything about your business finances — powered by Claude AI</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+    <div class="ph-badge">Pro · $29/month</div>
+    <span id="contextBadge" style="display:none">💬 0 turns</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ══ SIDEBAR ══ -->
+  <div class="sidebar">
+
+    <!-- API Key -->
+    <div class="sidebar-section">
+      <h3>🔑 Your Anthropic API Key</h3>
+      <div class="api-key-wrap">
+        <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-..."/>
+        <button class="api-key-toggle" onclick="toggleKeyVisibility()" title="Show/hide">👁</button>
+      </div>
+      <div class="api-status unset" id="apiStatus">⚪ No key set</div>
+      <button class="btn-save-key" onclick="saveApiKey()">Save Key</button>
+      <div style="font-size:.7rem;color:#94a3b8;margin-top:.4rem;line-height:1.5">
+        Key stored locally in your browser only. Get yours at
+        <a href="https://console.anthropic.com" target="_blank" style="color:#4f46e5">console.anthropic.com</a>
+      </div>
+    </div>
+
+    <!-- Business context -->
+    <div class="sidebar-section">
+      <h3>🏢 Business Context</h3>
+      <div class="ctx-grid">
+        <div class="ctx-field full">
+          <label>Business Name</label>
+          <input type="text" id="ctx_name" placeholder="Acme Consulting"/>
+        </div>
+        <div class="ctx-field">
+          <label>Monthly Revenue</label>
+          <input type="number" id="ctx_rev" placeholder="15000"/>
+        </div>
+        <div class="ctx-field">
+          <label>Monthly Expenses</label>
+          <input type="number" id="ctx_exp" placeholder="8500"/>
+        </div>
+        <div class="ctx-field">
+          <label>Existing EMI</label>
+          <input type="number" id="ctx_emi" placeholder="0"/>
+        </div>
+        <div class="ctx-field">
+          <label>Cash Reserve</label>
+          <input type="number" id="ctx_reserve" placeholder="20000"/>
+        </div>
+        <div class="ctx-field full">
+          <label>Industry</label>
+          <input type="text" id="ctx_industry" placeholder="e.g. Consulting"/>
+        </div>
+      </div>
+      <div style="margin-top:.5rem" id="ctxScoreWrap"></div>
+      <button class="btn-update-ctx" onclick="updateContext()">↻ Update Context</button>
+    </div>
+
+    <!-- Module data loaded -->
+    <div class="sidebar-section">
+      <h3>📦 Module Data Loaded</h3>
+      <div class="mod-chips" id="modChips"><span class="mod-chip no-data">Loading…</span></div>
+      <div class="ctx-data-count" id="ctxDataCount"></div>
+    </div>
+
+    <!-- Quick questions -->
+    <div class="sidebar-section">
+      <h3>⚡ Quick Questions</h3>
+      <div class="quick-list">
+        <button class="quick-btn" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</button>
+        <button class="quick-btn" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">What is my maximum safe loan?</button>
+        <button class="quick-btn" onclick="sendQuick('Analyse my total debt load. Which loan should I pay off first and why?')">Which loan should I pay off first?</button>
+        <button class="quick-btn" onclick="sendQuick('Review my recurring bills. Are there any I should cut or renegotiate to improve cash flow?')">Which bills should I cut?</button>
+        <button class="quick-btn" onclick="sendQuick('How much outstanding invoices do I have and what is the risk to my cash flow if they go uncollected?')">What is my AR/invoice risk?</button>
+        <button class="quick-btn" onclick="sendQuick('What happens to my cash flow if revenue drops 20%?')">What if revenue drops 20%?</button>
+        <button class="quick-btn" onclick="sendQuick('What are my biggest financial risks right now based on all my data?')">What are my biggest risks?</button>
+        <button class="quick-btn" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow this month.')">Give me a 3-step action plan</button>
+        <button class="quick-btn" onclick="sendQuick('Based on my loans, bills, and cash flow, how many months of runway do I have?')">How much runway do I have?</button>
+        <button class="quick-btn" onclick="sendQuick('What tax deductions am I likely missing based on my business data?')">What tax deductions am I missing?</button>
+        <button class="quick-btn" onclick="sendQuick('What is my biggest expense risk this month and what should I do about it?')">What\'s my biggest expense risk?</button>
+        <button class="quick-btn" onclick="sendQuick('Am I on track for my quarterly estimated tax payments? When is my next payment due?')">Am I on track for tax payments?</button>
+        <button class="quick-btn" onclick="sendQuick('Based on my current cash flow and growth rate, should I hire a new employee now or wait?')">Should I hire now?</button>
+        <button class="quick-btn" onclick="sendQuick('What is my effective burn rate and how long can I sustain operations at this pace?')">What\'s my burn rate and runway?</button>
+        <button class="quick-btn" onclick="sendQuick('Give me a vendor/bill review — which recurring costs should I cut or renegotiate?')">Which bills should I renegotiate?</button>
+      </div>
+    </div>
+
+    <!-- Saved conversations -->
+    <div class="sidebar-section" style="flex:1">
+      <h3>🕐 Saved Conversations</h3>
+      <div class="history-list" id="historyList">
+        <div class="no-history">No saved conversations yet.</div>
+      </div>
+      <button style="width:100%;margin-top:.5rem;padding:.45rem;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:6px;font-size:.78rem;font-weight:700;color:#4f46e5;cursor:pointer" onclick="newChat()">✚ New Chat</button>
+      <button style="width:100%;margin-top:.4rem;padding:.45rem;background:#fff;border:1.5px solid #fecaca;border-radius:6px;font-size:.78rem;font-weight:700;color:#dc2626;cursor:pointer" onclick="clearChat()">🗑 Clear &amp; Reset</button>
+    </div>
+
+  </div><!-- /sidebar -->
+
+  <!-- ══ CHAT AREA ══ -->
+  <div class="chat-area">
+
+    <div class="messages" id="messages">
+      <!-- Welcome card shown when no messages -->
+      <div class="welcome-card" id="welcomeCard">
+        <div class="wc-icon">🤖</div>
+        <h2>Hi! I'm your AI CFO</h2>
+        <p>I know your business numbers. Just ask me a question in plain English — no financial jargon needed.</p>
+
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:.9rem 1rem;margin-bottom:1rem;text-align:left">
+          <div style="font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">✅ You can ask things like:</div>
+          <div style="font-size:.82rem;color:#166534;display:flex;flex-direction:column;gap:.3rem">
+            <span>• "Can I take a $50,000 loan safely?"</span>
+            <span>• "What's the maximum I should borrow?"</span>
+            <span>• "What if my revenue drops next month?"</span>
+            <span>• "How do I improve my loan score?"</span>
+            <span>• "What EMI can my business afford?"</span>
+          </div>
+        </div>
+
+        <div style="background:#fefce8;border:1.5px solid #fde047;border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem;text-align:left">
+          <div style="font-size:.75rem;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">⚡ Before you start:</div>
+          <div style="font-size:.8rem;color:#78350f;line-height:1.6">
+            1. Add your <strong>Anthropic API key</strong> in the sidebar (free to get)<br/>
+            2. Your <strong>business numbers</strong> are auto-loaded from your saved profile<br/>
+            3. Click any suggestion below or type your own question
+          </div>
+        </div>
+
+        <div class="wc-suggestions">
+          <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
+          <div class="wc-suggestion" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">💬 What is my maximum safe loan amount?</div>
+          <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="msg typing" id="typingIndicator">
+      <div class="msg-avatar">🤖</div>
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <textarea class="chat-input" id="chatInput" rows="1"
+        placeholder="Ask your CFO anything... e.g. 'Can I take a $50,000 loan safely?'"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="btn-action-items" id="actionItemsBtn" onclick="generateActionItems()" title="Generate action items from this conversation" style="display:none">📋 Action Items</button>
+      <button class="btn-send" id="sendBtn" onclick="sendMessage()">Send →</button>
+    </div>
+
+  </div><!-- /chat-area -->
+
+</div><!-- /layout -->
+
+<div class="toast" id="toast"></div>
+
+<script src="../config.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function fmt(n){
+  if(!n&&n!==0) return '—';
+  const sym = '$';
+  return sym+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+function now(){ return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+
+function calcEMI(p,r,m){ if(!r)return p/m; const i=r/100/12; return p*i*Math.pow(1+i,m)/(Math.pow(1+i,m)-1); }
+
+function computeScore(rev,exp,emi,loan,rate,months){
+  const netCF=rev-exp, newEMI=calcEMI(loan,rate,months), totalEMI=emi+newEMI, postEMI=netCF-totalEMI;
+  const cfR=netCF/(rev||1);
+  const c1=cfR>=.3?30:cfR>=.2?24:cfR>=.1?15:cfR>=0?8:0;
+  const eR=totalEMI/(netCF||1);
+  const c2=eR<=.3?30:eR<=.4?24:eR<=.5?16:eR<=.65?8:0;
+  const dscr=netCF/(totalEMI||1);
+  const c3=dscr>=2?25:dscr>=1.5?20:dscr>=1.25?14:dscr>=1?7:0;
+  const sNet=rev*.8-exp-totalEMI;
+  const c4=sNet>0?15:sNet>-rev*.05?9:sNet>-rev*.15?4:0;
+  const score=c1+c2+c3+c4;
+  return{score,cls:score>=70?'safe':score>=40?'risky':'danger',label:score>=70?'SAFE':score>=40?'RISKY':'DANGEROUS',newEMI,totalEMI,postEMI,dscr,netCF};
+}
+
+/* ══════════════════════════════════════════════════════
+   PAYWALL
+══════════════════════════════════════════════════════ */
+function tryUnlock(){
+  const code=document.getElementById('pwCode').value.trim().toUpperCase();
+  const err=document.getElementById('pwError');
+  if(code==='FINWISE29'){
+    localStorage.setItem('fw_pro','1');
+    document.getElementById('paywallOverlay').style.display='none';
+    err.style.display='none';
+    initApp();
+  } else { err.style.display='block'; }
+}
+document.getElementById('pwCode').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();});
+
+/* ══════════════════════════════════════════════════════
+   API KEY
+══════════════════════════════════════════════════════ */
+function getApiKey(){
+  // Priority: config.js → localStorage → empty
+  const cfgKey = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX')
+    ? FINWISE_CONFIG.ANTHROPIC_API_KEY : '';
+  return cfgKey || localStorage.getItem('fw_api_key') || '';
+}
+
+function saveApiKey(){
+  const key=document.getElementById('apiKeyInput').value.trim();
+  if(!key.startsWith('sk-ant')){showToast('API key should start with sk-ant...');return;}
+  localStorage.setItem('fw_api_key',key);
+  updateKeyStatus();
+  showToast('✅ API key saved.');
+}
+
+function updateKeyStatus(){
+  const key=getApiKey();
+  const el=document.getElementById('apiStatus');
+  const fromConfig = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX');
+  if(key){
+    el.className='api-status set';
+    el.textContent='✅ Key set'+(fromConfig?' (from config.js)':' ('+key.slice(0,12)+'...)');
+    document.getElementById('apiKeyInput').value=key;
+  } else {
+    el.className='api-status unset';
+    el.textContent='⚪ No key — update config.js or enter below';
+  }
+}
+
+function toggleKeyVisibility(){
+  const inp=document.getElementById('apiKeyInput');
+  inp.type=inp.type==='password'?'text':'password';
+}
+
+/* ══════════════════════════════════════════════════════
+   BUSINESS CONTEXT
+══════════════════════════════════════════════════════ */
+let businessCtx = {};
+
+function loadContextFromProfile(){
+  function sg(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
+  const profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+  const prof = sg('fw_profile') || {};
+  if(profiles.length){
+    const idx=parseInt(localStorage.getItem('fw_active_idx'))||0;
+    const p=profiles[Math.min(idx,profiles.length-1)];
+    document.getElementById('ctx_name').value    = p.name||prof.bizName||'';
+    document.getElementById('ctx_rev').value     = p.rev||'';
+    document.getElementById('ctx_exp').value     = p.exp||'';
+    document.getElementById('ctx_emi').value     = p.emi||'';
+    document.getElementById('ctx_reserve').value = p.reserve||'';
+    document.getElementById('ctx_industry').value= p.industry||prof.industry||'';
+  } else if(prof.bizName){
+    document.getElementById('ctx_name').value    = prof.bizName||'';
+    document.getElementById('ctx_industry').value= prof.industry||'';
+  }
+  // Override with live module data where available
+  var liveSourced = [];
+  var curMo = new Date().toISOString().slice(0,7);
+  var curYr = String(new Date().getFullYear());
+  var invRevD = sg('fw_invoice_revenue');
+  if(invRevD){
+    var lRev = invRevD.byMonth&&invRevD.byMonth[curMo] ? Math.round(invRevD.byMonth[curMo])
+             : invRevD.byYear&&invRevD.byYear[curYr]   ? Math.round(invRevD.byYear[curYr]/(new Date().getMonth()+1||1)) : null;
+    if(lRev){ document.getElementById('ctx_rev').value=lRev; liveSourced.push('Revenue'); }
+  }
+  var expD = sg('fw_expense_by_category');
+  if(expD&&expD.totalMonthly){ document.getElementById('ctx_exp').value=Math.round(expD.totalMonthly); liveSourced.push('Expenses'); }
+  var cashD = sg('fw_cash_runway');
+  if(cashD&&cashD.currentBalance){ document.getElementById('ctx_reserve').value=Math.round(cashD.currentBalance); liveSourced.push('Cash Balance'); }
+  if(liveSourced.length){
+    var sWrap=document.getElementById('ctxScoreWrap');
+    if(sWrap){ var badge=document.createElement('div'); badge.style.marginTop='.3rem'; badge.innerHTML='<span class="ctx-live-badge">🟢 Live: '+liveSourced.join(', ')+'</span>'; sWrap.parentNode.insertBefore(badge,sWrap.nextSibling); }
+  }
+  updateContext();
+}
+
+function updateContext(){
+  businessCtx = {
+    name    : document.getElementById('ctx_name').value.trim()||'My Business',
+    rev     : parseFloat(document.getElementById('ctx_rev').value)||0,
+    exp     : parseFloat(document.getElementById('ctx_exp').value)||0,
+    emi     : parseFloat(document.getElementById('ctx_emi').value)||0,
+    reserve : parseFloat(document.getElementById('ctx_reserve').value)||0,
+    industry: document.getElementById('ctx_industry').value.trim()||'Small Business',
+  };
+  businessCtx.netCF = businessCtx.rev - businessCtx.exp;
+
+  // Show score badge if we have enough data
+  const wrap=document.getElementById('ctxScoreWrap');
+  if(businessCtx.rev && businessCtx.exp){
+    // Show a baseline health score (no new loan)
+    const margin=((businessCtx.netCF/businessCtx.rev)*100).toFixed(0);
+    const cls=margin>=20?'safe':margin>=10?'risky':'danger';
+    const label=margin>=20?'Healthy':margin>=10?'Moderate':'Tight';
+    wrap.innerHTML=`<span class="score-badge ${cls}">Cash Margin: ${margin}% · ${label}</span>`;
+  } else {
+    wrap.innerHTML='';
+  }
+  updateModuleDataUI();
+  showToast('Context updated.');
+}
+
+/* ══════════════════════════════════════════════════════
+   MODULE DATA AGGREGATION — reads all fw_* keys
+══════════════════════════════════════════════════════ */
+function gatherModuleData() {
+  function safeGet(key) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) { return null; }
+  }
+  return {
+    loans              : safeGet('fw_loans')                 || [],
+    bills              : safeGet('fw_bills')                 || [],
+    invoices           : safeGet('fw_invoices')              || [],
+    invoiceTrackerData : safeGet('invoiceTracker_invoices')  || [],
+    cfEvents           : safeGet('fw_cf_events')             || [],
+    savingsGoals       : safeGet('fw_savings_goals')         || [],
+    contractors        : safeGet('fw_contractors')           || [],
+    contractorPayments : safeGet('fw_contractor_payments')   || [],
+    employees          : safeGet('fw_employees')             || [],
+    futaSetup          : safeGet('fw_futa_setup'),
+    section179         : safeGet('fw_s179')                  || [],
+    homeOffice         : safeGet('fw_ho'),
+    mileageTrips       : safeGet('fw_ml_trips')              || [],
+    salesSetup         : safeGet('fw_sales_setup'),
+    salesTx            : safeGet('fw_sales_tx')              || [],
+    salesFiled         : safeGet('fw_sales_filed')           || [],
+    grantTracker       : safeGet('fw_grant_tracker')         || [],
+    scoreHistory       : safeGet('fw_score_history')         || [],
+    budgetData         : safeGet('fw_budget_data') || safeGet('budgetActualTracker_data'),
+    goals              : safeGet('goalTracker_goals')        || [],
+    taxPayments        : safeGet('fw_tax_payments_' + new Date().getFullYear()) || [],
+    invRevData         : safeGet('fw_invoice_revenue'),
+    expData            : safeGet('fw_expense_by_category'),
+    payrollData        : safeGet('fw_payroll_totals'),
+    cashRunData        : safeGet('fw_cash_runway'),
+    monthlySnaps       : safeGet('fw_monthly_snapshots')    || {},
+    profile            : safeGet('fw_profile'),
+  };
+}
+
+function buildModuleDataText(d) {
+  var lines = [];
+
+  if (d.loans.length > 0) {
+    var totalDebt = d.loans.reduce(function(s,l){ return s+(Number(l.balance)||0); }, 0);
+    var totalMin  = d.loans.reduce(function(s,l){ return s+(Number(l.minPay)||0);  }, 0);
+    var highRate  = d.loans.reduce(function(a,b){ return (Number(b.rate)||0)>(Number(a.rate)||0)?b:a; }, d.loans[0]);
+    lines.push('\nLOANS & DEBT:');
+    lines.push('- ' + d.loans.length + ' loan(s), total balance: ' + fmt(totalDebt) + ', total monthly minimums: ' + fmt(totalMin));
+    d.loans.forEach(function(l){
+      lines.push('  • ' + l.name + ' [' + (l.type||'loan') + ']: ' + fmt(l.balance) + ' @ ' + (l.rate||0) + '% APR, min pay ' + fmt(l.minPay) + (l.lender?' lender: '+l.lender:''));
+    });
+    lines.push('- Highest-rate: ' + highRate.name + ' @ ' + highRate.rate + '% APR');
+  }
+
+  if (d.bills.length > 0) {
+    var totalBills = d.bills.reduce(function(s,b){ return s+(Number(b.amount)||0); }, 0);
+    var autoPay    = d.bills.filter(function(b){ return b.autoPay; }).length;
+    lines.push('\nRECURRING BILLS:');
+    lines.push('- ' + d.bills.length + ' bill(s), ' + fmt(totalBills) + '/month (' + autoPay + ' on auto-pay)');
+    d.bills.slice(0,6).forEach(function(b){
+      lines.push('  • ' + b.vendor + ': ' + fmt(b.amount) + '/mo, due day ' + (b.dueDay||'?') + (b.category?', '+b.category:'') + (b.autoPay?' [autopay]':''));
+    });
+    if(d.bills.length>6) lines.push('  … and '+(d.bills.length-6)+' more');
+    var todayDate = new Date();
+    var upcomingBills = d.bills.filter(function(b){
+      var day=parseInt(b.dueDay)||0;
+      return day>=todayDate.getDate() && day<=todayDate.getDate()+7;
+    });
+    if(upcomingBills.length>0){
+      lines.push('- Bills due in next 7 days: '+upcomingBills.map(function(b){ return b.vendor+' '+fmt(b.amount)+' (day '+b.dueDay+')'; }).join(', '));
+    }
+  }
+
+  var allInv = d.invoices.length > 0 ? d.invoices : d.invoiceTrackerData;
+  if (allInv.length > 0) {
+    var today      = new Date().toISOString().split('T')[0];
+    var pending    = allInv.filter(function(i){ return i.status !== 'paid'; });
+    var pendingAmt = pending.reduce(function(s,i){ return s+(Number(i.amount)||0); }, 0);
+    var overdue    = pending.filter(function(i){ return i.dueDate && i.dueDate < today; });
+    lines.push('\nACCOUNTS RECEIVABLE:');
+    lines.push('- ' + allInv.length + ' invoice(s): ' + pending.length + ' pending (' + fmt(pendingAmt) + ' outstanding), ' + overdue.length + ' overdue');
+    if(overdue.length > 0){
+      lines.push('- OVERDUE invoices (immediate collection priority):');
+      overdue.slice(0,5).forEach(function(i){
+        var daysOD = i.dueDate ? Math.round((Date.now()-new Date(i.dueDate))/86400000) : '?';
+        lines.push('  • ' + (i.client||i.invNo||'Client') + ': ' + fmt(i.amount) + ' — ' + daysOD + ' days overdue');
+      });
+      if(overdue.length>5) lines.push('  … and '+(overdue.length-5)+' more overdue');
+    }
+    var notOverdue = pending.filter(function(i){ return !i.dueDate||i.dueDate>=today; });
+    if(notOverdue.length > 0){
+      lines.push('- Upcoming/current (not yet overdue):');
+      notOverdue.slice(0,3).forEach(function(i){
+        lines.push('  • ' + (i.client||i.invNo||'Invoice') + ': ' + fmt(i.amount) + ', due ' + (i.dueDate||'?'));
+      });
+    }
+  }
+
+  if (d.cfEvents.length > 0) {
+    var mIncome=0, mExpense=0;
+    d.cfEvents.forEach(function(e){
+      if(e.recur==='monthly'||e.recur==='weekly'){
+        if(e.type==='income') mIncome+=Number(e.amount)||0;
+        else mExpense+=Number(e.amount)||0;
+      }
+    });
+    lines.push('\nCASH FLOW CALENDAR:');
+    lines.push('- ' + d.cfEvents.length + ' event(s) tracked. Monthly recurring: income ' + fmt(mIncome) + ', expenses ' + fmt(mExpense) + ', net ' + fmt(mIncome-mExpense));
+  }
+
+  if (d.contractors.length > 0 || d.employees.length > 0) {
+    lines.push('\nPAYROLL & CONTRACTORS:');
+    if(d.employees.length>0){
+      var monthlyWages = d.employees.reduce(function(s,e){ return s+(Number(e.wages)||0); },0)/12;
+      lines.push('- ' + d.employees.length + ' employee(s) on payroll, ~' + fmt(monthlyWages) + '/mo wages');
+    }
+    if(d.contractors.length>0){
+      var cyr = new Date().getFullYear();
+      var totByC = {};
+      d.contractorPayments.forEach(function(p){
+        if(parseInt(p.year||p.date&&p.date.slice(0,4)||cyr)===cyr) totByC[p.cid]=(totByC[p.cid]||0)+(Number(p.amt||p.amount)||0);
+      });
+      var noW9c = d.contractors.filter(function(c){ return c.w9==='no'; });
+      var nec1099 = d.contractors.filter(function(c){
+        return !(c.type==='corp'||c.type==='llc_corp') && (totByC[c.id]||0)>=600;
+      });
+      var approaching600 = d.contractors.filter(function(c){
+        var paid=totByC[c.id]||0; return !(c.type==='corp'||c.type==='llc_corp') && paid>=400 && paid<600;
+      });
+      lines.push('- ' + d.contractors.length + ' contractor(s)' + (noW9c.length?' ('+noW9c.length+' missing W-9)':''));
+      if(nec1099.length>0){
+        lines.push('- Contractors requiring 1099-NEC (paid $600+):');
+        nec1099.forEach(function(c){ lines.push('  • '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD'); });
+      }
+      if(approaching600.length>0){
+        lines.push('- Contractors approaching $600 1099 threshold:');
+        approaching600.forEach(function(c){ lines.push('  • '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD ('+fmt(600-(totByC[c.id]||0))+' away from 1099 trigger)'); });
+      }
+    }
+  }
+
+  var taxLines = [];
+  if(d.section179.length>0){
+    var s179 = d.section179.reduce(function(s,a){ return s+(Number(a.cost||a.amount)||0); },0);
+    taxLines.push('Section 179: ' + d.section179.length + ' asset(s), total cost ' + fmt(s179));
+  }
+  if(d.homeOffice && (d.homeOffice.sqft||d.homeOffice.homeSqft)){
+    var pct = d.homeOffice.sqft&&d.homeOffice.homeSqft ? ((d.homeOffice.sqft/d.homeOffice.homeSqft)*100).toFixed(0) : '?';
+    taxLines.push('Home office: ' + (d.homeOffice.sqft||'?') + ' sq ft (' + pct + '% of home)');
+  }
+  if(d.mileageTrips.length>0){
+    var miles = d.mileageTrips.reduce(function(s,t){ return s+(Number(t.miles)||0); },0);
+    taxLines.push('Mileage: ' + miles.toLocaleString() + ' business miles (' + d.mileageTrips.length + ' trips)');
+  }
+  if(d.salesTx.length>0){
+    var salesAmt = d.salesTx.reduce(function(s,t){ return s+(Number(t.amount||t.total)||0); },0);
+    taxLines.push('Sales tax: ' + d.salesTx.length + ' transaction(s), ' + fmt(salesAmt) + ' taxable sales');
+  }
+  if(taxLines.length>0){
+    var dedTotal = 0;
+    if(d.section179.length>0) dedTotal += d.section179.reduce(function(s,a){ return s+(Number(a.cost||a.amount)||0); },0);
+    lines.push('\nTAX & DEDUCTIONS:');
+    taxLines.forEach(function(l){ lines.push('- '+l); });
+  }
+
+  if(d.taxPayments && d.taxPayments.length>0){
+    var sortedTx = d.taxPayments.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+    var lastTx = sortedTx[0];
+    var lastTxDate = new Date(lastTx.date);
+    var now2 = new Date();
+    var moSince = (now2.getFullYear()-lastTxDate.getFullYear())*12+(now2.getMonth()-lastTxDate.getMonth());
+    var txTotal = d.taxPayments.reduce(function(s,p){ return s+(Number(p.amount||p.amt)||0); },0);
+    lines.push('\nESTIMATED TAX PAYMENTS (' + now2.getFullYear() + '):');
+    lines.push('- ' + d.taxPayments.length + ' payment(s), total paid: ' + fmt(txTotal));
+    lines.push('- Last payment: ' + lastTx.date + ' (' + moSince + ' month' + (moSince!==1?'s':'')+' ago)');
+    if(moSince>3) lines.push('- ⚠️ OVERDUE: Quarterly estimated taxes due Apr 15 / Jun 16 / Sep 15 / Jan 15 — last payment was '+moSince+' months ago');
+  }
+
+  if(d.savingsGoals.length>0){
+    var sgTotal = d.savingsGoals.reduce(function(s,g){ return s+(Number(g.target)||0); },0);
+    var sgSaved = d.savingsGoals.reduce(function(s,g){ return s+(Number(g.saved||g.current||0)); },0);
+    var sgDeficit = Math.max(0,sgTotal-sgSaved);
+    var sgPct = sgTotal>0?Math.round((sgSaved/sgTotal)*100):0;
+    lines.push('\nSAVINGS GOALS (' + d.savingsGoals.length + ' goals, ' + sgPct + '% funded overall, ' + fmt(sgDeficit) + ' total deficit):');
+    d.savingsGoals.slice(0,4).forEach(function(g){
+      var saved = Number(g.saved||g.current||0);
+      var target = Number(g.target||0);
+      var pct = target ? Math.round((saved/target)*100) : 0;
+      var def = Math.max(0,target-saved);
+      lines.push('- ' + (g.name||g.label||'Goal') + ': ' + fmt(saved) + ' / ' + fmt(target) + ' (' + pct + '% funded' + (def>0?', '+fmt(def)+' short':'') + ')');
+    });
+    if(d.savingsGoals.length>4) lines.push('  … and '+(d.savingsGoals.length-4)+' more goals');
+  }
+
+  if(d.goals.length>0){
+    var done = d.goals.filter(function(g){ return g.done||g.completed; });
+    lines.push('\nBUSINESS GOALS:');
+    lines.push('- ' + d.goals.length + ' goal(s), ' + done.length + ' completed');
+    d.goals.filter(function(g){ return !(g.done||g.completed); }).slice(0,3).forEach(function(g){
+      lines.push('  • ' + (g.title||g.name||'Goal') + (g.target?' — target: '+g.target:'') + (g.deadline?', deadline: '+g.deadline:''));
+    });
+  }
+
+  if(d.grantTracker.length>0){
+    var gAmt = d.grantTracker.reduce(function(s,g){ return s+(Number(g.amount||g.value)||0); },0);
+    lines.push('\nGRANTS:');
+    lines.push('- ' + d.grantTracker.length + ' grant(s) tracked' + (gAmt>0?', potential value: '+fmt(gAmt):''));
+  }
+
+  if(d.budgetData && typeof d.budgetData==='object'){
+    var bdKeys = Object.keys(d.budgetData).sort().slice(-3);
+    if(bdKeys.length) lines.push('\nBUDGET VS ACTUAL (' + bdKeys.join(', ') + '): data available — ask for variance analysis');
+  }
+
+  // Live module data (Invoice Tracker, Vendor Tracker, Payroll, Cash Runway, Snapshots)
+  var curMoLive = new Date().toISOString().slice(0,7);
+  var curYrLive = String(new Date().getFullYear());
+  if(d.invRevData) {
+    var mRev = d.invRevData.byMonth && d.invRevData.byMonth[curMoLive] ? Number(d.invRevData.byMonth[curMoLive]) : 0;
+    var yRev = d.invRevData.byYear  && d.invRevData.byYear[curYrLive]  ? Number(d.invRevData.byYear[curYrLive])  : 0;
+    lines.push('\nLIVE REVENUE (Invoice Tracker):');
+    if(mRev > 0) lines.push('- This month collected: ' + fmt(mRev));
+    if(yRev > 0) { var moNum = new Date().getMonth()+1; lines.push('- YTD total: ' + fmt(yRev) + ' (avg ' + fmt(Math.round(yRev/moNum)) + '/mo over ' + moNum + ' months)'); }
+    if(d.invRevData.updatedAt) lines.push('- Data as of: ' + d.invRevData.updatedAt.slice(0,10));
+  }
+  if(d.expData && d.expData.totalMonthly) {
+    lines.push('\nLIVE EXPENSES (Vendor Tracker):');
+    lines.push('- Total monthly: ' + fmt(d.expData.totalMonthly));
+    if(d.expData.byCat) {
+      var cats = Object.entries(d.expData.byCat).sort(function(a,b){ return (b[1]||0)-(a[1]||0); }).slice(0,5);
+      if(cats.length) { lines.push('- Top categories:'); cats.forEach(function(c){ lines.push('  • '+c[0]+': '+fmt(c[1])); }); }
+    }
+  }
+  if(d.cashRunData) {
+    lines.push('\nCASH RUNWAY:');
+    if(d.cashRunData.runway !== undefined) lines.push('- Runway: ' + Number(d.cashRunData.runway).toFixed(1) + ' months');
+    if(d.cashRunData.currentBalance) lines.push('- Current balance: ' + fmt(d.cashRunData.currentBalance));
+    if(d.cashRunData.monthlyBurn)    lines.push('- Monthly burn: ' + fmt(d.cashRunData.monthlyBurn));
+  }
+  if(d.payrollData && d.payrollData.currentYearTotal) {
+    lines.push('\nPAYROLL (Payroll Estimator):');
+    lines.push('- Annual: ' + fmt(d.payrollData.currentYearTotal) + ' (~' + fmt(Math.round(d.payrollData.currentYearTotal/12)) + '/mo)');
+    if(d.payrollData.employeeCount) lines.push('- Employees: ' + d.payrollData.employeeCount);
+  }
+  var snapKeys = Object.keys(d.monthlySnaps).sort().slice(-3);
+  if(snapKeys.length) {
+    lines.push('\nMONTHLY SNAPSHOTS (last ' + snapKeys.length + ' months):');
+    snapKeys.forEach(function(k){ var s=d.monthlySnaps[k]; lines.push('- '+k+': Rev '+fmt(s.revenue||0)+', Exp '+fmt(s.expenses||0)+', Net '+fmt(s.netProfit||0)+(s.healthScore?' | Health: '+s.healthScore+'/100':'')); });
+  }
+
+  if(d.scoreHistory.length>0){
+    var latest = d.scoreHistory[d.scoreHistory.length-1];
+    var trend  = d.scoreHistory.length>1 ? (latest.score>d.scoreHistory[0].score?'improving':latest.score<d.scoreHistory[0].score?'declining':'stable') : '';
+    lines.push('\nHEALTH SCORE HISTORY:');
+    lines.push('- Latest: ' + (latest.score||latest.total||'?') + (latest.label?' ('+latest.label+')':'') + (latest.date?' on '+latest.date:'') + (trend?' — '+trend:''));
+    if(d.scoreHistory.length>1){
+      var recent3 = d.scoreHistory.slice(-3).map(function(h){ return h.score||h.total||'?'; });
+      lines.push('- Recent: ' + recent3.join(' → '));
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function updateModuleDataUI() {
+  var chips = document.getElementById('modChips');
+  var countEl = document.getElementById('ctxDataCount');
+  if(!chips) return;
+  var d = gatherModuleData();
+  var allInvCount = d.invoices.length || d.invoiceTrackerData.length;
+  var modules = [
+    {label:'Loans',      n: d.loans.length},
+    {label:'Bills',      n: d.bills.length},
+    {label:'Invoices',   n: allInvCount},
+    {label:'CF Events',  n: d.cfEvents.length},
+    {label:'Contractors',n: d.contractors.length},
+    {label:'Employees',  n: d.employees.length},
+    {label:'S179 Assets',n: d.section179.length},
+    {label:'Mileage',    n: d.mileageTrips.length},
+    {label:'Sales Tax',  n: d.salesTx.length},
+    {label:'Goals',      n: d.goals.length},
+    {label:'Savings',    n: d.savingsGoals.length},
+    {label:'Grants',     n: d.grantTracker.length},
+    {label:'Checkup',    n: d.scoreHistory.length},
+  ];
+  var loaded = modules.filter(function(m){ return m.n>0; });
+  chips.innerHTML = modules.map(function(m){
+    return '<span class="mod-chip ' + (m.n>0?'has-data':'no-data') + '">' + m.label + (m.n>0?' · '+m.n:'') + '</span>';
+  }).join('');
+  if(countEl) countEl.textContent = loaded.length + ' of ' + modules.length + ' modules have data — all fed to AI';
+}
+
+function buildSystemPrompt(){
+  const c   = businessCtx;
+  const netCF     = c.netCF||0;
+  const emiPct    = c.emi&&netCF ? ((c.emi/netCF)*100).toFixed(0) : 'N/A';
+  const reserveMos= c.emi ? (c.reserve/c.emi).toFixed(1) : 'N/A';
+  const margin    = c.rev  ? ((netCF/c.rev)*100).toFixed(0) : 'N/A';
+  const moduleData = buildModuleDataText(gatherModuleData());
+
+  return `You are an expert AI CFO advisor for small businesses, built into FinWise — a financial management platform.
+
+Your role: Give clear, direct, personalised financial advice based on the user's actual business numbers below. Be concise, use plain English, and always connect advice back to specific numbers. Never give generic advice.
+
+CORE BUSINESS PROFILE:
+- Business: ${c.name} (${c.industry})
+- Monthly Revenue: ${fmt(c.rev)}
+- Monthly Expenses: ${fmt(c.exp)}
+- Net Monthly Cash Flow: ${fmt(netCF)} (margin: ${margin}%)
+- Existing Monthly EMI: ${fmt(c.emi)} (${emiPct}% of net cash flow)
+- Cash Reserve / Savings: ${fmt(c.reserve)} (${reserveMos} months of EMI buffer)
+${moduleData}
+
+ANALYSIS RULES:
+- Safe new EMI: max 40% of net cash flow (${fmt(Math.round(netCF*0.4))}/month headroom)
+- DSCR ≥ 1.25 safe, ≥ 2.0 excellent
+- 3 months EMI reserve minimum before borrowing
+- Stress test: 20–30% revenue drop survivability
+- When bills + loan minimums are known, use them as the true expense baseline
+- Overdue invoices are a hidden cash flow risk — flag them prominently if asked about cash
+- Contractors approaching $600 must be monitored to avoid surprise 1099 obligations
+- Estimated tax payments: quarterly deadlines Apr 15, Jun 16, Sep 15, Jan 15 — flag if overdue
+- Savings goal deficit reduces real-world financial resilience even if cash flow looks OK
+- Low goal hit rate (<50%) signals execution risk — factor into growth advice
+
+RESPONSE FORMAT:
+- Short paragraphs + bullet points; specific numbers always
+- End with 1-2 clear action steps
+- Max 300 words unless asked for more
+- Use ✅ ⚠️ 🚨 💡 📊 for readability
+
+Do not invent data. If a number is missing or inconsistent, flag it. No legal or tax advice.`;
+}
+
+/* ══════════════════════════════════════════════════════
+   CONVERSATION PERSISTENCE
+══════════════════════════════════════════════════════ */
+const CONV_KEY = 'fw_cfo_conversations';
+let currentConvId = null;
+
+function saveConversation(){
+  if(!conversation.length) return;
+  try{
+    var convs=JSON.parse(localStorage.getItem(CONV_KEY)||'[]');
+    var firstUser=conversation.find(function(m){return m.role==='user';});
+    var title=firstUser?firstUser.content.substring(0,55):'Conversation';
+    var idx=currentConvId?convs.findIndex(function(c){return c.id===currentConvId;}):-1;
+    var session={
+      id:currentConvId||Date.now(),
+      title:title,
+      date:new Date().toISOString().slice(0,10),
+      messages:conversation.map(function(m){return{role:m.role,content:m.content};}),
+      context:Object.assign({},businessCtx),
+      savedAt:new Date().toISOString()
+    };
+    if(!currentConvId) currentConvId=session.id;
+    if(idx>=0) convs[idx]=session;
+    else{convs.unshift(session);if(convs.length>10)convs=convs.slice(0,10);}
+    localStorage.setItem(CONV_KEY,JSON.stringify(convs));
+    renderSavedHistory();
+  }catch(e){}
+}
+
+function loadConversation(id){
+  try{
+    var convs=JSON.parse(localStorage.getItem(CONV_KEY)||'[]');
+    var conv=convs.find(function(c){return c.id===id;});
+    if(!conv) return;
+    currentConvId=null;conversation=[];
+    document.getElementById('messages').innerHTML='';
+    currentConvId=conv.id;
+    conversation=conv.messages.map(function(m){return{role:m.role,content:m.content};});
+    conv.messages.forEach(function(m){addMessage(m.role,m.content);});
+    if(conv.context){
+      businessCtx=conv.context;
+      var map={ctx_name:'name',ctx_rev:'rev',ctx_exp:'exp',ctx_emi:'emi',ctx_reserve:'reserve',ctx_industry:'industry'};
+      Object.keys(map).forEach(function(elId){var el=document.getElementById(elId);if(el)el.value=conv.context[map[elId]]||'';});
+    }
+    renderSavedHistory();
+    showToast('✅ Conversation loaded');
+  }catch(e){showToast('Could not load conversation.');}
+}
+
+function renderSavedHistory(){
+  var list=document.getElementById('historyList');
+  if(!list) return;
+  try{
+    var convs=JSON.parse(localStorage.getItem(CONV_KEY)||'[]');
+    if(!convs.length){list.innerHTML='<div class="no-history">No saved conversations yet.</div>';return;}
+    list.innerHTML=convs.map(function(c){
+      var isActive=c.id===currentConvId;
+      var turns=c.messages?Math.floor(c.messages.length/2):0;
+      return '<div class="conv-item'+(isActive?' active':'')+'" onclick="loadConversation('+c.id+')">'+
+        '<div class="conv-item-date">'+c.date+' · '+turns+' turn'+(turns!==1?'s':'')+'</div>'+
+        '<div class="conv-item-title">💬 '+c.title+'</div></div>';
+    }).join('');
+  }catch(e){list.innerHTML='<div class="no-history">No saved conversations yet.</div>';}
+}
+
+function newChat(){
+  saveConversation();
+  currentConvId=null;conversation=[];
+  document.getElementById('messages').innerHTML=`
+    <div class="welcome-card" id="welcomeCard">
+      <div class="wc-icon">🤖</div>
+      <h2>Hi! I'm your AI CFO</h2>
+      <p>Ask me anything in plain English — no financial jargon needed.</p>
+      <div class="wc-suggestions">
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">💬 What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+      </div>
+    </div>`;
+  const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';
+  const badge=document.getElementById('contextBadge');if(badge)badge.style.display='none';
+  renderSavedHistory();
+}
+
+/* ══════════════════════════════════════════════════════
+   CHAT ENGINE
+══════════════════════════════════════════════════════ */
+let conversation = []; // {role, content}
+let isLoading = false;
+
+function addMessage(role, content){
+  const messagesEl=document.getElementById('messages');
+  const wc=document.getElementById('welcomeCard');
+  if(wc) wc.remove();
+
+  const time=now();
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">📋 Copy</button></div>`:'';
+  const safeContent=content.replace(/"/g,'&quot;');
+  div.innerHTML=`
+    <div class="msg-avatar">${role==='ai'?'🤖':'👤'}</div>
+    <div>
+      <div class="msg-bubble" data-raw="${safeContent}">${formatMarkdown(content)}</div>
+      ${copyBtn}
+      <div class="msg-time">${time}</div>
+    </div>
+  `;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop=messagesEl.scrollHeight;
+
+  if(role==='ai'){
+    const aib=document.getElementById('actionItemsBtn');
+    if(aib) aib.style.display='';
+    const turnCount=Math.floor(conversation.length/2);
+    const badge=document.getElementById('contextBadge');
+    if(badge&&turnCount>0){badge.style.display='';badge.textContent='💬 '+turnCount+' turn'+(turnCount!==1?'s':'')+' in context';}
+  }
+
+  updateHistory(content, role);
+}
+
+window.copyMsgText=function(btn){
+  const bubble=btn.closest('.msg-actions').previousElementSibling;
+  const text=bubble?(bubble.getAttribute('data-raw')||bubble.innerText):'';
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){showToast('✅ Response copied!');});
+  } else {
+    const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showToast('✅ Response copied!');
+  }
+};
+
+function formatMarkdown(text){
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^### (.+)$/gm,'<strong>$1</strong>')
+    .replace(/^## (.+)$/gm,'<strong>$1</strong>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>)+/gs, m=>'<ul>'+m+'</ul>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n/g,'<br/>')
+    .replace(/^(.)/,'<p>$1').replace(/(.)$/,'$1</p>');
+}
+
+function updateHistory(content, role){
+  if(role!=='user') return;
+  const list=document.getElementById('historyList');
+  const noH=list.querySelector('.no-history');
+  if(noH) noH.remove();
+  const item=document.createElement('div');
+  item.className='history-item';
+  item.textContent='💬 '+content.substring(0,45)+(content.length>45?'...':'');
+  item.title=content;
+  list.insertBefore(item,list.firstChild);
+}
+
+async function sendMessage(){
+  if(isLoading) return;
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text) return;
+
+  const apiKey=getApiKey();
+  if(!apiKey){
+    showToast('⚠️ Add your API key in config.js or the sidebar.');
+    return;
+  }
+
+  input.value='';
+  input.style.height='auto';
+
+  addMessage('user', text);
+  conversation.push({role:'user', content:text});
+
+  setLoading(true);
+
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MODEL : 'claude-haiku-4-5-20251001'),
+        max_tokens: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MAX_TOKENS : 600),
+        system: buildSystemPrompt(),
+        messages: conversation.slice(-12) // last 12 messages for context
+      })
+    });
+
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      throw new Error(err.error?.message || `API error ${resp.status}`);
+    }
+
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Sorry, I could not generate a response.';
+    conversation.push({role:'assistant', content:reply});
+    addMessage('ai', reply);
+    saveConversation();
+
+  } catch(e){
+    let msg = e.message||'Unknown error';
+    if(msg.includes('401')) msg='Invalid API key. Check your key in the sidebar.';
+    else if(msg.includes('429')) msg='Rate limit hit. Wait a moment and try again.';
+    else if(msg.includes('Failed to fetch')) msg='Network error. Check your internet connection.';
+    addMessage('ai','⚠️ Error: '+msg);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function sendQuick(text){
+  document.getElementById('chatInput').value=text;
+  sendMessage();
+}
+
+function setLoading(on){
+  isLoading=on;
+  document.getElementById('sendBtn').disabled=on;
+  document.getElementById('typingIndicator').classList.toggle('show',on);
+  const msgs=document.getElementById('messages');
+  if(on) msgs.scrollTop=msgs.scrollHeight;
+}
+
+function clearChat(){
+  saveConversation();
+  currentConvId=null;conversation=[];
+  const msgs=document.getElementById('messages');
+  msgs.innerHTML=`
+    <div class="welcome-card" id="welcomeCard">
+      <div class="wc-icon">🤖</div>
+      <h2>Hi! I'm your AI CFO</h2>
+      <p>Ask me anything in plain English — no financial jargon needed.</p>
+      <div class="wc-suggestions">
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">💬 What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+      </div>
+    </div>`;
+  const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';
+  const badge=document.getElementById('contextBadge');if(badge)badge.style.display='none';
+  renderSavedHistory();
+}
+
+function handleKey(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+/* ══════════════════════════════════════════════════════
+   GENERATE ACTION ITEMS (P3)
+══════════════════════════════════════════════════════ */
+async function generateActionItems(){
+  if(isLoading) return;
+  const aiExchanges=conversation.filter(function(m){return m.role==='assistant';}).length;
+  if(aiExchanges<1){showToast('Have a conversation first, then generate action items.');return;}
+  const apiKey=getApiKey();
+  if(!apiKey){showToast('⚠️ Add your Anthropic API key first.');return;}
+  const actionPrompt='Based on our entire conversation, generate a numbered list of 5–7 specific, concrete action items I should take THIS WEEK to improve my business finances. Format each as: [PRIORITY: High/Med/Low] Action — specific detail or dollar amount where applicable. Be concrete, not generic.';
+  addMessage('user','📋 Generate Action Items from this conversation');
+  const msgs=conversation.concat([{role:'user',content:actionPrompt}]);
+  conversation.push({role:'user',content:'Generate action items'});
+  setLoading(true);
+  const aib=document.getElementById('actionItemsBtn');
+  if(aib) aib.disabled=true;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:typeof FINWISE_CONFIG!=='undefined'?FINWISE_CONFIG.MODEL:'claude-haiku-4-5-20251001',
+        max_tokens:800,
+        system:buildSystemPrompt(),
+        messages:msgs.slice(-14)
+      })
+    });
+    if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`API error ${resp.status}`);}
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Could not generate action items.';
+    conversation.push({role:'assistant',content:reply});
+    addMessage('ai',reply);
+    saveConversation();
+  }catch(e){
+    conversation.pop();
+    addMessage('ai','⚠️ Error: '+e.message);
+  }finally{
+    setLoading(false);
+    if(aib){aib.disabled=false;}
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+function initApp(){
+  updateKeyStatus();
+  loadContextFromProfile();
+  updateModuleDataUI();
+  renderSavedHistory();
+}
+
+// Check paywall
+if(localStorage.getItem('fw_pro')==='1'){
+  document.getElementById('paywallOverlay').style.display='none';
+  initApp();
+}
+</script>
+</body>
+</html>

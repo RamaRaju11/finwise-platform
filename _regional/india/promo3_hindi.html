@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinWise — Hindi Reel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0000;display:flex;align-items:center;justify-content:center;font-family:Arial,'Noto Sans',sans-serif;overflow:hidden}
+
+/* ── START OVERLAY ── */
+#startOv{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a0505,#0a0014);display:flex;align-items:center;justify-content:center}
+.start-card{text-align:center;padding:44px 36px;max-width:370px;background:linear-gradient(145deg,#7c1a00,#3d0066);border-radius:28px;border:2px solid rgba(250,180,0,.25);box-shadow:0 24px 80px rgba(0,0,0,.9)}
+.start-emoji{font-size:3.5rem;margin-bottom:14px;display:block;animation:popIn .6s cubic-bezier(.34,1.7,.64,1) both}
+.start-title{font-size:1.55rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.5px}
+.start-title span{color:#facc15}
+.start-sub{font-size:.9rem;color:rgba(255,255,255,.55);font-weight:600;line-height:1.65;margin-bottom:28px}
+.start-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 40px;background:linear-gradient(135deg,#f97316,#facc15);color:#1a1a1a;border:none;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 28px rgba(249,115,22,.45);transition:transform .2s}
+.start-btn:hover{transform:scale(1.06)}
+.start-note{margin-top:16px;font-size:.72rem;color:rgba(255,255,255,.3);font-weight:700;letter-spacing:.5px}
+
+/* ── REEL ── */
+.reel{position:relative;width:390px;height:100vh;max-height:780px;overflow:hidden;border-radius:0;box-shadow:0 0 100px rgba(249,115,22,.2)}
+@media(min-width:500px){.reel{border-radius:24px;height:780px}}
+.reel::before{content:'';position:absolute;top:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);z-index:150;pointer-events:none}
+
+/* ── PROGRESS DOTS ── */
+.prog-dots{position:absolute;top:14px;left:0;right:0;display:flex;gap:4px;padding:0 16px;z-index:200}
+.dot{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.dot-fill{height:100%;background:#facc15;border-radius:99px;width:0%}
+
+/* ── CONTROLS ── */
+.ctrl-bar{position:absolute;top:10px;right:14px;z-index:300;display:flex;gap:6px}
+.ctrl-btn{background:rgba(0,0,0,.45);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:.88rem;cursor:pointer;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.ctrl-btn:hover{background:rgba(0,0,0,.7)}
+
+/* ── SLIDES ── */
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 28px 110px;text-align:center;opacity:0;pointer-events:none;transition:opacity .38s ease,transform .38s ease;transform:scale(1.06)}
+.slide.active{opacity:1;pointer-events:auto;transform:scale(1)}
+.slide.out{opacity:0;transform:scale(.93)}
+
+.s1{background:linear-gradient(160deg,#fbbf24 0%,#f97316 60%,#dc2626 100%)}
+.s2{background:radial-gradient(ellipse at top,#4a0808 0%,#0f0000 100%)}
+.s3{background:linear-gradient(160deg,#042f2e 0%,#0f766e 100%)}
+.s4{background:radial-gradient(ellipse at center,#1a0014 0%,#000000 100%)}
+.s5{background:linear-gradient(160deg,#0c1a40 0%,#1e3a5f 60%,#0c3d60 100%)}
+.s6{background:linear-gradient(160deg,#050505 0%,#0f0f18 100%)}
+.s7{background:linear-gradient(160deg,#78350f 0%,#f97316 60%,#facc15 100%)}
+
+/* ── SUBTITLE BAR ── */
+.sub-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);padding:11px 16px 22px;font-size:.9rem;font-weight:700;color:rgba(255,255,255,.85);line-height:1.6;min-height:70px;z-index:200;text-align:center}
+.sub-bar mark{background:none;color:#fbbf24;font-weight:900;font-style:normal}
+
+/* ── SHARED ELEMENTS ── */
+.big-emoji{font-size:4.2rem;line-height:1;margin-bottom:16px;display:block;animation:popIn .52s cubic-bezier(.34,1.7,.64,1) both}
+
+/* DARK slide text */
+.hd{font-size:1.85rem;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-.3px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.14s}
+.sd{font-size:.98rem;font-weight:700;color:rgba(255,255,255,.65);line-height:1.5;animation:riseUp .44s ease both;animation-delay:.3s}
+
+/* LIGHT slide text (s1) */
+.hl{font-size:1.85rem;font-weight:900;color:#1a1a1a;line-height:1.2;letter-spacing:-.3px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.14s}
+.sl{font-size:.98rem;font-weight:700;color:rgba(0,0,0,.6);line-height:1.5;animation:riseUp .44s ease both;animation-delay:.3s}
+
+/* ── SLIDE 1 — CA Receipt ── */
+.receipt{background:#fffbf0;border-radius:14px;padding:16px 20px;font-size:.84rem;color:#374151;text-align:left;width:100%;max-width:300px;box-shadow:0 6px 22px rgba(0,0,0,.2);animation:riseUp .44s ease both;animation-delay:.38s;margin-top:14px;border-top:4px solid #f97316}
+.r-row{display:flex;justify-content:space-between;margin-bottom:6px;font-family:Arial,sans-serif}
+.r-row .item{flex:1;font-size:.82rem}
+.r-row .amt{font-weight:800;color:#374151;white-space:nowrap;margin-left:8px}
+.r-divider{border:none;border-top:2px dashed #d1d5db;margin:10px 0}
+.r-total{display:flex;justify-content:space-between;font-weight:900;font-size:1rem;color:#dc2626}
+.r-stamp{margin-top:10px;text-align:center;font-size:.7rem;color:#9ca3af;font-style:italic}
+
+/* ── SLIDE 2 — GST Panic ── */
+.panic-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;max-width:300px;margin-top:14px;animation:riseUp .44s ease both;animation-delay:.3s}
+.pgrid-cell{background:rgba(255,255,255,.07);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid rgba(255,255,255,.1)}
+.pgrid-cell.panic{background:rgba(220,38,38,.25);border-color:rgba(220,38,38,.5);animation:pulse 1s ease infinite alternate}
+.pg-month{font-size:.65rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.5px;margin-bottom:4px}
+.pg-status{font-size:1.1rem}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+
+/* ── SLIDE 3 — Tally Disaster ── */
+.steps{margin-top:14px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.3s}
+.step-row{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:7px;background:rgba(255,255,255,.1);border-radius:12px;font-size:.88rem;font-weight:800;color:#fff;border-left:3px solid #2dd4bf}
+.s-no{font-size:.7rem;background:#0f766e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Arial,sans-serif;font-weight:900}
+
+/* ── SLIDE 4 — Pivot ── */
+.pivot-wrap{animation:zoomBounce .6s cubic-bezier(.34,1.7,.64,1) both}
+.pivot-hi{font-size:3.2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-2px}
+.pivot-hi span{color:#facc15}
+.pivot-sub{font-size:.95rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:16px;line-height:1.6;animation:riseUp .44s ease both;animation-delay:.48s}
+
+/* ── SLIDE 5 — Brand ── */
+.brand{font-size:3.8rem;font-weight:900;letter-spacing:-3px;color:#fff;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both;font-family:'Arial Black',Arial,sans-serif}
+.brand em{color:#fbbf24;font-style:normal}
+.brand-tag{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:4px;animation:riseUp .44s ease both;animation-delay:.28s}
+.pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:18px;animation:riseUp .44s ease both;animation-delay:.5s}
+.pill{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(251,191,36,.3);border-radius:99px;padding:7px 14px;font-size:.78rem;font-weight:800}
+.big-stat{font-size:1.65rem;font-weight:900;color:#fbbf24;margin-top:16px;animation:riseUp .44s ease both;animation-delay:.68s;line-height:1.3}
+
+/* ── SLIDE 6 — Features ── */
+.feat-lbl{font-size:1rem;font-weight:900;color:#f97316;margin-bottom:14px;animation:riseUp .4s ease both;animation-delay:.1s}
+.feat-ul{width:100%;list-style:none;text-align:left}
+.feat-ul li{padding:10px 14px;margin-bottom:7px;background:rgba(255,255,255,.04);border-radius:11px;border-left:3px solid #f97316;font-size:.88rem;font-weight:700;color:#fff;opacity:0;transform:translateX(-18px);transition:opacity .38s ease,transform .38s ease}
+.feat-ul li.show{opacity:1;transform:translateX(0)}
+.feat-ul li .fi{margin-right:7px}
+
+/* ── SLIDE 7 — CTA ── */
+.cta-head{font-size:1.75rem;font-weight:900;color:#1a1a1a;line-height:1.15;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both;letter-spacing:-.3px}
+.vs-row{display:flex;gap:10px;margin-top:16px;width:100%;animation:riseUp .44s ease both;animation-delay:.38s}
+.vs-c{flex:1;border-radius:12px;padding:13px 10px;text-align:center}
+.vs-old{background:rgba(0,0,0,.15)}
+.vs-new{background:rgba(255,255,255,.88)}
+.vs-lbl{font-size:.62rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#374151;margin-bottom:6px}
+.vs-val{font-size:1.3rem;font-weight:900;color:#1a1a1a}
+.vs-desc{font-size:.68rem;font-weight:700;color:#6b7280;margin-top:3px}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:14px 36px;background:#1a1a1a;color:#fbbf24;border:none;border-radius:50px;font-size:1rem;font-weight:900;cursor:pointer;text-decoration:none;box-shadow:0 8px 28px rgba(0,0,0,.4);animation:riseUp .44s ease both;animation-delay:.6s;transition:transform .2s;font-family:'Arial Black',Arial,sans-serif}
+.cta-btn:hover{transform:translateY(-3px) scale(1.04)}
+.replay-lnk{display:inline-block;margin-top:10px;background:rgba(0,0,0,.1);color:#374151;border:1.5px solid rgba(0,0,0,.18);border-radius:50px;padding:8px 24px;font-size:.8rem;font-weight:800;cursor:pointer;animation:riseUp .44s ease both;animation-delay:.8s}
+
+/* ── KEYFRAMES ── */
+@keyframes popIn{0%{transform:scale(0) rotate(-14deg);opacity:0}75%{transform:scale(1.18) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes riseUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zoomBounce{0%{opacity:0;transform:scale(.45)}72%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<!-- ── START OVERLAY ── -->
+<div id="startOv">
+  <div class="start-card">
+    <span class="start-emoji">🎙️</span>
+    <div class="start-title">Fin<span>Wise</span> — असली बात</div>
+    <div class="start-sub">हर छोटे businessman की सच्ची कहानी।<br>थोड़ी हँसी, थोड़ी सच्चाई — और एक solution।<br><br>Hindi voiceover के साथ।</div>
+    <button class="start-btn" onclick="beginReel()">▶&nbsp;&nbsp;चलाएं</button>
+    <div class="start-note">🔊 PHONE UNMUTE करें &nbsp;·&nbsp; TAP करें अगली SLIDE के लिए</div>
+  </div>
+</div>
+
+<!-- ── REEL ── -->
+<div class="reel" id="reel">
+
+  <div class="prog-dots" id="progDots"></div>
+  <div class="ctrl-bar">
+    <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+    <button class="ctrl-btn" onclick="restartReel()">↺</button>
+  </div>
+
+  <!-- SLIDE 1 — CA Saab -->
+  <div class="slide s1" id="s1">
+    <span class="big-emoji">😏</span>
+    <div class="hl">आपके CA साहब...</div>
+    <div class="sl">हर महीने ₹3,000 — बस इतना कहने के लिए:</div>
+    <div class="receipt">
+      <div class="r-row"><span class="item">Books देखी (briefly)</span><span class="amt">₹1,500</span></div>
+      <div class="r-row"><span class="item">बोले: "कम खर्च करो"</span><span class="amt">₹1,500</span></div>
+      <div class="r-row"><span class="item">कुछ समझाया</span><span class="amt">₹0</span></div>
+      <hr class="r-divider"/>
+      <div class="r-total"><span>कुल ज्ञान</span><span>₹3,000 💀</span></div>
+      <div class="r-stamp">Receipt No. 47 of 47 this year</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — GST Panic -->
+  <div class="slide s2" id="s2">
+    <span class="big-emoji">😰</span>
+    <div class="hd">हर महीने GST filing...</div>
+    <div class="sd">और हर महीने वही panic</div>
+    <div class="panic-grid">
+      <div class="pgrid-cell"><div class="pg-month">JAN</div><div class="pg-status">😮‍💨</div></div>
+      <div class="pgrid-cell"><div class="pg-month">FEB</div><div class="pg-status">😬</div></div>
+      <div class="pgrid-cell"><div class="pg-month">MAR</div><div class="pg-status">😅</div></div>
+      <div class="pgrid-cell"><div class="pg-month">APR</div><div class="pg-status">😰</div></div>
+      <div class="pgrid-cell panic"><div class="pg-month">NOW</div><div class="pg-status">🚨</div></div>
+      <div class="pgrid-cell"><div class="pg-month">NEXT</div><div class="pg-status">😶</div></div>
+    </div>
+    <div class="sd" style="margin-top:14px;animation-delay:.55s">"क्या मैं business बंद कर दूं?" 😭</div>
+  </div>
+
+  <!-- SLIDE 3 — Tally Disaster -->
+  <div class="slide s3" id="s3">
+    <span class="big-emoji">🪦</span>
+    <div class="hd">Tally खोली...</div>
+    <div class="steps">
+      <div class="step-row"><div class="s-no">1</div>Tally खोली। Motivated feel किया। 💪</div>
+      <div class="step-row"><div class="s-no">2</div>Numbers देखे। कुछ समझ नहीं आया। 😶</div>
+      <div class="step-row"><div class="s-no">3</div>बंद कर दी। Whatsapp खोला। 📱</div>
+      <div class="step-row"><div class="s-no">4</div>चाय पी। कल देखेंगे। ☕</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — Pivot -->
+  <div class="slide s4" id="s4">
+    <div style="font-size:3.5rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">✨</div>
+    <div class="pivot-wrap">
+      <div class="pivot-hi">अब <span>बस।</span></div>
+    </div>
+    <div class="pivot-sub">
+      आपके business को एक smart साथी चाहिए।<br>
+      CA fee नहीं। Tally confusion नहीं।<br>
+      GST panic नहीं।
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — Brand -->
+  <div class="slide s5" id="s5">
+    <div class="brand">Fin<em>Wise</em></div>
+    <div class="brand-tag">आपका AI-powered financial साथी</div>
+    <div class="pills">
+      <div class="pill">🆓 बिल्कुल Free</div>
+      <div class="pill">🌐 Browser में</div>
+      <div class="pill">🔒 Data आपका, आपके पास</div>
+      <div class="pill">💬 सीधी भाषा में</div>
+    </div>
+    <div class="big-stat">30 Tools.<br>Zero CA Fee. 🎉</div>
+  </div>
+
+  <!-- SLIDE 6 — Features -->
+  <div class="slide s6" id="s6">
+    <div class="feat-lbl">ये सब करता है FinWise 👇</div>
+    <ul class="feat-ul" id="featList">
+      <li><span class="fi">🏦</span><strong>Loan सही है या नहीं</strong> — एक second में जानिए</li>
+      <li><span class="fi">⏳</span><strong>Cash Runway</strong> — cash कितने दिन चलेगा?</li>
+      <li><span class="fi">🎯</span><strong>Grant Finder</strong> — free money जो आपको नहीं पता</li>
+      <li><span class="fi">🤖</span><strong>AI CFO Chat</strong> — judge नहीं करता, bill नहीं करता</li>
+      <li><span class="fi">📊</span><strong>Business Health Score</strong> — आपका financial report card</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 7 — CTA -->
+  <div class="slide s7" id="s7">
+    <div class="cta-head">Setup: 2 मिनट। 🤌<br>CA appointment: 2 हफ्ते।</div>
+    <div class="vs-row">
+      <div class="vs-c vs-old">
+        <div class="vs-lbl">पहले</div>
+        <div class="vs-val">😩 ₹3,000</div>
+        <div class="vs-desc">CA बोले: "कम खर्च करो"</div>
+      </div>
+      <div class="vs-c vs-new">
+        <div class="vs-lbl">FinWise से</div>
+        <div class="vs-val">🎉 Free</div>
+        <div class="vs-desc">30 tools · सीधे जवाब</div>
+      </div>
+    </div>
+    <a href="try.html" class="cta-btn">FinWise Try करें →</a><br>
+    <button class="replay-lnk" onclick="restartReel()">↺ फिर देखें</button>
+  </div>
+
+  <!-- subtitle / karaoke bar -->
+  <div class="sub-bar" id="subBar">&nbsp;</div>
+
+</div>
+
+<script>
+var SLIDES = ['s1','s2','s3','s4','s5','s6','s7'];
+
+/* Hindi script — Hinglish mix, readable by hi-IN TTS */
+var LINES = [
+  "सुनिए भाई। आपके CA साहब ने पिछले महीने क्या किया? एक भी number देखे बिना... तीन हजार रुपये की receipt पकड़ा दी। और बोले — कम खर्च करो। वाह! क्या wisdom है।",
+  "और GST filing का time? हर महीने वही story। Deadline आती है। Panic होती है। Portal crash होता है। और आप सोचते हैं — यार, business बंद कर दूं क्या?",
+  "Tally खोली। बड़े motivated थे। Numbers देखे। कुछ समझ नहीं आया। बंद कर दी। Whatsapp खोला। चाय पी। और बोले — कल देखेंगे। Classic।",
+  "दोस्त। अब बस। आपके business को एक smart साथी चाहिए। CA fee नहीं। Tally confusion नहीं। बस सीधे जवाब। Plain भाषा में।",
+  "मिलिए FinWise से। बीस free financial tools। सीधे आपके browser में। कोई app नहीं। कोई login नहीं। कोई CA fee नहीं। बस काम की बात।",
+  "Loan सही है या नहीं — एक second में पता चलेगा। Cash कितने दिन चलेगा — सीधा जवाब। Government grants खोजिए जो आपको नहीं पता थे। और AI CFO से कुछ भी पूछिए — वो judge नहीं करता। और bill भी नहीं करता।",
+  "Setup में सिर्फ दो minute लगते हैं। CA की appointment में दो हफ्ते। समझ गए ना? FinWise try करिए। बिल्कुल free। आज ही। आपका wallet शुक्रिया करेगा।"
+];
+
+var FEAT_DELAYS = [150, 420, 690, 960, 1230];
+var cur = 0, muted = false;
+var curUtter = null, safetyTimer = null;
+
+/* progress dots */
+(function(){
+  var wrap = document.getElementById('progDots');
+  SLIDES.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.innerHTML = '<div class="dot-fill" id="df'+i+'"></div>';
+    wrap.appendChild(d);
+  });
+})();
+
+/* Hindi voice picker */
+var pickedVoice = null;
+function pickVoice(){
+  var vv = speechSynthesis.getVoices();
+  pickedVoice =
+    vv.find(function(v){ return /hi[-_]IN/i.test(v.lang) && /heera|swara|hemant/i.test(v.name); }) ||
+    vv.find(function(v){ return /hi[-_]IN/i.test(v.lang); }) ||
+    vv.find(function(v){ return /hi/i.test(v.lang); }) ||
+    null;
+}
+if(window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; pickVoice(); }
+
+/* show slide */
+function showSlide(idx){
+  SLIDES.forEach(function(id,i){
+    var el = document.getElementById(id);
+    el.classList.remove('active','out');
+    if(i < idx) el.classList.add('out');
+    if(i === idx) el.classList.add('active');
+  });
+  for(var i = 0; i < SLIDES.length; i++){
+    var df = document.getElementById('df'+i);
+    df.style.transition = 'none';
+    df.style.width = i < idx ? '100%' : '0%';
+  }
+  /* feature stagger */
+  if(SLIDES[idx] === 's6'){
+    var items = document.querySelectorAll('#featList li');
+    items.forEach(function(li){ li.classList.remove('show'); });
+    FEAT_DELAYS.forEach(function(d,i){
+      setTimeout(function(){ if(items[i]) items[i].classList.add('show'); }, d);
+    });
+  }
+}
+
+/* subtitle */
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function setSub(text, ci, cl){
+  var bar = document.getElementById('subBar');
+  if(!text){ bar.innerHTML = '&nbsp;'; return; }
+  if(ci === undefined){ bar.textContent = text; return; }
+  bar.innerHTML = esc(text.substring(0,ci)) +
+    '<mark>' + esc(text.substring(ci, ci+(cl||1))) + '</mark>' +
+    esc(text.substring(ci+(cl||1)));
+}
+
+/* speak line */
+function speakLine(text, onDone){
+  if(safetyTimer){ clearTimeout(safetyTimer); safetyTimer = null; }
+  try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+
+  setSub(text);
+
+  if(!window.speechSynthesis){
+    safetyTimer = setTimeout(onDone, Math.max(3500, (text.split(/\s+/).length / 1.8) * 1000));
+    return;
+  }
+
+  curUtter = new SpeechSynthesisUtterance(text);
+  curUtter.lang = 'hi-IN';
+  curUtter.rate = 0.88;
+  curUtter.pitch = 1.06;
+  curUtter.volume = muted ? 0 : 1;
+  if(pickedVoice) curUtter.voice = pickedVoice;
+
+  curUtter.addEventListener('boundary', function(e){
+    if(e.name === 'word') setSub(text, e.charIndex, e.charLength);
+  });
+
+  var done = false, ka;
+  function finish(){
+    if(done) return; done = true;
+    clearTimeout(safetyTimer);
+    if(ka) clearInterval(ka);
+    onDone();
+  }
+  curUtter.onend = finish;
+  curUtter.onerror = finish;
+
+  /* Hindi speech is ~25% slower than English — adjust estimate */
+  var estMs = Math.ceil((text.split(/\s+/).length / curUtter.rate) * 620 + 1000);
+  safetyTimer = setTimeout(finish, estMs);
+
+  speechSynthesis.speak(curUtter);
+
+  /* Chrome keep-alive for longer Hindi lines */
+  ka = setInterval(function(){
+    if(!speechSynthesis.speaking){ clearInterval(ka); return; }
+    speechSynthesis.pause(); speechSynthesis.resume();
+  }, 9000);
+}
+
+/* run slide */
+function runSlide(idx){
+  cur = idx;
+  showSlide(idx);
+  speakLine(LINES[idx], function(){
+    if(idx < SLIDES.length - 1) runSlide(idx + 1);
+    else setSub('');
+  });
+}
+
+function beginReel(){
+  document.getElementById('startOv').style.display = 'none';
+  setTimeout(function(){ runSlide(0); }, 200);
+}
+function restartReel(){
+  try{ speechSynthesis.cancel(); }catch(e){}
+  if(safetyTimer){ clearTimeout(safetyTimer); safetyTimer = null; }
+  document.querySelectorAll('#featList li').forEach(function(li){ li.classList.remove('show'); });
+  runSlide(0);
+}
+function toggleMute(){
+  muted = !muted;
+  document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+  try{ speechSynthesis.cancel(); }catch(e){}
+  if(safetyTimer){ clearTimeout(safetyTimer); safetyTimer = null; }
+  runSlide(cur);
+}
+
+/* tap to skip */
+document.getElementById('reel').addEventListener('click', function(e){
+  if(e.target.closest('a') || e.target.closest('button')) return;
+  if(cur < SLIDES.length - 1){
+    try{ speechSynthesis.cancel(); }catch(e){}
+    if(safetyTimer){ clearTimeout(safetyTimer); safetyTimer = null; }
+    runSlide(cur + 1);
+  }
+});
+</script>
+</body>
+</html>

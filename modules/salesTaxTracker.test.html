@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sales Tax Tracker — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.4rem;font-weight:900;color:#1e293b;margin-bottom:4px}
+.subtitle{font-size:.88rem;color:#64748b;margin-bottom:24px}
+.card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 16px}
+.form-grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0 16px}
+@media(max-width:700px){.form-grid,.form-grid-4{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.form-grid,.form-grid-4{grid-template-columns:1fr}}
+label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+label:first-child{margin-top:0}
+input[type=text],input[type=number],input[type=date],select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif;background:#fff;transition:border-color .15s}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.rate-display{display:flex;margin-top:14px;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0}
+.rate-box{flex:1;padding:12px 16px;text-align:center;border-right:1px solid #e2e8f0;background:#f8fafc}
+.rate-box:last-child{border-right:none;background:#eff6ff}
+.rate-box-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:4px}
+.rate-box-val{font-size:1.15rem;font-weight:900;color:#1e293b}
+.rate-box:last-child .rate-box-val{color:#2563eb}
+.rate-note{font-size:.74rem;color:#64748b;margin-top:10px;padding:8px 12px;background:#fffbeb;border:1px solid #fde68a;border-radius:6px}
+.btn-add{padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.btn-add:hover{background:#1d4ed8}
+.btn-sm{padding:5px 12px;border:none;border-radius:6px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.btn-danger{background:#fee2e2;color:#dc2626}.btn-danger:hover{background:#fecaca}
+.btn-success{background:#dcfce7;color:#16a34a}.btn-success:hover{background:#bbf7d0}
+.btn-neutral{background:#f1f5f9;color:#475569}.btn-neutral:hover{background:#e2e8f0}
+.btn-period{padding:6px 14px;background:#f1f5f9;color:#475569;border:none;border-radius:6px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.btn-period:hover{background:#e2e8f0}
+.btn-today{background:#eff6ff;color:#2563eb}.btn-today:hover{background:#dbeafe}
+.period-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.period-nav{display:flex;align-items:center;gap:6px}
+.summary-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:600px){.summary-stats{grid-template-columns:1fr 1fr}}
+.stat-box{background:#f8fafc;border-radius:8px;padding:12px;text-align:center;border:1px solid #e2e8f0}
+.stat-box.hl{background:#eff6ff;border-color:#bfdbfe}
+.stat-lbl{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
+.stat-val{font-size:1rem;font-weight:900;color:#1e293b}
+.stat-box.hl .stat-val{color:#2563eb}
+.tx-table{width:100%;border-collapse:collapse;margin-top:4px}
+.tx-table th{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding:8px 10px;border-bottom:2px solid #f1f5f9;text-align:left}
+.tx-table th.r{text-align:right}
+.tx-table td{padding:9px 10px;border-bottom:1px solid #f8fafc;font-size:.83rem;vertical-align:middle}
+.tx-table tr:last-child td{border-bottom:none}
+.tx-table td.r{text-align:right}
+.cat-tag{display:inline-block;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.cat-product{background:#eff6ff;color:#2563eb}.cat-service{background:#f0fdf4;color:#16a34a}
+.cat-shipping{background:#fefce8;color:#ca8a04}.cat-digital{background:#faf5ff;color:#7c3aed}
+.cat-other{background:#f8fafc;color:#64748b}
+.taxbadge{display:inline-block;font-size:.62rem;font-weight:800;padding:2px 6px;border-radius:4px}
+.tb-yes{background:#dcfce7;color:#16a34a}.tb-no{background:#f1f5f9;color:#94a3b8}
+.empty{text-align:center;padding:28px;color:#94a3b8;font-size:.85rem}
+.filed-row{margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fbadge{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;font-size:.82rem;font-weight:800}
+.fb-filed{background:#dcfce7;color:#16a34a;border:1.5px solid #86efac}
+.fb-unfiled{background:#fff7ed;color:#c2410c;border:1.5px solid #fed7aa}
+.due-info{font-size:.78rem;color:#64748b}
+.nexus-bar{margin-bottom:14px}
+.nb-label{font-size:.8rem;font-weight:800;color:#475569;margin-bottom:6px}
+.progress-track{height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin-bottom:4px}
+.progress-fill{height:100%;border-radius:999px;transition:width .4s}
+.pf-safe{background:#10b981}.pf-warn{background:#f59e0b}.pf-danger{background:#ef4444}
+.nb-nums{font-size:.75rem;color:#64748b;display:flex;justify-content:space-between}
+.nexus-alert{padding:10px 14px;border-radius:7px;font-size:.82rem;margin-top:10px}
+.na-safe{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.na-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.na-danger{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.na-notax{background:#f8fafc;border:1px solid #e2e8f0;color:#64748b}
+.nexus-footer{font-size:.74rem;color:#94a3b8;margin-top:10px;line-height:1.5}
+.hist-table{width:100%;border-collapse:collapse}
+.hist-table th{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding:8px 10px;border-bottom:2px solid #f1f5f9;text-align:left}
+.hist-table th.r{text-align:right}
+.hist-table td{padding:9px 10px;border-bottom:1px solid #f8fafc;font-size:.83rem}
+.hist-table tr:last-child td{border-bottom:none}
+.hist-table td.r{text-align:right}
+.s-filed{color:#16a34a;font-weight:800;font-size:.75rem}
+.s-unfiled{color:#dc2626;font-weight:800;font-size:.75rem}
+.s-current{color:#2563eb;font-weight:800;font-size:.75rem}
+.s-future{color:#94a3b8;font-weight:700;font-size:.75rem}
+.s-clean{color:#94a3b8;font-size:.75rem}
+.save-card{background:#f8fafc;border:1px dashed #cbd5e1}
+.save-btn{padding:10px 24px;background:#10b981;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif}
+.save-btn:hover{background:#059669}
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-err{background:#dc2626}
+.disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.6;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #e2e8f0}
+
+/* ── STALE RATES BANNER ── */
+.stale-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:10px 16px;margin-bottom:16px;font-size:.8rem;color:#92400e;display:none;align-items:center;gap:10px;flex-wrap:wrap}
+.stale-banner strong{color:#78350f}
+
+/* ── MULTI-STATE NEXUS ── */
+.nexus-grid{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.nexus-row{padding:12px 14px;border-radius:9px;border:1.5px solid #e2e8f0;background:#f8fafc}
+.nexus-row.nr-danger{border-color:#fca5a5;background:#fff5f5}
+.nexus-row.nr-warn{border-color:#fde68a;background:#fffbeb}
+.nexus-row.nr-safe{border-color:#bbf7d0;background:#f0fdf4}
+.nr-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.nr-state{font-size:.88rem;font-weight:800;color:#1e293b}
+.nr-pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.68rem;font-weight:800}
+.nrp-d{background:#fee2e2;color:#dc2626}.nrp-w{background:#fef3c7;color:#92400e}.nrp-s{background:#dcfce7;color:#166534}
+
+/* ── FREQ RECOMMENDATION ── */
+.freq-card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:2px solid #7c3aed;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.freq-opts{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.freq-opt{flex:1;min-width:120px;border-radius:9px;padding:14px;border:2px solid #e2e8f0;text-align:center;cursor:default}
+.freq-opt.fo-cur{border-color:#2563eb;background:#eff6ff}
+.freq-opt.fo-rec{border-color:#7c3aed;background:#faf5ff}
+.fo-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:4px}
+.fo-name{font-size:1rem;font-weight:900;color:#1e293b}
+.fo-badge{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:800}
+.fob-cur{background:#dbeafe;color:#1d4ed8}.fob-rec{background:#ede9fe;color:#6d28d9}
+
+/* ── INVOICE CONN STRIP ── */
+.inv-strip{padding:8px 14px;border-radius:7px;font-size:.78rem;margin-bottom:12px;display:none}
+.inv-on{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.inv-off{background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0}
+
+/* ── PRINT / EXPORT ── */
+.print-hdr{display:none}
+.btn-csv{padding:9px 18px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:.84rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif;margin-left:10px}
+.btn-csv:hover{background:#15803d}
+@media print{
+  .print-hdr{display:block;padding:14px 0 10px;border-bottom:2px solid #1e293b;margin-bottom:18px}
+  .print-hdr-name{font-size:1.1rem;font-weight:800;color:#1e293b}
+  .print-hdr-meta{font-size:.78rem;color:#64748b;margin-top:3px}
+  .no-print{display:none!important}
+  .save-card,.stale-banner{display:none!important}
+  body{background:#fff}
+  .card,.freq-card{box-shadow:none;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+<div id="fwToast" class="fw-toast"></div>
+
+<div class="page">
+<div class="print-hdr" id="printHdr">
+  <div class="print-hdr-name" id="printBizName">Sales Tax Liability Report</div>
+  <div class="print-hdr-meta" id="printMeta"></div>
+</div>
+<h1>🏷️ Sales Tax Tracker</h1>
+<p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds — all 50 states + DC.</p>
+<div id="staleRatesBanner" class="stale-banner no-print">
+  ⚠️ <strong>Heads-up:</strong> <span id="staleMsg"></span> <a href="#" style="color:#92400e;font-weight:800;margin-left:6px" onclick="return false">Contact your CPA or check your state revenue website for current rates.</a>
+</div>
+<div id="invConnStrip" class="inv-strip no-print"></div>
+
+<!-- SETUP -->
+<div class="card">
+  <div class="card-title">Business Setup</div>
+  <div class="form-grid">
+    <div>
+      <label>Primary State</label>
+      <select id="setupState" onchange="onStateChange()"></select>
+    </div>
+    <div>
+      <label>Filing Frequency</label>
+      <select id="setupFreq" onchange="saveSetup();renderPeriodCard();renderHistory()">
+        <option value="monthly">Monthly</option>
+        <option value="quarterly">Quarterly</option>
+        <option value="annual">Annual</option>
+      </select>
+    </div>
+    <div>
+      <label>Product/Service Type</label>
+      <select id="setupType" onchange="saveSetup();updateTaxableHint()">
+        <option value="product">Physical Products</option>
+        <option value="service">Services</option>
+        <option value="mixed">Mixed (Products + Services)</option>
+        <option value="saas">SaaS / Digital Goods</option>
+      </select>
+    </div>
+  </div>
+  <div id="rateDisplay"></div>
+  <div style="margin-top:12px">
+    <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-top:0">
+      <input type="checkbox" id="useCustomLocal" onchange="toggleCustomLocal()"/>
+      <span style="font-size:.82rem;font-weight:700;color:#475569">Enter my exact local/county rate</span>
+    </label>
+    <div id="customLocalRow" style="display:none;margin-top:8px;align-items:center;gap:8px">
+      <input type="number" id="customLocalRate" placeholder="e.g. 2.5" min="0" max="15" step="0.01" style="width:130px" oninput="saveSetup()"/>
+      <span style="font-size:.8rem;color:#64748b">% local rate</span>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TRANSACTION -->
+<div class="card">
+  <div class="card-title">Add Transaction</div>
+  <div class="form-grid-4">
+    <div>
+      <label>Date</label>
+      <input type="date" id="txDate"/>
+    </div>
+    <div>
+      <label>Description</label>
+      <input type="text" id="txDesc" placeholder="e.g. Sale #1042" onkeydown="if(event.key==='Enter')addTransaction()"/>
+    </div>
+    <div>
+      <label>Sale Amount ($)</label>
+      <input type="number" id="txAmount" placeholder="0.00" min="0" step="0.01" onkeydown="if(event.key==='Enter')addTransaction()"/>
+    </div>
+    <div>
+      <label>Category</label>
+      <select id="txCategory" onchange="updateTaxableDefault()">
+        <option value="product">Product Sale</option>
+        <option value="service">Service</option>
+        <option value="shipping">Shipping</option>
+        <option value="digital">Digital / SaaS</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-grid" style="margin-top:14px">
+    <div>
+      <label>Customer State <span style="font-weight:500;color:#94a3b8">(for nexus tracking)</span></label>
+      <select id="txState"><option value="">— Same as my primary state —</option></select>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:16px;padding-bottom:1px">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-top:0;font-size:.84rem;font-weight:700;color:#475569">
+        <input type="checkbox" id="txTaxable" checked style="width:auto"/>
+        Taxable sale
+      </label>
+      <button class="btn-add" onclick="addTransaction()">+ Add Transaction</button>
+    </div>
+  </div>
+  <div id="taxableHint" style="font-size:.75rem;color:#64748b;margin-top:8px;min-height:18px"></div>
+</div>
+
+<!-- PERIOD SUMMARY -->
+<div class="card" id="periodCard">
+  <div class="period-header">
+    <div>
+      <div class="card-title" style="margin-bottom:2px">Period Summary</div>
+      <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">—</div>
+    </div>
+    <div class="period-nav">
+      <button class="btn-period" onclick="changePeriod(-1)">← Prev</button>
+      <button class="btn-period btn-today" onclick="goToToday()">Today</button>
+      <button class="btn-period" onclick="changePeriod(1)">Next →</button>
+    </div>
+  </div>
+  <div class="summary-stats" id="summaryStats"></div>
+  <div id="periodTxTable"></div>
+  <div class="filed-row" id="filedRow"></div>
+</div>
+
+<!-- NEXUS TRACKER -->
+<div class="card">
+  <div class="card-title">Economic Nexus Tracker — <span id="nexusYearLabel"></span></div>
+  <p style="font-size:.78rem;color:#64748b;margin-bottom:14px">Shows your home state plus any state where you've logged sales this year. Tag a <strong>Customer State</strong> on transactions to track exposure across multiple states.</p>
+  <div id="nexusContent"></div>
+  <div id="multiNexusContent"></div>
+  <div class="nexus-footer" style="margin-top:12px">Post-<em>Wayfair</em> (2018): most states require collection once you exceed their economic nexus threshold, even without physical presence. Thresholds reset each calendar year.</div>
+</div>
+
+<!-- FILING FREQUENCY RECOMMENDATION -->
+<div class="freq-card no-print" id="freqCard"></div>
+
+<!-- FILING HISTORY -->
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+    <div class="card-title" style="margin-bottom:0">Filing History</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-csv no-print" onclick="exportCSV()">&#8595; Export CSV</button>
+      <button class="btn-sm no-print" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">🖨️ Print</button>
+      <button class="btn-sm btn-neutral" onclick="clearAllData()" style="font-size:.7rem">Clear All Data</button>
+    </div>
+  </div>
+  <div id="filingHistory"></div>
+</div>
+
+<!-- SAVE TO PROFILE -->
+<div class="card save-card">
+  <button class="save-btn" onclick="saveSalesTaxToProfile()">💾 Save Setup to Profile</button>
+  <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves your state and filing frequency to your FinWise profile.</p>
+</div>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> Rates shown are 2024 averages. Actual local rates (county, city, special district) vary — verify your exact combined rate with your state revenue department before filing. Services taxability, digital goods, and SaaS rules vary by state. Not legal or tax advice.
+</div>
+</div>
+
+<script>
+/* ── RATES LAST UPDATED — UPDATE THIS DATE WHENEVER RATES ARE REFRESHED ── */
+// UPDATE ANNUALLY: Verify state tax rates against each state's revenue dept.
+// Many states adjust rates quarterly. Flag stale if >90 days since this date.
+var RATES_DATE = '2024-01-01';
+
+/* ── STATE TAX DATA 2024 ── */
+/* stateRate=state rate | avgLocal=avg local add-on | noTax=no sales tax at all */
+/* localOnly=no state tax but local may apply (AK) | nexus=$ threshold | nexusTx=transaction threshold */
+var ST = {
+  AK:{name:'Alaska',        sr:0,       al:0.0182, localOnly:true,  nx:100000,nt:200, note:'No state sales tax; local jurisdictions may impose their own rates.'},
+  AL:{name:'Alabama',       sr:0.04,    al:0.0524, nx:250000,nt:0},
+  AR:{name:'Arkansas',      sr:0.065,   al:0.0301, nx:100000,nt:200},
+  AZ:{name:'Arizona',       sr:0.056,   al:0.0277, nx:100000,nt:200},
+  CA:{name:'California',    sr:0.0725,  al:0.0157, nx:500000,nt:0},
+  CO:{name:'Colorado',      sr:0.029,   al:0.0488, nx:100000,nt:200},
+  CT:{name:'Connecticut',   sr:0.0635,  al:0,      nx:100000,nt:200},
+  DC:{name:'Washington DC', sr:0.06,    al:0,      nx:100000,nt:200},
+  DE:{name:'Delaware',      sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
+  FL:{name:'Florida',       sr:0.06,    al:0.0105, nx:100000,nt:200},
+  GA:{name:'Georgia',       sr:0.04,    al:0.034,  nx:100000,nt:200},
+  HI:{name:'Hawaii',        sr:0.04,    al:0.0044, nx:100000,nt:200, note:'General Excise Tax (GET) applies to gross receipts — not a traditional sales tax.'},
+  ID:{name:'Idaho',         sr:0.06,    al:0.0003, nx:100000,nt:200},
+  IL:{name:'Illinois',      sr:0.0625,  al:0.0253, nx:100000,nt:200},
+  IN:{name:'Indiana',       sr:0.07,    al:0,      nx:100000,nt:200},
+  IA:{name:'Iowa',          sr:0.06,    al:0.0094, nx:100000,nt:200},
+  KS:{name:'Kansas',        sr:0.065,   al:0.0222, nx:100000,nt:200},
+  KY:{name:'Kentucky',      sr:0.06,    al:0,      nx:100000,nt:200},
+  LA:{name:'Louisiana',     sr:0.0445,  al:0.051,  nx:100000,nt:200},
+  ME:{name:'Maine',         sr:0.055,   al:0,      nx:100000,nt:200},
+  MD:{name:'Maryland',      sr:0.06,    al:0,      nx:100000,nt:200},
+  MA:{name:'Massachusetts', sr:0.0625,  al:0,      nx:100000,nt:200},
+  MI:{name:'Michigan',      sr:0.06,    al:0,      nx:100000,nt:200},
+  MN:{name:'Minnesota',     sr:0.06875, al:0.0058, nx:100000,nt:200},
+  MS:{name:'Mississippi',   sr:0.07,    al:0.0007, nx:250000,nt:0},
+  MO:{name:'Missouri',      sr:0.04225, al:0.0405, nx:100000,nt:200},
+  MT:{name:'Montana',       sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
+  NE:{name:'Nebraska',      sr:0.055,   al:0.0144, nx:100000,nt:200},
+  NV:{name:'Nevada',        sr:0.0685,  al:0.0138, nx:100000,nt:200},
+  NH:{name:'New Hampshire', sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
+  NJ:{name:'New Jersey',    sr:0.06625, al:0,      nx:100000,nt:200},
+  NM:{name:'New Mexico',    sr:0.04875, al:0.0273, nx:100000,nt:200, note:'Gross Receipts Tax (GRT) — seller pays the tax, not the buyer.'},
+  NY:{name:'New York',      sr:0.04,    al:0.0452, nx:500000,nt:100},
+  NC:{name:'North Carolina',sr:0.0475,  al:0.0223, nx:100000,nt:200},
+  ND:{name:'North Dakota',  sr:0.05,    al:0.0197, nx:100000,nt:200},
+  OH:{name:'Ohio',          sr:0.0575,  al:0.0148, nx:100000,nt:200},
+  OK:{name:'Oklahoma',      sr:0.045,   al:0.0447, nx:100000,nt:200},
+  OR:{name:'Oregon',        sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
+  PA:{name:'Pennsylvania',  sr:0.06,    al:0.0034, nx:100000,nt:200},
+  RI:{name:'Rhode Island',  sr:0.07,    al:0,      nx:100000,nt:200},
+  SC:{name:'South Carolina',sr:0.06,    al:0.0143, nx:100000,nt:200},
+  SD:{name:'South Dakota',  sr:0.042,   al:0.019,  nx:100000,nt:200},
+  TN:{name:'Tennessee',     sr:0.07,    al:0.0255, nx:100000,nt:200},
+  TX:{name:'Texas',         sr:0.0625,  al:0.0194, nx:500000,nt:0},
+  UT:{name:'Utah',          sr:0.0485,  al:0.0234, nx:100000,nt:200},
+  VT:{name:'Vermont',       sr:0.06,    al:0.0018, nx:100000,nt:200},
+  VA:{name:'Virginia',      sr:0.043,   al:0.0133, nx:100000,nt:200},
+  WA:{name:'Washington',    sr:0.065,   al:0.0272, nx:100000,nt:200},
+  WV:{name:'West Virginia', sr:0.06,    al:0.0041, nx:100000,nt:200},
+  WI:{name:'Wisconsin',     sr:0.05,    al:0.0044, nx:100000,nt:200},
+  WY:{name:'Wyoming',       sr:0.04,    al:0.0139, nx:100000,nt:200}
+};
+
+/* ── APP STATE ── */
+var _setup = {state:'TX', freq:'monthly', type:'product', customLocal:null};
+var _txList = [];
+var _filedMap = {};
+var _periodOffset = 0;
+var _toastTimer = null;
+
+/* ── INIT ── */
+window.onload = function(){
+  loadData();
+  populateStateDropdown();
+  applySetupToUI();
+  setDefaultDate();
+  autoPopulate();
+  renderAll();
+};
+
+function loadData(){
+  try{ var s=localStorage.getItem('fw_sales_setup'); if(s) _setup=JSON.parse(s); }catch(e){}
+  try{ var t=localStorage.getItem('fw_sales_tx'); if(t) _txList=JSON.parse(t); }catch(e){}
+  try{ var f=localStorage.getItem('fw_sales_filed'); if(f) _filedMap=JSON.parse(f); }catch(e){}
+}
+function saveData(){
+  localStorage.setItem('fw_sales_setup',JSON.stringify(_setup));
+  localStorage.setItem('fw_sales_tx',JSON.stringify(_txList));
+  localStorage.setItem('fw_sales_filed',JSON.stringify(_filedMap));
+}
+
+/* ── STATE DROPDOWN ── */
+function populateStateDropdown(){
+  var sel = document.getElementById('setupState');
+  var keys = Object.keys(ST).sort(function(a,b){ return ST[a].name.localeCompare(ST[b].name); });
+  var taxKeys = keys.filter(function(k){ return !ST[k].noTax && !ST[k].localOnly; });
+  var specialKeys = keys.filter(function(k){ return ST[k].noTax || ST[k].localOnly; });
+  var html = '<optgroup label="Has State Sales Tax">';
+  taxKeys.forEach(function(k){
+    var d = ST[k];
+    var combined = ((d.sr + d.al)*100).toFixed(2);
+    html += '<option value="'+k+'">'+d.name+' — avg '+combined+'%</option>';
+  });
+  html += '</optgroup><optgroup label="No State Sales Tax">';
+  specialKeys.forEach(function(k){
+    var d = ST[k];
+    var suffix = d.localOnly ? ' — local taxes may apply' : ' — no sales tax';
+    html += '<option value="'+k+'">'+d.name+suffix+'</option>';
+  });
+  html += '</optgroup>';
+  sel.innerHTML = html;
+  // Also populate customer state selector in transaction form
+  var txSel = document.getElementById('txState');
+  var stateOpts = '<option value="">— Same as my primary state —</option>';
+  keys.forEach(function(k){ stateOpts += '<option value="'+k+'">'+ST[k].name+'</option>'; });
+  txSel.innerHTML = stateOpts;
+}
+
+function applySetupToUI(){
+  document.getElementById('setupState').value = _setup.state || 'TX';
+  document.getElementById('setupFreq').value = _setup.freq || 'monthly';
+  document.getElementById('setupType').value = _setup.type || 'product';
+  if(_setup.customLocal !== null){
+    document.getElementById('useCustomLocal').checked = true;
+    document.getElementById('customLocalRow').style.display = 'flex';
+    document.getElementById('customLocalRate').value = (_setup.customLocal*100).toFixed(2);
+  }
+}
+
+function onStateChange(){ saveSetup(); renderAll(); }
+
+function toggleCustomLocal(){
+  var on = document.getElementById('useCustomLocal').checked;
+  document.getElementById('customLocalRow').style.display = on ? 'flex' : 'none';
+  if(!on) _setup.customLocal = null;
+  saveSetup();
+}
+
+function saveSetup(){
+  _setup.state = document.getElementById('setupState').value;
+  _setup.freq  = document.getElementById('setupFreq').value;
+  _setup.type  = document.getElementById('setupType').value;
+  var useCustom = document.getElementById('useCustomLocal').checked;
+  if(useCustom){
+    var v = parseFloat(document.getElementById('customLocalRate').value);
+    _setup.customLocal = isNaN(v) ? 0 : v/100;
+  } else {
+    _setup.customLocal = null;
+  }
+  saveData();
+  renderRateDisplay();
+}
+
+function getRate(){
+  var d = ST[_setup.state];
+  if(!d || d.noTax) return 0;
+  var local = _setup.customLocal !== null ? _setup.customLocal : d.al;
+  return Math.max(0, d.sr + local);
+}
+
+function renderRateDisplay(){
+  var state = _setup.state, d = ST[state];
+  var el = document.getElementById('rateDisplay');
+  if(!d){ el.innerHTML=''; return; }
+  if(d.noTax){
+    el.innerHTML = '<div style="margin-top:14px;padding:12px 16px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;color:#166534;font-size:.82rem">'+
+      '✓ <strong>'+d.name+'</strong> has no state sales tax. No collection obligation.'+(d.note?' '+d.note:'')+'</div>';
+    return;
+  }
+  var useCustom = document.getElementById('useCustomLocal').checked;
+  var localRate = useCustom ? (_setup.customLocal||0) : d.al;
+  var combined = d.sr + localRate;
+  el.innerHTML =
+    '<div class="rate-display">'+
+    '<div class="rate-box"><div class="rate-box-lbl">State Rate</div><div class="rate-box-val">'+(d.sr*100).toFixed(3).replace(/\.?0+$/,'')+'%</div></div>'+
+    '<div class="rate-box"><div class="rate-box-lbl">'+(useCustom?'Your Local Rate':'Avg Local Rate')+'</div><div class="rate-box-val">'+(localRate*100).toFixed(2)+'%</div></div>'+
+    '<div class="rate-box"><div class="rate-box-lbl">Combined Rate</div><div class="rate-box-val">'+(combined*100).toFixed(2)+'%</div></div>'+
+    '</div>'+
+    (d.note ? '<div class="rate-note">⚠️ '+d.note+'</div>' : '');
+}
+
+/* ── TRANSACTIONS ── */
+function setDefaultDate(){
+  var now = new Date();
+  document.getElementById('txDate').value =
+    now.getFullYear()+'-'+zz(now.getMonth()+1)+'-'+zz(now.getDate());
+}
+
+function updateTaxableDefault(){
+  var cat = document.getElementById('txCategory').value;
+  document.getElementById('txTaxable').checked = (cat==='product'||cat==='shipping');
+  updateTaxableHint();
+}
+
+function updateTaxableHint(){
+  var cat = document.getElementById('txCategory').value;
+  var hints = {
+    product:'Physical products are taxable in almost all states.',
+    service:'Services: taxable in ~30 states. Check your state rules.',
+    shipping:'Shipping: taxable in ~24 states when the sale is taxable.',
+    digital:'SaaS/digital goods: taxable in ~30 states — rules vary significantly.',
+    other:'Check your state rules for this category.'
+  };
+  document.getElementById('taxableHint').textContent = hints[cat]||'';
+}
+
+function addTransaction(){
+  var date = document.getElementById('txDate').value;
+  var desc = document.getElementById('txDesc').value.trim();
+  var amount = parseFloat(document.getElementById('txAmount').value);
+  var category = document.getElementById('txCategory').value;
+  var taxable = document.getElementById('txTaxable').checked;
+  if(!date){ showToast('Select a date','err'); return; }
+  if(!amount||amount<=0){ showToast('Enter a sale amount','err'); return; }
+  var custState = document.getElementById('txState').value || _setup.state;
+  var rate = taxable ? getRate() : 0;
+  var tax = parseFloat((amount*rate).toFixed(2));
+  _txList.push({
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+    date:date, desc:desc||(getCatLabel(category)+' sale'),
+    amount:parseFloat(amount.toFixed(2)), taxable:taxable,
+    tax:tax, category:category, rate:rate, state:custState
+  });
+  document.getElementById('txState').value = '';
+  _txList.sort(function(a,b){ return b.date.localeCompare(a.date); });
+  saveData();
+  document.getElementById('txDesc').value='';
+  document.getElementById('txAmount').value='';
+  renderPeriodCard(); renderNexus(); renderHistory();
+  showToast('Added — tax: '+fmt(tax));
+}
+
+function deleteTx(id){
+  if(!confirm('Delete this transaction?')) return;
+  _txList = _txList.filter(function(t){ return t.id!==id; });
+  saveData();
+  renderPeriodCard(); renderNexus(); renderHistory();
+  showToast('Deleted');
+}
+
+/* ── PERIOD LOGIC ── */
+/* offset: 0=current, +1=next, -1=prev */
+function periodKey(off){
+  var now=new Date(), freq=_setup.freq;
+  if(freq==='monthly'){
+    var d=new Date(now.getFullYear(),now.getMonth()+off,1);
+    return d.getFullYear()+'-'+zz(d.getMonth()+1);
+  } else if(freq==='quarterly'){
+    var curQ=Math.floor(now.getMonth()/3);
+    var total=now.getFullYear()*4+curQ+off;
+    var yr=Math.floor(total/4), q=total%4;
+    if(q<0){q+=4;yr--;}
+    return yr+'-Q'+(q+1);
+  } else {
+    return String(now.getFullYear()+off);
+  }
+}
+
+function periodLabel(key){
+  var freq=_setup.freq;
+  if(freq==='monthly'){
+    var p=key.split('-');
+    return new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleString('en-US',{month:'long',year:'numeric'});
+  } else if(freq==='quarterly'){
+    var m=key.match(/(\d+)-Q(\d)/);
+    var ranges={1:'Jan–Mar',2:'Apr–Jun',3:'Jul–Sep',4:'Oct–Dec'};
+    return 'Q'+m[2]+' '+m[1]+' ('+ranges[parseInt(m[2])]+')';
+  } else { return 'Year '+key; }
+}
+
+function periodRange(key){
+  var freq=_setup.freq;
+  if(freq==='monthly'){
+    var p=key.split('-'),yr=parseInt(p[0]),mo=parseInt(p[1])-1;
+    return {s:yr+'-'+zz(mo+1)+'-01', e:yr+'-'+zz(mo+1)+'-'+zz(new Date(yr,mo+1,0).getDate())};
+  } else if(freq==='quarterly'){
+    var m=key.match(/(\d+)-Q(\d)/),yr2=parseInt(m[1]),q=parseInt(m[2]);
+    var sm=(q-1)*3, em=sm+2;
+    return {s:yr2+'-'+zz(sm+1)+'-01', e:yr2+'-'+zz(em+1)+'-'+zz(new Date(yr2,em+1,0).getDate())};
+  } else { return {s:key+'-01-01',e:key+'-12-31'}; }
+}
+
+function periodDue(key){
+  var freq=_setup.freq;
+  if(freq==='monthly'){
+    var p=key.split('-'),yr=parseInt(p[0]),mo=parseInt(p[1]);
+    return new Date(yr,mo,20).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  } else if(freq==='quarterly'){
+    var m=key.match(/(\d+)-Q(\d)/),yr2=parseInt(m[1]),q=parseInt(m[2]);
+    if(q===4) return 'Jan 20, '+(yr2+1);
+    return new Date(yr2,q*3,20).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  } else { return 'Jan 31, '+(parseInt(key)+1); }
+}
+
+function isFuture(key){ return key>periodKey(0); }
+function isCurrent(key){ return key===periodKey(0); }
+
+function txInPeriod(key){
+  var r=periodRange(key);
+  return _txList.filter(function(t){ return t.date>=r.s&&t.date<=r.e; });
+}
+
+function changePeriod(dir){ _periodOffset+=dir; renderPeriodCard(); }
+function goToToday(){ _periodOffset=0; renderPeriodCard(); }
+
+/* ── RENDER ── */
+function renderAll(){
+  renderRateDisplay();
+  updateTaxableHint();
+  renderPeriodCard();
+  renderNexus();
+  renderMultiStateNexus();
+  renderHistory();
+  renderFilingFreqRec();
+  checkRatesStaleness();
+  loadInvoiceIntegration();
+}
+
+function renderPeriodCard(){
+  var key=periodKey(_periodOffset);
+  var txs=txInPeriod(key);
+  var lbl=periodLabel(key);
+  var cur=isCurrent(key), fut=isFuture(key);
+
+  document.getElementById('periodTitle').textContent =
+    lbl+(cur?' — Current Period':'')+(fut?' — Future Period':'');
+
+  var totSales=0, taxableSales=0, taxColl=0;
+  txs.forEach(function(t){ totSales+=t.amount; if(t.taxable){taxableSales+=t.amount;taxColl+=t.tax;} });
+  var exemptSales=totSales-taxableSales;
+
+  document.getElementById('summaryStats').innerHTML =
+    sb('Total Sales',fmt(totSales))+
+    sb('Taxable Sales',fmt(taxableSales))+
+    sb('Exempt Sales',fmt(exemptSales))+
+    sb('Tax Collected',fmt(taxColl),true)+
+    sb('Transactions',String(txs.length));
+
+  var tbl='';
+  if(!txs.length){
+    tbl='<div class="empty">No transactions in this period.</div>';
+  } else {
+    tbl='<table class="tx-table"><thead><tr>'+
+      '<th>Date</th><th>Description</th><th>Category</th><th>Status</th>'+
+      '<th class="r">Sale Amount</th><th class="r">Tax</th><th></th></tr></thead><tbody>';
+    txs.forEach(function(t){
+      tbl+='<tr>'+
+        '<td>'+dispDate(t.date)+'</td>'+
+        '<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(t.desc)+'</td>'+
+        '<td><span class="cat-tag cat-'+t.category+'">'+getCatLabel(t.category)+'</span></td>'+
+        '<td><span class="taxbadge '+(t.taxable?'tb-yes':'tb-no')+'">'+(t.taxable?'Taxable':'Exempt')+'</span></td>'+
+        '<td class="r">'+fmt(t.amount)+'</td>'+
+        '<td class="r">'+(t.taxable?fmt(t.tax):'—')+'</td>'+
+        '<td><button class="btn-sm btn-danger" onclick="deleteTx(\''+t.id+'\')">✕</button></td>'+
+        '</tr>';
+    });
+    tbl+='</tbody></table>';
+  }
+  document.getElementById('periodTxTable').innerHTML=tbl;
+
+  var filed=_filedMap[key];
+  var fr='';
+  if(txs.length||filed){
+    fr='<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">';
+    if(filed){
+      fr+='<span class="fbadge fb-filed">✓ Filed '+filed.date+'</span>';
+      fr+='<span class="due-info">'+fmt(filed.amount)+' remitted</span>';
+      if(!fut) fr+='<button class="btn-sm btn-neutral" onclick="unmarkFiled(\''+key+'\')">Undo</button>';
+    } else if(!fut){
+      fr+='<span class="fbadge fb-unfiled">⚠ Not Filed</span>';
+      fr+='<span class="due-info">Due: '+periodDue(key)+'</span>';
+      if(taxColl>0)
+        fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">✓ Mark as Filed</button>';
+    } else {
+      fr+='<span style="font-size:.78rem;color:#94a3b8">Future period — due '+periodDue(key)+'</span>';
+    }
+    fr+='</div>';
+  }
+  document.getElementById('filedRow').innerHTML=fr;
+}
+
+function sb(lbl,val,hl){
+  return '<div class="stat-box'+(hl?' hl':'')+'"><div class="stat-lbl">'+lbl+'</div><div class="stat-val">'+val+'</div></div>';
+}
+
+function markFiled(key,amount){
+  var now=new Date();
+  _filedMap[key]={date:now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),amount:amount};
+  saveData(); renderPeriodCard(); renderHistory();
+  showToast('Period filed — '+fmt(amount)+' recorded');
+}
+function unmarkFiled(key){
+  delete _filedMap[key];
+  saveData(); renderPeriodCard(); renderHistory();
+}
+
+function renderNexus(){
+  var now=new Date(), yr=now.getFullYear();
+  document.getElementById('nexusYearLabel').textContent=yr+' YTD';
+  var state=_setup.state, d=ST[state];
+  if(!d){document.getElementById('nexusContent').innerHTML='';return;}
+
+  if(d.noTax&&!d.localOnly){
+    document.getElementById('nexusContent').innerHTML=
+      '<div class="nexus-alert na-notax">✓ <strong>'+d.name+'</strong> has no sales tax. Economic nexus does not apply.</div>';
+    return;
+  }
+
+  var ytdTx=_txList.filter(function(t){return t.date>=(yr+'-01-01')&&t.date<=(yr+'-12-31');});
+  var ytdSales=ytdTx.reduce(function(s,t){return s+t.amount;},0);
+  var ytdCount=ytdTx.length;
+  var threshold=d.nx, txThresh=d.nt;
+
+  var salesPct=Math.min(1,ytdSales/threshold);
+  var txPct=txThresh>0?Math.min(1,ytdCount/txThresh):0;
+  var reachedSales=ytdSales>=threshold;
+  var reachedTx=txThresh>0&&ytdCount>=txThresh;
+  var reached=reachedSales||reachedTx;
+  var warn=!reached&&(salesPct>=0.7||txPct>=0.7);
+
+  var html='<div class="nexus-bar">'+
+    '<div class="nb-label">'+d.name+' — Sales Threshold: '+fmtBig(threshold)+'</div>'+
+    '<div class="progress-track"><div class="progress-fill '+(reached?'pf-danger':warn?'pf-warn':'pf-safe')+
+    '" style="width:'+(salesPct*100).toFixed(1)+'%"></div></div>'+
+    '<div class="nb-nums"><span>'+fmt(ytdSales)+' YTD sales</span><span>'+fmtBig(threshold)+' threshold</span></div>'+
+    '</div>';
+
+  if(txThresh>0){
+    html+='<div class="nexus-bar">'+
+      '<div class="nb-label">Transaction Count Threshold: '+txThresh+' transactions</div>'+
+      '<div class="progress-track"><div class="progress-fill '+(reachedTx?'pf-danger':txPct>=0.7?'pf-warn':'pf-safe')+
+      '" style="width:'+(txPct*100).toFixed(1)+'%"></div></div>'+
+      '<div class="nb-nums"><span>'+ytdCount+' transactions YTD</span><span>'+txThresh+' threshold</span></div>'+
+      '</div>';
+  }
+
+  var alertCls=reached?'na-danger':warn?'na-warn':'na-safe';
+  var alertMsg=reached
+    ? '🚨 <strong>Nexus reached.</strong> You must collect and remit sales tax in '+d.name+'. Register with the state revenue department immediately if not already registered.'
+    : warn
+    ? '⚠️ <strong>Approaching nexus.</strong> You may reach the '+d.name+' threshold this year. Consider registering proactively.'
+    : '✓ <strong>Below nexus threshold.</strong> Not currently required to collect sales tax in '+d.name+' based on this year\'s sales.';
+
+  html+='<div class="nexus-alert '+alertCls+'">'+alertMsg+'</div>';
+  if(d.localOnly) html+='<div class="nexus-alert na-notax" style="margin-top:8px">'+
+    '🔵 Alaska has no state sales tax but local jurisdictions (cities/boroughs) may impose rates up to 7.5%.</div>';
+
+  document.getElementById('nexusContent').innerHTML=html;
+}
+
+function renderHistory(){
+  var freq=_setup.freq;
+  var numPast=freq==='annual'?5:freq==='quarterly'?7:11;
+  var rows='';
+  for(var off=2;off>=-numPast;off--){
+    var key=periodKey(off);
+    var txs=txInPeriod(key);
+    var sales=txs.reduce(function(s,t){return s+t.amount;},0);
+    var tax=txs.reduce(function(s,t){return s+t.tax;},0);
+    var filed=_filedMap[key];
+    var fut=isFuture(key), cur=isCurrent(key);
+    var statusHtml=fut?'<span class="s-future">Future</span>':
+      cur?'<span class="s-current">● Current</span>':
+      filed?'<span class="s-filed">✓ Filed</span>':
+      tax>0?'<span class="s-unfiled">⚠ Unfiled</span>':'<span class="s-clean">—</span>';
+    rows+='<tr style="'+(cur?'background:#f0f7ff':'')+'">'+'<td style="font-weight:'+(cur?'800':'600')+'">'+periodLabel(key)+'</td>'+
+      '<td class="r">'+fmt(sales)+'</td>'+
+      '<td class="r">'+fmt(tax)+'</td>'+
+      '<td class="r">'+periodDue(key)+'</td>'+
+      '<td class="r">'+statusHtml+'</td>'+
+      '<td class="r"><button class="btn-sm btn-neutral" onclick="_periodOffset='+off+';renderPeriodCard();document.getElementById(\'periodCard\').scrollIntoView({behavior:\'smooth\'})" style="font-size:.68rem">View</button></td>'+
+      '</tr>';
+  }
+  document.getElementById('filingHistory').innerHTML = rows
+    ? '<table class="hist-table"><thead><tr><th>Period</th><th class="r">Total Sales</th><th class="r">Tax Collected</th><th class="r">Due Date</th><th class="r">Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>'
+    : '<div class="empty">No periods yet — add your first transaction above.</div>';
+}
+
+/* ══════════════════════════════════════════
+   MULTI-STATE NEXUS TRACKER
+══════════════════════════════════════════ */
+function renderMultiStateNexus(){
+  var now = new Date(), yr = now.getFullYear();
+  var ytd = _txList.filter(function(t){ return t.date.startsWith(yr); });
+  // Aggregate by customer state (fall back to primary state)
+  var byState = {};
+  ytd.forEach(function(t){
+    var st = t.state || _setup.state;
+    if(!byState[st]) byState[st] = {sales:0, count:0};
+    byState[st].sales += t.amount;
+    byState[st].count++;
+  });
+  var primary = _setup.state;
+  // Remove primary state (already shown by renderNexus)
+  var otherStates = Object.keys(byState).filter(function(k){ return k !== primary && ST[k] && !ST[k].noTax; });
+  if(!otherStates.length){
+    document.getElementById('multiNexusContent').innerHTML = '';
+    return;
+  }
+  var html = '<div style="font-size:.82rem;font-weight:800;color:#475569;margin:16px 0 8px">Other States with Sales This Year</div><div class="nexus-grid">';
+  otherStates.sort(function(a,b){ return (byState[b].sales/ST[b].nx)-(byState[a].sales/ST[a].nx); }).forEach(function(k){
+    var d = ST[k], s = byState[k];
+    var pct = Math.min(1, s.sales/d.nx);
+    var txPct = d.nt>0 ? Math.min(1, s.count/d.nt) : 0;
+    var reached = s.sales >= d.nx || (d.nt>0 && s.count >= d.nt);
+    var warn = !reached && (pct >= 0.5 || txPct >= 0.5);
+    var cls = reached ? 'nr-danger' : warn ? 'nr-warn' : 'nr-safe';
+    var pillCls = reached ? 'nrp-d' : warn ? 'nrp-w' : 'nrp-s';
+    var pillTxt = reached ? 'NEXUS REACHED' : warn ? 'APPROACHING' : 'BELOW THRESHOLD';
+    html += '<div class="nexus-row '+cls+'">'+
+      '<div class="nr-head"><span class="nr-state">'+d.name+'</span><span class="nr-pill '+pillCls+'">'+pillTxt+'</span></div>'+
+      '<div class="progress-track"><div class="progress-fill '+(reached?'pf-danger':warn?'pf-warn':'pf-safe')+'" style="width:'+(pct*100).toFixed(1)+'%"></div></div>'+
+      '<div class="nb-nums" style="margin-top:4px"><span>'+fmt(s.sales)+' in sales ('+s.count+' tx)</span><span>'+fmtBig(d.nx)+' threshold</span></div>'+
+      (reached ? '<div style="font-size:.75rem;color:#dc2626;margin-top:6px;font-weight:700">Register with '+d.name+' revenue department and begin collecting sales tax.</div>' : '')+
+    '</div>';
+  });
+  html += '</div>';
+  document.getElementById('multiNexusContent').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════
+   FILING FREQUENCY RECOMMENDATION
+══════════════════════════════════════════ */
+function renderFilingFreqRec(){
+  var el = document.getElementById('freqCard');
+  if(!el || !_txList.length){ if(el) el.innerHTML=''; return; }
+  var now = new Date(), yr = now.getFullYear();
+  var ytd = _txList.filter(function(t){ return t.date.startsWith(yr) && t.taxable; });
+  var ytdTax = ytd.reduce(function(s,t){ return s+t.tax; }, 0);
+  var mo = now.getMonth()+1;
+  var annualized = mo > 0 ? (ytdTax/mo)*12 : 0;
+  var rec = annualized > 50000 ? 'monthly' : annualized > 10000 ? 'quarterly' : 'annual';
+  var cur = _setup.freq;
+  var freqInfo = {
+    monthly:{label:'Monthly', note:'Required in most states when annual tax liability exceeds $50K.'},
+    quarterly:{label:'Quarterly', note:'Common for mid-volume sellers — balance compliance with less admin overhead.'},
+    annual:{label:'Annual', note:'Best for low-volume sellers. Check your state — some require quarterly even at low volumes.'}
+  };
+  var match = rec === cur;
+  el.innerHTML =
+    '<div class="card-title" style="color:#7c3aed">📅 Filing Frequency Recommendation</div>'+
+    '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months × 12).</p>'+
+    '<div class="freq-opts">'+
+    Object.keys(freqInfo).map(function(f){
+      var isCur = f === cur, isRec = f === rec;
+      var cls = isCur ? 'fo-cur' : isRec ? 'fo-rec' : '';
+      return '<div class="freq-opt '+cls+'">'+
+        '<div class="fo-label">'+freqInfo[f].label+'</div>'+
+        (isCur ? '<span class="fo-badge fob-cur">Current</span>' : '')+
+        (isRec && !isCur ? '<span class="fo-badge fob-rec">Recommended</span>' : '')+
+        '<div style="font-size:.72rem;color:#64748b;margin-top:8px;text-align:left">'+freqInfo[f].note+'</div>'+
+        '</div>';
+    }).join('')+
+    '</div>'+
+    (!match ? '<div class="rate-note" style="margin-top:12px">💡 Your current setting is <strong>'+cur+'</strong> but your volume suggests <strong>'+rec+'</strong> may be more appropriate. Update in the setup above.</div>' : '');
+}
+
+/* ══════════════════════════════════════════
+   STALE RATES CHECK
+══════════════════════════════════════════ */
+function checkRatesStaleness(){
+  var updated = new Date(RATES_DATE);
+  var daysSince = Math.floor((new Date() - updated)/(1000*60*60*24));
+  var el = document.getElementById('staleRatesBanner');
+  if(el && daysSince > 90){
+    document.getElementById('staleMsg').textContent =
+      'Sales tax rates were last verified '+daysSince+' days ago ('+RATES_DATE+'). State rates change frequently — verify your exact combined rate before filing.';
+    el.style.display = 'flex';
+  }
+}
+
+/* ══════════════════════════════════════════
+   INVOICE TRACKER INTEGRATION
+══════════════════════════════════════════ */
+function loadInvoiceIntegration(){
+  var strip = document.getElementById('invConnStrip');
+  if(!strip) return;
+  try{
+    var invoices = JSON.parse(localStorage.getItem('fw_invoices')||'[]');
+    if(!invoices.length){ strip.style.display='none'; return; }
+    var paidInv = invoices.filter(function(i){ return i.status==='paid'; });
+    var totalRev = paidInv.reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
+    // Count invoices with state info
+    var stateTagged = paidInv.filter(function(i){ return i.state||i.customerState; }).length;
+    strip.className = 'inv-strip inv-on no-print';
+    strip.style.display = 'block';
+    strip.innerHTML = '✓ Invoice Tracker connected — '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
+      (stateTagged > 0 ? '. '+stateTagged+' invoices have state tags for nexus tracking.' :
+      '. Add a <em>state</em> field on invoices to enable per-state nexus tracking.')+
+      ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">→ Open Invoice Tracker</a>';
+  }catch(e){ strip.style.display='none'; }
+}
+
+/* ══════════════════════════════════════════
+   CSV EXPORT
+══════════════════════════════════════════ */
+function exportCSV(){
+  var rows = [['Period','State','Total Sales','Taxable Sales','Exempt Sales','Tax Collected','Filed','Filed Amount','Due Date']];
+  var freq = _setup.freq;
+  var numPast = freq==='annual' ? 5 : freq==='quarterly' ? 7 : 13;
+  for(var off=2; off>=-numPast; off--){
+    var key = periodKey(off);
+    var txs = txInPeriod(key);
+    if(!txs.length && !_filedMap[key]) continue;
+    var totSales=0, taxSales=0, taxColl=0;
+    txs.forEach(function(t){ totSales+=t.amount; if(t.taxable){taxSales+=t.amount;taxColl+=t.tax;} });
+    var filed = _filedMap[key];
+    rows.push([
+      periodLabel(key),
+      _setup.state,
+      totSales.toFixed(2),
+      taxSales.toFixed(2),
+      (totSales-taxSales).toFixed(2),
+      taxColl.toFixed(2),
+      filed ? 'Yes' : 'No',
+      filed ? String(filed.amount) : '0',
+      periodDue(key)
+    ]);
+  }
+  // By-state breakdown if customer states are tagged
+  var stateAgg = {};
+  _txList.forEach(function(t){
+    var st = t.state || _setup.state;
+    if(!stateAgg[st]) stateAgg[st]={sales:0,tax:0,count:0};
+    stateAgg[st].sales += t.amount;
+    stateAgg[st].tax += t.tax;
+    stateAgg[st].count++;
+  });
+  if(Object.keys(stateAgg).length > 1){
+    rows.push([]); rows.push(['STATE NEXUS SUMMARY','','','','','','','','']);
+    rows.push(['State','Total Sales','Tax Collected','Transactions','Nexus Threshold','% of Threshold','Nexus Status','','']);
+    Object.keys(stateAgg).sort().forEach(function(k){
+      var d = ST[k], s = stateAgg[k];
+      if(!d) return;
+      var pct = d.nx > 0 ? (s.sales/d.nx*100).toFixed(1) : '—';
+      var status = s.sales >= d.nx ? 'REACHED' : s.sales/d.nx >= 0.7 ? 'APPROACHING' : 'Below';
+      rows.push([d.name, s.sales.toFixed(2), s.tax.toFixed(2), s.count, d.nx, pct+'%', status,'','']);
+    });
+  }
+  var csv = rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sales-tax-liability-'+new Date().getFullYear()+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  showToast('CSV downloaded');
+}
+
+/* ── PROFILE ── */
+function saveProfile(u){
+  try{
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var ps=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    var p=ps[idx]||{};
+    Object.assign(p,u); ps[idx]=p;
+    localStorage.setItem('fw_profiles',JSON.stringify(ps));
+    var base=JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    Object.assign(base,u);
+    localStorage.setItem('fw_profile',JSON.stringify(base));
+  }catch(e){}
+}
+function saveSalesTaxToProfile(){
+  saveProfile({state:_setup.state, salesTaxFreq:_setup.freq});
+  showToast('Saved — state: '+_setup.state+', freq: '+_setup.freq);
+}
+function autoPopulate(){
+  try{
+    var existing=localStorage.getItem('fw_sales_setup');
+    if(existing) return;
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var ps=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+    var p=ps[idx]||JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(p&&p.state&&ST[p.state]){
+      _setup.state=p.state;
+      document.getElementById('setupState').value=p.state;
+      renderRateDisplay();
+    }
+  }catch(e){}
+}
+
+/* ── UTILS ── */
+function fmt(n){ return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtBig(n){ return n>=1000000?'$'+(n/1000000).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n; }
+function zz(n){ return String(n).padStart(2,'0'); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function dispDate(d){
+  var p=d.split('-');
+  return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function getCatLabel(c){ return {product:'Product',service:'Service',shipping:'Shipping',digital:'Digital',other:'Other'}[c]||c; }
+function showToast(msg,type){
+  var t=document.getElementById('fwToast');
+  t.textContent=msg; t.className='fw-toast'+(type?' toast-'+type:'');
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(function(){t.classList.remove('show');},3500);
+}
+function clearAllData(){
+  if(!confirm('Clear ALL transactions and filing history? This cannot be undone.')) return;
+  _txList=[]; _filedMap={};
+  saveData(); renderAll();
+  showToast('All data cleared');
+}
+</script>
+</body>
+</html>

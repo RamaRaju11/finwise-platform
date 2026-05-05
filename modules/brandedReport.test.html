@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Client Report — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+:root{--brand:#4f46e5;--brand-dk:#3730a3;--brand-text:#fff;}
+
+/* ── Controls bar ── */
+.controls-bar{background:#0f172a;padding:11px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.ctrl-info{flex:1;font-size:.78rem;color:rgba(255,255,255,.5)}
+.ctrl-btn{padding:7px 18px;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;border:none;transition:opacity .15s}
+.ctrl-btn:hover{opacity:.85}
+.ctrl-print{background:var(--brand);color:var(--brand-text)}
+.ctrl-back{background:rgba(255,255,255,.12);color:#fff}
+.ctrl-share{background:rgba(255,255,255,.1);color:#cbd5e1}
+
+/* ── Page ── */
+.page{max-width:800px;margin:24px auto;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.15);border-radius:4px;overflow:hidden}
+
+/* ── Header ── */
+.rpt-header{background:linear-gradient(135deg,#0f172a 0%,var(--brand) 100%);color:#fff;padding:28px 36px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.rh-left{display:flex;align-items:center;gap:12px}
+.rh-icon{font-size:2rem;line-height:1;flex-shrink:0}
+.rh-logo-img{width:44px;height:44px;border-radius:7px;object-fit:contain;background:rgba(255,255,255,.12);padding:4px;flex-shrink:0}
+.rh-brand-name{font-size:1.25rem;font-weight:900;letter-spacing:.02em}
+.rh-brand-tag{font-size:.74rem;color:rgba(255,255,255,.6);margin-top:2px}
+.rh-right{text-align:right;flex-shrink:0}
+.rh-report-title{font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.45);margin-bottom:4px}
+.rh-date{font-size:.84rem;font-weight:700;color:rgba(255,255,255,.9)}
+.rh-email{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* ── Client banner ── */
+.client-banner{display:flex;justify-content:space-between;align-items:center;padding:18px 36px;background:#f8fafc;border-bottom:3px solid var(--brand);gap:16px}
+.cb-info .cb-name{font-size:1.35rem;font-weight:900;color:#0f172a;line-height:1.2}
+.cb-info .cb-sub{font-size:.77rem;color:#64748b;margin-top:4px}
+.cb-score-block{text-align:center;flex-shrink:0}
+.cb-score-num{font-size:2.6rem;font-weight:900;line-height:1}
+.cb-score-denom{font-size:.78rem;font-weight:400;color:#94a3b8}
+.cb-grade-pill{font-size:.7rem;font-weight:800;padding:.25rem .9rem;border-radius:999px;margin-top:6px;display:inline-block}
+
+/* ── Body ── */
+.rpt-body{padding:28px 36px}
+.section{margin-bottom:26px}
+.section-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:var(--brand);padding-bottom:6px;border-bottom:2px solid var(--brand);margin-bottom:14px}
+
+/* ── Score components ── */
+.score-components{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc-comp{background:#f8fafc;border-radius:8px;padding:11px 14px}
+.sc-comp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.sc-comp-label{font-size:.72rem;color:#64748b}
+.sc-comp-val{font-size:.82rem;font-weight:900;color:#1e293b}
+.sc-bar-track{height:7px;background:#e2e8f0;border-radius:7px;overflow:hidden}
+.sc-bar-fill{height:100%;border-radius:7px;transition:width .3s}
+
+/* ── 6-metric grid ── */
+.metrics-6{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.m-box{background:#f8fafc;border-radius:8px;padding:11px 14px;border-left:3px solid #e2e8f0}
+.m-box.g{border-left-color:#10b981}.m-box.r{border-left-color:#dc2626}.m-box.b{border-left-color:var(--brand)}
+.m-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
+.m-val{font-size:1.05rem;font-weight:900;color:#1e293b}
+.m-val.g{color:#10b981}.m-val.r{color:#dc2626}
+
+/* ── Loan boxes ── */
+.loan-boxes{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.loan-box{background:#f8fafc;border-radius:8px;padding:11px 14px;text-align:center}
+.lb-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:4px}
+.lb-val{font-size:1rem;font-weight:900;color:#1e293b}
+
+/* ── Ratios table ── */
+.ratios-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.ratios-table th{background:#f8fafc;padding:7px 12px;text-align:left;font-size:.63rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+.ratios-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.ratios-table tr:last-child td{border-bottom:none}
+.status-pill{font-size:.66rem;font-weight:700;padding:.18rem .6rem;border-radius:999px;display:inline-block;white-space:nowrap}
+.pill-pass{background:#dcfce7;color:#166534}
+.pill-warn{background:#fef9c3;color:#854d0e}
+.pill-fail{background:#fee2e2;color:#991b1b}
+
+/* ── Stress box ── */
+.stress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.stress-item{background:#f8fafc;border-radius:8px;padding:11px 14px}
+.si-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:4px}
+.si-val{font-size:.95rem;font-weight:900}
+
+/* ── Recommendation ── */
+.rec-box{border-left:4px solid var(--brand);padding:14px 18px;background:#f8fafc;border-radius:0 8px 8px 0}
+.rec-max{font-size:1.25rem;font-weight:900;color:var(--brand);margin-bottom:6px}
+.rec-text{font-size:.82rem;color:#475569;line-height:1.7}
+
+/* ── Notes ── */
+.notes-box{background:#f8fafc;border-radius:8px;padding:12px 16px;font-size:.82rem;color:#475569;line-height:1.7;border-left:3px solid #cbd5e1}
+
+/* ── Footer ── */
+.rpt-footer{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 36px;background:#f8fafc;border-top:2px solid #e2e8f0;gap:16px;flex-wrap:wrap}
+.rf-brand{font-size:.78rem;font-weight:800;color:var(--brand);flex-shrink:0}
+.rf-disc{font-size:.66rem;color:#94a3b8;line-height:1.55;max-width:500px}
+
+/* ── Error state ── */
+.error-state{text-align:center;padding:80px 24px}
+.error-state .es-icon{font-size:3rem;display:block;margin-bottom:14px}
+.error-state h2{font-size:1.1rem;font-weight:800;color:#1e293b;margin-bottom:8px}
+.error-state p{font-size:.84rem;color:#64748b;line-height:1.65}
+.error-state a{color:var(--brand);font-weight:700}
+
+/* ── Template Panel ── */
+.tpl-panel{background:#1e293b;border-top:1px solid rgba(255,255,255,.08);padding:14px 24px;display:none;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.tpl-panel.open{display:flex}
+.tpl-group{display:flex;flex-direction:column;gap:8px;min-width:160px}
+.tpl-group-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569}
+.tpl-presets{display:flex;gap:6px;flex-wrap:wrap}
+.tpl-preset{padding:5px 12px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;border:2px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#94a3b8;transition:all .15s;white-space:nowrap}
+.tpl-preset:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.tpl-preset.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.tpl-checks{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.tpl-check{display:flex;align-items:center;gap:6px;font-size:.75rem;color:#94a3b8;cursor:pointer;white-space:nowrap}
+.tpl-check input{accent-color:var(--brand);width:13px;height:13px;cursor:pointer}
+.tpl-check:hover{color:#fff}
+.tpl-custom-field{display:flex;flex-direction:column;gap:4px}
+.tpl-custom-field label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#475569}
+.tpl-custom-field input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#e2e8f0;padding:5px 9px;font-size:.78rem;width:180px;outline:none}
+.tpl-custom-field input:focus{border-color:rgba(255,255,255,.3)}
+.tpl-custom-field input::placeholder{color:#334155}
+
+/* ── Palette cards ── */
+.palette-card{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:7px;cursor:pointer;border:2px solid transparent;background:rgba(255,255,255,.04);transition:all .15s;margin-bottom:3px}
+.palette-card:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.08)}
+.palette-card.active{border-color:var(--brand);background:rgba(255,255,255,.1)}
+.palette-swatch{width:24px;height:24px;border-radius:5px;flex-shrink:0}
+.palette-card-name{font-size:.73rem;font-weight:700;color:#cbd5e1;line-height:1.2}
+.palette-card-desc{font-size:.61rem;color:#475569}
+
+/* ── Logo upload ── */
+.logo-upload-area{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.logo-preview-img{width:42px;height:42px;border-radius:6px;object-fit:contain;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:3px}
+.logo-file-label{padding:5px 11px;border-radius:6px;font-size:.73rem;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#94a3b8;transition:all .15s;white-space:nowrap;display:inline-block}
+.logo-file-label:hover{background:rgba(255,255,255,.1);color:#fff}
+.logo-remove-btn{font-size:.7rem;color:#475569;cursor:pointer;background:none;border:none;padding:2px 5px}
+.logo-remove-btn:hover{color:#f87171}
+
+/* ── Biz info panel ── */
+.biz-info-pull{font-size:.72rem;color:#64748b;line-height:1.8}
+.biz-info-pull b{color:#94a3b8;margin-right:5px}
+
+/* ── Share modal ── */
+.share-modal-wrap{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.72);z-index:200;display:none;align-items:center;justify-content:center}
+.share-modal-wrap.open{display:flex}
+.share-modal-box{background:#1e293b;border-radius:12px;padding:22px 24px;max-width:520px;width:calc(100% - 32px);border:1px solid rgba(255,255,255,.1)}
+.share-modal-title{font-size:.9rem;font-weight:800;color:#e2e8f0;margin-bottom:8px}
+.share-modal-note{font-size:.74rem;color:#64748b;line-height:1.55;margin-bottom:12px}
+.share-link-box{width:100%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#7dd3fc;padding:9px 12px;font-size:.7rem;font-family:monospace;margin-bottom:12px;outline:none;resize:none;min-height:56px}
+.share-modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.smb{padding:7px 18px;border-radius:7px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:opacity .15s}
+.smb-copy{background:var(--brand);color:#fff}
+.smb-close{background:rgba(255,255,255,.1);color:#94a3b8}
+.smb:hover{opacity:.85}
+
+/* ══════════════════ PRINT ══════════════════ */
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff!important}
+  .controls-bar,.tpl-panel,.share-modal-wrap{display:none!important}
+  .page{margin:0!important;max-width:100%!important;box-shadow:none!important;border-radius:0!important}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div class="controls-bar" id="ctrlBar">
+  <span class="ctrl-info" id="ctrlInfo">Loading…</span>
+  <button class="ctrl-btn ctrl-back" onclick="history.back()">← Dashboard</button>
+  <button class="ctrl-btn" id="tplToggle" onclick="toggleTplPanel()" style="background:rgba(255,255,255,.1);color:#cbd5e1">⚙ Template</button>
+  <button class="ctrl-btn ctrl-share" onclick="openShareModal()">🔗 Share Link</button>
+  <button class="ctrl-btn ctrl-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<!-- Template Panel -->
+<div class="tpl-panel" id="tplPanel">
+
+  <!-- Presets -->
+  <div class="tpl-group">
+    <div class="tpl-group-title">Layout Preset</div>
+    <div class="tpl-presets">
+      <button class="tpl-preset" id="preset-full"      onclick="applyPreset('full')">📄 Full Report</button>
+      <button class="tpl-preset" id="preset-executive" onclick="applyPreset('executive')">📊 Executive</button>
+      <button class="tpl-preset" id="preset-minimal"   onclick="applyPreset('minimal')">⚡ Minimal</button>
+    </div>
+  </div>
+
+  <!-- Section toggles -->
+  <div class="tpl-group">
+    <div class="tpl-group-title">Sections</div>
+    <div class="tpl-checks">
+      <label class="tpl-check"><input type="checkbox" id="vis-scoreBreakdown"    onchange="onVisChange()"> Score Breakdown</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-financialSnapshot" onchange="onVisChange()"> Financial Snapshot</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-loanAssessment"    onchange="onVisChange()"> Loan Assessment</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-keyRatios"         onchange="onVisChange()"> Key Ratios</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-stressAnalysis"    onchange="onVisChange()"> Stress Analysis</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-recommendation"    onchange="onVisChange()"> Recommendation</label>
+      <label class="tpl-check"><input type="checkbox" id="vis-advisorNotes"      onchange="onVisChange()"> Advisor Notes</label>
+    </div>
+  </div>
+
+  <!-- Color themes — palette cards -->
+  <div class="tpl-group" style="min-width:200px">
+    <div class="tpl-group-title">Color Theme</div>
+    <div id="themeSwatches"></div>
+  </div>
+
+  <!-- Logo upload -->
+  <div class="tpl-group">
+    <div class="tpl-group-title">Logo</div>
+    <div class="logo-upload-area">
+      <img id="logoPreviewImg" class="logo-preview-img" alt="Logo" style="display:none"/>
+      <label class="logo-file-label">📁 Upload PNG
+        <input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="onLogoFileChange(event)"/>
+      </label>
+      <button class="logo-remove-btn" onclick="removeLogo()">✕ Remove</button>
+    </div>
+  </div>
+
+  <!-- Business info (auto-pulled) -->
+  <div class="tpl-group">
+    <div class="tpl-group-title">Business Info</div>
+    <div id="bizInfoDisplay"></div>
+  </div>
+
+  <!-- Custom details -->
+  <div class="tpl-group">
+    <div class="tpl-group-title">Custom Details</div>
+    <div class="tpl-custom-field">
+      <label>Report Subtitle</label>
+      <input type="text" id="tpl-subtitle" placeholder="e.g. Loan Assessment — Q1 2026" oninput="saveAndRender()"/>
+    </div>
+    <div class="tpl-custom-field" style="margin-top:6px">
+      <label>Prepared For</label>
+      <input type="text" id="tpl-preparedfor" placeholder="e.g. Wells Fargo Branch Manager" oninput="saveAndRender()"/>
+    </div>
+  </div>
+
+</div>
+
+<!-- Share Modal -->
+<div class="share-modal-wrap" id="shareModal" onclick="if(event.target===this)closeShareModal()">
+  <div class="share-modal-box">
+    <div class="share-modal-title">🔗 Shareable Link</div>
+    <div class="share-modal-note">This link encodes the full report into the URL. Anyone with it can view a read-only version — no account required. Note: large logos may produce very long URLs.</div>
+    <textarea class="share-link-box" id="shareLinkBox" readonly></textarea>
+    <div class="share-modal-btns">
+      <button class="smb smb-close" onclick="closeShareModal()">Close</button>
+      <button class="smb smb-copy" id="copyShareBtn" onclick="copyShareLink()">Copy Link</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div id="reportContent"></div>
+</div>
+
+<script>
+/* ── Helpers ── */
+function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+function lightness(hex){
+  var r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  return 0.299*r+0.587*g+0.114*b;
+}
+function darken(hex){
+  var r=Math.max(0,parseInt(hex.slice(1,3),16)-30),g=Math.max(0,parseInt(hex.slice(3,5),16)-30),b=Math.max(0,parseInt(hex.slice(5,7),16)-30);
+  return '#'+[r,g,b].map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ── Currency ── */
+var CUR_SYM=(function(){
+  var s=localStorage.getItem('finwise_currency')||'USD';
+  return s==='INR'?'₹':s==='EUR'?'€':s==='GBP'?'£':'$';
+})();
+function fmt(n){return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();}
+function fmtS(n){return (n<0?'-':'')+fmt(n);}
+function pct(n){return n.toFixed(1)+'%';}
+
+/* ── Finance ── */
+function calcEMI(p,r,m){
+  if(!p||!m) return 0; if(!r) return p/m;
+  var i=r/100/12; return p*i*Math.pow(1+i,m)/(Math.pow(1+i,m)-1);
+}
+function computeScore(rev,exp,emi,res,loan,rate,ten){
+  var le=calcEMI(loan,rate,ten); var tot=emi+le; var net=rev-exp-tot; var s=0;
+  if(rev>0){var cf=net/rev;s+=cf>=0.2?30:cf>=0.1?22:cf>0?14:0;}
+  if(tot>0&&rev>0){var er=tot/rev;s+=er<=0.2?30:er<=0.3?22:er<=0.4?14:er<=0.5?7:0;}
+  else if(tot===0)s+=30;
+  var dscr=tot>0?(rev-exp)/tot:99;
+  s+=(dscr>=99?25:dscr>=2?25:dscr>=1.5?20:dscr>=1.25?15:dscr>=1?8:0);
+  var st=rev*0.8-exp-tot;s+=st>0?15:st>-res*0.1?8:0;
+  return Math.min(100,Math.round(s));
+}
+function scoreComponents(rev,exp,emi,res,loan,rate,ten){
+  var le=calcEMI(loan,rate,ten); var tot=emi+le; var net=rev-exp-tot;
+  var cfS=0,afS=0,dscrS=0,stS=0;
+  if(rev>0){var cf=net/rev;cfS=cf>=0.2?30:cf>=0.1?22:cf>0?14:0;}
+  if(tot>0&&rev>0){var er=tot/rev;afS=er<=0.2?30:er<=0.3?22:er<=0.4?14:er<=0.5?7:0;}
+  else if(tot===0)afS=30;
+  var dscr=tot>0?(rev-exp)/tot:99;
+  dscrS=(dscr>=99?25:dscr>=2?25:dscr>=1.5?20:dscr>=1.25?15:dscr>=1?8:0);
+  var st=rev*0.8-exp-tot;stS=st>0?15:st>-res*0.1?8:0;
+  return {cf:cfS,af:afS,dscr:dscrS,st:stS};
+}
+function findMaxSafe(rev,exp,emi,res,rate,ten){
+  var lo=0,hi=rev*120;
+  for(var i=0;i<45;i++){var mid=(lo+hi)/2;if(computeScore(rev,exp,emi,res,mid,rate,ten)>=70)lo=mid;else hi=mid;}
+  return Math.round(lo/1000)*1000;
+}
+
+/* ── White-label ── */
+var WL={brand:'FinWise',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+function loadWL(){
+  try{var s=localStorage.getItem('fw_wl');if(s)WL=Object.assign(WL,JSON.parse(s));}catch(e){}
+}
+
+/* ── Bar / pill helpers ── */
+function bar(val,max,color){
+  var w=Math.round(Math.min(100,val/max*100));
+  return '<div class="sc-bar-track"><div class="sc-bar-fill" style="width:'+w+'%;background:'+color+'"></div></div>';
+}
+function pill(ok,warn){
+  return ok?'<span class="status-pill pill-pass">✓ Pass</span>':warn?'<span class="status-pill pill-warn">⚠ Marginal</span>':'<span class="status-pill pill-fail">✗ Fail</span>';
+}
+
+/* ══════════════════════════════════════════
+   SHARE LINK — detect encoded state in URL hash
+══════════════════════════════════════════ */
+var SHARE_DATA=null;
+(function(){
+  var h=window.location.hash;
+  if(h&&h.indexOf('#share=')===0){
+    try{
+      var b64=h.slice(7).replace(/-/g,'+').replace(/_/g,'/');
+      SHARE_DATA=JSON.parse(decodeURIComponent(escape(atob(b64))));
+    }catch(e){}
+  }
+})();
+
+/* ── Logo ── */
+function loadLogoPreview(){
+  var logo=localStorage.getItem('fw_rpt_logo');
+  var img=document.getElementById('logoPreviewImg');
+  if(img){img.src=logo||'';img.style.display=logo?'block':'none';}
+}
+function onLogoFileChange(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    localStorage.setItem('fw_rpt_logo',ev.target.result);
+    loadLogoPreview();
+    render();
+  };
+  reader.readAsDataURL(file);
+}
+function removeLogo(){
+  localStorage.removeItem('fw_rpt_logo');
+  var inp=document.getElementById('logoFileInput');
+  if(inp) inp.value='';
+  loadLogoPreview();
+  render();
+}
+
+/* ── Business Profile ── */
+function loadBusinessProfile(){
+  var prof=null;
+  var profiles=sg('fw_profiles');
+  if(profiles&&profiles.length){
+    var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+    prof=profiles[isNaN(idx)?0:idx]||profiles[0];
+  }
+  if(!prof) prof=sg('fw_profile');
+  return prof;
+}
+function refreshBizInfo(){
+  var el=document.getElementById('bizInfoDisplay');
+  if(!el) return;
+  var prof=loadBusinessProfile();
+  if(!prof){el.innerHTML='<span style="font-size:.7rem;color:#334155">No profile — set up in Business Profiles.</span>';return;}
+  var name=prof.name||prof.businessName||'';
+  var addr=(prof.address||'')+(prof.city?', '+prof.city:'')+(prof.state?' '+prof.state:'');
+  var ein=prof.ein||prof.taxId||'';
+  var html='';
+  if(name) html+='<div class="biz-info-pull"><b>Name</b>'+esc(name)+'</div>';
+  if(addr) html+='<div class="biz-info-pull"><b>Addr</b>'+esc(addr)+'</div>';
+  if(ein)  html+='<div class="biz-info-pull"><b>EIN</b>'+esc(ein)+'</div>';
+  if(!html) html='<span style="font-size:.7rem;color:#334155">No profile data found.</span>';
+  el.innerHTML=html;
+}
+
+/* ── Share link functions ── */
+function openShareModal(){
+  var client=null;
+  if(SHARE_DATA&&SHARE_DATA.c){
+    client=SHARE_DATA.c;
+  } else {
+    var idx=parseInt(localStorage.getItem('fw_report_idx'));
+    var clients=[];try{clients=JSON.parse(localStorage.getItem('fw_clients')||'[]');}catch(e){}
+    if(isNaN(idx)||idx<0||idx>=clients.length){alert('No client selected to share.');return;}
+    client=clients[idx];
+  }
+  var T=loadTpl();
+  var state={
+    c:client,
+    wl:WL,
+    tpl:{vis:T.vis,themeIdx:T.themeIdx,subtitle:T.subtitle,preparedFor:T.preparedFor,preset:T.preset},
+    logo:localStorage.getItem('fw_rpt_logo')||null,
+    biz:loadBusinessProfile()
+  };
+  var b64=btoa(unescape(encodeURIComponent(JSON.stringify(state)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  var url=window.location.href.split('#')[0]+'#share='+b64;
+  var box=document.getElementById('shareLinkBox');
+  if(box) box.value=url;
+  document.getElementById('shareModal').classList.add('open');
+}
+function copyShareLink(){
+  var box=document.getElementById('shareLinkBox');
+  if(!box) return;
+  box.select();
+  try{document.execCommand('copy');}catch(e){}
+  var btn=document.getElementById('copyShareBtn');
+  if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent='Copy Link';},2000);}
+}
+function closeShareModal(){
+  document.getElementById('shareModal').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════
+   TEMPLATE ENGINE
+══════════════════════════════════════════ */
+var THEMES=[
+  {name:'Brand',             desc:'Your WL color',      color:null},
+  {name:'Navy Professional', desc:'Classic authority',   color:'#1e3a8a'},
+  {name:'Forest Green',      desc:'Growth & trust',      color:'#166534'},
+  {name:'Slate Executive',   desc:'Modern & refined',    color:'#374151'},
+  {name:'Crimson Trust',     desc:'Bold & confident',    color:'#991b1b'},
+  {name:'Indigo Digital',    desc:'Tech-forward',        color:'#4f46e5'},
+];
+
+var PRESETS={
+  full:     {scoreBreakdown:true, financialSnapshot:true, loanAssessment:true, keyRatios:true, stressAnalysis:true, recommendation:true, advisorNotes:true},
+  executive:{scoreBreakdown:false,financialSnapshot:true, loanAssessment:true, keyRatios:false,stressAnalysis:false,recommendation:true, advisorNotes:true},
+  minimal:  {scoreBreakdown:false,financialSnapshot:false,loanAssessment:false,keyRatios:false,stressAnalysis:false,recommendation:true, advisorNotes:false},
+};
+
+var TPL_KEY='fw_rpt_template';
+
+function defaultTpl(){
+  return {vis:Object.assign({},PRESETS.full),themeIdx:0,subtitle:'',preparedFor:'',preset:'full'};
+}
+function loadTpl(){
+  try{var s=localStorage.getItem(TPL_KEY);if(s)return Object.assign(defaultTpl(),JSON.parse(s));}catch(e){}
+  return defaultTpl();
+}
+function saveTpl(t){localStorage.setItem(TPL_KEY,JSON.stringify(t));}
+function getTpl(){return loadTpl();}
+
+function applyPreset(name){
+  var t=loadTpl();
+  t.vis=Object.assign({},PRESETS[name]||PRESETS.full);
+  t.preset=name;
+  saveTpl(t);syncUI(t);render();
+}
+function onVisChange(){
+  var t=loadTpl();
+  ['scoreBreakdown','financialSnapshot','loanAssessment','keyRatios','stressAnalysis','recommendation','advisorNotes'].forEach(function(k){
+    var el=document.getElementById('vis-'+k);if(el)t.vis[k]=el.checked;
+  });
+  t.preset='custom';saveTpl(t);syncPresetButtons(t);render();
+}
+function saveAndRender(){
+  var t=loadTpl();
+  t.subtitle=document.getElementById('tpl-subtitle').value;
+  t.preparedFor=document.getElementById('tpl-preparedfor').value;
+  saveTpl(t);render();
+}
+function setTheme(idx){
+  var t=loadTpl();t.themeIdx=idx;saveTpl(t);applyTheme(t);syncThemeSwatches(idx);render();
+}
+function applyTheme(t){
+  var th=THEMES[t.themeIdx||0];
+  var color=th.color||WL.color||'#4f46e5';
+  document.documentElement.style.setProperty('--brand',color);
+  document.documentElement.style.setProperty('--brand-dk',darken(color));
+  document.documentElement.style.setProperty('--brand-text',lightness(color)<0.5?'#fff':'#1e293b');
+}
+function toggleTplPanel(){
+  var p=document.getElementById('tplPanel');
+  p.classList.toggle('open');
+  document.getElementById('tplToggle').style.background=p.classList.contains('open')?'var(--brand)':'rgba(255,255,255,.1)';
+}
+function syncUI(t){
+  ['scoreBreakdown','financialSnapshot','loanAssessment','keyRatios','stressAnalysis','recommendation','advisorNotes'].forEach(function(k){
+    var el=document.getElementById('vis-'+k);
+    if(el)el.checked=!!(t.vis&&t.vis[k]!==undefined?t.vis[k]:true);
+  });
+  syncPresetButtons(t);syncThemeSwatches(t.themeIdx||0);
+  document.getElementById('tpl-subtitle').value=t.subtitle||'';
+  document.getElementById('tpl-preparedfor').value=t.preparedFor||'';
+}
+function syncPresetButtons(t){
+  ['full','executive','minimal'].forEach(function(n){
+    var el=document.getElementById('preset-'+n);if(el)el.classList.toggle('active',t.preset===n);
+  });
+}
+function syncThemeSwatches(idx){
+  document.querySelectorAll('.palette-card').forEach(function(s,i){s.classList.toggle('active',i===idx);});
+}
+function buildSwatches(){
+  var wrap=document.getElementById('themeSwatches');if(!wrap)return;
+  var curIdx=(loadTpl()||{}).themeIdx||0;
+  wrap.innerHTML='';
+  THEMES.forEach(function(th,i){
+    var color=th.color||(WL.color||'#4f46e5');
+    var card=document.createElement('div');
+    card.className='palette-card'+(curIdx===i?' active':'');
+    card.innerHTML='<div class="palette-swatch" style="background:'+color+'"></div>'
+      +'<div><div class="palette-card-name">'+th.name+'</div><div class="palette-card-desc">'+th.desc+'</div></div>';
+    card.onclick=function(){setTheme(i);};
+    wrap.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════ */
+function render(){
+  var T=getTpl();
+  var V=T.vis||PRESETS.full;
+  loadWL();applyTheme(T);
+
+  /* Client data — share link takes priority over localStorage */
+  var c=null;
+  if(SHARE_DATA&&SHARE_DATA.c){
+    c=SHARE_DATA.c;
+    if(SHARE_DATA.wl)Object.assign(WL,SHARE_DATA.wl);
+    if(SHARE_DATA.tpl){T=Object.assign(T,SHARE_DATA.tpl);V=T.vis||PRESETS.full;applyTheme(T);}
+  } else {
+    var idx=parseInt(localStorage.getItem('fw_report_idx'));
+    var clients=[];
+    try{clients=JSON.parse(localStorage.getItem('fw_clients')||'[]');}catch(e){}
+    if(isNaN(idx)||idx<0||idx>=clients.length){
+      document.getElementById('reportContent').innerHTML=
+        '<div class="error-state"><span class="es-icon">📄</span>'
+        +'<h2>No client selected</h2>'
+        +'<p>Open this report from the <a href="advisorDashboard.test.html">Advisor Dashboard</a><br>'
+        +'by clicking the <strong>📄 Report</strong> button on a client card.</p></div>';
+      document.getElementById('ctrlInfo').textContent='No client selected.';
+      return;
+    }
+    c=clients[idx];
+  }
+
+  var logoData=SHARE_DATA&&SHARE_DATA.logo?SHARE_DATA.logo:localStorage.getItem('fw_rpt_logo');
+  var bizProf=SHARE_DATA&&SHARE_DATA.biz?SHARE_DATA.biz:loadBusinessProfile();
+
+  var rev=c.rev||0,exp=c.exp||0,emi=c.emi||0,res=c.reserve||0;
+  var loan=c.loan||0,rate=c.rate||12,ten=c.tenure||36;
+  var loanEMI=calcEMI(loan,rate,ten);
+  var totEMI=emi+loanEMI;
+  var net=rev-exp-totEMI;
+  var dscr=totEMI>0?(rev-exp)/totEMI:99;
+  var resMo=totEMI>0?(res/totEMI):exp>0?(res/exp):0;
+  var score=computeScore(rev,exp,emi,res,loan,rate,ten);
+  var comp=scoreComponents(rev,exp,emi,res,loan,rate,ten);
+  var maxSafe=findMaxSafe(rev,exp,emi,res,rate,ten);
+  var stressRev=rev*0.8,stressNet=stressRev-exp-totEMI;
+  var npm=rev>0?net/rev*100:0,emr=rev>0?totEMI/rev*100:0,opMgn=rev>0?(rev-exp)/rev*100:0;
+
+  var gcls=score>=70?'#10b981':score>=50?'#f59e0b':'#dc2626';
+  var grade=score>=70?'✓ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'✗ HIGH RISK — NOT ADVISED';
+  var gradeBg=score>=70?'#dcfce7':score>=50?'#fef9c3':'#fee2e2';
+  var gradeFg=score>=70?'#166534':score>=50?'#854d0e':'#991b1b';
+  var dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+  document.getElementById('ctrlInfo').textContent=esc(c.name||'Client')+' · '+dateStr;
+
+  var html='';
+
+  /* ── HEADER ── */
+  html+='<div class="rpt-header">'
+    +'<div class="rh-left">'
+    +(logoData?'<img class="rh-logo-img" src="'+logoData+'" alt="Logo"/>':'<div class="rh-icon">'+esc(WL.icon||'🏢')+'</div>')
+    +'<div>'
+      +'<div class="rh-brand-name">'+esc(WL.brand)+'</div>'
+      +'<div class="rh-brand-tag">'+esc(WL.tag||'Financial Advisory Services')+'</div>'
+    +'</div></div>'
+    +'<div class="rh-right">'
+      +'<div class="rh-report-title">'+(T.subtitle?esc(T.subtitle):'Financial Advisory Report')+'</div>'
+      +(T.preparedFor?'<div class="rh-report-title" style="font-size:.58rem;margin-top:2px;opacity:.7">Prepared for: '+esc(T.preparedFor)+'</div>':'')
+      +'<div class="rh-date">'+dateStr+'</div>'
+      +(WL.email?'<div class="rh-email">'+esc(WL.email)+'</div>':'')
+    +'</div>'
+  +'</div>';
+
+  /* ── CLIENT BANNER ── */
+  html+='<div class="client-banner">'
+    +'<div class="cb-info">'
+      +'<div class="cb-name">'+esc(c.name||'Unnamed Client')+'</div>'
+      +'<div class="cb-sub">'+(c.industry?esc(c.industry)+' · ':'')+'Report generated '+dateStr+'</div>'
+    +'</div>'
+    +'<div class="cb-score-block">'
+      +'<div class="cb-score-num" style="color:'+gcls+'">'+score+'<span class="cb-score-denom">/100</span></div>'
+      +'<div class="cb-grade-pill" style="background:'+gradeBg+';color:'+gradeFg+'">'+grade+'</div>'
+    +'</div>'
+  +'</div>';
+
+  html+='<div class="rpt-body">';
+
+  /* ── SCORE BREAKDOWN ── */
+  if(V.scoreBreakdown){
+    function compBar(val,max){var p=val/max;var col=p>=0.8?'#10b981':p>=0.5?'#f59e0b':'#dc2626';return bar(val,max,col);}
+    html+='<div class="section"><div class="section-title">Loan Safety Score — Component Breakdown</div>'
+      +'<div class="score-components">'
+        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Cash Flow Ratio (max 30)</span><span class="sc-comp-val">'+comp.cf+' / 30</span></div>'+compBar(comp.cf,30)+'</div>'
+        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">EMI Affordability (max 30)</span><span class="sc-comp-val">'+comp.af+' / 30</span></div>'+compBar(comp.af,30)+'</div>'
+        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Debt Coverage — DSCR (max 25)</span><span class="sc-comp-val">'+comp.dscr+' / 25</span></div>'+compBar(comp.dscr,25)+'</div>'
+        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Stress Test −20% Revenue (max 15)</span><span class="sc-comp-val">'+comp.st+' / 15</span></div>'+compBar(comp.st,15)+'</div>'
+      +'</div></div>';
+  }
+
+  /* ── FINANCIAL SNAPSHOT ── */
+  if(V.financialSnapshot)
+  html+='<div class="section"><div class="section-title">Financial Snapshot</div>'
+    +'<div class="metrics-6">'
+      +'<div class="m-box b"><div class="m-lbl">Monthly Revenue</div><div class="m-val">'+fmt(rev)+'</div></div>'
+      +'<div class="m-box b"><div class="m-lbl">Monthly Expenses</div><div class="m-val">'+fmt(exp)+'</div></div>'
+      +'<div class="m-box '+(net>=0?'g':'r')+'"><div class="m-lbl">Net Cash Flow</div><div class="m-val '+(net>=0?'g':'r')+'">'+fmtS(net)+'</div></div>'
+      +'<div class="m-box b"><div class="m-lbl">Total EMI Burden</div><div class="m-val">'+(totEMI>0?fmt(totEMI):'None')+'</div></div>'
+      +'<div class="m-box b"><div class="m-lbl">Cash Reserve</div><div class="m-val">'+fmt(res)+'</div></div>'
+      +'<div class="m-box '+(dscr>=1.25||dscr>=99?'g':'r')+'"><div class="m-lbl">DSCR</div><div class="m-val '+(dscr>=1.25||dscr>=99?'g':'r')+'">'+(dscr>=99?'N/A':dscr.toFixed(2)+'x')+'</div></div>'
+    +'</div></div>';
+
+  /* ── LOAN ASSESSMENT ── */
+  if(V.loanAssessment&&loan>0){
+    html+='<div class="section"><div class="section-title">New Loan Being Assessed</div>'
+      +'<div class="loan-boxes">'
+        +'<div class="loan-box"><div class="lb-lbl">Loan Amount</div><div class="lb-val">'+fmt(loan)+'</div></div>'
+        +'<div class="loan-box"><div class="lb-lbl">Annual Rate</div><div class="lb-val">'+rate+'%</div></div>'
+        +'<div class="loan-box"><div class="lb-lbl">Tenure</div><div class="lb-val">'+ten+' months</div></div>'
+        +'<div class="loan-box"><div class="lb-lbl">Monthly EMI</div><div class="lb-val">'+fmt(loanEMI)+'</div></div>'
+      +'</div></div>';
+  }
+
+  /* ── KEY RATIOS TABLE ── */
+  if(V.keyRatios)
+  html+='<div class="section"><div class="section-title">Key Financial Ratios</div>'
+    +'<table class="ratios-table"><thead><tr><th>Metric</th><th>Value</th><th>Target</th><th>Status</th></tr></thead><tbody>'
+      +'<tr><td style="font-weight:600">Net Profit Margin</td><td style="font-weight:800">'+pct(npm)+'</td><td style="color:#94a3b8">&gt; 10%</td><td>'+pill(npm>=10,npm>=0)+'</td></tr>'
+      +'<tr><td style="font-weight:600">Operating Margin</td><td style="font-weight:800">'+pct(opMgn)+'</td><td style="color:#94a3b8">&gt; 20%</td><td>'+pill(opMgn>=20,opMgn>=10)+'</td></tr>'
+      +'<tr><td style="font-weight:600">EMI-to-Revenue Ratio</td><td style="font-weight:800">'+(totEMI>0?pct(emr):'N/A')+'</td><td style="color:#94a3b8">&lt; 40%</td><td>'+pill(totEMI===0||emr<=40,emr<=55)+'</td></tr>'
+      +'<tr><td style="font-weight:600">Debt Service Coverage (DSCR)</td><td style="font-weight:800">'+(dscr>=99?'N/A':dscr.toFixed(2)+'x')+'</td><td style="color:#94a3b8">&gt; 1.25x</td><td>'+pill(dscr>=1.25||dscr>=99,dscr>=1)+'</td></tr>'
+      +'<tr><td style="font-weight:600">Reserve Coverage</td><td style="font-weight:800">'+resMo.toFixed(1)+' months</td><td style="color:#94a3b8">&gt; 3 months</td><td>'+pill(resMo>=3,resMo>=1)+'</td></tr>'
+      +'<tr><td style="font-weight:600">Stress Test (−20% Revenue)</td><td style="font-weight:800">'+(stressNet>=0?'Positive':fmtS(stressNet))+'</td><td style="color:#94a3b8">Positive</td><td>'+pill(stressNet>0,stressNet>-res*0.1)+'</td></tr>'
+    +'</tbody></table></div>';
+
+  /* ── STRESS ANALYSIS ── */
+  if(V.stressAnalysis)
+  html+='<div class="section"><div class="section-title">Stress Analysis — 20% Revenue Reduction Scenario</div>'
+    +'<div class="stress-grid">'
+      +'<div class="stress-item"><div class="si-lbl">Normal Revenue</div><div class="si-val" style="color:#10b981">'+fmt(rev)+'</div></div>'
+      +'<div class="stress-item"><div class="si-lbl">Revenue at −20%</div><div class="si-val" style="color:#f59e0b">'+fmt(stressRev)+'</div></div>'
+      +'<div class="stress-item"><div class="si-lbl">Fixed Obligations</div><div class="si-val">'+fmt(exp+totEMI)+'</div></div>'
+      +'<div class="stress-item"><div class="si-lbl">Stressed Net CF</div><div class="si-val" style="color:'+(stressNet>=0?'#10b981':'#dc2626')+'">'+fmtS(stressNet)+'</div></div>'
+    +'</div>'
+    +'<div style="margin-top:10px;padding:9px 14px;border-radius:7px;font-size:.8rem;font-weight:700;background:'+(stressNet>=0?'#dcfce7':'#fee2e2')+';color:'+(stressNet>=0?'#166534':'#991b1b')+'">'
+      +(stressNet>=0?'✓ Business survives a 20% revenue shock — cash flow remains positive.':'✗ A 20% revenue drop would turn cash flow negative. Build reserves or reduce fixed costs before taking on debt.')
+    +'</div></div>';
+
+  /* ── RECOMMENDATION ── */
+  if(V.recommendation){
+    var recBorder=score>=70?WL.color:'#dc2626';
+    html+='<div class="section"><div class="section-title">Advisor Recommendation</div>'
+      +'<div class="rec-box" style="border-left-color:'+recBorder+'">';
+    if(score>=70){
+      html+='<div class="rec-max" style="color:'+recBorder+'">Maximum Safe Loan: '+fmt(maxSafe)+'</div>'
+        +'<div class="rec-text">'
+        +(loan>0&&loan<=maxSafe
+          ?'The requested loan of <strong>'+fmt(loan)+'</strong> is within the safe limit. DSCR of '+dscr.toFixed(2)+'x and a positive stressed cash flow of '+fmt(stressNet)+' indicate this business can comfortably service the loan even under adverse conditions.'
+          :loan>0&&loan>maxSafe
+            ?'The requested loan of '+fmt(loan)+' exceeds the safe limit of <strong>'+fmt(maxSafe)+'</strong>. Consider reducing the loan amount or extending the tenure to lower monthly EMI burden.'
+            :'This business qualifies for a loan of up to <strong>'+fmt(maxSafe)+'</strong>. Cash flow margins are healthy, DSCR is above threshold, and the stress test passes. Proceed with confidence.'
+        )+'</div>';
+    } else {
+      html+='<div class="rec-max" style="color:'+recBorder+'">Caution — Maximum Supportable Loan: '+fmt(maxSafe)+'</div>'
+        +'<div class="rec-text">Current financial metrics present elevated risk (score: <strong>'+score+'/100</strong>). '
+        +(net<0?'Net cash flow is currently negative ('+fmtS(net)+'/month) — address operating expenses or revenue growth first. ':'')
+        +(dscr<1.25&&dscr<99&&totEMI>0?'DSCR of '+dscr.toFixed(2)+'x falls below the 1.25x minimum threshold. ':'')
+        +(resMo<3&&totEMI>0?'Cash reserve covers only '+resMo.toFixed(1)+' months of obligations — target 3+. ':'')
+        +(stressNet<0?'Business does not survive the stress scenario. ':'')
+        +'Recommend revisiting after addressing the above metrics.</div>';
+    }
+    html+='</div></div>';
+  }
+
+  /* ── ADVISOR NOTES ── */
+  if(V.advisorNotes&&c.notes&&c.notes.trim()){
+    html+='<div class="section"><div class="section-title">Advisor Notes</div>'
+      +'<div class="notes-box">'+esc(c.notes)+'</div></div>';
+  }
+
+  html+='</div>'; /* /rpt-body */
+
+  /* ── FOOTER ── */
+  var bizFooter='';
+  if(bizProf){
+    var bn=bizProf.name||bizProf.businessName||'';
+    var ba=(bizProf.address||'')+(bizProf.city?', '+bizProf.city:'')+(bizProf.state?' '+bizProf.state:'');
+    var be=bizProf.ein||bizProf.taxId||'';
+    if(bn||ba||be) bizFooter='<div style="font-size:.63rem;color:#64748b;font-weight:400;margin-top:3px">'
+      +(bn?esc(bn)+(ba||be?' · ':''):'')+(ba?esc(ba)+(be?' · ':''):'')+(be?'EIN '+esc(be):'')+'</div>';
+  }
+  html+='<div class="rpt-footer">'
+    +'<div class="rf-brand">'+esc(WL.brand)+(WL.email?' &nbsp;·&nbsp; '+esc(WL.email):'')+bizFooter+'</div>'
+    +'<div class="rf-disc">This report is prepared by '+esc(WL.brand)+' for advisory purposes only. It is indicative in nature and does not constitute financial, investment, or lending advice. Loan decisions should be made in consultation with your lender.</div>'
+  +'</div>';
+
+  document.getElementById('reportContent').innerHTML=html;
+}
+
+/* ── Boot ── */
+if(SHARE_DATA&&SHARE_DATA.wl) Object.assign(WL,SHARE_DATA.wl);
+loadWL();
+buildSwatches();
+var _initTpl=loadTpl();
+if(SHARE_DATA&&SHARE_DATA.tpl) _initTpl=Object.assign(_initTpl,SHARE_DATA.tpl);
+syncUI(_initTpl);
+loadLogoPreview();
+refreshBizInfo();
+render();
+</script>
+</body>
+</html>

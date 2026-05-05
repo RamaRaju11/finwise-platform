@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinWise v2 — To-Be Process Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#0a0f1e;color:#e2e8f0}
+
+/* ══ SLIDE ENGINE ══ */
+#deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px 120px;opacity:0;transform:translateX(60px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* ══ PROGRESS BAR ══ */
+#progressBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#6366f1,#a78bfa);transition:width .4s ease;z-index:100}
+
+/* ══ SLIDE COUNTER ══ */
+#slideCounter{position:fixed;top:14px;right:20px;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.35);z-index:100;letter-spacing:.06em}
+
+/* ══ BOTTOM CONTROL BAR ══ */
+#controls{position:fixed;bottom:0;left:0;right:0;height:108px;background:linear-gradient(to top,rgba(10,15,30,1) 60%,transparent);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:18px;gap:10px}
+
+/* Voice over bar */
+#voBar{width:100%;max-width:820px;padding:0 16px;display:flex;align-items:center;gap:12px}
+#voText{flex:1;font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;font-style:italic;min-height:36px;transition:color .3s}
+#voText.speaking{color:rgba(255,255,255,.85)}
+#voBtn{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#94a3b8;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+#voBtn:hover{background:rgba(99,102,241,.25);border-color:#6366f1;color:#a5b4fc}
+#voBtn.active{background:rgba(99,102,241,.3);border-color:#a78bfa;color:#c4b5fd}
+
+/* Nav dots + arrows */
+#navRow{display:flex;align-items:center;gap:16px}
+.nav-arrow{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.nav-arrow:hover{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}
+.nav-arrow:disabled{opacity:.25;cursor:default}
+#dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s}
+.dot.active{background:#a78bfa;width:20px;border-radius:3px}
+
+/* ══ COMMON COMPONENTS ══ */
+.slide-inner{width:100%;max-width:920px}
+.tag{display:inline-block;background:rgba(99,102,241,.18);color:#a5b4fc;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:999px;border:1px solid rgba(99,102,241,.3);margin-bottom:16px}
+.slide-title{font-size:clamp(1.6rem,4vw,2.8rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:10px}
+.grad{background:linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.slide-sub{font-size:.95rem;color:#64748b;line-height:1.7;max-width:580px}
+
+/* Mock card */
+.mock{background:#111827;border:1px solid #1e293b;border-radius:14px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.mock-bar{height:36px;background:#0f172a;border-bottom:1px solid #1e293b;display:flex;align-items:center;padding:0 14px;gap:7px}
+.mock-dot{width:10px;height:10px;border-radius:50%}
+.mock-title{font-size:.72rem;color:#475569;font-weight:600;flex:1;text-align:center}
+
+/* Stat row */
+.stat-row{display:flex;gap:20px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 20px;flex:1;min-width:130px;text-align:center}
+.stat-val{font-size:1.6rem;font-weight:900;color:#f1f5f9;letter-spacing:-.03em}
+.stat-lbl{font-size:.7rem;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+
+/* Priority cards */
+.priority{display:flex;align-items:flex-start;gap:14px;background:#111827;border:1px solid #1e293b;border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.priority:last-child{margin-bottom:0}
+.prio-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.prio-red{background:#dc262622;color:#ef4444}
+.prio-amber{background:#d9770622;color:#f59e0b}
+.prio-green{background:#16a34a22;color:#22c55e}
+.prio-blue{background:#2563eb22;color:#60a5fa}
+.prio-title{font-size:.85rem;font-weight:800;color:#e2e8f0;margin-bottom:2px}
+.prio-desc{font-size:.77rem;color:#64748b;line-height:1.5}
+.prio-action{margin-top:6px;font-size:.72rem;font-weight:700;color:#a78bfa;cursor:pointer}
+
+/* Lender cards */
+.lender-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lender-card{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:16px}
+.lender-card.best{border-color:#166534;background:linear-gradient(135deg,#14532d18,#111827)}
+.lender-name{font-size:.78rem;font-weight:800;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.best-badge{background:#14532d;color:#4ade80;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:999px}
+.lender-amount{font-size:1.5rem;font-weight:900;color:#f1f5f9;letter-spacing:-.02em;margin-bottom:4px}
+.lender-terms{font-size:.75rem;color:#475569;margin-bottom:10px}
+.lender-rate{display:flex;gap:12px}
+.lender-pill{background:#0f172a;border:1px solid #1e293b;border-radius:6px;padding:4px 10px;font-size:.73rem;color:#94a3b8}
+.lender-pill span{color:#e2e8f0;font-weight:700}
+.apply-btn{width:100%;margin-top:10px;padding:8px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit}
+.lender-card.best .apply-btn{background:#16a34a}
+.lender-prob{font-size:.7rem;color:#4ade80;font-weight:700;text-align:right;margin-top:4px}
+
+/* Bank connection */
+.bank-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#111827;border:1px solid #1e293b;border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.bank-item:hover,.bank-item.selected{border-color:#6366f1;background:#1a1040}
+.bank-logo{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900}
+.bank-info{flex:1}
+.bank-name{font-size:.85rem;font-weight:700;color:#e2e8f0;margin-bottom:1px}
+.bank-type{font-size:.72rem;color:#475569}
+.bank-check{color:#4ade80;font-size:1rem;opacity:0;transition:opacity .3s}
+.bank-item.selected .bank-check{opacity:1}
+
+/* Email mockup */
+.email-mock{background:#1a1040;border:1px solid #2d1f6e;border-radius:14px;overflow:hidden;max-width:500px}
+.email-hd{background:#0f0730;padding:16px 20px;border-bottom:1px solid #2d1f6e}
+.email-from{font-size:.72rem;color:#6366f1;font-weight:700;margin-bottom:3px}
+.email-subject{font-size:.88rem;font-weight:800;color:#e2e8f0}
+.email-body{padding:16px 20px}
+.email-greeting{font-size:.85rem;color:#94a3b8;margin-bottom:14px;line-height:1.5}
+.email-metric{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1e293b;font-size:.82rem}
+.email-metric:last-child{border-bottom:none}
+.em-label{color:#64748b}
+.em-val{font-weight:800;color:#e2e8f0}
+.em-delta{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px}
+.delta-up{background:#14532d22;color:#4ade80}
+.delta-down{background:#7f1d1d22;color:#ef4444}
+.email-cta{display:block;width:100%;margin-top:14px;padding:10px;background:#6366f1;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:800;cursor:pointer;text-align:center;font-family:inherit}
+
+/* Alert notification */
+.notif{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:16px;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.notif-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.notif-icon{width:32px;height:32px;border-radius:9px;background:#7f1d1d33;color:#ef4444;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.notif-app{font-size:.7rem;font-weight:800;color:#64748b;letter-spacing:.05em;text-transform:uppercase}
+.notif-time{font-size:.68rem;color:#475569;margin-left:auto}
+.notif-title{font-size:.88rem;font-weight:800;color:#ef4444;margin-bottom:4px}
+.notif-body{font-size:.8rem;color:#94a3b8;line-height:1.6}
+.notif-actions{display:flex;gap:8px;margin-top:12px}
+.notif-btn{flex:1;padding:7px;border-radius:7px;font-size:.75rem;font-weight:800;cursor:pointer;text-align:center;font-family:inherit}
+.notif-btn.primary{background:#dc2626;color:#fff;border:none}
+.notif-btn.secondary{background:transparent;color:#94a3b8;border:1px solid #334155}
+
+/* Health ring */
+.health-ring-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-svg{width:100px;height:100px}
+.ring-score{font-size:1.6rem;font-weight:900;color:#f1f5f9}
+.ring-label{font-size:.68rem;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+
+/* Connecting animation */
+.connecting-dots span{display:inline-block;animation:blink 1.2s infinite}
+.connecting-dots span:nth-child(2){animation-delay:.2s}
+.connecting-dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* Auto-fill animation */
+@keyframes fillIn{from{background:#1e3a5f;color:#60a5fa}to{background:transparent;color:#e2e8f0}}
+.filling{animation:fillIn .6s ease-out forwards}
+
+/* Roadmap */
+.roadmap-item{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}
+.roadmap-item:last-child{margin-bottom:0}
+.rm-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
+.rm-content{flex:1}
+.rm-title{font-size:.88rem;font-weight:800;color:#e2e8f0;margin-bottom:2px}
+.rm-desc{font-size:.77rem;color:#64748b;line-height:1.5}
+.rm-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:999px;margin-left:6px}
+
+/* Grid layouts */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:920px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+/* Problem vs solution */
+.problem-box{background:#7f1d1d18;border:1px solid #7f1d1d55;border-radius:12px;padding:18px 20px}
+.solution-box{background:#14532d18;border:1px solid #14532d55;border-radius:12px;padding:18px 20px}
+.box-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.problem-box .box-label{color:#ef4444}
+.solution-box .box-label{color:#4ade80}
+.box-item{display:flex;align-items:flex-start;gap:9px;font-size:.82rem;color:#94a3b8;margin-bottom:8px;line-height:1.5}
+.box-item:last-child{margin-bottom:0}
+
+/* Input field mock */
+.field-mock{margin-bottom:10px}
+.field-label{font-size:.7rem;font-weight:700;color:#475569;margin-bottom:4px}
+.field-input{width:100%;padding:8px 10px;border:1.5px solid #1e293b;border-radius:7px;background:#0f172a;font-size:.85rem;color:#94a3b8;font-family:inherit}
+.field-input.auto-filled{border-color:#16a34a55;background:#14532d18;color:#4ade80}
+
+/* Divider */
+.vs-arrow{display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#334155}
+
+/* Fade-in animation for children */
+.stagger > *{opacity:0;transform:translateY(20px);transition:opacity .4s ease,transform .4s ease}
+.slide.active .stagger > *:nth-child(1){opacity:1;transform:none;transition-delay:.1s}
+.slide.active .stagger > *:nth-child(2){opacity:1;transform:none;transition-delay:.2s}
+.slide.active .stagger > *:nth-child(3){opacity:1;transform:none;transition-delay:.35s}
+.slide.active .stagger > *:nth-child(4){opacity:1;transform:none;transition-delay:.5s}
+.slide.active .stagger > *:nth-child(5){opacity:1;transform:none;transition-delay:.65s}
+.slide.active .stagger > *:nth-child(6){opacity:1;transform:none;transition-delay:.8s}
+.slide.active .stagger > *:nth-child(7){opacity:1;transform:none;transition-delay:.95s}
+
+/* Chip */
+.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px 12px;font-size:.75rem;color:#94a3b8}
+
+/* Centered text slides */
+.centered{text-align:center;align-items:center}
+.centered .slide-sub{margin:0 auto}
+
+/* Plaid-style flow */
+.plaid-box{background:#111827;border:1px solid #1e293b;border-radius:16px;padding:24px;width:100%;max-width:340px;text-align:center}
+.plaid-logo{font-size:1.6rem;margin-bottom:8px}
+.plaid-title{font-size:1rem;font-weight:800;color:#e2e8f0;margin-bottom:4px}
+.plaid-sub{font-size:.78rem;color:#64748b;margin-bottom:20px;line-height:1.5}
+.connect-btn{width:100%;padding:12px;background:linear-gradient(90deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.security-note{font-size:.7rem;color:#475569;display:flex;align-items:center;justify-content:center;gap:5px}
+
+/* ══ SLIDE-SPECIFIC BACKGROUNDS ══ */
+.slide-1{background:radial-gradient(ellipse at 30% 40%,#1e1b4b 0%,#0a0f1e 70%)}
+.slide-2{background:radial-gradient(ellipse at 70% 30%,#0c1a0c 0%,#0a0f1e 70%)}
+.slide-3{background:radial-gradient(ellipse at 20% 60%,#0c1a30 0%,#0a0f1e 70%)}
+.slide-4{background:radial-gradient(ellipse at 60% 20%,#1a0830 0%,#0a0f1e 70%)}
+.slide-5{background:radial-gradient(ellipse at 40% 70%,#0c2010 0%,#0a0f1e 70%)}
+.slide-6{background:radial-gradient(ellipse at 80% 50%,#1a0808 0%,#0a0f1e 70%)}
+.slide-7{background:radial-gradient(ellipse at 30% 30%,#0c1a40 0%,#0a0f1e 70%)}
+.slide-8{background:radial-gradient(ellipse at 50% 80%,#1a0830 0%,#0a0f1e 70%)}
+.slide-9{background:radial-gradient(ellipse at 50% 30%,#0f172a 0%,#0a0f1e 70%)}
+</style>
+</head>
+<body>
+
+<div id="progressBar" style="width:11.1%"></div>
+<div id="slideCounter">1 / 9</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 — TITLE
+══════════════════════════════════════════ -->
+<div id="deck">
+<div class="slide slide-1 active centered" id="slide-1">
+  <div class="slide-inner stagger" style="text-align:center">
+    <div class="tag">FinWise v2 — Product Vision</div>
+    <h1 class="slide-title" style="font-size:clamp(2rem,5vw,3.6rem)">The <span class="grad">World-Class</span><br/>Small Business Advisor</h1>
+    <p class="slide-sub" style="margin:0 auto;font-size:1rem">What FinWise becomes when we stop making excuses and build the best.</p>
+    <div class="stat-row" style="justify-content:center;margin-top:32px;max-width:600px;margin-left:auto;margin-right:auto">
+      <div class="stat"><div class="stat-val">33M</div><div class="stat-lbl">US Small Businesses</div></div>
+      <div class="stat"><div class="stat-val">$600B</div><div class="stat-lbl">Annual SMB Lending</div></div>
+      <div class="stat"><div class="stat-val">82%</div><div class="stat-lbl">Fail from Cash Flow</div></div>
+    </div>
+    <p style="color:#334155;font-size:.75rem;margin-top:28px">Press → or click anywhere to advance &nbsp;·&nbsp; 🔊 to enable voice over</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 — THE PROBLEM
+══════════════════════════════════════════ -->
+<div class="slide slide-2" id="slide-2">
+  <div class="slide-inner">
+    <div class="stagger">
+      <div class="tag">The Problem Today</div>
+      <h1 class="slide-title">Every calculation is built<br/>on <span class="grad">guesswork</span></h1>
+    </div>
+    <div class="two-col" style="margin-top:24px">
+      <div class="stagger">
+        <div class="problem-box">
+          <div class="box-label">✗ How it works today</div>
+          <div class="box-item"><span style="color:#ef4444">✗</span> Owner types "Monthly Revenue: $22,000" — a rough estimate</div>
+          <div class="box-item"><span style="color:#ef4444">✗</span> Expenses are best-guess, not actual transactions</div>
+          <div class="box-item"><span style="color:#ef4444">✗</span> Loan score calculated on numbers that are probably wrong</div>
+          <div class="box-item"><span style="color:#ef4444">✗</span> Same data entry on every new tool, every new session</div>
+          <div class="box-item"><span style="color:#ef4444">✗</span> Data lives in one browser — lost when they switch devices</div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="field-mock"><div class="field-label">Monthly Revenue ($)</div><input class="field-input" value="22000" readonly/></div>
+          <div class="field-mock"><div class="field-label">Monthly Expenses ($)</div><input class="field-input" value="15500" readonly/></div>
+          <div class="field-mock"><div class="field-label">Existing EMI / Debt ($)</div><input class="field-input" value="2000" readonly/></div>
+          <p style="font-size:.72rem;color:#475569;margin-top:6px">↑ Numbers entered by hand. Probably wrong. Entered again on next tool.</p>
+        </div>
+      </div>
+      <div class="stagger">
+        <div class="solution-box">
+          <div class="box-label">✓ How it works in v2</div>
+          <div class="box-item"><span style="color:#4ade80">✓</span> Bank connected once — real transaction data, always accurate</div>
+          <div class="box-item"><span style="color:#4ade80">✓</span> Revenue and expenses pulled live from actual bank feeds</div>
+          <div class="box-item"><span style="color:#4ade80">✓</span> Loan score based on verified financials — lenders trust it</div>
+          <div class="box-item"><span style="color:#4ade80">✓</span> Every tool pre-fills automatically, every session</div>
+          <div class="box-item"><span style="color:#4ade80">✓</span> Data synced to cloud — same experience on any device</div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="field-mock"><div class="field-label">Monthly Revenue ($)</div><input class="field-input auto-filled" value="24,347  ← Live from Chase Business" readonly/></div>
+          <div class="field-mock"><div class="field-label">Monthly Expenses ($)</div><input class="field-input auto-filled" value="16,182  ← Live from Chase Business" readonly/></div>
+          <div class="field-mock"><div class="field-label">Existing EMI / Debt ($)</div><input class="field-input auto-filled" value="1,850   ← Detected from recurring payments" readonly/></div>
+          <p style="font-size:.72rem;color:#4ade80;margin-top:6px">↑ Real numbers. Auto-filled everywhere. Updated nightly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 — BANK CONNECTION
+══════════════════════════════════════════ -->
+<div class="slide slide-3" id="slide-3">
+  <div class="slide-inner">
+    <div class="stagger">
+      <div class="tag">Phase 2 — Bank Connection</div>
+      <h1 class="slide-title">Connect once.<br/><span class="grad">Never enter data again.</span></h1>
+    </div>
+    <div class="two-col" style="margin-top:24px;align-items:start">
+      <div class="stagger">
+        <div class="plaid-box">
+          <div class="plaid-logo">🏦</div>
+          <div class="plaid-title">Connect your business bank</div>
+          <div class="plaid-sub">FinWise uses bank-level encryption. We read your data — we never move money.</div>
+          <div class="bank-item selected" id="bankItem1">
+            <div class="bank-logo" style="background:#003087;color:#fff">C</div>
+            <div class="bank-info"><div class="bank-name">Chase Business</div><div class="bank-type">Business Checking ···4821</div></div>
+            <div class="bank-check">✓</div>
+          </div>
+          <div class="bank-item" id="bankItem2">
+            <div class="bank-logo" style="background:#d4001a;color:#fff">B</div>
+            <div class="bank-info"><div class="bank-name">Bank of America</div><div class="bank-type">Business Savings</div></div>
+            <div class="bank-check">✓</div>
+          </div>
+          <div class="bank-item" id="bankItem3">
+            <div class="bank-logo" style="background:#ff6900;color:#fff">W</div>
+            <div class="bank-info"><div class="bank-name">Wells Fargo</div><div class="bank-type">Business Checking</div></div>
+            <div class="bank-check">✓</div>
+          </div>
+          <button class="connect-btn" style="margin-top:14px" onclick="runBankAnim()">⚡ Connect Chase Business</button>
+          <div class="security-note">🔒 256-bit encryption &nbsp;·&nbsp; Read-only access</div>
+        </div>
+      </div>
+      <div class="stagger">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:14px;padding:18px">
+          <div style="font-size:.72rem;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px">Live data flowing into all tools</div>
+          <div id="fillFields">
+            <div class="field-mock" id="ff1"><div class="field-label">Monthly Revenue</div><input class="field-input" id="fv1" value="Waiting for bank…" readonly/></div>
+            <div class="field-mock" id="ff2"><div class="field-label">Monthly Expenses</div><input class="field-input" id="fv2" value="Waiting for bank…" readonly/></div>
+            <div class="field-mock" id="ff3"><div class="field-label">Avg Cash Balance</div><input class="field-input" id="fv3" value="Waiting for bank…" readonly/></div>
+            <div class="field-mock" id="ff4"><div class="field-label">Recurring Debt Payments</div><input class="field-input" id="fv4" value="Waiting for bank…" readonly/></div>
+            <div class="field-mock" id="ff5"><div class="field-label">Top Expense Category</div><input class="field-input" id="fv5" value="Waiting for bank…" readonly/></div>
+            <div class="field-mock" id="ff6"><div class="field-label">Cash Runway (months)</div><input class="field-input" id="fv6" value="Waiting for bank…" readonly/></div>
+          </div>
+          <div id="connStatus" style="display:none;margin-top:10px;background:#14532d18;border:1px solid #14532d44;border-radius:8px;padding:10px 12px;font-size:.78rem;color:#4ade80;font-weight:700">
+            ✓ Bank connected · 847 transactions imported · All tools updated
+          </div>
+        </div>
+        <div style="margin-top:14px;background:#1e293b;border-radius:10px;padding:12px 14px;font-size:.78rem;color:#64748b;line-height:1.6">
+          <strong style="color:#94a3b8">Powered by Plaid</strong> — The same connection technology used by 8,000+ apps including Venmo, Coinbase, and American Express. Your credentials never touch FinWise servers.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 — DAILY HEALTH BRIEFING
+══════════════════════════════════════════ -->
+<div class="slide slide-4" id="slide-4">
+  <div class="slide-inner">
+    <div class="stagger">
+      <div class="tag">Phase 3 — Daily Health Engine</div>
+      <h1 class="slide-title">Not a tool menu.<br/><span class="grad">Your daily briefing.</span></h1>
+    </div>
+    <div class="two-col" style="margin-top:20px;align-items:start">
+      <div class="stagger">
+        <div class="mock">
+          <div class="mock-bar">
+            <div class="mock-dot" style="background:#ef4444"></div>
+            <div class="mock-dot" style="background:#f59e0b"></div>
+            <div class="mock-dot" style="background:#22c55e"></div>
+            <div class="mock-title">FinWise — Daily Briefing</div>
+          </div>
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+              <div class="health-ring-wrap">
+                <svg class="ring-svg" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#1e293b" stroke-width="10"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="10"
+                    stroke-dasharray="185 264" stroke-dashoffset="66" stroke-linecap="round"/>
+                  <text x="50" y="54" text-anchor="middle" fill="#f1f5f9" font-size="20" font-weight="900" font-family="Inter">67</text>
+                </svg>
+                <div class="ring-label">Health Score</div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:.95rem;font-weight:900;color:#f1f5f9;margin-bottom:3px">Good morning, Sarah ☀️</div>
+                <div style="font-size:.78rem;color:#64748b;line-height:1.5">Thursday · Riverside Bakery · 3 items need your attention today</div>
+              </div>
+            </div>
+            <div class="priority">
+              <div class="prio-icon prio-red">⚠️</div>
+              <div>
+                <div class="prio-title">Cash runway at 2.1 months — below safe threshold</div>
+                <div class="prio-desc">Your runway dropped 0.4 months since last week. At current burn rate, you have 63 days of cash. Minimum safe runway is 3 months.</div>
+                <div class="prio-action">→ View cash flow plan &amp; loan options</div>
+              </div>
+            </div>
+            <div class="priority">
+              <div class="prio-icon prio-amber">💰</div>
+              <div>
+                <div class="prio-title">You pre-qualify for 4 loans — window is open now</div>
+                <div class="prio-desc">Your credit score (720) and 36-month history qualify you for $65K–$100K. Best rate: 6.5% SBA 7(a). This window closes if runway drops further.</div>
+                <div class="prio-action">→ See your live loan offers</div>
+              </div>
+            </div>
+            <div class="priority">
+              <div class="prio-icon prio-green">📋</div>
+              <div>
+                <div class="prio-title">Q2 estimated tax payment due in 14 days</div>
+                <div class="prio-desc">Estimated payment: $3,240 based on YTD net income. Set aside from your Chase account before June 15.</div>
+                <div class="prio-action">→ View tax command center</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:16px">
+          <div style="font-size:.72rem;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">This week vs last week</div>
+          <div class="email-metric"><span class="em-label">Monthly Revenue</span><span class="em-val">$24,347 <span class="em-delta delta-up">↑ 4.2%</span></span></div>
+          <div class="email-metric"><span class="em-label">Monthly Expenses</span><span class="em-val">$16,182 <span class="em-delta delta-down">↑ 2.1%</span></span></div>
+          <div class="email-metric"><span class="em-label">Net Cash Flow</span><span class="em-val">$8,165 <span class="em-delta delta-up">↑ 8.7%</span></span></div>
+          <div class="email-metric"><span class="em-label">Cash Runway</span><span class="em-val">2.1 mo <span class="em-delta delta-down">↓ 0.4</span></span></div>
+        </div>
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:16px">
+          <div style="font-size:.72rem;font-weight:800;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Upcoming deadlines</div>
+          <div class="box-item"><span style="color:#ef4444;font-size:.8rem">Jun 15</span> Q2 Tax Estimated Payment — $3,240</div>
+          <div class="box-item"><span style="color:#f59e0b;font-size:.8rem">Jun 20</span> USDA Rural Grant — Application deadline</div>
+          <div class="box-item"><span style="color:#4ade80;font-size:.8rem">Jul 1</span> Chase Business LOC renewal — Auto-renews</div>
+        </div>
+        <div style="background:#14532d18;border:1px solid #14532d44;border-radius:10px;padding:12px 14px;font-size:.78rem;color:#4ade80;line-height:1.6">
+          <strong>Runs every night at 2 AM.</strong> By the time Sarah opens FinWise each morning, her briefing is ready — calculated from the previous day's bank transactions.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 — LIVE LOAN MATCHING
+══════════════════════════════════════════ -->
+<div class="slide slide-5" id="slide-5">
+  <div class="slide-inner">
+    <div class="stagger">
+      <div class="tag">Phase 5 — Live Loan Pre-Qualification</div>
+      <h1 class="slide-title">Real offers from real lenders.<br/><span class="grad">In under 10 seconds.</span></h1>
+    </div>
+    <div class="two-col" style="margin-top:20px;align-items:start">
+      <div class="stagger">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:14px;padding:18px">
+          <div style="font-size:.72rem;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px">Your verified financial profile</div>
+          <div class="email-metric"><span class="em-label">Monthly Revenue</span><span class="em-val" style="color:#4ade80">$24,347 ✓ Verified</span></div>
+          <div class="email-metric"><span class="em-label">Monthly Expenses</span><span class="em-val" style="color:#4ade80">$16,182 ✓ Verified</span></div>
+          <div class="email-metric"><span class="em-label">Net Monthly Profit</span><span class="em-val">$8,165</span></div>
+          <div class="email-metric"><span class="em-label">Cash Reserve</span><span class="em-val" style="color:#4ade80">$18,000 ✓ Verified</span></div>
+          <div class="email-metric"><span class="em-label">Business Age</span><span class="em-val">3 years 4 months</span></div>
+          <div class="email-metric"><span class="em-label">Credit Score</span><span class="em-val">720 (Good)</span></div>
+          <div class="email-metric"><span class="em-label">Debt-to-Income</span><span class="em-val">7.6% (Excellent)</span></div>
+          <button class="connect-btn" style="margin-top:16px;background:linear-gradient(90deg,#16a34a,#065f46)">🔍 Submit to lender network</button>
+          <div class="security-note" style="margin-top:8px">Soft inquiry only — does not affect credit score</div>
+        </div>
+      </div>
+      <div class="stagger">
+        <div style="font-size:.72rem;font-weight:800;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">4 live offers returned in 8 seconds</div>
+        <div class="lender-grid">
+          <div class="lender-card best">
+            <div class="lender-name">SBA 7(a) Program <span class="best-badge">Best Rate</span></div>
+            <div class="lender-amount">$100,000</div>
+            <div class="lender-terms">Up to 84 months · Fully amortised</div>
+            <div class="lender-rate"><span class="lender-pill">Rate <span>6.5%</span></span><span class="lender-pill">EMI <span>$1,487/mo</span></span></div>
+            <div class="lender-prob">72% approval probability</div>
+            <button class="apply-btn">Apply — pre-filled</button>
+          </div>
+          <div class="lender-card">
+            <div class="lender-name">Bluevine Business</div>
+            <div class="lender-amount">$80,000</div>
+            <div class="lender-terms">Up to 24 months</div>
+            <div class="lender-rate"><span class="lender-pill">Rate <span>7.9%</span></span><span class="lender-pill">EMI <span>$3,623/mo</span></span></div>
+            <div class="lender-prob" style="color:#60a5fa">Decision in 24 hrs</div>
+            <button class="apply-btn">Apply — pre-filled</button>
+          </div>
+          <div class="lender-card">
+            <div class="lender-name">Funding Circle</div>
+            <div class="lender-amount">$75,000</div>
+            <div class="lender-terms">Up to 36 months</div>
+            <div class="lender-rate"><span class="lender-pill">Rate <span>8.1%</span></span><span class="lender-pill">EMI <span>$2,354/mo</span></span></div>
+            <div class="lender-prob" style="color:#f59e0b">88% approval probability</div>
+            <button class="apply-btn">Apply — pre-filled</button>
+          </div>
+          <div class="lender-card">
+            <div class="lender-name">OnDeck Capital</div>
+            <div class="lender-amount">$65,000</div>
+            <div class="lender-terms">Up to 18 months</div>
+            <div class="lender-rate"><span class="lender-pill">Rate <span>9.4%</span></span><span class="lender-pill">EMI <span>$3,950/mo</span></span></div>
+            <div class="lender-prob" style="color:#4ade80">Same-day decision</div>
+            <button class="apply-btn">Apply — pre-filled</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 — SMART ALERTS
+══════════════════════════════════════════ -->
+<div class="slide slide-6" id="slide-6">
+  <div class="slide-inner">
+    <div class="two-col" style="align-items:center">
+      <div class="stagger">
+        <div class="tag">Phase 4 — Real-Time Monitoring</div>
+        <h1 class="slide-title">We watch the numbers<br/><span class="grad">so you don't have to.</span></h1>
+        <p class="slide-sub" style="margin-top:10px">FinWise monitors every key metric every night. The moment something changes — cash runway drops, loan eligibility shifts, a grant deadline approaches — you get an alert with exactly what to do.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:#94a3b8"><span style="color:#ef4444;font-size:1rem">🔴</span> Cash runway below 3 months — urgent action required</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:#94a3b8"><span style="color:#f59e0b;font-size:1rem">🟡</span> Loan eligibility improved — new offers available</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:#94a3b8"><span style="color:#22c55e;font-size:1rem">🟢</span> Grant deadline approaching — application closes in 7 days</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:#94a3b8"><span style="color:#60a5fa;font-size:1rem">🔵</span> Tax payment due in 14 days — estimated $3,240</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.84rem;color:#94a3b8"><span style="color:#a78bfa;font-size:1rem">🟣</span> Health score improved 8 points this month</div>
+        </div>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:14px;align-items:flex-end">
+        <!-- Phone mockup -->
+        <div style="background:#111827;border:2px solid #1e293b;border-radius:28px;padding:10px;width:260px">
+          <div style="background:#0f172a;border-radius:20px;overflow:hidden">
+            <div style="background:#1a1a1a;height:24px;display:flex;align-items:center;justify-content:center"><div style="width:60px;height:4px;background:#333;border-radius:999px"></div></div>
+            <div style="padding:12px">
+              <div style="font-size:.65rem;color:#475569;text-align:right;margin-bottom:8px">9:42 AM</div>
+              <div class="notif">
+                <div class="notif-hd">
+                  <div class="notif-icon">⚠️</div>
+                  <div>
+                    <div class="notif-app">FinWise</div>
+                  </div>
+                  <div class="notif-time">now</div>
+                </div>
+                <div class="notif-title">Cash runway alert</div>
+                <div class="notif-body">Riverside Bakery's runway dropped to 2.1 months — below your 3-month threshold. 4 loan options available now.</div>
+                <div class="notif-actions">
+                  <button class="notif-btn primary">View options</button>
+                  <button class="notif-btn secondary">Dismiss</button>
+                </div>
+              </div>
+              <div class="notif" style="margin-top:10px;border-color:#166534">
+                <div class="notif-hd">
+                  <div class="notif-icon" style="background:#14532d33;color:#4ade80">💰</div>
+                  <div><div class="notif-app">FinWise</div></div>
+                  <div class="notif-time">6h ago</div>
+                </div>
+                <div class="notif-title" style="color:#4ade80">New grant match found</div>
+                <div class="notif-body">USDA Rural Business Grant: up to $25,000. Deadline June 20. You match 8/9 criteria.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 — WEEKLY DIGEST
+══════════════════════════════════════════ -->
+<div class="slide slide-7" id="slide-7">
+  <div class="slide-inner">
+    <div class="two-col" style="align-items:start">
+      <div class="stagger">
+        <div class="tag">Phase 4 — Weekly Financial Digest</div>
+        <h1 class="slide-title">The email your business<br/><span class="grad">looks forward to.</span></h1>
+        <p class="slide-sub" style="margin-top:10px">Every Monday morning. Personalised from your real data. Your week at a glance — health score, what changed, what needs action. The email business owners forward to their accountants.</p>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
+          <div class="chip">📈 Week-over-week metrics comparison</div>
+          <div class="chip">🎯 Top 3 actions for the week ahead</div>
+          <div class="chip">📅 Upcoming deadlines — taxes, grants, renewals</div>
+          <div class="chip">💳 Loan eligibility change notifications</div>
+          <div class="chip">🏆 Monthly business health score report</div>
+        </div>
+      </div>
+      <div class="stagger">
+        <div class="email-mock">
+          <div class="email-hd">
+            <div class="email-from">finwise@yourplatform.com</div>
+            <div class="email-subject">Your Monday Brief — Riverside Bakery · June 3</div>
+          </div>
+          <div class="email-body">
+            <div class="email-greeting">Good morning, Sarah. Here's your week at a glance. Your health score improved 3 points. Two items need action before Friday.</div>
+            <div class="email-metric"><span class="em-label">Health Score</span><span class="em-val">67 / 100 <span class="em-delta delta-up">↑ 3 pts</span></span></div>
+            <div class="email-metric"><span class="em-label">Net Cash Flow</span><span class="em-val">$8,165 <span class="em-delta delta-up">↑ 8.7%</span></span></div>
+            <div class="email-metric"><span class="em-label">Cash Runway</span><span class="em-val">2.1 months <span class="em-delta delta-down">↓ 0.4</span></span></div>
+            <div class="email-metric"><span class="em-label">Loan Eligibility</span><span class="em-val">$100K max <span class="em-delta delta-up">↑ $15K</span></span></div>
+            <div style="margin-top:12px;padding:10px 12px;background:#78350f22;border:1px solid #92400e55;border-radius:8px;font-size:.78rem;color:#fb923c;line-height:1.6">
+              <strong>Action required:</strong> Cash runway at 2.1 months. Review loan options and cash flow plan before runway drops below 2 months.
+            </div>
+            <button class="email-cta">Open my FinWise Briefing →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 — ADVISOR COLLABORATION
+══════════════════════════════════════════ -->
+<div class="slide slide-8" id="slide-8">
+  <div class="slide-inner">
+    <div class="stagger">
+      <div class="tag">Phase 7 — Advisor Network</div>
+      <h1 class="slide-title">Your accountant sees<br/><span class="grad">exactly what you see.</span></h1>
+    </div>
+    <div class="two-col" style="margin-top:20px;align-items:start">
+      <div class="stagger">
+        <div class="mock">
+          <div class="mock-bar">
+            <div class="mock-dot" style="background:#ef4444"></div>
+            <div class="mock-dot" style="background:#f59e0b"></div>
+            <div class="mock-dot" style="background:#22c55e"></div>
+            <div class="mock-title">Shared with: David Kim (Accountant) · Read Only</div>
+          </div>
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div style="font-size:.88rem;font-weight:800;color:#e2e8f0">Riverside Bakery — Live Dashboard</div>
+              <div style="font-size:.7rem;background:#14532d22;color:#4ade80;padding:3px 10px;border-radius:999px;font-weight:700">● Live</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="background:#0f172a;border-radius:9px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:#f1f5f9">$8,165</div><div style="font-size:.65rem;color:#475569;margin-top:2px">Net Cash Flow</div></div>
+              <div style="background:#7f1d1d22;border:1px solid #7f1d1d44;border-radius:9px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:#ef4444">2.1mo</div><div style="font-size:.65rem;color:#475569;margin-top:2px">Cash Runway ⚠️</div></div>
+              <div style="background:#0f172a;border-radius:9px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:900;color:#f1f5f9">67</div><div style="font-size:.65rem;color:#475569;margin-top:2px">Health Score</div></div>
+            </div>
+            <!-- Comment thread -->
+            <div style="border-top:1px solid #1e293b;padding-top:12px">
+              <div style="font-size:.68rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Advisor Comments</div>
+              <div style="background:#0f172a;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:.78rem">
+                <div style="color:#6366f1;font-weight:700;font-size:.7rem;margin-bottom:3px">David Kim · Accountant · 2h ago</div>
+                <div style="color:#94a3b8;line-height:1.5">Sarah — the runway drop is real. I'd recommend drawing $50K from the SBA 7(a) now while you still qualify at 6.5%. I've modelled it in the loan tool and the EMI is comfortable at your current margins.</div>
+              </div>
+              <div style="background:#1e3a5f18;border:1px solid #1e3a5f55;border-radius:8px;padding:10px 12px;font-size:.78rem">
+                <div style="color:#4ade80;font-weight:700;font-size:.7rem;margin-bottom:3px">Sarah Chen · Owner · 1h ago</div>
+                <div style="color:#94a3b8;line-height:1.5">Makes sense — starting the SBA application today. The pre-fill from FinWise means the form is already 90% done.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:18px">
+          <div style="font-size:.72rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Who gets access</div>
+          <div class="box-item"><span style="color:#a78bfa">●</span> Accountant / CPA — read-only live dashboard</div>
+          <div class="box-item"><span style="color:#a78bfa">●</span> Financial advisor — can leave comments and recommendations</div>
+          <div class="box-item"><span style="color:#a78bfa">●</span> Bank relationship manager — sees qualified loan profile</div>
+          <div class="box-item"><span style="color:#a78bfa">●</span> Business partner — full co-owner access</div>
+        </div>
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:18px">
+          <div style="font-size:.72rem;font-weight:800;color:#f472b6;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">White-label for banks &amp; CDFIs</div>
+          <div style="font-size:.82rem;color:#64748b;line-height:1.7">Banks and credit unions can embed FinWise as their own SMB financial health tool — branded, integrated with their loan products, and generating qualified applications automatically. This is the B2B revenue layer.</div>
+        </div>
+        <div style="background:#1e3a5f18;border:1px solid #1e3a5f55;border-radius:10px;padding:12px 14px;font-size:.78rem;color:#60a5fa;line-height:1.6">
+          <strong>No more emailing spreadsheets.</strong> No more PDFs that are out of date the moment they're sent. Everyone sees the same live data.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 — CLOSING / ROADMAP
+══════════════════════════════════════════ -->
+<div class="slide slide-9" id="slide-9">
+  <div class="slide-inner">
+    <div class="two-col" style="align-items:start">
+      <div class="stagger">
+        <div class="tag">The Roadmap</div>
+        <h1 class="slide-title">Seven phases.<br/><span class="grad">One platform.</span></h1>
+        <p class="slide-sub" style="margin-top:8px">Built in order. No shortcuts. Each phase makes the next one possible.</p>
+        <div style="margin-top:20px">
+          <div class="roadmap-item"><div class="rm-num" style="background:#3b0764;color:#d946ef">1</div><div class="rm-content"><div class="rm-title">Backend API + Real Database <span class="rm-badge" style="background:#3b0764;color:#d946ef">Foundation</span></div><div class="rm-desc">Node.js API + Supabase tables. Everything else depends on this.</div></div></div>
+          <div class="roadmap-item"><div class="rm-num" style="background:#1e3a5f;color:#60a5fa">2</div><div class="rm-content"><div class="rm-title">Plaid Bank Connection <span class="rm-badge" style="background:#1e3a5f;color:#60a5fa">Data</span></div><div class="rm-desc">Real financial data. Manual entry eliminated permanently.</div></div></div>
+          <div class="roadmap-item"><div class="rm-num" style="background:#14532d;color:#4ade80">3</div><div class="rm-content"><div class="rm-title">Daily Health Engine <span class="rm-badge" style="background:#14532d;color:#4ade80">Intelligence</span></div><div class="rm-desc">Nightly analysis. Personalised briefing. The core differentiator.</div></div></div>
+          <div class="roadmap-item"><div class="rm-num" style="background:#431407;color:#fb923c">4</div><div class="rm-content"><div class="rm-title">Alerts + Weekly Digest <span class="rm-badge" style="background:#431407;color:#fb923c">Retention</span></div><div class="rm-desc">Email infrastructure. Real-time monitoring. Ongoing relationship.</div></div></div>
+          <div class="roadmap-item"><div class="rm-num" style="background:#0c4a6e;color:#38bdf8">5</div><div class="rm-content"><div class="rm-title">Live Lender Pre-Qualification <span class="rm-badge" style="background:#0c4a6e;color:#38bdf8">Revenue</span></div><div class="rm-desc">Lender API integrations. Referral commissions. Core monetisation.</div></div></div>
+          <div class="roadmap-item"><div class="rm-num" style="background:#1c1917;color:#a8a29e">6</div><div class="rm-content"><div class="rm-title">Mobile PWA</div><div class="rm-desc">Installable. Offline capable. Push notifications. Mobile-first.</div></div></div>
+          <div class="roadmap-item" style="margin-bottom:0"><div class="rm-num" style="background:#1a0830;color:#9d4edd">7</div><div class="rm-content"><div class="rm-title">Advisor Network + White-Label <span class="rm-badge" style="background:#1a0830;color:#9d4edd">B2B</span></div><div class="rm-desc">Accountant sharing. Bank and CDFI embed partnerships.</div></div></div>
+        </div>
+      </div>
+      <div class="stagger" style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:linear-gradient(135deg,#1e3a5f,#1e1b4b);border:1px solid rgba(99,102,241,.3);border-radius:16px;padding:24px;text-align:center">
+          <div style="font-size:2rem;margin-bottom:12px">🎯</div>
+          <div style="font-size:1rem;font-weight:900;color:#f1f5f9;margin-bottom:8px">The honest truth</div>
+          <div style="font-size:.84rem;color:#64748b;line-height:1.75">The current platform can get to a good product. But the best SMB financial platform in the world requires a backend, real bank data, and proactive intelligence that tells each owner exactly what to do next. Those three things separate tools from platforms.</div>
+        </div>
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:14px;padding:20px;text-align:center">
+          <div style="font-size:1.5rem;font-weight:900;color:#f1f5f9;margin-bottom:4px">33 million</div>
+          <div style="font-size:.82rem;color:#64748b;line-height:1.6">small businesses in America that deserve the same financial intelligence that Fortune 500 companies take for granted. That is the market. That is the mission.</div>
+        </div>
+        <div style="background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:12px;padding:20px;text-align:center">
+          <div style="font-size:.78rem;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">FinWise v2</div>
+          <div style="font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:4px">No excuses. No shortcuts.</div>
+          <div style="font-size:.82rem;color:rgba(255,255,255,.7)">The best for the businesses that need it most.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ══ CONTROLS ══ -->
+<div id="controls">
+  <div id="voBar">
+    <div id="voText">Press 🔊 to enable voice over narration</div>
+    <button id="voBtn" title="Toggle voice over">🔊</button>
+  </div>
+  <div id="navRow">
+    <button class="nav-arrow" id="prevBtn" onclick="changeSlide(-1)" disabled>←</button>
+    <div id="dots"></div>
+    <button class="nav-arrow" id="nextBtn" onclick="changeSlide(1)">→</button>
+  </div>
+</div>
+
+<script>
+const TOTAL = 9;
+let current = 0;
+let voEnabled = false;
+let speaking = false;
+
+/* ── Voice Over scripts ── */
+const VO = [
+  "Welcome. This is the FinWise version 2 product vision. Today, 33 million small businesses in America make critical financial decisions without the right data. FinWise is built to change that.",
+  "The biggest problem with financial tools today is that every calculation is built on guesswork. Business owners type in estimates. They guess their revenue. They guess their expenses. Every score, every recommendation — built on numbers that are probably wrong. Version 2 eliminates manual entry entirely.",
+  "With FinWise version 2, Sarah connects her Chase Business account once. In under 5 seconds, 847 real transactions are imported. Revenue, expenses, cash balance, recurring debt payments — all live, all accurate, auto-populated into every single tool on the platform. She never enters a number manually again.",
+  "Instead of a menu of 40 tools, Sarah opens FinWise and sees her Daily Business Briefing. Health score 67. Three priorities ranked by urgency. Cash runway at 2.1 months — that's a red flag. A loan window that's open right now. A tax payment in 14 days. No guessing which tool to open. The platform already knows what matters.",
+  "When Sarah needs a loan, she doesn't browse a directory. FinWise submits her verified bank-backed financial profile to a network of partnered lenders and returns 4 real pre-qualified offers in 8 seconds. SBA 7-a at 6.5%. Bluevine at 7.9%. Every application is pre-filled from her verified data. One click to apply.",
+  "FinWise monitors every key metric every night. The moment Sarah's cash runway drops below her 3-month threshold, she gets a push notification — not just the alert, but the exact action to take and the loan options available right now. She finds out before it becomes a crisis.",
+  "Every Monday morning, Sarah receives a personalised financial digest built from her real bank data. Health score. What changed this week. What needs action. Two items flagged before they become problems. This is the email business owners forward to their accountants.",
+  "With a single share link, Sarah's accountant David sees the same live dashboard. Real-time data. He leaves a comment recommending the SBA loan. Sarah acts on it the same day. No emailing spreadsheets. No out-of-date PDFs. Everyone working from the same live numbers.",
+  "Seven phases. One platform. Backend first. Then real bank data. Then daily intelligence. Then alerts and email. Then live lender matching. Then mobile. Then advisor partnerships. This is the roadmap — built in order, no shortcuts, no excuses. The best financial platform for the businesses that need it most."
+];
+
+/* ── Build dots ── */
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+/* ── Navigation ── */
+function goTo(n){
+  if(n<0||n>=TOTAL) return;
+  const slides=document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(()=>{ slides[current].classList.remove('exit'); },600);
+  current=n;
+  slides[current].classList.add('active');
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('progressBar').style.width=((current+1)/TOTAL*100)+'%';
+  document.getElementById('slideCounter').textContent=(current+1)+' / '+TOTAL;
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').disabled=current===TOTAL-1;
+  document.getElementById('voText').textContent=VO[current];
+  if(voEnabled) speak(VO[current]);
+  if(current===2) setTimeout(startBankAnim,800);
+}
+
+function changeSlide(dir){ goTo(current+dir); }
+
+/* ── Keyboard nav ── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') changeSlide(1);
+  if(e.key==='ArrowLeft') changeSlide(-1);
+});
+document.getElementById('deck').addEventListener('click',e=>{
+  if(!e.target.closest('button')&&!e.target.closest('input')) changeSlide(1);
+});
+
+/* ── Voice over ── */
+const voBtn=document.getElementById('voBtn');
+const voText=document.getElementById('voText');
+voBtn.onclick=function(e){
+  e.stopPropagation();
+  voEnabled=!voEnabled;
+  voBtn.classList.toggle('active',voEnabled);
+  if(voEnabled){ voText.textContent=VO[current]; speak(VO[current]); }
+  else{ window.speechSynthesis.cancel(); voText.style.color=''; speaking=false; voText.textContent=VO[current]; }
+};
+
+function speak(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.92; u.pitch=1.0; u.volume=1;
+  const voices=window.speechSynthesis.getVoices();
+  const pref=voices.find(v=>v.name.includes('Google')||v.name.includes('Samantha')||v.name.includes('Karen'));
+  if(pref) u.voice=pref;
+  u.onstart=()=>{ speaking=true; voText.classList.add('speaking'); };
+  u.onend=()=>{ speaking=false; voText.classList.remove('speaking'); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ── Slide 3 bank animation ── */
+let bankAnimDone=false;
+function startBankAnim(){
+  if(bankAnimDone) return;
+  bankAnimDone=true;
+}
+function runBankAnim(){
+  const items=[
+    {id:'fv1',val:'$24,347 / month'},
+    {id:'fv2',val:'$16,182 / month'},
+    {id:'fv3',val:'$18,000 avg balance'},
+    {id:'fv4',val:'$1,850 / month'},
+    {id:'fv5',val:'Supplies & Inventory (34%)'},
+    {id:'fv6',val:'2.1 months ⚠️'}
+  ];
+  items.forEach((item,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(item.id);
+      if(el){ el.classList.add('auto-filled'); el.value=item.val; }
+      if(i===items.length-1){
+        document.getElementById('connStatus').style.display='block';
+      }
+    },400+i*350);
+  });
+}
+
+/* Init voice list (Chrome lazy-loads) */
+window.speechSynthesis && window.speechSynthesis.getVoices();
+window.speechSynthesis && (window.onvoiceschanged=()=>window.speechSynthesis.getVoices());
+</script>
+</body>
+</html>

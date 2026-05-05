@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Debt Command Center — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#64748b;font-size:.88rem;margin-bottom:24px}
+
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:8px 18px;border:1.5px solid #e2e8f0;border-radius:7px;cursor:pointer;background:#fff;font-size:.85rem;font-weight:700;color:#475569;transition:all .15s;font-family:inherit}
+.tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.panel{display:none}
+.panel.active{display:block}
+
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border:1px solid #e2e8f0}
+.card h2{font-size:1rem;margin-bottom:6px;color:#1e293b;font-weight:800}
+.card .desc{font-size:.83rem;color:#64748b;margin-bottom:14px;line-height:1.5}
+
+/* Summary row */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:700px){.summary-row{grid-template-columns:1fr 1fr}}
+.sum-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0;text-align:center}
+.sum-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:6px}
+.sum-value{font-size:1.4rem;font-weight:900;line-height:1}
+.sum-sub{font-size:.72rem;color:#94a3b8;margin-top:4px}
+
+/* Per-loan cards */
+.loan-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.loan-cards-grid{grid-template-columns:1fr}}
+.loan-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0}
+.lc-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.lc-name{font-weight:800;font-size:.95rem;flex:1;line-height:1.3}
+.lc-type{font-size:.66rem;padding:3px 9px;border-radius:999px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0}
+.type-business{background:#eff6ff;color:#1d4ed8}
+.type-car{background:#f0fdf4;color:#166534}
+.type-personal{background:#fff7ed;color:#c2410c}
+.type-credit_card{background:#fdf4ff;color:#7e22ce}
+.type-equipment{background:#ecfdf5;color:#065f46}
+.type-loc{background:#fefce8;color:#854d0e}
+.type-mortgage{background:#f0f9ff;color:#0369a1}
+.type-other{background:#f8fafc;color:#475569}
+.lc-balance{font-size:1.2rem;font-weight:900;color:#dc2626;white-space:nowrap}
+.lc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.lc-stat-label{color:#94a3b8;font-size:.67rem;text-transform:uppercase;letter-spacing:.04em}
+.lc-stat-val{font-weight:700;font-size:.85rem;margin-top:1px}
+.progress-wrap{background:#f1f5f9;border-radius:999px;height:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;transition:width .5s}
+.progress-labels{display:flex;justify-content:space-between;font-size:.7rem;color:#94a3b8;margin-top:4px}
+
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+label{display:block;font-size:.82rem;color:#475569;margin-bottom:3px;margin-top:12px;font-weight:600}
+.hint{font-size:.73rem;color:#94a3b8;margin-top:2px}
+input[type=text],input[type=number],select{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.9rem;font-family:inherit;color:#1e293b;background:#fff}
+input:focus,select:focus{outline:none;border-color:#2563eb}
+
+/* Buttons */
+.btn-primary{padding:10px 24px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;margin-top:16px}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{padding:9px 20px;background:#f1f5f9;color:#475569;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:16px;margin-left:8px;transition:all .15s}
+.btn-secondary:hover{background:#e2e8f0}
+.btn-danger{padding:5px 12px;background:#fff;color:#dc2626;border:1px solid #fca5a5;border-radius:5px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-danger:hover{background:#fef2f2}
+.btn-edit{padding:5px 12px;background:#eff6ff;color:#2563eb;border:1px solid #93c5fd;border-radius:5px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;margin-right:4px}
+.btn-edit:hover{background:#dbeafe}
+
+/* Loans table */
+.loans-table-wrap{overflow-x:auto;margin-top:4px}
+.loans-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.loans-table th{background:#1e293b;color:#fff;padding:9px 12px;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.loans-table td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.loans-table tr:hover td{background:#f8fafc}
+.loans-table tr:last-child td{border-bottom:none}
+
+/* Strategy */
+.strat-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:580px){.strat-cards{grid-template-columns:1fr}}
+.strat-card{border-radius:10px;padding:18px;border:1px solid #e2e8f0}
+.strat-card.snowball{border-top:4px solid #3b82f6}
+.strat-card.avalanche{border-top:4px solid #22c55e}
+.strat-card h3{font-size:.92rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:800}
+.badge-snow{background:#eff6ff;color:#2563eb;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase}
+.badge-aval{background:#f0fdf4;color:#16a34a;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase}
+.strat-stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:.83rem}
+.strat-stat:last-child{border-bottom:none}
+.strat-stat .s-lbl{color:#64748b}
+.strat-stat .s-val{font-weight:800}
+.winner-banner{border-radius:8px;padding:14px 18px;margin-bottom:14px;background:#f0fdf4;border:2px solid #4ade80;color:#166534;font-size:.95rem;font-weight:700;line-height:1.5}
+.winner-banner span{display:block;font-weight:400;font-size:.83rem;color:#15803d;margin-top:4px}
+
+/* Schedule */
+.sched-wrap{overflow-x:auto}
+.sched-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.sched-table th{background:#f1f5f9;color:#475569;padding:7px 10px;text-align:right;border-bottom:2px solid #e2e8f0;white-space:nowrap;font-weight:700}
+.sched-table th:first-child{text-align:left}
+.sched-table td{padding:6px 10px;border-bottom:1px solid #f1f5f9;text-align:right}
+.sched-table td:first-child{text-align:left;font-weight:700}
+.done-cell{color:#16a34a;font-weight:800}
+
+/* Insights */
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:600px){.insight-grid{grid-template-columns:1fr}}
+.insight-card{border-radius:10px;padding:16px;border:1px solid #e2e8f0}
+.ins-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:6px}
+.ins-value{font-size:1.2rem;font-weight:900;margin-bottom:4px}
+.ins-desc{font-size:.78rem;color:#64748b;line-height:1.4}
+.ins-green{background:#f0fdf4;border-color:#bbf7d0}
+.ins-amber{background:#fffbeb;border-color:#fde68a}
+.ins-red{background:#fef2f2;border-color:#fca5a5}
+
+/* Connections strip */
+.conn-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.conn-pill{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-size:.8rem;font-weight:700;text-decoration:none;border:1.5px solid;transition:all .15s}
+.conn-pill:hover{filter:brightness(1.08)}
+.conn-loan-check{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}
+.conn-optimizer{background:#f0fdf4;border-color:#86efac;color:#166534}
+
+/* Empty state */
+.empty-state{text-align:center;padding:48px 24px;color:#94a3b8}
+.empty-state .es-icon{font-size:3rem;margin-bottom:12px}
+.empty-state p{font-size:.88rem;margin-bottom:16px;line-height:1.5}
+
+/* Alert boxes */
+.rec-box{background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:.88rem;line-height:1.5}
+.warn-box{background:#fef9c3;border-left:4px solid #f59e0b;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:.88rem;line-height:1.5}
+.danger-box{background:#fee2e2;border-left:4px solid #dc2626;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:.88rem;line-height:1.5}
+.success-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:.88rem;line-height:1.5}
+
+/* Toast */
+.toast{display:none;position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.toast.show{display:block}
+
+/* Glossary */
+.glossary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.glossary{grid-template-columns:1fr}}
+.gl-item{background:#f8fafc;border-radius:8px;padding:12px 14px;border:1px solid #e2e8f0}
+.gl-term{font-size:.8rem;font-weight:800;color:#1e293b;margin-bottom:3px}
+.gl-def{font-size:.76rem;color:#64748b;line-height:1.4}
+
+.c-green{color:#16a34a}
+.c-amber{color:#d97706}
+.c-red{color:#dc2626}
+.c-blue{color:#2563eb}
+
+/* Debt-free chip */
+.dff-chip{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:12px 20px;border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:14px;font-weight:700;box-shadow:0 2px 10px rgba(37,99,235,.25)}
+.dff-chip .dff-icon{font-size:2rem;flex-shrink:0}
+.dff-chip .dff-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;opacity:.8;margin-bottom:3px}
+.dff-chip .dff-date{font-size:1.15rem;line-height:1}
+.dff-chip .dff-days{font-size:.78rem;opacity:.85;margin-top:3px}
+
+/* Strategy toggle */
+.strat-toggle{display:flex;gap:6px;margin-bottom:16px}
+.strat-btn{padding:7px 18px;border:1.5px solid #e2e8f0;border-radius:7px;cursor:pointer;background:#fff;font-size:.85rem;font-weight:700;color:#475569;font-family:inherit;transition:all .15s}
+.strat-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
+
+/* Action buttons */
+.btn-cal-sync{padding:9px 18px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-cal-sync:hover{background:#f5f3ff}
+.btn-print{padding:9px 18px;background:#fff;color:#475569;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-print:hover{background:#f8fafc}
+
+/* Big celebration toast */
+.toast-big{display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;padding:18px 32px;border-radius:16px;font-size:1.05rem;font-weight:700;z-index:9999;box-shadow:0 8px 32px rgba(22,163,74,.4);text-align:center;min-width:300px;line-height:1.5}
+.toast-big.show{display:block;animation:slideIn .4s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* Print header */
+.print-hdr{display:none;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #1e293b}
+.print-hdr h2{font-size:1.1rem;margin-bottom:4px}
+.print-hdr p{font-size:.8rem;color:#475569}
+
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+
+@media print{
+  body{background:#fff;padding:16px}
+  .tabs,.tab,.conn-strip,.btn-primary,.btn-secondary,.btn-danger,.btn-edit,.btn-cal-sync,.btn-print,.toast,.toast-big,.dff-chip,nav,[class*="sidebar"]{display:none!important}
+  .print-hdr{display:block!important}
+  .panel{display:block!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div class="print-hdr">
+  <h2>Debt Command Center &mdash; Payoff Summary</h2>
+  <p>Generated: <span id="printDate"></span> &bull; FinWise SmallBiz Platform</p>
+</div>
+
+<h1>&#128184; Debt Command Center</h1>
+<p class="subtitle">FinWise &middot; All your loans in one place &mdash; track balances, compare payoff strategies, and eliminate debt faster.</p>
+
+<div class="dff-chip" id="dff-chip" style="display:none">
+  <div class="dff-icon">&#127942;</div>
+  <div>
+    <div class="dff-label">Projected Debt-Free Date (Avalanche at Minimums)</div>
+    <div class="dff-date" id="dff-date">—</div>
+    <div class="dff-days" id="dff-days"></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('dashboard',this)">&#128202; Dashboard</button>
+  <button class="tab" onclick="showTab('loans',this)">&#128179; My Loans</button>
+  <button class="tab" onclick="showTab('strategy',this)">&#127942; Payoff Strategy</button>
+  <button class="tab" onclick="showTab('insights',this)">&#128161; Insights</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 1: DASHBOARD
+═══════════════════════════════════════════════════════ -->
+<div id="tab-dashboard" class="panel active">
+  <div id="dashboard-content"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 2: MY LOANS
+═══════════════════════════════════════════════════════ -->
+<div id="tab-loans" class="panel">
+
+  <div class="card" id="add-loan-card">
+    <h2>&#43; Add a Loan</h2>
+    <p class="desc">Enter each loan you currently owe. This builds your shared <strong>fw_loans</strong> profile used by the Repayment Optimizer and Loan Safety Score tools automatically.</p>
+    <div class="form-grid">
+      <div>
+        <label>Loan Name *</label>
+        <input type="text" id="ln-name" placeholder="e.g. SBA Business Loan"/>
+      </div>
+      <div>
+        <label>Loan Type</label>
+        <select id="ln-type">
+          <option value="business">Business Loan</option>
+          <option value="car">Car / Vehicle</option>
+          <option value="personal">Personal Loan</option>
+          <option value="equipment">Equipment Financing</option>
+          <option value="credit_card">Credit Card</option>
+          <option value="loc">Line of Credit</option>
+          <option value="mortgage">Mortgage / Real Estate</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Current Balance ($) *</label>
+        <input type="number" id="ln-balance" placeholder="e.g. 32000" min="0"/>
+        <p class="hint">What you still owe today</p>
+      </div>
+      <div>
+        <label>Original Balance ($)</label>
+        <input type="number" id="ln-orig-balance" placeholder="e.g. 40000" min="0"/>
+        <p class="hint">What you originally borrowed — used for the payoff progress bar</p>
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="ln-rate" placeholder="e.g. 12" min="0" max="100" step="0.1"/>
+        <p class="hint">Find this on your loan statement or lender portal</p>
+      </div>
+      <div>
+        <label>Minimum Monthly Payment ($)</label>
+        <input type="number" id="ln-minpay" placeholder="e.g. 700" min="0"/>
+        <p class="hint">The minimum you must pay each month to stay current</p>
+      </div>
+      <div>
+        <label>Lender / Bank <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
+        <input type="text" id="ln-lender" placeholder="e.g. Chase Bank"/>
+      </div>
+      <div>
+        <label>Notes <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
+        <input type="text" id="ln-notes" placeholder="e.g. Balloon payment in month 36"/>
+      </div>
+    </div>
+    <input type="hidden" id="ln-edit-id" value=""/>
+    <button class="btn-primary" onclick="saveLoan()">&#128190; Save Loan</button>
+    <button class="btn-secondary" id="cancel-edit-btn" style="display:none" onclick="cancelEdit()">Cancel Edit</button>
+  </div>
+
+  <div class="card" id="loans-list-card">
+    <h2>Saved Loans</h2>
+    <p class="desc" style="margin-bottom:10px">These loans are shared with the Repayment Optimizer and Loan Safety Score tools.</p>
+    <div id="loans-list-body"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 3: PAYOFF STRATEGY
+═══════════════════════════════════════════════════════ -->
+<div id="tab-strategy" class="panel">
+  <div class="card">
+    <h2>&#127942; Snowball vs Avalanche — Which Strategy Wins for You?</h2>
+    <p class="desc">
+      <strong>Debt Snowball</strong> — pay off your smallest balance first. Fast wins, great for motivation.<br>
+      <strong>Debt Avalanche</strong> — pay off your highest interest rate first. Saves the most money overall.<br>
+      This runs both strategies on your saved loans and tells you exactly which one wins — and by how much.
+    </p>
+    <div style="max-width:300px">
+      <label>Extra Monthly Payment Beyond Minimums ($)</label>
+      <input type="number" id="strat-extra" value="200" min="0" placeholder="e.g. 200"/>
+      <p class="hint">Even $50–$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
+    </div>
+    <button class="btn-primary" onclick="runStrategy()">&#9654; Calculate Best Payoff Strategy</button>
+  </div>
+  <div id="strategy-results"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 4: INSIGHTS
+═══════════════════════════════════════════════════════ -->
+<div id="tab-insights" class="panel">
+  <div id="insights-content"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<div class="toast-big" id="toast-big"></div>
+
+<script src="fw-amortize.js"></script>
+<script>
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+// ════════════════════════════════════════════════════════════════
+// SHARED fw_loans STORE
+// Schema: [{id, name, type, balance, originalBalance, rate, minPay, lender, notes, addedDate}]
+// ════════════════════════════════════════════════════════════════
+var LS_KEY = 'fw_loans';
+
+function loadLoans() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e) { return []; }
+}
+function saveLoans(loans) {
+  localStorage.setItem(LS_KEY, JSON.stringify(loans));
+}
+
+// ── Loan type display labels ─────────────────────────────────────
+var TYPE_LABEL = {
+  business:'Business', car:'Car/Vehicle', personal:'Personal',
+  equipment:'Equipment', credit_card:'Credit Card', loc:'Line of Credit',
+  mortgage:'Mortgage', other:'Other'
+};
+
+// ── Tab navigation ───────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id === 'dashboard') renderDashboard();
+  if(id === 'insights')  renderInsights();
+  if(id === 'loans')     renderLoansList();
+  if(id === 'strategy')  {
+    var loans = loadLoans();
+    if(loans.length === 0) {
+      document.getElementById('strategy-results').innerHTML =
+        '<div class="warn-box">&#128184; No loans found. Go to the <strong>My Loans</strong> tab to add your loans, then come back here.</div>';
+    }
+  }
+}
+
+function goToTab(id) {
+  var tabs = document.querySelectorAll('.tab');
+  var idx = id==='dashboard'?0:id==='loans'?1:id==='strategy'?2:3;
+  showTab(id, tabs[idx]);
+}
+
+// ── Formatting helpers ───────────────────────────────────────────
+function fmt(n) {
+  return '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
+}
+function fmtMonths(m) {
+  var yr = Math.floor(m/12), mo = m%12;
+  if(yr===0) return mo+' mo';
+  if(mo===0) return yr+' yr';
+  return yr+'yr '+mo+'mo';
+}
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.innerHTML = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB 1: DASHBOARD
+// ════════════════════════════════════════════════════════════════
+function renderDashboard() {
+  var loans = loadLoans();
+  var el = document.getElementById('dashboard-content');
+
+  if(loans.length === 0) {
+    el.innerHTML =
+      '<div class="conn-strip">' +
+        '<a href="loanDecisionScoreEngine.test.html" class="conn-pill conn-loan-check">&#127974; Loan Safety Score</a>' +
+        '<a href="loanRepaymentOptimizer.test.html"  class="conn-pill conn-optimizer">&#10054; Repayment Optimizer</a>' +
+      '</div>' +
+      '<div class="card"><div class="empty-state">' +
+        '<div class="es-icon">&#128184;</div>' +
+        '<p>No loans saved yet.<br>Add your first loan in the <strong>My Loans</strong> tab to see your debt dashboard.</p>' +
+        '<button class="btn-primary" style="margin-top:0" onclick="goToTab(\'loans\')">+ Add Your First Loan</button>' +
+      '</div></div>';
+    return;
+  }
+
+  // Summary metrics
+  var totalDebt    = loans.reduce(function(s,l){ return s + l.balance; }, 0);
+  var totalMinPay  = loans.reduce(function(s,l){ return s + l.minPay; }, 0);
+  var weightedRate = loans.reduce(function(s,l){ return s + (l.rate * l.balance); }, 0) / (totalDebt || 1);
+  var estMonths    = estimatePayoffMonths(loans, 0);
+
+  var summaryHtml =
+    '<div class="summary-row">' +
+      sumCard(fmt(totalDebt),         'Total Debt',         loans.length+' loan'+(loans.length>1?'s':'')) +
+      sumCard(fmt(totalMinPay)+'/mo', 'Monthly Minimums',   'required payments') +
+      sumCard(weightedRate.toFixed(1)+'%', 'Avg Interest Rate', 'weighted by balance') +
+      sumCard(fmtMonths(estMonths),   'Payoff Estimate',    'at minimums only') +
+    '</div>';
+
+  // Per-loan cards
+  var loansHtml = '<div class="card"><h2>Loan Breakdown</h2><div class="loan-cards-grid">';
+  loans.forEach(function(l) {
+    var origBal  = l.originalBalance && l.originalBalance >= l.balance ? l.originalBalance : l.balance;
+    var paidPct  = origBal > l.balance ? Math.round((1 - l.balance/origBal)*100) : 0;
+    var barColor = l.rate > 15 ? '#dc2626' : l.rate > 8 ? '#d97706' : '#16a34a';
+    var monthsLeft = estimatePayoffMonths([l], 0);
+    loansHtml +=
+      '<div class="loan-card">' +
+        '<div class="lc-header">' +
+          '<div>' +
+            '<div class="lc-name">'+escHtml(l.name)+'</div>' +
+            (l.lender ? '<div style="font-size:.73rem;color:#94a3b8;margin-top:2px">'+escHtml(l.lender)+'</div>' : '') +
+          '</div>' +
+          '<span class="lc-type type-'+(l.type||'other')+'">'+(TYPE_LABEL[l.type]||'Other')+'</span>' +
+        '</div>' +
+        '<div style="font-size:1.35rem;font-weight:900;color:#dc2626;margin-bottom:10px">'+fmt(l.balance)+'</div>' +
+        '<div class="lc-stats">' +
+          '<div><div class="lc-stat-label">Rate</div><div class="lc-stat-val" style="color:'+barColor+'">'+l.rate+'% p.a.</div></div>' +
+          '<div><div class="lc-stat-label">Min/mo</div><div class="lc-stat-val">'+fmt(l.minPay)+'</div></div>' +
+          '<div><div class="lc-stat-label">Payoff</div><div class="lc-stat-val">'+fmtMonths(monthsLeft)+'</div></div>' +
+        '</div>' +
+        '<div class="progress-wrap"><div class="progress-fill" style="width:'+paidPct+'%;background:'+barColor+'"></div></div>' +
+        '<div class="progress-labels"><span>'+paidPct+'% paid off</span><span>'+fmt(l.balance)+' remaining</span></div>' +
+        (l.notes ? '<div style="font-size:.73rem;color:#94a3b8;margin-top:6px;font-style:italic">'+escHtml(l.notes)+'</div>' : '') +
+      '</div>';
+  });
+  loansHtml += '</div></div>';
+
+  // Debt composition bar
+  var stackHtml = '';
+  if(loans.length > 1) {
+    var COLORS = ['#2563eb','#16a34a','#d97706','#7c3aed','#dc2626','#0891b2'];
+    stackHtml = '<div class="card"><h2>Debt Composition</h2>' +
+      '<div style="display:flex;height:20px;border-radius:999px;overflow:hidden;margin-bottom:10px">';
+    loans.forEach(function(l, i) {
+      var pct = totalDebt > 0 ? (l.balance/totalDebt*100).toFixed(1) : 0;
+      stackHtml += '<div title="'+escHtml(l.name)+': '+pct+'%" style="width:'+pct+'%;background:'+COLORS[i%COLORS.length]+';height:100%"></div>';
+    });
+    stackHtml += '</div><div style="display:flex;flex-wrap:wrap;gap:8px 16px;">';
+    loans.forEach(function(l, i) {
+      var pct = totalDebt > 0 ? (l.balance/totalDebt*100).toFixed(0) : 0;
+      stackHtml += '<div style="display:flex;align-items:center;gap:5px;font-size:.78rem">'+
+        '<div style="width:10px;height:10px;border-radius:50%;background:'+COLORS[i%COLORS.length]+';flex-shrink:0"></div>'+
+        escHtml(l.name)+' &mdash; '+pct+'%</div>';
+    });
+    stackHtml += '</div></div>';
+  }
+
+  // Connections
+  var connHtml =
+    '<div class="conn-strip">' +
+      '<a href="loanDecisionScoreEngine.test.html" class="conn-pill conn-loan-check">&#127974; Check Loan Safety</a>' +
+      '<a href="loanRepaymentOptimizer.test.html"  class="conn-pill conn-optimizer">&#10054; Repayment Optimizer</a>' +
+    '</div>';
+
+  el.innerHTML = connHtml + summaryHtml + loansHtml + stackHtml;
+}
+
+function sumCard(value, label, sub) {
+  return '<div class="sum-card"><div class="sum-label">'+label+'</div><div class="sum-value">'+value+'</div><div class="sum-sub">'+sub+'</div></div>';
+}
+
+// ── Estimate payoff months (avalanche) ──────────────────────────
+function estimatePayoffMonths(loans, extra) {
+  if(!loans || loans.length === 0) return 0;
+  return fwSimulateFull(loans, extra, function(a,b){ return b.rate - a.rate; }).months;
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB 2: MY LOANS
+// ════════════════════════════════════════════════════════════════
+function renderLoansList() {
+  var loans = loadLoans();
+  var el = document.getElementById('loans-list-body');
+  if(loans.length === 0) {
+    el.innerHTML = '<p style="color:#94a3b8;font-size:.88rem;padding:8px 0">No loans added yet. Use the form above to add your first loan.</p>';
+    return;
+  }
+  var html = '<div class="loans-table-wrap"><table class="loans-table">' +
+    '<thead><tr><th>Name</th><th>Type</th><th>Balance</th><th>Rate</th><th>Min Pay/mo</th><th>Lender</th><th>Actions</th></tr></thead><tbody>';
+  loans.forEach(function(l) {
+    html += '<tr>' +
+      '<td><strong>'+escHtml(l.name)+'</strong>'+(l.notes?'<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+escHtml(l.notes)+'</div>':'')+'</td>' +
+      '<td><span class="lc-type type-'+(l.type||'other')+'">'+(TYPE_LABEL[l.type||'other']||'Other')+'</span></td>' +
+      '<td>'+fmt(l.balance)+'</td>' +
+      '<td>'+l.rate+'%</td>' +
+      '<td>'+fmt(l.minPay)+'</td>' +
+      '<td>'+escHtml(l.lender||'—')+'</td>' +
+      '<td style="white-space:nowrap">' +
+        '<button class="btn-edit"   onclick="editLoan(\''+l.id+'\')">Edit</button>' +
+        '<button class="btn-danger" onclick="deleteLoan(\''+l.id+'\')">Delete</button>' +
+        '<button style="padding:5px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #86efac;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;margin-left:4px" onclick="markLoanPaid(\''+l.id+'\')">&#10003; Mark Paid</button>' +
+      '</td>' +
+    '</tr>';
+  });
+  html += '</tbody></table></div>';
+  // Total row
+  var totalBal = loans.reduce(function(s,l){ return s+l.balance; },0);
+  var totalPay = loans.reduce(function(s,l){ return s+l.minPay; },0);
+  html += '<div style="margin-top:10px;font-size:.83rem;color:#475569;display:flex;gap:20px">' +
+    '<span><strong>Total Balance:</strong> '+fmt(totalBal)+'</span>' +
+    '<span><strong>Total Monthly Min:</strong> '+fmt(totalPay)+'/mo</span>' +
+    '</div>';
+  el.innerHTML = html;
+}
+
+function saveLoan() {
+  var name       = document.getElementById('ln-name').value.trim();
+  var type       = document.getElementById('ln-type').value;
+  var balance    = parseFloat(document.getElementById('ln-balance').value)      || 0;
+  var origBal    = parseFloat(document.getElementById('ln-orig-balance').value) || 0;
+  var rate       = parseFloat(document.getElementById('ln-rate').value)         || 0;
+  var minPay     = parseFloat(document.getElementById('ln-minpay').value)       || 0;
+  var lender     = document.getElementById('ln-lender').value.trim();
+  var notes      = document.getElementById('ln-notes').value.trim();
+  var editId     = document.getElementById('ln-edit-id').value;
+
+  if(!name)    { document.getElementById('ln-name').style.borderColor='#dc2626';    document.getElementById('ln-name').focus();    return; }
+  if(!balance) { document.getElementById('ln-balance').style.borderColor='#dc2626'; document.getElementById('ln-balance').focus(); return; }
+
+  var loans = loadLoans();
+  if(editId) {
+    var idx = -1;
+    loans.forEach(function(l,i){ if(l.id===editId) idx=i; });
+    if(idx >= 0) {
+      loans[idx] = {
+        id: editId, name: name, type: type,
+        balance: balance,
+        originalBalance: origBal || loans[idx].originalBalance || balance,
+        rate: rate, minPay: minPay, lender: lender, notes: notes,
+        addedDate: loans[idx].addedDate
+      };
+    }
+    document.getElementById('ln-edit-id').value = '';
+    document.getElementById('cancel-edit-btn').style.display = 'none';
+    showToast('&#10003; Loan updated');
+  } else {
+    loans.push({
+      id: 'loan_'+Date.now(),
+      name: name, type: type,
+      balance: balance,
+      originalBalance: origBal || balance,
+      rate: rate, minPay: minPay,
+      lender: lender, notes: notes,
+      addedDate: new Date().toISOString().split('T')[0]
+    });
+    showToast('&#10003; Loan saved to Debt Center');
+  }
+  saveLoans(loans);
+  clearLoanForm();
+  renderLoansList();
+  renderDebtFreeChip();
+  // Reset border colors
+  document.getElementById('ln-name').style.borderColor    = '';
+  document.getElementById('ln-balance').style.borderColor = '';
+}
+
+function editLoan(id) {
+  var loans = loadLoans();
+  var l = null;
+  loans.forEach(function(x){ if(x.id===id) l=x; });
+  if(!l) return;
+  document.getElementById('ln-name').value         = l.name;
+  document.getElementById('ln-type').value         = l.type||'business';
+  document.getElementById('ln-balance').value      = l.balance;
+  document.getElementById('ln-orig-balance').value = l.originalBalance||'';
+  document.getElementById('ln-rate').value         = l.rate;
+  document.getElementById('ln-minpay').value       = l.minPay;
+  document.getElementById('ln-lender').value       = l.lender||'';
+  document.getElementById('ln-notes').value        = l.notes||'';
+  document.getElementById('ln-edit-id').value      = id;
+  document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+  document.getElementById('add-loan-card').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteLoan(id) {
+  if(!confirm('Delete this loan from Debt Center?')) return;
+  var loans = loadLoans().filter(function(l){ return l.id !== id; });
+  saveLoans(loans);
+  renderLoansList();
+  renderDebtFreeChip();
+  showToast('Loan removed');
+}
+
+function cancelEdit() {
+  document.getElementById('ln-edit-id').value = '';
+  document.getElementById('cancel-edit-btn').style.display = 'none';
+  clearLoanForm();
+}
+
+function clearLoanForm() {
+  ['ln-name','ln-balance','ln-orig-balance','ln-rate','ln-minpay','ln-lender','ln-notes'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('ln-type').value = 'business';
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB 3: PAYOFF STRATEGY
+// ════════════════════════════════════════════════════════════════
+function runStrategy() {
+  var loans = loadLoans().filter(function(l){ return l.balance > 0; });
+  if(loans.length === 0) {
+    document.getElementById('strategy-results').innerHTML =
+      '<div class="warn-box">No loans found. Go to <strong>My Loans</strong> and add your loans first.</div>';
+    return;
+  }
+  if(loans.every(function(l){ return l.minPay <= 0; })) {
+    document.getElementById('strategy-results').innerHTML =
+      '<div class="warn-box">Please enter a minimum monthly payment for each loan so the simulator can run.</div>';
+    return;
+  }
+  var extra = parseFloat(document.getElementById('strat-extra').value) || 0;
+  var snow  = simulateFull(loans, extra, function(a,b){ return a.balance - b.balance; });
+  var aval  = simulateFull(loans, extra, function(a,b){ return b.rate - a.rate; });
+  renderStrategy(snow, aval);
+}
+
+function simulateFull(loans, extra, sortFn) {
+  return fwSimulateFull(loans, extra, sortFn);
+}
+
+function renderStrategy(snow, aval) {
+  var avSaves  = snow.totalInterest - aval.totalInterest;
+  var avFaster = snow.months - aval.months;
+  var winner   = avSaves >= 0 ? 'avalanche' : 'snowball';
+
+  var winHtml = '';
+  if(avSaves === 0 && avFaster === 0) {
+    winHtml = '<div class="winner-banner">Both strategies are identical for your loan mix. Either approach works perfectly!<span>This happens when loan priorities align in both sort orders.</span></div>';
+  } else if(winner === 'avalanche') {
+    winHtml = '<div class="winner-banner">&#9650; Avalanche Strategy wins!' +
+      (avSaves>0?' Saves <strong>'+fmt(avSaves)+'</strong> in interest.':'') +
+      (avFaster>0?' <strong>'+avFaster+' months faster.</strong>':'') +
+      '<span>Pay your highest-interest loan first to minimize total cost.</span></div>';
+  } else {
+    var ss=-avSaves, sf=-avFaster;
+    winHtml = '<div class="winner-banner">&#10052; Snowball Strategy wins!' +
+      (ss>0?' Saves <strong>'+fmt(ss)+'</strong> in interest.':'') +
+      (sf>0?' <strong>'+sf+' months faster.</strong>':'') +
+      '<span>Knock out your smallest balance first for quick psychological wins and momentum.</span></div>';
+  }
+
+  var stratHtml =
+    '<div class="card"><div class="strat-cards">' +
+      buildStratCard('snowball', snow, '&#10052;', 'Debt Snowball', 'Smallest Balance First', '#2563eb', 'badge-snow') +
+      buildStratCard('avalanche', aval, '&#9650;', 'Debt Avalanche', 'Highest Rate First', '#16a34a', 'badge-aval') +
+    '</div></div>';
+
+  var winData = winner === 'avalanche' ? aval : snow;
+  var schedHtml = buildScheduleTable(winData, winner==='avalanche'?'Avalanche':'Snowball');
+  var calHtml   = buildPayoffCalendar(snow, aval);
+  var actHtml   =
+    '<div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">' +
+      '<button class="btn-print" onclick="exportPDF()">&#128438; Print / Save PDF</button>' +
+      '<button class="btn-cal-sync" onclick="syncToCalendar()">&#128197; Sync Loan Payments to Cash Flow Calendar</button>' +
+    '</div>';
+
+  document.getElementById('strategy-results').innerHTML = winHtml + stratHtml + schedHtml + calHtml + actHtml;
+}
+
+function buildStratCard(type, r, icon, title, badge, color, badgeCls) {
+  var orderHtml = r.payoffOrder.map(function(p, i) {
+    return '<div style="font-size:.82rem;color:#475569;padding:4px 0;display:flex;align-items:center;gap:7px">' +
+      '<span style="background:#e2e8f0;color:#475569;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0">'+(i+1)+'</span>' +
+      escHtml(p.name)+'<span style="color:#94a3b8;font-size:.75rem">&mdash; mo '+p.month+'</span></div>';
+  }).join('');
+  return '<div class="strat-card '+type+'">' +
+    '<h3 style="color:'+color+'">'+icon+' '+title+' <span class="'+badgeCls+'">'+badge+'</span></h3>' +
+    '<div class="strat-stat"><span class="s-lbl">Debt-Free In</span><span class="s-val" style="color:'+color+'">'+fmtMonths(r.months)+'</span></div>' +
+    '<div class="strat-stat"><span class="s-lbl">Total Interest Paid</span><span class="s-val" style="color:'+color+'">'+fmt(r.totalInterest)+'</span></div>' +
+    '<div class="strat-stat"><span class="s-lbl">Loans Paid Off</span><span class="s-val">'+r.payoffOrder.length+'</span></div>' +
+    '<div style="margin-top:10px"><div style="font-size:.72rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Payoff Order</div>'+orderHtml+'</div>' +
+  '</div>';
+}
+
+function buildScheduleTable(r, stratName) {
+  var months = Math.min(12, r.monthlyData.length);
+  if(months === 0) return '';
+  var names = r.monthlyData[0].map(function(l){ return l.name; });
+  var html = '<div class="card"><h2>12-Month Balance Schedule &mdash; '+stratName+' Strategy</h2>' +
+    '<div class="sched-wrap"><table class="sched-table"><thead><tr><th>Month</th>';
+  names.forEach(function(n){ html += '<th>'+escHtml(n)+'</th>'; });
+  html += '</tr></thead><tbody>';
+  for(var m=0; m<months; m++) {
+    html += '<tr><td>Month '+(m+1)+'</td>';
+    r.monthlyData[m].forEach(function(l){
+      html += l.paidOff ? '<td class="done-cell">&#10003; Done</td>' : '<td>'+fmt(l.balance)+'</td>';
+    });
+    html += '</tr>';
+  }
+  html += '</tbody></table></div><p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Balances shown at end of each month after all payments. Freed minimums are cascaded to the next priority loan.</p></div>';
+  return html;
+}
+
+function buildPayoffCalendar(snow, aval) {
+  var names = {};
+  snow.payoffOrder.forEach(function(p){ names[p.name]=true; });
+  aval.payoffOrder.forEach(function(p){ names[p.name]=true; });
+  var snowMap={}, avalMap={};
+  snow.payoffOrder.forEach(function(p){ snowMap[p.name]=p.month; });
+  aval.payoffOrder.forEach(function(p){ avalMap[p.name]=p.month; });
+  function moDate(m) {
+    var d = new Date(); d.setDate(1); d.setMonth(d.getMonth()+m);
+    return d.toLocaleString('en-US',{month:'short',year:'numeric'});
+  }
+  var sorted = Object.keys(names).sort(function(a,b){ return (avalMap[a]||9999)-(avalMap[b]||9999); });
+  var html = '<div class="card"><h2>Payoff Calendar</h2>' +
+    '<p class="desc" style="margin-bottom:10px">Exact month-year each loan is paid off — both strategies side by side.</p>' +
+    '<div style="overflow-x:auto"><table class="sched-table">' +
+    '<thead><tr><th>Loan</th><th>&#10052; Snowball Payoff</th><th>&#9650; Avalanche Payoff</th><th>Months Away</th></tr></thead><tbody>';
+  sorted.forEach(function(name) {
+    var sm=snowMap[name], am=avalMap[name];
+    var moAway = am || sm || 0;
+    html += '<tr>' +
+      '<td><strong>'+escHtml(name)+'</strong></td>' +
+      '<td>'+(sm?'<span style="background:#eff6ff;color:#2563eb;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:700">'+moDate(sm)+' &mdash; mo '+sm+'</span>':'&mdash;')+'</td>' +
+      '<td>'+(am?'<span style="background:#f0fdf4;color:#16a34a;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:700">'+moDate(am)+' &mdash; mo '+am+'</span>':'&mdash;')+'</td>' +
+      '<td style="color:#64748b;font-weight:700">'+moAway+' mo</td>' +
+    '</tr>';
+  });
+  html += '</tbody></table></div></div>';
+  return html;
+}
+
+// ════════════════════════════════════════════════════════════════
+// TAB 4: INSIGHTS
+// ════════════════════════════════════════════════════════════════
+function renderInsights() {
+  var loans = loadLoans();
+  var el = document.getElementById('insights-content');
+  if(loans.length === 0) {
+    el.innerHTML = '<div class="card"><div class="empty-state"><div class="es-icon">&#128161;</div><p>Add your loans in the <strong>My Loans</strong> tab to unlock debt insights.</p></div></div>';
+    return;
+  }
+
+  var totalDebt   = loans.reduce(function(s,l){ return s+l.balance; }, 0);
+  var totalMinPay = loans.reduce(function(s,l){ return s+l.minPay;  }, 0);
+  var prof = {};
+  try{ prof = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  var monthlyRev = prof.rev || 0;
+
+  // Debt burden ratio
+  var burden = monthlyRev > 0 ? (totalMinPay / monthlyRev * 100) : null;
+  var burdenClass = burden===null ? '' : (burden<30?'ins-green':burden<50?'ins-amber':'ins-red');
+  var burdenDesc  = burden===null ?
+    'Set your monthly revenue in Profile (top toolbar) to see your debt burden ratio.' :
+    'Your loan payments are <strong>'+burden.toFixed(0)+'%</strong> of monthly revenue. '+
+    (burden<30?'Healthy — well within the 30% safe zone.':burden<50?'Elevated. Aim to get below 30% by accelerating payoff.':'High. Prioritize debt reduction before taking on any new debt.');
+
+  // Highest rate loan
+  var sortedByRate  = loans.slice().sort(function(a,b){ return b.rate - a.rate; });
+  var highRateLoan  = sortedByRate[0];
+  var sortedByBal   = loans.slice().sort(function(a,b){ return a.balance - b.balance; });
+  var quickWinLoan  = sortedByBal[0];
+
+  // Interest projections
+  var totalInterestMin    = simulateFull(loans, 0,   function(a,b){ return b.rate-a.rate; }).totalInterest;
+  var totalInterest200    = simulateFull(loans, 200, function(a,b){ return b.rate-a.rate; }).totalInterest;
+  var monthsSaved200      = estimatePayoffMonths(loans, 0) - estimatePayoffMonths(loans, 200);
+  var interestSaved200    = totalInterestMin - totalInterest200;
+
+  var insGrid =
+    '<div class="insight-grid">' +
+      '<div class="insight-card '+burdenClass+'">' +
+        '<div class="ins-label">Monthly Debt Burden</div>' +
+        '<div class="ins-value">'+(burden!==null?burden.toFixed(0)+'%':'No Profile Set')+'</div>' +
+        '<div class="ins-desc">'+burdenDesc+'</div>' +
+      '</div>' +
+      '<div class="insight-card '+(highRateLoan.rate>15?'ins-red':highRateLoan.rate>8?'ins-amber':'ins-green')+'">' +
+        '<div class="ins-label">Highest-Cost Loan</div>' +
+        '<div class="ins-value c-red">'+escHtml(highRateLoan.name)+'</div>' +
+        '<div class="ins-desc"><strong>'+highRateLoan.rate+'% annual rate</strong> on '+fmt(highRateLoan.balance)+' balance. This loan costs you the most in interest. The Avalanche strategy targets this first.</div>' +
+      '</div>' +
+      '<div class="insight-card ins-green">' +
+        '<div class="ins-label">Quickest Win (Smallest Balance)</div>' +
+        '<div class="ins-value c-green">'+escHtml(quickWinLoan.name)+'</div>' +
+        '<div class="ins-desc"><strong>'+fmt(quickWinLoan.balance)+' remaining</strong>. Paying this off first frees up '+fmt(quickWinLoan.minPay)+'/mo that cascades to your next loan (Snowball method).</div>' +
+      '</div>' +
+      '<div class="insight-card '+(interestSaved200>500?'ins-green':'')+'">'+
+        '<div class="ins-label">Save by Adding $200/mo Extra</div>' +
+        '<div class="ins-value c-green">'+fmt(interestSaved200)+'</div>' +
+        '<div class="ins-desc">Total interest drops from <strong>'+fmt(totalInterestMin)+'</strong> to <strong>'+fmt(totalInterest200)+'</strong>. You\'d also be debt-free <strong>'+monthsSaved200+' months sooner.</strong></div>' +
+      '</div>' +
+    '</div>';
+
+  // Per-loan interest cost
+  var costHtml = '<div class="card"><h2>Total Interest Remaining per Loan</h2>' +
+    '<p class="desc">How much each loan will cost you in interest if you only pay the minimums from now on.</p>';
+  loans.forEach(function(l) {
+    if(l.minPay <= 0) return;
+    var lInt = simulateFull([l], 0, function(a,b){ return 0; }).totalInterest;
+    var color = l.rate > 15 ? '#dc2626' : l.rate > 8 ? '#d97706' : '#16a34a';
+    var totalBack = l.balance + lInt;
+    var interestExplain = '';
+    if(lInt > l.balance * 0.3){
+      interestExplain = explainHtml([
+        'This is how much extra you pay the bank on top of the principal borrowed',
+        'High interest loans cost more in interest than the original loan amount if tenure is long',
+        'Prepayment or refinancing can dramatically reduce this number'
+      ], 'You borrowed '+fmt(l.balance)+' but will pay back '+fmt(totalBack)+' total → '+fmt(lInt)+' in interest alone. That\'s '+Math.round(lInt/l.balance*100)+'% extra cost');
+    }
+    costHtml += '<div style="margin-bottom:10px">' +
+      '<div style="display:flex;align-items:center;gap:12px">' +
+        '<div style="flex:1"><div style="font-weight:700;font-size:.88rem">'+escHtml(l.name)+'</div>' +
+        '<div style="font-size:.75rem;color:#94a3b8">'+l.rate+'% rate &bull; '+fmt(l.balance)+' balance</div></div>' +
+        '<div style="font-size:1.1rem;font-weight:900;color:'+color+'">'+fmt(lInt)+' interest</div>' +
+      '</div>' +
+      interestExplain +
+    '</div>';
+  });
+  costHtml += '</div>';
+
+  // Debt-free date insight
+  var estMonths = estimatePayoffMonths(loans, 0);
+  var debtFreeExplain = '';
+  if(estMonths > 36){
+    var estYears = (estMonths/12).toFixed(1);
+    var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + estMonths);
+    var debtFreeYear = d.getFullYear();
+    debtFreeExplain = explainHtml([
+      'Being in debt for this long limits your ability to invest in growth',
+      'Future loan applications will be harder with existing long-term debt',
+      'Even $100–$200 extra per month can cut years off this timeline'
+    ], 'At current minimums, you\'ll be debt-free around '+debtFreeYear+' (in ~'+estYears+' years). Adding $200/mo extra saves '+fmt(interestSaved200)+' in interest and cuts '+monthsSaved200+' months off your payoff timeline');
+  }
+
+  // Recommendations
+  var recs = '<div class="card"><h2>Recommendations</h2>';
+  if(highRateLoan.rate > 20) {
+    recs += '<div class="danger-box">&#128308; <strong>'+escHtml(highRateLoan.name)+'</strong> is at '+highRateLoan.rate+'%. Consider refinancing or making aggressive extra payments on this loan before any other financial goals.</div>';
+  } else if(highRateLoan.rate > 10) {
+    recs += '<div class="warn-box">&#9888;&#65039; Your highest rate is '+highRateLoan.rate+'% ('+escHtml(highRateLoan.name)+'). Use the Avalanche strategy to minimize total interest paid.</div>';
+  } else {
+    recs += '<div class="success-box">&#9989; Your loan rates are reasonable. Stay consistent with minimums and apply any extra cash to the smallest balance to build momentum.</div>';
+  }
+  if(burden !== null && burden > 40) {
+    recs += '<div class="danger-box">&#128202; Loan payments are consuming '+burden.toFixed(0)+'% of your monthly revenue. Most lenders want this below 30%. Avoid new debt until you pay down existing balances. Use the <a href="loanDecisionScoreEngine.test.html">Loan Safety Score</a> before any new application.</div>';
+  }
+  recs += '<div class="rec-box">&#128161; <strong>The $+200/mo rule:</strong> Even a modest extra $200/month saves you '+fmt(interestSaved200)+' in interest and eliminates debt '+monthsSaved200+' months faster. Use the Payoff Strategy tab to model your exact numbers.'+debtFreeExplain+'</div>';
+  recs += '</div>';
+
+  // Plain-English glossary
+  var glossaryHtml = '<div class="card"><h2>&#128216; Debt Terms — Plain English</h2><p class="desc">No jargon, just what these terms actually mean for your business.</p><div class="glossary">' +
+    '<div class="gl-item"><div class="gl-term">Debt Snowball</div><div class="gl-def">Pay off your smallest loan first, then roll that freed-up payment into the next smallest. Quick wins boost motivation. Example: Clear a $3,000 credit card, then add that $80/mo minimum to your car loan.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Avalanche</div><div class="gl-def">Pay off your highest-interest loan first regardless of balance. Mathematically optimal — saves the most money. Best if you can stay disciplined even without quick wins.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Minimum Payment</div><div class="gl-def">The smallest amount you must pay to avoid a late fee or default. Paying only the minimum means most of your payment goes to interest, not the balance.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Interest Rate (APR)</div><div class="gl-def">The annual cost of borrowing expressed as a percentage. A 12% APR means a $10,000 loan costs ~$1,200 in interest per year if the balance stays the same.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Burden Ratio</div><div class="gl-def">Your monthly loan payments as a percentage of monthly revenue. Below 30% = healthy. 30–50% = elevated. Above 50% = high risk. Lenders check this when you apply for new credit.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Freed Minimum Cascade</div><div class="gl-def">When you pay off a loan, its monthly payment doesn\'t disappear — it gets redirected to the next loan. This snowball effect accelerates payoff on all remaining loans.</div></div>' +
+  '</div></div>';
+
+  el.innerHTML = '<div class="card"><h2>&#128161; Debt Insights</h2>' + insGrid + '</div>' + costHtml + recs + glossaryHtml;
+}
+
+// ════════════════════════════════════════════════════════════════
+// DEBT-FREE CHIP
+// ════════════════════════════════════════════════════════════════
+function renderDebtFreeChip() {
+  var loans = loadLoans().filter(function(l){ return l.balance > 0 && l.minPay > 0; });
+  var chip = document.getElementById('dff-chip');
+  if(!chip) return;
+  if(loans.length === 0) { chip.style.display = 'none'; return; }
+  var months = estimatePayoffMonths(loans, 0);
+  if(months <= 0 || months >= 600) { chip.style.display = 'none'; return; }
+  var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + months);
+  var dateStr = d.toLocaleString('en-US', {month:'long', year:'numeric'});
+  chip.style.display = 'flex';
+  document.getElementById('dff-date').textContent = dateStr;
+  document.getElementById('dff-days').textContent = 'In approximately ' + fmtMonths(months) + ' — keep going!';
+}
+
+// ════════════════════════════════════════════════════════════════
+// CALENDAR SYNC
+// ════════════════════════════════════════════════════════════════
+function syncToCalendar() {
+  var loans = loadLoans();
+  if(loans.length === 0) { showToast('No loans to sync'); return; }
+  var bills = [];
+  try { bills = JSON.parse(localStorage.getItem('fw_bills') || '[]'); } catch(e) {}
+  bills = bills.filter(function(b){ return !b._dcc; });
+  loans.forEach(function(l) {
+    bills.push({
+      id: 'dcc_' + l.id,
+      name: l.name + ' — loan payment',
+      amount: l.minPay,
+      dueDay: 1,
+      recurring: true,
+      category: 'debt',
+      _dcc: true
+    });
+  });
+  localStorage.setItem('fw_bills', JSON.stringify(bills));
+  showToast('&#128197; ' + loans.length + ' loan payment' + (loans.length > 1 ? 's' : '') + ' synced to Cash Flow Calendar');
+}
+
+// ════════════════════════════════════════════════════════════════
+// MARK LOAN PAID (with interest-saved celebration)
+// ════════════════════════════════════════════════════════════════
+function markLoanPaid(id) {
+  var loans = loadLoans();
+  var loan = null;
+  loans.forEach(function(l){ if(l.id === id) loan = l; });
+  if(!loan) return;
+  if(!confirm('Mark "' + loan.name + '" as fully paid off?\nThis removes it from your loan list.')) return;
+  var beforeInt = fwSimulateFull(loans, 0, function(a,b){ return b.rate-a.rate; }).totalInterest;
+  var remaining = loans.filter(function(l){ return l.id !== id; });
+  var afterInt  = remaining.length > 0 ? fwSimulateFull(remaining, 0, function(a,b){ return b.rate-a.rate; }).totalInterest : 0;
+  var intSaved  = Math.max(0, beforeInt - afterInt);
+  saveLoans(remaining);
+  renderLoansList();
+  renderDashboard();
+  renderDebtFreeChip();
+  var tb = document.getElementById('toast-big');
+  tb.innerHTML = '&#127881; "' + escHtml(loan.name) + '" is PAID OFF!<br>' +
+    '<span style="font-size:.85rem;opacity:.9">You saved approximately ' + fmt(intSaved) + ' in interest &#127881;</span>';
+  tb.classList.add('show');
+  setTimeout(function(){ tb.classList.remove('show'); }, 4500);
+}
+
+// ════════════════════════════════════════════════════════════════
+// EXPORT PDF
+// ════════════════════════════════════════════════════════════════
+function exportPDF() {
+  document.getElementById('printDate').textContent =
+    new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  window.print();
+}
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+(function init(){
+  renderDashboard();
+  renderLoansList();
+  renderDebtFreeChip();
+
+  // Pre-fill from fw_profile if available
+  var prof = {};
+  try{ prof = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  if(prof.emi && loadLoans().length === 0) {
+    var tip = document.createElement('div');
+    tip.className = 'rec-box';
+    tip.style.marginBottom = '12px';
+    tip.innerHTML = '&#128161; <strong>Tip:</strong> Your profile shows an existing loan EMI of $'+prof.emi+'/mo. Go to <strong>My Loans</strong> to enter those loans individually for a full payoff analysis.';
+    var lc = document.getElementById('dashboard-content');
+    if(lc) lc.insertAdjacentHTML('beforeend', tip.outerHTML);
+  }
+})();
+</script>
+</body>
+</html>

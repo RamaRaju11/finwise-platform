@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recommendation Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+    .panel { display: none; } .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 6px; color: #444; }
+    .desc { font-size: 0.83rem; color: #666; margin-bottom: 14px; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number], input[type=text], select { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:5px; font-size:0.9rem; }
+    input:focus, select:focus { outline:none; border-color:#7c3aed; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+    .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 16px; }
+
+    button.primary { margin-top:14px; padding:10px 24px; background:#7c3aed; color:#fff; border:none; border-radius:6px; font-size:0.9rem; cursor:pointer; }
+    button.primary:hover { background:#6d28d9; }
+    button.add-btn { padding:7px 16px; background:#7c3aed; color:#fff; border:none; border-radius:5px; font-size:0.83rem; cursor:pointer; }
+    button.del-btn { padding:5px 10px; background:#dc2626; color:#fff; border:none; border-radius:4px; font-size:0.78rem; cursor:pointer; }
+
+    hr { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
+    .section-title { font-size:0.75rem; font-weight:bold; text-transform:uppercase; color:#94a3b8; margin:14px 0 6px; letter-spacing:0.05em; }
+
+    /* Recommendation card */
+    .rec-card { border-radius:8px; padding:16px 18px; margin-bottom:12px; border:1px solid #e2e8f0; }
+    .rec-card.priority-high   { border-left:5px solid #dc2626; background:#fff8f8; }
+    .rec-card.priority-medium { border-left:5px solid #d97706; background:#fffbeb; }
+    .rec-card.priority-low    { border-left:5px solid #16a34a; background:#f0fdf4; }
+
+    .rec-header { display:flex; align-items:flex-start; gap:12px; margin-bottom:10px; }
+    .rec-icon   { font-size:1.5rem; flex-shrink:0; margin-top:2px; }
+    .rec-title  { font-weight:bold; font-size:0.98rem; }
+    .rec-type   { font-size:0.75rem; color:#64748b; margin-top:2px; text-transform:uppercase; letter-spacing:0.04em; }
+
+    .priority-badge { display:inline-block; padding:2px 10px; border-radius:99px; font-size:0.75rem; font-weight:bold; margin-left:8px; }
+    .badge-high   { background:#fee2e2; color:#991b1b; }
+    .badge-medium { background:#fef9c3; color:#92400e; }
+    .badge-low    { background:#dcfce7; color:#15803d; }
+
+    .rec-reason { font-size:0.85rem; color:#555; margin-bottom:8px; }
+    .rec-action { font-size:0.88rem; background:#f8fafc; border-radius:5px; padding:8px 12px; border-left:3px solid #7c3aed; margin-bottom:8px; }
+    .rec-action strong { color:#7c3aed; }
+
+    .rec-metrics { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .rec-metric  { background:#fff; border:1px solid #e2e8f0; border-radius:5px; padding:5px 10px; font-size:0.8rem; }
+    .rec-metric span { font-weight:bold; color:#2563eb; }
+
+    .conditions { margin-top:8px; }
+    .condition-item { font-size:0.82rem; color:#555; padding:3px 0 3px 16px; position:relative; }
+    .condition-item::before { content:"→"; position:absolute; left:0; color:#7c3aed; }
+
+    /* Summary bar */
+    .summary-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+    .sb-item { background:#fff; border-radius:6px; padding:12px; border:1px solid #e2e8f0; text-align:center; }
+    .sb-label { font-size:0.72rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
+    .sb-val   { font-size:1.2rem; font-weight:bold; margin-top:4px; }
+    .c-purple { color:#7c3aed; } .c-green { color:#16a34a; }
+    .c-red    { color:#dc2626; } .c-amber { color:#d97706; }
+
+    /* Risk badge */
+    .risk-badge { display:inline-block; padding:2px 10px; border-radius:99px; font-weight:bold; font-size:0.82rem; }
+    .risk-Low      { background:#dcfce7; color:#15803d; }
+    .risk-Moderate { background:#fef9c3; color:#92400e; }
+    .risk-High     { background:#fed7aa; color:#9a3412; }
+    .risk-Critical { background:#fee2e2; color:#991b1b; }
+
+    /* Loan rows */
+    .loan-row { display:grid; grid-template-columns:2fr 1.5fr 1fr 1fr auto; gap:8px; align-items:end; margin-bottom:8px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0; }
+
+    /* Decision badge */
+    .decision-proceed { background:#dcfce7; color:#15803d; border-radius:6px; padding:10px 14px; margin-bottom:10px; font-weight:bold; }
+    .decision-caution  { background:#fef9c3; color:#92400e; border-radius:6px; padding:10px 14px; margin-bottom:10px; font-weight:bold; }
+    .decision-delay    { background:#fee2e2; color:#991b1b; border-radius:6px; padding:10px 14px; margin-bottom:10px; font-weight:bold; }
+
+    /* Unit tests */
+    .test-result { font-family:monospace; font-size:0.88rem; padding:4px 0; }
+    .test-result.pass { color:#15803d; } .test-result.fail { color:#dc2626; font-weight:bold; }
+    .test-summary { margin-top:12px; font-weight:bold; font-size:0.95rem; padding:10px; border-radius:6px; }
+    .test-summary.all-pass { background:#dcfce7; color:#15803d; }
+    .test-summary.has-fail  { background:#fee2e2; color:#dc2626; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Recommendation Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Prepayment · Tenure Change · Loan Decision · Full Report</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('full')">Full Report</button>
+  <button class="tab" onclick="showTab('prepay')">Prepayment</button>
+  <button class="tab" onclick="showTab('tenure')">Tenure Change</button>
+  <button class="tab" onclick="showTab('decision')">Loan Decision</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Full Report Panel ──────────────────────────────────────────────── -->
+<div id="panel-full" class="panel active">
+  <div class="card">
+    <h2>Full Recommendation Report</h2>
+    <p class="desc">Enter your complete financial picture to get prioritised recommendations across all areas.</p>
+
+    <div class="section-title">Business Financials</div>
+    <div class="grid2">
+      <div><label>Gross Monthly Income ($)</label><input type="number" id="f-income" value="150000" /></div>
+      <div><label>Operating Expenses ($/mo) <span class="hint">excl. debt</span></label><input type="number" id="f-opex" value="60000" min="0" /></div>
+      <div><label>Monthly Cash Surplus ($/mo) <span class="hint">after all expenses + EMIs</span></label><input type="number" id="f-surplus" value="15000" /></div>
+      <div><label>Lump Sum Available for Prepayment ($)</label><input type="number" id="f-lump" value="100000" min="0" /></div>
+    </div>
+
+    <hr/>
+    <div class="section-title">Active Loans</div>
+    <div style="display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr auto;gap:8px;margin-bottom:4px;">
+      <label>Name</label><label>Principal ($)</label><label>Rate (%)</label><label>Tenure (mo)</label><label></label>
+    </div>
+    <div id="f-loan-rows"></div>
+    <button class="add-btn" onclick="addFullLoanRow()" style="margin-top:6px;">+ Add Loan</button>
+
+    <hr/>
+    <div class="section-title">New Loan Being Considered <span class="hint">(optional)</span></div>
+    <div class="grid3">
+      <div><label>Name</label><input type="text" id="f-new-name" value="Expansion Loan" /></div>
+      <div><label>Principal ($)</label><input type="number" id="f-new-principal" value="500000" min="0" /></div>
+      <div><label>Rate (%)</label><input type="number" id="f-new-rate" value="12" step="0.1" min="0" /></div>
+      <div><label>Tenure (months)</label><input type="number" id="f-new-tenure" value="48" min="1" /></div>
+    </div>
+    <label style="margin-top:10px;"><input type="checkbox" id="f-include-new" checked style="width:auto;margin-right:6px;" /> Include new loan in analysis</label>
+
+    <button class="primary" onclick="calcFull()">Generate Recommendations</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="full-result"></div>
+</div>
+
+<!-- ─── Prepayment Panel ───────────────────────────────────────────────── -->
+<div id="panel-prepay" class="panel">
+  <div class="card">
+    <h2>Prepayment Recommendation</h2>
+    <p class="desc">Which loan should you prepay first? How much interest will you save?</p>
+    <div style="display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr auto;gap:8px;margin-bottom:4px;">
+      <label>Name</label><label>Principal ($)</label><label>Rate (%)</label><label>Tenure (mo)</label><label></label>
+    </div>
+    <div id="pp-loan-rows"></div>
+    <button class="add-btn" onclick="addPPLoanRow()" style="margin-top:6px;">+ Add Loan</button>
+    <div class="grid2" style="margin-top:4px;">
+      <div><label>Monthly Surplus Available ($)</label><input type="number" id="pp-surplus" value="15000" min="0" /></div>
+      <div><label>Lump Sum Available ($)</label><input type="number" id="pp-lump" value="100000" min="0" /></div>
+    </div>
+    <button class="primary" onclick="calcPrepay()">Get Recommendation</button>
+  </div>
+  <div id="prepay-result"></div>
+</div>
+
+<!-- ─── Tenure Change Panel ───────────────────────────────────────────── -->
+<div id="panel-tenure" class="panel">
+  <div class="card">
+    <h2>Tenure Change Recommendation</h2>
+    <p class="desc">What tenure change achieves your target EMI?</p>
+    <div class="grid2">
+      <div><label>Loan Name</label><input type="text" id="tc-name" value="Business Loan" /></div>
+      <div><label>Principal ($)</label><input type="number" id="tc-principal" value="1000000" min="1" /></div>
+      <div><label>Annual Rate (%)</label><input type="number" id="tc-rate" value="10" min="0" step="0.1" /></div>
+      <div><label>Current Tenure (months)</label><input type="number" id="tc-tenure" value="60" min="1" /></div>
+      <div><label>Target Monthly EMI ($)</label><input type="number" id="tc-target" value="15000" min="1" /></div>
+      <div>
+        <label>Direction</label>
+        <select id="tc-dir">
+          <option value="auto">Auto (based on target EMI)</option>
+          <option value="extend">Extend tenure</option>
+          <option value="shorten">Shorten tenure</option>
+        </select>
+      </div>
+    </div>
+    <button class="primary" onclick="calcTenure()">Get Recommendation</button>
+  </div>
+  <div id="tenure-result"></div>
+</div>
+
+<!-- ─── Loan Decision Panel ───────────────────────────────────────────── -->
+<div id="panel-decision" class="panel">
+  <div class="card">
+    <h2>Should I Take This Loan?</h2>
+    <p class="desc">Based on current risk metrics, get a clear proceed / caution / delay decision.</p>
+    <div class="grid2">
+      <div><label>Current DSCR</label><input type="number" id="ld-dscr" value="1.4" step="0.01" /></div>
+      <div><label>Current DTI (%)</label><input type="number" id="ld-dti" value="28" step="0.1" /></div>
+      <div>
+        <label>Risk Level</label>
+        <select id="ld-risk">
+          <option value="Low">Low</option>
+          <option value="Moderate" selected>Moderate</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
+      </div>
+      <div><label>Safe EMI Capacity ($/mo)</label><input type="number" id="ld-safe" value="20000" min="0" /></div>
+      <div><label>Desired Loan EMI ($/mo)</label><input type="number" id="ld-desired" value="15000" min="1" /></div>
+      <div><label>Monthly Cash Surplus ($)</label><input type="number" id="ld-surplus" value="25000" /></div>
+    </div>
+    <button class="primary" onclick="calcDecision()">Get Decision</button>
+  </div>
+  <div id="decision-result"></div>
+</div>
+
+<!-- ─── Unit Tests ─────────────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Module 7: Recommendation Engine ──────────────────────────────────────
+
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function _calcEMI(principal, annualRate, tenureMonths) {
+  const r = annualRate / 12 / 100;
+  if (r === 0) return _r(principal / tenureMonths);
+  const f = Math.pow(1 + r, tenureMonths);
+  return _r((principal * r * f) / (f - 1));
+}
+function _totalInterest(principal, annualRate, tenureMonths) {
+  return _r(_calcEMI(principal, annualRate, tenureMonths) * tenureMonths - principal);
+}
+
+function recommendPrepayment(loans, availableSurplus, lumpSum = 0) {
+  if (!Array.isArray(loans) || loans.length === 0) throw new Error("loans must be non-empty.");
+  if (availableSurplus < 0) throw new Error("availableSurplus cannot be negative.");
+  const enriched = loans.map(l => ({ ...l, emi: _calcEMI(l.principal, l.annualRate, l.tenureMonths), totalInterest: _totalInterest(l.principal, l.annualRate, l.tenureMonths) }));
+  const sorted = [...enriched].sort((a, b) => b.annualRate !== a.annualRate ? b.annualRate - a.annualRate : b.principal - a.principal);
+  const target = sorted[0];
+  const prepayAmount = _r(lumpSum + availableSurplus);
+  let interestSaved = 0, monthsSaved = 0, newTenure = target.tenureMonths;
+  if (prepayAmount > 0 && prepayAmount < target.principal) {
+    const newPrincipal = _r(target.principal - prepayAmount);
+    interestSaved = _r(target.totalInterest - _totalInterest(newPrincipal, target.annualRate, target.tenureMonths));
+    const r = target.annualRate / 12 / 100;
+    if (r > 0) {
+      newTenure = Math.ceil(-Math.log(1 - (newPrincipal * r) / target.emi) / Math.log(1 + r));
+      monthsSaved = target.tenureMonths - newTenure;
+    }
+  } else if (prepayAmount >= target.principal) {
+    interestSaved = target.totalInterest; monthsSaved = target.tenureMonths; newTenure = 0;
+  }
+  const priority = prepayAmount <= 0 ? "low" : target.annualRate >= 14 ? "high" : target.annualRate >= 10 ? "medium" : "low";
+  return {
+    type: "prepayment", priority,
+    title: `Prepay "${target.name}" (highest rate at ${target.annualRate}%)`,
+    reason: "Highest-rate loan costs the most in interest. Avalanche method minimises total interest paid.",
+    action: prepayAmount > 0 ? `Apply $${prepayAmount.toLocaleString()} to "${target.name}".` : "Build a cash surplus first.",
+    targetLoan: target.name, prepayAmount, interestSaved, monthsSaved, newTenure,
+    allLoansSorted: sorted.map(l => ({ name: l.name, rate: l.annualRate, emi: l.emi, totalInterest: l.totalInterest })),
+  };
+}
+
+function recommendTenureChange(loan, targetEMI, direction = "auto") {
+  const { name, principal, annualRate, tenureMonths } = loan;
+  if (!name) throw new Error("loan must have a name.");
+  if (principal <= 0) throw new Error("principal must be > 0.");
+  if (targetEMI <= 0) throw new Error("targetEMI must be > 0.");
+  const currentEMI = _calcEMI(principal, annualRate, tenureMonths);
+  const r = annualRate / 12 / 100;
+  let newTenure;
+  if (r === 0) { newTenure = Math.round(principal / targetEMI); }
+  else {
+    const ratio = (principal * r) / targetEMI;
+    newTenure = ratio >= 1 ? tenureMonths * 3 : Math.ceil(-Math.log(1 - ratio) / Math.log(1 + r));
+  }
+  const actualDir = direction === "auto" ? (targetEMI < currentEMI ? "extend" : "shorten") : direction;
+  const interestDelta = _r(_totalInterest(principal, annualRate, newTenure) - _totalInterest(principal, annualRate, tenureMonths));
+  const emiDelta = _r(targetEMI - currentEMI);
+  return {
+    type: "tenure-change",
+    priority: Math.abs(emiDelta) / currentEMI > 0.2 ? "high" : "medium",
+    title: `${actualDir === "extend" ? "Extend" : "Shorten"} tenure on "${name}"`,
+    reason: actualDir === "extend" ? "Extending tenure reduces monthly EMI, improving cash flow." : "Shortening tenure saves interest and clears debt faster.",
+    action: `Change tenure from ${tenureMonths} months to ${newTenure} months to achieve EMI of $${targetEMI.toLocaleString()}.`,
+    loan: name, currentEMI, targetEMI: _r(targetEMI), emiDelta,
+    currentTenure: tenureMonths, newTenure, tenureDelta: newTenure - tenureMonths,
+    interestDelta, direction: actualDir,
+  };
+}
+
+function recommendLoanDecision({ dscr, dti, riskLevel, safeEMI, desiredEMI, cashSurplus = 0 }) {
+  if (typeof dscr !== "number") throw new Error("dscr must be a number.");
+  if (typeof dti !== "number") throw new Error("dti must be a number.");
+  const canAfford = desiredEMI <= safeEMI;
+  const headroom  = _r(safeEMI - desiredEMI);
+  const overrun   = canAfford ? 0 : _r(desiredEMI - safeEMI);
+  let decision, priority, title, reason, action, conditions;
+  if (riskLevel === "Critical" || dscr < 1.0) {
+    decision="delay"; priority="high"; title="Delay — current risk is Critical";
+    reason=`DSCR of ${dscr.toFixed(2)} — business cannot currently service existing debt.`;
+    action="Stabilise existing finances before taking on new debt.";
+    conditions=["DSCR must reach ≥ 1.25","Risk level must improve to Moderate or Low"];
+  } else if (riskLevel === "High" || !canAfford) {
+    decision="delay"; priority="high";
+    title=canAfford?"Delay — risk level is High":"Delay — EMI exceeds safe capacity";
+    reason=canAfford?`Risk level is High. More debt now increases default probability.`:`Desired EMI ($${desiredEMI.toLocaleString()}) exceeds safe capacity ($${safeEMI.toLocaleString()}) by $${overrun.toLocaleString()}.`;
+    action=canAfford?"Wait until risk level drops to Moderate before proceeding.":`Reduce loan amount or extend tenure to bring EMI within $${safeEMI.toLocaleString()}/mo.`;
+    conditions=canAfford?["Bring risk level to Moderate","Maintain DSCR ≥ 1.25 for 3 months"]:[`Reduce desired EMI by $${overrun.toLocaleString()}`,"Or increase net cash flow"];
+  } else if (riskLevel === "Moderate" || (dscr >= 1.0 && dscr < 1.25)) {
+    decision="caution"; priority="medium"; title="Proceed with caution";
+    reason=`Business can afford this loan but headroom is limited ($${headroom.toLocaleString()}/mo).`;
+    action="Negotiate lower rate or longer tenure to reduce EMI and preserve buffer.";
+    conditions=["Ensure 3-month cash reserve before signing","Monitor DSCR monthly"];
+  } else {
+    decision="proceed"; priority="low"; title="Proceed — business is in good shape";
+    reason=`DSCR ${dscr.toFixed(2)}, DTI ${dti.toFixed(1)}%, $${headroom.toLocaleString()}/mo headroom — manageable.`;
+    action="Proceed. Negotiate best available rate to maximise savings.";
+    conditions=[];
+  }
+  return { type:"loan-decision", priority, decision, title, reason, action, conditions, metrics:{ dscr, dti, riskLevel, safeEMI, desiredEMI, headroom, overrun, cashSurplus } };
+}
+
+function generateRecommendations({ loans, grossMonthlyIncome, monthlyOperatingExpenses, monthlyCashSurplus, lumpSumAvailable=0, newLoan=null, safeRatio=0.4 }) {
+  if (!Array.isArray(loans) || loans.length === 0) throw new Error("loans must be non-empty.");
+  if (grossMonthlyIncome <= 0) throw new Error("grossMonthlyIncome must be > 0.");
+  const totalEMI    = _r(loans.reduce((s,l)=>s+_calcEMI(l.principal,l.annualRate,l.tenureMonths),0));
+  const netOpIncome = _r(grossMonthlyIncome - monthlyOperatingExpenses);
+  const dscr        = totalEMI > 0 ? _r(netOpIncome / totalEMI) : null;
+  const dti         = _r((totalEMI / grossMonthlyIncome) * 100);
+  const safeEMI     = _r(Math.max(0, grossMonthlyIncome * safeRatio - totalEMI));
+  const dscrStatus  = dscr === null ? "no-debt" : dscr >= 1.5 ? "strong" : dscr >= 1.25 ? "adequate" : dscr >= 1.0 ? "caution" : "danger";
+  const dtiStatus   = dti < 20 ? "excellent" : dti < 35 ? "good" : dti < 50 ? "moderate" : "high-risk";
+  let riskScore     = ({strong:0,adequate:15,caution:30,danger:50,"no-debt":0}[dscrStatus]??0) + ({excellent:0,good:10,moderate:30,"high-risk":50}[dtiStatus]??0);
+  const riskLevel   = riskScore<=10?"Low":riskScore<=30?"Moderate":riskScore<=55?"High":"Critical";
+  const recs = [];
+  if (monthlyCashSurplus > 0 || lumpSumAvailable > 0 || riskLevel==="High" || riskLevel==="Critical")
+    recs.push(recommendPrepayment(loans, Math.max(0,monthlyCashSurplus), lumpSumAvailable));
+  if (dscr !== null && dscr < 1.25 && monthlyCashSurplus < 0) {
+    const heaviest = [...loans].sort((a,b)=>_calcEMI(b.principal,b.annualRate,b.tenureMonths)-_calcEMI(a.principal,a.annualRate,a.tenureMonths))[0];
+    recs.push(recommendTenureChange(heaviest, _r(_calcEMI(heaviest.principal,heaviest.annualRate,heaviest.tenureMonths)*0.75), "extend"));
+  }
+  if (newLoan) {
+    const desiredEMI = _calcEMI(newLoan.principal, newLoan.annualRate, newLoan.tenureMonths);
+    recs.push(recommendLoanDecision({ dscr: dscr??99, dti, riskLevel, safeEMI, desiredEMI, cashSurplus:monthlyCashSurplus }));
+  }
+  const highRateLoans = loans.filter(l=>l.annualRate>=12);
+  if (highRateLoans.length>=2)
+    recs.push({ type:"consolidation", priority:riskLevel==="High"||riskLevel==="Critical"?"high":"medium",
+      title:`Consolidate ${highRateLoans.length} high-rate loans`,
+      reason:`${highRateLoans.length} loans above 12%. Consolidating could reduce total interest significantly.`,
+      action:`Refinance ${highRateLoans.map(l=>`"${l.name}"`).join(", ")} into a single lower-rate loan.`,
+      loans:highRateLoans.map(l=>l.name), combinedEMI:_r(highRateLoans.reduce((s,l)=>s+_calcEMI(l.principal,l.annualRate,l.tenureMonths),0)) });
+  recs.sort((a,b)=>({high:0,medium:1,low:2}[a.priority]-{high:0,medium:1,low:2}[b.priority]));
+  return { recommendations:recs, summary:{ totalLoans:loans.length, totalEMI, netOpIncome, dscr, dscrStatus, dti, dtiStatus, riskLevel, riskScore, safeEMI, monthlyCashSurplus, recommendationCount:recs.length, highPriorityCount:recs.filter(r=>r.priority==="high").length } };
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────
+const fmt = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+function showTab(n) {
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById("panel-"+n).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id)?.value)||0; }
+function getInt(id) { return parseInt(document.getElementById(id)?.value)||0; }
+function getStr(id) { return document.getElementById(id)?.value||""; }
+function errBox(e)  { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;margin-top:12px;">❌ ${e.message}</div>`; }
+
+// ─── Loan row management ──────────────────────────────────────────────────
+let fCount=0, ppCount=0;
+
+function _loanRow(prefix, n, def={}) {
+  const id=`${prefix}-${n}`;
+  return `<div class="loan-row" id="${id}">
+    <div><input type="text"   id="${id}-n" value="${def.name||'Loan '+(n+1)}" /></div>
+    <div><input type="number" id="${id}-p" value="${def.principal||500000}" min="1" /></div>
+    <div><input type="number" id="${id}-r" value="${def.rate||10}" min="0" step="0.1" /></div>
+    <div><input type="number" id="${id}-t" value="${def.tenure||60}" min="1" /></div>
+    <button class="del-btn" onclick="document.getElementById('${id}').remove()">✕</button>
+  </div>`;
+}
+function _readRows(container) {
+  return Array.from(container.querySelectorAll(".loan-row")).map(row => {
+    const id = row.id;
+    return { name:document.getElementById(id+"-n")?.value||"Loan", principal:parseFloat(document.getElementById(id+"-p")?.value)||0, annualRate:parseFloat(document.getElementById(id+"-r")?.value)||0, tenureMonths:parseInt(document.getElementById(id+"-t")?.value)||0 };
+  });
+}
+
+function addFullLoanRow(d={}) { document.getElementById("f-loan-rows").insertAdjacentHTML("beforeend",_loanRow("fl",fCount++,d)); }
+function addPPLoanRow(d={})   { document.getElementById("pp-loan-rows").insertAdjacentHTML("beforeend",_loanRow("pp",ppCount++,d)); }
+
+// ─── Render a single rec card ─────────────────────────────────────────────
+const recIcons = { prepayment:"💰", "tenure-change":"📅", "loan-decision":"🏦", consolidation:"🔗" };
+const recTypeLabel = { prepayment:"Prepayment", "tenure-change":"Tenure Change", "loan-decision":"Loan Decision", consolidation:"Consolidation" };
+
+function renderRec(rec) {
+  let metricsHtml = "";
+  if (rec.type === "prepayment") {
+    metricsHtml = `<div class="rec-metrics">
+      <div class="rec-metric">Prepay amount: <span>${fmt(rec.prepayAmount)}</span></div>
+      <div class="rec-metric">Interest saved: <span style="color:#16a34a">${fmt(rec.interestSaved)}</span></div>
+      <div class="rec-metric">Months saved: <span>${rec.monthsSaved}</span></div>
+      <div class="rec-metric">Target loan: <span>${rec.targetLoan}</span></div>
+    </div>
+    <div class="section-title" style="margin-top:10px;">Repayment priority (highest rate first)</div>
+    ${rec.allLoansSorted.map((l,i)=>`<div style="font-size:0.83rem;padding:4px 0;color:#555;">${i+1}. <strong>${l.name}</strong> — ${l.rate}% rate, EMI ${fmt(l.emi)}, total interest ${fmt(l.totalInterest)}</div>`).join("")}`;
+  } else if (rec.type === "tenure-change") {
+    metricsHtml = `<div class="rec-metrics">
+      <div class="rec-metric">Current EMI: <span>${fmt(rec.currentEMI)}</span></div>
+      <div class="rec-metric">Target EMI: <span style="color:#16a34a">${fmt(rec.targetEMI)}</span></div>
+      <div class="rec-metric">EMI change: <span style="color:${rec.emiDelta>=0?'#dc2626':'#16a34a'}">${rec.emiDelta>=0?'+':''}${fmt(rec.emiDelta)}</span></div>
+      <div class="rec-metric">Tenure: <span>${rec.currentTenure} → ${rec.newTenure} mo</span></div>
+      <div class="rec-metric">Interest delta: <span style="color:${rec.interestDelta>=0?'#dc2626':'#16a34a'}">${rec.interestDelta>=0?'+':''}${fmt(rec.interestDelta)}</span></div>
+    </div>`;
+  } else if (rec.type === "loan-decision") {
+    const dcls = rec.decision==="proceed"?"decision-proceed":rec.decision==="caution"?"decision-caution":"decision-delay";
+    const dicon = rec.decision==="proceed"?"✅":rec.decision==="caution"?"⚠️":"🚫";
+    metricsHtml = `<div class="${dcls}">${dicon} Decision: ${rec.decision.toUpperCase()}</div>
+    <div class="rec-metrics">
+      <div class="rec-metric">DSCR: <span>${rec.metrics.dscr.toFixed(2)}</span></div>
+      <div class="rec-metric">DTI: <span>${rec.metrics.dti.toFixed(1)}%</span></div>
+      <div class="rec-metric">Risk: <span>${rec.metrics.riskLevel}</span></div>
+      <div class="rec-metric">Safe EMI: <span>${fmt(rec.metrics.safeEMI)}</span></div>
+      <div class="rec-metric">Desired EMI: <span>${fmt(rec.metrics.desiredEMI)}</span></div>
+      <div class="rec-metric">${rec.metrics.headroom>=0?'Headroom':'Overrun'}: <span style="color:${rec.metrics.headroom>=0?'#16a34a':'#dc2626'}">${fmt(Math.abs(rec.metrics.headroom))}</span></div>
+    </div>
+    ${rec.conditions.length ? `<div class="conditions"><div class="section-title">Conditions to meet</div>${rec.conditions.map(c=>`<div class="condition-item">${c}</div>`).join("")}</div>` : ""}`;
+  } else if (rec.type === "consolidation") {
+    metricsHtml = `<div class="rec-metrics">
+      <div class="rec-metric">Loans: <span>${rec.loans.join(", ")}</span></div>
+      <div class="rec-metric">Combined EMI: <span>${fmt(rec.combinedEMI)}</span></div>
+    </div>`;
+  }
+
+  return `<div class="rec-card priority-${rec.priority}">
+    <div class="rec-header">
+      <span class="rec-icon">${recIcons[rec.type]||'📌'}</span>
+      <div>
+        <div class="rec-title">${rec.title} <span class="priority-badge badge-${rec.priority}">${rec.priority.toUpperCase()}</span></div>
+        <div class="rec-type">${recTypeLabel[rec.type]||rec.type}</div>
+      </div>
+    </div>
+    <div class="rec-reason">${rec.reason}</div>
+    <div class="rec-action"><strong>Action:</strong> ${rec.action}</div>
+    ${metricsHtml}
+  </div>`;
+}
+
+// ─── Full Report ──────────────────────────────────────────────────────────
+function calcFull() {
+  const out = document.getElementById("full-result");
+  try {
+    const loans = _readRows(document.getElementById("f-loan-rows"));
+    const includeNew = document.getElementById("f-include-new").checked;
+    const newLoan = includeNew && getNum("f-new-principal") > 0 ? {
+      name: getStr("f-new-name"), principal: getNum("f-new-principal"),
+      annualRate: getNum("f-new-rate"), tenureMonths: getInt("f-new-tenure"),
+    } : null;
+    const result = generateRecommendations({
+      loans, grossMonthlyIncome: getNum("f-income"),
+      monthlyOperatingExpenses: getNum("f-opex"),
+      monthlyCashSurplus: getNum("f-surplus"),
+      lumpSumAvailable: getNum("f-lump"),
+      newLoan,
+    });
+    const s = result.summary;
+    const riskBadge = `<span class="risk-badge risk-${s.riskLevel}">${s.riskLevel}</span>`;
+    out.innerHTML = `
+      <div class="summary-bar">
+        <div class="sb-item"><div class="sb-label">Recommendations</div><div class="sb-val c-purple">${s.recommendationCount}</div></div>
+        <div class="sb-item"><div class="sb-label">High Priority</div><div class="sb-val ${s.highPriorityCount>0?'c-red':'c-green'}">${s.highPriorityCount}</div></div>
+        <div class="sb-item"><div class="sb-label">Risk Level</div><div class="sb-val">${riskBadge}</div></div>
+        <div class="sb-item"><div class="sb-label">Total EMI</div><div class="sb-val c-red">${fmt(s.totalEMI)}</div></div>
+      </div>
+      <div class="card" style="padding:12px 16px;font-size:0.85rem;color:#555;">
+        DSCR: <strong>${s.dscr?.toFixed(2)||'N/A'}</strong> (${s.dscrStatus}) &nbsp;|&nbsp;
+        DTI: <strong>${s.dti.toFixed(1)}%</strong> (${s.dtiStatus}) &nbsp;|&nbsp;
+        Net Op. Income: <strong>${fmt(s.netOpIncome)}</strong> &nbsp;|&nbsp;
+        Safe EMI remaining: <strong>${fmt(s.safeEMI)}</strong>
+      </div>
+      ${result.recommendations.map(renderRec).join("") || `<div class="card" style="color:#16a34a;font-weight:bold;">✅ No recommendations — financials look healthy!</div>`}`;
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Prepayment ───────────────────────────────────────────────────────────
+function calcPrepay() {
+  const out = document.getElementById("prepay-result");
+  try {
+    const loans = _readRows(document.getElementById("pp-loan-rows"));
+    const rec = recommendPrepayment(loans, getNum("pp-surplus"), getNum("pp-lump"));
+    out.innerHTML = renderRec(rec);
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Tenure Change ────────────────────────────────────────────────────────
+function calcTenure() {
+  const out = document.getElementById("tenure-result");
+  try {
+    const loan = { name:getStr("tc-name"), principal:getNum("tc-principal"), annualRate:getNum("tc-rate"), tenureMonths:getInt("tc-tenure") };
+    const rec = recommendTenureChange(loan, getNum("tc-target"), getStr("tc-dir"));
+    out.innerHTML = renderRec(rec);
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Loan Decision ────────────────────────────────────────────────────────
+function calcDecision() {
+  const out = document.getElementById("decision-result");
+  try {
+    const rec = recommendLoanDecision({ dscr:getNum("ld-dscr"), dti:getNum("ld-dti"), riskLevel:getStr("ld-risk"), safeEMI:getNum("ld-safe"), desiredEMI:getNum("ld-desired"), cashSurplus:getNum("ld-surplus") });
+    out.innerHTML = renderRec(rec);
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, cond) { results.push({ label, pass:!!cond }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass:false, note:"expected error not thrown" }); }
+    catch(e) { results.push({ label, pass:true }); }
+  }
+
+  const loans = [
+    { name:"Loan A", principal:1000000, annualRate:14, tenureMonths:60 },
+    { name:"Loan B", principal:500000,  annualRate:10, tenureMonths:36 },
+    { name:"Loan C", principal:800000,  annualRate:12, tenureMonths:48 },
+  ];
+
+  // Prepayment
+  const pp = recommendPrepayment(loans, 20000, 100000);
+  assert("Prepay: type = prepayment", pp.type === "prepayment");
+  assert("Prepay: targets highest-rate loan (Loan A at 14%)", pp.targetLoan === "Loan A");
+  assert("Prepay: prepayAmount = surplus + lumpSum = 120000", pp.prepayAmount === 120000);
+  assert("Prepay: interestSaved > 0", pp.interestSaved > 0);
+  assert("Prepay: allLoansSorted has 3 entries", pp.allLoansSorted.length === 3);
+  assert("Prepay: first sorted loan is highest rate", pp.allLoansSorted[0].rate === 14);
+  assertThrows("Prepay: throws on empty loans", () => recommendPrepayment([], 1000));
+  assertThrows("Prepay: throws on negative surplus", () => recommendPrepayment(loans, -100));
+
+  // Tenure change
+  const tc = recommendTenureChange({ name:"BizLoan", principal:1000000, annualRate:10, tenureMonths:60 }, 15000, "auto");
+  assert("Tenure: type = tenure-change", tc.type === "tenure-change");
+  assert("Tenure: newTenure > currentTenure when extending", tc.newTenure > 60);
+  assert("Tenure: emiDelta < 0 when extending", tc.emiDelta < 0);
+  assert("Tenure: direction = extend", tc.direction === "extend");
+  assertThrows("Tenure: throws on targetEMI = 0", () => recommendTenureChange({ name:"X", principal:100000, annualRate:10, tenureMonths:12 }, 0));
+
+  // Shorten tenure
+  const ts = recommendTenureChange({ name:"BizLoan", principal:1000000, annualRate:10, tenureMonths:60 }, 30000, "auto");
+  assert("Tenure(shorten): newTenure < currentTenure", ts.newTenure < 60);
+  assert("Tenure(shorten): direction = shorten", ts.direction === "shorten");
+
+  // Loan decision - proceed
+  const d1 = recommendLoanDecision({ dscr:1.8, dti:20, riskLevel:"Low", safeEMI:25000, desiredEMI:15000, cashSurplus:30000 });
+  assert("Decision(proceed): decision = proceed", d1.decision === "proceed");
+  assert("Decision(proceed): headroom = 10000", d1.metrics.headroom === 10000);
+
+  // Loan decision - delay
+  const d2 = recommendLoanDecision({ dscr:0.8, dti:60, riskLevel:"Critical", safeEMI:5000, desiredEMI:20000, cashSurplus:-5000 });
+  assert("Decision(delay): decision = delay", d2.decision === "delay");
+  assert("Decision(delay): priority = high", d2.priority === "high");
+
+  // Loan decision - caution
+  const d3 = recommendLoanDecision({ dscr:1.1, dti:35, riskLevel:"Moderate", safeEMI:18000, desiredEMI:15000, cashSurplus:5000 });
+  assert("Decision(caution): decision = caution", d3.decision === "caution");
+
+  assertThrows("Decision: throws on non-number dscr", () => recommendLoanDecision({ dscr:"x", dti:20, riskLevel:"Low", safeEMI:10000, desiredEMI:5000 }));
+
+  // Full report
+  const report = generateRecommendations({ loans, grossMonthlyIncome:200000, monthlyOperatingExpenses:80000, monthlyCashSurplus:20000, lumpSumAvailable:100000 });
+  assert("Report: recommendations is array", Array.isArray(report.recommendations));
+  assert("Report: summary has riskLevel", typeof report.summary.riskLevel === "string");
+  assert("Report: summary has dscr", report.summary.dscr !== undefined);
+  assert("Report: sorted by priority (high first if any)", report.recommendations[0]?.priority !== "low" || report.recommendations.length === 1);
+  assertThrows("Report: throws on empty loans", () => generateRecommendations({ loans:[], grossMonthlyIncome:100000, monthlyOperatingExpenses:40000, monthlyCashSurplus:0 }));
+
+  const passed = results.filter(r=>r.pass).length;
+  const failed = results.filter(r=>!r.pass).length;
+  document.getElementById("test-output").innerHTML =
+    results.map(r=>`<div class="test-result ${r.pass?'pass':'fail'}">${r.pass?'✓':'✗'} ${r.label}${r.note?' — '+r.note:''}</div>`).join("") +
+    `<div class="test-summary ${failed===0?'all-pass':'has-fail'}">${failed===0?`✅ All ${passed} tests passed`:`❌ ${failed} failed / ${passed} passed`}</div>`;
+}
+
+// ─── Seed default rows ────────────────────────────────────────────────────
+addFullLoanRow({ name:"Business Loan",  principal:1000000, rate:10, tenure:60 });
+addFullLoanRow({ name:"Equipment Loan", principal:500000,  rate:14, tenure:36 });
+addFullLoanRow({ name:"Working Capital",principal:300000,  rate:12, tenure:24 });
+addPPLoanRow({ name:"Business Loan",  principal:1000000, rate:10, tenure:60 });
+addPPLoanRow({ name:"Equipment Loan", principal:500000,  rate:14, tenure:36 });
+</script>
+</body>
+</html>

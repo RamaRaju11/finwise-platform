@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Goal Tracker — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
+#mainWrap{margin-left:220px;padding:28px 24px}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:16px}}
+
+h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
+.subtitle{font-size:.88rem;color:#64748b;margin-bottom:20px}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.btn-add{padding:9px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:800;cursor:pointer}
+.btn-add:hover{background:#1d4ed8}
+
+/* Goal grid */
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.goal-card{background:#fff;border-radius:12px;border:1.5px solid #e2e8f0;padding:20px;position:relative}
+.goal-card:hover{border-color:#2563eb;box-shadow:0 4px 16px rgba(37,99,235,.08)}
+
+/* Type badge */
+.gc-type{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:999px;margin-bottom:10px;display:inline-block}
+.type-revenue{background:#dbeafe;color:#1d4ed8}
+.type-profit{background:#dcfce7;color:#166534}
+.type-savings{background:#fef9c3;color:#854d0e}
+.type-debt{background:#ede9fe;color:#6d28d9}
+.type-customers{background:#e0f2fe;color:#0369a1}
+
+.gc-name{font-size:1rem;font-weight:900;color:#1e293b;margin-bottom:4px;padding-right:52px}
+.gc-deadline{font-size:.72rem;color:#94a3b8;margin-bottom:14px;font-weight:600}
+.gc-amounts{display:flex;justify-content:space-between;margin-bottom:8px;font-size:.8rem}
+
+/* Progress bar */
+.prog-track{background:#f1f5f9;border-radius:999px;height:10px;overflow:hidden;margin-bottom:8px}
+.prog-fill{height:100%;border-radius:999px;transition:width .5s}
+.prog-row{display:flex;justify-content:space-between;font-size:.76rem;color:#64748b;margin-bottom:10px}
+
+/* Status chips */
+.status-chip{font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:10px}
+.chip-ahead{background:#dcfce7;color:#166534}
+.chip-ontrack{background:#dbeafe;color:#1d4ed8}
+.chip-behind{background:#fef3c7;color:#92400e}
+.chip-danger{background:#fee2e2;color:#991b1b}
+.chip-done{background:#dcfce7;color:#166534}
+
+.gc-monthly{font-size:.78rem;color:#475569;margin-bottom:10px;line-height:1.5}
+
+/* Timeline */
+.tl-wrap{margin:8px 0 12px}
+.tl-track{position:relative;height:10px;background:#f1f5f9;border-radius:99px;overflow:visible;margin-bottom:22px}
+.tl-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;transition:width .5s;opacity:.85}
+.tl-milestone{position:absolute;top:50%;transform:translate(-50%,-50%);z-index:2}
+.tl-m-dot{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tl-m-label{position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:.58rem;color:#94a3b8;white-space:nowrap;font-weight:700}
+.tl-today-line{position:absolute;top:-5px;bottom:-5px;width:2px;background:#1e293b;border-radius:1px;transform:translateX(-50%);z-index:3}
+.tl-today-label{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#1e293b;white-space:nowrap;font-weight:800;background:#f4f6f9;padding:0 2px}
+.tl-dates{display:flex;justify-content:space-between;font-size:.62rem;color:#94a3b8;margin-top:0}
+
+/* Monthly bars */
+.months-row{display:flex;gap:4px;margin-top:10px;overflow-x:auto;padding-bottom:2px}
+.mo-bar{flex-shrink:0;width:28px;text-align:center}
+.mo-bar-track{background:#f1f5f9;border-radius:4px;height:40px;display:flex;align-items:flex-end;overflow:hidden}
+.mo-bar-fill{width:100%;border-radius:4px 4px 0 0;transition:height .4s}
+.mo-bar-label{font-size:.58rem;color:#94a3b8;margin-top:2px}
+
+/* Log row */
+.log-row{display:flex;gap:6px;margin-top:10px}
+.log-input{flex:1;padding:7px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.84rem;color:#1e293b;font-family:Arial,sans-serif;min-width:0}
+.log-input:focus{outline:none;border-color:#2563eb}
+.log-btn{padding:7px 12px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.log-btn:hover{background:#1d4ed8}
+.sync-btn{padding:7px 10px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:7px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.sync-btn:hover{background:#dcfce7}
+
+/* Card actions */
+.gc-actions{position:absolute;top:14px;right:14px;display:flex;gap:4px}
+.gc-act{width:26px;height:26px;border:none;border-radius:6px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.gc-del{background:#fee2e2;color:#991b1b}.gc-del:hover{background:#fecaca}
+
+/* Empty state */
+.empty-state{text-align:center;padding:56px 20px;background:#fff;border-radius:12px}
+.empty-icon{font-size:3rem;margin-bottom:14px}
+.empty-text{font-size:.9rem;color:#94a3b8;margin-bottom:20px}
+.empty-btn{padding:11px 28px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:800;cursor:pointer}
+
+/* Integration strip */
+.int-strip{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:7px;padding:10px 14px;margin-bottom:14px;font-size:.83rem;color:#166534;font-weight:600}
+
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:480px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:1rem;font-weight:900;margin-bottom:20px}
+.modal label{display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+.modal label:first-of-type{margin-top:0}
+.modal input,.modal select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif}
+.modal input:focus,.modal select:focus{outline:none;border-color:#2563eb}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:480px){.modal-grid{grid-template-columns:1fr}}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-save{flex:1;padding:11px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:800;cursor:pointer}
+.btn-cancel{padding:11px 18px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer}
+.type-hint{font-size:.75rem;color:#64748b;margin-top:6px;padding:8px 10px;background:#f8fafc;border-radius:6px;line-height:1.5;min-height:32px}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+@media print{.back-link,.btn-add,.btn-cancel,.btn-save,.btn-del,.btn-log,.sync-btn,.log-btn,.overlay{display:none!important}body{background:#fff;padding:8px}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div id="mainWrap">
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>🎯 Goal Tracker</h1>
+<p class="subtitle">FinWise · Set revenue, profit, savings, debt, and customer targets — sync live data automatically</p>
+
+<div class="int-strip" id="intStrip"></div>
+
+<div class="toolbar">
+  <div style="flex:1"></div>
+  <button class="btn-add" onclick="openModal()">＋ Add Goal</button>
+  <button style="margin-left:8px;padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.82rem;cursor:pointer" onclick="window.print()">🖨️ Print</button>
+</div>
+
+<div class="goals-grid" id="goalsGrid"></div>
+<div class="empty-state" id="emptyState" style="display:none">
+  <div class="empty-icon">🎯</div>
+  <div class="empty-text">No goals yet — set your first financial target</div>
+  <button class="empty-btn" onclick="openModal()">＋ Add My First Goal</button>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-title">Set a New Goal</div>
+    <label>Goal Type</label>
+    <select id="fType" onchange="updateTypeHint()">
+      <option value="revenue">📈 Monthly Revenue Target</option>
+      <option value="profit">💰 Monthly Net Profit Target</option>
+      <option value="savings">🏦 Savings / Cash Reserve Goal</option>
+      <option value="debt">💳 Debt Payoff Goal</option>
+      <option value="customers">👥 Customer Count Goal</option>
+    </select>
+    <div class="type-hint" id="typeHint"></div>
+    <label>Goal Name</label>
+    <input type="text" id="fName" placeholder='e.g. "Hit $50K revenue by December"'/>
+    <div class="modal-grid">
+      <div>
+        <label id="startLabel">Starting Value ($)</label>
+        <input type="number" id="fStart" placeholder="Current amount" min="0"/>
+      </div>
+      <div>
+        <label id="targetLabel">Target Value ($)</label>
+        <input type="number" id="fTarget" placeholder="Goal amount" min="0"/>
+      </div>
+    </div>
+    <label>Target Deadline</label>
+    <input type="month" id="fDeadline"/>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveGoal()">Save Goal →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var KEY = 'goalTracker_goals';
+
+function safeJson(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function load(){ return safeJson(KEY)||[]; }
+function save(g){ localStorage.setItem(KEY, JSON.stringify(g)); }
+function fmtVal(n, unit){
+  if(unit==='#') return Math.round(Math.abs(n)).toLocaleString('en-US');
+  return '$'+Math.abs(Math.round(n)).toLocaleString('en-US');
+}
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+var GOAL_DEFS = {
+  revenue:   {label:'Revenue Target',  cls:'type-revenue',   color:'#2563eb', icon:'📈', unit:'$',
+               liveDesc:'Syncs from Invoice Tracker (paid invoices this month)'},
+  profit:    {label:'Profit Target',   cls:'type-profit',    color:'#16a34a', icon:'💰', unit:'$',
+               liveDesc:'Syncs from Budget vs. Actual (actual net profit this month)'},
+  savings:   {label:'Savings Goal',    cls:'type-savings',   color:'#d97706', icon:'🏦', unit:'$',
+               liveDesc:'Syncs total already-saved from Business Savings Planner'},
+  debt:      {label:'Debt Payoff',     cls:'type-debt',      color:'#7c3aed', icon:'💳', unit:'$',
+               liveDesc:'Syncs current loan balance from Business Profile (progress = balance going down)'},
+  customers: {label:'Customer Count',  cls:'type-customers', color:'#0891b2', icon:'👥', unit:'#',
+               liveDesc:'Syncs unique paying clients this year from Invoice Tracker'}
+};
+
+var TYPE_HINTS = {
+  revenue:  'Track monthly revenue growth. Syncs automatically from paid invoice totals.',
+  profit:   'Track net profit per month. Syncs from Budget vs. Actual Tracker when actuals are entered.',
+  savings:  'Track cash reserve accumulation. Starting value = amount already saved.',
+  debt:     'Track debt payoff. Enter current balance as "Starting Value" and payoff target as "Target". Progress goes up as balance goes down.',
+  customers:'Track paying client count. Enter a number (not dollars). Syncs from invoices.'
+};
+
+function getProgressPct(g){
+  if(g.type==='debt'){
+    var range = (g.startValue||0) - (g.target||0);
+    if(range<=0) return g.current<=(g.target||0) ? 100 : 0;
+    return Math.min(100, Math.max(0, (((g.startValue||0)-(g.current||0))/range)*100));
+  }
+  if(!g.target||g.target<=0) return 0;
+  return Math.min(100, Math.max(0, ((g.current||0)/(g.target))*100));
+}
+
+function getMonthsLeft(deadline){
+  var now=new Date(), d=new Date(deadline+'-01');
+  return Math.max(0,(d.getFullYear()-now.getFullYear())*12+d.getMonth()-now.getMonth());
+}
+
+function getElapsedMonths(createdAt, deadline){
+  var start=new Date(createdAt), end=new Date(deadline+'-01'), now=new Date();
+  var total=Math.max(1,(end.getFullYear()-start.getFullYear())*12+(end.getMonth()-start.getMonth()));
+  var elapsed=Math.max(0,(now.getFullYear()-start.getFullYear())*12+(now.getMonth()-start.getMonth()));
+  return {total:total, elapsed:Math.min(total,elapsed)};
+}
+
+function getStatus(g){
+  var pct = getProgressPct(g)/100;
+  if(pct>=1) return {label:'🎉 Goal Reached!', cls:'chip-done'};
+  var mo = getElapsedMonths(g.createdAt, g.deadline);
+  var expectedPct = mo.total>0 ? mo.elapsed/mo.total : 0;
+  var diff = pct - expectedPct;
+  if(diff>0.1)  return {label:'🚀 Ahead of pace', cls:'chip-ahead'};
+  if(diff>-0.05) return {label:'✅ On track',      cls:'chip-ontrack'};
+  if(diff>-0.2)  return {label:'⚠️ Slightly behind',cls:'chip-behind'};
+  return {label:'🚨 Behind pace', cls:'chip-danger'};
+}
+
+/* ── Live data sync ── */
+function getLiveValue(g){
+  try{
+    var now = new Date();
+    var curMo = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    var curYr = now.getFullYear();
+
+    if(g.type==='revenue'){
+      var ir = safeJson('fw_invoice_revenue');
+      if(ir&&ir.byMonth&&ir.byMonth[curMo]) return ir.byMonth[curMo];
+      var invs = safeJson('fw_invoices')||[];
+      return invs.filter(function(i){
+        return i.status==='paid'&&(i.paidDate||i.date||'').slice(0,7)===curMo;
+      }).reduce(function(s,i){ return s+parseFloat(i.amount||0); },0);
+    }
+
+    if(g.type==='profit'){
+      var bud = safeJson('fw_budget_data')||{};
+      var m = bud[curMo]||{};
+      var aExp = (m.aCogs||0)+(m.aPayrl||0)+(m.aRent||0)+(m.aMktg||0)+(m.aOpex||0);
+      var prof = (m.aRev||0)-aExp;
+      return prof!==0 ? prof : null;
+    }
+
+    if(g.type==='savings'){
+      var sg = safeJson('fw_savings_goals');
+      var goalsArr = Array.isArray(sg)?sg:(sg&&sg.goals?sg.goals:[]);
+      var total = goalsArr.reduce(function(s,gi){ return s+parseFloat(gi.saved||0); },0);
+      return total>0 ? total : null;
+    }
+
+    if(g.type==='debt'){
+      var p = safeJson('fw_profile')||{};
+      var lb = parseFloat(p.loanBal||0);
+      return lb>0 ? lb : null;
+    }
+
+    if(g.type==='customers'){
+      var invs2 = safeJson('fw_invoices')||[];
+      var clients = {};
+      invs2.filter(function(i){
+        return i.status==='paid'&&(i.paidDate||i.date||'').startsWith(curYr+'');
+      }).forEach(function(i){ if(i.client) clients[i.client]=true; });
+      var cnt = Object.keys(clients).length;
+      return cnt>0 ? cnt : null;
+    }
+  }catch(e){}
+  return null;
+}
+
+function syncGoal(id){
+  var val = getLiveValue(load().find(function(g){ return g.id===id; }));
+  if(val===null||val===undefined){
+    alert('No live data found for this goal type. Log progress manually using the input field.');
+    return;
+  }
+  var now = new Date();
+  var month = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  var goals = load().map(function(g){
+    if(g.id!==id) return g;
+    var logs = g.logs||[];
+    var idx = logs.findIndex(function(l){ return l.month===month; });
+    if(idx>=0) logs[idx].value=val; else logs.push({month:month,value:val});
+    return Object.assign({},g,{current:val,logs:logs});
+  });
+  save(goals);
+  renderGoals();
+}
+
+/* ── Timeline (P3) ── */
+function renderTimeline(g){
+  var start = new Date(g.createdAt);
+  var end = new Date(g.deadline+'-28');
+  var now = new Date();
+  var totalMs = Math.max(end-start, 1);
+  var elapsedMs = Math.min(Math.max(now-start,0), totalMs);
+  var elapsedPct = (elapsedMs/totalMs)*100;
+  var pct = getProgressPct(g);
+  var color = (GOAL_DEFS[g.type]||GOAL_DEFS.revenue).color;
+
+  var html = '<div class="tl-wrap"><div class="tl-track">';
+  html += '<div class="tl-fill" style="width:'+pct.toFixed(1)+'%;background:'+color+'"></div>';
+
+  /* Milestone dots at 25/50/75% of GOAL progress (not time) */
+  [25,50,75].forEach(function(m){
+    var reached = pct >= m;
+    html += '<div class="tl-milestone" style="left:'+m+'%">'+
+      '<div class="tl-m-dot" style="background:'+(reached?color:'#cbd5e1')+'"></div>'+
+      '<div class="tl-m-label">'+m+'%</div>'+
+    '</div>';
+  });
+
+  /* Today marker at time-elapsed position */
+  var todayLeft = Math.min(98, Math.max(2, elapsedPct));
+  html += '<div class="tl-today-line" style="left:'+todayLeft.toFixed(1)+'%">'+
+    '<div class="tl-today-label">Today</div>'+
+  '</div>';
+
+  html += '</div>';
+  var sLbl = start.toLocaleDateString('en-US',{month:'short',year:'2-digit'});
+  var eLbl = end.toLocaleDateString('en-US',{month:'short',year:'2-digit'});
+  html += '<div class="tl-dates"><span>'+sLbl+'</span><span>'+eLbl+'</span></div>';
+  html += '</div>';
+  return html;
+}
+
+/* ── Render all goals ── */
+function renderGoals(){
+  var goals = load();
+  var grid = document.getElementById('goalsGrid');
+  var empty = document.getElementById('emptyState');
+  if(!goals.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  var html = '';
+  goals.forEach(function(g){
+    var def = GOAL_DEFS[g.type]||GOAL_DEFS.revenue;
+    var pct = getProgressPct(g);
+    var moLeft = getMonthsLeft(g.deadline);
+    var status = getStatus(g);
+    var mo = getElapsedMonths(g.createdAt, g.deadline);
+    var unit = def.unit;
+
+    var remaining = g.type==='debt'
+      ? Math.max(0,(g.current||0)-(g.target||0))
+      : Math.max(0,(g.target||0)-(g.current||0));
+    var monthlyNeeded = moLeft>0 ? remaining/moLeft : remaining;
+    var gainPerMo = mo.elapsed>0
+      ? (g.type==='debt' ? ((g.startValue||0)-(g.current||0))/mo.elapsed : ((g.current||0)-(g.startValue||0))/mo.elapsed)
+      : 0;
+
+    var logs = g.logs||[];
+    var last6 = logs.slice(-6);
+    var maxLog = Math.max.apply(null, last6.map(function(l){ return Math.abs(l.value); }).concat([1]));
+    var barHtml = last6.map(function(l){
+      var h = Math.round((Math.abs(l.value)/maxLog)*40);
+      return '<div class="mo-bar">'+
+        '<div class="mo-bar-track"><div class="mo-bar-fill" style="height:'+h+'px;background:'+def.color+'22;border-top:2px solid '+def.color+'"></div></div>'+
+        '<div class="mo-bar-label">'+l.month.substring(5)+'</div>'+
+      '</div>';
+    }).join('');
+
+    html += '<div class="goal-card">'+
+      '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">✕</button></div>'+
+      '<span class="gc-type '+def.cls+'">'+def.icon+' '+def.label+'</span>'+
+      '<div class="gc-name">'+esc(g.name)+'</div>'+
+      '<div class="gc-deadline">📅 '+g.deadline+' · '+moLeft+' mo left</div>'+
+      '<div class="gc-amounts">'+
+        '<span style="color:#64748b">Current: <strong style="color:#1e293b">'+fmtVal(g.current||0,unit)+'</strong></span>'+
+        '<span style="color:#1e293b;font-weight:700">Target: '+fmtVal(g.target||0,unit)+'</span>'+
+      '</div>'+
+      '<div class="prog-track"><div class="prog-fill" style="width:'+pct.toFixed(1)+'%;background:'+def.color+'"></div></div>'+
+      '<div class="prog-row">'+
+        '<span style="font-weight:700;color:'+def.color+'">'+pct.toFixed(1)+'%</span>'+
+        '<span style="font-size:.72rem;color:#94a3b8">'+fmtVal(remaining,unit)+' remaining</span>'+
+      '</div>'+
+      '<span class="status-chip '+status.cls+'">'+status.label+'</span>'+
+      '<div class="gc-monthly">Need <strong>'+fmtVal(monthlyNeeded,unit)+'/mo</strong>'+
+        (gainPerMo>0?' · Avg gain <strong>'+fmtVal(gainPerMo,unit)+'/mo</strong>':'')+
+      '</div>'+
+      renderTimeline(g)+
+      (barHtml?'<div class="months-row">'+barHtml+'</div>':'')+
+      '<div class="log-row">'+
+        '<input type="number" class="log-input" id="log_'+g.id+'" placeholder="Log '+(unit==='#'?'customer count':'this month\'s amount')+'"/>'+
+        '<button class="sync-btn" onclick="syncGoal(\''+g.id+'\')" title="'+esc(def.liveDesc)+'">⚡ Sync</button>'+
+        '<button class="log-btn" onclick="logProgress(\''+g.id+'\')">Log →</button>'+
+      '</div>'+
+    '</div>';
+  });
+  grid.innerHTML = html;
+  checkIntegration();
+}
+
+function logProgress(id){
+  var input = document.getElementById('log_'+id);
+  var val = parseFloat(input.value);
+  if(isNaN(val)||val<0){ alert('Enter a valid amount.'); return; }
+  var now = new Date();
+  var month = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  var goals = load().map(function(g){
+    if(g.id!==id) return g;
+    var logs = g.logs||[];
+    var idx = logs.findIndex(function(l){ return l.month===month; });
+    if(idx>=0) logs[idx].value=val; else logs.push({month:month,value:val});
+    return Object.assign({},g,{current:val,logs:logs});
+  });
+  save(goals);
+  input.value='';
+  renderGoals();
+}
+
+function deleteGoal(id){
+  if(!confirm('Delete this goal?')) return;
+  save(load().filter(function(g){ return g.id!==id; }));
+  renderGoals();
+}
+
+/* ── Integration strip ── */
+function checkIntegration(){
+  if(!load().length) return;
+  var sources = [];
+  if(safeJson('fw_invoice_revenue')) sources.push('Invoice Revenue');
+  if(safeJson('fw_budget_data'))     sources.push('Budget Actuals');
+  if(safeJson('fw_savings_goals'))   sources.push('Savings Goals');
+  if(!sources.length) return;
+  var strip = document.getElementById('intStrip');
+  strip.style.display='';
+  strip.innerHTML='⚡ Live data available from: '+sources.join(', ')+'. Hit <strong>Sync</strong> on any goal card to import current values.';
+}
+
+/* ── Modal ── */
+function updateTypeHint(){
+  var type = document.getElementById('fType').value;
+  document.getElementById('typeHint').textContent = TYPE_HINTS[type]||'';
+  var unit = (GOAL_DEFS[type]||{}).unit||'$';
+  document.getElementById('startLabel').textContent = unit==='#' ? 'Current Count' : 'Starting Value ($)';
+  document.getElementById('targetLabel').textContent = unit==='#' ? 'Target Count' : 'Target Value ($)';
+}
+
+function openModal(){
+  document.getElementById('fName').value='';
+  document.getElementById('fStart').value='';
+  document.getElementById('fTarget').value='';
+  var now = new Date();
+  document.getElementById('fDeadline').value = (now.getFullYear()+1)+'-12';
+  var p = safeJson('fw_profile')||{};
+  if(p.rev) document.getElementById('fStart').value = p.rev;
+  updateTypeHint();
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('fName').focus(); }, 50);
+}
+
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+function handleOverlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
+
+function saveGoal(){
+  var name     = document.getElementById('fName').value.trim();
+  var target   = parseFloat(document.getElementById('fTarget').value);
+  var start    = parseFloat(document.getElementById('fStart').value)||0;
+  var deadline = document.getElementById('fDeadline').value;
+  var type     = document.getElementById('fType').value;
+  if(!name){ alert('Enter a goal name.'); return; }
+  if(!target||target<=0){ alert('Enter a target value greater than 0.'); return; }
+  if(!deadline){ alert('Select a deadline month.'); return; }
+  var goals = load();
+  goals.push({
+    id        : Date.now().toString(),
+    type      : type,
+    name      : name,
+    startValue: start,
+    current   : start,
+    target    : target,
+    deadline  : deadline,
+    logs      : start>0 ? [{month:new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0'),value:start}] : [],
+    createdAt : new Date().toISOString()
+  });
+  save(goals);
+  closeModal();
+  renderGoals();
+}
+
+window.addEventListener('load', renderGoals);
+</script>
+</body>
+</html>

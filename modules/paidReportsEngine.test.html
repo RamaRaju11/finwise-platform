@@ -1,0 +1,899 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paid Reports Engine</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #1e293b; }
+  header { background: linear-gradient(135deg, #0f172a, #065f46); color: #fff; padding: 24px 32px; }
+  header h1 { font-size: 1.5rem; }
+  header p  { font-size: 0.85rem; opacity: .75; margin-top: 4px; }
+  .tabs { display: flex; gap: 4px; background: #e2e8f0; padding: 8px; flex-wrap: wrap; }
+  .tab  { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer;
+          background: transparent; font-size: 0.9rem; color: #475569; }
+  .tab.active { background: #fff; color: #0f172a; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .panel { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+  .panel.active { display: block; }
+  .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 6px rgba(0,0,0,.07); margin-bottom: 16px; }
+  .card h3 { font-size: 1rem; margin-bottom: 12px; color: #1e293b; }
+  label { display: block; font-size: 0.82rem; color: #64748b; margin-bottom: 4px; margin-top: 10px; }
+  input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1;
+              border-radius: 6px; font-size: 0.9rem; }
+  textarea { resize: vertical; min-height: 60px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  button.btn { margin-top: 14px; padding: 9px 22px; background: #065f46; color: #fff;
+              border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+  button.btn:hover { background: #047857; }
+  .section-divider { border: none; border-top: 1px solid #e2e8f0; margin: 12px 0; }
+
+  /* Catalog cards */
+  .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .catalog-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; }
+  .catalog-card h4 { font-size: 0.95rem; margin-bottom: 4px; }
+  .catalog-card .desc { font-size: 0.8rem; color: #64748b; margin-bottom: 10px; }
+  .price-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .price-pill { font-size: 0.74rem; padding: 3px 9px; border-radius: 10px; font-weight: 600; }
+  .pill-na    { background: #f1f5f9; color: #94a3b8; }
+  .pill-free  { background: #dcfce7; color: #16a34a; }
+  .pill-price { background: #ede9fe; color: #5b21b6; }
+  .modules-tag { font-size: 0.74rem; color: #64748b; margin-top: 8px; }
+  .modules-tag span { background: #e0f2fe; color: #0369a1; border-radius: 4px; padding: 2px 6px;
+                      margin-right: 4px; font-size: 0.72rem; }
+
+  /* Report output */
+  .report-output { background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 24px; }
+  .report-header { border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 20px; }
+  .report-title  { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
+  .report-meta   { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+  .report-section { margin-bottom: 20px; }
+  .report-section h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: .08em;
+                        color: #64748b; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
+  .verdict-box { border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+  .verdict-green  { background: #f0fdf4; border: 2px solid #16a34a; }
+  .verdict-orange { background: #fff7ed; border: 2px solid #f59e0b; }
+  .verdict-amber  { background: #fffbeb; border: 2px solid #fbbf24; }
+  .verdict-red    { background: #fef2f2; border: 2px solid #dc2626; }
+  .verdict-box .decision { font-size: 1.1rem; font-weight: 800; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .stat-cell { background: #f8fafc; border-radius: 8px; padding: 10px; }
+  .stat-cell .val { font-size: 1.1rem; font-weight: 700; color: #1e293b; }
+  .stat-cell .lbl { font-size: 0.74rem; color: #64748b; margin-top: 2px; }
+  .highlight-list li { font-size: 0.85rem; padding: 4px 0; list-style: none; }
+  .highlight-list li::before { content: "▸ "; color: #065f46; }
+  .disclaimer { background: #fafbff; border-left: 4px solid #6366f1; padding: 10px 14px;
+                font-size: 0.78rem; color: #64748b; border-radius: 0 8px 8px 0; margin-top: 16px; }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  table.data-table th { background: #f8fafc; padding: 8px 10px; text-align: left; color: #64748b;
+                         font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
+  table.data-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }
+
+  #unitResults .pass { color: #16a34a; }
+  #unitResults .fail { color: #dc2626; }
+  #unitResults li { padding: 4px 0; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; }
+  @media print {
+    .tabs, button { display:none !important; }
+    body { background:#fff; padding:8px; }
+    .panel { display:block !important; }
+    #panel-tests { display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Paid Reports Engine</h1>
+  <p>Generate structured financial reports · Loan Risk · Business Plan · Financial Summary · Loan Viability</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('catalog')">📦 Report Catalog</button>
+  <button class="tab" onclick="showTab('loanrisk')">⚠️ Loan Risk Report</button>
+  <button class="tab" onclick="showTab('viability')">✅ Loan Viability</button>
+  <button class="tab" onclick="showTab('bizplan')">📋 Business Plan</button>
+  <button class="tab" onclick="showTab('finsummary')">📊 Financial Summary</button>
+  <button class="tab" onclick="showTab('tests')">🧪 Unit Tests</button>
+</div>
+
+<!-- ═══════ TAB 1: CATALOG ═══════ -->
+<div id="tab-catalog" class="panel active">
+  <div class="card">
+    <h3>Available Reports</h3>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:14px">Reports are data objects assembled from your module outputs and rendered as printable HTML.</p>
+    <div id="catalog-grid"></div>
+  </div>
+  <div class="card">
+    <h3>Report Price by Tier</h3>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Report</th><th>Free</th><th>Basic</th><th>Pro</th><th>Enterprise</th></tr></thead>
+        <tbody id="price-table"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 2: LOAN RISK REPORT ═══════ -->
+<div id="tab-loanrisk" class="panel">
+  <div class="card">
+    <h3>Generate Loan Risk Report</h3>
+    <div class="row2">
+      <div>
+        <label>Business Name</label>
+        <input type="text" id="lr-biz" value="Ravi's Textile Trading Co.">
+      </div>
+      <div>
+        <label>Lender Name</label>
+        <input type="text" id="lr-lender" value="SBA 7(a) Business Loan">
+      </div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Loan Details</p>
+    <div class="row3">
+      <div><label>Principal ($)</label><input type="number" id="lr-principal" value="1500000"></div>
+      <div><label>Annual Rate (%)</label><input type="number" id="lr-rate" value="10.5" step="0.1"></div>
+      <div><label>Tenure (months)</label><input type="number" id="lr-tenure" value="36"></div>
+      <div><label>Monthly EMI ($)</label><input type="number" id="lr-emi" value="48767"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Cash Flow (Monthly)</p>
+    <div class="row3">
+      <div><label>Revenue ($)</label><input type="number" id="lr-rev" value="300000"></div>
+      <div><label>Fixed Expenses ($)</label><input type="number" id="lr-fixed" value="80000"></div>
+      <div><label>Variable Expenses ($)</label><input type="number" id="lr-variable" value="100000"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Risk Metrics (from Risk Engine)</p>
+    <div class="row3">
+      <div><label>DSCR</label><input type="number" id="lr-dscr" value="2.47" step="0.01"></div>
+      <div><label>DTI (%)</label><input type="number" id="lr-dti" value="20.3" step="0.1"></div>
+      <div>
+        <label>Risk Level</label>
+        <select id="lr-risk">
+          <option value="Low">Low</option>
+          <option value="Moderate">Moderate</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
+      </div>
+      <div><label>Risk Score (0–100)</label><input type="number" id="lr-score" value="72"></div>
+    </div>
+    <button class="btn" onclick="doLoanRisk()">Generate Report</button>
+    <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="loanrisk-output"></div>
+</div>
+
+<!-- ═══════ TAB 3: LOAN VIABILITY REPORT ═══════ -->
+<div id="tab-viability" class="panel">
+  <div class="card">
+    <h3>Generate Loan Viability Report</h3>
+    <div class="row2">
+      <div><label>Business Name</label><input type="text" id="lv-biz" value="Sarah's Catering Services"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Affordability Analysis (from Affordability Engine)</p>
+    <div class="row3">
+      <div>
+        <label>Affordability Status</label>
+        <select id="lv-status">
+          <option value="affordable">Affordable</option>
+          <option value="tight" selected>Tight</option>
+          <option value="unaffordable">Unaffordable</option>
+        </select>
+      </div>
+      <div><label>Safe EMI ($)</label><input type="number" id="lv-safeemi" value="42000"></div>
+      <div><label>Desired EMI ($)</label><input type="number" id="lv-desiredemi" value="48000"></div>
+      <div><label>Headroom ($)</label><input type="number" id="lv-headroom" value="0"></div>
+      <div><label>Shortfall ($)</label><input type="number" id="lv-shortfall" value="6000"></div>
+      <div><label>Max Loan Amount ($)</label><input type="number" id="lv-maxloan" value="1050000"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Stress Test (from Stress Test — optional)</p>
+    <div class="row2">
+      <div>
+        <label>All Scenarios Passed?</label>
+        <select id="lv-stresspass">
+          <option value="">Skip stress test</option>
+          <option value="true">Yes — all passed</option>
+          <option value="false" selected>No — some failed</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doViability()">Generate Report</button>
+  </div>
+  <div id="viability-output"></div>
+</div>
+
+<!-- ═══════ TAB 4: BUSINESS PLAN ═══════ -->
+<div id="tab-bizplan" class="panel">
+  <div class="card">
+    <h3>Generate Business Financial Plan</h3>
+    <div class="row2">
+      <div><label>Business Name</label><input type="text" id="bp-biz" value="Suresh Electronics Mart"></div>
+      <div><label>Business Type</label><input type="text" id="bp-type" value="Retail Electronics"></div>
+      <div><label>Loan Purpose</label><input type="text" id="bp-purpose" value="Expand store inventory and hire 2 staff"></div>
+      <div><label>Loan Requested ($)</label><input type="number" id="bp-loanamt" value="2000000"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Current Cash Flow (Monthly)</p>
+    <div class="row3">
+      <div><label>Revenue ($)</label><input type="number" id="bp-rev" value="450000"></div>
+      <div><label>Total Expenses ($)</label><input type="number" id="bp-exp" value="320000"></div>
+      <div><label>Net Cash Flow ($)</label><input type="number" id="bp-net" value="130000"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">P&amp;L Summary (from P&L Engine)</p>
+    <div class="row3">
+      <div><label>Gross Margin (%)</label><input type="number" id="bp-gm" value="28.5" step="0.1"></div>
+      <div><label>Net Margin (%)</label><input type="number" id="bp-nm" value="14.2" step="0.1"></div>
+      <div><label>Operating Profit ($)</label><input type="number" id="bp-op" value="63000"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">12-Month Forecast Summary (from Forecasting Engine)</p>
+    <div class="row3">
+      <div><label>Total Revenue 12m ($)</label><input type="number" id="bp-forerev" value="5940000"></div>
+      <div><label>Total Net Cash 12m ($)</label><input type="number" id="bp-forenet" value="1716000"></div>
+      <div><label>Avg Monthly Revenue ($)</label><input type="number" id="bp-avgrev" value="495000"></div>
+      <div><label>Avg Monthly Cash Flow ($)</label><input type="number" id="bp-avgcf" value="143000"></div>
+      <div><label>Surplus Months</label><input type="number" id="bp-surplus" value="11"></div>
+    </div>
+    <button class="btn" onclick="doBizPlan()">Generate Report</button>
+  </div>
+  <div id="bizplan-output"></div>
+</div>
+
+<!-- ═══════ TAB 5: FINANCIAL SUMMARY ═══════ -->
+<div id="tab-finsummary" class="panel">
+  <div class="card">
+    <h3>Generate Financial Statements Summary</h3>
+    <div class="row2">
+      <div><label>Business Name</label><input type="text" id="fs-biz" value="Kumar Pharma Distributors"></div>
+      <div><label>Period</label><input type="text" id="fs-period" value="Q4 FY2024-25"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">P&amp;L (from P&L Engine)</p>
+    <div class="row3">
+      <div><label>Revenue ($)</label><input type="number" id="fs-rev" value="850000"></div>
+      <div><label>Gross Profit ($)</label><input type="number" id="fs-gp" value="255000"></div>
+      <div><label>Gross Margin (%)</label><input type="number" id="fs-gm" value="30" step="0.1"></div>
+      <div><label>Operating Profit ($)</label><input type="number" id="fs-op" value="102000"></div>
+      <div><label>Net Profit ($)</label><input type="number" id="fs-np" value="73440"></div>
+      <div><label>Net Margin (%)</label><input type="number" id="fs-nm" value="8.64" step="0.01"></div>
+      <div>
+        <label>P&amp;L Status</label>
+        <select id="fs-status">
+          <option value="Profitable">Profitable</option>
+          <option value="Break-even">Break-even</option>
+          <option value="Loss-making">Loss-making</option>
+        </select>
+      </div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Balance Sheet (from Balance Sheet)</p>
+    <div class="row3">
+      <div><label>Total Assets ($)</label><input type="number" id="fs-assets" value="2150000"></div>
+      <div><label>Total Liabilities ($)</label><input type="number" id="fs-liab" value="980000"></div>
+      <div><label>Total Equity ($)</label><input type="number" id="fs-equity" value="1170000"></div>
+      <div><label>Current Ratio</label><input type="number" id="fs-cr" value="2.1" step="0.01"></div>
+      <div><label>Debt-to-Equity</label><input type="number" id="fs-dte" value="0.84" step="0.01"></div>
+    </div>
+    <hr class="section-divider">
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Cash Flow Statement (from Cash Flow Statement)</p>
+    <div class="row3">
+      <div><label>Opening Cash ($)</label><input type="number" id="fs-open" value="120000"></div>
+      <div><label>Operating CF ($)</label><input type="number" id="fs-opcf" value="95000"></div>
+      <div><label>Investing CF ($)</label><input type="number" id="fs-invcf" value="-45000"></div>
+      <div><label>Financing CF ($)</label><input type="number" id="fs-fincf" value="-28000"></div>
+      <div><label>Closing Cash ($)</label><input type="number" id="fs-close" value="142000"></div>
+    </div>
+    <button class="btn" onclick="doFinSummary()">Generate Report</button>
+  </div>
+  <div id="finsummary-output"></div>
+</div>
+
+<!-- ═══════ TAB 6: UNIT TESTS ═══════ -->
+<div id="tab-tests" class="panel">
+  <div class="card">
+    <h3>Automated Unit Tests</h3>
+    <button class="btn" onclick="runTests()">Run All Tests</button>
+    <ul id="unitResults" style="margin-top:16px; list-style:none;"></ul>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// PAID REPORTS ENGINE
+// ═══════════════════════════════════════════════════════════════════════════
+function _r(n) { return Math.round(n * 100) / 100; }
+function _fmt(n) { return (n||0).toLocaleString("en-US"); }
+
+const REPORT_CATALOG = [
+  { id:"loan-risk",         name:"Loan Risk Report",
+    description:"Full risk assessment for a proposed loan — DSCR, DTI, stress scenarios, and verdict.",
+    icon:"⚠️", price:{free:null,basic:null,pro:299,enterprise:0},
+    requiredModules:["Loan Engine","Cash Flow","Risk & Debt"],
+    pages:"3–4 pages", useCases:["Loan application support","Banker presentation","Internal risk review"] },
+  { id:"business-plan",     name:"Business Financial Plan",
+    description:"Investor-ready plan with revenue projections, P&L forecast, and loan viability.",
+    icon:"📋", price:{free:null,basic:null,pro:499,enterprise:0},
+    requiredModules:["Cash Flow","P&L","Forecasting"],
+    pages:"5–7 pages", useCases:["Investor deck","Bank loan application","Internal business planning"] },
+  { id:"financial-summary", name:"Financial Statements Summary",
+    description:"Three-statement report: P&L, Balance Sheet, and Cash Flow Statement in one document.",
+    icon:"📊", price:{free:null,basic:null,pro:399,enterprise:0},
+    requiredModules:["P&L","Balance Sheet","Cash Flow Statement"],
+    pages:"4–5 pages", useCases:["Year-end review","Auditor prep","Lender package"] },
+  { id:"loan-viability",    name:"Loan Viability Report",
+    description:"Clear yes/no verdict on whether your business can safely take a specific loan.",
+    icon:"✅", price:{free:null,basic:199,pro:199,enterprise:0},
+    requiredModules:["Affordability","Stress Test","Recommendations"],
+    pages:"2–3 pages", useCases:["Quick decision making","Comparison between loan options","Business owner briefing"] },
+];
+
+function getReportCatalog() { return [...REPORT_CATALOG]; }
+
+function getReportPrice(reportId, tierId) {
+  const report = REPORT_CATALOG.find(r => r.id === reportId);
+  if (!report) throw new Error(`Unknown report: "${reportId}"`);
+  const price = report.price[tierId];
+  return {
+    reportId, tierId, price: price === null ? null : price, available: price !== null,
+    note: price === null ? `Not available on ${tierId} tier.`
+        : price === 0   ? "Included in your plan."
+        : `$${price} per report.`,
+  };
+}
+
+function generateLoanRiskReport({ businessName="Business", reportDate, loan, cashFlow, risk,
+    stress=null, preparedBy="SmallBiz Platform" }) {
+  if (!loan || !cashFlow || !risk) throw new Error("Missing required fields: loan, cashFlow, risk");
+  const date = reportDate || new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const totalPayment  = _r(loan.emi * loan.tenureMonths);
+  const totalInterest = _r(totalPayment - loan.principal);
+  const debtBurdenPct = cashFlow.netCashFlow > 0 ? _r((loan.emi / cashFlow.netCashFlow) * 100) : null;
+  const verdict       = _loanRiskVerdict(risk.dscr, risk.dtiPercent, risk.riskLevel);
+
+  return {
+    type:"loan-risk", title:"Loan Risk Assessment Report",
+    businessName, reportDate:date, preparedBy, generatedAt:new Date().toISOString(),
+    executiveSummary: {
+      verdict:verdict.decision, riskLevel:risk.riskLevel, riskScore:risk.riskScore,
+      keyMessage:verdict.message,
+      highlights: [
+        `Loan Amount: $${_fmt(loan.principal)} at ${loan.annualRate}% for ${loan.tenureMonths} months`,
+        `Monthly EMI: $${_fmt(loan.emi)} (${debtBurdenPct!==null?debtBurdenPct+"% of net cash flow":"N/A"})`,
+        `DSCR: ${risk.dscr} (${risk.dscr>=1.25?"Healthy ≥ 1.25":"Below threshold 1.25"})`,
+        `DTI: ${risk.dtiPercent}% (${risk.dtiPercent<35?"Acceptable < 35%":"High ≥ 35%"})`,
+      ],
+    },
+    loanDetails: { principal:loan.principal, annualRate:loan.annualRate, tenureMonths:loan.tenureMonths,
+                   emi:loan.emi, totalPayment, totalInterest, lenderName:loan.lenderName||"—" },
+    cashFlowAnalysis: {
+      monthlyRevenue:loan.revenue||cashFlow.revenue, monthlyFixedCosts:cashFlow.fixedExpenses,
+      monthlyVarCosts:cashFlow.variableExpenses, netCashFlow:cashFlow.netCashFlow,
+      emiAfterLoan:loan.emi, residualCashFlow:_r(cashFlow.netCashFlow - loan.emi), debtBurdenPct,
+    },
+    riskAssessment: {
+      dscr:risk.dscr,
+      dscrStatus:risk.dscr>=1.5?"Strong":risk.dscr>=1.25?"Adequate":risk.dscr>=1.0?"Tight":"Critical",
+      dtiPercent:risk.dtiPercent,
+      dtiStatus:risk.dtiPercent<30?"Conservative":risk.dtiPercent<35?"Acceptable":"High",
+      riskLevel:risk.riskLevel, riskScore:risk.riskScore,
+    },
+    stressResults: stress ? { revenueDrop20:stress.revenueDrop||null, expenseIncrease15:stress.expenseIncrease||null,
+      rateIncrease2pp:stress.rateIncrease||null, worstCaseNote:"If any scenario shows FAIL, reconsider loan." } : null,
+    verdict,
+    disclaimer:"This report is generated by SmallBiz Financial Platform for informational purposes only. It does not constitute financial advice.",
+  };
+}
+
+function generateBusinessPlan({ businessName="Business", businessType="Small Business",
+    cashFlow, pnl, forecast, loanPurpose="", loanRequested=0,
+    preparedBy="SmallBiz Platform", reportDate }) {
+  if (!cashFlow || !pnl || !forecast) throw new Error("Missing required fields: cashFlow, pnl, forecast");
+  const date = reportDate || new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const sm = forecast.summary || {};
+  const projectedGrowth = sm.avgMonthlyRevenue && cashFlow.revenue
+    ? _r(((sm.avgMonthlyRevenue - cashFlow.revenue) / cashFlow.revenue) * 100) : null;
+
+  return {
+    type:"business-plan", title:"Business Financial Plan",
+    businessName, businessType, reportDate:date, preparedBy, generatedAt:new Date().toISOString(),
+    businessOverview:{ name:businessName, type:businessType, loanPurpose, loanRequested },
+    currentFinancials:{ monthlyRevenue:cashFlow.revenue, monthlyExpenses:cashFlow.totalExpenses,
+      netCashFlow:cashFlow.netCashFlow, grossMargin:pnl.grossMargin, netMargin:pnl.netMargin,
+      operatingProfit:pnl.operatingProfit },
+    forecastSummary:{ forecastPeriods:sm.periods||12, projectedRevenue12m:sm.totalRevenue,
+      projectedNetCash12m:sm.totalNetCash, avgMonthlyRevenue:sm.avgMonthlyRevenue,
+      avgMonthlyCashFlow:sm.avgMonthlyCashFlow, surplusMonths:sm.surplusMonths,
+      projectedGrowth, closingCash:sm.closingCash },
+    monthlyProjections: (forecast.projections||[]).slice(0,12).map(p => ({
+      period:p.period, revenue:p.revenue, netCashFlow:p.netCashFlow, cumulative:p.cumulativeCash })),
+    loanUtilizationPlan: loanPurpose ? { purpose:loanPurpose, amount:loanRequested, expectedROI:"To be determined based on implementation" } : null,
+    disclaimer:"This business plan is generated by SmallBiz Financial Platform for planning purposes only.",
+  };
+}
+
+function generateFinancialSummary({ businessName="Business", pnl, balanceSheet, cashFlow,
+    reportDate, preparedBy="SmallBiz Platform" }) {
+  if (!pnl || !balanceSheet || !cashFlow) throw new Error("Missing required fields: pnl, balanceSheet, cashFlow");
+  const date = reportDate || new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const bsSummary = balanceSheet.summary || balanceSheet;
+  return {
+    type:"financial-summary", title:"Financial Statements Summary",
+    businessName, reportDate:date, preparedBy, generatedAt:new Date().toISOString(),
+    profitLoss:{ period:pnl.period||date, revenue:pnl.revenue, grossProfit:pnl.grossProfit,
+      grossMargin:pnl.grossMargin, operatingProfit:pnl.operatingProfit,
+      netProfitAfterTax:pnl.netProfitAfterTax||pnl.netProfit, netMargin:pnl.netMargin, status:pnl.status },
+    balanceSheet:{ period:balanceSheet.period||date, totalAssets:bsSummary.totalAssets,
+      totalLiabilities:bsSummary.totalLiabilities, totalEquity:bsSummary.totalEquity,
+      isBalanced:bsSummary.isBalanced, currentRatio:balanceSheet.ratios?.currentRatio||balanceSheet.currentRatio,
+      debtToEquity:balanceSheet.ratios?.debtToEquityRatio||balanceSheet.debtToEquity },
+    cashFlowStatement:{ period:cashFlow.period||date, openingCash:cashFlow.openingCash,
+      netCashFromOperating:cashFlow.netCashFromOperating, netCashFromInvesting:cashFlow.netCashFromInvesting,
+      netCashFromFinancing:cashFlow.netCashFromFinancing, closingCash:cashFlow.closingCash },
+    interlinkCheck:{
+      netProfitMatchesOperatingCF: null, closingCashMatchesBS: null,
+    },
+    disclaimer:"This report is for informational purposes only.",
+  };
+}
+
+function generateLoanViabilityReport({ businessName="Business", affordability, stress=null,
+    recommendation=null, reportDate, preparedBy="SmallBiz Platform" }) {
+  if (!affordability) throw new Error("affordability data is required.");
+  const date = reportDate || new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const verdict = affordability.status==="affordable" ? "PROCEED"
+    : affordability.status==="tight" ? "PROCEED WITH CAUTION" : "DO NOT PROCEED";
+  return {
+    type:"loan-viability", title:"Loan Viability Report",
+    businessName, reportDate:date, preparedBy, generatedAt:new Date().toISOString(),
+    verdict, verdictColor:verdict==="PROCEED"?"green":verdict==="PROCEED WITH CAUTION"?"amber":"red",
+    affordabilityAnalysis:{ status:affordability.status, safeEMI:affordability.safeEMI,
+      desiredEMI:affordability.desiredEMI, headroom:affordability.headroom,
+      shortfall:affordability.shortfall, maxLoanAmount:affordability.maxLoanAmount },
+    stressResults: stress ? { scenarios:stress.results||[], allPassed:stress.allPassed||false, worstCase:stress.worstScenario||null } : null,
+    recommendations: recommendation ? { decision:recommendation.decision, actions:recommendation.actions||[] } : null,
+    disclaimer:"This report is generated by SmallBiz Financial Platform for informational purposes only.",
+  };
+}
+
+function _loanRiskVerdict(dscr, dtiPercent, riskLevel) {
+  if (riskLevel==="Critical" || dscr<1.0)
+    return {decision:"DO NOT PROCEED", color:"red", message:"Critical risk — loan would severely strain your cash flow."};
+  if (riskLevel==="High" || dscr<1.25)
+    return {decision:"HIGH RISK — RECONSIDER", color:"orange", message:"High risk — consider reducing loan amount or extending tenure."};
+  if (riskLevel==="Moderate" || dtiPercent>35)
+    return {decision:"PROCEED WITH CAUTION", color:"amber", message:"Moderate risk — ensure you have 2+ months cash reserve."};
+  return {decision:"SAFE TO PROCEED", color:"green", message:"Loan appears manageable based on current cash flow and risk metrics."};
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UI Logic
+// ═══════════════════════════════════════════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function fmt(n) { return (n||0).toLocaleString('en-US'); }
+
+function renderCatalog() {
+  const catalog = getReportCatalog();
+  document.getElementById('catalog-grid').innerHTML = `<div class="catalog-grid">` +
+    catalog.map(r => `
+      <div class="catalog-card">
+        <h4>${r.icon} ${r.name}</h4>
+        <div class="desc">${r.description}</div>
+        <div class="price-row">
+          <span class="price-pill pill-na">Free: N/A</span>
+          ${r.price.basic !== null ? `<span class="price-pill pill-price">Basic: $${r.price.basic}</span>` : `<span class="price-pill pill-na">Basic: N/A</span>`}
+          <span class="price-pill pill-price">Pro: $${r.price.pro}</span>
+          <span class="price-pill pill-free">Enterprise: Free</span>
+        </div>
+        <div class="modules-tag"><b>Uses:</b> ${r.requiredModules.map(m=>`<span>${m}</span>`).join('')}</div>
+        <div style="font-size:0.74rem;color:#64748b;margin-top:6px">${r.pages} &nbsp;·&nbsp; ${r.useCases.slice(0,2).join(', ')}</div>
+      </div>`).join('') + `</div>`;
+
+  const tiers = ['free','basic','pro','enterprise'];
+  document.getElementById('price-table').innerHTML = catalog.map(r =>
+    `<tr><td><b>${r.icon}</b> ${r.name}</td>` +
+    tiers.map(t => {
+      const p = r.price[t];
+      return `<td>${p === null ? '<span style="color:#94a3b8">—</span>'
+                : p === 0    ? '<span style="color:#16a34a;font-weight:600">Included</span>'
+                : `<span style="color:#5b21b6;font-weight:600">$${p}</span>`}</td>`;
+    }).join('') + `</tr>`
+  ).join('');
+}
+
+function reportHeader(title, biz, date, generatedAt) {
+  return `<div class="report-header">
+    <div class="report-title">${title}</div>
+    <div class="report-meta">${biz} &nbsp;·&nbsp; ${date} &nbsp;·&nbsp; Generated: ${new Date(generatedAt).toLocaleString('en-US')}</div>
+  </div>`;
+}
+
+function verdictBox(decision, color, message) {
+  const cls = color === 'green' ? 'verdict-green' : color === 'red' ? 'verdict-red' : color === 'orange' ? 'verdict-orange' : 'verdict-amber';
+  const icon = color === 'green' ? '✅' : color === 'red' ? '🚫' : '⚠️';
+  return `<div class="verdict-box ${cls}">
+    <div class="decision">${icon} ${decision}</div>
+    <div style="font-size:0.85rem;margin-top:6px;color:#374151">${message}</div>
+  </div>`;
+}
+
+function doLoanRisk() {
+  const principal = parseFloat(document.getElementById('lr-principal').value);
+  const rate      = parseFloat(document.getElementById('lr-rate').value);
+  const tenure    = parseInt(document.getElementById('lr-tenure').value);
+  const emi       = parseFloat(document.getElementById('lr-emi').value);
+  const rev       = parseFloat(document.getElementById('lr-rev').value);
+  const fixed     = parseFloat(document.getElementById('lr-fixed').value);
+  const variable  = parseFloat(document.getElementById('lr-variable').value);
+
+  const report = generateLoanRiskReport({
+    businessName: document.getElementById('lr-biz').value,
+    loan: { principal, annualRate:rate, tenureMonths:tenure, emi, lenderName:document.getElementById('lr-lender').value },
+    cashFlow: { revenue:rev, fixedExpenses:fixed, variableExpenses:variable, netCashFlow:rev-fixed-variable },
+    risk: { dscr:parseFloat(document.getElementById('lr-dscr').value),
+            dtiPercent:parseFloat(document.getElementById('lr-dti').value),
+            riskLevel:document.getElementById('lr-risk').value,
+            riskScore:parseInt(document.getElementById('lr-score').value) },
+  });
+
+  const es = report.executiveSummary;
+  const ld = report.loanDetails;
+  const cf = report.cashFlowAnalysis;
+  const ra = report.riskAssessment;
+
+  document.getElementById('loanrisk-output').innerHTML = `<div class="report-output">
+    ${reportHeader(report.title, report.businessName, report.reportDate, report.generatedAt)}
+    ${verdictBox(es.verdict, report.verdict.color, es.keyMessage)}
+
+    <div class="report-section"><h4>Loan Details</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(ld.principal)}</div><div class="lbl">Principal</div></div>
+        <div class="stat-cell"><div class="val">${ld.annualRate}%</div><div class="lbl">Annual Rate</div></div>
+        <div class="stat-cell"><div class="val">${ld.tenureMonths} months</div><div class="lbl">Tenure</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(ld.emi)}/mo</div><div class="lbl">Monthly EMI</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(ld.totalPayment)}</div><div class="lbl">Total Payment</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(ld.totalInterest)}</div><div class="lbl">Total Interest</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>Cash Flow Analysis</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(cf.monthlyRevenue)}</div><div class="lbl">Monthly Revenue</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.netCashFlow)}</div><div class="lbl">Net Cash Flow</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.emiAfterLoan)}</div><div class="lbl">EMI</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.residualCashFlow)}</div><div class="lbl">Residual After EMI</div></div>
+        <div class="stat-cell"><div class="val">${cf.debtBurdenPct !== null ? cf.debtBurdenPct + '%' : 'N/A'}</div><div class="lbl">Debt Burden</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>Risk Assessment</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">${ra.dscr}</div><div class="lbl">DSCR (${ra.dscrStatus})</div></div>
+        <div class="stat-cell"><div class="val">${ra.dtiPercent}%</div><div class="lbl">DTI (${ra.dtiStatus})</div></div>
+        <div class="stat-cell"><div class="val">${ra.riskLevel}</div><div class="lbl">Risk Level</div></div>
+        <div class="stat-cell"><div class="val">${ra.riskScore}/100</div><div class="lbl">Risk Score</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>Key Highlights</h4>
+      <ul class="highlight-list">${es.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+    </div>
+
+    <div class="disclaimer">${report.disclaimer}</div>
+  </div>`;
+}
+
+function doViability() {
+  const stressPass = document.getElementById('lv-stresspass').value;
+  const stress = stressPass === '' ? null : { allPassed: stressPass === 'true', results: [] };
+
+  const report = generateLoanViabilityReport({
+    businessName: document.getElementById('lv-biz').value,
+    affordability: {
+      status:       document.getElementById('lv-status').value,
+      safeEMI:      parseFloat(document.getElementById('lv-safeemi').value),
+      desiredEMI:   parseFloat(document.getElementById('lv-desiredemi').value),
+      headroom:     parseFloat(document.getElementById('lv-headroom').value),
+      shortfall:    parseFloat(document.getElementById('lv-shortfall').value),
+      maxLoanAmount:parseFloat(document.getElementById('lv-maxloan').value),
+    },
+    stress,
+  });
+
+  const af = report.affordabilityAnalysis;
+
+  document.getElementById('viability-output').innerHTML = `<div class="report-output">
+    ${reportHeader(report.title, report.businessName, report.reportDate, report.generatedAt)}
+    ${verdictBox(report.verdict, report.verdictColor, '')}
+
+    <div class="report-section"><h4>Affordability Analysis</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">${af.status}</div><div class="lbl">Status</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(af.safeEMI)}</div><div class="lbl">Safe EMI</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(af.desiredEMI)}</div><div class="lbl">Desired EMI</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(af.headroom)}</div><div class="lbl">Headroom</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(af.shortfall)}</div><div class="lbl">Shortfall</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(af.maxLoanAmount)}</div><div class="lbl">Max Loan Eligible</div></div>
+      </div>
+    </div>
+
+    ${report.stressResults ? `<div class="report-section"><h4>Stress Test Results</h4>
+      <p style="font-size:0.85rem;color:${report.stressResults.allPassed?'#16a34a':'#dc2626'}">
+        ${report.stressResults.allPassed ? '✓ All stress scenarios passed.' : '✗ Some stress scenarios failed — proceed carefully.'}
+      </p></div>` : ''}
+
+    <div class="disclaimer">${report.disclaimer}</div>
+  </div>`;
+}
+
+function doBizPlan() {
+  const report = generateBusinessPlan({
+    businessName: document.getElementById('bp-biz').value,
+    businessType: document.getElementById('bp-type').value,
+    loanPurpose:  document.getElementById('bp-purpose').value,
+    loanRequested:parseFloat(document.getElementById('bp-loanamt').value),
+    cashFlow: {
+      revenue:       parseFloat(document.getElementById('bp-rev').value),
+      totalExpenses: parseFloat(document.getElementById('bp-exp').value),
+      netCashFlow:   parseFloat(document.getElementById('bp-net').value),
+    },
+    pnl: {
+      grossMargin:     parseFloat(document.getElementById('bp-gm').value),
+      netMargin:       parseFloat(document.getElementById('bp-nm').value),
+      operatingProfit: parseFloat(document.getElementById('bp-op').value),
+    },
+    forecast: {
+      summary: {
+        periods:           12,
+        totalRevenue:      parseFloat(document.getElementById('bp-forerev').value),
+        totalNetCash:      parseFloat(document.getElementById('bp-forenet').value),
+        avgMonthlyRevenue: parseFloat(document.getElementById('bp-avgrev').value),
+        avgMonthlyCashFlow:parseFloat(document.getElementById('bp-avgcf').value),
+        surplusMonths:     parseInt(document.getElementById('bp-surplus').value),
+      },
+      projections: [],
+    },
+  });
+
+  const cf = report.currentFinancials;
+  const fs = report.forecastSummary;
+  const bo = report.businessOverview;
+
+  document.getElementById('bizplan-output').innerHTML = `<div class="report-output">
+    ${reportHeader(report.title, report.businessName, report.reportDate, report.generatedAt)}
+
+    <div class="report-section"><h4>Business Overview</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">${bo.type}</div><div class="lbl">Business Type</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(bo.loanRequested)}</div><div class="lbl">Loan Requested</div></div>
+      </div>
+      ${bo.loanPurpose ? `<p style="font-size:0.85rem;margin-top:10px;color:#374151"><b>Purpose:</b> ${bo.loanPurpose}</p>` : ''}
+    </div>
+
+    <div class="report-section"><h4>Current Financial Performance</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(cf.monthlyRevenue)}</div><div class="lbl">Monthly Revenue</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.netCashFlow)}</div><div class="lbl">Net Cash Flow</div></div>
+        <div class="stat-cell"><div class="val">${cf.grossMargin}%</div><div class="lbl">Gross Margin</div></div>
+        <div class="stat-cell"><div class="val">${cf.netMargin}%</div><div class="lbl">Net Margin</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.operatingProfit)}</div><div class="lbl">Operating Profit</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>12-Month Forecast</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(fs.projectedRevenue12m)}</div><div class="lbl">Projected Revenue</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(fs.projectedNetCash12m)}</div><div class="lbl">Projected Net Cash</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(fs.avgMonthlyRevenue)}</div><div class="lbl">Avg Monthly Revenue</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(fs.avgMonthlyCashFlow)}</div><div class="lbl">Avg Monthly CF</div></div>
+        <div class="stat-cell"><div class="val">${fs.surplusMonths}/12</div><div class="lbl">Surplus Months</div></div>
+        ${fs.projectedGrowth !== null ? `<div class="stat-cell"><div class="val">${fs.projectedGrowth}%</div><div class="lbl">Revenue Growth</div></div>` : ''}
+      </div>
+    </div>
+
+    <div class="disclaimer">${report.disclaimer}</div>
+  </div>`;
+}
+
+function doFinSummary() {
+  const report = generateFinancialSummary({
+    businessName: document.getElementById('fs-biz').value,
+    pnl: {
+      period:           document.getElementById('fs-period').value,
+      revenue:          parseFloat(document.getElementById('fs-rev').value),
+      grossProfit:      parseFloat(document.getElementById('fs-gp').value),
+      grossMargin:      parseFloat(document.getElementById('fs-gm').value),
+      operatingProfit:  parseFloat(document.getElementById('fs-op').value),
+      netProfitAfterTax:parseFloat(document.getElementById('fs-np').value),
+      netMargin:        parseFloat(document.getElementById('fs-nm').value),
+      status:           document.getElementById('fs-status').value,
+    },
+    balanceSheet: {
+      period:           document.getElementById('fs-period').value,
+      totalAssets:      parseFloat(document.getElementById('fs-assets').value),
+      totalLiabilities: parseFloat(document.getElementById('fs-liab').value),
+      totalEquity:      parseFloat(document.getElementById('fs-equity').value),
+      isBalanced:       true,
+      currentRatio:     parseFloat(document.getElementById('fs-cr').value),
+      debtToEquity:     parseFloat(document.getElementById('fs-dte').value),
+    },
+    cashFlow: {
+      period:              document.getElementById('fs-period').value,
+      openingCash:         parseFloat(document.getElementById('fs-open').value),
+      netCashFromOperating:parseFloat(document.getElementById('fs-opcf').value),
+      netCashFromInvesting:parseFloat(document.getElementById('fs-invcf').value),
+      netCashFromFinancing:parseFloat(document.getElementById('fs-fincf').value),
+      closingCash:         parseFloat(document.getElementById('fs-close').value),
+    },
+  });
+
+  const pl = report.profitLoss;
+  const bs = report.balanceSheet;
+  const cf = report.cashFlowStatement;
+
+  document.getElementById('finsummary-output').innerHTML = `<div class="report-output">
+    ${reportHeader(report.title, report.businessName, report.reportDate, report.generatedAt)}
+
+    <div class="report-section"><h4>Profit &amp; Loss — ${pl.period||''}</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(pl.revenue)}</div><div class="lbl">Revenue</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(pl.grossProfit)}</div><div class="lbl">Gross Profit (${pl.grossMargin}%)</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(pl.operatingProfit)}</div><div class="lbl">Operating Profit</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(pl.netProfitAfterTax)}</div><div class="lbl">Net Profit (${pl.netMargin}%)</div></div>
+        <div class="stat-cell"><div class="val" style="color:${pl.status==='Profitable'?'#16a34a':'#dc2626'}">${pl.status}</div><div class="lbl">Status</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>Balance Sheet</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(bs.totalAssets)}</div><div class="lbl">Total Assets</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(bs.totalLiabilities)}</div><div class="lbl">Total Liabilities</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(bs.totalEquity)}</div><div class="lbl">Total Equity</div></div>
+        <div class="stat-cell"><div class="val">${bs.currentRatio}</div><div class="lbl">Current Ratio</div></div>
+        <div class="stat-cell"><div class="val">${bs.debtToEquity}</div><div class="lbl">Debt-to-Equity</div></div>
+      </div>
+    </div>
+
+    <div class="report-section"><h4>Cash Flow Statement</h4>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="val">$${fmt(cf.openingCash)}</div><div class="lbl">Opening Cash</div></div>
+        <div class="stat-cell"><div class="val" style="color:${cf.netCashFromOperating>=0?'#16a34a':'#dc2626'}">$${fmt(cf.netCashFromOperating)}</div><div class="lbl">Operating CF</div></div>
+        <div class="stat-cell"><div class="val" style="color:${cf.netCashFromInvesting>=0?'#16a34a':'#dc2626'}">$${fmt(cf.netCashFromInvesting)}</div><div class="lbl">Investing CF</div></div>
+        <div class="stat-cell"><div class="val" style="color:${cf.netCashFromFinancing>=0?'#16a34a':'#dc2626'}">$${fmt(cf.netCashFromFinancing)}</div><div class="lbl">Financing CF</div></div>
+        <div class="stat-cell"><div class="val">$${fmt(cf.closingCash)}</div><div class="lbl">Closing Cash</div></div>
+      </div>
+    </div>
+
+    <div class="disclaimer">${report.disclaimer}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Unit Tests
+// ═══════════════════════════════════════════════════════════════════════════
+function runTests() {
+  const results = [];
+  function test(name, fn) {
+    try { fn(); results.push({name, ok:true}); }
+    catch(e) { results.push({name, ok:false, err:e.message}); }
+  }
+  function assert(cond, msg) { if (!cond) throw new Error(msg || "Assertion failed"); }
+
+  const sampleLoan = {principal:1500000, annualRate:10.5, tenureMonths:36, emi:48767, lenderName:"SBI"};
+  const sampleCF   = {revenue:300000, fixedExpenses:80000, variableExpenses:100000, netCashFlow:120000};
+  const sampleRisk = {dscr:2.47, dtiPercent:20.3, riskLevel:"Low", riskScore:72};
+
+  test("getReportCatalog returns 4 reports", () => assert(getReportCatalog().length === 4));
+  test("getReportPrice — loan-risk on pro = $299", () => {
+    const p = getReportPrice("loan-risk","pro");
+    assert(p.price === 299 && p.available === true);
+  });
+  test("getReportPrice — loan-risk on free = null", () => {
+    const p = getReportPrice("loan-risk","free");
+    assert(p.price === null && p.available === false);
+  });
+  test("getReportPrice — enterprise = 0 (included)", () => {
+    const p = getReportPrice("business-plan","enterprise");
+    assert(p.price === 0 && p.available === true);
+  });
+  test("getReportPrice — loan-viability on basic = $199", () => {
+    const p = getReportPrice("loan-viability","basic");
+    assert(p.price === 199 && p.available === true);
+  });
+  test("getReportPrice — unknown report throws", () => {
+    let threw = false;
+    try { getReportPrice("xyz","pro"); } catch { threw = true; }
+    assert(threw);
+  });
+
+  test("generateLoanRiskReport — returns type loan-risk", () => {
+    const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
+    assert(r.type === "loan-risk");
+  });
+  test("generateLoanRiskReport — SAFE verdict for low risk", () => {
+    const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
+    assert(r.verdict.decision === "SAFE TO PROCEED");
+    assert(r.verdict.color === "green");
+  });
+  test("generateLoanRiskReport — DO NOT PROCEED for critical", () => {
+    const r = generateLoanRiskReport({
+      loan:sampleLoan, cashFlow:sampleCF,
+      risk:{dscr:0.8, dtiPercent:50, riskLevel:"Critical", riskScore:20}
+    });
+    assert(r.verdict.decision === "DO NOT PROCEED");
+  });
+  test("generateLoanRiskReport — totalPayment = emi * tenure", () => {
+    const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
+    assert(Math.abs(r.loanDetails.totalPayment - (sampleLoan.emi * sampleLoan.tenureMonths)) < 1);
+  });
+  test("generateLoanRiskReport — residualCashFlow = netCashFlow - emi", () => {
+    const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
+    const expected = _r(sampleCF.netCashFlow - sampleLoan.emi);
+    assert(Math.abs(r.cashFlowAnalysis.residualCashFlow - expected) < 1);
+  });
+  test("generateLoanRiskReport — missing loan throws", () => {
+    let threw = false;
+    try { generateLoanRiskReport({cashFlow:sampleCF, risk:sampleRisk}); } catch { threw = true; }
+    assert(threw);
+  });
+
+  test("generateLoanViabilityReport — PROCEED for affordable", () => {
+    const r = generateLoanViabilityReport({affordability:{status:"affordable",safeEMI:50000,desiredEMI:45000,headroom:5000,shortfall:0,maxLoanAmount:1500000}});
+    assert(r.verdict === "PROCEED" && r.verdictColor === "green");
+  });
+  test("generateLoanViabilityReport — PROCEED WITH CAUTION for tight", () => {
+    const r = generateLoanViabilityReport({affordability:{status:"tight",safeEMI:48000,desiredEMI:50000,headroom:0,shortfall:2000,maxLoanAmount:1200000}});
+    assert(r.verdict === "PROCEED WITH CAUTION");
+  });
+  test("generateLoanViabilityReport — DO NOT PROCEED for unaffordable", () => {
+    const r = generateLoanViabilityReport({affordability:{status:"unaffordable",safeEMI:30000,desiredEMI:60000,headroom:0,shortfall:30000,maxLoanAmount:700000}});
+    assert(r.verdict === "DO NOT PROCEED" && r.verdictColor === "red");
+  });
+  test("generateLoanViabilityReport — missing affordability throws", () => {
+    let threw = false;
+    try { generateLoanViabilityReport({}); } catch { threw = true; }
+    assert(threw);
+  });
+
+  test("generateBusinessPlan — returns type business-plan", () => {
+    const r = generateBusinessPlan({
+      cashFlow:{revenue:450000,totalExpenses:320000,netCashFlow:130000},
+      pnl:{grossMargin:28,netMargin:14,operatingProfit:63000},
+      forecast:{summary:{periods:12,totalRevenue:5940000,totalNetCash:1716000,avgMonthlyRevenue:495000,avgMonthlyCashFlow:143000,surplusMonths:11},projections:[]}
+    });
+    assert(r.type === "business-plan");
+  });
+  test("generateFinancialSummary — returns type financial-summary", () => {
+    const r = generateFinancialSummary({
+      pnl:{revenue:850000,grossProfit:255000,grossMargin:30,operatingProfit:102000,netProfitAfterTax:73440,netMargin:8.64,status:"Profitable"},
+      balanceSheet:{totalAssets:2150000,totalLiabilities:980000,totalEquity:1170000,isBalanced:true},
+      cashFlow:{openingCash:120000,netCashFromOperating:95000,netCashFromInvesting:-45000,netCashFromFinancing:-28000,closingCash:142000},
+    });
+    assert(r.type === "financial-summary");
+  });
+  test("generateFinancialSummary — missing pnl throws", () => {
+    let threw = false;
+    try { generateFinancialSummary({balanceSheet:{},cashFlow:{}}); } catch { threw = true; }
+    assert(threw);
+  });
+
+  const ul = document.getElementById('unitResults');
+  const pass = results.filter(r => r.ok).length;
+  ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+window.onload = () => renderCatalog();
+</script>
+</body>
+</html>

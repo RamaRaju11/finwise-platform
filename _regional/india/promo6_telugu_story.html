@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinWise — బాబు సుబ్బారావు Story</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0500;display:flex;align-items:center;justify-content:center;font-family:Arial,'Noto Sans Telugu',sans-serif;overflow:hidden}
+
+/* ── START OVERLAY ── */
+#startOv{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a0800,#0a0000);display:flex;align-items:center;justify-content:center}
+.start-card{text-align:center;padding:44px 32px;max-width:370px;background:linear-gradient(145deg,#3d1500,#1a0800);border-radius:28px;border:1.5px solid rgba(251,191,36,.25);box-shadow:0 28px 80px rgba(0,0,0,.9)}
+.start-emoji{font-size:3.8rem;margin-bottom:12px;display:block;animation:popIn .6s cubic-bezier(.34,1.7,.64,1) both}
+.start-title{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:6px}
+.start-title em{color:#fbbf24;font-style:normal}
+.start-sub{font-size:.9rem;color:rgba(255,255,255,.5);font-weight:600;line-height:1.7;margin-bottom:22px}
+.start-sub strong{color:#fbbf24}
+.start-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 38px;background:linear-gradient(135deg,#d97706,#fbbf24);color:#1a0800;border:none;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 28px rgba(217,119,6,.5);transition:transform .2s}
+.start-btn:hover{transform:scale(1.05)}
+.start-note{margin-top:14px;font-size:.72rem;color:rgba(255,255,255,.25);font-weight:700;letter-spacing:.5px}
+
+/* ── REEL ── */
+.reel{position:relative;width:390px;height:100vh;max-height:780px;overflow:hidden;border-radius:0;box-shadow:0 0 100px rgba(251,191,36,.12)}
+@media(min-width:500px){.reel{border-radius:24px;height:780px}}
+.reel::before{content:'';position:absolute;top:0;left:0;right:0;height:72px;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);z-index:150;pointer-events:none}
+
+/* ── PROGRESS ── */
+.prog-dots{position:absolute;top:14px;left:0;right:0;display:flex;gap:4px;padding:0 16px;z-index:200}
+.dot{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.dot-fill{height:100%;background:#fbbf24;border-radius:99px;width:0%}
+
+/* ── CONTROLS ── */
+.ctrl-bar{position:absolute;top:10px;right:14px;z-index:300;display:flex;gap:6px}
+.ctrl-btn{background:rgba(0,0,0,.45);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:.88rem;cursor:pointer;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center}
+
+/* ── SCENE LABEL ── */
+.scene-tag{position:absolute;top:36px;left:50%;transform:translateX(-50%);background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;font-size:.65rem;font-weight:900;padding:4px 14px;border-radius:99px;letter-spacing:1px;text-transform:uppercase;z-index:160;white-space:nowrap;opacity:0;animation:riseUp .4s ease both;animation-delay:.05s}
+
+/* ── SLIDES ── */
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:68px 26px 112px;text-align:center;opacity:0;pointer-events:none;transition:opacity .38s ease,transform .38s ease;transform:scale(1.06)}
+.slide.active{opacity:1;pointer-events:auto;transform:scale(1)}
+.slide.active .scene-tag{opacity:1}
+.slide.out{opacity:0;transform:scale(.92)}
+
+.s1{background:linear-gradient(160deg,#1a0e00,#3d2200)}
+.s2{background:linear-gradient(160deg,#1a0000,#3d0808)}
+.s3{background:linear-gradient(160deg,#000d1a,#00173d)}
+.s4{background:linear-gradient(160deg,#0d001a,#1f003d)}
+.s5{background:radial-gradient(ellipse at center,#1a1400 0%,#020100 100%)}
+.s6{background:linear-gradient(160deg,#001a10,#003320)}
+.s7{background:linear-gradient(160deg,#052e16,#16a34a)}
+
+/* ── SUBTITLE ── */
+.sub-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);padding:11px 16px 22px;font-size:.88rem;font-weight:700;color:rgba(255,255,255,.82);line-height:1.65;min-height:72px;z-index:200;text-align:center}
+.sub-bar mark{background:none;color:#fbbf24;font-weight:900;font-style:normal;text-decoration:underline;text-underline-offset:2px}
+
+/* ── TEXT ── */
+.big-emoji{font-size:4rem;line-height:1;margin-bottom:14px;display:block;animation:popIn .52s cubic-bezier(.34,1.7,.64,1) both}
+.hd{font-size:1.75rem;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-.3px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.13s}
+.sd{font-size:.94rem;font-weight:700;color:rgba(255,255,255,.58);line-height:1.55;animation:riseUp .44s ease both;animation-delay:.28s}
+.gold{color:#fbbf24}
+.green{color:#4ade80}
+
+/* ── SLIDE 1 — Character Card ── */
+.char-card{background:rgba(255,255,255,.06);border:1.5px solid rgba(251,191,36,.25);border-radius:18px;padding:18px 20px;width:100%;max-width:300px;margin-top:14px;animation:riseUp .44s ease both;animation-delay:.35s}
+.char-avatar{font-size:3.2rem;margin-bottom:6px}
+.char-name{font-size:1.2rem;font-weight:900;color:#fbbf24;margin-bottom:10px}
+.char-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.8rem}
+.char-stat:last-child{border-bottom:none}
+.cs-key{color:rgba(255,255,255,.45);font-weight:700}
+.cs-val{color:#fff;font-weight:900;text-align:right;font-size:.78rem}
+.char-badge{margin-top:10px;display:inline-block;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:#fbbf24;border-radius:99px;font-size:.7rem;font-weight:900;padding:4px 14px}
+
+/* ── SLIDE 2 — CA Dialog ── */
+.chat-box{margin-top:12px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.35s}
+.bbl{padding:10px 14px;border-radius:14px;font-size:.84rem;font-weight:700;margin-bottom:8px;line-height:1.5;text-align:left}
+.bbl-ca{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);color:#fca5a5;border-top-left-radius:4px}
+.bbl-bs{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.85);border-top-right-radius:4px;text-align:right}
+.bbl-lbl{font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;opacity:.55;margin-bottom:3px}
+.bbl-bs .bbl-lbl{text-align:right}
+.punch-tag{margin-top:4px;display:inline-block;background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid rgba(220,38,38,.4);border-radius:99px;font-size:.72rem;font-weight:900;padding:5px 14px;animation:riseUp .44s ease both;animation-delay:.65s}
+
+/* ── SLIDE 3 — Bank Scene ── */
+.bank-dialog{margin-top:12px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.35s}
+.think-bubble{background:rgba(255,255,255,.05);border:1.5px dashed rgba(255,255,255,.2);border-radius:14px;padding:12px 16px;font-size:.86rem;font-weight:700;color:rgba(255,255,255,.7);margin-top:8px;line-height:1.5;position:relative;animation:riseUp .44s ease both;animation-delay:.6s}
+.think-bubble::before{content:'💭';position:absolute;top:-14px;left:16px;font-size:1.2rem}
+
+/* ── SLIDE 4 — Wife Scene ── */
+.convo-wrap{margin-top:12px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.35s}
+.month-tag{display:inline-block;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);color:#c4b5fd;border-radius:99px;font-size:.68rem;font-weight:900;padding:4px 12px;margin-bottom:8px;animation:riseUp .44s ease both;animation-delay:.3s}
+.bbl-wife{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:#e9d5ff;border-top-right-radius:4px;text-align:right}
+
+/* ── SLIDE 5 — Discovery ── */
+.discovery-wrap{text-align:center;animation:zoomBounce .62s cubic-bezier(.34,1.7,.64,1) both}
+.disco-big{font-size:2.7rem;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1px}
+.disco-big em{color:#fbbf24;font-style:normal}
+.friend-quote{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:14px;padding:12px 16px;margin-top:14px;font-size:.86rem;font-weight:700;color:rgba(255,255,255,.7);line-height:1.55;animation:riseUp .44s ease both;animation-delay:.5s}
+.fq-from{font-size:.62rem;color:rgba(251,191,36,.7);font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+
+/* ── SLIDE 6 — FinWise + Reactions ── */
+.brand{font-size:3.5rem;font-weight:900;letter-spacing:-3px;color:#fff;animation:zoomBounce .5s cubic-bezier(.34,1.7,.64,1) both;font-family:'Arial Black',Arial,sans-serif}
+.brand em{color:#4ade80;font-style:normal}
+.brand-tag{font-size:.82rem;color:rgba(255,255,255,.45);font-weight:700;margin-top:3px;animation:riseUp .44s ease both;animation-delay:.28s}
+.feat-ul{width:100%;list-style:none;text-align:left;margin-top:14px}
+.feat-ul li{padding:9px 13px;margin-bottom:6px;background:rgba(74,222,128,.05);border-radius:10px;border-left:3px solid #4ade80;font-size:.86rem;font-weight:700;color:#e2e8f0;opacity:0;transform:translateX(-18px);transition:opacity .38s ease,transform .38s ease;display:flex;align-items:center;gap:8px}
+.feat-ul li.show{opacity:1;transform:translateX(0)}
+.feat-ul li .react{font-size:.9rem;flex-shrink:0;opacity:.7}
+
+/* ── SLIDE 7 — CTA ── */
+.cta-hero{font-size:1.7rem;font-weight:900;color:#fff;line-height:1.2;animation:zoomBounce .5s cubic-bezier(.34,1.7,.64,1) both}
+.cta-sub{font-size:.9rem;color:rgba(255,255,255,.6);font-weight:700;margin-top:10px;line-height:1.55;animation:riseUp .44s ease both;animation-delay:.3s}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:14px 34px;background:#fbbf24;color:#1a0800;border:none;border-radius:50px;font-size:.98rem;font-weight:900;cursor:pointer;text-decoration:none;box-shadow:0 8px 28px rgba(251,191,36,.4);animation:riseUp .44s ease both;animation-delay:.55s;transition:transform .2s;font-family:'Arial Black',Arial,sans-serif}
+.cta-btn:hover{transform:translateY(-3px) scale(1.04)}
+.replay-lnk{display:inline-block;margin-top:10px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.15);border-radius:50px;padding:8px 22px;font-size:.8rem;font-weight:800;cursor:pointer;animation:riseUp .44s ease both;animation-delay:.75s}
+
+/* ── KEYFRAMES ── */
+@keyframes popIn{0%{transform:scale(0) rotate(-14deg);opacity:0}75%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes riseUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zoomBounce{0%{opacity:0;transform:scale(.45)}72%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<!-- ── START OVERLAY ── -->
+<div id="startOv">
+  <div class="start-card">
+    <span class="start-emoji">👨‍💼</span>
+    <div class="start-title">బాబు <em>సుబ్బారావు</em></div>
+    <div class="start-sub">
+      ఒక చిన్న business owner.<br>
+      పెద్ద problems.<br>
+      <strong>చాలా funny కదా? 😂</strong>
+    </div>
+    <button class="start-btn" onclick="beginReel()">▶&nbsp;&nbsp;కధ చూడండి</button>
+    <div class="start-note">🔊 PHONE UNMUTE చేయండి &nbsp;·&nbsp; TAP = NEXT SLIDE</div>
+  </div>
+</div>
+
+<!-- ── REEL ── -->
+<div class="reel" id="reel">
+
+  <div class="prog-dots" id="progDots"></div>
+  <div class="ctrl-bar">
+    <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+    <button class="ctrl-btn" onclick="restartReel()">↺</button>
+  </div>
+
+  <!-- SLIDE 1 — Meet Babu Subbarao -->
+  <div class="slide s1" id="s1">
+    <div class="scene-tag">Scene 1 · పరిచయం</div>
+    <span class="big-emoji">👨‍💼</span>
+    <div class="hd">మన <span class="gold">బాబు సుబ్బారావు</span></div>
+    <div class="char-card">
+      <div class="char-avatar">🧔</div>
+      <div class="char-name">బాబు సుబ్బారావు</div>
+      <div class="char-stat"><span class="cs-key">వృత్తి</span><span class="cs-val">Business Owner 💼</span></div>
+      <div class="char-stat"><span class="cs-key">Business type</span><span class="cs-val">అన్నీ చేస్తాడు 😅</span></div>
+      <div class="char-stat"><span class="cs-key">Profit తెలుసా?</span><span class="cs-val">అడగకండి 🙈</span></div>
+      <div class="char-stat"><span class="cs-key">CA fees</span><span class="cs-val">ప్రతి నెలా ₹8,000 💸</span></div>
+      <div class="char-badge">😎 Self-proclaimed Entrepreneur</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — CA Scene -->
+  <div class="slide s2" id="s2">
+    <div class="scene-tag">Scene 2 · CA వద్ద</div>
+    <span class="big-emoji">🧾</span>
+    <div class="hd">CA దగ్గర బాబు సుబ్బారావు</div>
+    <div class="chat-box">
+      <div class="bbl bbl-ca">
+        <div class="bbl-lbl">CA గారు</div>
+        ఈ నెల fees ₹8,000. Consultation, GST, audit అన్నీ.
+      </div>
+      <div class="bbl bbl-bs">
+        <div class="bbl-lbl">బాబు సుబ్బారావు</div>
+        సరే. నా profit margin ఎంత అయింది?
+      </div>
+      <div class="bbl bbl-ca">
+        <div class="bbl-lbl">CA గారు</div>
+        అది... next month చెప్తాను. 😊
+      </div>
+    </div>
+    <div class="punch-tag">₹8,000 పోయింది. Answers: సున్నా. 😂</div>
+  </div>
+
+  <!-- SLIDE 3 — Bank DSCR -->
+  <div class="slide s3" id="s3">
+    <div class="scene-tag">Scene 3 · Bank లో</div>
+    <span class="big-emoji">🏦</span>
+    <div class="hd">Loan కోసం Bank కి వెళ్ళాడు</div>
+    <div class="bank-dialog">
+      <div class="bbl bbl-ca">
+        <div class="bbl-lbl">Bank Manager</div>
+        మీ DSCR ratio ఎంత? Debt-to-equity కూడా చెప్పండి.
+      </div>
+      <div class="think-bubble">
+        బాబు సుబ్బారావు అనుకున్నాడు —<br>
+        <strong>"DSCR... అది Vijayawada branch లో handle అవుతుందా?" 🤔</strong>
+      </div>
+      <div class="punch-tag" style="margin-top:8px;background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.35)">❌ Loan Rejected. బాబు సుబ్బారావు ఇంటికి వెళ్ళాడు.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — Wife Scene -->
+  <div class="slide s4" id="s4">
+    <div class="scene-tag">Scene 4 · ఇంట్లో</div>
+    <span class="big-emoji">🏠</span>
+    <div class="hd">నెల చివర్లో ఇంట్లో</div>
+    <div class="convo-wrap">
+      <div class="month-tag">🗓️ ప్రతి నెలా — Same story</div>
+      <div class="bbl bbl-bs">
+        <div class="bbl-lbl">బాబు సుబ్బారావు</div>
+        ఈ నెల కొంచెం కష్టంగా ఉంది...
+      </div>
+      <div class="bbl bbl-wife" style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:#e9d5ff;border-top-right-radius:14px;border-top-left-radius:4px;text-align:left">
+        <div class="bbl-lbl" style="color:rgba(196,181,253,.6)">భార్య</div>
+        ప్రతి నెలా అదే చెప్తావు. CA కి ఎంత ఇచ్చావు ఈ నెల? 🙄
+      </div>
+      <div class="bbl bbl-bs">
+        <div class="bbl-lbl">బాబు సుబ్బారావు</div>
+        అది... CA అడిగాడు కదా... 😅
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — Friend Suggests FinWise -->
+  <div class="slide s5" id="s5">
+    <div class="scene-tag">Scene 5 · మలుపు</div>
+    <div class="discovery-wrap">
+      <div class="disco-big">బాబు సుబ్బారావుకి<br><em>దారి దొరికింది.</em></div>
+    </div>
+    <div class="friend-quote">
+      <div class="fq-from">👬 Friend చెప్పాడు</div>
+      "బాబు సుబ్బారావూ... FinWise try చేయి. Free గా ఉంది."<br><br>
+      బాబు సుబ్బారావు — <strong>"Free అంటే?! ఇప్పుడే చేస్తా!" 😂</strong>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — FinWise Features -->
+  <div class="slide s6" id="s6">
+    <div class="scene-tag">FinWise తో బాబు సుబ్బారావు</div>
+    <div class="brand">Fin<em>Wise</em></div>
+    <div class="brand-tag">బాబు సుబ్బారావు యొక్క AI financial దోస్తు</div>
+    <ul class="feat-ul" id="featList">
+      <li><span class="react">🏦</span><strong>Loan safe అా?</strong> — DSCR ఇప్పుడు తెలుసు 😎</li>
+      <li><span class="react">⏳</span><strong>Cash Runway</strong> — Salary ఎన్ని నెలలు ఇవ్వగలడో తెలిసింది</li>
+      <li><span class="react">🎯</span><strong>Grant Finder</strong> — Free money దొరికింది! 🎉</li>
+      <li><span class="react">🤖</span><strong>AI CFO</strong> — Judge చేయదు. Bill చేయదు. 😂</li>
+      <li><span class="react">📊</span><strong>Business Grade</strong> — CA కంటే తొందరగా తెలిసింది</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 7 — CTA -->
+  <div class="slide s7" id="s7">
+    <div class="scene-tag">The End · మీ వంతు</div>
+    <div class="cta-hero">బాబు సుబ్బారావు<br>మారాడు. 🚀<br><span style="color:#fbbf24">మీరూ మారతారా?</span></div>
+    <div class="cta-sub">
+      CA fees ఆపాడు ✓<br>
+      Loan reject కాకుండా చేసుకున్నాడు ✓<br>
+      భార్యకి "ఈ నెల బాగుంది" అన్నాడు ✓ 😂
+    </div>
+    <a href="try.html" class="cta-btn">FinWise Free గా Try చేయండి →</a><br>
+    <button class="replay-lnk" onclick="restartReel()">↺ బాబు సుబ్బారావు కధ మళ్ళీ చూడు</button>
+  </div>
+
+  <div class="sub-bar" id="subBar">&nbsp;</div>
+
+</div>
+
+<script>
+var SLIDES = ['s1','s2','s3','s4','s5','s6','s7'];
+
+var LINES = [
+  "పరిచయం చేసుకుందాం. మన బాబు సుబ్బారావు. ఒక చిన్న business పెట్టాడు. Proud గా అందరికీ చెప్పాడు — నేను entrepreneur ని అని. Numbers అడిగితే? బాబు సుబ్బారావు వేరే topic మాట్లాడతాడు. 😂",
+  "బాబు సుబ్బారావు CA దగ్గరికి వెళ్ళాడు. ఎనిమిది వేల fees కట్టాడు. తర్వాత అడిగాడు — నా profit margin ఎంత? CA చెప్పాడు — next month చెప్తాను. బాబు సుబ్బారావు ఇంటికి వెళ్ళాడు. Answers లేవు. Pocket లో డబ్బులు కూడా లేవు.",
+  "Bank loan కి వెళ్ళాడు బాబు సుబ్బారావు. Manager అడిగాడు — మీ DSCR ratio ఏంటి? బాబు సుబ్బారావు confidently అన్నాడు — అది Vijayawada branch లో handle అవుతుందా sir? Loan రాలేదు. బాబు సుబ్బారావు ఇంటికి వెళ్ళాడు.",
+  "నెల చివర్లో భార్యతో అన్నాడు — ఈ నెల కొంచెం కష్టంగా ఉంది. ఆవిడ అంది — ప్రతి నెలా అదే చెప్తావు. CA కి ఎంత ఇచ్చావు? బాబు సుబ్బారావు చెప్పాడు — అది... CA అడిగాడు కదా. భార్య మాట్లాడటం ఆపింది.",
+  "ఒక రోజు బాబు సుబ్బారావు friend చెప్పాడు — FinWise try చేయి. Free గా ఉంది. బాబు సుబ్బారావు అడిగాడు — నిజంగా free గా ఉందా? అవును అని తెలిసింది. బాబు సుబ్బారావు immediately try చేశాడు.",
+  "FinWise తో బాబు సుబ్బారావు first time తన business అర్థం చేసుకున్నాడు. DSCR ఏంటో తెలిసింది. Loan safe అా కాదా second లో తెలిసింది. Cash ఎన్ని నెలలు చాలుతుందో తెలిసింది. Government grants కూడా దొరికాయి. AI CFO judge చేయలేదు. Bill కూడా చేయలేదు.",
+  "బాబు సుబ్బారావు మారాడు. CA fees ఆపాడు. Loan approve అయింది. నెల చివర్లో భార్యతో అన్నాడు — ఈ నెల బాగుంది. ఆవిడ shock అయింది. బాబు సుబ్బారావు లాంటి వాళ్ళందరికీ FinWise వచ్చింది. Free గా. Try చేయండి."
+];
+
+var FEAT_DELAYS = [150, 420, 690, 960, 1230];
+var cur = 0, muted = false;
+var currentAudio = null, playTimeouts = [];
+
+/* progress dots */
+(function(){
+  var wrap = document.getElementById('progDots');
+  SLIDES.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.innerHTML = '<div class="dot-fill" id="df'+i+'"></div>';
+    wrap.appendChild(d);
+  });
+})();
+
+function stopAll(){
+  if(currentAudio){ try{currentAudio.pause();}catch(e){} currentAudio.src=''; currentAudio=null; }
+  playTimeouts.forEach(clearTimeout);
+  playTimeouts=[];
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function setSub(t){ document.getElementById('subBar').textContent=t||'\u00a0'; }
+function hlWord(words,idx){
+  document.getElementById('subBar').innerHTML=words.map(function(w,i){
+    return i===idx?'<mark>'+esc(w)+'</mark>':esc(w);
+  }).join(' ');
+}
+
+function splitChunks(text,maxLen){
+  maxLen=maxLen||180;
+  if(text.length<=maxLen) return [text];
+  var out=[],words=text.split(/\s+/),cur='';
+  words.forEach(function(w){
+    var t=cur?cur+' '+w:w;
+    if(t.length>maxLen&&cur){out.push(cur);cur=w;}else cur=t;
+  });
+  if(cur) out.push(cur);
+  return out;
+}
+
+function ttsUrl(text){
+  return 'https://translate.google.com/translate_tts?ie=UTF-8&tl=te&client=tw-ob&q='+encodeURIComponent(text);
+}
+
+function speakLine(text,onDone){
+  stopAll();
+  setSub(text);
+  if(muted){
+    playTimeouts.push(setTimeout(onDone,Math.max(3000,(text.split(/\s+/).length/2)*1000)));
+    return;
+  }
+  var chunks=splitChunks(text,180);
+  var allWords=text.split(/\s+/);
+  var chunkWordStart=0, ci=0;
+
+  function playNext(){
+    if(ci>=chunks.length){onDone();return;}
+    var chunk=chunks[ci];
+    var chunkWords=chunk.split(/\s+/);
+    var startW=chunkWordStart;
+    ci++; chunkWordStart+=chunkWords.length;
+
+    var audio=new Audio(ttsUrl(chunk));
+    currentAudio=audio;
+
+    audio.addEventListener('timeupdate',function(){
+      if(!audio.duration||isNaN(audio.duration)) return;
+      var idx=Math.min(Math.floor((audio.currentTime/audio.duration)*chunkWords.length),chunkWords.length-1);
+      hlWord(allWords,startW+idx);
+    });
+    audio.onended=playNext;
+    audio.onerror=function(){ playTimeouts.push(setTimeout(playNext,Math.max(2000,chunkWords.length*600))); };
+    audio.play().catch(function(){ playTimeouts.push(setTimeout(playNext,Math.max(2000,chunkWords.length*600))); });
+  }
+  playNext();
+}
+
+function showSlide(idx){
+  SLIDES.forEach(function(id,i){
+    var el=document.getElementById(id);
+    el.classList.remove('active','out');
+    if(i<idx) el.classList.add('out');
+    if(i===idx) el.classList.add('active');
+  });
+  for(var i=0;i<SLIDES.length;i++){
+    var df=document.getElementById('df'+i);
+    df.style.transition='none';
+    df.style.width=i<idx?'100%':'0%';
+  }
+  if(SLIDES[idx]==='s6'){
+    var items=document.querySelectorAll('#featList li');
+    items.forEach(function(li){li.classList.remove('show');});
+    FEAT_DELAYS.forEach(function(d,i){ setTimeout(function(){if(items[i])items[i].classList.add('show');},d); });
+  }
+}
+
+function runSlide(idx){
+  cur=idx; showSlide(idx);
+  speakLine(LINES[idx],function(){
+    if(idx<SLIDES.length-1) runSlide(idx+1); else setSub('');
+  });
+}
+
+function beginReel(){
+  document.getElementById('startOv').style.display='none';
+  setTimeout(function(){runSlide(0);},150);
+}
+function restartReel(){
+  stopAll();
+  document.querySelectorAll('#featList li').forEach(function(li){li.classList.remove('show');});
+  runSlide(0);
+}
+function toggleMute(){
+  muted=!muted;
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  if(currentAudio) currentAudio.volume=muted?0:1;
+}
+
+document.getElementById('reel').addEventListener('click',function(e){
+  if(e.target.closest('a')||e.target.closest('button')) return;
+  if(cur<SLIDES.length-1){stopAll();runSlide(cur+1);}
+});
+</script>
+</body>
+</html>

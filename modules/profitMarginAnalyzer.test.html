@@ -1,0 +1,456 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Profit Margin Analyzer — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+select{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem;background:#fff}
+input:focus,select:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+button.secondary{padding:7px 18px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:6px;font-size:.85rem;cursor:pointer;font-weight:600}
+button.secondary:hover{background:#e2e8f0}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.metric-grid{grid-template-columns:1fr}}
+.metric-box{background:#f8fafc;border-radius:8px;padding:16px;border:1px solid #e2e8f0;text-align:center}
+.mb-label{font-size:.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.mb-big{font-size:2rem;font-weight:900;line-height:1.1;margin-bottom:4px}
+.mb-dollar{font-size:.82rem;color:#64748b;margin-bottom:8px}
+.badge{display:inline-block;padding:.2rem .7rem;border-radius:999px;font-size:.72rem;font-weight:800}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-yellow{background:#fef9c3;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.bm-table{width:100%;border-collapse:collapse}
+.bm-table th{background:#f1f5f9;padding:9px 12px;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0}
+.bm-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.85rem;vertical-align:middle}
+.bm-table tr:last-child td{border-bottom:none}
+.bm-bar-wrap{display:flex;flex-direction:column;gap:3px;min-width:120px}
+.bm-bar-row{display:flex;align-items:center;gap:6px;font-size:.7rem;color:#64748b}
+.bm-bar-track{flex:1;background:#e2e8f0;border-radius:99px;height:7px;overflow:hidden;min-width:60px}
+.bm-bar-fill{height:100%;border-radius:99px}
+.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+@media(max-width:700px){.slider-grid{grid-template-columns:1fr}}
+.slider-wrap{margin-top:14px}
+.slider-label{font-size:.83rem;font-weight:600;color:#555;margin-bottom:4px;display:flex;justify-content:space-between}
+.slider-val{color:#2563eb;font-weight:800}
+input[type=range]{width:100%;accent-color:#2563eb}
+.wi-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+@media(max-width:600px){.wi-metrics{grid-template-columns:1fr}}
+.wi-box{background:#f8fafc;border-radius:6px;padding:10px 12px;border:1px solid #e2e8f0;text-align:center}
+.wi-label{font-size:.68rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em}
+.wi-val{font-size:1.05rem;font-weight:900;margin-top:2px}
+.insight-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.insight-item{border-left:4px solid #2563eb;background:#eff6ff;padding:11px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#1e40af;line-height:1.6}
+.insight-item.warn{border-color:#f59e0b;background:#fffbeb;color:#92400e}
+.insight-item.good{border-color:#16a34a;background:#f0fdf4;color:#166534}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.reset-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+@media print{.back-link,button,.slider-grid{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Profit Margin Analyzer</h1>
+<p class="subtitle">FinWise · Compare your margins against industry benchmarks and model what-if scenarios.</p>
+
+<!-- Input Card -->
+<div class="card">
+  <h2>Your Financials (Monthly)</h2>
+  <div class="input-grid">
+    <div>
+      <label>Monthly Revenue ($)</label>
+      <input type="number" id="revenue" placeholder="e.g. 50000" min="0"/>
+    </div>
+    <div>
+      <label>Cost of Goods Sold / Direct Costs ($)</label>
+      <input type="number" id="cogs" placeholder="e.g. 20000" min="0"/>
+    </div>
+    <div>
+      <label>Operating Expenses ($) <span style="font-weight:400;color:#94a3b8">rent, salaries, utilities</span></label>
+      <input type="number" id="opex" placeholder="e.g. 15000" min="0"/>
+    </div>
+    <div>
+      <label>Other Expenses / Interest / Tax ($)</label>
+      <input type="number" id="other" placeholder="e.g. 3000" min="0"/>
+    </div>
+    <div style="grid-column:1/-1">
+      <label>Industry</label>
+      <select id="industry">
+        <option value="Technology">Technology</option>
+        <option value="Retail">Retail</option>
+        <option value="Restaurant">Restaurant</option>
+        <option value="Professional Services">Professional Services</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Construction">Construction</option>
+        <option value="Manufacturing">Manufacturing</option>
+        <option value="Agriculture">Agriculture</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+  <button class="primary" onclick="analyze()">Analyze Margins →</button>
+</div>
+
+<!-- Results -->
+<div id="resultsSection" style="display:none">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <button class="secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+
+  <div class="card">
+    <h2>Your Margins</h2>
+    <div class="metric-grid" id="metricGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Industry Benchmark Comparison</h2>
+    <table class="bm-table">
+      <thead>
+        <tr>
+          <th>Margin Type</th>
+          <th>Your Margin</th>
+          <th>Benchmark (<span id="bmIndustryLabel"></span>)</th>
+          <th>Visual</th>
+        </tr>
+      </thead>
+      <tbody id="bmBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="reset-row">
+      <h2 style="margin:0">What-If Levers</h2>
+      <button class="secondary" onclick="resetSliders()">Reset</button>
+    </div>
+    <div class="slider-grid">
+      <div class="slider-wrap">
+        <div class="slider-label"><span>Revenue Change</span><span class="slider-val" id="revSliderVal">0%</span></div>
+        <input type="range" id="revSlider" min="-20" max="20" value="0" step="1" oninput="updateWhatIf()"/>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span>COGS Change</span><span class="slider-val" id="cogsSliderVal">0%</span></div>
+        <input type="range" id="cogsSlider" min="-20" max="20" value="0" step="1" oninput="updateWhatIf()"/>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span>OpEx Change</span><span class="slider-val" id="opexSliderVal">0%</span></div>
+        <input type="range" id="opexSlider" min="-20" max="20" value="0" step="1" oninput="updateWhatIf()"/>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span>Price Raise</span><span class="slider-val" id="priceSliderVal">+0%</span></div>
+        <input type="range" id="priceSlider" min="0" max="20" value="0" step="1" oninput="updateWhatIf()"/>
+      </div>
+    </div>
+    <div class="wi-metrics" id="wiMetrics"></div>
+  </div>
+
+  <div class="card">
+    <h2>Insights</h2>
+    <ul class="insight-list" id="insightList"></ul>
+  </div>
+
+</div>
+
+<script>
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+var BENCHMARKS = {
+  'Technology':            {gross:70, operating:25, net:18},
+  'Retail':                {gross:35, operating:5,  net:3},
+  'Restaurant':            {gross:65, operating:8,  net:4},
+  'Professional Services': {gross:80, operating:20, net:15},
+  'Healthcare':            {gross:45, operating:12, net:8},
+  'Construction':          {gross:20, operating:7,  net:4},
+  'Manufacturing':         {gross:30, operating:10, net:6},
+  'Agriculture':           {gross:25, operating:8,  net:4},
+  'Other':                 {gross:50, operating:10, net:6}
+};
+
+var _rev=0,_cogs=0,_opex=0,_other=0,_industry='';
+
+function fmt(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function pct(n){return n.toFixed(1)+'%';}
+function safe(n){return isNaN(n)||!isFinite(n)?0:n;}
+
+function calcMargins(rev,cogs,opex,other){
+  var gross = rev>0 ? (rev-cogs)/rev*100 : 0;
+  var operating = rev>0 ? (rev-cogs-opex)/rev*100 : 0;
+  var net = rev>0 ? (rev-cogs-opex-other)/rev*100 : 0;
+  return {gross:safe(gross), operating:safe(operating), net:safe(net)};
+}
+
+function badgeClass(val, bm){
+  if(val >= bm) return 'badge-green';
+  if(val >= bm-5) return 'badge-yellow';
+  return 'badge-red';
+}
+function badgeLabel(val, bm){
+  if(val >= bm) return 'At/Above Benchmark';
+  if(val >= bm-5) return 'Near Benchmark';
+  return 'Below Benchmark';
+}
+
+function renderMetricGrid(margins, bm, rev, cogs, opex, other){
+  var grossDollar = rev - cogs;
+  var opDollar    = rev - cogs - opex;
+  var netDollar   = rev - cogs - opex - other;
+  var defs = [
+    {label:'Gross Margin',     val:margins.gross,     dollar:grossDollar, bmVal:bm.gross},
+    {label:'Operating Margin', val:margins.operating, dollar:opDollar,    bmVal:bm.operating},
+    {label:'Net Margin',       val:margins.net,       dollar:netDollar,   bmVal:bm.net}
+  ];
+  return defs.map(function(d){
+    var bc = badgeClass(d.val, d.bmVal);
+    var bl = badgeLabel(d.val, d.bmVal);
+    var col = bc==='badge-green'?'#16a34a':bc==='badge-yellow'?'#ca8a04':'#dc2626';
+    return '<div class="metric-box">'+
+      '<div class="mb-label">'+d.label+'</div>'+
+      '<div class="mb-big" style="color:'+col+'">'+pct(d.val)+'</div>'+
+      '<div class="mb-dollar">'+fmt(d.dollar)+' / mo</div>'+
+      '<span class="badge '+bc+'">'+bl+'</span>'+
+      '</div>';
+  }).join('');
+}
+
+function renderBmTable(margins, bm){
+  var rows = [
+    {label:'Gross Margin',     your:margins.gross,     bmVal:bm.gross},
+    {label:'Operating Margin', your:margins.operating, bmVal:bm.operating},
+    {label:'Net Margin',       your:margins.net,       bmVal:bm.net}
+  ];
+  return rows.map(function(r){
+    var maxW = Math.max(r.your, r.bmVal, 1);
+    var yourW = Math.min(Math.round(r.your/maxW*100),100);
+    var bmW   = Math.min(Math.round(r.bmVal/maxW*100),100);
+    var yourColor = r.your>=r.bmVal?'#16a34a':r.your>=r.bmVal-5?'#f59e0b':'#dc2626';
+    var bc = badgeClass(r.your, r.bmVal);
+    return '<tr>'+
+      '<td><strong>'+r.label+'</strong></td>'+
+      '<td><span class="badge '+bc+'" style="font-size:.82rem">'+pct(r.your)+'</span></td>'+
+      '<td style="color:#475569;font-weight:700">'+pct(r.bmVal)+'</td>'+
+      '<td>'+
+        '<div class="bm-bar-wrap">'+
+          '<div class="bm-bar-row"><span style="width:28px">You</span>'+
+            '<div class="bm-bar-track"><div class="bm-bar-fill" style="width:'+Math.max(yourW,2)+'%;background:'+yourColor+'"></div></div>'+
+            '<span>'+pct(r.your)+'</span></div>'+
+          '<div class="bm-bar-row"><span style="width:28px">BM</span>'+
+            '<div class="bm-bar-track"><div class="bm-bar-fill" style="width:'+Math.max(bmW,2)+'%;background:#94a3b8"></div></div>'+
+            '<span>'+pct(r.bmVal)+'</span></div>'+
+        '</div>'+
+      '</td>'+
+      '</tr>';
+  }).join('');
+}
+
+function renderWiMetrics(margins){
+  var defs = [
+    {label:'Gross Margin',     val:margins.gross},
+    {label:'Operating Margin', val:margins.operating},
+    {label:'Net Margin',       val:margins.net}
+  ];
+  return defs.map(function(d){
+    var col = d.val>=0?'#16a34a':'#dc2626';
+    return '<div class="wi-box">'+
+      '<div class="wi-label">'+d.label+'</div>'+
+      '<div class="wi-val" style="color:'+col+'">'+pct(d.val)+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+function buildInsights(margins, bm, industry){
+  var items = [];
+
+  // Gross margin insight
+  var gDiff = margins.gross - bm.gross;
+  if(gDiff < -5){
+    var grossExplain = explainHtml([
+      'Your cost of goods is rising faster than your prices — margin compression',
+      'This trend, if unchecked, leads to operating losses within a few months',
+      'Options: raise prices, find cheaper suppliers, or reduce product complexity'
+    ], 'Your gross margin is '+pct(margins.gross)+', vs the '+industry+' benchmark of '+pct(bm.gross)+'. The gap of '+Math.abs(gDiff).toFixed(1)+'% means your cost of goods is eating '+Math.abs(gDiff).toFixed(1)+'% more of each revenue dollar than peers');
+    items.push({cls:'warn', text:'Your gross margin of '+pct(margins.gross)+' is '+Math.abs(gDiff).toFixed(1)+'% below the '+industry+' benchmark of '+pct(bm.gross)+'. Focus on reducing direct costs or renegotiating supplier prices.'+grossExplain});
+  } else if(gDiff >= 0){
+    items.push({cls:'good', text:'Your gross margin of '+pct(margins.gross)+' meets or exceeds the '+industry+' benchmark of '+pct(bm.gross)+'. Strong pricing power or lean cost of goods.'});
+  } else {
+    items.push({cls:'', text:'Your gross margin of '+pct(margins.gross)+' is within 5% of the '+industry+' benchmark of '+pct(bm.gross)+'. Minor COGS improvements could close the gap.'});
+  }
+
+  // Operating margin insight
+  var oDiff = margins.operating - bm.operating;
+  if(oDiff < -5){
+    items.push({cls:'warn', text:'Operating margin of '+pct(margins.operating)+' lags the '+industry+' benchmark of '+pct(bm.operating)+' by '+Math.abs(oDiff).toFixed(1)+'%. Review overhead — rent, salaries, and utilities may be oversized relative to revenue.'});
+  } else if(oDiff >= 0){
+    items.push({cls:'good', text:'Operating margin of '+pct(margins.operating)+' is at or above the '+industry+' industry norm of '+pct(bm.operating)+'. Operating efficiency is a strength.'});
+  }
+
+  // Net margin insight
+  if(margins.net < 0){
+    var netNegExplain = explainHtml([
+      'Less than 5 cents of profit for every $1 of sales — very thin cushion',
+      'One unexpected cost or price drop eliminates all profit',
+      'Industry benchmark: healthy SMB net margin is 7–15%'
+    ], 'Net margin of '+pct(margins.net)+' means you are losing money on each sale. At the US SMB average of 10%, you would keep $10 per $100. You currently keep $0 and lose '+pct(Math.abs(margins.net))+' per $100');
+    items.push({cls:'warn', text:'Net margin is negative ('+pct(margins.net)+'). Total expenses exceed revenue — cutting costs or raising prices is urgent to avoid cash burn.'+netNegExplain});
+  } else if(margins.net < 5){
+    var netLowExplain = explainHtml([
+      'Less than 5 cents of profit for every $1 of sales — very thin cushion',
+      'One unexpected cost or price drop eliminates all profit',
+      'Industry benchmark: healthy SMB net margin is 7–15%'
+    ], 'Net margin of '+pct(margins.net)+' means: you keep $'+margins.net.toFixed(2)+' of every $100 in sales as profit. At the US SMB average of 10%, you\'d keep $10 per $100');
+    items.push({cls:'warn', text:'Net margin of '+pct(margins.net)+' is below the 5% warning threshold — dangerously thin for a small business.'+netLowExplain});
+  } else if(margins.net < bm.net){
+    items.push({cls:'', text:'Net margin of '+pct(margins.net)+' is below the '+industry+' benchmark of '+pct(bm.net)+'. Consider tax planning or refinancing higher-interest obligations to improve the bottom line.'});
+  }
+
+  return items;
+}
+
+function analyze(){
+  var rev   = parseFloat(document.getElementById('revenue').value)||0;
+  var cogs  = parseFloat(document.getElementById('cogs').value)||0;
+  var opex  = parseFloat(document.getElementById('opex').value)||0;
+  var other = parseFloat(document.getElementById('other').value)||0;
+  var ind   = document.getElementById('industry').value;
+
+  if(!rev){alert('Please enter your Monthly Revenue to continue.');return;}
+
+  _rev=rev;_cogs=cogs;_opex=opex;_other=other;_industry=ind;
+
+  var margins = calcMargins(rev,cogs,opex,other);
+  var bm = BENCHMARKS[ind]||BENCHMARKS['Other'];
+
+  document.getElementById('metricGrid').innerHTML = renderMetricGrid(margins,bm,rev,cogs,opex,other);
+  document.getElementById('bmIndustryLabel').textContent = ind;
+  document.getElementById('bmBody').innerHTML = renderBmTable(margins,bm);
+
+  // Reset sliders
+  document.getElementById('revSlider').value='0';
+  document.getElementById('cogsSlider').value='0';
+  document.getElementById('opexSlider').value='0';
+  document.getElementById('revSliderVal').textContent='0%';
+  document.getElementById('cogsSliderVal').textContent='0%';
+  document.getElementById('opexSliderVal').textContent='0%';
+  document.getElementById('priceSlider').value='0';
+  document.getElementById('priceSliderVal').textContent='+0%';
+  document.getElementById('wiMetrics').innerHTML = renderWiMetrics(margins);
+
+  // Insights
+  var insights = buildInsights(margins,bm,ind);
+  document.getElementById('insightList').innerHTML = insights.map(function(i){
+    return '<li class="insight-item'+(i.cls?' '+i.cls:'')+'">'+i.text+'</li>';
+  }).join('');
+
+  document.getElementById('resultsSection').style.display='block';
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
+  savePMA();
+}
+
+function updateWhatIf(){
+  var rPct  = parseInt(document.getElementById('revSlider').value)||0;
+  var cPct  = parseInt(document.getElementById('cogsSlider').value)||0;
+  var oPct  = parseInt(document.getElementById('opexSlider').value)||0;
+  var pPct  = parseInt(document.getElementById('priceSlider').value)||0;
+
+  document.getElementById('revSliderVal').textContent  = (rPct>=0?'+':'')+rPct+'%';
+  document.getElementById('cogsSliderVal').textContent = (cPct>=0?'+':'')+cPct+'%';
+  document.getElementById('opexSliderVal').textContent = (oPct>=0?'+':'')+oPct+'%';
+  document.getElementById('priceSliderVal').textContent= '+'+pPct+'%';
+
+  var adjRev  = _rev  * (1 + rPct/100) * (1 + pPct/100);
+  var adjCogs = _cogs * (1 + cPct/100);
+  var adjOpex = _opex * (1 + oPct/100);
+
+  var margins = calcMargins(adjRev, adjCogs, adjOpex, _other);
+  document.getElementById('wiMetrics').innerHTML = renderWiMetrics(margins);
+}
+
+function resetSliders(){
+  document.getElementById('revSlider').value='0';
+  document.getElementById('cogsSlider').value='0';
+  document.getElementById('opexSlider').value='0';
+  document.getElementById('priceSlider').value='0';
+  updateWhatIf();
+}
+
+var PMA_KEY = 'fw_profit_margin';
+function savePMA(){
+  try{localStorage.setItem(PMA_KEY,JSON.stringify({
+    revenue:document.getElementById('revenue').value,
+    cogs:document.getElementById('cogs').value,
+    opex:document.getElementById('opex').value,
+    other:document.getElementById('other').value,
+    industry:document.getElementById('industry').value
+  }));}catch(e){}
+}
+
+// Auto-populate: saved state → fw_profile fallback
+(function(){
+  try{
+    var s=JSON.parse(localStorage.getItem(PMA_KEY)||'null');
+    if(s){
+      if(s.revenue)  document.getElementById('revenue').value  = s.revenue;
+      if(s.cogs)     document.getElementById('cogs').value     = s.cogs;
+      if(s.opex)     document.getElementById('opex').value     = s.opex;
+      if(s.other)    document.getElementById('other').value    = s.other;
+      if(s.industry) document.getElementById('industry').value = s.industry;
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+    if(!p){ p = JSON.parse(localStorage.getItem('fw_profile')||'null'); }
+    if(p){
+      if(p.rev != null && p.rev !== '')  document.getElementById('revenue').value = p.rev;
+      if(p.exp != null && p.exp !== ''){
+        var exp = parseFloat(p.exp)||0;
+        document.getElementById('cogs').value  = Math.round(exp*0.50)||'';
+        document.getElementById('opex').value  = Math.round(exp*0.35)||'';
+        document.getElementById('other').value = Math.round(exp*0.15)||'';
+      }
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

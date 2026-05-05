@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Forecasting Engine</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%); color: #fff; padding: 20px 28px; }
+  .header h1 { font-size: 1.4rem; font-weight: 700; }
+  .header p  { opacity: .8; font-size: .85rem; margin-top: 4px; }
+  .breadcrumb { font-size: .75rem; opacity: .65; margin-bottom: 6px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e8f0; background: #fff; padding: 0 28px; flex-wrap: wrap; }
+  .tab  { padding: 12px 18px; cursor: pointer; font-size: .85rem; font-weight: 500; color: #64748b;
+          border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+  .tab.active { color: #4338ca; border-bottom-color: #4338ca; }
+  .tab:hover:not(.active) { color: #0f172a; }
+
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 28px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-weight: 600; font-size: .9rem; margin-bottom: 14px; padding-bottom: 10px;
+                border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .form-group label { display: block; font-size: .78rem; color: #64748b; margin-bottom: 4px; font-weight: 500; }
+  .form-group input, .form-group select {
+    width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px;
+    font-size: .85rem; outline: none; transition: border-color .15s; }
+  .form-group input:focus { border-color: #4338ca; box-shadow: 0 0 0 3px rgba(67,56,202,.1); }
+  .hint { font-size: .7rem; color: #94a3b8; margin-top: 3px; }
+
+  .btn { padding: 10px 22px; border: none; border-radius: 7px; font-weight: 600; cursor: pointer; font-size: .88rem; }
+  .btn-primary { background: #4338ca; color: #fff; }
+  .btn-primary:hover { background: #3730a3; }
+  .btn-secondary { background: #f1f5f9; color: #475569; }
+  .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  @media print {
+    .header, .tabs, button { display:none !important; }
+    body, .main { background:#fff; padding:8px; max-width:100%; }
+    .panel { display:block !important; }
+    #panel-tests { display:none !important; }
+  }
+
+  /* ── Summary strip ── */
+  .summary-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .sum-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; text-align: center; }
+  .sum-val   { font-size: 1.1rem; font-weight: 700; }
+  .sum-label { font-size: .7rem; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ── Forecast table ── */
+  .fc-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .fc-table th { background: #f1f5f9; padding: 8px 10px; text-align: right; font-weight: 600;
+                 color: #475569; border: 1px solid #e2e8f0; white-space: nowrap; }
+  .fc-table th:first-child { text-align: left; }
+  .fc-table td { padding: 7px 10px; border: 1px solid #f1f5f9; text-align: right; }
+  .fc-table td:first-child { text-align: left; font-weight: 500; }
+  .fc-table tr:nth-child(even) { background: #fafcfe; }
+  .fc-table tr.total-row td { background: #eff6ff; font-weight: 700; border-top: 2px solid #bfdbfe; }
+  .pos { color: #16a34a; font-weight: 600; }
+  .neg { color: #dc2626; font-weight: 600; }
+  .num { font-family: 'Courier New', monospace; }
+
+  /* ── Mini bar chart ── */
+  .bar-wrap { display: inline-flex; align-items: center; gap: 4px; width: 100%; }
+  .bar-bg { flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; min-width: 40px; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+
+  /* ── Scenario columns ── */
+  .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 700px) { .scenario-grid { grid-template-columns: 1fr; } }
+  .sc-card { border-radius: 10px; padding: 16px; border: 2px solid transparent; }
+  .sc-opt  { background: #f0fdf4; border-color: #bbf7d0; }
+  .sc-base { background: #eff6ff; border-color: #bfdbfe; }
+  .sc-pess { background: #fff7ed; border-color: #fed7aa; }
+  .sc-title { font-weight: 700; font-size: .85rem; margin-bottom: 10px; text-align: center; }
+  .sc-opt  .sc-title { color: #166534; }
+  .sc-base .sc-title { color: #1e40af; }
+  .sc-pess .sc-title { color: #92400e; }
+  .sc-metric { display: flex; justify-content: space-between; font-size: .82rem; padding: 4px 0;
+               border-bottom: 1px solid rgba(0,0,0,.06); }
+  .sc-metric:last-child { border-bottom: none; }
+
+  /* ── Loan milestone ── */
+  .milestone-bar { position: relative; height: 24px; background: #f1f5f9; border-radius: 6px;
+                   overflow: hidden; margin: 12px 0; }
+  .milestone-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, #4338ca, #7c3aed);
+                    border-radius: 6px; transition: width .6s; display: flex; align-items: center;
+                    padding-right: 8px; justify-content: flex-end; }
+  .milestone-fill span { font-size: .72rem; color: #fff; font-weight: 700; white-space: nowrap; }
+  .milestone-tick { position: absolute; top: 0; height: 100%; border-left: 2px dashed rgba(0,0,0,.2); }
+  .milestone-label { position: absolute; bottom: -18px; font-size: .68rem; color: #64748b;
+                     transform: translateX(-50%); white-space: nowrap; }
+
+  /* ── Tests ── */
+  .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .test-item { border-radius: 8px; padding: 12px 14px; font-size: .82rem; border: 1px solid transparent; }
+  .test-pass { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .test-fail { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+  .test-name   { font-weight: 600; margin-bottom: 2px; }
+  .test-detail { opacity: .8; }
+
+  .err-box { background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px;
+             color: #991b1b; font-size: .85rem; margin-bottom: 12px; display: none; }
+  .section-label { font-size: .8rem; font-weight: 600; color: #64748b; text-transform: uppercase;
+                   letter-spacing: .05em; margin: 16px 0 8px; }
+
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="breadcrumb">← <a href="../index.html" style="color:#a5b4fc;">SmallBiz Platform</a> › Financial Statements</div>
+  <h1>🔮 Forecasting Engine</h1>
+  <p>Future projections · Cash Flow · P&amp;L · Loan Balance · Scenario Analysis (Optimistic / Base / Pessimistic)</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('cashflow')">Cash Flow Forecast</div>
+  <div class="tab" onclick="switchTab('pnl')">P&amp;L Forecast</div>
+  <div class="tab" onclick="switchTab('scenarios')">Scenarios</div>
+  <div class="tab" onclick="switchTab('loan')">Loan Balance</div>
+  <div class="tab" onclick="switchTab('tests')">Unit Tests</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PANEL 1 — Cash Flow Forecast
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel-cashflow" class="main panel active">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#4338ca"></span>Cash Flow Forecast Inputs</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Forecast Periods</label>
+        <select id="cf-periods">
+          <option value="6">6 months</option>
+          <option value="12" selected>12 months</option>
+          <option value="24">24 months</option>
+          <option value="36">36 months</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Opening Cash Balance ($)</label>
+        <input id="cf-open" type="number" value="50000"/>
+      </div>
+      <div class="form-group">
+        <label>Current Monthly Revenue ($)</label>
+        <input id="cf-rev" type="number" value="150000"/>
+      </div>
+      <div class="form-group">
+        <label>Revenue Growth Rate (%/month)</label>
+        <input id="cf-revgrow" type="number" value="3" step="0.5"/>
+        <div class="hint">Compound per period. 0 = flat.</div>
+      </div>
+      <div class="form-group">
+        <label>Fixed Expenses ($/month)</label>
+        <input id="cf-fixed" type="number" value="50000"/>
+      </div>
+      <div class="form-group">
+        <label>Variable Expenses ($/month)</label>
+        <input id="cf-var" type="number" value="30000"/>
+      </div>
+      <div class="form-group">
+        <label>Expense Growth Rate (%/month)</label>
+        <input id="cf-expgrow" type="number" value="1" step="0.5"/>
+      </div>
+      <div class="form-group">
+        <label>Monthly EMI Payments ($)</label>
+        <input id="cf-emi" type="number" value="11122"/>
+        <div class="hint">From Loan Engine</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildCForecast()">Generate Forecast</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
+  </div>
+  <div id="cf-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PANEL 2 — P&L Forecast
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel-pnl" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#16a34a"></span>P&amp;L Forecast Inputs</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Forecast Periods</label>
+        <select id="pl-periods">
+          <option value="6">6 months</option>
+          <option value="12" selected>12 months</option>
+          <option value="24">24 months</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Current Monthly Revenue ($)</label>
+        <input id="pl-rev" type="number" value="150000"/>
+      </div>
+      <div class="form-group">
+        <label>Revenue Growth (%/month)</label>
+        <input id="pl-revgrow" type="number" value="3" step="0.5"/>
+      </div>
+      <div class="form-group">
+        <label>COGS as % of Revenue</label>
+        <input id="pl-cogspct" type="number" value="35" step="1"/>
+        <div class="hint">Locks gross margin at this %</div>
+      </div>
+      <div class="form-group">
+        <label>Fixed Opex ($/month)</label>
+        <input id="pl-fixedopex" type="number" value="40000"/>
+      </div>
+      <div class="form-group">
+        <label>Variable Opex ($/month)</label>
+        <input id="pl-varopex" type="number" value="15000"/>
+      </div>
+      <div class="form-group">
+        <label>Opex Growth (%/month)</label>
+        <input id="pl-opexgrow" type="number" value="1" step="0.5"/>
+      </div>
+      <div class="form-group">
+        <label>Monthly Interest Expense ($)</label>
+        <input id="pl-interest" type="number" value="5000"/>
+        <div class="hint">From Loan Engine</div>
+      </div>
+      <div class="form-group">
+        <label>Tax Rate (%)</label>
+        <input id="pl-tax" type="number" value="25"/>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildPLForecast()">Generate P&amp;L Forecast</button>
+    </div>
+  </div>
+  <div id="pl-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PANEL 3 — Scenarios
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel-scenarios" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#ca8a04"></span>Scenario Analysis Inputs (Base Case)</div>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:14px;">
+      Enter your base-case assumptions. The engine auto-generates optimistic (2× revenue growth, ½ expense growth)
+      and pessimistic (¼ revenue growth, 2× expense growth) scenarios.
+    </p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Periods</label>
+        <select id="sc-periods">
+          <option value="12" selected>12 months</option>
+          <option value="24">24 months</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Opening Cash ($)</label>
+        <input id="sc-open" type="number" value="50000"/>
+      </div>
+      <div class="form-group">
+        <label>Base Revenue ($/month)</label>
+        <input id="sc-rev" type="number" value="150000"/>
+      </div>
+      <div class="form-group">
+        <label>Base Revenue Growth (%)</label>
+        <input id="sc-revgrow" type="number" value="3" step="0.5"/>
+      </div>
+      <div class="form-group">
+        <label>Fixed Expenses ($)</label>
+        <input id="sc-fixed" type="number" value="50000"/>
+      </div>
+      <div class="form-group">
+        <label>Variable Expenses ($)</label>
+        <input id="sc-var" type="number" value="30000"/>
+      </div>
+      <div class="form-group">
+        <label>Base Expense Growth (%)</label>
+        <input id="sc-expgrow" type="number" value="1" step="0.5"/>
+      </div>
+      <div class="form-group">
+        <label>EMI Payments ($)</label>
+        <input id="sc-emi" type="number" value="11122"/>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildScenarios()">Run Scenario Analysis</button>
+    </div>
+  </div>
+  <div id="sc-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PANEL 4 — Loan Balance
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel-loan" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#7c3aed"></span>Loan Balance Forecast</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Outstanding Principal ($)</label>
+        <input id="lb-principal" type="number" value="500000"/>
+      </div>
+      <div class="form-group">
+        <label>Annual Rate (%)</label>
+        <input id="lb-rate" type="number" value="12" step="0.1"/>
+      </div>
+      <div class="form-group">
+        <label>Monthly EMI ($)</label>
+        <input id="lb-emi" type="number" value="11122"/>
+        <div class="hint">From Loan Engine</div>
+      </div>
+      <div class="form-group">
+        <label>Periods to Show</label>
+        <select id="lb-periods">
+          <option value="12">12 months</option>
+          <option value="24" selected>24 months</option>
+          <option value="36">36 months</option>
+          <option value="48">48 months</option>
+          <option value="60">60 months</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildLoanForecast()">Project Loan Balance</button>
+    </div>
+  </div>
+  <div id="lb-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PANEL 5 — Unit Tests
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel-tests" class="main panel">
+  <div class="card">
+    <div class="card-title">Automated Unit Tests</div>
+    <button class="btn btn-primary" onclick="runTests()" style="margin-bottom:14px;">Run All Tests</button>
+    <div id="test-output" class="test-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ENGINE (inlined) ═══════════════════════════ -->
+<script>
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function _validate(periods, baseRevenue) {
+  if (typeof periods !== "number" || periods < 1 || periods > 120)
+    throw new Error("periods must be between 1 and 120.");
+  if (typeof baseRevenue !== "number" || baseRevenue < 0)
+    throw new Error("baseRevenue must be a non-negative number.");
+}
+
+function forecastCashFlow({ periods=12, openingCash=0, baseRevenue,
+    revenueGrowthRate=0, baseFixedExpenses=0, baseVariableExpenses=0,
+    expenseGrowthRate=0, emiPayments=0 }={}) {
+  _validate(periods, baseRevenue);
+  const rg=revenueGrowthRate/100, eg=expenseGrowthRate/100;
+  const projections=[]; let cumCash=_r(openingCash);
+  for (let i=1;i<=periods;i++) {
+    const revenue       = _r(baseRevenue*Math.pow(1+rg,i));
+    const fixedExp      = _r(baseFixedExpenses*Math.pow(1+eg,i));
+    const variableExp   = _r(baseVariableExpenses*Math.pow(1+eg,i));
+    const totalExpenses = _r(fixedExp+variableExp+emiPayments);
+    const netCashFlow   = _r(revenue-totalExpenses);
+    cumCash             = _r(cumCash+netCashFlow);
+    projections.push({ period:i, revenue, fixedExpenses:fixedExp, variableExpenses:variableExp,
+      emiPayments, totalExpenses, netCashFlow, cumulativeCash:cumCash,
+      status: netCashFlow>0?"surplus":netCashFlow<0?"deficit":"breakeven" });
+  }
+  const totalRevenue=_r(projections.reduce((s,p)=>s+p.revenue,0));
+  const totalExpenses=_r(projections.reduce((s,p)=>s+p.totalExpenses,0));
+  const totalNetCash=_r(projections.reduce((s,p)=>s+p.netCashFlow,0));
+  const surplusMonths=projections.filter(p=>p.netCashFlow>0).length;
+  const closingCash=projections[periods-1].cumulativeCash;
+  const peakCash=Math.max(...projections.map(p=>p.cumulativeCash));
+  const troughCash=Math.min(...projections.map(p=>p.cumulativeCash));
+  let breakevenPeriod=null;
+  if (openingCash<=0) { const bp=projections.find(p=>p.cumulativeCash>0); breakevenPeriod=bp?bp.period:null; }
+  const lastFlow=projections[periods-1].netCashFlow;
+  let cashRunway=null;
+  if (closingCash>0&&lastFlow<0) cashRunway=Math.floor(closingCash/Math.abs(lastFlow));
+  else if (closingCash<=0) cashRunway=0;
+  return { projections, summary:{ periods, openingCash, closingCash, totalRevenue, totalExpenses, totalNetCash,
+    surplusMonths, deficitMonths:periods-surplusMonths, peakCash, troughCash,
+    breakevenPeriod, cashRunway, avgMonthlyRevenue:_r(totalRevenue/periods),
+    avgMonthlyCashFlow:_r(totalNetCash/periods), revenueGrowthRate, expenseGrowthRate }};
+}
+
+function forecastProfitLoss({ periods=12, baseRevenue, revenueGrowthRate=0,
+    baseCogs=0, cogsPercent=null, cogsGrowthRate=0, baseFixedOpex=0,
+    baseVariableOpex=0, opexGrowthRate=0, interestExpense=0, taxRate=0 }={}) {
+  _validate(periods, baseRevenue);
+  const rg=revenueGrowthRate/100, cg=cogsGrowthRate/100, og=opexGrowthRate/100;
+  const projections=[];
+  for (let i=1;i<=periods;i++) {
+    const revenue=_r(baseRevenue*Math.pow(1+rg,i));
+    const cogs=cogsPercent!==null ? _r(revenue*(cogsPercent/100)) : _r(baseCogs*Math.pow(1+cg,i));
+    const grossProfit=_r(revenue-cogs);
+    const grossMargin=revenue>0?_r((grossProfit/revenue)*100):0;
+    const fixedOpex=_r(baseFixedOpex*Math.pow(1+og,i));
+    const variableOpex=_r(baseVariableOpex*Math.pow(1+og,i));
+    const totalOpex=_r(fixedOpex+variableOpex);
+    const operatingProfit=_r(grossProfit-totalOpex);
+    const operatingMargin=revenue>0?_r((operatingProfit/revenue)*100):0;
+    const netProfitBeforeTax=_r(operatingProfit-interestExpense);
+    const taxAmount=(taxRate>0&&netProfitBeforeTax>0)?_r(netProfitBeforeTax*(taxRate/100)):0;
+    const netProfitAfterTax=_r(netProfitBeforeTax-taxAmount);
+    const netMargin=revenue>0?_r((netProfitAfterTax/revenue)*100):0;
+    projections.push({ period:i, revenue, cogs, grossProfit, grossMargin, fixedOpex, variableOpex,
+      totalOpex, operatingProfit, operatingMargin, interestExpense, netProfitBeforeTax,
+      taxAmount, netProfitAfterTax, netMargin,
+      status:netProfitAfterTax>0?"profit":netProfitAfterTax<0?"loss":"breakeven" });
+  }
+  const totalRevenue=_r(projections.reduce((s,p)=>s+p.revenue,0));
+  const totalNetProfit=_r(projections.reduce((s,p)=>s+p.netProfitAfterTax,0));
+  const profitableMonths=projections.filter(p=>p.netProfitAfterTax>0).length;
+  return { projections, summary:{ periods, totalRevenue, totalNetProfit, profitableMonths,
+    lossMonths:periods-profitableMonths, avgMonthlyRevenue:_r(totalRevenue/periods),
+    avgMonthlyProfit:_r(totalNetProfit/periods),
+    openingNetMargin:projections[0].netMargin, closingNetMargin:projections[periods-1].netMargin,
+    revenueGrowthPeriod:_r(projections[periods-1].revenue-baseRevenue), revenueGrowthRate }};
+}
+
+function forecastLoanBalance({ principal, annualRate, emi, periods=24 }) {
+  if (!principal||principal<=0) throw new Error("principal must be positive.");
+  if (annualRate<0) throw new Error("annualRate cannot be negative.");
+  if (!emi||emi<=0) throw new Error("emi must be positive.");
+  const monthlyRate=annualRate/12/100;
+  const projections=[]; let outstanding=principal, totalInt=0, totalPri=0;
+  for (let i=1;i<=periods;i++) {
+    if (outstanding<=0.01) break;
+    const interest=_r(outstanding*monthlyRate);
+    const principalRepaid=_r(Math.min(emi-interest,outstanding));
+    outstanding=_r(outstanding-principalRepaid);
+    totalInt=_r(totalInt+interest); totalPri=_r(totalPri+principalRepaid);
+    projections.push({ period:i, interestPaid:interest, principalRepaid, outstandingBalance:outstanding,
+      totalInterestPaid:totalInt, totalPrincipalPaid:totalPri,
+      pctRepaid:_r(((principal-outstanding)/principal)*100) });
+  }
+  const milestones={};
+  [25,50,75].forEach(pct=>{ const mp=projections.find(p=>p.pctRepaid>=pct); if(mp) milestones[`${pct}pct`]=mp.period; });
+  return { projections, milestones, summary:{ originalPrincipal:principal,
+    periodsShown:projections.length, balanceAtEnd:projections[projections.length-1]?.outstandingBalance??0,
+    pctRepaidAtEnd:projections[projections.length-1]?.pctRepaid??100,
+    totalInterestPaid:totalInt, totalPrincipalPaid:totalPri }};
+}
+
+function _buildScenarios({ baseParams, optimisticRevGrowth, pessimisticRevGrowth,
+    optimisticExpGrowth, pessimisticExpGrowth }) {
+  const bRev=baseParams.revenueGrowthRate??0, bExp=baseParams.expenseGrowthRate??0;
+  const optRev  = optimisticRevGrowth  ?? Math.max(bRev*2,2);
+  const pessRev = pessimisticRevGrowth ?? Math.max(bRev*0.25,0);
+  const optExp  = optimisticExpGrowth  ?? Math.max(bExp*0.5,0);
+  const pessExp = pessimisticExpGrowth ?? Math.max(bExp*2,3);
+  return {
+    optimistic:  forecastCashFlow({ ...baseParams, revenueGrowthRate:optRev,  expenseGrowthRate:optExp  }),
+    base:        forecastCashFlow(baseParams),
+    pessimistic: forecastCashFlow({ ...baseParams, revenueGrowthRate:pessRev, expenseGrowthRate:pessExp }),
+    assumptions: { optimistic:{revenueGrowthRate:optRev,expenseGrowthRate:optExp},
+                   base:{revenueGrowthRate:bRev,expenseGrowthRate:bExp},
+                   pessimistic:{revenueGrowthRate:pessRev,expenseGrowthRate:pessExp} },
+  };
+}
+
+/* ── Format helpers ── */
+function fmt(n) { return Math.abs(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtShort(n) {
+  if (n===null||n===undefined) return "—";
+  const abs=Math.abs(n);
+  if (abs>=1e7) return (n<0?"−":"")+(abs/1e7).toFixed(1)+"Cr";
+  if (abs>=1e5) return (n<0?"−":"")+(abs/1e5).toFixed(1)+"L";
+  if (abs>=1e3) return (n<0?"−":"")+(abs/1e3).toFixed(1)+"K";
+  return fmt(n);
+}
+function cls(n) { return n>0?"pos":n<0?"neg":""; }
+
+function miniBar(value, max, color) {
+  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
+  return `<div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div></div>`;
+}
+
+function sumCard(label, value, color, isShort) {
+  const display = isShort ? fmtShort(value) : `$${fmtShort(value)}`;
+  return `<div class="sum-card"><div class="sum-val" style="color:${color}">${display}</div><div class="sum-label">${label}</div></div>`;
+}
+
+/* ── Panel 1: Cash Flow Forecast ── */
+function buildCForecast() {
+  const errEl = document.getElementById("cf-output");
+  try {
+    const params = {
+      periods:              parseInt(document.getElementById("cf-periods").value),
+      openingCash:          parseFloat(document.getElementById("cf-open").value)||0,
+      baseRevenue:          parseFloat(document.getElementById("cf-rev").value)||0,
+      revenueGrowthRate:    parseFloat(document.getElementById("cf-revgrow").value)||0,
+      baseFixedExpenses:    parseFloat(document.getElementById("cf-fixed").value)||0,
+      baseVariableExpenses: parseFloat(document.getElementById("cf-var").value)||0,
+      expenseGrowthRate:    parseFloat(document.getElementById("cf-expgrow").value)||0,
+      emiPayments:          parseFloat(document.getElementById("cf-emi").value)||0,
+    };
+    const fc = forecastCashFlow(params);
+    const sm = fc.summary;
+    const maxRev = Math.max(...fc.projections.map(p=>p.revenue));
+
+    let html = `<div class="summary-strip">
+      ${sumCard("Opening Cash", sm.openingCash, "#0369a1")}
+      ${sumCard("Closing Cash", sm.closingCash, sm.closingCash>0?"#16a34a":"#dc2626")}
+      ${sumCard("Total Revenue", sm.totalRevenue, "#4338ca")}
+      ${sumCard("Total Net Cash", sm.totalNetCash, sm.totalNetCash>0?"#16a34a":"#dc2626")}
+      <div class="sum-card"><div class="sum-val" style="color:#16a34a">${sm.surplusMonths}</div><div class="sum-label">Surplus Months</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#dc2626">${sm.deficitMonths}</div><div class="sum-label">Deficit Months</div></div>
+      ${sm.breakevenPeriod ? `<div class="sum-card"><div class="sum-val" style="color:#ca8a04">M${sm.breakevenPeriod}</div><div class="sum-label">Breakeven Period</div></div>` : ""}
+      ${sm.cashRunway!==null ? `<div class="sum-card"><div class="sum-val" style="color:${sm.cashRunway>6?"#16a34a":"#dc2626"}">${sm.cashRunway}</div><div class="sum-label">Cash Runway (mo)</div></div>` : ""}
+    </div>`;
+
+    // Negative cash flow explain block
+    const firstDeficit = fc.projections.find(p => p.netCashFlow < 0);
+    if (firstDeficit) {
+      html += `<div class="card" style="border-color:#fca5a5">
+        <div style="font-weight:700;color:#991b1b;margin-bottom:4px">⚠️ Projected Cash Flow Turns Negative (Month ${firstDeficit.period})</div>
+        <div style="font-size:.83rem;color:#64748b">Revenue: $${fmt(firstDeficit.revenue)} &minus; Expenses: $${fmt(firstDeficit.totalExpenses)} = Net Cash Flow: ($${fmt(Math.abs(firstDeficit.netCashFlow))})</div>
+        ${explainHtml([
+          'Your forecast shows you will run out of cash in month '+firstDeficit.period,
+          'Bills, salaries, and loan EMIs cannot be paid without additional funding',
+          'Act now — it typically takes 4–12 weeks to secure emergency funding'
+        ], 'Month '+firstDeficit.period+' projection: Revenue $'+fmt(firstDeficit.revenue)+' − Expenses $'+fmt(firstDeficit.totalExpenses)+' − Debt $'+fmt(firstDeficit.emiPayments)+' = Cash Flow of ($'+fmt(Math.abs(firstDeficit.netCashFlow))+') (negative)')}
+      </div>`;
+    }
+
+    // Cumulative deficit explain block
+    if (sm.troughCash < 0) {
+      html += `<div class="card" style="border-color:#fca5a5">
+        <div style="font-weight:700;color:#991b1b;margin-bottom:4px">⚠️ Projected Cumulative Deficit: ($${fmt(Math.abs(sm.troughCash))})</div>
+        ${explainHtml([
+          'The running total shortfall grows each month cash flow is negative',
+          'This is how fast your reserves will be depleted if the trend continues',
+          'Each month of negative cash flow is money you need to find from somewhere'
+        ], 'Your projected worst-case shortfall reaches ($'+fmt(Math.abs(sm.troughCash))+') — this is the total cash gap you would need to cover through financing, savings, or cost reduction')}
+      </div>`;
+    }
+
+    html += `<div class="card"><div class="card-title">Monthly Cash Flow Projections</div>
+    <div style="overflow-x:auto;"><table class="fc-table">
+      <thead><tr>
+        <th style="text-align:left">Period</th>
+        <th>Revenue ($)</th>
+        <th>Revenue Trend</th>
+        <th>Expenses ($)</th>
+        <th>Net CF ($)</th>
+        <th>Cumulative ($)</th>
+      </tr></thead>
+      <tbody>
+      ${fc.projections.map(p=>`<tr>
+        <td>Month ${p.period}</td>
+        <td class="num">${fmt(p.revenue)}</td>
+        <td>${miniBar(p.revenue, maxRev, "#4338ca")}</td>
+        <td class="num">${fmt(p.totalExpenses)}</td>
+        <td class="num ${cls(p.netCashFlow)}">${p.netCashFlow<0?"("+fmt(p.netCashFlow)+")":fmt(p.netCashFlow)}</td>
+        <td class="num ${cls(p.cumulativeCash)}">${p.cumulativeCash<0?"("+fmt(p.cumulativeCash)+")":fmt(p.cumulativeCash)}</td>
+      </tr>`).join("")}
+      <tr class="total-row">
+        <td>TOTAL</td>
+        <td class="num">${fmt(sm.totalRevenue)}</td>
+        <td></td>
+        <td class="num">${fmt(sm.totalExpenses)}</td>
+        <td class="num ${cls(sm.totalNetCash)}">${sm.totalNetCash<0?"("+fmt(sm.totalNetCash)+")":fmt(sm.totalNetCash)}</td>
+        <td class="num ${cls(sm.closingCash)}">${sm.closingCash<0?"("+fmt(sm.closingCash)+")":fmt(sm.closingCash)}</td>
+      </tr>
+      </tbody>
+    </table></div></div>`;
+    errEl.innerHTML = html;
+    saveFE();
+  } catch(e) {
+    errEl.innerHTML = `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ── Panel 2: P&L Forecast ── */
+function buildPLForecast() {
+  const out = document.getElementById("pl-output");
+  try {
+    const fc = forecastProfitLoss({
+      periods:           parseInt(document.getElementById("pl-periods").value),
+      baseRevenue:       parseFloat(document.getElementById("pl-rev").value)||0,
+      revenueGrowthRate: parseFloat(document.getElementById("pl-revgrow").value)||0,
+      cogsPercent:       parseFloat(document.getElementById("pl-cogspct").value)||0,
+      baseFixedOpex:     parseFloat(document.getElementById("pl-fixedopex").value)||0,
+      baseVariableOpex:  parseFloat(document.getElementById("pl-varopex").value)||0,
+      opexGrowthRate:    parseFloat(document.getElementById("pl-opexgrow").value)||0,
+      interestExpense:   parseFloat(document.getElementById("pl-interest").value)||0,
+      taxRate:           parseFloat(document.getElementById("pl-tax").value)||0,
+    });
+    const sm = fc.summary;
+    const maxRev = Math.max(...fc.projections.map(p=>p.revenue));
+
+    let html = `<div class="summary-strip">
+      ${sumCard("Total Revenue",    sm.totalRevenue,   "#4338ca")}
+      ${sumCard("Total Net Profit", sm.totalNetProfit, sm.totalNetProfit>0?"#16a34a":"#dc2626")}
+      <div class="sum-card"><div class="sum-val" style="color:#16a34a">${sm.profitableMonths}</div><div class="sum-label">Profitable Months</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#dc2626">${sm.lossMonths}</div><div class="sum-label">Loss Months</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:#64748b">${sm.openingNetMargin}%</div><div class="sum-label">Opening Margin</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:${sm.closingNetMargin>sm.openingNetMargin?"#16a34a":"#dc2626"}">${sm.closingNetMargin}%</div><div class="sum-label">Closing Margin</div></div>
+    </div>
+
+    <div class="card"><div class="card-title">Monthly P&amp;L Projections</div>
+    <div style="overflow-x:auto;"><table class="fc-table">
+      <thead><tr>
+        <th style="text-align:left">Period</th>
+        <th>Revenue ($)</th>
+        <th>Gross Profit ($)</th>
+        <th>Gross %</th>
+        <th>Oper. Profit ($)</th>
+        <th>Net Profit ($)</th>
+        <th>Net %</th>
+      </tr></thead>
+      <tbody>
+      ${fc.projections.map(p=>`<tr>
+        <td>Month ${p.period}</td>
+        <td class="num">${fmt(p.revenue)}</td>
+        <td class="num ${cls(p.grossProfit)}">${fmt(p.grossProfit)}</td>
+        <td class="num">${p.grossMargin}%</td>
+        <td class="num ${cls(p.operatingProfit)}">${p.operatingProfit<0?"("+fmt(p.operatingProfit)+")":fmt(p.operatingProfit)}</td>
+        <td class="num ${cls(p.netProfitAfterTax)}">${p.netProfitAfterTax<0?"("+fmt(p.netProfitAfterTax)+")":fmt(p.netProfitAfterTax)}</td>
+        <td class="num ${cls(p.netMargin)}">${p.netMargin}%</td>
+      </tr>`).join("")}
+      <tr class="total-row">
+        <td>TOTAL</td>
+        <td class="num">${fmt(sm.totalRevenue)}</td>
+        <td colspan="3"></td>
+        <td class="num ${cls(sm.totalNetProfit)}">${sm.totalNetProfit<0?"("+fmt(sm.totalNetProfit)+")":fmt(sm.totalNetProfit)}</td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table></div></div>`;
+    out.innerHTML = html;
+    saveFE();
+  } catch(e) {
+    out.innerHTML = `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ── Panel 3: Scenarios ── */
+function buildScenarios() {
+  const out = document.getElementById("sc-output");
+  try {
+    const baseParams = {
+      periods:              parseInt(document.getElementById("sc-periods").value),
+      openingCash:          parseFloat(document.getElementById("sc-open").value)||0,
+      baseRevenue:          parseFloat(document.getElementById("sc-rev").value)||0,
+      revenueGrowthRate:    parseFloat(document.getElementById("sc-revgrow").value)||0,
+      baseFixedExpenses:    parseFloat(document.getElementById("sc-fixed").value)||0,
+      baseVariableExpenses: parseFloat(document.getElementById("sc-var").value)||0,
+      expenseGrowthRate:    parseFloat(document.getElementById("sc-expgrow").value)||0,
+      emiPayments:          parseFloat(document.getElementById("sc-emi").value)||0,
+    };
+    const sc = _buildScenarios({ baseParams });
+    const { optimistic: opt, base, pessimistic: pess, assumptions: ass } = sc;
+
+    const scCard = (cls, title, fc, assumpt) => {
+      const sm = fc.summary;
+      return `<div class="sc-card ${cls}">
+        <div class="sc-title">${title}</div>
+        <div style="font-size:.75rem;color:#64748b;text-align:center;margin-bottom:10px;">
+          Rev growth: ${assumpt.revenueGrowthRate}%/mo · Exp growth: ${assumpt.expenseGrowthRate}%/mo
+        </div>
+        <div class="sc-metric"><span>Closing Cash</span><span style="font-weight:700;color:${sm.closingCash>0?'#16a34a':'#dc2626'}">$${fmtShort(sm.closingCash)}</span></div>
+        <div class="sc-metric"><span>Total Net CF</span><span style="font-weight:700;color:${sm.totalNetCash>0?'#16a34a':'#dc2626'}">$${fmtShort(sm.totalNetCash)}</span></div>
+        <div class="sc-metric"><span>Avg Monthly CF</span><span style="font-weight:700;">$${fmtShort(sm.avgMonthlyCashFlow)}</span></div>
+        <div class="sc-metric"><span>Surplus Months</span><span style="font-weight:700;color:#16a34a">${sm.surplusMonths}</span></div>
+        <div class="sc-metric"><span>Deficit Months</span><span style="font-weight:700;color:#dc2626">${sm.deficitMonths}</span></div>
+        ${sm.breakevenPeriod?`<div class="sc-metric"><span>Breakeven</span><span style="font-weight:700;color:#ca8a04">Month ${sm.breakevenPeriod}</span></div>`:""}
+        ${sm.cashRunway!==null?`<div class="sc-metric"><span>Cash Runway</span><span style="font-weight:700;color:${sm.cashRunway>6?'#16a34a':'#dc2626'}">${sm.cashRunway} months</span></div>`:""}
+      </div>`;
+    };
+
+    let html = `<div class="scenario-grid">
+      ${scCard("sc-opt",  "🟢 Optimistic",  opt,  ass.optimistic)}
+      ${scCard("sc-base", "🔵 Base Case",   base, ass.base)}
+      ${scCard("sc-pess", "🔴 Pessimistic", pess, ass.pessimistic)}
+    </div>`;
+
+    // Period-by-period comparison table
+    html += `<div class="card"><div class="card-title">Monthly Net Cash Flow — All Scenarios</div>
+    <div style="overflow-x:auto;"><table class="fc-table">
+      <thead><tr>
+        <th style="text-align:left">Period</th>
+        <th style="color:#166534">🟢 Optimistic ($)</th>
+        <th style="color:#1e40af">🔵 Base ($)</th>
+        <th style="color:#92400e">🔴 Pessimistic ($)</th>
+      </tr></thead>
+      <tbody>
+      ${opt.projections.map((_, i) => {
+        const o=opt.projections[i], b=base.projections[i], p=pess.projections[i];
+        const fv = v => v<0?"("+fmt(v)+")":fmt(v);
+        return `<tr>
+          <td>Month ${i+1}</td>
+          <td class="num ${cls(o.cumulativeCash)}">${fv(o.cumulativeCash)}</td>
+          <td class="num ${cls(b.cumulativeCash)}">${fv(b.cumulativeCash)}</td>
+          <td class="num ${cls(p.cumulativeCash)}">${fv(p.cumulativeCash)}</td>
+        </tr>`;
+      }).join("")}
+      </tbody>
+    </table></div></div>`;
+    out.innerHTML = html;
+  } catch(e) {
+    out.innerHTML = `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ── Panel 4: Loan Balance ── */
+function buildLoanForecast() {
+  const out = document.getElementById("lb-output");
+  try {
+    const fc = forecastLoanBalance({
+      principal: parseFloat(document.getElementById("lb-principal").value)||0,
+      annualRate: parseFloat(document.getElementById("lb-rate").value)||0,
+      emi: parseFloat(document.getElementById("lb-emi").value)||0,
+      periods: parseInt(document.getElementById("lb-periods").value),
+    });
+    const sm = fc.summary;
+    const ms = fc.milestones;
+
+    const barPct = sm.pctRepaidAtEnd;
+
+    let html = `<div class="summary-strip">
+      ${sumCard("Original Principal", sm.originalPrincipal, "#4338ca")}
+      ${sumCard("Balance at End",     sm.balanceAtEnd,      sm.balanceAtEnd>0?"#dc2626":"#16a34a")}
+      ${sumCard("Principal Paid",     sm.totalPrincipalPaid, "#16a34a")}
+      ${sumCard("Interest Paid",      sm.totalInterestPaid,  "#ef4444")}
+      <div class="sum-card"><div class="sum-val" style="color:#7c3aed">${sm.pctRepaidAtEnd}%</div><div class="sum-label">% Repaid</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Loan Repayment Progress</div>
+      <div class="milestone-bar">
+        <div class="milestone-fill" style="width:${barPct}%"><span>${barPct}% repaid</span></div>
+        ${[25,50,75].map(pct=>`
+          <div class="milestone-tick" style="left:${pct}%">
+            <div class="milestone-label">${pct}% ${ms[pct+'pct']?'(M'+ms[pct+'pct']+')':''}</div>
+          </div>`).join("")}
+      </div>
+      <div style="margin-top:24px;font-size:.82rem;color:#64748b;">
+        ${ms['25pct']?`✅ 25% repaid by Month <strong>${ms['25pct']}</strong>`:""}&nbsp;
+        ${ms['50pct']?`&nbsp;|&nbsp; ✅ 50% repaid by Month <strong>${ms['50pct']}</strong>`:""}&nbsp;
+        ${ms['75pct']?`&nbsp;|&nbsp; ✅ 75% repaid by Month <strong>${ms['75pct']}</strong>`:""}
+      </div>
+    </div>
+
+    <div class="card"><div class="card-title">Month-by-Month Loan Schedule</div>
+    <div style="overflow-x:auto;"><table class="fc-table">
+      <thead><tr>
+        <th style="text-align:left">Month</th>
+        <th>Interest ($)</th>
+        <th>Principal ($)</th>
+        <th>Outstanding ($)</th>
+        <th>% Repaid</th>
+        <th>Progress</th>
+      </tr></thead>
+      <tbody>
+      ${fc.projections.map(p=>`<tr>
+        <td>Month ${p.period}</td>
+        <td class="num neg">${fmt(p.interestPaid)}</td>
+        <td class="num pos">${fmt(p.principalRepaid)}</td>
+        <td class="num">${fmt(p.outstandingBalance)}</td>
+        <td class="num">${p.pctRepaid}%</td>
+        <td>${miniBar(p.pctRepaid, 100, "#7c3aed")}</td>
+      </tr>`).join("")}
+      </tbody>
+    </table></div></div>`;
+    out.innerHTML = html;
+  } catch(e) {
+    out.innerHTML = `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ── Unit Tests ── */
+function assert(name, condition, detail) { return { name, pass:!!condition, detail:detail||"" }; }
+
+function runTests() {
+  const results = [];
+
+  // T1 — Compound growth
+  {
+    const fc = forecastCashFlow({ periods:1, baseRevenue:100000, revenueGrowthRate:10 });
+    results.push(assert("T1: Compound revenue growth (10%)", fc.projections[0].revenue === 110000,
+      `Got ${fc.projections[0].revenue}`));
+  }
+
+  // T2 — Flat growth (0%)
+  {
+    const fc = forecastCashFlow({ periods:3, baseRevenue:100000, revenueGrowthRate:0 });
+    const allEqual = fc.projections.every(p=>p.revenue===100000);
+    results.push(assert("T2: Zero growth → all periods equal", allEqual));
+  }
+
+  // T3 — Cumulative cash chains correctly
+  {
+    const fc = forecastCashFlow({ openingCash:10000, periods:2, baseRevenue:50000,
+      revenueGrowthRate:0, baseFixedExpenses:30000, baseVariableExpenses:10000 });
+    // Each period: netCF = 50000 - 40000 = 10000
+    // P1 cum = 10000+10000 = 20000, P2 cum = 20000+10000 = 30000
+    results.push(assert("T3: Cumulative cash chains correctly",
+      fc.projections[1].cumulativeCash === 30000, `Got ${fc.projections[1].cumulativeCash}`));
+  }
+
+  // T4 — Summary totals match
+  {
+    const fc = forecastCashFlow({ periods:12, baseRevenue:100000, revenueGrowthRate:5,
+      baseFixedExpenses:40000, expenseGrowthRate:2 });
+    const manualTotal = _r(fc.projections.reduce((s,p)=>s+p.revenue,0));
+    results.push(assert("T4: Summary totalRevenue matches sum of projections",
+      fc.summary.totalRevenue === manualTotal, `sm=${fc.summary.totalRevenue}, manual=${manualTotal}`));
+  }
+
+  // T5 — P&L: COGS as % of revenue
+  {
+    const fc = forecastProfitLoss({ periods:1, baseRevenue:100000, revenueGrowthRate:0, cogsPercent:40 });
+    results.push(assert("T5: COGS % locks gross margin at 60%",
+      fc.projections[0].grossMargin === 60, `Got ${fc.projections[0].grossMargin}%`));
+  }
+
+  // T6 — P&L: no tax on losses
+  {
+    const fc = forecastProfitLoss({ periods:1, baseRevenue:10000, revenueGrowthRate:0,
+      baseCogs:5000, baseFixedOpex:8000, taxRate:25 });
+    results.push(assert("T6: No tax when operating at a loss", fc.projections[0].taxAmount===0,
+      `taxAmount=${fc.projections[0].taxAmount}, netProfitBT=${fc.projections[0].netProfitBeforeTax}`));
+  }
+
+  // T7 — Loan balance decreases each period
+  {
+    const fc = forecastLoanBalance({ principal:500000, annualRate:12, emi:11122, periods:6 });
+    const decreasing = fc.projections.every((p,i)=>i===0||p.outstandingBalance<fc.projections[i-1].outstandingBalance);
+    results.push(assert("T7: Loan balance strictly decreases each month", decreasing));
+  }
+
+  // T8 — Loan balance: interest = outstanding × monthlyRate
+  {
+    const fc = forecastLoanBalance({ principal:500000, annualRate:12, emi:11122, periods:1 });
+    results.push(assert("T8: First month interest = 500000 × 1% = 5000",
+      fc.projections[0].interestPaid === 5000, `Got ${fc.projections[0].interestPaid}`));
+  }
+
+  // T9 — Scenario: optimistic closing > base closing > pessimistic
+  {
+    const bp = { periods:12, baseRevenue:100000, revenueGrowthRate:5,
+      baseFixedExpenses:40000, baseVariableExpenses:20000, expenseGrowthRate:2 };
+    const sc = _buildScenarios({ baseParams:bp });
+    const opt=sc.optimistic.summary.closingCash, base=sc.base.summary.closingCash,
+          pess=sc.pessimistic.summary.closingCash;
+    results.push(assert("T9: Optimistic closing > base > pessimistic",
+      opt>base && base>pess, `Opt=${opt}, Base=${base}, Pess=${pess}`));
+  }
+
+  // T10 — Milestones detected
+  {
+    const fc = forecastLoanBalance({ principal:500000, annualRate:12, emi:11122, periods:60 });
+    results.push(assert("T10: 25% and 50% milestones are detected",
+      fc.milestones['25pct'] && fc.milestones['50pct'],
+      `25%=M${fc.milestones['25pct']}, 50%=M${fc.milestones['50pct']}`));
+  }
+
+  // T11 — periods validation
+  {
+    let threw=false;
+    try { forecastCashFlow({ periods:0, baseRevenue:100000 }); } catch(e) { threw=true; }
+    results.push(assert("T11: periods=0 throws validation error", threw));
+  }
+
+  // T12 — negative baseRevenue throws
+  {
+    let threw=false;
+    try { forecastCashFlow({ periods:12, baseRevenue:-1000 }); } catch(e) { threw=true; }
+    results.push(assert("T12: Negative baseRevenue throws error", threw));
+  }
+
+  const passed = results.filter(r=>r.pass).length;
+  document.getElementById("test-output").innerHTML = `
+    <div style="grid-column:1/-1;margin-bottom:10px;font-weight:600;font-size:.9rem;color:#475569;">
+      ${passed}/${results.length} tests passed
+    </div>
+    ${results.map(r=>`
+      <div class="test-item ${r.pass?'test-pass':'test-fail'}">
+        <div class="test-name">${r.pass?'✅':'❌'} ${r.name}</div>
+        ${r.detail?`<div class="test-detail">${r.detail}</div>`:""}
+      </div>`).join("")}`;
+}
+
+/* ── Init ── */
+function switchTab(tab) {
+  const names=["cashflow","pnl","scenarios","loan","tests"];
+  document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active",names[i]===tab));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+tab).classList.add("active");
+}
+
+/* ── Persistence ── */
+var FE_KEY = 'fw_forecasting_engine';
+var FE_FIELDS = ['cf-periods','cf-open','cf-rev','cf-revgrow','cf-fixed','cf-var','cf-expgrow','cf-emi',
+                 'pl-periods','pl-rev','pl-revgrow','pl-cogspct','pl-fixedopex','pl-varopex','pl-opexgrow','pl-interest','pl-tax'];
+function saveFE(){
+  try{
+    var obj = {};
+    FE_FIELDS.forEach(function(id){ var el=document.getElementById(id); if(el) obj[id]=el.value; });
+    localStorage.setItem(FE_KEY, JSON.stringify(obj));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(FE_KEY)||'null');
+    if(s){
+      FE_FIELDS.forEach(function(id){ var el=document.getElementById(id); if(el&&s[id]!==undefined&&s[id]!=='') el.value=s[id]; });
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.rev) { var r=Math.round((parseFloat(p.rev)||0)/12); document.getElementById('cf-rev').value=r; document.getElementById('pl-rev').value=r; }
+    if(p.exp) { var e=Math.round((parseFloat(p.exp)||0)/12); document.getElementById('cf-fixed').value=e; document.getElementById('pl-fixedopex').value=e; }
+    if(p.emi) { document.getElementById('cf-emi').value=p.emi; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Advisor Dashboard — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px}
+.adv-wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
+h1{font-size:1.4rem;font-weight:900;color:#0f172a;margin-bottom:4px}
+.adv-sub{color:#64748b;font-size:.85rem;margin-bottom:24px}
+
+/* Stats bar */
+.stats-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:14px 20px;flex:1;min-width:130px}
+.stat-num{font-size:1.6rem;font-weight:900;color:#0f172a}
+.stat-label{font-size:.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+/* Add client panel */
+.add-panel{background:#fff;border-radius:12px;border:2px dashed #e2e8f0;padding:20px 24px;margin-bottom:24px;transition:border-color .2s}
+.add-panel:focus-within{border-color:#6366f1}
+.add-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#6366f1;margin-bottom:12px}
+.add-row{display:flex;gap:10px;flex-wrap:wrap}
+.add-input{flex:1;min-width:180px;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.85rem;outline:none}
+.add-input:focus{border-color:#6366f1}
+.btn-add{background:#6366f1;color:#fff;border:none;border-radius:7px;padding:9px 20px;font-size:.85rem;font-weight:800;cursor:pointer;white-space:nowrap}
+.btn-add:hover{background:#4f46e5}
+.btn-add:disabled{background:#94a3b8;cursor:not-allowed}
+
+/* Client table */
+.clients-section{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden}
+.cs-header{padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.cs-title{font-size:.85rem;font-weight:800;color:#0f172a}
+.cs-count{font-size:.75rem;color:#94a3b8}
+
+.client-row{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid #f8fafc;transition:background .1s}
+.client-row:hover{background:#fafafa}
+.client-row:last-child{border-bottom:none}
+.cr-avatar{width:36px;height:36px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;color:#6366f1;flex-shrink:0}
+.cr-info{flex:1;min-width:0}
+.cr-name{font-size:.88rem;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-email{font-size:.75rem;color:#94a3b8}
+.cr-status{font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:999px;flex-shrink:0}
+.status-pending{background:#fef9c3;color:#854d0e}
+.status-active{background:#dcfce7;color:#15803d}
+.cr-score{text-align:center;min-width:60px}
+.cr-score-val{font-size:1rem;font-weight:900}
+.cr-score-label{font-size:.65rem;color:#94a3b8}
+.cr-revenue{text-align:right;min-width:90px}
+.cr-rev-val{font-size:.85rem;font-weight:700;color:#0f172a}
+.cr-rev-label{font-size:.65rem;color:#94a3b8}
+.cr-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-invite{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:6px;padding:5px 10px;font-size:.72rem;font-weight:800;cursor:pointer}
+.btn-invite:hover{background:#dcfce7}
+.btn-invite.sent{background:#f8fafc;color:#94a3b8;border-color:#e2e8f0;cursor:default}
+.btn-remove{background:#fff;color:#ef4444;border:1px solid #fecaca;border-radius:6px;padding:5px 8px;font-size:.72rem;cursor:pointer}
+.btn-remove:hover{background:#fef2f2}
+.cr-notes{font-size:.72rem;color:#64748b;font-style:italic;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+
+.empty-state{text-align:center;padding:48px 20px;color:#94a3b8}
+.empty-icon{font-size:2.5rem;margin-bottom:12px}
+.loading{text-align:center;padding:40px;color:#94a3b8}
+
+/* Commission box */
+.commission-box{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:20px 24px;margin-top:20px}
+.cb-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:14px}
+.comm-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f8fafc}
+.comm-row:last-child{border-bottom:none}
+.comm-lender{font-size:.85rem;font-weight:700;color:#0f172a}
+.comm-meta{font-size:.75rem;color:#64748b}
+.comm-amount{font-size:.9rem;font-weight:900;color:#16a34a}
+.no-comm{font-size:.82rem;color:#94a3b8;text-align:center;padding:16px 0}
+
+/* Invite copy box */
+.invite-copy-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:8px}
+.invite-copy-url{flex:1;font-size:.72rem;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-copy{background:#6366f1;color:#fff;border:none;border-radius:5px;padding:4px 10px;font-size:.7rem;font-weight:800;cursor:pointer;flex-shrink:0}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="sidebar.js"></script>
+<script src="modules/nav.js"></script>
+<script src="modules/fw-auth.js"></script>
+
+<div class="adv-wrap">
+  <h1>Advisor Dashboard</h1>
+  <p class="adv-sub">Manage your clients, track health scores, and monitor referral commissions.</p>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total Clients</div></div>
+    <div class="stat-card"><div class="stat-num" id="statActive">—</div><div class="stat-label">Active</div></div>
+    <div class="stat-card"><div class="stat-num" id="statPending">—</div><div class="stat-label">Pending Invite</div></div>
+    <div class="stat-card"><div class="stat-num" id="statAvgScore">—</div><div class="stat-label">Avg Health Score</div></div>
+  </div>
+
+  <!-- Add Client -->
+  <div class="add-panel">
+    <div class="add-title">+ Add New Client</div>
+    <div class="add-row">
+      <input class="add-input" id="addEmail" type="email" placeholder="Client email address" />
+      <input class="add-input" id="addName" type="text" placeholder="Client name (optional)" style="max-width:200px"/>
+      <input class="add-input" id="addNotes" type="text" placeholder="Notes (optional)" style="max-width:200px"/>
+      <button class="btn-add" id="addClientBtn" onclick="addClient()">Send Invite</button>
+    </div>
+    <div id="addMsg" style="margin-top:8px;font-size:.78rem"></div>
+  </div>
+
+  <!-- Client list -->
+  <div class="clients-section">
+    <div class="cs-header">
+      <span class="cs-title">Your Clients</span>
+      <span class="cs-count" id="clientCount"></span>
+    </div>
+    <div id="clientList" class="loading">Loading clients…</div>
+  </div>
+
+  <!-- Commission tracking -->
+  <div class="commission-box">
+    <div class="cb-title">Referral Commissions</div>
+    <div id="commissionList"><div class="no-comm">No loan applications tracked yet.</div></div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co'
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ'
+
+async function getToken() {
+  if (window.fwAuth && window.fwAuth.client) {
+    const res = await window.fwAuth.client.auth.getSession()
+    return res?.data?.session?.access_token || null
+  }
+  return null
+}
+
+async function callFn(name, method, body) {
+  const token = await getToken()
+  if (!token) return null
+  const r = await fetch(SUPA_URL + '/functions/v1/' + name, {
+    method: method || 'GET',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+    body: body ? JSON.stringify(body) : undefined
+  })
+  return r.json()
+}
+
+function scoreColor(s) { return s >= 70 ? '#16a34a' : s >= 45 ? '#d97706' : '#dc2626' }
+function initial(name, email) {
+  const n = name || email || '?'
+  return n.charAt(0).toUpperCase()
+}
+
+function renderClients(clients) {
+  const list = document.getElementById('clientList')
+  const count = document.getElementById('clientCount')
+  count.textContent = clients.length + ' client' + (clients.length !== 1 ? 's' : '')
+
+  // Stats
+  const active = clients.filter(c => c.status === 'active')
+  const pending = clients.filter(c => c.status === 'pending')
+  const scores = active.map(c => c.health_score?.overall_score || 0).filter(s => s > 0)
+  const avgScore = scores.length ? Math.round(scores.reduce((a,b) => a+b,0) / scores.length) : 0
+
+  document.getElementById('statTotal').textContent = clients.length
+  document.getElementById('statActive').textContent = active.length
+  document.getElementById('statPending').textContent = pending.length
+  document.getElementById('statAvgScore').textContent = avgScore > 0 ? avgScore + '/100' : '—'
+
+  if (clients.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><div>No clients yet — invite your first client above.</div></div>'
+    return
+  }
+
+  list.innerHTML = clients.map(c => {
+    const score = c.health_score?.overall_score ? Math.round(c.health_score.overall_score) : null
+    const rev = c.loan_profile?.monthly_revenue ? '$' + Math.round(c.loan_profile.monthly_revenue).toLocaleString() + '/mo' : '—'
+    const biz = c.loan_profile?.business_name || ''
+    const inviteUrl = location.origin + '/accept-invite.html?token=' + (c.invite_token || '')
+    return `<div class="client-row" id="cr-${c.id}">
+      <div class="cr-avatar">${initial(c.client_name, c.client_email)}</div>
+      <div class="cr-info">
+        <div class="cr-name">${c.client_name || c.client_email}${biz ? ' · ' + biz : ''}</div>
+        <div class="cr-email">${c.client_email}</div>
+        ${c.notes ? '<div class="cr-notes">' + c.notes + '</div>' : ''}
+      </div>
+      <span class="cr-status status-${c.status}">${c.status === 'active' ? '✓ Active' : '⏳ Pending'}</span>
+      <div class="cr-score">
+        ${score !== null ? `<div class="cr-score-val" style="color:${scoreColor(score)}">${score}</div><div class="cr-score-label">Health</div>` : '<div class="cr-score-val" style="color:#cbd5e1">—</div><div class="cr-score-label">Health</div>'}
+      </div>
+      <div class="cr-revenue">
+        <div class="cr-rev-val">${rev}</div>
+        <div class="cr-rev-label">Revenue</div>
+      </div>
+      <div class="cr-actions">
+        ${c.status === 'pending' ? `<button class="btn-invite" onclick="sendInvite('${c.id}', this)">✉ Send Invite</button>` : '<button class="btn-invite sent" disabled>✓ Joined</button>'}
+        <button class="btn-remove" onclick="removeClient('${c.id}')" title="Remove client">✕</button>
+      </div>
+    </div>
+    ${c.status === 'pending' ? `<div style="padding:0 20px 12px 68px"><div class="invite-copy-box"><span class="invite-copy-url">${inviteUrl}</span><button class="btn-copy" onclick="copyInvite('${inviteUrl}', this)">Copy Link</button></div></div>` : ''}`
+  }).join('')
+}
+
+async function loadClients() {
+  const data = await callFn('advisor-clients', 'GET')
+  if (!data) {
+    document.getElementById('clientList').innerHTML = '<div class="loading">Sign in as Advisor to manage clients.</div>'
+    return
+  }
+  renderClients(data.clients || [])
+  loadCommissions()
+}
+
+async function addClient() {
+  const email = document.getElementById('addEmail').value.trim()
+  const name = document.getElementById('addName').value.trim()
+  const notes = document.getElementById('addNotes').value.trim()
+  const msg = document.getElementById('addMsg')
+  const btn = document.getElementById('addClientBtn')
+  if (!email) { msg.style.color='#dc2626'; msg.textContent='Email is required.'; return }
+  btn.disabled = true; btn.textContent = 'Adding…'
+  const data = await callFn('advisor-clients', 'POST', { client_email: email, client_name: name, notes })
+  btn.disabled = false; btn.textContent = 'Send Invite'
+  if (!data) { msg.style.color='#dc2626'; msg.textContent='Error — please try again.'; return }
+  if (!data.ok) { msg.style.color='#d97706'; msg.textContent = data.reason === 'already_invited' ? 'Already invited (' + data.status + ').' : (data.error || 'Error'); return }
+  msg.style.color='#16a34a'; msg.textContent='✓ Client added — now send them the invite link below.'
+  document.getElementById('addEmail').value = ''
+  document.getElementById('addName').value = ''
+  document.getElementById('addNotes').value = ''
+  loadClients()
+}
+
+async function sendInvite(clientId, btn) {
+  btn.textContent = 'Sending…'; btn.disabled = true
+  const baseUrl = location.origin
+  const data = await callFn('advisor-invite', 'POST', { client_id: clientId, base_url: baseUrl })
+  if (data && data.ok) {
+    btn.textContent = '✓ Sent'; btn.classList.add('sent')
+  } else {
+    btn.textContent = '✉ Send Invite'; btn.disabled = false
+    alert('Email failed: ' + (data?.error || 'unknown error') + '\nUse the copy link to share manually.')
+  }
+}
+
+async function removeClient(id) {
+  if (!confirm('Remove this client?')) return
+  await callFn('advisor-clients?action=remove', 'POST', { id })
+  document.getElementById('cr-' + id)?.remove()
+  loadClients()
+}
+
+function copyInvite(url, btn) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = '✓ Copied'
+    setTimeout(() => { btn.textContent = 'Copy Link' }, 2000)
+  })
+}
+
+async function loadCommissions() {
+  const token = await getToken()
+  if (!token) return
+  const r = await fetch(SUPA_URL + '/rest/v1/loan_applications?select=*&order=applied_at.desc&limit=20', {
+    headers: { 'Authorization': 'Bearer ' + token, 'apikey': SUPA_KEY }
+  })
+  const apps = await r.json().catch(() => [])
+  const box = document.getElementById('commissionList')
+  if (!apps || apps.length === 0) { box.innerHTML = '<div class="no-comm">No loan applications tracked yet.</div>'; return }
+  const totalComm = apps.reduce((s, a) => s + (a.commission_amount || 0), 0)
+  box.innerHTML = `<div style="margin-bottom:12px;font-size:.8rem;color:#64748b">Potential earnings: <strong style="color:#16a34a;font-size:1rem">$${Math.round(totalComm).toLocaleString()}</strong></div>` +
+    apps.map(a => `<div class="comm-row">
+      <div><div class="comm-lender">${a.lender_name} — ${a.loan_type || ''}</div><div class="comm-meta">${new Date(a.applied_at).toLocaleDateString()} · ${a.status}</div></div>
+      <div class="comm-amount">$${Math.round(a.commission_amount || 0).toLocaleString()}</div>
+    </div>`).join('')
+}
+
+// Load after auth resolves
+setTimeout(loadClients, 900)
+</script>
+</body>
+</html>

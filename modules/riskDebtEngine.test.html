@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Risk & Debt Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 6px; color: #444; }
+    .card .desc { font-size: 0.83rem; color: #666; margin-bottom: 14px; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number] { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
+    input:focus { outline: none; border-color: #2563eb; }
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+    button.primary { margin-top: 16px; padding: 10px 24px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; }
+    button.primary:hover { background: #1d4ed8; }
+
+    /* Metric gauge */
+    .metric-row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+    .metric-label { min-width: 80px; font-size: 0.82rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; }
+    .gauge-wrap { flex: 1; background: #e2e8f0; border-radius: 99px; height: 12px; overflow: hidden; }
+    .gauge-fill  { height: 100%; border-radius: 99px; transition: width 0.4s; }
+    .gauge-val  { min-width: 70px; font-weight: bold; font-size: 0.95rem; text-align: right; }
+
+    /* Summary grid */
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .summary-item { background: #f8fafc; border-radius: 6px; padding: 12px 14px; border: 1px solid #e2e8f0; }
+    .summary-item .s-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; }
+    .summary-item .s-val   { font-size: 1.15rem; font-weight: bold; margin-top: 4px; }
+    .c-blue  { color: #2563eb; } .c-green { color: #16a34a; }
+    .c-red   { color: #dc2626; } .c-amber { color: #d97706; }
+
+    /* Risk badge */
+    .risk-badge { display: inline-block; padding: 4px 14px; border-radius: 99px; font-weight: bold; font-size: 0.9rem; margin-left: 10px; }
+    .risk-Low      { background: #dcfce7; color: #15803d; }
+    .risk-Moderate { background: #fef9c3; color: #92400e; }
+    .risk-High     { background: #fed7aa; color: #9a3412; }
+    .risk-Critical { background: #fee2e2; color: #991b1b; }
+
+    /* Status pill */
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 0.78rem; font-weight: bold; margin-left: 6px; }
+    .pill-strong    { background:#dcfce7; color:#15803d; }
+    .pill-adequate  { background:#dbeafe; color:#1d4ed8; }
+    .pill-caution   { background:#fef9c3; color:#92400e; }
+    .pill-danger    { background:#fee2e2; color:#991b1b; }
+    .pill-excellent { background:#dcfce7; color:#15803d; }
+    .pill-good      { background:#dbeafe; color:#1d4ed8; }
+    .pill-moderate  { background:#fef9c3; color:#92400e; }
+    .pill-high-risk { background:#fee2e2; color:#991b1b; }
+
+    /* Alerts & Recs */
+    .alert-box { border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; font-size: 0.88rem; }
+    .alert-warn { background: #fef9c3; border-left: 4px solid #f59e0b; }
+    .alert-danger { background: #fee2e2; border-left: 4px solid #dc2626; }
+    .rec-box { background: #f0f9ff; border-left: 4px solid #38bdf8; border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; font-size: 0.88rem; }
+
+    /* Benchmark table */
+    .bench-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; }
+    .bench-table th { background: #1e293b; color: #fff; padding: 7px 10px; text-align: left; }
+    .bench-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9; }
+    .bench-table tr:hover td { background: #f8fafc; }
+
+    /* Unit tests */
+    .test-result { font-family: monospace; font-size: 0.88rem; padding: 4px 0; }
+    .test-result.pass { color: #15803d; }
+    .test-result.fail { color: #dc2626; font-weight: bold; }
+    .test-summary { margin-top: 12px; font-weight: bold; font-size: 0.95rem; padding: 10px; border-radius: 6px; }
+    .test-summary.all-pass { background: #dcfce7; color: #15803d; }
+    .test-summary.has-fail  { background: #fee2e2; color: #dc2626; }
+
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
+    .section-title { font-size: 0.78rem; font-weight: bold; text-transform: uppercase; color: #94a3b8; margin: 14px 0 4px; letter-spacing: 0.05em; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+
+    /* Plain-English Explain Blocks */
+    .explain-block{margin-top:7px}
+    .explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+    .explain-toggle:hover{text-decoration:underline}
+    .explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+    .explain-body.open{display:block}
+    .explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+    .explain-body ul{padding-left:18px;margin-bottom:6px}
+    .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+    .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+  </style>
+</head>
+<body>
+
+<h1>Risk &amp; Debt Engine</h1>
+<p class="subtitle">Small Business Financial Platform · DSCR · DTI · Risk Level · Alerts</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('dscr')">DSCR</button>
+  <button class="tab" onclick="showTab('dti')">DTI</button>
+  <button class="tab" onclick="showTab('assess')">Full Risk Assessment</button>
+  <button class="tab" onclick="showTab('bench')">Benchmarks</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── DSCR Panel ─────────────────────────────────────────────────────── -->
+<div id="panel-dscr" class="panel active">
+  <div class="card">
+    <h2>Debt Service Coverage Ratio (DSCR)</h2>
+    <p class="desc">DSCR = Net Operating Income ÷ Total Debt Service &nbsp;|&nbsp; Target: ≥ 1.25</p>
+    <div class="input-grid">
+      <div>
+        <label>Net Operating Income ($/month) <span class="hint">revenue − operating expenses</span></label>
+        <input type="number" id="d-noi" value="60000" />
+      </div>
+      <div>
+        <label>Total Debt Service ($/month) <span class="hint">all EMI payments</span></label>
+        <input type="number" id="d-debt" value="40000" min="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcDSCR()">Calculate DSCR</button>
+  </div>
+  <div id="dscr-result"></div>
+</div>
+
+<!-- ─── DTI Panel ──────────────────────────────────────────────────────── -->
+<div id="panel-dti" class="panel">
+  <div class="card">
+    <h2>Debt-to-Income Ratio (DTI)</h2>
+    <p class="desc">DTI = (Total Monthly Debt ÷ Gross Monthly Income) × 100 &nbsp;|&nbsp; Target: &lt; 35%</p>
+    <div class="input-grid">
+      <div>
+        <label>Total Monthly Debt Payments ($) <span class="hint">all EMIs</span></label>
+        <input type="number" id="t-debt" value="20000" min="0" />
+      </div>
+      <div>
+        <label>Gross Monthly Income ($) <span class="hint">total revenue</span></label>
+        <input type="number" id="t-income" value="80000" min="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcDTI()">Calculate DTI</button>
+  </div>
+  <div id="dti-result"></div>
+</div>
+
+<!-- ─── Full Assessment Panel ─────────────────────────────────────────── -->
+<div id="panel-assess" class="panel">
+  <div class="card">
+    <h2>Full Risk Assessment</h2>
+    <p class="desc">Combines DSCR + DTI → overall risk level, alerts, and recommendations.</p>
+
+    <div class="section-title">Business Financials</div>
+    <div class="input-grid">
+      <div>
+        <label>Gross Monthly Income ($)</label>
+        <input type="number" id="a-income" value="100000" />
+      </div>
+      <div>
+        <label>Operating Expenses ($/month) <span class="hint">excl. debt payments</span></label>
+        <input type="number" id="a-opex" value="40000" min="0" />
+      </div>
+      <div>
+        <label>Total Existing Debt Service ($/month)</label>
+        <input type="number" id="a-debt" value="20000" min="0" />
+      </div>
+      <div>
+        <label>Proposed New EMI ($/month) <span class="hint">0 if no new loan</span></label>
+        <input type="number" id="a-newemi" value="5000" min="0" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcAssess()">Assess Risk</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="assess-result"></div>
+</div>
+
+<!-- ─── Benchmarks Panel ───────────────────────────────────────────────── -->
+<div id="panel-bench" class="panel">
+  <div class="card">
+    <h2>DSCR Benchmarks</h2>
+    <table class="bench-table">
+      <thead><tr><th>DSCR Value</th><th>Status</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td>≥ 1.50</td><td><span class="pill pill-strong">Strong</span></td><td>Well covered — safe to take new debt</td></tr>
+        <tr><td>1.25 – 1.49</td><td><span class="pill pill-adequate">Adequate</span></td><td>Safe with buffer — most lenders approve here</td></tr>
+        <tr><td>1.00 – 1.24</td><td><span class="pill pill-caution">Caution</span></td><td>Barely covered — risky if revenue dips</td></tr>
+        <tr><td>&lt; 1.00</td><td><span class="pill pill-danger">Danger</span></td><td>Income not enough to service debt</td></tr>
+      </tbody>
+    </table>
+    <h2 style="margin-top:20px;">DTI Benchmarks</h2>
+    <table class="bench-table">
+      <thead><tr><th>DTI %</th><th>Status</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td>&lt; 20%</td><td><span class="pill pill-excellent">Excellent</span></td><td>Very low debt burden — strong position</td></tr>
+        <tr><td>20% – 34%</td><td><span class="pill pill-good">Good</span></td><td>Manageable — healthy for small business</td></tr>
+        <tr><td>35% – 49%</td><td><span class="pill pill-moderate">Moderate</span></td><td>Elevated — monitor closely</td></tr>
+        <tr><td>≥ 50%</td><td><span class="pill pill-high-risk">High Risk</span></td><td>Over half of income goes to debt</td></tr>
+      </tbody>
+    </table>
+    <h2 style="margin-top:20px;">Overall Risk Score</h2>
+    <table class="bench-table">
+      <thead><tr><th>Score</th><th>Risk Level</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>0 – 10</td><td><span class="risk-badge risk-Low">Low</span></td><td>Can safely take on new debt</td></tr>
+        <tr><td>11 – 30</td><td><span class="risk-badge risk-Moderate">Moderate</span></td><td>Proceed with caution</td></tr>
+        <tr><td>31 – 55</td><td><span class="risk-badge risk-High">High</span></td><td>Avoid new debt — fix existing issues</td></tr>
+        <tr><td>56 – 100</td><td><span class="risk-badge risk-Critical">Critical</span></td><td>Immediate action needed</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── Unit Tests Panel ───────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Plain-English Explain Helpers ───────────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+// ─── Module 4: Risk & Debt Engine ─────────────────────────────────────────
+
+function _round(n) { return Math.round(n * 100) / 100; }
+
+function calculateDSCR(netOperatingIncome, totalDebtService) {
+  if (typeof netOperatingIncome !== "number") throw new Error("netOperatingIncome must be a number.");
+  if (typeof totalDebtService !== "number")   throw new Error("totalDebtService must be a number.");
+  if (totalDebtService <= 0) throw new Error("totalDebtService must be greater than 0.");
+  const dscr = _round(netOperatingIncome / totalDebtService);
+  let status, label;
+  if      (dscr >= 1.5)  { status = "strong";   label = "Strong — well covered"; }
+  else if (dscr >= 1.25) { status = "adequate";  label = "Adequate — safe with buffer"; }
+  else if (dscr >= 1.0)  { status = "caution";   label = "Caution — barely covered"; }
+  else                   { status = "danger";    label = "Danger — income insufficient to cover debt"; }
+  return { dscr, status, label };
+}
+
+function calculateDTI(totalMonthlyDebt, grossMonthlyIncome) {
+  if (typeof totalMonthlyDebt !== "number")   throw new Error("totalMonthlyDebt must be a number.");
+  if (typeof grossMonthlyIncome !== "number") throw new Error("grossMonthlyIncome must be a number.");
+  if (grossMonthlyIncome <= 0) throw new Error("grossMonthlyIncome must be greater than 0.");
+  if (totalMonthlyDebt < 0)    throw new Error("totalMonthlyDebt cannot be negative.");
+  const dti = _round((totalMonthlyDebt / grossMonthlyIncome) * 100);
+  let status, label;
+  if      (dti < 20) { status = "excellent"; label = "Excellent — very low debt burden"; }
+  else if (dti < 35) { status = "good";      label = "Good — manageable debt load"; }
+  else if (dti < 50) { status = "moderate";  label = "Moderate — monitor closely"; }
+  else               { status = "high-risk"; label = "High Risk — debt burden is excessive"; }
+  return { dti, dtiPercent: dti.toFixed(1) + "%", status, label };
+}
+
+function assessRisk({ grossMonthlyIncome, operatingExpenses, totalDebtService, proposedNewEMI = 0 }) {
+  if (grossMonthlyIncome <= 0) throw new Error("grossMonthlyIncome must be greater than 0.");
+  if (operatingExpenses < 0)   throw new Error("operatingExpenses cannot be negative.");
+  if (totalDebtService < 0)    throw new Error("totalDebtService cannot be negative.");
+  if (proposedNewEMI < 0)      throw new Error("proposedNewEMI cannot be negative.");
+
+  const totalDebt          = _round(totalDebtService + proposedNewEMI);
+  const netOperatingIncome = _round(grossMonthlyIncome - operatingExpenses);
+
+  const dscrResult = totalDebt > 0
+    ? calculateDSCR(netOperatingIncome, totalDebt)
+    : { dscr: null, status: "no-debt", label: "No debt obligations" };
+
+  const dtiResult = totalDebt > 0
+    ? calculateDTI(totalDebt, grossMonthlyIncome)
+    : { dti: 0, dtiPercent: "0%", status: "excellent", label: "No debt" };
+
+  const alerts = [], recs = [];
+  if (netOperatingIncome <= 0)
+    alerts.push({ type:"danger", msg:"Net operating income is zero or negative — not covering expenses." });
+  if (dscrResult.status === "danger")
+    alerts.push({ type:"danger", msg:"DSCR < 1.0: Cannot cover debt payments from operating income." });
+  if (dscrResult.status === "caution")
+    alerts.push({ type:"warn",  msg:"DSCR 1.0–1.25: Debt barely covered. Any revenue drop is risky." });
+  if (dtiResult.status === "high-risk")
+    alerts.push({ type:"danger", msg:"DTI > 50%: Over half of revenue goes to debt." });
+  if (dtiResult.status === "moderate")
+    alerts.push({ type:"warn",  msg:"DTI 35–50%: Debt load is elevated. Avoid additional borrowing." });
+  if (proposedNewEMI > 0 && (dscrResult.status === "danger" || dscrResult.status === "caution"))
+    alerts.push({ type:"danger", msg:"Adding a new loan at current DSCR levels is not advisable." });
+
+  if (netOperatingIncome <= 0)
+    recs.push("Reduce operating expenses or increase revenue before considering any debt.");
+  if (dscrResult.status === "danger" || dscrResult.status === "caution")
+    recs.push("Target DSCR ≥ 1.25 before taking new debt. Increase income or reduce existing EMIs.");
+  if (dtiResult.status === "high-risk")
+    recs.push("Pay down existing debt aggressively to bring DTI below 35%.");
+  if (dtiResult.status === "moderate")
+    recs.push("Avoid new loans until DTI drops below 35%. Focus on revenue growth.");
+  if (dscrResult.status === "strong" && dtiResult.status === "excellent")
+    recs.push("Financials are healthy. Well-positioned to take on new debt if needed.");
+  if (dscrResult.status === "adequate" && dtiResult.status === "good")
+    recs.push("Business is in good shape. Maintain buffer before committing to additional loans.");
+
+  // Risk score
+  let score = 0;
+  const dscrScore = { strong:0, adequate:15, caution:30, danger:50, "no-debt":0 };
+  const dtiScore  = { excellent:0, good:10, moderate:30, "high-risk":50 };
+  score += dscrScore[dscrResult.status] || 0;
+  score += dtiScore[dtiResult.status]   || 0;
+  const riskLevel = score <= 10 ? "Low" : score <= 30 ? "Moderate" : score <= 55 ? "High" : "Critical";
+
+  return {
+    inputs: { grossMonthlyIncome, operatingExpenses, netOperatingIncome, totalDebtService, proposedNewEMI, totalDebt },
+    dscr: dscrResult, dti: dtiResult,
+    riskLevel, riskScore: score,
+    alerts, recommendations: recs,
+  };
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────
+const fmt = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function errBox(e)  { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;">❌ ${e.message}</div>`; }
+
+const dscrColors = { strong:"#16a34a", adequate:"#2563eb", caution:"#d97706", danger:"#dc2626", "no-debt":"#64748b" };
+const dtiColors  = { excellent:"#16a34a", good:"#2563eb", moderate:"#d97706", "high-risk":"#dc2626" };
+const pillMap = { strong:"pill-strong", adequate:"pill-adequate", caution:"pill-caution", danger:"pill-danger",
+                  excellent:"pill-excellent", good:"pill-good", moderate:"pill-moderate", "high-risk":"pill-high-risk" };
+
+function gauge(value, max, color) {
+  const pct = Math.min(100, Math.max(0, (value / max) * 100));
+  return `<div class="gauge-wrap"><div class="gauge-fill" style="width:${pct}%;background:${color};"></div></div>`;
+}
+
+// ─── DSCR ─────────────────────────────────────────────────────────────────
+function calcDSCR() {
+  const out = document.getElementById("dscr-result");
+  try {
+    const r = calculateDSCR(getNum("d-noi"), getNum("d-debt"));
+    const col = dscrColors[r.status];
+    out.innerHTML = `<div class="card">
+      <div class="metric-row">
+        <span class="metric-label">DSCR</span>
+        ${gauge(r.dscr, 2, col)}
+        <span class="gauge-val" style="color:${col}">${r.dscr.toFixed(2)}</span>
+      </div>
+      <div style="margin-top:8px;">
+        Status: <span class="pill ${pillMap[r.status]}">${r.status.toUpperCase()}</span>
+        <span style="font-size:0.88rem;color:#555;margin-left:10px;">${r.label}</span>
+      </div>
+    </div>`;
+    saveRDE();
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── DTI ──────────────────────────────────────────────────────────────────
+function calcDTI() {
+  const out = document.getElementById("dti-result");
+  try {
+    const r = calculateDTI(getNum("t-debt"), getNum("t-income"));
+    const col = dtiColors[r.status];
+    out.innerHTML = `<div class="card">
+      <div class="metric-row">
+        <span class="metric-label">DTI</span>
+        ${gauge(r.dti, 100, col)}
+        <span class="gauge-val" style="color:${col}">${r.dtiPercent}</span>
+      </div>
+      <div style="margin-top:8px;">
+        Status: <span class="pill ${pillMap[r.status]}">${r.status.toUpperCase()}</span>
+        <span style="font-size:0.88rem;color:#555;margin-left:10px;">${r.label}</span>
+      </div>
+    </div>`;
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Full Assessment ──────────────────────────────────────────────────────
+function calcAssess() {
+  const out = document.getElementById("assess-result");
+  try {
+    const r = assessRisk({
+      grossMonthlyIncome: getNum("a-income"),
+      operatingExpenses:  getNum("a-opex"),
+      totalDebtService:   getNum("a-debt"),
+      proposedNewEMI:     getNum("a-newemi"),
+    });
+
+    const dscrCol = dscrColors[r.dscr.status];
+    const dtiCol  = dtiColors[r.dti.status];
+    const dscrVal = r.dscr.dscr !== null ? r.dscr.dscr.toFixed(2) : "N/A";
+
+    const alertsHtml = r.alerts.length
+      ? r.alerts.map(a => {
+          let explain = '';
+          if (a.msg.includes('DSCR < 1.0')) {
+            explain = explainHtml(
+              ['Banks reject loan applications when DSCR is below 1.0','Your income does not fully cover debt repayments','High risk of loan default'],
+              'DSCR of ' + dscrVal + ' means for every $1 you owe, you only earn $' + dscrVal + ' in cash to cover it'
+            );
+          } else if (a.msg.includes('DSCR 1.0')) {
+            const gap = (1.25 - (r.dscr.dscr || 0)).toFixed(2);
+            explain = explainHtml(
+              ['Most US lenders require DSCR ≥ 1.25 to approve a loan','You have very little buffer — one bad month could push you into default','A small unexpected expense will break this'],
+              'Safe zone is 1.25+. You\'re at ' + dscrVal + ' — just ' + gap + ' points below what lenders want'
+            );
+          } else if (a.msg.includes('DTI > 50%')) {
+            const dtiVal = r.dti.dtiPercent;
+            const dtiNum = r.dti.dti.toFixed(1);
+            const leftover = (100 - r.dti.dti).toFixed(1);
+            explain = explainHtml(
+              ['More than half your revenue goes to debt repayments','Lenders typically reject applicants with DTI above 40–50%','Any revenue dip will immediately create a cash shortfall'],
+              'DTI of ' + dtiVal + ' means: out of every $100 you earn, $' + dtiNum + ' goes to debt — only $' + leftover + ' left for everything else'
+            );
+          } else if (a.msg.includes('operating income is zero or negative')) {
+            const inc = fmt(r.inputs.grossMonthlyIncome);
+            const exp = fmt(r.inputs.operatingExpenses);
+            const noi = fmt(r.inputs.netOperatingIncome);
+            explain = explainHtml(
+              ['Expenses exceed revenue — business is losing money','Even before paying loans, you\'re in the red','This cannot continue without funding or cost cuts'],
+              'Revenue ' + inc + ' minus operating expenses ' + exp + ' = Net Operating Income of ' + noi
+            );
+          }
+          return '<div class="alert-box ' + (a.type === 'danger' ? 'alert-danger' : 'alert-warn') + '">' + a.msg + explain + '</div>';
+        }).join("")
+      : `<div class="alert-box" style="background:#dcfce7;border-left:4px solid #86efac;">✅ No alerts — financials look healthy.</div>`;
+
+    const recsHtml = r.recommendations.length
+      ? r.recommendations.map(rec => `<div class="rec-box">💡 ${rec}</div>`).join("")
+      : "";
+
+    out.innerHTML = `
+      <div class="card">
+        <div style="display:flex;align-items:center;margin-bottom:16px;">
+          <span style="font-size:1rem;font-weight:bold;">Overall Risk Level</span>
+          <span class="risk-badge risk-${r.riskLevel}">${r.riskLevel}</span>
+          <span style="font-size:0.82rem;color:#94a3b8;margin-left:8px;">Score: ${r.riskScore}/100</span>
+        </div>
+
+        <div class="section-title">Metrics</div>
+        <div class="metric-row">
+          <span class="metric-label">DSCR</span>
+          ${gauge(r.dscr.dscr || 0, 2, dscrCol)}
+          <span class="gauge-val" style="color:${dscrCol}">${dscrVal}
+            <span class="pill ${pillMap[r.dscr.status]}" style="font-size:0.7rem;">${r.dscr.status}</span>
+          </span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">DTI</span>
+          ${gauge(r.dti.dti, 100, dtiCol)}
+          <span class="gauge-val" style="color:${dtiCol}">${r.dti.dtiPercent}
+            <span class="pill ${pillMap[r.dti.status]}" style="font-size:0.7rem;">${r.dti.status}</span>
+          </span>
+        </div>
+
+        <div class="section-title" style="margin-top:16px;">Inputs Summary</div>
+        <div class="summary-grid">
+          <div class="summary-item"><div class="s-label">Gross Income</div><div class="s-val c-blue">${fmt(r.inputs.grossMonthlyIncome)}</div></div>
+          <div class="summary-item"><div class="s-label">Operating Expenses</div><div class="s-val">${fmt(r.inputs.operatingExpenses)}</div></div>
+          <div class="summary-item"><div class="s-label">Net Op. Income</div><div class="s-val ${r.inputs.netOperatingIncome >= 0 ? 'c-green' : 'c-red'}">${fmt(r.inputs.netOperatingIncome)}</div></div>
+          <div class="summary-item"><div class="s-label">Existing Debt</div><div class="s-val">${fmt(r.inputs.totalDebtService)}</div></div>
+          <div class="summary-item"><div class="s-label">Proposed New EMI</div><div class="s-val c-amber">${fmt(r.inputs.proposedNewEMI)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Debt Service</div><div class="s-val c-red">${fmt(r.inputs.totalDebt)}</div></div>
+        </div>
+
+        <div class="section-title">Alerts</div>
+        ${alertsHtml}
+        ${recsHtml ? `<div class="section-title" style="margin-top:12px;">Recommendations</div>${recsHtml}` : ""}
+      </div>`;
+    saveRDE();
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, cond) { results.push({ label, pass: !!cond }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass: false, note: "expected error not thrown" }); }
+    catch(e) { results.push({ label, pass: true }); }
+  }
+
+  // DSCR
+  const d1 = calculateDSCR(75000, 50000);
+  assert("DSCR: 75000/50000 = 1.50 → strong", d1.dscr === 1.5 && d1.status === "strong");
+
+  const d2 = calculateDSCR(60000, 50000);
+  assert("DSCR: 60000/50000 = 1.20 → caution", d2.dscr === 1.2 && d2.status === "caution");
+
+  const d3 = calculateDSCR(40000, 50000);
+  assert("DSCR: 40000/50000 = 0.80 → danger", d3.dscr === 0.8 && d3.status === "danger");
+
+  const d4 = calculateDSCR(65000, 50000);
+  assert("DSCR: 65000/50000 = 1.30 → adequate", d4.dscr === 1.3 && d4.status === "adequate");
+
+  assertThrows("DSCR: throws on debtService = 0", () => calculateDSCR(50000, 0));
+  assertThrows("DSCR: throws on non-number", () => calculateDSCR("abc", 50000));
+
+  // DTI
+  const t1 = calculateDTI(10000, 100000);
+  assert("DTI: 10% → excellent", t1.dti === 10 && t1.status === "excellent");
+
+  const t2 = calculateDTI(25000, 100000);
+  assert("DTI: 25% → good", t2.dti === 25 && t2.status === "good");
+
+  const t3 = calculateDTI(40000, 100000);
+  assert("DTI: 40% → moderate", t3.dti === 40 && t3.status === "moderate");
+
+  const t4 = calculateDTI(60000, 100000);
+  assert("DTI: 60% → high-risk", t4.dti === 60 && t4.status === "high-risk");
+
+  assertThrows("DTI: throws on income = 0", () => calculateDTI(10000, 0));
+  assertThrows("DTI: throws on negative debt", () => calculateDTI(-100, 50000));
+
+  // Full Assessment
+  const a1 = assessRisk({ grossMonthlyIncome: 100000, operatingExpenses: 40000, totalDebtService: 20000, proposedNewEMI: 5000 });
+  assert("Assess: riskLevel is defined", ["Low","Moderate","High","Critical"].includes(a1.riskLevel));
+  assert("Assess: dscr calculated", a1.dscr.dscr !== null);
+  assert("Assess: dti calculated", typeof a1.dti.dti === "number");
+  assert("Assess: alerts is array", Array.isArray(a1.alerts));
+  assert("Assess: recommendations is array", Array.isArray(a1.recommendations));
+  assert("Assess: NOI = income - opex", a1.inputs.netOperatingIncome === 60000);
+  assert("Assess: totalDebt = existing + proposed", a1.inputs.totalDebt === 25000);
+
+  const a2 = assessRisk({ grossMonthlyIncome: 100000, operatingExpenses: 90000, totalDebtService: 20000, proposedNewEMI: 0 });
+  assert("Assess: negative NOI triggers alert", a2.alerts.some(al => al.msg.includes("operating income")));
+
+  assertThrows("Assess: throws on income = 0", () => assessRisk({ grossMonthlyIncome: 0, operatingExpenses: 0, totalDebtService: 0 }));
+
+  const passed = results.filter(r => r.pass).length;
+  const failed = results.filter(r => !r.pass).length;
+  const html = results.map(r =>
+    `<div class="test-result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.label}${r.note ? ' — ' + r.note : ''}</div>`
+  ).join("");
+  document.getElementById("test-output").innerHTML = html +
+    `<div class="test-summary ${failed === 0 ? 'all-pass' : 'has-fail'}">${failed === 0 ? `✅ All ${passed} tests passed` : `❌ ${failed} failed / ${passed} passed`}</div>`;
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────
+var RDE_KEY = 'fw_risk_debt';
+function saveRDE(){
+  try{
+    localStorage.setItem(RDE_KEY, JSON.stringify({
+      'd-noi':document.getElementById('d-noi').value,
+      'd-debt':document.getElementById('d-debt').value,
+      't-debt':document.getElementById('t-debt').value,
+      't-income':document.getElementById('t-income').value,
+      'a-income':document.getElementById('a-income').value,
+      'a-opex':document.getElementById('a-opex').value,
+      'a-debt':document.getElementById('a-debt').value,
+      'a-newemi':document.getElementById('a-newemi').value,
+    }));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(RDE_KEY)||'null');
+    if(s){
+      ['d-noi','d-debt','t-debt','t-income','a-income','a-opex','a-debt','a-newemi'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el && s[id]!==undefined && s[id]!=='') el.value = s[id];
+      });
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.rev) { var m=Math.round((parseFloat(p.rev)||0)/12); document.getElementById('d-noi').value=m; document.getElementById('a-income').value=m; document.getElementById('t-income').value=m; }
+    if(p.emi) { document.getElementById('d-debt').value=p.emi; document.getElementById('t-debt').value=p.emi; document.getElementById('a-debt').value=p.emi; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

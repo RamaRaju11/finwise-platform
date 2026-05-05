@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Your Financial Report</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f0f4ff;color:#1e293b;font-size:14px;min-height:100vh}
+
+/* Dynamic brand color via CSS variable */
+:root{ --brand:#4f46e5; }
+
+.header{background:var(--brand);padding:20px 24px;color:#fff}
+.header-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand-area{display:flex;align-items:center;gap:10px}
+.brand-logo{width:36px;height:36px;border-radius:7px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden}
+.brand-logo img{width:100%;height:100%;object-fit:cover;border-radius:5px}
+.brand-name{font-size:1.05rem;font-weight:900;color:#fff}
+.brand-tag{font-size:.72rem;color:rgba(255,255,255,.7);margin-top:2px}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.prepared-by{font-size:.72rem;color:rgba(255,255,255,.75);text-align:right}
+.prepared-by strong{display:block;color:#fff;font-size:.8rem}
+.print-btn{padding:6px 14px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;transition:background .15s}
+.print-btn:hover{background:rgba(255,255,255,.3)}
+
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 60px}
+
+/* Loading */
+.loading-box{text-align:center;padding:60px 20px;color:#64748b}
+.spinner{width:36px;height:36px;border:3px solid #e2e8f0;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Error */
+.error-box{text-align:center;padding:60px 20px}
+.error-box h2{font-size:1.2rem;font-weight:900;color:#dc2626;margin-bottom:8px}
+.error-box p{font-size:.84rem;color:#64748b;max-width:360px;margin:0 auto}
+
+/* Report card */
+.report-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+.rc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.rc-biz{font-size:1.15rem;font-weight:900;color:#0f172a}
+.rc-sub{font-size:.75rem;color:#94a3b8;margin-top:3px}
+.rc-date{font-size:.72rem;color:#94a3b8;text-align:right;white-space:nowrap;background:#f8fafc;padding:5px 12px;border-radius:6px;border:1px solid #e2e8f0}
+
+.section-title{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:10px;margin-top:18px;padding-top:14px;border-top:1px solid #f1f5f9}
+.section-title:first-of-type{border-top:none;padding-top:0;margin-top:0}
+
+.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:480px){.metrics-row{grid-template-columns:1fr 1fr}}
+.metric{background:#f8fafc;border-radius:8px;padding:12px 14px;border:1px solid #e2e8f0}
+.m-label{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:4px}
+.m-value{font-size:1.3rem;font-weight:900;line-height:1}
+.m-value.green{color:#16a34a}
+.m-value.blue{color:#2563eb}
+.m-value.red{color:#dc2626}
+.m-value.amber{color:#d97706}
+.m-sub{font-size:.7rem;color:#94a3b8;margin-top:2px}
+
+.runway-bar-wrap{margin-top:12px}
+.runway-bar-bg{background:#e2e8f0;border-radius:999px;height:10px;overflow:hidden;margin-top:6px}
+.runway-bar-fill{height:100%;border-radius:999px;transition:width .6s ease}
+.runway-status{font-size:.78rem;font-weight:700;margin-top:6px}
+
+.health-ring-wrap{display:flex;align-items:center;gap:16px;margin-top:8px}
+.health-grade{font-size:3.5rem;font-weight:900;line-height:1}
+.health-grade.A{color:#16a34a}
+.health-grade.B{color:#2563eb}
+.health-grade.C{color:#d97706}
+.health-grade.D{color:#ea580c}
+.health-grade.F{color:#dc2626}
+.health-desc{font-size:.82rem;color:#475569;line-height:1.5}
+
+.loan-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:400px){.loan-row{grid-template-columns:1fr}}
+.loan-item{background:#f8fafc;border-radius:8px;padding:12px 14px;border:1px solid #e2e8f0}
+
+.message-box{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:14px 16px;margin-top:4px}
+.message-from{font-size:.72rem;font-weight:700;color:#0369a1;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.message-text{font-size:.88rem;color:#0c4a6e;line-height:1.6;white-space:pre-wrap}
+
+.pl-bar{margin-top:10px}
+.pl-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.pl-label{font-size:.78rem;color:#64748b;width:100px;flex-shrink:0}
+.pl-bar-bg{flex:1;background:#f1f5f9;border-radius:999px;height:8px;overflow:hidden}
+.pl-bar-fill{height:100%;border-radius:999px}
+.pl-val{font-size:.78rem;font-weight:800;width:70px;text-align:right;flex-shrink:0}
+
+/* Footer */
+.powered-by{text-align:center;padding:24px;font-size:.75rem;color:#94a3b8}
+.powered-by a{color:var(--brand);font-weight:700;text-decoration:none}
+.powered-by a:hover{text-decoration:underline}
+.pw-logo{font-size:1.1rem;font-weight:900;color:#1e293b;display:block;margin-bottom:4px}
+.pw-logo span{color:var(--brand)}
+
+/* Print styles */
+@media print{
+  .header{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-btn{display:none!important}
+  body{background:#fff}
+  .report-card{box-shadow:none;border:1px solid #e2e8f0}
+  .powered-by{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="header" id="pageHeader">
+  <div class="header-inner">
+    <div class="brand-area">
+      <div class="brand-logo" id="brandLogo">💡</div>
+      <div>
+        <div class="brand-name" id="brandName">FinWise</div>
+        <div class="brand-tag" id="brandTag">Financial Advisory Services</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="prepared-by">
+        <strong id="advisorNameDisplay">Your Advisor</strong>
+        Prepared this report for you
+      </div>
+      <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="loadingBox" class="loading-box">
+    <div class="spinner"></div>
+    <div>Loading your report…</div>
+  </div>
+  <div id="errorBox" class="error-box" style="display:none">
+    <h2>Report Not Found</h2>
+    <p>This link may have expired or been removed. Please ask your advisor to send you a new link.</p>
+  </div>
+  <div id="reportContent" style="display:none"></div>
+</div>
+
+<div class="powered-by" id="poweredBy" style="display:none">
+  <span class="pw-logo">💡 Fin<span>Wise</span></span>
+  This report was prepared using FinWise — the financial platform for small businesses.<br>
+  <a href="index.html">Get your own free dashboard →</a>
+</div>
+
+<script>
+var SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+var SUPA_KEY = 'sb_publishable_MT6Yw204o8Ho5nY-82IvkA_Ys_00yGO';
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function getToken(){
+  var m = window.location.search.match(/[?&]token=([^&]+)/);
+  return m ? m[1] : null;
+}
+
+function applyWhiteLabel(wl){
+  if(!wl) return;
+  var color = wl.color || wl.brand_color || '#4f46e5';
+  /* Set CSS variable so entire page picks it up */
+  document.documentElement.style.setProperty('--brand', color);
+
+  if(wl.brand_name){
+    document.getElementById('brandName').textContent = wl.brand_name;
+    document.title = 'Your Financial Report — ' + wl.brand_name;
+  }
+  if(wl.tagline) document.getElementById('brandTag').textContent = wl.tagline;
+  if(wl.logo_url){
+    document.getElementById('brandLogo').innerHTML = '<img src="'+esc(wl.logo_url)+'" alt="logo" onerror="this.parentElement.textContent=\'💡\'">';
+  }
+  if(wl.hide_finwise) document.getElementById('poweredBy').style.display='none';
+}
+
+function runwayColor(months){
+  if(months >= 6) return '#16a34a';
+  if(months >= 3) return '#d97706';
+  return '#dc2626';
+}
+function healthGrade(score){
+  if(score >= 80) return 'A';
+  if(score >= 65) return 'B';
+  if(score >= 50) return 'C';
+  if(score >= 35) return 'D';
+  return 'F';
+}
+function calcScore(d){
+  var score = 50;
+  var rev = d.rev||0, exp = d.exp||0, emi = d.emi||0, reserve = d.reserve||0;
+  var net = rev - exp - emi;
+  var margin = rev>0?(net/rev)*100:0;
+  var burn = exp+emi;
+  var runway = burn>0?reserve/burn:0;
+  if(margin>20) score+=15; else if(margin>10) score+=8; else if(margin<0) score-=20;
+  if(runway>6) score+=15; else if(runway>3) score+=8; else if(runway<1) score-=15;
+  if(rev>0&&emi/rev<0.3) score+=10; else if(rev>0&&emi/rev>0.5) score-=10;
+  return Math.max(0,Math.min(100,Math.round(score)));
+}
+
+function renderReport(portal){
+  var d = portal.shared_data || {};
+  var rev = d.rev||0, exp = d.exp||0, emi = d.emi||0, reserve = d.reserve||0;
+  var net = rev-exp-emi, burn = exp+emi;
+  var runway = burn>0?Math.floor(reserve/burn):0;
+  var margin = rev>0?Math.round((net/rev)*100):0;
+  var prepDate = new Date(d.sharedAt||portal.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  var html = '';
+
+  html += '<div class="report-card">';
+  html += '<div class="rc-header">';
+  html += '<div><div class="rc-biz">'+esc(d.bizName||portal.biz_name||'Financial Report')+'</div>';
+  if(d.industry) html += '<div class="rc-sub">'+esc(d.industry)+(d.state?' &bull; '+esc(d.state):'')+'</div>';
+  html += '</div><div class="rc-date">Report Date<br>'+prepDate+'</div></div>';
+
+  /* Advisor message */
+  if(portal.custom_message){
+    html += '<div class="section-title">Message from '+esc(portal.advisor_name||'Your Advisor')+'</div>';
+    html += '<div class="message-box"><div class="message-from">From '+esc(portal.advisor_name||'Your Advisor')+'</div>';
+    html += '<div class="message-text">'+esc(portal.custom_message)+'</div></div>';
+  }
+
+  /* Revenue */
+  if(d.includeRevenue && rev > 0){
+    html += '<div class="section-title">Monthly Financial Summary</div>';
+    html += '<div class="metrics-row">';
+    html += '<div class="metric"><div class="m-label">Revenue</div><div class="m-value blue">'+fmt(rev)+'</div><div class="m-sub">per month</div></div>';
+    html += '<div class="metric"><div class="m-label">Expenses</div><div class="m-value amber">'+fmt(exp+emi)+'</div><div class="m-sub">per month</div></div>';
+    html += '<div class="metric"><div class="m-label">Net Profit</div><div class="m-value '+(net>=0?'green':'red')+'">'+fmt(net)+'</div><div class="m-sub">'+margin+'% margin</div></div>';
+    html += '</div>';
+    var maxBar = Math.max(rev,exp+emi,1);
+    html += '<div class="pl-bar">';
+    html += '<div class="pl-row"><span class="pl-label">Revenue</span><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:'+Math.round(rev/maxBar*100)+'%;background:#2563eb"></div></div><span class="pl-val" style="color:#2563eb">'+fmt(rev)+'</span></div>';
+    html += '<div class="pl-row"><span class="pl-label">Expenses</span><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:'+Math.round((exp+emi)/maxBar*100)+'%;background:#f59e0b"></div></div><span class="pl-val" style="color:#f59e0b">'+fmt(exp+emi)+'</span></div>';
+    html += '<div class="pl-row"><span class="pl-label">Net Profit</span><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:'+Math.round(Math.abs(net)/maxBar*100)+'%;background:'+(net>=0?'#16a34a':'#dc2626')+'"></div></div><span class="pl-val" style="color:'+(net>=0?'#16a34a':'#dc2626')+'">'+fmt(net)+'</span></div>';
+    html += '</div>';
+  }
+
+  /* Cashflow */
+  if(d.includeCashflow && reserve > 0){
+    var rwColor = runwayColor(runway);
+    var rwText = runway>=6?'Healthy runway — good cash position':runway>=3?'Moderate runway — monitor spending':'Low runway — action recommended';
+    html += '<div class="section-title">Cash Runway</div>';
+    html += '<div class="metrics-row" style="grid-template-columns:1fr 1fr">';
+    html += '<div class="metric"><div class="m-label">Cash Reserve</div><div class="m-value blue">'+fmt(reserve)+'</div><div class="m-sub">available</div></div>';
+    html += '<div class="metric"><div class="m-label">Runway</div><div class="m-value" style="color:'+rwColor+'">'+runway+' mo</div><div class="m-sub">before cash runs out</div></div>';
+    html += '</div>';
+    html += '<div class="runway-bar-wrap"><div class="runway-bar-bg"><div class="runway-bar-fill" style="width:'+Math.min(100,Math.round(runway/12*100))+'%;background:'+rwColor+'"></div></div>';
+    html += '<div class="runway-status" style="color:'+rwColor+'">'+rwText+'</div></div>';
+  }
+
+  /* Health */
+  if(d.includeHealth && rev > 0){
+    var score = calcScore(d), grade = healthGrade(score);
+    var gradeDesc = { A:'Excellent financial health — strong profit, healthy runway, and manageable debt.', B:'Good financial position. Some areas can be optimized further.', C:'Fair. Revenue covers costs but limited buffer. Focus on improving margins.', D:'Needs attention. Low margins or high debt exposure. Review expenses.', F:'Critical. Business may face cash or debt issues. Immediate review needed.' };
+    html += '<div class="section-title">Business Health Score</div>';
+    html += '<div class="health-ring-wrap"><div class="health-grade '+grade+'">'+grade+'</div>';
+    html += '<div><div class="m-value" style="font-size:1rem;color:#1e293b;margin-bottom:4px">Score: '+score+'/100</div>';
+    html += '<div class="health-desc">'+gradeDesc[grade]+'</div></div></div>';
+  }
+
+  /* Loan */
+  if(d.includeLoan && rev > 0){
+    var net2 = rev-exp-emi;
+    var dscr = net2>0&&emi>0?(net2/emi).toFixed(2):(net2>0?'—':'<1');
+    var maxLoan = net2>0?fmt(Math.round(net2*36)):'Not eligible';
+    html += '<div class="section-title">Loan Readiness</div>';
+    html += '<div class="loan-row">';
+    html += '<div class="loan-item"><div class="m-label">Est. Borrowing Power</div><div class="m-value blue">'+maxLoan+'</div><div class="m-sub">based on current cash flow</div></div>';
+    html += '<div class="loan-item"><div class="m-label">Debt Coverage Ratio</div><div class="m-value '+(parseFloat(dscr)>=1.25?'green':parseFloat(dscr)>=1?'amber':'red')+'">'+dscr+'x</div><div class="m-sub">≥1.25x is healthy</div></div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function trackView(token){
+  fetch(SUPA_URL+'/rest/v1/client_portals?token=eq.'+encodeURIComponent(token),{
+    method:'PATCH',
+    headers:{ 'apikey':SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal' },
+    body: JSON.stringify({ last_viewed_at:new Date().toISOString() })
+  }).catch(function(){});
+}
+
+window.addEventListener('load', function(){
+  var token = getToken();
+  if(!token){
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('errorBox').style.display='block';
+    return;
+  }
+  fetch(SUPA_URL+'/rest/v1/client_portals?token=eq.'+encodeURIComponent(token)+'&select=*',{
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY }
+  }).then(function(r){ return r.json(); }).then(function(rows){
+    document.getElementById('loadingBox').style.display='none';
+    if(!rows||!rows.length||rows.error){
+      document.getElementById('errorBox').style.display='block';
+      return;
+    }
+    var portal = rows[0];
+
+    /* Apply white-label branding */
+    var wl = (portal.shared_data && portal.shared_data.wl) ? portal.shared_data.wl : null;
+    applyWhiteLabel(wl);
+
+    /* Advisor name in header */
+    document.getElementById('advisorNameDisplay').textContent = portal.advisor_name || 'Your Advisor';
+
+    /* Render report */
+    document.getElementById('reportContent').innerHTML = renderReport(portal);
+    document.getElementById('reportContent').style.display='block';
+
+    /* Show/hide powered-by */
+    var hideFinwise = wl && wl.hide_finwise;
+    if(!hideFinwise) document.getElementById('poweredBy').style.display='block';
+
+    /* Page title */
+    var biz = portal.shared_data && portal.shared_data.bizName ? portal.shared_data.bizName : '';
+    document.title = 'Your Financial Report' + (biz ? ' — '+biz : '');
+
+    trackView(token);
+  }).catch(function(){
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('errorBox').style.display='block';
+  });
+});
+</script>
+</body>
+</html>

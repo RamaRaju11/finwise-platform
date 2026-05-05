@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Business Savings Planner — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
+#mainWrap{margin-left:220px;padding:28px 24px}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:16px}}
+
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444;font-weight:700}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+label:first-of-type{margin-top:0}
+input[type=number],input[type=text],select{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem;font-family:Arial,sans-serif;color:#1e293b}
+input:focus,select:focus{outline:none;border-color:#2563eb}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-row{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+
+/* Goal cards */
+.goals-list{display:flex;flex-direction:column;gap:14px}
+.goal-card{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:16px;position:relative}
+.goal-card-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:0 16px;align-items:end}
+@media(max-width:700px){.goal-card-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.goal-card-grid{grid-template-columns:1fr}}
+.goal-num{font-size:.7rem;font-weight:800;text-transform:uppercase;color:#94a3b8;letter-spacing:.05em;margin-bottom:8px}
+.btn-remove{position:absolute;top:12px;right:12px;background:#fee2e2;color:#991b1b;border:none;border-radius:5px;padding:4px 10px;font-size:.76rem;font-weight:700;cursor:pointer}
+.btn-remove:hover{background:#fecaca}
+.btn-add-goal{margin-top:12px;padding:8px 20px;background:#f1f5f9;color:#2563eb;border:1.5px solid #2563eb;border-radius:6px;font-size:.84rem;font-weight:700;cursor:pointer}
+.btn-add-goal:hover{background:#eff6ff}
+.btn-add-goal:disabled{opacity:.4;cursor:default}
+
+/* Results */
+.results-goal-card{background:#fff;border-radius:8px;padding:18px;margin-bottom:12px;border:1.5px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.rg-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.rg-name{font-size:.98rem;font-weight:900;color:#1e293b}
+.rg-badges{display:flex;gap:6px;align-items:center}
+.rg-priority{font-size:.68rem;font-weight:800;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.pri-high{background:#fee2e2;color:#991b1b}
+.pri-medium{background:#fef3c7;color:#92400e}
+.pri-low{background:#dcfce7;color:#166534}
+.status-badge{font-size:.68rem;font-weight:800;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.on-track{background:#dcfce7;color:#166534}
+.behind{background:#fee2e2;color:#991b1b}
+.ahead{background:#dbeafe;color:#1d4ed8}
+.done{background:#f1f5f9;color:#475569}
+.prog-track{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;border-radius:99px;transition:width .5s}
+.prog-row{display:flex;justify-content:space-between;font-size:.76rem;color:#64748b;margin-bottom:12px}
+.rg-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:500px){.rg-stats{grid-template-columns:1fr 1fr}}
+.stat-box{background:#f8fafc;border-radius:7px;padding:10px 12px}
+.stat-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;font-weight:700;margin-bottom:3px}
+.stat-value{font-size:1.05rem;font-weight:900;color:#1e293b}
+.stat-value.green{color:#16a34a}
+.stat-value.yellow{color:#d97706}
+.stat-value.red{color:#dc2626}
+.stat-sub{font-size:.7rem;color:#64748b;margin-top:2px}
+
+/* HYSA card */
+.hysa-card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;border:1.5px solid #bbf7d0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.hysa-card h2{font-size:1rem;margin-bottom:12px;color:#444;font-weight:700}
+.hysa-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:500px){.hysa-grid{grid-template-columns:1fr}}
+.hysa-chip{background:#f8fafc;border-radius:7px;padding:12px;text-align:center;border:1px solid #e2e8f0}
+.hysa-chip.highlight{background:#f0fdf4;border-color:#bbf7d0}
+.hysa-chip .hc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;font-weight:700;margin-bottom:4px}
+.hysa-chip .hc-val{font-size:1.1rem;font-weight:900;color:#1e293b}
+.hysa-chip.highlight .hc-val{color:#16a34a}
+.hysa-chip .hc-sub{font-size:.72rem;color:#64748b;margin-top:3px}
+
+/* Summary row */
+.summary-row{background:#1e293b;color:#fff;border-radius:8px;padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:500px){.summary-row{grid-template-columns:1fr 1fr}}
+.sum-item .sum-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;font-weight:700;margin-bottom:4px}
+.sum-item .sum-value{font-size:1.15rem;font-weight:900;color:#fff}
+
+/* Integration strip */
+.int-strip{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:7px;padding:10px 14px;margin-bottom:14px;font-size:.83rem;color:#166534;font-weight:600}
+
+/* Tip */
+.tip-box{border-left:4px solid #f59e0b;background:#fffbeb;padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#92400e;line-height:1.6}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.section-note{font-size:.78rem;color:#64748b;margin-bottom:12px}
+.milestone-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;background:#f8fafc;border-radius:6px;padding:8px 10px}
+.ms-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-right:2px}
+.ms-item{font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:999px}
+.ms-25{background:#eff6ff;color:#1d4ed8}
+.ms-50{background:#fef3c7;color:#92400e}
+.ms-75{background:#dcfce7;color:#166534}
+button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.88rem;cursor:pointer}
+button.print-btn:hover{background:#e2e8f0}
+@media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div id="mainWrap">
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>Business Savings Planner</h1>
+<p class="subtitle">FinWise · Plan and allocate your monthly surplus across multiple savings goals</p>
+
+<div class="int-strip" id="intStrip"></div>
+
+<!-- Surplus inputs -->
+<div class="card">
+  <h2>Monthly Savings Capacity</h2>
+  <div class="input-row">
+    <div>
+      <label>Monthly amount available for savings ($)</label>
+      <input type="number" id="surplus" placeholder="e.g. 3000" min="0" oninput="autoSave()"/>
+    </div>
+    <div>
+      <label>Annual return on savings (% p.a., optional)</label>
+      <input type="number" id="annualRate" placeholder="e.g. 4.5" min="0" max="50" step="0.1" value="0" oninput="autoSave()"/>
+    </div>
+  </div>
+</div>
+
+<!-- Goals -->
+<div class="card">
+  <h2>Savings Goals</h2>
+  <p class="section-note">Add up to 4 goals. Priority determines how the monthly surplus is split: High ≈ 50%, Medium ≈ 33%, Low ≈ 17%.</p>
+  <div class="goals-list" id="goalsList"></div>
+  <button class="btn-add-goal" id="btnAddGoal" onclick="addGoal()">+ Add Goal</button>
+</div>
+
+<button class="primary" onclick="calculate()">Plan My Savings →</button>
+<button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<!-- Results -->
+<div id="resultsSection" style="display:none;margin-top:20px">
+  <div class="card">
+    <h2>Savings Plan Results</h2>
+    <div id="resultsContainer"></div>
+  </div>
+  <div class="summary-row" id="summaryRow"></div>
+  <div id="hysaSection"></div>
+  <div id="tipContainer"></div>
+</div>
+
+</div><!-- /mainWrap -->
+
+<script>
+/* ── Helpers ── */
+function fmt(n){ return '$'+Math.round(Math.abs(n)).toLocaleString('en-US'); }
+
+function esc(s){
+  var d = document.createElement('div');
+  d.textContent = String(s || '');
+  return d.innerHTML;
+}
+
+function monthsToReach(target, saved, monthlyAlloc, ratePA){
+  var remaining = target - saved;
+  if(remaining <= 0) return 0;
+  if(monthlyAlloc <= 0) return 600;
+  if(ratePA <= 0) return Math.ceil(remaining / monthlyAlloc);
+  var r = ratePA / 12 / 100;
+  var fv = saved > 0 ? saved : 0;
+  for(var n = 1; n <= 600; n++){
+    fv = fv * (1 + r) + monthlyAlloc;
+    if(fv >= target) return n;
+  }
+  return 600;
+}
+
+function targetDateLabel(monthsFromNow){
+  if(monthsFromNow <= 0) return 'Already reached';
+  if(monthsFromNow >= 600) return '50+ years';
+  var d = new Date();
+  d.setMonth(d.getMonth() + monthsFromNow);
+  return d.toLocaleString('default',{month:'short', year:'numeric'});
+}
+
+function monthsColor(m){
+  if(m <= 0) return 'green';
+  if(m < 12) return 'green';
+  if(m <= 24) return 'yellow';
+  return 'red';
+}
+
+function priorityWeight(pri){
+  if(pri === 'High')   return 3;
+  if(pri === 'Medium') return 2;
+  return 1;
+}
+
+function fvAnnuity(monthlyAlloc, ratePA, months){
+  if(ratePA <= 0) return monthlyAlloc * months;
+  var r = ratePA / 12 / 100;
+  return monthlyAlloc * ((Math.pow(1+r, months) - 1) / r);
+}
+
+/* ── Goal state ── */
+var goals = [];
+var goalIdSeq = 0;
+
+function makeGoal(name, target, saved, priority){
+  return {id: ++goalIdSeq, name: name, target: target, saved: saved, priority: priority};
+}
+
+function autoSave(){
+  var surplus  = parseFloat(document.getElementById('surplus').value) || 0;
+  var ratePA   = parseFloat(document.getElementById('annualRate').value) || 0;
+  readAllGoalsFromDOM();
+  localStorage.setItem('fw_savings_goals', JSON.stringify({
+    surplus: surplus, annualRate: ratePA, goals: goals,
+    savedAt: new Date().toISOString()
+  }));
+}
+
+function addGoal(name, target, saved, priority){
+  if(goals.length >= 4) return;
+  goals.push(makeGoal(
+    name     || '',
+    target   != null ? target : '',
+    saved    != null ? saved  : '',
+    priority || 'Medium'
+  ));
+  renderGoals();
+  autoSave();
+}
+
+function removeGoal(id){
+  goals = goals.filter(function(g){ return g.id !== id; });
+  renderGoals();
+  autoSave();
+}
+
+function readGoalFromDOM(id){
+  var g = goals.find(function(x){ return x.id === id; });
+  if(!g) return;
+  g.name     = (document.getElementById('gname_'+id)||{}).value || '';
+  g.target   = parseFloat((document.getElementById('gtarget_'+id)||{}).value) || 0;
+  g.saved    = parseFloat((document.getElementById('gsaved_'+id)||{}).value)  || 0;
+  g.priority = (document.getElementById('gpri_'+id)||{}).value || 'Medium';
+}
+
+function readAllGoalsFromDOM(){
+  goals.forEach(function(g){ readGoalFromDOM(g.id); });
+}
+
+function renderGoals(){
+  var list = document.getElementById('goalsList');
+  var html = '';
+  goals.forEach(function(g, idx){
+    html += '<div class="goal-card">';
+    html += '<div class="goal-num">Goal '+(idx+1)+'</div>';
+    if(idx > 0) html += '<button class="btn-remove" onclick="removeGoal('+g.id+')">✕ Remove</button>';
+    html += '<div class="goal-card-grid">';
+    html += '<div><label for="gname_'+g.id+'">Goal Name</label>'+
+      '<input type="text" id="gname_'+g.id+'" placeholder="e.g. Emergency Fund" value="'+esc(g.name)+'" oninput="autoSave()"/></div>';
+    html += '<div><label for="gtarget_'+g.id+'">Target Amount ($)</label>'+
+      '<input type="number" id="gtarget_'+g.id+'" placeholder="e.g. 30000" min="0" value="'+(g.target||'')+'" oninput="autoSave()"/></div>';
+    html += '<div><label for="gsaved_'+g.id+'">Already Saved ($)</label>'+
+      '<input type="number" id="gsaved_'+g.id+'" placeholder="e.g. 8000" min="0" value="'+(g.saved||'')+'" oninput="autoSave()"/></div>';
+    html += '<div><label for="gpri_'+g.id+'">Priority</label>'+
+      '<select id="gpri_'+g.id+'" onchange="autoSave()">';
+    ['High','Medium','Low'].forEach(function(p){
+      html += '<option value="'+p+'"'+(g.priority===p?' selected':'')+'>'+p+'</option>';
+    });
+    html += '</select></div>';
+    html += '</div></div>';
+  });
+  list.innerHTML = html;
+  document.getElementById('btnAddGoal').disabled = goals.length >= 4;
+}
+
+/* ── Integration: pull cash balance ── */
+function checkIntegration(){
+  var strip = document.getElementById('intStrip');
+  var items = [];
+  try{
+    var cr = JSON.parse(localStorage.getItem('fw_cash_runway')||'null');
+    if(cr && cr.currentBalance){
+      items.push('Current cash balance: '+fmt(cr.currentBalance)+' (from Cash Runway)');
+    }
+  }catch(e){}
+  try{
+    var bb = JSON.parse(localStorage.getItem('fw_bank_balance')||'null');
+    if(bb && bb.balance){
+      items.push('Bank balance: '+fmt(bb.balance)+' (from Bank Statement)');
+    }
+  }catch(e){}
+  if(items.length){
+    strip.style.display = '';
+    strip.innerHTML = '💰 Starting point — '+items.join(' · ')+'. Enter this as "Already Saved" in your Emergency Fund goal.';
+  }
+}
+
+/* ── Calculate ── */
+function calculate(){
+  readAllGoalsFromDOM();
+
+  var surplus  = parseFloat(document.getElementById('surplus').value) || 0;
+  var ratePA   = parseFloat(document.getElementById('annualRate').value) || 0;
+
+  if(surplus <= 0){ alert('Please enter the monthly amount available for savings.'); return; }
+  if(goals.length === 0){ alert('Please add at least one savings goal.'); return; }
+
+  for(var i = 0; i < goals.length; i++){
+    var g = goals[i];
+    if(!g.name.trim()){ alert('Please enter a name for Goal '+(i+1)+'.'); return; }
+    if(!g.target || g.target <= 0){ alert('Please enter a target amount for Goal '+(i+1)+'.'); return; }
+  }
+
+  var totalWeight = 0;
+  goals.forEach(function(g){ totalWeight += priorityWeight(g.priority); });
+
+  var allocations = goals.map(function(g){
+    return Math.round((priorityWeight(g.priority) / totalWeight) * surplus * 100) / 100;
+  });
+
+  var results = goals.map(function(g, idx){
+    var alloc   = allocations[idx];
+    var months  = monthsToReach(g.target, g.saved, alloc, ratePA);
+    var pct     = g.target > 0 ? Math.min(100, Math.round((g.saved / g.target) * 100)) : 0;
+    var color   = monthsColor(months);
+    var dateStr = targetDateLabel(months);
+    var remaining = Math.max(0, g.target - g.saved);
+    /* On-track check: required monthly vs allocated */
+    var requiredMonthly = remaining > 0 ? remaining / 120 : 0; // rough 10-yr baseline
+    var trackStatus = months <= 0 ? 'done' : alloc >= remaining / 12 ? 'ahead' : alloc >= remaining / 24 ? 'on-track' : 'behind';
+    return {goal:g, alloc:alloc, months:months, pct:pct, color:color, dateStr:dateStr, remaining:remaining, trackStatus:trackStatus};
+  });
+
+  /* Render goal result cards */
+  var html = '';
+  results.forEach(function(r){
+    var barColor = r.color === 'green' ? '#16a34a' : r.color === 'yellow' ? '#f59e0b' : '#dc2626';
+    var priCls   = r.goal.priority === 'High' ? 'pri-high' : r.goal.priority === 'Medium' ? 'pri-medium' : 'pri-low';
+    var monthsDisplay = r.months >= 600 ? '50+ yrs' : r.months <= 0 ? 'Done!' : r.months+' mo';
+    var trackLabel = r.trackStatus==='done' ? '✅ Complete' : r.trackStatus==='ahead' ? '🚀 Ahead of Schedule' : r.trackStatus==='on-track' ? '✅ On Track' : '⚠️ Behind';
+    var trackCls   = r.trackStatus==='done'||r.trackStatus==='ahead' ? 'ahead' : r.trackStatus==='on-track' ? 'on-track' : 'behind';
+
+    html += '<div class="results-goal-card">';
+    html += '<div class="rg-header">';
+    html += '<span class="rg-name">'+esc(r.goal.name)+'</span>';
+    html += '<div class="rg-badges"><span class="rg-priority '+priCls+'">'+r.goal.priority+'</span><span class="status-badge '+trackCls+'">'+trackLabel+'</span></div>';
+    html += '</div>';
+    html += '<div class="prog-track"><div class="prog-fill" style="width:'+r.pct+'%;background:'+barColor+'"></div></div>';
+    html += '<div class="prog-row"><span>'+fmt(r.goal.saved)+' saved of '+fmt(r.goal.target)+' target</span><span>'+r.pct+'%</span></div>';
+    html += '<div class="rg-stats">';
+    html += '<div class="stat-box"><div class="stat-label">Monthly Allocation</div><div class="stat-value">'+fmt(r.alloc)+'/mo</div><div class="stat-sub">'+(Math.round(r.alloc/surplus*100))+'% of surplus</div></div>';
+    html += '<div class="stat-box"><div class="stat-label">Months to Goal</div><div class="stat-value '+r.color+'">'+(r.months <= 0 ? '—' : monthsDisplay)+'</div><div class="stat-sub">'+fmt(r.remaining)+' remaining</div></div>';
+    html += '<div class="stat-box"><div class="stat-label">Target Date</div><div class="stat-value '+r.color+'" style="font-size:.88rem">'+r.dateStr+'</div><div class="stat-sub">'+(r.months <= 0 ? 'Fully funded' : r.months >= 600 ? 'Increase savings' : 'Estimated')+'</div></div>';
+    html += '</div>';
+    var m25 = monthsToReach(r.goal.target*0.25, r.goal.saved, r.alloc, ratePA);
+    var m50 = monthsToReach(r.goal.target*0.50, r.goal.saved, r.alloc, ratePA);
+    var m75 = monthsToReach(r.goal.target*0.75, r.goal.saved, r.alloc, ratePA);
+    html += '<div class="milestone-row">';
+    html += '<span class="ms-label">Milestones</span>';
+    html += '<span class="ms-item ms-25">25% — '+(m25<=0?'Done ✓':targetDateLabel(m25))+'</span>';
+    html += '<span class="ms-item ms-50">50% — '+(m50<=0?'Done ✓':targetDateLabel(m50))+'</span>';
+    html += '<span class="ms-item ms-75">75% — '+(m75<=0?'Done ✓':targetDateLabel(m75))+'</span>';
+    html += '</div>';
+    html += '</div>';
+  });
+  document.getElementById('resultsContainer').innerHTML = html;
+
+  /* Summary */
+  var totalCommitted = 0;
+  results.forEach(function(r){ totalCommitted += r.alloc; });
+  var totalToSave = 0;
+  results.forEach(function(r){ totalToSave += r.remaining; });
+  var maxMonths = 0;
+  results.forEach(function(r){ if(r.months > maxMonths && r.months < 600) maxMonths = r.months; });
+  if(!maxMonths) results.forEach(function(r){ if(r.months < 600) maxMonths = r.months; });
+
+  document.getElementById('summaryRow').innerHTML =
+    '<div class="sum-item"><div class="sum-label">Monthly Committed</div><div class="sum-value">'+fmt(totalCommitted)+'/mo</div></div>'+
+    '<div class="sum-item"><div class="sum-label">Total Still To Save</div><div class="sum-value">'+fmt(totalToSave)+'</div></div>'+
+    '<div class="sum-item"><div class="sum-label">All Goals Done By</div><div class="sum-value" style="font-size:.95rem">'+(maxMonths ? targetDateLabel(maxMonths) : 'Goals reached!')+'</div></div>';
+
+  /* HYSA comparison */
+  var hysaRate = 4.5;
+  var horizon = Math.min(maxMonths || 60, 120);
+  var hysaFV = fvAnnuity(totalCommitted, hysaRate, horizon);
+  var checkingFV = totalCommitted * horizon;
+  var extraInterest = hysaFV - checkingFV;
+
+  document.getElementById('hysaSection').innerHTML =
+    '<div class="hysa-card">'+
+    '<h2>💡 HYSA Comparison — High-Yield Savings at '+hysaRate+'% APY</h2>'+
+    '<p style="font-size:.83rem;color:#64748b;margin-bottom:14px">Keeping your savings in a High-Yield Savings Account (HYSA) vs. a regular checking account over <strong>'+horizon+' months</strong>:</p>'+
+    '<div class="hysa-grid">'+
+    '<div class="hysa-chip"><div class="hc-label">Checking Account (0%)</div><div class="hc-val">'+fmt(checkingFV)+'</div><div class="hc-sub">Principal only</div></div>'+
+    '<div class="hysa-chip highlight"><div class="hc-label">HYSA at '+hysaRate+'% APY</div><div class="hc-val">'+fmt(hysaFV)+'</div><div class="hc-sub">Principal + interest</div></div>'+
+    '<div class="hysa-chip highlight"><div class="hc-label">Extra Interest Earned</div><div class="hc-val">+'+fmt(extraInterest)+'</div><div class="hc-sub">Free money from HYSA</div></div>'+
+    '</div>'+
+    '<p style="font-size:.78rem;color:#64748b;margin-top:12px">Popular HYSAs: Marcus by Goldman Sachs, SoFi Savings, Ally Bank, Discover Online Savings. Rates change — verify current rates at your institution. FDIC insured.</p>'+
+    '</div>';
+
+  /* Tip */
+  var tipHtml = '';
+  try{
+    var profile = JSON.parse(localStorage.getItem('fw_profile') || 'null');
+    var monthlyExp = profile ? (parseFloat(profile.exp) || 0) : 0;
+    if(monthlyExp > 0){
+      var efGoal = results.find(function(r){ return r.goal.name.toLowerCase().indexOf('emergency') >= 0; });
+      if(efGoal && efGoal.goal.saved < monthlyExp * 3){
+        tipHtml = '<div class="tip-box">Tip: Your Emergency Fund covers less than 3 months of expenses ('+fmt(monthlyExp*3)+' recommended). Consider moving it to High priority so it gets funded first.</div>';
+      } else if(!efGoal){
+        tipHtml = '<div class="tip-box">Tip: We recommend keeping at least 3 months of expenses ('+fmt(monthlyExp*3)+') as an Emergency Fund. Consider adding an Emergency Fund goal.</div>';
+      }
+    }
+  } catch(e){}
+  document.getElementById('tipContainer').innerHTML = tipHtml ? '<div style="margin-bottom:16px">'+tipHtml+'</div>' : '';
+
+  document.getElementById('resultsSection').style.display = 'block';
+
+  /* Persist */
+  localStorage.setItem('fw_savings_goals', JSON.stringify({
+    surplus: surplus, annualRate: ratePA, goals: goals,
+    calculatedAt: new Date().toISOString()
+  }));
+
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ── Init ── */
+window.addEventListener('DOMContentLoaded', function(){
+  checkIntegration();
+
+  var stored = null;
+  try{ stored = JSON.parse(localStorage.getItem('fw_savings_goals')||'null'); }catch(e){}
+
+  var goalsArr = [];
+  var surplus = 0, annualRate = 0;
+
+  if(Array.isArray(stored)){
+    /* Format from grantFinder — array of goals */
+    goalsArr = stored;
+  } else if(stored && stored.goals && stored.goals.length){
+    /* Full state object from businessSavingsPlanner */
+    goalsArr = stored.goals;
+    surplus   = stored.surplus || 0;
+    annualRate = stored.annualRate != null ? stored.annualRate : 0;
+  }
+
+  if(goalsArr.length){
+    document.getElementById('surplus').value    = surplus || '';
+    document.getElementById('annualRate').value = annualRate;
+    goalsArr.forEach(function(g){
+      addGoal(g.name, g.target, g.saved, g.priority);
+    });
+  } else {
+    addGoal('Emergency Fund',    30000, 8000, 'High');
+    addGoal('Equipment Purchase',15000, 2000, 'Medium');
+    addGoal('Tax Reserve',        8000,  500, 'Low');
+  }
+});
+</script>
+</body>
+</html>

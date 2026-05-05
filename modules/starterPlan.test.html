@@ -1,0 +1,1737 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Starter Plan — FinWise $9/month</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,system-ui,sans-serif;background:#f4f6f9;color:#222;padding:24px;min-height:100vh}
+    a{text-decoration:none;color:inherit}
+
+    /* ── Header ── */
+    .page-header{background:linear-gradient(135deg,#4f46e5,#0891b2);border-radius:12px;padding:24px 28px;color:#fff;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .ph-left h1{font-size:1.3rem;font-weight:800}
+    .ph-left p{font-size:.87rem;color:rgba(255,255,255,.75);margin-top:.25rem}
+    .ph-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.4rem 1.1rem;font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap}
+    .ph-back{font-size:.82rem;color:rgba(255,255,255,.75);margin-top:.5rem;display:inline-block}
+    .ph-back:hover{color:#fff}
+
+    /* ── Paywall ── */
+    .paywall{background:#fff;border-radius:12px;padding:40px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:24px}
+    .paywall-icon{font-size:3rem;margin-bottom:.75rem}
+    .paywall h2{font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
+    .paywall p{font-size:.9rem;color:#64748b;max-width:440px;margin:0 auto 1.5rem;line-height:1.6}
+    .paywall-features{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:640px;margin:0 auto 2rem;text-align:left}
+    @media(max-width:600px){.paywall-features{grid-template-columns:1fr}}
+    .pf-item{background:#f8fafc;border-radius:8px;padding:1rem;border:1px solid #e2e8f0}
+    .pf-icon{font-size:1.5rem;margin-bottom:.5rem}
+    .pf-item h4{font-size:.88rem;font-weight:700;margin-bottom:.25rem}
+    .pf-item p{font-size:.78rem;color:#64748b;line-height:1.5}
+    .unlock-row{display:flex;align-items:center;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:.75rem}
+    .unlock-input{padding:.6rem 1rem;border:2px solid #e2e8f0;border-radius:8px;font-size:.9rem;width:200px!important;text-align:center;letter-spacing:.1em;text-transform:uppercase}
+    .unlock-input:focus{outline:none;border-color:#4f46e5}
+    .btn-unlock{padding:.65rem 1.6rem;background:#4f46e5;color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer}
+    .btn-unlock:hover{background:#3730a3}
+    .unlock-hint{font-size:.78rem;color:#94a3b8;margin-top:.5rem}
+    .unlock-hint code{background:#f1f5f9;padding:.1rem .4rem;border-radius:4px;font-family:monospace;color:#4f46e5}
+    .btn-stripe{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;background:linear-gradient(135deg,#4f46e5,#0891b2);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;text-decoration:none}
+    .btn-stripe:hover{opacity:.9}
+    .unlock-error{color:#dc2626;font-size:.82rem;margin-top:.5rem;display:none}
+
+    /* ── Tabs (only shown after unlock) ── */
+    .main-content{display:none}
+    .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+    .tab{padding:8px 20px;border:1px solid #ccc;border-radius:6px;cursor:pointer;background:#fff;font-size:.9rem;font-weight:600}
+    .tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .panel{display:none}
+    .panel.active{display:block}
+
+    /* ── Cards ── */
+    .card{background:#fff;border-radius:10px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+    .card h2{font-size:1rem;font-weight:700;margin-bottom:.35rem;color:#1e293b}
+    .card .desc{font-size:.83rem;color:#64748b;margin-bottom:1rem;line-height:1.5}
+
+    /* ── Form ── */
+    label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+    input[type=number],input[type=text],select{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:.93rem;background:#fff}
+    input:focus,select:focus{outline:none;border-color:#4f46e5}
+    .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+    .input-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 16px}
+    @media(max-width:600px){.input-grid,.input-grid-3{grid-template-columns:1fr}}
+    .hint{font-size:.73rem;color:#94a3b8;margin-top:2px}
+
+    /* ── Buttons ── */
+    .btn-primary{padding:9px 24px;background:#4f46e5;color:#fff;border:none;border-radius:6px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:14px}
+    .btn-primary:hover{background:#3730a3}
+    .btn-green{padding:9px 24px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:14px;margin-left:8px}
+    .btn-green:hover{background:#15803d}
+    .btn-outline{padding:9px 24px;background:#fff;color:#4f46e5;border:2px solid #4f46e5;border-radius:6px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:14px;margin-left:8px}
+    .btn-outline:hover{background:#eef2ff}
+    .btn-red{padding:9px 24px;background:#dc2626;color:#fff;border:none;border-radius:6px;font-size:.88rem;font-weight:700;cursor:pointer;margin-left:8px}
+
+    /* ══════════════════════════════════════════
+       FEATURE 1 — COMPARE SCENARIOS
+    ══════════════════════════════════════════ */
+    .scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+    @media(max-width:900px){.scenario-grid{grid-template-columns:1fr}}
+    .scenario-card{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:1.25rem}
+    .scenario-card h3{font-size:.88rem;font-weight:800;color:#4f46e5;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
+    .scenario-card h3 span{font-size:.72rem;background:#eef2ff;color:#4f46e5;padding:.15rem .5rem;border-radius:999px}
+    .s-result{display:none;margin-top:1rem;padding:1rem;border-radius:8px;text-align:center}
+    .s-result.safe{background:#f0fdf4;border:2px solid #bbf7d0}
+    .s-result.risky{background:#fffbeb;border:2px solid #fde68a}
+    .s-result.danger{background:#fff5f5;border:2px solid #fecaca}
+    .s-score{font-size:2.5rem;font-weight:900;line-height:1}
+    .s-score.safe{color:#16a34a}
+    .s-score.risky{color:#d97706}
+    .s-score.danger{color:#dc2626}
+    .s-verdict{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-top:.3rem}
+    .s-verdict.safe{color:#166534}
+    .s-verdict.risky{color:#92400e}
+    .s-verdict.danger{color:#991b1b}
+    .s-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem;text-align:left}
+    .s-metric{background:rgba(255,255,255,.7);border-radius:6px;padding:.45rem .6rem}
+    .s-ml{font-size:.67rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
+    .s-mv{font-size:.88rem;font-weight:700;color:#1e293b}
+    .compare-btn-row{text-align:center;margin-top:1.25rem}
+    .winner-badge{display:inline-block;background:#fef9c3;border:2px solid #fde047;color:#713f12;font-size:.72rem;font-weight:800;padding:.2rem .7rem;border-radius:999px;margin-top:.5rem}
+
+    /* ══════════════════════════════════════════
+       FEATURE 2 — SAVE PROFILE
+    ══════════════════════════════════════════ */
+    .profiles-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .profile-row{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .profile-row-info h4{font-size:.9rem;font-weight:700;margin-bottom:.15rem}
+    .profile-row-info p{font-size:.78rem;color:#64748b}
+    .profile-row-actions{display:flex;gap:.5rem}
+    .btn-load{padding:.4rem .9rem;background:#4f46e5;color:#fff;border:none;border-radius:5px;font-size:.8rem;font-weight:700;cursor:pointer}
+    .btn-delete{padding:.4rem .9rem;background:#fff;color:#dc2626;border:1.5px solid #fecaca;border-radius:5px;font-size:.8rem;font-weight:700;cursor:pointer}
+    .no-profiles{color:#94a3b8;font-size:.87rem;padding:1rem 0;text-align:center}
+    .save-success{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:.75rem 1rem;color:#166534;font-size:.87rem;font-weight:600;margin-top:1rem;display:none}
+
+    /* ══════════════════════════════════════════
+       FEATURE 3 — PDF REPORT
+    ══════════════════════════════════════════ */
+    .report-preview{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:1.5rem;margin-top:1rem;max-width:720px}
+    .report-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #4f46e5;padding-bottom:1rem;margin-bottom:1.25rem}
+    .report-brand{font-size:1.15rem;font-weight:900;color:#4f46e5}
+    .report-brand span{color:#0891b2}
+    .report-title{font-size:.78rem;color:#64748b;margin-top:.2rem}
+    .report-date{font-size:.75rem;color:#94a3b8;text-align:right}
+    .report-section{margin-bottom:1.25rem}
+    .report-section h3{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#4f46e5;border-bottom:1px solid #e2e8f0;padding-bottom:.35rem;margin-bottom:.75rem}
+    .report-row{display:flex;justify-content:space-between;font-size:.87rem;padding:.3rem 0;border-bottom:1px solid #f8fafc}
+    .report-row .rk{color:#64748b}
+    .report-row .rv{font-weight:700;color:#1e293b}
+    .report-score-block{text-align:center;padding:1.25rem;background:#f8fafc;border-radius:8px;margin-bottom:1rem}
+    .report-score-num{font-size:3.5rem;font-weight:900}
+    .report-score-num.safe{color:#16a34a}
+    .report-score-num.risky{color:#d97706}
+    .report-score-num.danger{color:#dc2626}
+    .report-verdict{font-size:.88rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem}
+    .report-verdict.safe{color:#166534}
+    .report-verdict.risky{color:#92400e}
+    .report-verdict.danger{color:#991b1b}
+    .report-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.75rem}
+    .report-metric{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:.6rem .75rem;text-align:center}
+    .report-metric .rm-l{font-size:.68rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
+    .report-metric .rm-v{font-size:1rem;font-weight:800;color:#1e293b;margin-top:.2rem}
+    .report-footer{border-top:1px solid #e2e8f0;padding-top:.75rem;font-size:.73rem;color:#94a3b8;text-align:center;margin-top:1rem}
+    .report-disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.5;margin-top:.5rem;font-style:italic}
+    .no-report-msg{color:#94a3b8;font-size:.87rem;padding:2rem;text-align:center}
+
+    /* ══════════════════════════════════════════
+       FEATURE 4 — STRESS TEST
+    ══════════════════════════════════════════ */
+    @media(max-width:900px){#stressScenarios{grid-template-columns:1fr 1fr!important}}
+    @media(max-width:500px){#stressScenarios{grid-template-columns:1fr!important}}
+    .stress-card{border-radius:10px;padding:1rem;text-align:center;border:2px solid transparent}
+    .stress-card.ok{background:#f0fdf4;border-color:#bbf7d0}
+    .stress-card.warn{background:#fffbeb;border-color:#fde68a}
+    .stress-card.fail{background:#fff5f5;border-color:#fecaca}
+    .stress-drop{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+    .stress-drop.ok{color:#166534}
+    .stress-drop.warn{color:#92400e}
+    .stress-drop.fail{color:#991b1b}
+    .stress-rev{font-size:1rem;font-weight:800;color:#1e293b;margin-bottom:.15rem}
+    .stress-net{font-size:.82rem;margin-bottom:.5rem}
+    .stress-net.ok{color:#16a34a}
+    .stress-net.warn{color:#d97706}
+    .stress-net.fail{color:#dc2626}
+    .stress-verdict{font-size:.72rem;font-weight:800;padding:.25rem .65rem;border-radius:999px;display:inline-block}
+    .stress-verdict.ok{background:#dcfce7;color:#166534}
+    .stress-verdict.warn{background:#fef3c7;color:#92400e}
+    .stress-verdict.fail{background:#fee2e2;color:#991b1b}
+    .rec-item{display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 1rem;border-radius:8px;border:1.5px solid #e2e8f0;background:#f8fafc}
+    .rec-icon{font-size:1.3rem;flex-shrink:0;line-height:1;margin-top:.1rem}
+    .rec-body h4{font-size:.88rem;font-weight:700;margin-bottom:.2rem;color:#1e293b}
+    .rec-body p{font-size:.82rem;color:#64748b;line-height:1.55}
+    .rec-item.urgent{background:#fff5f5;border-color:#fecaca}
+    .rec-item.caution{background:#fffbeb;border-color:#fde68a}
+    .rec-item.good{background:#f0fdf4;border-color:#bbf7d0}
+
+    /* ── Print styles ── */
+    @media print{
+      body{background:#fff;padding:0}
+      .page-header,.tabs,.btn-primary,.btn-green,.btn-outline,.card .desc,.paywall,.no-print{display:none!important}
+      .main-content{display:block!important}
+      .panel{display:block!important}
+      .report-preview{border:none;padding:0;max-width:100%}
+    }
+
+    /* ── Toast ── */
+    .toast{position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:.7rem 1.25rem;border-radius:8px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+    .toast.show{opacity:1}
+  </style>
+</head>
+<body>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div class="page-header">
+  <div class="ph-left">
+    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <h1>⚡ Starter Plan</h1>
+    <p>PDF Reports · Save Profiles · Compare Scenarios</p>
+  </div>
+  <div class="ph-badge">$9 / month</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAYWALL
+══════════════════════════════════════════════════════ -->
+<div class="paywall" id="paywall">
+  <div class="paywall-icon">🔐</div>
+  <h2>FinWise Starter Plan</h2>
+  <p>Get banker-ready PDF reports, save your business profile, and compare up to 3 loan scenarios side by side — all for $9/month.</p>
+
+  <div class="paywall-features">
+    <div class="pf-item">
+      <div class="pf-icon">📄</div>
+      <h4>PDF Report</h4>
+      <p>Banker-ready loan safety report you can hand to any lender.</p>
+    </div>
+    <div class="pf-item">
+      <div class="pf-icon">💾</div>
+      <h4>Save Profile</h4>
+      <p>Save your business numbers. Reload instantly — no re-entry.</p>
+    </div>
+    <div class="pf-item">
+      <div class="pf-icon">⚖️</div>
+      <h4>Compare Scenarios</h4>
+      <p>Compare 3 loan options side by side. Pick the safest one.</p>
+    </div>
+  </div>
+
+  <div>
+    <a class="btn-stripe" href="#" onclick="showToast('💳 Stripe payment coming soon! Use code FINWISE9 to demo all features free.');return false;">
+      💳 Subscribe — $9/month
+    </a>
+    <p style="font-size:.78rem;color:#94a3b8;margin-top:.75rem">Stripe integration coming soon · Use <strong>FINWISE9</strong> to demo free</p>
+  </div>
+
+  <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #e2e8f0">
+    <p style="font-size:.82rem;color:#64748b;margin-bottom:.75rem">Already have a code? Enter it below:</p>
+    <div class="unlock-row">
+      <input type="text" class="unlock-input" id="promoInput" placeholder="PROMO CODE" maxlength="12"/>
+      <button class="btn-unlock" onclick="tryUnlock()">Unlock</button>
+    </div>
+    <div class="unlock-error" id="unlockError">Invalid code. Try <code>FINWISE9</code></div>
+    <div class="unlock-hint">Demo code: <code>FINWISE9</code></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MAIN CONTENT (shown after unlock)
+══════════════════════════════════════════════════════ -->
+<div class="main-content" id="mainContent">
+
+  <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:.7rem 1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.6rem;font-size:.87rem;font-weight:600;color:#166534">
+    ✅ Starter Plan Active &nbsp;·&nbsp; <span style="font-weight:400;color:#15803d">All 3 features unlocked</span>
+    <span style="margin-left:auto;font-size:.78rem;font-weight:400;color:#4ade80;cursor:pointer" onclick="lock()">Lock →</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('t1',this)">⚖️ Compare Scenarios</div>
+    <div class="tab" onclick="switchTab('t2',this)">💾 Save Profile</div>
+    <div class="tab" onclick="switchTab('t3',this)">📄 PDF Report</div>
+    <div class="tab" onclick="switchTab('t4',this)">📉 Stress Test</div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TAB 1 — COMPARE SCENARIOS
+  ════════════════════════════════════ -->
+  <div class="panel active" id="t1">
+    <div class="card">
+      <h2>⚖️ Compare Up to 3 Loan Scenarios</h2>
+      <div class="desc">Enter different loan amounts, rates, or tenures. See which scenario gives the safest score and fits your cash flow best.</div>
+
+      <!-- Shared business inputs -->
+      <div style="background:#f8fafc;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;border:1.5px solid #e2e8f0">
+        <div style="font-size:.82rem;font-weight:700;color:#4f46e5;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Your Business (shared across all scenarios)</div>
+        <div class="input-grid" style="margin-bottom:.75rem">
+          <div>
+            <label>Business Name</label>
+            <input type="text" id="c_name" placeholder="e.g. Acme Consulting" oninput="clearResults()"/>
+          </div>
+          <div>
+            <label>Existing Monthly EMI</label>
+            <input type="number" id="c_emi" placeholder="0" min="0" oninput="clearResults()"/>
+            <div class="hint">Other loans you already pay</div>
+          </div>
+        </div>
+        <div class="input-grid-3">
+          <div>
+            <label>Monthly Revenue</label>
+            <input type="number" id="c_rev" placeholder="15000" min="0" oninput="clearResults()"/>
+          </div>
+          <div>
+            <label>Monthly Expenses</label>
+            <input type="number" id="c_exp" placeholder="8500" min="0" oninput="clearResults()"/>
+          </div>
+          <div>
+            <label>Cash Reserve (savings)</label>
+            <input type="number" id="c_reserve" placeholder="20000" min="0" oninput="clearResults()"/>
+            <div class="hint">Used to cover EMI if cash flow dips</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Scenario columns -->
+      <div class="scenario-grid">
+
+        <div class="scenario-card" id="sc1">
+          <h3>Scenario A <span>Option 1</span></h3>
+          <label>Loan Amount</label>
+          <input type="number" id="s1_amt" placeholder="50000" min="0"/>
+          <label>Annual Interest %</label>
+          <input type="number" id="s1_rate" placeholder="12" min="0" max="100"/>
+          <label>Tenure (months)</label>
+          <input type="number" id="s1_ten" placeholder="36" min="1"/>
+          <label>Label (optional)</label>
+          <input type="text" id="s1_lbl" placeholder="e.g. Bank A"/>
+          <div class="s-result" id="sr1"></div>
+        </div>
+
+        <div class="scenario-card" id="sc2">
+          <h3>Scenario B <span>Option 2</span></h3>
+          <label>Loan Amount</label>
+          <input type="number" id="s2_amt" placeholder="75000" min="0"/>
+          <label>Annual Interest %</label>
+          <input type="number" id="s2_rate" placeholder="14" min="0" max="100"/>
+          <label>Tenure (months)</label>
+          <input type="number" id="s2_ten" placeholder="48" min="1"/>
+          <label>Label (optional)</label>
+          <input type="text" id="s2_lbl" placeholder="e.g. Bank B"/>
+          <div class="s-result" id="sr2"></div>
+        </div>
+
+        <div class="scenario-card" id="sc3">
+          <h3>Scenario C <span>Option 3</span></h3>
+          <label>Loan Amount</label>
+          <input type="number" id="s3_amt" placeholder="100000" min="0"/>
+          <label>Annual Interest %</label>
+          <input type="number" id="s3_rate" placeholder="16" min="0" max="100"/>
+          <label>Tenure (months)</label>
+          <input type="number" id="s3_ten" placeholder="60" min="1"/>
+          <label>Label (optional)</label>
+          <input type="text" id="s3_lbl" placeholder="e.g. NBFC"/>
+          <div class="s-result" id="sr3"></div>
+        </div>
+
+      </div>
+
+      <div class="compare-btn-row no-print">
+        <button class="btn-primary" onclick="runCompare()">⚖️ Compare All Scenarios</button>
+        <button class="btn-outline" onclick="clearCompare()">Clear</button>
+      </div>
+      <div id="compareWinner" style="display:none;text-align:center;margin-top:1.25rem;padding:1rem;background:#fefce8;border:2px solid #fde047;border-radius:8px"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TAB 2 — SAVE PROFILE
+  ════════════════════════════════════ -->
+  <div class="panel" id="t2">
+    <div class="card">
+      <h2>💾 Save Business Profile</h2>
+      <div class="desc">Save your business numbers to your browser. Load them instantly next time — no re-entry needed. Saved locally, never leaves your device.</div>
+
+      <div class="input-grid">
+        <div>
+          <label>Business Name</label>
+          <input type="text" id="p_name" placeholder="e.g. Acme Consulting"/>
+        </div>
+        <div>
+          <label>Industry</label>
+          <select id="p_industry">
+            <option value="">Select industry</option>
+            <option>Consulting / Agency</option>
+            <option>Retail</option>
+            <option>Food & Beverage</option>
+            <option>Freelance / Solo</option>
+            <option>Manufacturing</option>
+            <option>Healthcare</option>
+            <option>Technology</option>
+            <option>Real Estate</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>Monthly Revenue</label>
+          <input type="number" id="p_rev" placeholder="15000" min="0"/>
+        </div>
+        <div>
+          <label>Monthly Expenses</label>
+          <input type="number" id="p_exp" placeholder="8500" min="0"/>
+        </div>
+        <div>
+          <label>Existing Monthly EMI</label>
+          <input type="number" id="p_emi" placeholder="0" min="0"/>
+        </div>
+        <div>
+          <label>Cash Reserve (savings)</label>
+          <input type="number" id="p_reserve" placeholder="20000" min="0"/>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem">
+        <button class="btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+        <button class="btn-outline" onclick="clearForm()">Clear</button>
+      </div>
+      <div class="save-success" id="saveSuccess">✅ Profile saved successfully!</div>
+    </div>
+
+    <div class="card">
+      <h2>📂 Saved Profiles</h2>
+      <div class="desc">Click Load to populate any form with saved data. Use it with Compare Scenarios or the PDF Report.</div>
+      <div class="profiles-list" id="profilesList"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TAB 3 — PDF REPORT
+  ════════════════════════════════════ -->
+  <div class="panel" id="t3">
+    <div class="card no-print">
+      <h2>📄 Banker-Ready PDF Report</h2>
+      <div class="desc">Generate a professional Loan Safety Report you can hand to any bank or lender. Fill in the details below, then print or save as PDF.</div>
+
+      <div class="input-grid">
+        <div>
+          <label>Business Name</label>
+          <input type="text" id="r_name" placeholder="Your Business Name"/>
+        </div>
+        <div>
+          <label>Owner Name</label>
+          <input type="text" id="r_owner" placeholder="Your Name"/>
+        </div>
+        <div>
+          <label>Monthly Revenue</label>
+          <input type="number" id="r_rev" placeholder="15000" min="0"/>
+        </div>
+        <div>
+          <label>Monthly Expenses</label>
+          <input type="number" id="r_exp" placeholder="8500" min="0"/>
+        </div>
+        <div>
+          <label>Existing Monthly EMI</label>
+          <input type="number" id="r_emi" placeholder="0" min="0"/>
+        </div>
+        <div>
+          <label>Cash Reserve</label>
+          <input type="number" id="r_reserve" placeholder="20000" min="0"/>
+        </div>
+        <div>
+          <label>Loan Amount Requested</label>
+          <input type="number" id="r_loan" placeholder="75000" min="0"/>
+        </div>
+        <div>
+          <label>Annual Interest Rate %</label>
+          <input type="number" id="r_rate" placeholder="12" min="0" max="100"/>
+        </div>
+        <div>
+          <label>Loan Tenure (months)</label>
+          <input type="number" id="r_tenure" placeholder="36" min="1"/>
+        </div>
+        <div>
+          <label>Purpose of Loan</label>
+          <input type="text" id="r_purpose" placeholder="e.g. Equipment purchase"/>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem">
+        <button class="btn-primary" onclick="generateReport()">🔍 Generate Report</button>
+        <button class="btn-green" onclick="printReport()" id="printBtn" style="display:none">🖨️ Print / Save PDF</button>
+        <button class="btn-outline" onclick="loadFromProfile()" id="loadProfileBtn">📂 Load from Saved Profile</button>
+      </div>
+    </div>
+
+    <!-- Report preview (also what gets printed) -->
+    <div id="reportOutput">
+      <div class="no-report-msg">Fill in the form above and click Generate Report.</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TAB 4 — STRESS TEST
+  ════════════════════════════════════ -->
+  <div class="panel" id="t4">
+    <div class="card">
+      <h2>📉 Stress Test &amp; Recommendations</h2>
+      <div class="desc">See if your business can still pay the loan EMI if revenue drops 10%, 20%, or 30%. Get a personalised action plan based on your results.</div>
+
+      <div class="input-grid" style="margin-bottom:.75rem">
+        <div>
+          <label>Business Name</label>
+          <input type="text" id="st_name" placeholder="e.g. Acme Consulting"/>
+        </div>
+        <div>
+          <label>Existing Monthly EMI (other loans)</label>
+          <input type="number" id="st_emi" placeholder="0" min="0"/>
+        </div>
+      </div>
+      <div class="input-grid-3" style="margin-bottom:.75rem">
+        <div>
+          <label>Monthly Revenue</label>
+          <input type="number" id="st_rev" placeholder="15000" min="0"/>
+        </div>
+        <div>
+          <label>Monthly Expenses</label>
+          <input type="number" id="st_exp" placeholder="8500" min="0"/>
+        </div>
+        <div>
+          <label>Cash Reserve (savings)</label>
+          <input type="number" id="st_reserve" placeholder="20000" min="0"/>
+          <div class="hint">Months of EMI buffer</div>
+        </div>
+      </div>
+      <div class="input-grid-3">
+        <div>
+          <label>New Loan Amount</label>
+          <input type="number" id="st_loan" placeholder="75000" min="0"/>
+        </div>
+        <div>
+          <label>Annual Interest %</label>
+          <input type="number" id="st_rate" placeholder="12" min="0" max="100"/>
+        </div>
+        <div>
+          <label>Tenure (months)</label>
+          <input type="number" id="st_ten" placeholder="36" min="1"/>
+        </div>
+      </div>
+      <div style="margin-top:1rem">
+        <button class="btn-primary" onclick="runStressTest()">📉 Run Stress Test</button>
+        <button class="btn-outline" onclick="clearStress()">Clear</button>
+      </div>
+    </div>
+
+    <div id="stressOutput" style="display:none">
+
+      <!-- Scenario cards -->
+      <div class="card">
+        <h2>📊 Stress Scenarios</h2>
+        <div class="desc">How your cash flow holds up under revenue pressure.</div>
+        <div id="stressScenarios" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem"></div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="card" id="stressRecs">
+        <h2>💡 Recommendations</h2>
+        <div id="stressRecsList" style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /mainContent -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Toast (defined first so paywall buttons can call it) ── */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ══════════════════════════════════════════════════════
+   SHARED ENGINE FUNCTIONS
+══════════════════════════════════════════════════════ */
+const CURRENCY = (() => {
+  const saved = localStorage.getItem('finwise_currency') || 'USD';
+  const map = {
+    USD:{sym:'
+  };
+  return map[saved] || map.USD;
+})();
+
+function fmt(n){
+  if(isNaN(n)||n===null) return '—';
+  return CURRENCY.sym + Number(n).toLocaleString(CURRENCY.loc,{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+function calcEMI(principal, annualRate, months){
+  if(annualRate === 0) return principal / months;
+  const r = annualRate / 100 / 12;
+  return principal * r * Math.pow(1+r, months) / (Math.pow(1+r, months) - 1);
+}
+
+function computeScore(rev, exp, existingEMI, loanAmt, annualRate, months){
+  const netCF   = rev - exp;
+  const newEMI  = calcEMI(loanAmt, annualRate, months);
+  const totalEMI = existingEMI + newEMI;
+  const postEMI = netCF - totalEMI;
+
+  // Component 1: Cash Flow Strength (0–30)
+  const cfRatio = netCF / (rev || 1);
+  let c1 = cfRatio >= 0.3 ? 30 : cfRatio >= 0.2 ? 24 : cfRatio >= 0.1 ? 15 : cfRatio >= 0 ? 8 : 0;
+
+  // Component 2: Loan Affordability — EMI / net CF (0–30)
+  const emiRatio = totalEMI / (netCF || 1);
+  let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.4 ? 24 : emiRatio <= 0.5 ? 16 : emiRatio <= 0.65 ? 8 : 0;
+
+  // Component 3: Debt Coverage — DSCR (0–25)
+  const dscr = netCF / (totalEMI || 1);
+  let c3 = dscr >= 2.0 ? 25 : dscr >= 1.5 ? 20 : dscr >= 1.25 ? 14 : dscr >= 1.0 ? 7 : 0;
+
+  // Component 4: Stress Resilience — 20% revenue drop (0–15)
+  const stressNetCF = rev * 0.8 - exp;
+  const stressPost  = stressNetCF - totalEMI;
+  let c4 = stressPost > 0 ? 15 : stressPost > -rev * 0.05 ? 9 : stressPost > -rev * 0.15 ? 4 : 0;
+
+  const total = c1 + c2 + c3 + c4;
+  const cls   = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'danger';
+  const label = total >= 70 ? 'SAFE' : total >= 40 ? 'RISKY' : 'DANGEROUS';
+  return { score:total, cls, label, newEMI, totalEMI, postEMI, dscr,
+           c1, c2, c3, c4, netCF };
+}
+
+function findMaxSafeLoan(rev, exp, existingEMI, rate, months){
+  let lo=0, hi=rev*120, best=0;
+  for(let i=0;i<40;i++){
+    const mid=(lo+hi)/2;
+    const r=computeScore(rev,exp,existingEMI,mid,rate,months);
+    if(r.score>=70){best=mid;lo=mid;}else hi=mid;
+  }
+  return Math.floor(best/500)*500;
+}
+
+/* ══════════════════════════════════════════════════════
+   PAYWALL
+══════════════════════════════════════════════════════ */
+function tryUnlock(){
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const err  = document.getElementById('unlockError');
+  if(code === 'FINWISE9'){
+    localStorage.setItem('fw_starter','1');
+    showApp();
+    err.style.display='none';
+  } else {
+    err.style.display='block';
+  }
+}
+
+function showApp(){
+  document.getElementById('paywall').style.display='none';
+  document.getElementById('mainContent').style.display='block';
+  renderProfiles();
+  // Auto-fill all tabs from active saved profile
+  const profiles = getProfiles();
+  if(profiles.length){
+    const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
+    applyProfile(profiles[idx]);
+  }
+}
+
+function lock(){
+  localStorage.removeItem('fw_starter');
+  document.getElementById('paywall').style.display='block';
+  document.getElementById('mainContent').style.display='none';
+}
+
+// Auto-unlock if already activated
+if(localStorage.getItem('fw_starter') === '1') showApp();
+
+// Enter key on promo input
+document.getElementById('promoInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') tryUnlock();
+});
+
+/* ══════════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════════ */
+function switchTab(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 1 — COMPARE SCENARIOS
+══════════════════════════════════════════════════════ */
+function clearResults(){
+  ['sr1','sr2','sr3'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.style.display='none'; el.innerHTML='';
+  });
+  document.getElementById('compareWinner').style.display='none';
+}
+
+function clearCompare(){
+  ['s1_amt','s1_rate','s1_ten','s1_lbl',
+   's2_amt','s2_rate','s2_ten','s2_lbl',
+   's3_amt','s3_rate','s3_ten','s3_lbl',
+   'c_name','c_rev','c_exp','c_emi','c_reserve'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  clearResults();
+}
+
+function runCompare(){
+  const name    = document.getElementById('c_name').value.trim();
+  const rev     = parseFloat(document.getElementById('c_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('c_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('c_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('c_reserve').value)||0;
+
+  if(!rev || !exp){
+    showToast('Enter your Monthly Revenue and Expenses first.');
+    return;
+  }
+
+  const scenarios = [
+    {amt:document.getElementById('s1_amt').value, rate:document.getElementById('s1_rate').value,
+     ten:document.getElementById('s1_ten').value, lbl:document.getElementById('s1_lbl').value||'Scenario A', id:'sr1'},
+    {amt:document.getElementById('s2_amt').value, rate:document.getElementById('s2_rate').value,
+     ten:document.getElementById('s2_ten').value, lbl:document.getElementById('s2_lbl').value||'Scenario B', id:'sr2'},
+    {amt:document.getElementById('s3_amt').value, rate:document.getElementById('s3_rate').value,
+     ten:document.getElementById('s3_ten').value, lbl:document.getElementById('s3_lbl').value||'Scenario C', id:'sr3'},
+  ];
+
+  let results=[], best=null, bestScore=-1;
+
+  scenarios.forEach((s,i)=>{
+    if(!s.amt || !s.rate || !s.ten) return;
+    const r = computeScore(rev, exp, emi, parseFloat(s.amt), parseFloat(s.rate), parseInt(s.ten));
+    results.push({...s,...r});
+    if(r.score > bestScore){bestScore=r.score; best=i;}
+  });
+
+  if(!results.length){
+    showToast('Fill at least one scenario with Loan Amount, Rate, and Tenure.');
+    return;
+  }
+
+  results.forEach(r=>{
+    const el = document.getElementById(r.id);
+    el.className = 's-result ' + r.cls;
+    el.style.display = 'block';
+    const reserveMos = r.newEMI > 0 ? (reserve / r.newEMI).toFixed(1) : '—';
+    el.innerHTML = `
+      <div class="s-score ${r.cls}">${r.score}</div>
+      <div class="s-verdict ${r.cls}">${r.label}</div>
+      <div class="s-metrics">
+        <div class="s-metric"><div class="s-ml">New EMI</div><div class="s-mv">${fmt(r.newEMI)}/mo</div></div>
+        <div class="s-metric"><div class="s-ml">Net After EMI</div><div class="s-mv">${fmt(r.postEMI)}/mo</div></div>
+        <div class="s-metric"><div class="s-ml">DSCR</div><div class="s-mv">${r.dscr.toFixed(2)}x</div></div>
+        <div class="s-metric"><div class="s-ml">Reserve Coverage</div><div class="s-mv">${reserveMos} mo</div></div>
+      </div>
+    `;
+  });
+
+  if(best !== null){
+    const w = results[best];
+    const winnerEl = document.getElementById('compareWinner');
+    winnerEl.style.display='block';
+    winnerEl.innerHTML = `
+      ${name ? `<div style="font-size:.78rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem">${name}</div>` : ''}
+      <div style="font-size:1.1rem;font-weight:800;color:#713f12;margin-bottom:.35rem">
+        🏆 Best Option: ${w.lbl}
+      </div>
+      <div style="font-size:.87rem;color:#78350f">
+        Highest Loan Decision Score: <strong>${w.score}/100 — ${w.label}</strong>
+      </div>
+      <div style="font-size:.82rem;color:#92400e;margin-top:.35rem">
+        ${w.cls==='safe' ? 'This loan is safe for your cash flow.' :
+          w.cls==='risky' ? 'Proceed with caution — cash flow is tight.' :
+          'All options are risky. Consider a smaller loan amount.'}
+      </div>
+    `;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 2 — SAVE PROFILE
+══════════════════════════════════════════════════════ */
+function getProfiles(){
+  return JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+}
+
+function saveProfiles(arr){
+  localStorage.setItem('fw_profiles', JSON.stringify(arr));
+}
+
+function saveProfile(){
+  const name = document.getElementById('p_name').value.trim();
+  if(!name){showToast('Enter a Business Name to save.'); return;}
+
+  const profile = {
+    id: Date.now(),
+    name,
+    industry : document.getElementById('p_industry').value,
+    rev      : parseFloat(document.getElementById('p_rev').value)||0,
+    exp      : parseFloat(document.getElementById('p_exp').value)||0,
+    emi      : parseFloat(document.getElementById('p_emi').value)||0,
+    reserve  : parseFloat(document.getElementById('p_reserve').value)||0,
+    savedAt  : new Date().toLocaleDateString()
+  };
+
+  const profiles = getProfiles();
+  const existing = profiles.findIndex(p=>p.name.toLowerCase()===name.toLowerCase());
+  // Enforce tier limits for NEW profiles (updates to existing names are always allowed)
+  if(existing < 0){
+    const isUnlimited = localStorage.getItem('fw_unlimited')==='1';
+    const limit = isUnlimited ? Infinity : 3; // Pro = 3, Unlimited = no cap
+    if(profiles.length >= limit){
+      showToast('Profile limit reached ('+limit+'/'+limit+'). Upgrade to Unlimited in the Profiles Manager.');
+      return;
+    }
+  }
+  if(existing >= 0) profiles[existing] = profile;
+  else profiles.push(profile);
+
+  saveProfiles(profiles);
+  renderProfiles();
+
+  document.getElementById('saveSuccess').style.display='block';
+  setTimeout(()=>document.getElementById('saveSuccess').style.display='none', 2500);
+  showToast('Profile saved!');
+}
+
+function renderProfiles(){
+  const list = document.getElementById('profilesList');
+  if(!list) return;
+  const profiles = getProfiles();
+  if(!profiles.length){
+    list.innerHTML = '<div class="no-profiles">No saved profiles yet. Fill the form above and click Save.</div>';
+    return;
+  }
+  list.innerHTML = profiles.map(p=>`
+    <div class="profile-row">
+      <div class="profile-row-info">
+        <h4>${p.name}${p.industry ? ' · <span style="font-weight:400;color:#64748b">'+p.industry+'</span>' : ''}</h4>
+        <p>Rev: ${fmt(p.rev)} &nbsp;·&nbsp; Exp: ${fmt(p.exp)} &nbsp;·&nbsp; EMI: ${fmt(p.emi)} &nbsp;·&nbsp; Saved: ${p.savedAt}</p>
+      </div>
+      <div class="profile-row-actions">
+        <button class="btn-load" onclick="loadProfile(${p.id})">Load</button>
+        <button class="btn-delete" onclick="deleteProfile(${p.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyProfile(p){
+  // Save Profile tab
+  document.getElementById('p_name').value     = p.name;
+  document.getElementById('p_industry').value = p.industry;
+  document.getElementById('p_rev').value      = p.rev;
+  document.getElementById('p_exp').value      = p.exp;
+  document.getElementById('p_emi').value      = p.emi;
+  document.getElementById('p_reserve').value  = p.reserve;
+  // Compare Scenarios — shared business inputs
+  document.getElementById('c_name').value    = p.name;
+  document.getElementById('c_rev').value     = p.rev;
+  document.getElementById('c_exp').value     = p.exp;
+  document.getElementById('c_emi').value     = p.emi;
+  document.getElementById('c_reserve').value = p.reserve;
+  // PDF Report inputs
+  document.getElementById('r_name').value    = p.name;
+  document.getElementById('r_rev').value     = p.rev;
+  document.getElementById('r_exp').value     = p.exp;
+  document.getElementById('r_emi').value     = p.emi;
+  document.getElementById('r_reserve').value = p.reserve;
+  // Stress Test inputs
+  document.getElementById('st_name').value    = p.name;
+  document.getElementById('st_rev').value     = p.rev;
+  document.getElementById('st_exp').value     = p.exp;
+  document.getElementById('st_emi').value     = p.emi;
+  document.getElementById('st_reserve').value = p.reserve;
+}
+
+function loadProfile(id){
+  const p = getProfiles().find(x=>x.id===id);
+  if(!p) return;
+  applyProfile(p);
+  showToast('✅ ' + p.name + ' loaded into all tabs.');
+}
+
+function deleteProfile(id){
+  const profiles = getProfiles().filter(p=>p.id!==id);
+  saveProfiles(profiles);
+  renderProfiles();
+  showToast('Profile deleted.');
+}
+
+function clearForm(){
+  ['p_name','p_rev','p_exp','p_emi','p_reserve'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('p_industry').value='';
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 3 — PDF REPORT
+══════════════════════════════════════════════════════ */
+function loadFromProfile(){
+  const profiles = getProfiles();
+  if(!profiles.length){
+    showToast('No saved profiles. Go to Save Profile tab first.');
+    return;
+  }
+  const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
+  applyProfile(profiles[idx]);
+  showToast('✅ Profile loaded into all tabs.');
+}
+
+function generateReport(){
+  const name    = document.getElementById('r_name').value.trim() || 'My Business';
+  const owner   = document.getElementById('r_owner').value.trim() || '—';
+  const rev     = parseFloat(document.getElementById('r_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('r_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('r_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('r_reserve').value)||0;
+  const loan    = parseFloat(document.getElementById('r_loan').value)||0;
+  const rate    = parseFloat(document.getElementById('r_rate').value)||12;
+  const tenure  = parseInt(document.getElementById('r_tenure').value)||36;
+  const purpose = document.getElementById('r_purpose').value.trim() || 'Not specified';
+
+  if(!rev || !exp || !loan){
+    showToast('Enter Revenue, Expenses, and Loan Amount to generate report.');
+    return;
+  }
+
+  const r = computeScore(rev, exp, emi, loan, rate, tenure);
+  const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, tenure);
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+  const verdictMsg = r.cls==='safe'
+    ? 'This business demonstrates adequate cash flow strength and debt service capacity to safely support the requested loan.'
+    : r.cls==='risky'
+    ? 'The business can service this loan but cash flow margins are thin. Caution is advised — monitor closely after disbursement.'
+    : 'Current cash flow and debt levels indicate this loan size poses significant risk to the business. A smaller amount is recommended.';
+
+  document.getElementById('reportOutput').innerHTML = `
+    <div class="report-preview" id="reportPreview">
+
+      <div class="report-header">
+        <div>
+          <div class="report-brand">Fin<span>Wise</span></div>
+          <div class="report-title">Loan Safety Assessment Report</div>
+        </div>
+        <div class="report-date">
+          <div style="font-weight:700;color:#1e293b">${name}</div>
+          <div>Owner: ${owner}</div>
+          <div>Date: ${today}</div>
+          <div>Purpose: ${purpose}</div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Loan Decision Score</h3>
+        <div class="report-score-block">
+          <div class="report-score-num ${r.cls}">${r.score}</div>
+          <div style="font-size:.72rem;color:#94a3b8;margin:.15rem 0 .35rem">out of 100</div>
+          <div class="report-verdict ${r.cls}">${r.label} TO BORROW</div>
+          <div style="font-size:.82rem;color:#64748b;max-width:480px;margin:.75rem auto 0;line-height:1.55">${verdictMsg}</div>
+        </div>
+        <div class="report-metrics">
+          <div class="report-metric">
+            <div class="rm-l">New Monthly EMI</div>
+            <div class="rm-v">${fmt(r.newEMI)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Net Cash After EMI</div>
+            <div class="rm-v" style="color:${r.postEMI>=0?'#16a34a':'#dc2626'}">${fmt(r.postEMI)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Debt Coverage (DSCR)</div>
+            <div class="rm-v">${r.dscr.toFixed(2)}x</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Max Safe Loan</div>
+            <div class="rm-v">${fmt(maxSafe)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Score — Cash Flow</div>
+            <div class="rm-v">${r.c1}/30</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Score — Affordability</div>
+            <div class="rm-v">${r.c2}/30</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Business Financials</h3>
+        <div class="report-row"><span class="rk">Monthly Revenue</span><span class="rv">${fmt(rev)}</span></div>
+        <div class="report-row"><span class="rk">Monthly Expenses</span><span class="rv">${fmt(exp)}</span></div>
+        <div class="report-row"><span class="rk">Net Monthly Cash Flow</span><span class="rv" style="color:${r.netCF>=0?'#16a34a':'#dc2626'}">${fmt(r.netCF)}</span></div>
+        <div class="report-row"><span class="rk">Existing Monthly EMI</span><span class="rv">${fmt(emi)}</span></div>
+        <div class="report-row"><span class="rk">Cash Reserve</span><span class="rv">${fmt(reserve)}</span></div>
+      </div>
+
+      <div class="report-section">
+        <h3>Loan Details</h3>
+        <div class="report-row"><span class="rk">Loan Amount Requested</span><span class="rv">${fmt(loan)}</span></div>
+        <div class="report-row"><span class="rk">Annual Interest Rate</span><span class="rv">${rate}%</span></div>
+        <div class="report-row"><span class="rk">Tenure</span><span class="rv">${tenure} months</span></div>
+        <div class="report-row"><span class="rk">Monthly EMI (new)</span><span class="rv">${fmt(r.newEMI)}</span></div>
+        <div class="report-row"><span class="rk">Total Interest Payable</span><span class="rv">${fmt(r.newEMI*tenure - loan)}</span></div>
+        <div class="report-row"><span class="rk">Purpose</span><span class="rv">${purpose}</span></div>
+      </div>
+
+      <div class="report-section">
+        <h3>Score Breakdown</h3>
+        <div class="report-row"><span class="rk">Cash Flow Strength</span><span class="rv">${r.c1} / 30</span></div>
+        <div class="report-row"><span class="rk">Loan Affordability</span><span class="rv">${r.c2} / 30</span></div>
+        <div class="report-row"><span class="rk">Debt Coverage (DSCR)</span><span class="rv">${r.c3} / 25</span></div>
+        <div class="report-row"><span class="rk">Stress Resilience (−20% revenue)</span><span class="rv">${r.c4} / 15</span></div>
+        <div class="report-row" style="font-weight:800"><span class="rk" style="color:#1e293b;font-weight:800">Total Score</span><span class="rv" style="color:${r.cls==='safe'?'#16a34a':r.cls==='risky'?'#d97706':'#dc2626'}">${r.score} / 100 — ${r.label}</span></div>
+      </div>
+
+      <div class="report-footer">
+        Generated by FinWise · AI Loan Decision Engine for Small Businesses ·
+        <span style="color:#4f46e5">finwise.app</span>
+        <div class="report-disclaimer">
+          This report is for informational purposes only and does not constitute financial advice.
+          FinWise analyses are based on the data provided and do not account for all credit factors.
+          Consult a qualified financial advisor before making borrowing decisions.
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById('printBtn').style.display='inline-block';
+  showToast('Report generated. Click Print / Save PDF.');
+}
+
+function printReport(){
+  window.print();
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 4 — STRESS TEST & RECOMMENDATIONS
+══════════════════════════════════════════════════════ */
+function clearStress(){
+  ['st_name','st_rev','st_exp','st_emi','st_reserve','st_loan','st_rate','st_ten']
+    .forEach(id=>document.getElementById(id).value='');
+  document.getElementById('stressOutput').style.display='none';
+}
+
+function runStressTest(){
+  const name    = document.getElementById('st_name').value.trim();
+  const rev     = parseFloat(document.getElementById('st_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('st_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('st_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('st_reserve').value)||0;
+  const loan    = parseFloat(document.getElementById('st_loan').value)||0;
+  const rate  = parseFloat(document.getElementById('st_rate').value)||12;
+  const ten   = parseInt(document.getElementById('st_ten').value)||36;
+
+  if(!rev||!exp||!loan){
+    showToast('Enter Revenue, Expenses, and Loan Amount to run stress test.');
+    return;
+  }
+
+  const newEMI   = calcEMI(loan, rate, ten);
+  const totalEMI = emi + newEMI;
+  const netCF    = rev - exp;
+
+  // Build 4 scenarios: normal, -10%, -20%, -30%
+  const drops = [0, 10, 20, 30];
+  const scenarios = drops.map(d=>{
+    const stressRev = rev * (1 - d/100);
+    const stressNet = stressRev - exp;
+    const postEMI   = stressNet - totalEMI;
+    const dscr      = totalEMI > 0 ? stressNet / totalEMI : 99;
+    let cls, verdict;
+    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='✅ Safe'; }
+    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='⚠️ Tight'; }
+    else { cls='fail'; verdict='🚫 Deficit'; }
+    return {d, stressRev, stressNet, postEMI, dscr, cls, verdict};
+  });
+
+  // Render scenario cards
+  document.getElementById('stressScenarios').innerHTML = scenarios.map(s=>{
+    const resMos = totalEMI > 0 ? (reserve / totalEMI).toFixed(1) : '—';
+    return `
+    <div class="stress-card ${s.cls}">
+      <div class="stress-drop ${s.cls}">${s.d===0?'Normal':'-'+s.d+'% Revenue'}</div>
+      <div class="stress-rev">${fmt(Math.round(s.stressRev))}/mo</div>
+      <div class="stress-net ${s.cls}">Net: ${fmt(Math.round(s.postEMI))}/mo after EMI</div>
+      <div class="stress-verdict ${s.cls}">${s.verdict}</div>
+      <div style="font-size:.7rem;color:#94a3b8;margin-top:.4rem">DSCR: ${s.dscr.toFixed(2)}x</div>
+      ${reserve>0?`<div style="font-size:.7rem;color:#64748b;margin-top:.25rem">Reserve: ${resMos} mo buffer</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Generate recommendations
+  const recs = [];
+  const baseline = scenarios[0];
+  const drop20   = scenarios[2];
+  const drop30   = scenarios[3];
+
+  // Overall score for current state
+  const scoreResult = computeScore(rev, exp, emi, loan, rate, ten);
+
+  if(scoreResult.cls === 'safe' && drop20.cls === 'ok'){
+    recs.push({cls:'good', icon:'🟢', title:'Loan looks safe', body:`Your business handles this loan comfortably even at −20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
+  }
+  if(drop20.cls === 'warn' || drop20.cls === 'fail'){
+    const needed = Math.round(totalEMI*3);
+    const shortfall = needed - reserve;
+    if(shortfall > 0){
+      recs.push({cls:'caution', icon:'⚠️', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
+    } else {
+      recs.push({cls:'good', icon:'✅', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
+    }
+  }
+  const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, ten);
+  if(drop30.cls === 'fail'){
+    if(maxSafe < loan){
+      recs.push({cls:'urgent', icon:'🚨', title:'Consider a smaller loan', body:`At −30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
+    } else {
+      const needed3mo = Math.round(totalEMI * 3);
+      if(reserve >= needed3mo){
+        recs.push({cls:'good', icon:'🛡️', title:'Reserve covers the −30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
+      } else {
+        const shortfall = needed3mo - reserve;
+        recs.push({cls:'caution', icon:'⚠️', title:'Stress risk at −30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
+      }
+    }
+  }
+  if(totalEMI / netCF > 0.5){
+    recs.push({cls:'caution', icon:'📊', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
+  }
+  if(emi > 0 && (emi / netCF) > 0.25){
+    recs.push({cls:'caution', icon:'🏦', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
+  }
+  if(scoreResult.c1 < 15){
+    recs.push({cls:'urgent', icon:'💰', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10–15% before borrowing. A stronger margin means a safer loan.`});
+  }
+  if(scoreResult.cls === 'safe' && drop30.cls !== 'fail'){
+    recs.push({cls:'good', icon:'📈', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
+  }
+  if(!recs.length){
+    recs.push({cls:'good', icon:'✅', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
+  }
+
+  document.getElementById('stressRecsList').innerHTML = recs.map(r=>`
+    <div class="rec-item ${r.cls}">
+      <div class="rec-icon">${r.icon}</div>
+      <div class="rec-body">
+        <h4>${r.title}</h4>
+        <p>${r.body}</p>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('stressOutput').style.display='block';
+  document.getElementById('stressOutput').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+</script>
+</body>
+</html>
+,loc:'en-US'}
+  };
+  return map[saved] || map.USD;
+})();
+
+function fmt(n){
+  if(isNaN(n)||n===null) return '—';
+  return CURRENCY.sym + Number(n).toLocaleString(CURRENCY.loc,{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+function calcEMI(principal, annualRate, months){
+  if(annualRate === 0) return principal / months;
+  const r = annualRate / 100 / 12;
+  return principal * r * Math.pow(1+r, months) / (Math.pow(1+r, months) - 1);
+}
+
+function computeScore(rev, exp, existingEMI, loanAmt, annualRate, months){
+  const netCF   = rev - exp;
+  const newEMI  = calcEMI(loanAmt, annualRate, months);
+  const totalEMI = existingEMI + newEMI;
+  const postEMI = netCF - totalEMI;
+
+  // Component 1: Cash Flow Strength (0–30)
+  const cfRatio = netCF / (rev || 1);
+  let c1 = cfRatio >= 0.3 ? 30 : cfRatio >= 0.2 ? 24 : cfRatio >= 0.1 ? 15 : cfRatio >= 0 ? 8 : 0;
+
+  // Component 2: Loan Affordability — EMI / net CF (0–30)
+  const emiRatio = totalEMI / (netCF || 1);
+  let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.4 ? 24 : emiRatio <= 0.5 ? 16 : emiRatio <= 0.65 ? 8 : 0;
+
+  // Component 3: Debt Coverage — DSCR (0–25)
+  const dscr = netCF / (totalEMI || 1);
+  let c3 = dscr >= 2.0 ? 25 : dscr >= 1.5 ? 20 : dscr >= 1.25 ? 14 : dscr >= 1.0 ? 7 : 0;
+
+  // Component 4: Stress Resilience — 20% revenue drop (0–15)
+  const stressNetCF = rev * 0.8 - exp;
+  const stressPost  = stressNetCF - totalEMI;
+  let c4 = stressPost > 0 ? 15 : stressPost > -rev * 0.05 ? 9 : stressPost > -rev * 0.15 ? 4 : 0;
+
+  const total = c1 + c2 + c3 + c4;
+  const cls   = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'danger';
+  const label = total >= 70 ? 'SAFE' : total >= 40 ? 'RISKY' : 'DANGEROUS';
+  return { score:total, cls, label, newEMI, totalEMI, postEMI, dscr,
+           c1, c2, c3, c4, netCF };
+}
+
+function findMaxSafeLoan(rev, exp, existingEMI, rate, months){
+  let lo=0, hi=rev*120, best=0;
+  for(let i=0;i<40;i++){
+    const mid=(lo+hi)/2;
+    const r=computeScore(rev,exp,existingEMI,mid,rate,months);
+    if(r.score>=70){best=mid;lo=mid;}else hi=mid;
+  }
+  return Math.floor(best/500)*500;
+}
+
+/* ══════════════════════════════════════════════════════
+   PAYWALL
+══════════════════════════════════════════════════════ */
+function tryUnlock(){
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const err  = document.getElementById('unlockError');
+  if(code === 'FINWISE9'){
+    localStorage.setItem('fw_starter','1');
+    showApp();
+    err.style.display='none';
+  } else {
+    err.style.display='block';
+  }
+}
+
+function showApp(){
+  document.getElementById('paywall').style.display='none';
+  document.getElementById('mainContent').style.display='block';
+  renderProfiles();
+  // Auto-fill all tabs from active saved profile
+  const profiles = getProfiles();
+  if(profiles.length){
+    const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
+    applyProfile(profiles[idx]);
+  }
+}
+
+function lock(){
+  localStorage.removeItem('fw_starter');
+  document.getElementById('paywall').style.display='block';
+  document.getElementById('mainContent').style.display='none';
+}
+
+// Auto-unlock if already activated
+if(localStorage.getItem('fw_starter') === '1') showApp();
+
+// Enter key on promo input
+document.getElementById('promoInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') tryUnlock();
+});
+
+/* ══════════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════════ */
+function switchTab(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 1 — COMPARE SCENARIOS
+══════════════════════════════════════════════════════ */
+function clearResults(){
+  ['sr1','sr2','sr3'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.style.display='none'; el.innerHTML='';
+  });
+  document.getElementById('compareWinner').style.display='none';
+}
+
+function clearCompare(){
+  ['s1_amt','s1_rate','s1_ten','s1_lbl',
+   's2_amt','s2_rate','s2_ten','s2_lbl',
+   's3_amt','s3_rate','s3_ten','s3_lbl',
+   'c_name','c_rev','c_exp','c_emi','c_reserve'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  clearResults();
+}
+
+function runCompare(){
+  const name    = document.getElementById('c_name').value.trim();
+  const rev     = parseFloat(document.getElementById('c_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('c_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('c_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('c_reserve').value)||0;
+
+  if(!rev || !exp){
+    showToast('Enter your Monthly Revenue and Expenses first.');
+    return;
+  }
+
+  const scenarios = [
+    {amt:document.getElementById('s1_amt').value, rate:document.getElementById('s1_rate').value,
+     ten:document.getElementById('s1_ten').value, lbl:document.getElementById('s1_lbl').value||'Scenario A', id:'sr1'},
+    {amt:document.getElementById('s2_amt').value, rate:document.getElementById('s2_rate').value,
+     ten:document.getElementById('s2_ten').value, lbl:document.getElementById('s2_lbl').value||'Scenario B', id:'sr2'},
+    {amt:document.getElementById('s3_amt').value, rate:document.getElementById('s3_rate').value,
+     ten:document.getElementById('s3_ten').value, lbl:document.getElementById('s3_lbl').value||'Scenario C', id:'sr3'},
+  ];
+
+  let results=[], best=null, bestScore=-1;
+
+  scenarios.forEach((s,i)=>{
+    if(!s.amt || !s.rate || !s.ten) return;
+    const r = computeScore(rev, exp, emi, parseFloat(s.amt), parseFloat(s.rate), parseInt(s.ten));
+    results.push({...s,...r});
+    if(r.score > bestScore){bestScore=r.score; best=i;}
+  });
+
+  if(!results.length){
+    showToast('Fill at least one scenario with Loan Amount, Rate, and Tenure.');
+    return;
+  }
+
+  results.forEach(r=>{
+    const el = document.getElementById(r.id);
+    el.className = 's-result ' + r.cls;
+    el.style.display = 'block';
+    const reserveMos = r.newEMI > 0 ? (reserve / r.newEMI).toFixed(1) : '—';
+    el.innerHTML = `
+      <div class="s-score ${r.cls}">${r.score}</div>
+      <div class="s-verdict ${r.cls}">${r.label}</div>
+      <div class="s-metrics">
+        <div class="s-metric"><div class="s-ml">New EMI</div><div class="s-mv">${fmt(r.newEMI)}/mo</div></div>
+        <div class="s-metric"><div class="s-ml">Net After EMI</div><div class="s-mv">${fmt(r.postEMI)}/mo</div></div>
+        <div class="s-metric"><div class="s-ml">DSCR</div><div class="s-mv">${r.dscr.toFixed(2)}x</div></div>
+        <div class="s-metric"><div class="s-ml">Reserve Coverage</div><div class="s-mv">${reserveMos} mo</div></div>
+      </div>
+    `;
+  });
+
+  if(best !== null){
+    const w = results[best];
+    const winnerEl = document.getElementById('compareWinner');
+    winnerEl.style.display='block';
+    winnerEl.innerHTML = `
+      ${name ? `<div style="font-size:.78rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem">${name}</div>` : ''}
+      <div style="font-size:1.1rem;font-weight:800;color:#713f12;margin-bottom:.35rem">
+        🏆 Best Option: ${w.lbl}
+      </div>
+      <div style="font-size:.87rem;color:#78350f">
+        Highest Loan Decision Score: <strong>${w.score}/100 — ${w.label}</strong>
+      </div>
+      <div style="font-size:.82rem;color:#92400e;margin-top:.35rem">
+        ${w.cls==='safe' ? 'This loan is safe for your cash flow.' :
+          w.cls==='risky' ? 'Proceed with caution — cash flow is tight.' :
+          'All options are risky. Consider a smaller loan amount.'}
+      </div>
+    `;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 2 — SAVE PROFILE
+══════════════════════════════════════════════════════ */
+function getProfiles(){
+  return JSON.parse(localStorage.getItem('fw_profiles')||'[]');
+}
+
+function saveProfiles(arr){
+  localStorage.setItem('fw_profiles', JSON.stringify(arr));
+}
+
+function saveProfile(){
+  const name = document.getElementById('p_name').value.trim();
+  if(!name){showToast('Enter a Business Name to save.'); return;}
+
+  const profile = {
+    id: Date.now(),
+    name,
+    industry : document.getElementById('p_industry').value,
+    rev      : parseFloat(document.getElementById('p_rev').value)||0,
+    exp      : parseFloat(document.getElementById('p_exp').value)||0,
+    emi      : parseFloat(document.getElementById('p_emi').value)||0,
+    reserve  : parseFloat(document.getElementById('p_reserve').value)||0,
+    savedAt  : new Date().toLocaleDateString()
+  };
+
+  const profiles = getProfiles();
+  const existing = profiles.findIndex(p=>p.name.toLowerCase()===name.toLowerCase());
+  // Enforce tier limits for NEW profiles (updates to existing names are always allowed)
+  if(existing < 0){
+    const isUnlimited = localStorage.getItem('fw_unlimited')==='1';
+    const limit = isUnlimited ? Infinity : 3; // Pro = 3, Unlimited = no cap
+    if(profiles.length >= limit){
+      showToast('Profile limit reached ('+limit+'/'+limit+'). Upgrade to Unlimited in the Profiles Manager.');
+      return;
+    }
+  }
+  if(existing >= 0) profiles[existing] = profile;
+  else profiles.push(profile);
+
+  saveProfiles(profiles);
+  renderProfiles();
+
+  document.getElementById('saveSuccess').style.display='block';
+  setTimeout(()=>document.getElementById('saveSuccess').style.display='none', 2500);
+  showToast('Profile saved!');
+}
+
+function renderProfiles(){
+  const list = document.getElementById('profilesList');
+  if(!list) return;
+  const profiles = getProfiles();
+  if(!profiles.length){
+    list.innerHTML = '<div class="no-profiles">No saved profiles yet. Fill the form above and click Save.</div>';
+    return;
+  }
+  list.innerHTML = profiles.map(p=>`
+    <div class="profile-row">
+      <div class="profile-row-info">
+        <h4>${p.name}${p.industry ? ' · <span style="font-weight:400;color:#64748b">'+p.industry+'</span>' : ''}</h4>
+        <p>Rev: ${fmt(p.rev)} &nbsp;·&nbsp; Exp: ${fmt(p.exp)} &nbsp;·&nbsp; EMI: ${fmt(p.emi)} &nbsp;·&nbsp; Saved: ${p.savedAt}</p>
+      </div>
+      <div class="profile-row-actions">
+        <button class="btn-load" onclick="loadProfile(${p.id})">Load</button>
+        <button class="btn-delete" onclick="deleteProfile(${p.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyProfile(p){
+  // Save Profile tab
+  document.getElementById('p_name').value     = p.name;
+  document.getElementById('p_industry').value = p.industry;
+  document.getElementById('p_rev').value      = p.rev;
+  document.getElementById('p_exp').value      = p.exp;
+  document.getElementById('p_emi').value      = p.emi;
+  document.getElementById('p_reserve').value  = p.reserve;
+  // Compare Scenarios — shared business inputs
+  document.getElementById('c_name').value    = p.name;
+  document.getElementById('c_rev').value     = p.rev;
+  document.getElementById('c_exp').value     = p.exp;
+  document.getElementById('c_emi').value     = p.emi;
+  document.getElementById('c_reserve').value = p.reserve;
+  // PDF Report inputs
+  document.getElementById('r_name').value    = p.name;
+  document.getElementById('r_rev').value     = p.rev;
+  document.getElementById('r_exp').value     = p.exp;
+  document.getElementById('r_emi').value     = p.emi;
+  document.getElementById('r_reserve').value = p.reserve;
+  // Stress Test inputs
+  document.getElementById('st_name').value    = p.name;
+  document.getElementById('st_rev').value     = p.rev;
+  document.getElementById('st_exp').value     = p.exp;
+  document.getElementById('st_emi').value     = p.emi;
+  document.getElementById('st_reserve').value = p.reserve;
+}
+
+function loadProfile(id){
+  const p = getProfiles().find(x=>x.id===id);
+  if(!p) return;
+  applyProfile(p);
+  showToast('✅ ' + p.name + ' loaded into all tabs.');
+}
+
+function deleteProfile(id){
+  const profiles = getProfiles().filter(p=>p.id!==id);
+  saveProfiles(profiles);
+  renderProfiles();
+  showToast('Profile deleted.');
+}
+
+function clearForm(){
+  ['p_name','p_rev','p_exp','p_emi','p_reserve'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('p_industry').value='';
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 3 — PDF REPORT
+══════════════════════════════════════════════════════ */
+function loadFromProfile(){
+  const profiles = getProfiles();
+  if(!profiles.length){
+    showToast('No saved profiles. Go to Save Profile tab first.');
+    return;
+  }
+  const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
+  applyProfile(profiles[idx]);
+  showToast('✅ Profile loaded into all tabs.');
+}
+
+function generateReport(){
+  const name    = document.getElementById('r_name').value.trim() || 'My Business';
+  const owner   = document.getElementById('r_owner').value.trim() || '—';
+  const rev     = parseFloat(document.getElementById('r_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('r_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('r_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('r_reserve').value)||0;
+  const loan    = parseFloat(document.getElementById('r_loan').value)||0;
+  const rate    = parseFloat(document.getElementById('r_rate').value)||12;
+  const tenure  = parseInt(document.getElementById('r_tenure').value)||36;
+  const purpose = document.getElementById('r_purpose').value.trim() || 'Not specified';
+
+  if(!rev || !exp || !loan){
+    showToast('Enter Revenue, Expenses, and Loan Amount to generate report.');
+    return;
+  }
+
+  const r = computeScore(rev, exp, emi, loan, rate, tenure);
+  const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, tenure);
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+  const verdictMsg = r.cls==='safe'
+    ? 'This business demonstrates adequate cash flow strength and debt service capacity to safely support the requested loan.'
+    : r.cls==='risky'
+    ? 'The business can service this loan but cash flow margins are thin. Caution is advised — monitor closely after disbursement.'
+    : 'Current cash flow and debt levels indicate this loan size poses significant risk to the business. A smaller amount is recommended.';
+
+  document.getElementById('reportOutput').innerHTML = `
+    <div class="report-preview" id="reportPreview">
+
+      <div class="report-header">
+        <div>
+          <div class="report-brand">Fin<span>Wise</span></div>
+          <div class="report-title">Loan Safety Assessment Report</div>
+        </div>
+        <div class="report-date">
+          <div style="font-weight:700;color:#1e293b">${name}</div>
+          <div>Owner: ${owner}</div>
+          <div>Date: ${today}</div>
+          <div>Purpose: ${purpose}</div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Loan Decision Score</h3>
+        <div class="report-score-block">
+          <div class="report-score-num ${r.cls}">${r.score}</div>
+          <div style="font-size:.72rem;color:#94a3b8;margin:.15rem 0 .35rem">out of 100</div>
+          <div class="report-verdict ${r.cls}">${r.label} TO BORROW</div>
+          <div style="font-size:.82rem;color:#64748b;max-width:480px;margin:.75rem auto 0;line-height:1.55">${verdictMsg}</div>
+        </div>
+        <div class="report-metrics">
+          <div class="report-metric">
+            <div class="rm-l">New Monthly EMI</div>
+            <div class="rm-v">${fmt(r.newEMI)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Net Cash After EMI</div>
+            <div class="rm-v" style="color:${r.postEMI>=0?'#16a34a':'#dc2626'}">${fmt(r.postEMI)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Debt Coverage (DSCR)</div>
+            <div class="rm-v">${r.dscr.toFixed(2)}x</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Max Safe Loan</div>
+            <div class="rm-v">${fmt(maxSafe)}</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Score — Cash Flow</div>
+            <div class="rm-v">${r.c1}/30</div>
+          </div>
+          <div class="report-metric">
+            <div class="rm-l">Score — Affordability</div>
+            <div class="rm-v">${r.c2}/30</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Business Financials</h3>
+        <div class="report-row"><span class="rk">Monthly Revenue</span><span class="rv">${fmt(rev)}</span></div>
+        <div class="report-row"><span class="rk">Monthly Expenses</span><span class="rv">${fmt(exp)}</span></div>
+        <div class="report-row"><span class="rk">Net Monthly Cash Flow</span><span class="rv" style="color:${r.netCF>=0?'#16a34a':'#dc2626'}">${fmt(r.netCF)}</span></div>
+        <div class="report-row"><span class="rk">Existing Monthly EMI</span><span class="rv">${fmt(emi)}</span></div>
+        <div class="report-row"><span class="rk">Cash Reserve</span><span class="rv">${fmt(reserve)}</span></div>
+      </div>
+
+      <div class="report-section">
+        <h3>Loan Details</h3>
+        <div class="report-row"><span class="rk">Loan Amount Requested</span><span class="rv">${fmt(loan)}</span></div>
+        <div class="report-row"><span class="rk">Annual Interest Rate</span><span class="rv">${rate}%</span></div>
+        <div class="report-row"><span class="rk">Tenure</span><span class="rv">${tenure} months</span></div>
+        <div class="report-row"><span class="rk">Monthly EMI (new)</span><span class="rv">${fmt(r.newEMI)}</span></div>
+        <div class="report-row"><span class="rk">Total Interest Payable</span><span class="rv">${fmt(r.newEMI*tenure - loan)}</span></div>
+        <div class="report-row"><span class="rk">Purpose</span><span class="rv">${purpose}</span></div>
+      </div>
+
+      <div class="report-section">
+        <h3>Score Breakdown</h3>
+        <div class="report-row"><span class="rk">Cash Flow Strength</span><span class="rv">${r.c1} / 30</span></div>
+        <div class="report-row"><span class="rk">Loan Affordability</span><span class="rv">${r.c2} / 30</span></div>
+        <div class="report-row"><span class="rk">Debt Coverage (DSCR)</span><span class="rv">${r.c3} / 25</span></div>
+        <div class="report-row"><span class="rk">Stress Resilience (−20% revenue)</span><span class="rv">${r.c4} / 15</span></div>
+        <div class="report-row" style="font-weight:800"><span class="rk" style="color:#1e293b;font-weight:800">Total Score</span><span class="rv" style="color:${r.cls==='safe'?'#16a34a':r.cls==='risky'?'#d97706':'#dc2626'}">${r.score} / 100 — ${r.label}</span></div>
+      </div>
+
+      <div class="report-footer">
+        Generated by FinWise · AI Loan Decision Engine for Small Businesses ·
+        <span style="color:#4f46e5">finwise.app</span>
+        <div class="report-disclaimer">
+          This report is for informational purposes only and does not constitute financial advice.
+          FinWise analyses are based on the data provided and do not account for all credit factors.
+          Consult a qualified financial advisor before making borrowing decisions.
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById('printBtn').style.display='inline-block';
+  showToast('Report generated. Click Print / Save PDF.');
+}
+
+function printReport(){
+  window.print();
+}
+
+/* ══════════════════════════════════════════════════════
+   FEATURE 4 — STRESS TEST & RECOMMENDATIONS
+══════════════════════════════════════════════════════ */
+function clearStress(){
+  ['st_name','st_rev','st_exp','st_emi','st_reserve','st_loan','st_rate','st_ten']
+    .forEach(id=>document.getElementById(id).value='');
+  document.getElementById('stressOutput').style.display='none';
+}
+
+function runStressTest(){
+  const name    = document.getElementById('st_name').value.trim();
+  const rev     = parseFloat(document.getElementById('st_rev').value)||0;
+  const exp     = parseFloat(document.getElementById('st_exp').value)||0;
+  const emi     = parseFloat(document.getElementById('st_emi').value)||0;
+  const reserve = parseFloat(document.getElementById('st_reserve').value)||0;
+  const loan    = parseFloat(document.getElementById('st_loan').value)||0;
+  const rate  = parseFloat(document.getElementById('st_rate').value)||12;
+  const ten   = parseInt(document.getElementById('st_ten').value)||36;
+
+  if(!rev||!exp||!loan){
+    showToast('Enter Revenue, Expenses, and Loan Amount to run stress test.');
+    return;
+  }
+
+  const newEMI   = calcEMI(loan, rate, ten);
+  const totalEMI = emi + newEMI;
+  const netCF    = rev - exp;
+
+  // Build 4 scenarios: normal, -10%, -20%, -30%
+  const drops = [0, 10, 20, 30];
+  const scenarios = drops.map(d=>{
+    const stressRev = rev * (1 - d/100);
+    const stressNet = stressRev - exp;
+    const postEMI   = stressNet - totalEMI;
+    const dscr      = totalEMI > 0 ? stressNet / totalEMI : 99;
+    let cls, verdict;
+    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='✅ Safe'; }
+    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='⚠️ Tight'; }
+    else { cls='fail'; verdict='🚫 Deficit'; }
+    return {d, stressRev, stressNet, postEMI, dscr, cls, verdict};
+  });
+
+  // Render scenario cards
+  document.getElementById('stressScenarios').innerHTML = scenarios.map(s=>{
+    const resMos = totalEMI > 0 ? (reserve / totalEMI).toFixed(1) : '—';
+    return `
+    <div class="stress-card ${s.cls}">
+      <div class="stress-drop ${s.cls}">${s.d===0?'Normal':'-'+s.d+'% Revenue'}</div>
+      <div class="stress-rev">${fmt(Math.round(s.stressRev))}/mo</div>
+      <div class="stress-net ${s.cls}">Net: ${fmt(Math.round(s.postEMI))}/mo after EMI</div>
+      <div class="stress-verdict ${s.cls}">${s.verdict}</div>
+      <div style="font-size:.7rem;color:#94a3b8;margin-top:.4rem">DSCR: ${s.dscr.toFixed(2)}x</div>
+      ${reserve>0?`<div style="font-size:.7rem;color:#64748b;margin-top:.25rem">Reserve: ${resMos} mo buffer</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Generate recommendations
+  const recs = [];
+  const baseline = scenarios[0];
+  const drop20   = scenarios[2];
+  const drop30   = scenarios[3];
+
+  // Overall score for current state
+  const scoreResult = computeScore(rev, exp, emi, loan, rate, ten);
+
+  if(scoreResult.cls === 'safe' && drop20.cls === 'ok'){
+    recs.push({cls:'good', icon:'🟢', title:'Loan looks safe', body:`Your business handles this loan comfortably even at −20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
+  }
+  if(drop20.cls === 'warn' || drop20.cls === 'fail'){
+    const needed = Math.round(totalEMI*3);
+    const shortfall = needed - reserve;
+    if(shortfall > 0){
+      recs.push({cls:'caution', icon:'⚠️', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
+    } else {
+      recs.push({cls:'good', icon:'✅', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
+    }
+  }
+  const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, ten);
+  if(drop30.cls === 'fail'){
+    if(maxSafe < loan){
+      recs.push({cls:'urgent', icon:'🚨', title:'Consider a smaller loan', body:`At −30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
+    } else {
+      const needed3mo = Math.round(totalEMI * 3);
+      if(reserve >= needed3mo){
+        recs.push({cls:'good', icon:'🛡️', title:'Reserve covers the −30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
+      } else {
+        const shortfall = needed3mo - reserve;
+        recs.push({cls:'caution', icon:'⚠️', title:'Stress risk at −30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
+      }
+    }
+  }
+  if(totalEMI / netCF > 0.5){
+    recs.push({cls:'caution', icon:'📊', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
+  }
+  if(emi > 0 && (emi / netCF) > 0.25){
+    recs.push({cls:'caution', icon:'🏦', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
+  }
+  if(scoreResult.c1 < 15){
+    recs.push({cls:'urgent', icon:'💰', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10–15% before borrowing. A stronger margin means a safer loan.`});
+  }
+  if(scoreResult.cls === 'safe' && drop30.cls !== 'fail'){
+    recs.push({cls:'good', icon:'📈', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
+  }
+  if(!recs.length){
+    recs.push({cls:'good', icon:'✅', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
+  }
+
+  document.getElementById('stressRecsList').innerHTML = recs.map(r=>`
+    <div class="rec-item ${r.cls}">
+      <div class="rec-icon">${r.icon}</div>
+      <div class="rec-body">
+        <h4>${r.title}</h4>
+        <p>${r.body}</p>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('stressOutput').style.display='block';
+  document.getElementById('stressOutput').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Budget vs. Actual Tracker — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
+#mainWrap{margin-left:220px;padding:28px 24px}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:16px}}
+
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:14px;color:#444}
+input[type=number]{width:100%;padding:7px 9px;border:1px solid #ccc;border-radius:5px;font-size:.88rem}
+select{padding:8px 12px;border:1px solid #ccc;border-radius:5px;font-size:.88rem;background:#fff}
+input:focus,select:focus{outline:none;border-color:#2563eb}
+button.primary{padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.88rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+button.secondary{padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:6px;font-size:.83rem;cursor:pointer;font-weight:600}
+button.secondary:hover{background:#e2e8f0}
+.btn-green{padding:8px 16px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:6px;font-size:.83rem;cursor:pointer;font-weight:600}
+.btn-green:hover{background:#dcfce7}
+.btn-export{padding:8px 16px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:6px;font-size:.83rem;cursor:pointer;font-weight:600}
+.btn-export:hover{background:#dbeafe}
+
+/* Entry table */
+.entry-table{width:100%;border-collapse:collapse}
+.entry-table th{background:#f1f5f9;padding:9px 12px;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0;text-align:left}
+.entry-table td{padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:.85rem;vertical-align:middle}
+.entry-table td input[type=number]{padding:6px 8px;border:1px solid #e2e8f0;border-radius:4px;font-size:.85rem;width:100%}
+.cat-label{font-weight:700;color:#1e293b}
+.cat-hint{font-size:.7rem;color:#94a3b8;font-weight:400}
+.subtotal-row td{background:#f8fafc;font-weight:800;border-top:2px solid #e2e8f0;border-bottom:none}
+.profit-row td{background:#f1f5f9;font-weight:800;border-top:2px solid #cbd5e1;border-bottom:none}
+
+/* Traffic-light variance */
+.var-green{color:#166534;font-weight:800;background:#dcfce7;padding:3px 8px;border-radius:999px;font-size:.78rem}
+.var-yellow{color:#92400e;font-weight:800;background:#fef9c3;padding:3px 8px;border-radius:999px;font-size:.78rem}
+.var-red{color:#991b1b;font-weight:800;background:#fee2e2;padding:3px 8px;border-radius:999px;font-size:.78rem}
+.var-neutral{color:#475569;font-weight:700;font-size:.85rem}
+
+/* Trend table */
+.trend-wrap{overflow-x:auto}
+.trend-table{width:100%;border-collapse:collapse;min-width:500px}
+.trend-table th{background:#f1f5f9;padding:8px 10px;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:2px solid #e2e8f0;text-align:right;white-space:nowrap}
+.trend-table th:first-child{text-align:left}
+.trend-table td{padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:.8rem;text-align:right;white-space:nowrap}
+.trend-table td:first-child{font-weight:600;text-align:left;color:#475569;width:160px}
+.trend-table tr.t-subtotal td{background:#f8fafc;font-weight:800;border-top:2px solid #e2e8f0}
+.trend-table tr.t-profit td{background:#f1f5f9;font-weight:800;border-top:2px solid #cbd5e1}
+
+/* Summary chips */
+.sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.sum-row{grid-template-columns:1fr}}
+.sum-chip{background:#f8fafc;border-radius:8px;padding:14px;border:1px solid #e2e8f0;text-align:center}
+.sc-label{font-size:.68rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.sc-val{font-size:1.4rem;font-weight:900}
+.sc-sub{font-size:.72rem;color:#64748b;margin-top:3px}
+
+/* Category breakdown */
+.cat-row{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:5px;background:#f8fafc;margin-bottom:4px;font-size:.83rem}
+.cat-row.cat-total{background:#f1f5f9;border-top:1px solid #e2e8f0;margin-top:6px;font-weight:800}
+
+/* Integration strip */
+.int-strip{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:7px;padding:10px 14px;margin-bottom:14px;font-size:.83rem;color:#166534;font-weight:600}
+
+/* View toggle */
+.view-toggle{display:flex;gap:0;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden}
+.view-toggle button{padding:7px 14px;background:#fff;border:none;font-size:.82rem;cursor:pointer;color:#64748b;font-weight:600}
+.view-toggle button.active{background:#2563eb;color:#fff}
+
+.toolbar-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+.toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:8px;font-size:.84rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap}
+button.print-btn{margin-top:0;margin-left:8px;padding:9px 18px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.85rem;cursor:pointer}
+button.print-btn:hover{background:#e2e8f0}
+@media print{.back-link,.toolbar-row,button{display:none!important}body{background:#fff;padding:8px}}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<div id="mainWrap">
+
+<a href="../try.html" class="back-link">← Back to Demo</a>
+<h1>📊 Budget vs. Actual Tracker</h1>
+<p class="subtitle">FinWise · Set monthly budgets, import actuals from invoices &amp; bills, and track variance at a glance.</p>
+
+<div class="int-strip" id="intStrip"></div>
+<div class="toast" id="toast"></div>
+
+<!-- Month picker + data entry -->
+<div class="card">
+  <div class="toolbar-row">
+    <h2 style="margin:0">Monthly Data</h2>
+    <select id="monthSel" onchange="loadMonth()"></select>
+    <button class="primary" onclick="saveMonth()">Save Month</button>
+    <button class="btn-green" onclick="importAllActuals()">⬇ Import Actuals</button>
+    <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+    <button class="secondary" onclick="clearMonth()">Clear</button>
+  </div>
+
+  <table class="entry-table">
+    <thead>
+      <tr>
+        <th style="width:34%">Category</th>
+        <th>Budget ($)</th>
+        <th>Actual ($)</th>
+        <th>Variance</th>
+      </tr>
+    </thead>
+    <tbody id="entryBody"></tbody>
+  </table>
+</div>
+
+<!-- Expense breakdown from vendor bills -->
+<div class="card" id="catBreakCard" style="display:none">
+  <h2>Expense Breakdown by Category <span style="font-size:.75rem;color:#94a3b8;font-weight:400">— from Vendor Bills (live)</span></h2>
+  <div id="catBreakList"></div>
+</div>
+
+<!-- Summary chips -->
+<div class="card" id="summaryCard" style="display:none">
+  <h2 id="summaryTitle"></h2>
+  <div class="sum-row" id="sumRow"></div>
+</div>
+
+<!-- Trend view -->
+<div class="card">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap">
+    <h2 style="margin:0">Trend View</h2>
+    <div class="view-toggle">
+      <button id="vBtn6" class="active" onclick="setView(6)">6-Month</button>
+      <button id="vBtn12" onclick="setView(12)">Full Year</button>
+    </div>
+  </div>
+  <div class="trend-wrap">
+    <table class="trend-table">
+      <thead id="trendHead"></thead>
+      <tbody id="trendBody"></tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /mainWrap -->
+
+<script>
+var KEY = 'fw_budget_data';
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var trendMonths = 6;
+
+/* Category definitions — bKey/aKey map to localStorage fields */
+var CATS = [
+  {id:'rev',   label:'Revenue',                hint:'Total income for the month',              rev:true,  bKey:'bRev',   aKey:'aRev'},
+  {id:'cogs',  label:'COGS / Direct Costs',    hint:'Materials, direct labor, subcontractors', rev:false, bKey:'bCogs',  aKey:'aCogs'},
+  {id:'payrl', label:'Payroll &amp; Benefits', hint:'W-2 employee wages + employer costs',     rev:false, bKey:'bPayrl', aKey:'aPayrl'},
+  {id:'rent',  label:'Rent &amp; Utilities',   hint:'Office, warehouse, electricity, internet',rev:false, bKey:'bRent',  aKey:'aRent'},
+  {id:'mktg',  label:'Marketing &amp; Ads',    hint:'Ads, promotions, software subscriptions', rev:false, bKey:'bMktg',  aKey:'aMktg'},
+  {id:'opex',  label:'Other Operating Expenses',hint:'Insurance, professional services, misc', rev:false, bKey:'bOpex',  aKey:'aOpex'}
+];
+
+/* Map fw_expense_by_category category names → CATS id */
+var CAT_MAP = {
+  'Rent':'rent','Utilities':'rent',
+  'Payroll':'payrl','Salaries':'payrl',
+  'Marketing':'mktg','Advertising':'mktg','Subscriptions':'mktg',
+  'COGS':'cogs','Materials':'cogs',
+  'Insurance':'opex','Professional Services':'opex','Maintenance':'opex',
+  'Loan/EMI':'opex','LoanEMI':'opex','Other':'opex'
+};
+
+function loadData(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function saveData(d){ localStorage.setItem(KEY, JSON.stringify(d)); }
+function tryParse(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function safe(n){ return isNaN(n)||!isFinite(n)?0:n; }
+function getVal(id){ var el=document.getElementById(id); return el?parseFloat(el.value)||0:0; }
+
+function varPct(budget, actual){
+  if(!budget) return null;
+  return safe((actual - budget) / Math.abs(budget) * 100);
+}
+
+function varClass(pct, isRevenue){
+  if(pct === null) return 'var-neutral';
+  var good    = isRevenue ? pct >= 0  : pct <= 0;
+  var neutral = isRevenue ? (pct >= -5 && pct < 0) : (pct > 0 && pct <= 5);
+  var abs = Math.abs(pct);
+  if(good && abs <= 15)    return 'var-green';
+  if(neutral || abs <= 15) return 'var-yellow';
+  return 'var-red';
+}
+
+function varText(pct){
+  if(pct === null) return '—';
+  return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+}
+
+/* ---- Entry table ---- */
+
+function renderEntryTable(){
+  var html = '';
+  CATS.forEach(function(c){
+    html += '<tr>'+
+      '<td><div class="cat-label">'+c.label+'</div><div class="cat-hint">'+c.hint+'</div></td>'+
+      '<td><input type="number" id="'+c.bKey+'" placeholder="0" min="0" oninput="updateVariance()"/></td>'+
+      '<td><input type="number" id="'+c.aKey+'" placeholder="0" min="0" oninput="updateVariance()"/></td>'+
+      '<td><span id="v_'+c.id+'" class="var-neutral">—</span></td>'+
+      '</tr>';
+  });
+  /* Total Expenses subtotal */
+  html += '<tr class="subtotal-row">'+
+    '<td><div class="cat-label">Total Expenses</div></td>'+
+    '<td><span id="sub_bExp" style="font-weight:800;color:#64748b">—</span></td>'+
+    '<td><span id="sub_aExp" style="font-weight:800;color:#64748b">—</span></td>'+
+    '<td><span id="v_totexp" class="var-neutral">—</span></td>'+
+    '</tr>';
+  /* Net Profit subtotal */
+  html += '<tr class="profit-row">'+
+    '<td><div class="cat-label">Net Profit</div></td>'+
+    '<td><span id="sub_bProfit" style="font-weight:800;color:#64748b">—</span></td>'+
+    '<td><span id="sub_aProfit" style="font-weight:800;color:#64748b">—</span></td>'+
+    '<td><span id="v_profit" class="var-neutral">—</span></td>'+
+    '</tr>';
+  document.getElementById('entryBody').innerHTML = html;
+}
+
+function updateVariance(){
+  CATS.forEach(function(c){
+    var b = getVal(c.bKey), a = getVal(c.aKey);
+    var pct = varPct(b, a);
+    var el = document.getElementById('v_'+c.id);
+    if(el){ el.textContent = varText(pct); el.className = varClass(pct, c.rev); }
+  });
+
+  var bExp = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+getVal(c.bKey);},0);
+  var aExp = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+getVal(c.aKey);},0);
+  var bProfit = getVal('bRev') - bExp;
+  var aProfit = getVal('aRev') - aExp;
+
+  var se = document.getElementById('sub_bExp'); if(se) se.textContent = bExp ? fmt(bExp) : '—';
+  var ae = document.getElementById('sub_aExp'); if(ae) ae.textContent = aExp ? fmt(aExp) : '—';
+  var sp = document.getElementById('sub_bProfit'); if(sp) sp.textContent = fmt(bProfit);
+  var ap = document.getElementById('sub_aProfit'); if(ap) ap.textContent = fmt(aProfit);
+
+  var vE = document.getElementById('v_totexp');
+  if(vE){ var ep=varPct(bExp,aExp); vE.textContent=varText(ep); vE.className=varClass(ep,false); }
+  var vP = document.getElementById('v_profit');
+  if(vP){ var pp=varPct(bProfit,aProfit); vP.textContent=varText(pp); vP.className=varClass(pp,true); }
+
+  updateSummary(bProfit, aProfit);
+}
+
+function updateSummary(bProfit, aProfit){
+  var hasData = CATS.some(function(c){ return getVal(c.bKey)||getVal(c.aKey); });
+  if(!hasData){ document.getElementById('summaryCard').style.display='none'; return; }
+
+  var sel = document.getElementById('monthSel');
+  var parts = sel.value.split('-');
+  var mName = MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
+  document.getElementById('summaryTitle').textContent = mName + ' — Summary';
+
+  var profPct = varPct(bProfit, aProfit);
+  document.getElementById('sumRow').innerHTML = [
+    {label:'Budgeted Net Profit', val:fmt(bProfit), col:'#475569', sub:'Revenue − All Expenses'},
+    {label:'Actual Net Profit',   val:fmt(aProfit), col:aProfit>=bProfit?'#16a34a':aProfit>=0?'#ca8a04':'#dc2626', sub:varText(profPct)+' vs budget'},
+    {label:'Net Variance',        val:fmt(aProfit-bProfit), col:(aProfit-bProfit)>=0?'#16a34a':'#dc2626', sub:(aProfit-bProfit)>=0?'Surplus':'Shortfall'}
+  ].map(function(c){
+    return '<div class="sum-chip">'+
+      '<div class="sc-label">'+c.label+'</div>'+
+      '<div class="sc-val" style="color:'+c.col+'">'+c.val+'</div>'+
+      '<div class="sc-sub">'+c.sub+'</div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('summaryCard').style.display='block';
+}
+
+/* ---- Month picker + load/save ---- */
+
+function populateMonthSel(){
+  var sel = document.getElementById('monthSel');
+  var now = new Date();
+  sel.innerHTML = '';
+  for(var i = -5; i <= 2; i++){
+    var d = new Date(now.getFullYear(), now.getMonth()+i, 1);
+    var key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    var opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = MONTHS[d.getMonth()]+' '+d.getFullYear();
+    if(i===0) opt.selected = true;
+    sel.appendChild(opt);
+  }
+}
+
+function loadMonth(){
+  var key = document.getElementById('monthSel').value;
+  var data = loadData();
+  var m = data[key] || {};
+  CATS.forEach(function(c){
+    var bEl = document.getElementById(c.bKey);
+    var aEl = document.getElementById(c.aKey);
+    if(bEl) bEl.value = m[c.bKey] || '';
+    if(aEl) aEl.value = m[c.aKey] || '';
+  });
+  updateVariance();
+}
+
+function saveMonth(){
+  var key = document.getElementById('monthSel').value;
+  var data = loadData();
+  var row = {};
+  CATS.forEach(function(c){ row[c.bKey]=getVal(c.bKey); row[c.aKey]=getVal(c.aKey); });
+  data[key] = row;
+  saveData(data);
+  renderTrend();
+  showToast('Saved!');
+}
+
+function clearMonth(){
+  CATS.forEach(function(c){
+    var b=document.getElementById(c.bKey); if(b) b.value='';
+    var a=document.getElementById(c.aKey); if(a) a.value='';
+  });
+  updateVariance();
+}
+
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(function(){ t.style.display='none'; }, 2500);
+}
+
+/* ---- Integration ---- */
+
+function checkIntegration(){
+  var sources = [];
+  if(tryParse('fw_invoice_revenue')) sources.push('Invoice Revenue');
+  if(tryParse('fw_expense_by_category')) sources.push('Bill Expenses');
+  if(tryParse('fw_payroll_totals')) sources.push('Payroll Totals');
+  var strip = document.getElementById('intStrip');
+  if(sources.length){
+    strip.style.display='';
+    strip.innerHTML = '✅ Live data available: '+sources.join(', ')+
+      ' — click <strong>Import Actuals</strong> to pull into the selected month.';
+  }
+}
+
+function importAllActuals(){
+  var key = document.getElementById('monthSel').value;
+  var yr  = parseInt(key.split('-')[0]);
+  var mo  = parseInt(key.split('-')[1]);
+  var ymKey = yr+'-'+String(mo).padStart(2,'0');
+  var imported = [];
+
+  /* Revenue from fw_invoice_revenue */
+  var invRev = tryParse('fw_invoice_revenue');
+  if(invRev && invRev.byMonth && invRev.byMonth[ymKey]){
+    var rev = Math.round(invRev.byMonth[ymKey]);
+    document.getElementById('aRev').value = rev;
+    imported.push('Revenue: '+fmt(rev));
+  } else {
+    /* Fallback: sum paid invoices from fw_invoices */
+    var invs = tryParse('fw_invoices') || [];
+    var revTotal = invs.filter(function(inv){
+      if(inv.status !== 'paid') return false;
+      var ds = inv.paidDate || inv.date || inv.issueDate || '';
+      if(!ds) return false;
+      var p = ds.split('-');
+      return parseInt(p[0])===yr && parseInt(p[1])===mo;
+    }).reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
+    if(revTotal){ document.getElementById('aRev').value=Math.round(revTotal); imported.push('Revenue (raw): '+fmt(revTotal)); }
+  }
+
+  /* Expense categories from fw_expense_by_category */
+  var expCat = tryParse('fw_expense_by_category');
+  if(expCat && expCat.byCat && Object.keys(expCat.byCat).length){
+    /* Clear expense actuals first */
+    ['aCogs','aPayrl','aRent','aMktg','aOpex'].forEach(function(id){
+      var el=document.getElementById(id); if(el) el.value='';
+    });
+    var buckets = {cogs:0,payrl:0,rent:0,mktg:0,opex:0};
+    Object.keys(expCat.byCat).forEach(function(cat){
+      var bucket = CAT_MAP[cat] || 'opex';
+      buckets[bucket] += expCat.byCat[cat] || 0;
+    });
+    var expMap = {cogs:'aCogs',payrl:'aPayrl',rent:'aRent',mktg:'aMktg',opex:'aOpex'};
+    var catLabels = {cogs:'COGS',payrl:'Payroll',rent:'Rent/Util',mktg:'Marketing',opex:'Other OpEx'};
+    Object.keys(buckets).forEach(function(b){
+      if(buckets[b]){
+        var el = document.getElementById(expMap[b]);
+        if(el){ el.value = Math.round(buckets[b]); imported.push(catLabels[b]+': '+fmt(buckets[b])); }
+      }
+    });
+  }
+
+  /* Payroll from fw_payroll_totals (monthly average, fills only if not already set) */
+  var payrl = tryParse('fw_payroll_totals');
+  var payrlEl = document.getElementById('aPayrl');
+  if(payrl && payrl.currentYearTotal && payrlEl && !payrlEl.value){
+    var monthly = Math.round(payrl.currentYearTotal / 12);
+    payrlEl.value = monthly;
+    imported.push('Payroll (est.): '+fmt(monthly));
+  }
+
+  updateVariance();
+  renderCatBreakdown();
+
+  if(imported.length){
+    showToast('✅ '+imported.slice(0,2).join(' · ')+(imported.length>2?' +more':''));
+  } else {
+    showToast('No live data found — enter actuals manually');
+  }
+}
+
+function renderCatBreakdown(){
+  var expCat = tryParse('fw_expense_by_category');
+  if(!expCat || !expCat.byCat || !Object.keys(expCat.byCat).length){
+    document.getElementById('catBreakCard').style.display='none'; return;
+  }
+  var cats = Object.keys(expCat.byCat).sort(function(a,b){ return (expCat.byCat[b]||0)-(expCat.byCat[a]||0); });
+  var html = cats.map(function(cat){
+    return '<div class="cat-row">'+
+      '<span style="font-weight:600;color:#475569">'+cat+'</span>'+
+      '<span style="font-weight:800;color:#1e293b">'+fmt(expCat.byCat[cat])+'<span style="font-size:.72rem;font-weight:400;color:#94a3b8">/mo</span></span>'+
+      '</div>';
+  }).join('');
+  html += '<div class="cat-row cat-total">'+
+    '<span>Total Monthly Bills</span>'+
+    '<span>'+fmt(expCat.totalMonthly||0)+'</span>'+
+    '</div>';
+  document.getElementById('catBreakList').innerHTML = html;
+  document.getElementById('catBreakCard').style.display='block';
+}
+
+/* ---- Trend view ---- */
+
+function setView(n){
+  trendMonths = n;
+  document.getElementById('vBtn6').className  = n===6  ? 'active' : '';
+  document.getElementById('vBtn12').className = n===12 ? 'active' : '';
+  renderTrend();
+}
+
+function trendKeys(){
+  var now = new Date();
+  var keys = [];
+  if(trendMonths === 12){
+    var yr = now.getFullYear();
+    for(var m=1; m<=12; m++){
+      keys.push({key:yr+'-'+String(m).padStart(2,'0'), label:MONTHS[m-1]});
+    }
+  } else {
+    for(var i=-(trendMonths-1); i<=0; i++){
+      var d = new Date(now.getFullYear(), now.getMonth()+i, 1);
+      keys.push({key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'), label:MONTHS[d.getMonth()]+(trendMonths===6?'':' '+d.getFullYear())});
+    }
+  }
+  return keys;
+}
+
+function computeProfit(m){
+  var bE = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+(m[c.bKey]||0);},0);
+  var aE = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+(m[c.aKey]||0);},0);
+  return {b:(m.bRev||0)-bE, a:(m.aRev||0)-aE};
+}
+
+function renderTrend(){
+  var keys = trendKeys();
+  var data = loadData();
+
+  var headHtml = '<tr><th>Category</th>'+
+    keys.map(function(k){ return '<th colspan="2" style="text-align:center">'+k.label+'</th>'; }).join('')+
+    '</tr><tr><th></th>'+
+    keys.map(function(){ return '<th>Budget</th><th>Actual</th>'; }).join('')+
+    '</tr>';
+
+  /* Build rows: CATS + total expenses subtotal + net profit */
+  var trendCats = CATS.concat([
+    {id:'totexp', label:'Total Expenses', rev:false, computed:'exp'},
+    {id:'profit',  label:'Net Profit',    rev:true,  computed:'prof'}
+  ]);
+
+  var bodyRows = trendCats.map(function(cat){
+    var rowCls = cat.id==='totexp' ? ' class="t-subtotal"' : cat.id==='profit' ? ' class="t-profit"' : '';
+    var cells = keys.map(function(k){
+      var m = data[k.key] || {};
+      var hasAny = Object.keys(m).length > 0;
+      var b, a, hasB, hasA;
+      if(cat.computed === 'exp'){
+        b = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+(m[c.bKey]||0);},0);
+        a = CATS.filter(function(c){return !c.rev;}).reduce(function(s,c){return s+(m[c.aKey]||0);},0);
+        hasB = hasAny && b; hasA = hasAny && a;
+      } else if(cat.computed === 'prof'){
+        var p = computeProfit(m);
+        b = p.b; a = p.a;
+        hasB = hasAny; hasA = hasAny;
+      } else {
+        b = m[cat.bKey]||0; a = m[cat.aKey]||0;
+        hasB = !!m[cat.bKey]; hasA = !!m[cat.aKey];
+      }
+      var pct = varPct(b, a);
+      var vc = varClass(pct, cat.rev);
+      var vcol = vc==='var-green'?'#166534':vc==='var-yellow'?'#92400e':vc==='var-red'?'#991b1b':'#64748b';
+      var bCell = hasB ? '<span style="color:#475569">'+fmt(b)+'</span>' : '<span style="color:#cbd5e1">—</span>';
+      var aCell = hasA ? '<span style="color:'+vcol+';font-weight:700">'+fmt(a)+'</span>' : '<span style="color:#cbd5e1">—</span>';
+      return '<td>'+bCell+'</td><td>'+aCell+'</td>';
+    }).join('');
+    return '<tr'+rowCls+'><td>'+cat.label+'</td>'+cells+'</tr>';
+  }).join('');
+
+  document.getElementById('trendHead').innerHTML = headHtml;
+  document.getElementById('trendBody').innerHTML = bodyRows;
+}
+
+/* ---- CSV Export ---- */
+
+function exportCSV(){
+  var data = loadData();
+  var now = new Date();
+  /* Export last 12 months + any saved months */
+  var keySet = {};
+  for(var i=-11; i<=0; i++){
+    var d = new Date(now.getFullYear(), now.getMonth()+i, 1);
+    keySet[d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')] = true;
+  }
+  Object.keys(data).forEach(function(k){ keySet[k]=true; });
+  var sortedKeys = Object.keys(keySet).sort();
+
+  var hdr = ['Month','Category','Budget','Actual','Variance $','Variance %'];
+  var rows = [hdr];
+
+  sortedKeys.forEach(function(k){
+    var m = data[k] || {};
+    if(!Object.keys(m).length) return;
+    var mo = MONTHS[parseInt(k.split('-')[1])-1]+' '+k.split('-')[0];
+    CATS.forEach(function(cat){
+      var b = m[cat.bKey]||0, a = m[cat.aKey]||0;
+      if(!b && !a) return;
+      var varD = a - b;
+      var varP = b ? ((varD/Math.abs(b))*100).toFixed(1)+'%' : '—';
+      rows.push([mo, cat.label.replace(/&amp;/g,'&'), b, a, varD, varP]);
+    });
+    var p = computeProfit(m);
+    if(p.b || p.a){
+      var vD = p.a - p.b;
+      var vP = p.b ? ((vD/Math.abs(p.b))*100).toFixed(1)+'%' : '—';
+      rows.push([mo, 'Net Profit', p.b, p.a, vD, vP]);
+    }
+  });
+
+  var csv = rows.map(function(r){
+    return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\n');
+
+  var blob = new Blob([csv], {type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'budget-vs-actual-'+now.getFullYear()+'.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ---- Init ---- */
+renderEntryTable();
+populateMonthSel();
+loadMonth();
+renderTrend();
+checkIntegration();
+renderCatBreakdown();
+</script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Balance Sheet Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #0f766e; color: #fff; border-color: #0f766e; }
+
+    .panel { display: none; } .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 6px; color: #444; }
+    .desc { font-size: 0.83rem; color: #666; margin-bottom: 14px; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 11px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number], input[type=text] { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:5px; font-size:0.9rem; }
+    input:focus { outline:none; border-color:#0f766e; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+    .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 16px; }
+
+    button.primary { margin-top:14px; padding:10px 24px; background:#0f766e; color:#fff; border:none; border-radius:6px; font-size:0.9rem; cursor:pointer; }
+    button.primary:hover { background:#0d6560; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.85rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+
+    hr { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
+    .section-title { font-size:0.75rem; font-weight:bold; text-transform:uppercase; color:#94a3b8; margin:14px 0 6px; letter-spacing:0.05em; }
+
+    /* Balance Sheet Statement */
+    .bs-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .bs-table td { padding:7px 12px; border-bottom:1px solid #f1f5f9; }
+    .bs-table td:last-child { text-align:right; min-width:130px; }
+    .bs-table .row-header { background:#1e293b; color:#fff; font-weight:bold; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; }
+    .bs-table .row-header td:last-child { color:#fff; }
+    .bs-table .row-section { background:#f8fafc; font-weight:600; font-size:0.8rem; color:#475569; text-transform:uppercase; letter-spacing:0.04em; }
+    .bs-table .row-indent td:first-child { padding-left:28px; color:#475569; }
+    .bs-table .row-subtotal { font-weight:700; background:#f1f5f9; }
+    .bs-table .row-subtotal td:last-child { color:#0f766e; font-size:0.95rem; }
+    .bs-table .row-grand { font-weight:700; background:#e2e8f0; border-top:2px solid #94a3b8; }
+    .bs-table .row-grand td:last-child { font-size:1.05rem; }
+    .bs-table .c-green td:last-child { color:#16a34a; }
+    .bs-table .c-red   td:last-child { color:#dc2626; }
+    .bs-table .c-blue  td:last-child { color:#2563eb; }
+    .bs-table .c-teal  td:last-child { color:#0f766e; }
+
+    /* Two-column layout for BS */
+    .bs-columns { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media(max-width:700px) { .bs-columns { grid-template-columns:1fr; } }
+
+    /* Balance check banner */
+    .balance-banner { border-radius:6px; padding:12px 16px; margin-bottom:14px; font-weight:bold; display:flex; align-items:center; gap:10px; }
+    .balance-ok   { background:#dcfce7; border:1px solid #86efac; color:#15803d; }
+    .balance-fail { background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; }
+
+    /* Ratio cards */
+    .ratio-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+    .ratio-item { border-radius:6px; padding:12px 14px; border:1px solid #e2e8f0; background:#f8fafc; }
+    .r-label { font-size:0.72rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
+    .r-val   { font-size:1.15rem; font-weight:bold; margin-top:4px; }
+    .r-bench { font-size:0.72rem; color:#94a3b8; margin-top:2px; }
+    .r-green { color:#16a34a; } .r-red { color:#dc2626; } .r-amber { color:#d97706; } .r-blue { color:#2563eb; }
+
+    /* Health bar */
+    .health-bar-wrap { background:#e2e8f0; border-radius:99px; height:10px; overflow:hidden; margin:6px 0; }
+    .health-bar-fill { height:100%; border-radius:99px; }
+    .health-healthy  { color:#15803d; } .health-moderate { color:#d97706; } .health-stressed { color:#dc2626; }
+
+    /* Alert/strength items */
+    .alert-item  { padding:8px 12px; border-radius:5px; margin-bottom:6px; font-size:0.85rem; background:#fef9c3; border-left:3px solid #f59e0b; }
+    .strength-item { padding:8px 12px; border-radius:5px; margin-bottom:6px; font-size:0.85rem; background:#f0fdf4; border-left:3px solid #86efac; }
+
+    /* Compare */
+    .cmp-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .cmp-table th { background:#1e293b; color:#fff; padding:8px 12px; text-align:right; }
+    .cmp-table th:first-child { text-align:left; }
+    .cmp-table td { padding:7px 12px; border-bottom:1px solid #f1f5f9; text-align:right; }
+    .cmp-table td:first-child { text-align:left; font-weight:600; color:#475569; }
+    .cmp-table .positive { color:#16a34a; font-weight:bold; }
+    .cmp-table .negative { color:#dc2626; font-weight:bold; }
+    .cmp-table tr:hover td { background:#f8fafc; }
+
+    /* Unit tests */
+    .test-result { font-family:monospace; font-size:0.88rem; padding:4px 0; }
+    .test-result.pass { color:#15803d; } .test-result.fail { color:#dc2626; font-weight:bold; }
+    .test-summary { margin-top:12px; font-weight:bold; font-size:0.95rem; padding:10px; border-radius:6px; }
+    .test-summary.all-pass { background:#dcfce7; color:#15803d; }
+    .test-summary.has-fail  { background:#fee2e2; color:#dc2626; }
+  </style>
+</head>
+<body>
+
+<h1>Balance Sheet Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Assets = Liabilities + Equity · Ratios · Health Score</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('single')">Balance Sheet</button>
+  <button class="tab" onclick="showTab('compare')">Compare Two Periods</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Single Balance Sheet ──────────────────────────────────────────── -->
+<div id="panel-single" class="panel active">
+  <div class="card">
+    <h2>Balance Sheet Builder</h2>
+    <p class="desc">Enter assets, liabilities and equity. The sheet auto-checks: <strong>Assets = Liabilities + Equity</strong>.</p>
+
+    <div class="grid2">
+      <div><label>Period Label <span class="hint">e.g. Dec 2025</span></label><input type="text" id="s-period" value="Dec 2025" /></div>
+    </div>
+
+    <div class="bs-columns" style="margin-top:14px;">
+      <!-- Left: Assets -->
+      <div>
+        <div class="section-title" style="color:#2563eb;">Assets</div>
+        <div class="section-title">Current Assets</div>
+        <label>Cash &amp; Bank ($)</label><input type="number" id="a-cash" value="300000" min="0" />
+        <label>Accounts Receivable ($)</label><input type="number" id="a-ar" value="120000" min="0" />
+        <label>Inventory ($)</label><input type="number" id="a-inv" value="80000" min="0" />
+        <label>Other Current Assets ($)</label><input type="number" id="a-oca" value="20000" min="0" />
+        <div class="section-title" style="margin-top:14px;">Fixed Assets</div>
+        <label>Equipment ($)</label><input type="number" id="a-eq" value="500000" min="0" />
+        <label>Property ($)</label><input type="number" id="a-prop" value="1000000" min="0" />
+        <label>Other Fixed Assets ($)</label><input type="number" id="a-ofa" value="50000" min="0" />
+      </div>
+
+      <!-- Right: Liabilities + Equity -->
+      <div>
+        <div class="section-title" style="color:#dc2626;">Liabilities</div>
+        <div class="section-title">Current Liabilities</div>
+        <label>Accounts Payable ($)</label><input type="number" id="l-ap" value="60000" min="0" />
+        <label>Short-Term Debt ($)</label><input type="number" id="l-std" value="50000" min="0" />
+        <label>Other Current Liabilities ($)</label><input type="number" id="l-ocl" value="20000" min="0" />
+        <div class="section-title" style="margin-top:14px;">Long-Term Liabilities</div>
+        <label>Loan Principal Outstanding ($) <span class="hint">from Loan Engine</span></label><input type="number" id="l-loan" value="800000" min="0" />
+        <label>Other Long-Term Liabilities ($)</label><input type="number" id="l-oltl" value="40000" min="0" />
+        <div class="section-title" style="margin-top:14px; color:#16a34a;">Equity</div>
+        <label>Owner's Equity ($)</label><input type="number" id="e-oe" value="750000" min="0" />
+        <label>Retained Earnings ($) <span class="hint">from P&L net profit</span></label><input type="number" id="e-re" value="350000" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcSingle()">Build Balance Sheet</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="single-result"></div>
+</div>
+
+<!-- ─── Compare Two Periods ───────────────────────────────────────────── -->
+<div id="panel-compare" class="panel">
+  <div class="card">
+    <h2>Compare Two Periods</h2>
+    <p class="desc">Enter two balance sheets (e.g. start and end of year) to see what changed.</p>
+
+    <div class="bs-columns">
+      <!-- Period 1 -->
+      <div>
+        <div class="section-title" style="color:#2563eb;">Period 1 (Previous)</div>
+        <label>Period Label</label><input type="text" id="p1-period" value="Dec 2024" />
+        <label>Cash ($)</label><input type="number" id="p1-cash" value="200000" min="0" />
+        <label>Accounts Receivable ($)</label><input type="number" id="p1-ar" value="100000" min="0" />
+        <label>Inventory ($)</label><input type="number" id="p1-inv" value="90000" min="0" />
+        <label>Equipment ($)</label><input type="number" id="p1-eq" value="500000" min="0" />
+        <label>Property ($)</label><input type="number" id="p1-prop" value="1000000" min="0" />
+        <label>Accounts Payable ($)</label><input type="number" id="p1-ap" value="70000" min="0" />
+        <label>Short-Term Debt ($)</label><input type="number" id="p1-std" value="60000" min="0" />
+        <label>Loan Principal ($)</label><input type="number" id="p1-loan" value="900000" min="0" />
+        <label>Owner's Equity ($)</label><input type="number" id="p1-oe" value="750000" min="0" />
+        <label>Retained Earnings ($)</label><input type="number" id="p1-re" value="10000" />
+      </div>
+      <!-- Period 2 -->
+      <div>
+        <div class="section-title" style="color:#0f766e;">Period 2 (Current)</div>
+        <label>Period Label</label><input type="text" id="p2-period" value="Dec 2025" />
+        <label>Cash ($)</label><input type="number" id="p2-cash" value="300000" min="0" />
+        <label>Accounts Receivable ($)</label><input type="number" id="p2-ar" value="120000" min="0" />
+        <label>Inventory ($)</label><input type="number" id="p2-inv" value="80000" min="0" />
+        <label>Equipment ($)</label><input type="number" id="p2-eq" value="500000" min="0" />
+        <label>Property ($)</label><input type="number" id="p2-prop" value="1000000" min="0" />
+        <label>Accounts Payable ($)</label><input type="number" id="p2-ap" value="60000" min="0" />
+        <label>Short-Term Debt ($)</label><input type="number" id="p2-std" value="50000" min="0" />
+        <label>Loan Principal ($)</label><input type="number" id="p2-loan" value="800000" min="0" />
+        <label>Owner's Equity ($)</label><input type="number" id="p2-oe" value="750000" min="0" />
+        <label>Retained Earnings ($)</label><input type="number" id="p2-re" value="350000" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcCompare()">Compare Periods</button>
+  </div>
+  <div id="compare-result"></div>
+</div>
+
+<!-- ─── Unit Tests ─────────────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Module 9: Balance Sheet Engine ──────────────────────────────────────
+
+function _r(n) { return Math.round(n * 100) / 100; }
+function _pos(n) {
+  if (n === undefined || n === null) return 0;
+  if (typeof n !== "number") throw new Error(`Expected a number, got: ${typeof n}`);
+  if (n < 0) throw new Error(`Balance sheet values cannot be negative. Got: ${n}`);
+  return _r(n);
+}
+
+function buildBalanceSheet(assets={}, liabilities={}, equity={}, period="") {
+  const cash               = _pos(assets.cash);
+  const accountsReceivable = _pos(assets.accountsReceivable);
+  const inventory          = _pos(assets.inventory);
+  const otherCurrentAssets = _pos(assets.otherCurrentAssets);
+  const totalCurrentAssets = _r(cash + accountsReceivable + inventory + otherCurrentAssets);
+
+  const equipment          = _pos(assets.equipment);
+  const property           = _pos(assets.property);
+  const otherFixedAssets   = _pos(assets.otherFixedAssets);
+  const totalFixedAssets   = _r(equipment + property + otherFixedAssets);
+  const totalAssets        = _r(totalCurrentAssets + totalFixedAssets);
+
+  const accountsPayable          = _pos(liabilities.accountsPayable);
+  const shortTermDebt            = _pos(liabilities.shortTermDebt);
+  const otherCurrentLiabilities  = _pos(liabilities.otherCurrentLiabilities);
+  const totalCurrentLiabilities  = _r(accountsPayable + shortTermDebt + otherCurrentLiabilities);
+
+  const loanPrincipalOutstanding = _pos(liabilities.loanPrincipalOutstanding);
+  const otherLongTermLiabilities = _pos(liabilities.otherLongTermLiabilities);
+  const totalLongTermLiabilities = _r(loanPrincipalOutstanding + otherLongTermLiabilities);
+  const totalLiabilities         = _r(totalCurrentLiabilities + totalLongTermLiabilities);
+
+  const ownerEquity      = _pos(equity.ownerEquity);
+  const retainedEarnings = equity.retainedEarnings ?? 0;
+  const totalEquity      = _r(ownerEquity + retainedEarnings);
+
+  const liabilitiesPlusEquity = _r(totalLiabilities + totalEquity);
+  const isBalanced            = Math.abs(totalAssets - liabilitiesPlusEquity) < 0.02;
+  const balanceDifference     = _r(totalAssets - liabilitiesPlusEquity);
+
+  const currentRatio      = totalCurrentLiabilities > 0 ? _r(totalCurrentAssets / totalCurrentLiabilities) : null;
+  const quickRatio        = totalCurrentLiabilities > 0 ? _r((totalCurrentAssets - inventory) / totalCurrentLiabilities) : null;
+  const debtToEquityRatio = totalEquity !== 0 ? _r(totalLiabilities / totalEquity) : null;
+  const debtToAssetsRatio = totalAssets > 0 ? _r(totalLiabilities / totalAssets) : null;
+  const equityRatio       = totalAssets > 0 ? _r((totalEquity / totalAssets) * 100) : null;
+  const workingCapital    = _r(totalCurrentAssets - totalCurrentLiabilities);
+
+  const alerts = [], strengths = [];
+  let score = 100;
+  if (currentRatio !== null) {
+    if (currentRatio >= 2)        strengths.push("Strong current ratio (≥ 2.0) — good short-term liquidity.");
+    else if (currentRatio >= 1.5) strengths.push("Healthy current ratio (≥ 1.5).");
+    else if (currentRatio >= 1)   alerts.push("Current ratio 1.0–1.5 — limited liquidity buffer.");
+    else                          { alerts.push("Current ratio < 1.0 — current liabilities exceed current assets."); score -= 30; }
+  }
+  if (quickRatio !== null && quickRatio < 1) { alerts.push("Quick ratio < 1.0 — may struggle to meet short-term obligations."); score -= 20; }
+  if (debtToEquityRatio !== null) {
+    if (debtToEquityRatio <= 1)      strengths.push("Conservative D/E ratio (≤ 1.0).");
+    else if (debtToEquityRatio <= 2) alerts.push(`D/E ratio ${debtToEquityRatio.toFixed(2)} — moderate leverage.`);
+    else                             { alerts.push(`D/E ratio ${debtToEquityRatio.toFixed(2)} > 2 — high leverage, increased risk.`); score -= 25; }
+  }
+  if (workingCapital < 0) { alerts.push("Negative working capital — potential short-term cash crisis."); score -= 25; }
+  if (totalEquity < 0)    { alerts.push("Negative equity — technically insolvent."); score -= 30; }
+  score = Math.max(0, score);
+  const healthStatus = score >= 80 ? "healthy" : score >= 55 ? "moderate" : "stressed";
+
+  return {
+    period,
+    assets: { cash, accountsReceivable, inventory, otherCurrentAssets, totalCurrentAssets, equipment, property, otherFixedAssets, totalFixedAssets, totalAssets },
+    liabilities: { accountsPayable, shortTermDebt, otherCurrentLiabilities, totalCurrentLiabilities, loanPrincipalOutstanding, otherLongTermLiabilities, totalLongTermLiabilities, totalLiabilities },
+    equity: { ownerEquity, retainedEarnings, totalEquity },
+    summary: { totalAssets, totalLiabilities, totalEquity, liabilitiesPlusEquity, isBalanced, balanceDifference },
+    ratios: { currentRatio, quickRatio, debtToEquityRatio, debtToAssetsRatio, equityRatio, workingCapital },
+    health: { score, status: healthStatus, alerts, strengths },
+  };
+}
+
+function compareBalanceSheets(prev, cur) {
+  const d = (c, p) => _r(c - p);
+  return {
+    previousPeriod: prev.period, currentPeriod: cur.period,
+    assets: { cash: d(cur.assets.cash, prev.assets.cash), totalCurrentAssets: d(cur.assets.totalCurrentAssets, prev.assets.totalCurrentAssets), totalFixedAssets: d(cur.assets.totalFixedAssets, prev.assets.totalFixedAssets), totalAssets: d(cur.assets.totalAssets, prev.assets.totalAssets) },
+    liabilities: { totalCurrentLiabilities: d(cur.liabilities.totalCurrentLiabilities, prev.liabilities.totalCurrentLiabilities), loanPrincipalOutstanding: d(cur.liabilities.loanPrincipalOutstanding, prev.liabilities.loanPrincipalOutstanding), totalLiabilities: d(cur.liabilities.totalLiabilities, prev.liabilities.totalLiabilities) },
+    equity: { retainedEarnings: d(cur.equity.retainedEarnings, prev.equity.retainedEarnings), totalEquity: d(cur.equity.totalEquity, prev.equity.totalEquity) },
+    ratios: { currentRatio: cur.ratios.currentRatio && prev.ratios.currentRatio ? _r(cur.ratios.currentRatio - prev.ratios.currentRatio) : null, debtToEquityRatio: cur.ratios.debtToEquityRatio && prev.ratios.debtToEquityRatio ? _r(cur.ratios.debtToEquityRatio - prev.ratios.debtToEquityRatio) : null, workingCapital: d(cur.ratios.workingCapital, prev.ratios.workingCapital) },
+  };
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────
+const fmt  = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+const fmtP = n => n !== null ? n.toFixed(2) : "N/A";
+function showTab(n) {
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById("panel-"+n).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id)?.value)||0; }
+function getStr(id) { return document.getElementById(id)?.value||""; }
+function errBox(e)  { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;margin-top:12px;">❌ ${e.message}</div>`; }
+
+// ─── Read inputs ──────────────────────────────────────────────────────────
+function readSingle() {
+  return buildBalanceSheet(
+    { cash:getNum("a-cash"), accountsReceivable:getNum("a-ar"), inventory:getNum("a-inv"), otherCurrentAssets:getNum("a-oca"), equipment:getNum("a-eq"), property:getNum("a-prop"), otherFixedAssets:getNum("a-ofa") },
+    { accountsPayable:getNum("l-ap"), shortTermDebt:getNum("l-std"), otherCurrentLiabilities:getNum("l-ocl"), loanPrincipalOutstanding:getNum("l-loan"), otherLongTermLiabilities:getNum("l-oltl") },
+    { ownerEquity:getNum("e-oe"), retainedEarnings:getNum("e-re") },
+    getStr("s-period")
+  );
+}
+
+function readPeriod(p) {
+  return buildBalanceSheet(
+    { cash:getNum(p+"-cash"), accountsReceivable:getNum(p+"-ar"), inventory:getNum(p+"-inv"), equipment:getNum(p+"-eq"), property:getNum(p+"-prop") },
+    { accountsPayable:getNum(p+"-ap"), shortTermDebt:getNum(p+"-std"), loanPrincipalOutstanding:getNum(p+"-loan") },
+    { ownerEquity:getNum(p+"-oe"), retainedEarnings:getNum(p+"-re") },
+    getStr(p+"-period")
+  );
+}
+
+// ─── Render Balance Sheet ─────────────────────────────────────────────────
+function renderBS(bs) {
+  const a = bs.assets, l = bs.liabilities, e = bs.equity, s = bs.summary, r = bs.ratios, h = bs.health;
+
+  const bannerCls = s.isBalanced ? "balance-ok" : "balance-fail";
+  const bannerIcon = s.isBalanced ? "✅" : "❌";
+  const bannerText = s.isBalanced
+    ? `Balance Sheet is balanced — Assets = Liabilities + Equity = ${fmt(s.totalAssets)}`
+    : `Not balanced — Difference: ${fmt(s.balanceDifference)} (check your inputs)`;
+
+  const ratioColor = v => v === null ? "" : v >= 2 ? "r-green" : v >= 1 ? "r-amber" : "r-red";
+  const deColor    = v => v === null ? "" : v <= 1 ? "r-green" : v <= 2 ? "r-amber" : "r-red";
+
+  const healthColor = { healthy:"#16a34a", moderate:"#d97706", stressed:"#dc2626" }[h.status];
+  const healthLabel = { healthy:"Healthy", moderate:"Moderate", stressed:"Stressed" }[h.status];
+
+  const alertsHtml   = h.alerts.map(a=>`<div class="alert-item">⚠️ ${a}</div>`).join("") || "";
+  const strengthsHtml = h.strengths.map(s=>`<div class="strength-item">✅ ${s}</div>`).join("") || "";
+
+  return `<div class="card">
+    <div class="balance-banner ${bannerCls}">${bannerIcon} ${bs.period ? bs.period + " — " : ""}${bannerText}</div>
+
+    <!-- Ratios -->
+    <div class="section-title">Key Ratios</div>
+    <div class="ratio-grid">
+      <div class="ratio-item"><div class="r-label">Current Ratio</div><div class="r-val ${ratioColor(r.currentRatio)}">${fmtP(r.currentRatio)}x</div><div class="r-bench">Target ≥ 1.5</div></div>
+      <div class="ratio-item"><div class="r-label">Quick Ratio</div><div class="r-val ${ratioColor(r.quickRatio)}">${fmtP(r.quickRatio)}x</div><div class="r-bench">Target ≥ 1.0</div></div>
+      <div class="ratio-item"><div class="r-label">Debt / Equity</div><div class="r-val ${deColor(r.debtToEquityRatio)}">${fmtP(r.debtToEquityRatio)}x</div><div class="r-bench">Target ≤ 2.0</div></div>
+      <div class="ratio-item"><div class="r-label">Debt / Assets</div><div class="r-val ${r.debtToAssetsRatio!==null&&r.debtToAssetsRatio<0.5?'r-green':'r-amber'}">${r.debtToAssetsRatio!==null?(r.debtToAssetsRatio*100).toFixed(1)+"%":"N/A"}</div><div class="r-bench">Target &lt; 50%</div></div>
+      <div class="ratio-item"><div class="r-label">Working Capital</div><div class="r-val ${r.workingCapital>=0?'r-green':'r-red'}">${fmt(r.workingCapital)}</div><div class="r-bench">Should be positive</div></div>
+      <div class="ratio-item"><div class="r-label">Equity Ratio</div><div class="r-val r-blue">${r.equityRatio!==null?r.equityRatio.toFixed(1)+"%":"N/A"}</div><div class="r-bench">Higher = safer</div></div>
+    </div>
+
+    <!-- Health score -->
+    <div class="section-title">Financial Health</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <span style="font-weight:bold;color:${healthColor}">${healthLabel} (${h.score}/100)</span>
+      <div style="flex:1;"><div class="health-bar-wrap"><div class="health-bar-fill" style="width:${h.score}%;background:${healthColor};"></div></div></div>
+    </div>
+    ${strengthsHtml}${alertsHtml}
+
+    <!-- The statement -->
+    <div class="bs-columns" style="margin-top:16px;">
+      <div>
+        <table class="bs-table">
+          <tr class="row-header"><td colspan="2">ASSETS</td></tr>
+          <tr class="row-section"><td colspan="2">Current Assets</td></tr>
+          <tr class="row-indent"><td>Cash &amp; Bank</td><td>${fmt(a.cash)}</td></tr>
+          <tr class="row-indent"><td>Accounts Receivable</td><td>${fmt(a.accountsReceivable)}</td></tr>
+          <tr class="row-indent"><td>Inventory</td><td>${fmt(a.inventory)}</td></tr>
+          ${a.otherCurrentAssets>0?`<tr class="row-indent"><td>Other Current Assets</td><td>${fmt(a.otherCurrentAssets)}</td></tr>`:''}
+          <tr class="row-subtotal"><td>Total Current Assets</td><td>${fmt(a.totalCurrentAssets)}</td></tr>
+          <tr class="row-section"><td colspan="2">Fixed Assets</td></tr>
+          <tr class="row-indent"><td>Equipment</td><td>${fmt(a.equipment)}</td></tr>
+          <tr class="row-indent"><td>Property</td><td>${fmt(a.property)}</td></tr>
+          ${a.otherFixedAssets>0?`<tr class="row-indent"><td>Other Fixed Assets</td><td>${fmt(a.otherFixedAssets)}</td></tr>`:''}
+          <tr class="row-subtotal"><td>Total Fixed Assets</td><td>${fmt(a.totalFixedAssets)}</td></tr>
+          <tr class="row-grand c-blue"><td><strong>TOTAL ASSETS</strong></td><td><strong>${fmt(a.totalAssets)}</strong></td></tr>
+        </table>
+      </div>
+      <div>
+        <table class="bs-table">
+          <tr class="row-header"><td colspan="2">LIABILITIES</td></tr>
+          <tr class="row-section"><td colspan="2">Current Liabilities</td></tr>
+          <tr class="row-indent"><td>Accounts Payable</td><td>${fmt(l.accountsPayable)}</td></tr>
+          <tr class="row-indent"><td>Short-Term Debt</td><td>${fmt(l.shortTermDebt)}</td></tr>
+          ${l.otherCurrentLiabilities>0?`<tr class="row-indent"><td>Other Current</td><td>${fmt(l.otherCurrentLiabilities)}</td></tr>`:''}
+          <tr class="row-subtotal"><td>Total Current Liabilities</td><td>${fmt(l.totalCurrentLiabilities)}</td></tr>
+          <tr class="row-section"><td colspan="2">Long-Term Liabilities</td></tr>
+          <tr class="row-indent"><td>Loan Principal Outstanding</td><td>${fmt(l.loanPrincipalOutstanding)}</td></tr>
+          ${l.otherLongTermLiabilities>0?`<tr class="row-indent"><td>Other Long-Term</td><td>${fmt(l.otherLongTermLiabilities)}</td></tr>`:''}
+          <tr class="row-subtotal"><td>Total Long-Term Liabilities</td><td>${fmt(l.totalLongTermLiabilities)}</td></tr>
+          <tr class="row-grand c-red"><td><strong>TOTAL LIABILITIES</strong></td><td><strong>${fmt(l.totalLiabilities)}</strong></td></tr>
+          <tr class="row-header"><td colspan="2">EQUITY</td></tr>
+          <tr class="row-indent"><td>Owner's Equity</td><td>${fmt(e.ownerEquity)}</td></tr>
+          <tr class="row-indent ${e.retainedEarnings>=0?'c-green':'c-red'}"><td>Retained Earnings</td><td>${fmt(e.retainedEarnings)}</td></tr>
+          <tr class="row-grand c-green"><td><strong>TOTAL EQUITY</strong></td><td><strong>${fmt(e.totalEquity)}</strong></td></tr>
+          <tr style="background:#fffbeb;"><td style="padding:10px 12px;font-weight:bold;color:#92400e;">Liabilities + Equity</td><td style="text-align:right;font-weight:bold;padding:10px 12px;color:#92400e;">${fmt(s.liabilitiesPlusEquity)}</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── Single ───────────────────────────────────────────────────────────────
+function calcSingle() {
+  const out = document.getElementById("single-result");
+  try { out.innerHTML = renderBS(readSingle()); saveBSE(); }
+  catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Compare ──────────────────────────────────────────────────────────────
+function calcCompare() {
+  const out = document.getElementById("compare-result");
+  try {
+    const bs1 = readPeriod("p1");
+    const bs2 = readPeriod("p2");
+    const diff = compareBalanceSheets(bs1, bs2);
+
+    const fmtD = (n, positiveGood=true) => {
+      const cls = n === 0 ? "" : (positiveGood ? (n>0?"positive":"negative") : (n<0?"positive":"negative"));
+      return `<span class="${cls}">${n>=0?"+":""}${fmt(n)}</span>`;
+    };
+
+    const rows = [
+      ["Cash",                     fmt(bs1.assets.cash),                     fmt(bs2.assets.cash),                     fmtD(diff.assets.cash) ],
+      ["Total Current Assets",     fmt(bs1.assets.totalCurrentAssets),       fmt(bs2.assets.totalCurrentAssets),       fmtD(diff.assets.totalCurrentAssets) ],
+      ["Total Fixed Assets",       fmt(bs1.assets.totalFixedAssets),         fmt(bs2.assets.totalFixedAssets),         fmtD(diff.assets.totalFixedAssets) ],
+      ["Total Assets",             fmt(bs1.assets.totalAssets),              fmt(bs2.assets.totalAssets),              fmtD(diff.assets.totalAssets), true ],
+      ["Total Current Liabilities",fmt(bs1.liabilities.totalCurrentLiabilities),fmt(bs2.liabilities.totalCurrentLiabilities),fmtD(diff.liabilities.totalCurrentLiabilities, false)],
+      ["Loan Principal",           fmt(bs1.liabilities.loanPrincipalOutstanding),fmt(bs2.liabilities.loanPrincipalOutstanding),fmtD(diff.liabilities.loanPrincipalOutstanding, false)],
+      ["Total Liabilities",        fmt(bs1.liabilities.totalLiabilities),    fmt(bs2.liabilities.totalLiabilities),    fmtD(diff.liabilities.totalLiabilities, false), true ],
+      ["Retained Earnings",        fmt(bs1.equity.retainedEarnings),         fmt(bs2.equity.retainedEarnings),         fmtD(diff.equity.retainedEarnings) ],
+      ["Total Equity",             fmt(bs1.equity.totalEquity),              fmt(bs2.equity.totalEquity),              fmtD(diff.equity.totalEquity), true ],
+      ["Working Capital",          fmt(bs1.ratios.workingCapital),           fmt(bs2.ratios.workingCapital),           fmtD(diff.ratios.workingCapital) ],
+      ["Current Ratio",            fmtP(bs1.ratios.currentRatio)+"x",       fmtP(bs2.ratios.currentRatio)+"x",       diff.ratios.currentRatio!==null?`<span class="${diff.ratios.currentRatio>=0?'positive':'negative'}">${diff.ratios.currentRatio>=0?'+':''}${diff.ratios.currentRatio?.toFixed(2)}x</span>`:"—"],
+      ["Debt / Equity",            fmtP(bs1.ratios.debtToEquityRatio)+"x",  fmtP(bs2.ratios.debtToEquityRatio)+"x",  diff.ratios.debtToEquityRatio!==null?`<span class="${diff.ratios.debtToEquityRatio<=0?'positive':'negative'}">${diff.ratios.debtToEquityRatio>=0?'+':''}${diff.ratios.debtToEquityRatio?.toFixed(2)}x</span>`:"—"],
+    ];
+
+    out.innerHTML = `
+      <div class="card">
+        <h2>${bs1.period} → ${bs2.period}</h2>
+        <table class="cmp-table" style="margin-top:12px;">
+          <thead><tr><th style="text-align:left">Metric</th><th>${bs1.period}</th><th>${bs2.period}</th><th>Change</th></tr></thead>
+          <tbody>${rows.map(r=>`<tr ${r[4]?"style='background:#f8fafc;font-weight:bold;'":""}><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody>
+        </table>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>${renderBS(bs1)}</div>
+        <div>${renderBS(bs2)}</div>
+      </div>`;
+    saveBSE();
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, cond) { results.push({ label, pass:!!cond }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass:false, note:"expected error not thrown" }); }
+    catch(e) { results.push({ label, pass:true }); }
+  }
+
+  const bs = buildBalanceSheet(
+    { cash:300000, accountsReceivable:120000, inventory:80000, otherCurrentAssets:20000, equipment:500000, property:1000000, otherFixedAssets:50000 },
+    { accountsPayable:60000, shortTermDebt:50000, otherCurrentLiabilities:20000, loanPrincipalOutstanding:800000, otherLongTermLiabilities:40000 },
+    { ownerEquity:750000, retainedEarnings:350000 },
+    "Test Period"
+  );
+
+  // Assets
+  assert("Assets: totalCurrentAssets = 300+120+80+20 = 520000", bs.assets.totalCurrentAssets === 520000);
+  assert("Assets: totalFixedAssets = 500+1000+50 = 1550000", bs.assets.totalFixedAssets === 1550000);
+  assert("Assets: totalAssets = 520000+1550000 = 2070000", bs.assets.totalAssets === 2070000);
+
+  // Liabilities
+  assert("Liab: totalCurrentLiabilities = 60+50+20 = 130000", bs.liabilities.totalCurrentLiabilities === 130000);
+  assert("Liab: totalLongTermLiabilities = 800+40 = 840000", bs.liabilities.totalLongTermLiabilities === 840000);
+  assert("Liab: totalLiabilities = 130+840 = 970000", bs.liabilities.totalLiabilities === 970000);
+
+  // Equity
+  assert("Equity: totalEquity = 750+350 = 1100000", bs.equity.totalEquity === 1100000);
+
+  // Balance check
+  assert("Balance: totalAssets = liabilities + equity = 2070000", bs.summary.isBalanced === true);
+  assert("Balance: liabilitiesPlusEquity = 970+1100 = 2070000", bs.summary.liabilitiesPlusEquity === 2070000);
+
+  // Ratios
+  assert("Ratio: currentRatio = 520/130 = 4.0", bs.ratios.currentRatio === 4);
+  assert("Ratio: quickRatio = (520-80)/130 = 3.38", bs.ratios.quickRatio === 3.38);
+  assert("Ratio: debtToEquity = 970/1100 ≈ 0.88", Math.abs(bs.ratios.debtToEquityRatio - 0.88) < 0.01);
+  assert("Ratio: workingCapital = 520-130 = 390000", bs.ratios.workingCapital === 390000);
+
+  // Health
+  assert("Health: status = healthy (score ≥ 80)", bs.health.status === "healthy");
+  assert("Health: score > 0", bs.health.score > 0);
+
+  // Unbalanced sheet
+  const ubs = buildBalanceSheet(
+    { cash:100000 },
+    { accountsPayable:50000 },
+    { ownerEquity:20000 } // 100000 ≠ 50000+20000
+  );
+  assert("Balance: detects imbalance", ubs.summary.isBalanced === false);
+  assert("Balance: balanceDifference = 30000", ubs.summary.balanceDifference === 30000);
+
+  // Validation
+  assertThrows("Throws on negative asset value", () => buildBalanceSheet({ cash:-1000 }, {}, {}));
+
+  // Compare
+  const bs2 = buildBalanceSheet(
+    { cash:350000, accountsReceivable:130000, inventory:75000, equipment:500000, property:1000000 },
+    { accountsPayable:55000, shortTermDebt:45000, loanPrincipalOutstanding:750000 },
+    { ownerEquity:750000, retainedEarnings:405000 },
+    "Next Period"
+  );
+  const cmp = compareBalanceSheets(bs, bs2);
+  assert("Compare: cash delta = 350000-300000 = 50000", cmp.assets.cash === 50000);
+  assert("Compare: loan delta = 750000-800000 = -50000 (paid down)", cmp.liabilities.loanPrincipalOutstanding === -50000);
+  assert("Compare: retained earnings delta = 405000-350000 = 55000", cmp.equity.retainedEarnings === 55000);
+
+  const passed = results.filter(r=>r.pass).length;
+  const failed = results.filter(r=>!r.pass).length;
+  document.getElementById("test-output").innerHTML =
+    results.map(r=>`<div class="test-result ${r.pass?'pass':'fail'}">${r.pass?'✓':'✗'} ${r.label}${r.note?' — '+r.note:''}</div>`).join("") +
+    `<div class="test-summary ${failed===0?'all-pass':'has-fail'}">${failed===0?`✅ All ${passed} tests passed`:`❌ ${failed} failed / ${passed} passed`}</div>`;
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────
+var BSE_KEY = 'fw_balance_sheet';
+var BSE_SINGLE_FIELDS = ['s-period','a-cash','a-ar','a-inv','a-oca','a-eq','a-prop','a-ofa','l-ap','l-std','l-ocl','l-loan','l-oltl','e-oe','e-re'];
+var BSE_P1_FIELDS = ['p1-period','p1-cash','p1-ar','p1-inv','p1-eq','p1-prop','p1-ap','p1-std','p1-loan','p1-oe','p1-re'];
+var BSE_P2_FIELDS = ['p2-period','p2-cash','p2-ar','p2-inv','p2-eq','p2-prop','p2-ap','p2-std','p2-loan','p2-oe','p2-re'];
+function saveBSE(){
+  try{
+    var obj = {};
+    BSE_SINGLE_FIELDS.concat(BSE_P1_FIELDS).concat(BSE_P2_FIELDS).forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) obj[id] = el.value;
+    });
+    localStorage.setItem(BSE_KEY, JSON.stringify(obj));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(BSE_KEY)||'null');
+    if(s){
+      BSE_SINGLE_FIELDS.concat(BSE_P1_FIELDS).concat(BSE_P2_FIELDS).forEach(function(id){
+        var el = document.getElementById(id);
+        if(el && s[id]!==undefined && s[id]!=='') el.value = s[id];
+      });
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.loan) { document.getElementById('l-loan').value = p.loan; document.getElementById('p1-loan').value = p.loan; document.getElementById('p2-loan').value = p.loan; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Subscription System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #1e293b; }
+  header { background: linear-gradient(135deg, #0f172a, #4c1d95); color: #fff; padding: 24px 32px; }
+  header h1 { font-size: 1.5rem; }
+  header p  { font-size: 0.85rem; opacity: .75; margin-top: 4px; }
+  .tabs { display: flex; gap: 4px; background: #e2e8f0; padding: 8px; flex-wrap: wrap; }
+  .tab  { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer;
+          background: transparent; font-size: 0.9rem; color: #475569; }
+  .tab.active { background: #fff; color: #0f172a; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .panel { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .panel.active { display: block; }
+  .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 6px rgba(0,0,0,.07); margin-bottom: 16px; }
+  label { display: block; font-size: 0.82rem; color: #64748b; margin-bottom: 4px; margin-top: 10px; }
+  input, select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  button.btn { margin-top: 14px; padding: 9px 22px; background: #4c1d95; color: #fff;
+              border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+  button.btn:hover { background: #5b21b6; }
+
+  /* Pricing table */
+  .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+  .tier-card { border-radius: 12px; border: 2px solid #e2e8f0; padding: 20px; position: relative; }
+  .tier-card.popular { border-color: #7c3aed; }
+  .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+                   background: #7c3aed; color: #fff; font-size: 0.72rem; font-weight: 700;
+                   padding: 3px 12px; border-radius: 20px; }
+  .tier-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+  .tier-price { font-size: 2rem; font-weight: 800; margin: 8px 0; }
+  .tier-price sub { font-size: 0.85rem; font-weight: 500; color: #64748b; }
+  .tier-desc { font-size: 0.8rem; color: #64748b; margin-bottom: 12px; }
+  .tier-limits { background: #f8fafc; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+  .tier-limits li { font-size: 0.78rem; list-style: none; padding: 3px 0; color: #475569; }
+  .tier-limits li::before { content: "→ "; }
+  .feature-list li { font-size: 0.78rem; padding: 3px 0; list-style: none; }
+  .feature-list li.on::before  { content: "✓ "; color: #16a34a; font-weight: 700; }
+  .feature-list li.off::before { content: "✗ "; color: #dc2626; }
+  .feature-list li.off { color: #94a3b8; }
+  .tier-cta { display: block; margin-top: 14px; text-align: center; padding: 10px; background: #7c3aed;
+              color: #fff; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer;
+              border: none; width: 100%; }
+  .tier-cta.free-btn { background: #64748b; }
+
+  /* Feature compare table */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  .compare-table th { background: #f8fafc; text-align: center; padding: 10px 8px; font-size: 0.75rem;
+                      text-transform: uppercase; letter-spacing: .05em; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; text-align: center; }
+  .compare-table td:first-child { text-align: left; font-weight: 500; color: #374151; }
+  .compare-table tr:hover td { background: #fafbff; }
+  .check { color: #16a34a; font-weight: 700; }
+  .cross { color: #d1d5db; }
+  .note-text { font-size: 0.72rem; color: #94a3b8; display: block; }
+
+  /* Feature checker */
+  .access-result { border-radius: 10px; padding: 16px; margin-top: 14px; }
+  .access-allowed { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .access-blocked { background: #fef2f2; border: 1px solid #fecaca; }
+  .access-result h4 { font-size: 1rem; margin-bottom: 6px; }
+  .upgrade-box { background: #faf5ff; border: 1px solid #d8b4fe; border-radius: 10px; padding: 14px; margin-top: 12px; }
+  .upgrade-box .cta { background: #7c3aed; color: #fff; border: none; border-radius: 6px;
+                      padding: 8px 18px; cursor: pointer; font-weight: 600; margin-top: 8px; }
+
+  /* Billing */
+  .billing-card { background: #fff; border-radius: 12px; border: 2px solid #e2e8f0; padding: 20px; }
+  .billing-big { font-size: 2.5rem; font-weight: 800; }
+  .billing-saving { background: #dcfce7; color: #15803d; border-radius: 6px; padding: 6px 12px;
+                    font-size: 0.85rem; font-weight: 600; display: inline-block; margin-top: 8px; }
+
+  /* Recommender */
+  .feature-checkboxes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .feature-checkboxes label { display: flex; align-items: center; gap: 8px; font-size: 0.85rem;
+                               color: #374151; margin: 0; background: #f8fafc; border-radius: 6px; padding: 8px; }
+  .recommend-result { background: #faf5ff; border: 2px solid #7c3aed; border-radius: 12px; padding: 20px; margin-top: 16px; }
+
+  #unitResults .pass { color: #16a34a; }
+  #unitResults .fail { color: #dc2626; }
+  #unitResults li { padding: 4px 0; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; }
+  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 10px;
+         font-weight: 600; background: #e0e7ff; color: #3730a3; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Subscription System</h1>
+  <p>Free · Basic · Pro · Enterprise — Feature gates, billing, and tier recommendations</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('pricing')">💳 Pricing</button>
+  <button class="tab" onclick="showTab('compare')">📊 Feature Comparison</button>
+  <button class="tab" onclick="showTab('checker')">🔑 Feature Checker</button>
+  <button class="tab" onclick="showTab('billing')">🧾 Billing Calculator</button>
+  <button class="tab" onclick="showTab('recommend')">💡 Tier Recommender</button>
+  <button class="tab" onclick="showTab('tests')">✅ Unit Tests</button>
+</div>
+
+<!-- ═══════ TAB 1: PRICING ═══════ -->
+<div id="tab-pricing" class="panel active">
+  <div class="card">
+    <h3 style="margin-bottom:4px">Choose Your Plan</h3>
+    <p style="font-size:0.85rem;color:#64748b">All prices in Indian Rupees ($). Annual plan saves ~17%.</p>
+    <div style="margin-top:10px">
+      <button class="btn" style="margin:0 8px 0 0" onclick="renderPricing('monthly')">Monthly</button>
+      <button class="btn" style="background:#16a34a" onclick="renderPricing('annual')">Annual (Save 2 months)</button>
+    </div>
+  </div>
+  <div id="pricing-grid"></div>
+</div>
+
+<!-- ═══════ TAB 2: FEATURE COMPARISON ═══════ -->
+<div id="tab-compare" class="panel">
+  <div class="card" style="overflow-x:auto">
+    <h3 style="margin-bottom:14px">Feature Comparison Table</h3>
+    <div id="compare-table-container"></div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 3: FEATURE CHECKER ═══════ -->
+<div id="tab-checker" class="panel">
+  <div class="card">
+    <h3>Check Feature Access</h3>
+    <div class="row2">
+      <div>
+        <label>Your Subscription Tier</label>
+        <select id="fc-tier">
+          <option value="free">Free</option>
+          <option value="basic">Basic</option>
+          <option value="pro" selected>Pro</option>
+          <option value="enterprise">Enterprise</option>
+        </select>
+      </div>
+      <div>
+        <label>Feature / Module</label>
+        <select id="fc-feature">
+          <option value="cashFlowEngine">Cash Flow Engine</option>
+          <option value="loanEngine">Loan Engine</option>
+          <option value="loanAffordabilityEngine">Loan Affordability</option>
+          <option value="riskDebtEngine">Risk &amp; Debt Engine</option>
+          <option value="stressTestEngine">Stress Test Engine</option>
+          <option value="multiLoanManager">Multi-Loan Manager</option>
+          <option value="recommendationEngine">Recommendation Engine</option>
+          <option value="profitLossEngine">P&amp;L Engine</option>
+          <option value="balanceSheetEngine">Balance Sheet</option>
+          <option value="cashFlowStatementEngine">Cash Flow Statement</option>
+          <option value="accountingMappingEngine">Accounting Mapping</option>
+          <option value="forecastingEngine">Forecasting Engine</option>
+          <option value="loanMarketplace">Loan Marketplace</option>
+          <option value="paidReports">Paid Reports</option>
+          <option value="exportCSV">Export CSV</option>
+          <option value="exportPDF">Export PDF</option>
+          <option value="apiAccess">API Access</option>
+          <option value="whiteLabel">White Label</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doCheckAccess()">Check Access</button>
+    <div id="access-result-box"></div>
+  </div>
+
+  <div class="card">
+    <h3>Check Multiple Features at Once</h3>
+    <div class="row2">
+      <div>
+        <label>Tier</label>
+        <select id="mf-tier">
+          <option value="free">Free</option>
+          <option value="basic" selected>Basic</option>
+          <option value="pro">Pro</option>
+          <option value="enterprise">Enterprise</option>
+        </select>
+      </div>
+    </div>
+    <div class="feature-checkboxes" id="multi-feature-checks"></div>
+    <button class="btn" onclick="doMultiCheck()">Check All Selected</button>
+    <div id="multi-result" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 4: BILLING CALCULATOR ═══════ -->
+<div id="tab-billing" class="panel">
+  <div class="card">
+    <h3>Billing Calculator</h3>
+    <div class="row2">
+      <div>
+        <label>Subscription Tier</label>
+        <select id="bill-tier">
+          <option value="free">Free</option>
+          <option value="basic">Basic — $499/mo</option>
+          <option value="pro" selected>Pro — $1499/mo</option>
+          <option value="enterprise">Enterprise — $4999/mo</option>
+        </select>
+      </div>
+      <div>
+        <label>Billing Cycle</label>
+        <select id="bill-cycle">
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doBilling()">Calculate</button>
+  </div>
+  <div id="billing-result"></div>
+</div>
+
+<!-- ═══════ TAB 5: TIER RECOMMENDER ═══════ -->
+<div id="tab-recommend" class="panel">
+  <div class="card">
+    <h3>Tier Recommender</h3>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:12px">Select the features you need — we'll find the most cost-effective plan.</p>
+    <div class="feature-checkboxes">
+      <label><input type="checkbox" name="rf" value="cashFlowEngine" checked> Cash Flow Engine</label>
+      <label><input type="checkbox" name="rf" value="loanEngine" checked> Loan Engine</label>
+      <label><input type="checkbox" name="rf" value="loanAffordabilityEngine"> Loan Affordability</label>
+      <label><input type="checkbox" name="rf" value="riskDebtEngine"> Risk &amp; Debt Engine</label>
+      <label><input type="checkbox" name="rf" value="stressTestEngine"> Stress Test Engine</label>
+      <label><input type="checkbox" name="rf" value="multiLoanManager"> Multi-Loan Manager</label>
+      <label><input type="checkbox" name="rf" value="recommendationEngine"> Recommendation Engine</label>
+      <label><input type="checkbox" name="rf" value="profitLossEngine"> P&amp;L Engine</label>
+      <label><input type="checkbox" name="rf" value="balanceSheetEngine"> Balance Sheet</label>
+      <label><input type="checkbox" name="rf" value="cashFlowStatementEngine"> Cash Flow Statement</label>
+      <label><input type="checkbox" name="rf" value="accountingMappingEngine"> Accounting Mapping</label>
+      <label><input type="checkbox" name="rf" value="forecastingEngine"> Forecasting Engine</label>
+      <label><input type="checkbox" name="rf" value="paidReports"> Paid Reports</label>
+      <label><input type="checkbox" name="rf" value="exportCSV"> Export CSV</label>
+      <label><input type="checkbox" name="rf" value="exportPDF"> Export PDF</label>
+      <label><input type="checkbox" name="rf" value="apiAccess"> API Access</label>
+    </div>
+    <button class="btn" onclick="doRecommend()">Find Best Plan</button>
+    <div id="recommend-result"></div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 6: UNIT TESTS ═══════ -->
+<div id="tab-tests" class="panel">
+  <div class="card">
+    <h3>Automated Unit Tests</h3>
+    <button class="btn" onclick="runTests()">Run All Tests</button>
+    <ul id="unitResults" style="margin-top:16px; list-style:none;"></ul>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// SUBSCRIPTION ENGINE
+// ═══════════════════════════════════════════════════════════════════════════
+function _r(n) { return Math.round(n * 100) / 100; }
+
+const TIERS = {
+  free: {
+    id:"free", name:"Free", price:{monthly:0,annual:0},
+    description:"Basic EMI and cash flow tools — no sign-up required",
+    color:"#64748b", popular:false,
+    limits:{calculationsPerMonth:10,forecastMonths:6,savedReports:0,lenderComparisons:3},
+    features:{
+      cashFlowEngine:          {enabled:true,  note:"Single period only"},
+      loanEngine:              {enabled:true,  note:"EMI & amortization"},
+      loanAffordabilityEngine: {enabled:true,  note:"Basic check only"},
+      riskDebtEngine:          {enabled:false, note:"Requires Basic+"},
+      stressTestEngine:        {enabled:false, note:"Requires Basic+"},
+      multiLoanManager:        {enabled:false, note:"Requires Basic+"},
+      recommendationEngine:    {enabled:false, note:"Requires Basic+"},
+      profitLossEngine:        {enabled:false, note:"Requires Basic+"},
+      balanceSheetEngine:      {enabled:false, note:"Requires Basic+"},
+      cashFlowStatementEngine: {enabled:false, note:"Requires Pro+"},
+      accountingMappingEngine: {enabled:false, note:"Requires Pro+"},
+      forecastingEngine:       {enabled:false, note:"Requires Basic+"},
+      loanMarketplace:         {enabled:true,  note:"View only"},
+      paidReports:             {enabled:false, note:"Requires Pro+"},
+      exportCSV:               {enabled:false, note:"Requires Basic+"},
+      exportPDF:               {enabled:false, note:"Requires Pro+"},
+      apiAccess:               {enabled:false, note:"Requires Enterprise"},
+      whiteLabel:              {enabled:false, note:"Requires Enterprise"},
+    },
+  },
+  basic: {
+    id:"basic", name:"Basic", price:{monthly:499,annual:4990},
+    description:"All 7 core engines + basic financial statements",
+    color:"#2563eb", popular:false,
+    limits:{calculationsPerMonth:100,forecastMonths:12,savedReports:5,lenderComparisons:10},
+    features:{
+      cashFlowEngine:          {enabled:true},
+      loanEngine:              {enabled:true},
+      loanAffordabilityEngine: {enabled:true},
+      riskDebtEngine:          {enabled:true},
+      stressTestEngine:        {enabled:true},
+      multiLoanManager:        {enabled:true,  note:"Up to 5 loans"},
+      recommendationEngine:    {enabled:true},
+      profitLossEngine:        {enabled:true,  note:"Single period"},
+      balanceSheetEngine:      {enabled:true,  note:"Single period"},
+      cashFlowStatementEngine: {enabled:false, note:"Requires Pro+"},
+      accountingMappingEngine: {enabled:false, note:"Requires Pro+"},
+      forecastingEngine:       {enabled:true,  note:"Up to 12 months"},
+      loanMarketplace:         {enabled:true},
+      paidReports:             {enabled:false, note:"Requires Pro+"},
+      exportCSV:               {enabled:true},
+      exportPDF:               {enabled:false, note:"Requires Pro+"},
+      apiAccess:               {enabled:false, note:"Requires Enterprise"},
+      whiteLabel:              {enabled:false, note:"Requires Enterprise"},
+    },
+  },
+  pro: {
+    id:"pro", name:"Pro", price:{monthly:1499,annual:14990},
+    description:"Complete platform — all 12 modules + PDF reports",
+    color:"#7c3aed", popular:true,
+    limits:{calculationsPerMonth:-1,forecastMonths:36,savedReports:25,lenderComparisons:-1},
+    features:{
+      cashFlowEngine:          {enabled:true},
+      loanEngine:              {enabled:true},
+      loanAffordabilityEngine: {enabled:true},
+      riskDebtEngine:          {enabled:true},
+      stressTestEngine:        {enabled:true},
+      multiLoanManager:        {enabled:true},
+      recommendationEngine:    {enabled:true},
+      profitLossEngine:        {enabled:true},
+      balanceSheetEngine:      {enabled:true},
+      cashFlowStatementEngine: {enabled:true},
+      accountingMappingEngine: {enabled:true},
+      forecastingEngine:       {enabled:true, note:"Up to 36 months"},
+      loanMarketplace:         {enabled:true},
+      paidReports:             {enabled:true, note:"3 reports/month"},
+      exportCSV:               {enabled:true},
+      exportPDF:               {enabled:true},
+      apiAccess:               {enabled:false, note:"Requires Enterprise"},
+      whiteLabel:              {enabled:false, note:"Requires Enterprise"},
+    },
+  },
+  enterprise: {
+    id:"enterprise", name:"Enterprise", price:{monthly:4999,annual:49990},
+    description:"Unlimited access + API + white-label for teams",
+    color:"#0f172a", popular:false,
+    limits:{calculationsPerMonth:-1,forecastMonths:120,savedReports:-1,lenderComparisons:-1},
+    features:{
+      cashFlowEngine:          {enabled:true},
+      loanEngine:              {enabled:true},
+      loanAffordabilityEngine: {enabled:true},
+      riskDebtEngine:          {enabled:true},
+      stressTestEngine:        {enabled:true},
+      multiLoanManager:        {enabled:true},
+      recommendationEngine:    {enabled:true},
+      profitLossEngine:        {enabled:true},
+      balanceSheetEngine:      {enabled:true},
+      cashFlowStatementEngine: {enabled:true},
+      accountingMappingEngine: {enabled:true},
+      forecastingEngine:       {enabled:true},
+      loanMarketplace:         {enabled:true},
+      paidReports:             {enabled:true, note:"Unlimited"},
+      exportCSV:               {enabled:true},
+      exportPDF:               {enabled:true},
+      apiAccess:               {enabled:true},
+      whiteLabel:              {enabled:true},
+    },
+  },
+};
+
+const TIER_ORDER = ["free","basic","pro","enterprise"];
+
+function getAllTiers() { return {...TIERS}; }
+function getTier(id) {
+  if (!TIERS[id]) throw new Error(`Unknown tier: "${id}". Valid: ${TIER_ORDER.join(", ")}`);
+  return TIERS[id];
+}
+
+function checkFeatureAccess(tierId, featureKey) {
+  const tier = getTier(tierId);
+  const f = tier.features[featureKey];
+  if (!f) throw new Error(`Unknown feature: "${featureKey}".`);
+  if (f.enabled) return {allowed:true, note:f.note||null, requiredTier:null};
+  const requiredTier = TIER_ORDER.find(t => TIERS[t].features[featureKey]?.enabled) || null;
+  return {allowed:false, note:f.note||`Requires ${requiredTier||"higher"} tier.`, requiredTier};
+}
+
+function checkMultipleFeatures(tierId, featureKeys) {
+  const results = {};
+  for (const key of featureKeys) results[key] = checkFeatureAccess(tierId, key);
+  return results;
+}
+
+function checkUsageLimit(tierId, limitKey, currentUsage=0) {
+  const tier  = getTier(tierId);
+  const limit = tier.limits[limitKey];
+  if (limit === undefined) throw new Error(`Unknown limit key: "${limitKey}"`);
+  if (limit === -1) return {allowed:true, current:currentUsage, limit:"unlimited", remaining:"unlimited"};
+  const remaining = Math.max(0, limit - currentUsage);
+  return {allowed:currentUsage < limit, current:currentUsage, limit, remaining};
+}
+
+function getUpgradePrompt(currentTierId, requiredTierId, featureKey) {
+  const current  = getTier(currentTierId);
+  const required = getTier(requiredTierId);
+  const annualSavings = _r(required.price.annual * (10 / 12));
+  return {
+    currentTier:  currentTierId, requiredTier: requiredTierId, featureKey,
+    message:      `"${featureKey}" requires the ${required.name} plan.`,
+    upgradeAction:`Upgrade from ${current.name} → ${required.name}`,
+    monthlyCost:  required.price.monthly,
+    annualCost:   required.price.annual,
+    annualSaving: annualSavings,
+    cta:          `Upgrade to ${required.name} — $${required.price.monthly}/month`,
+  };
+}
+
+function calculateBilling(tierId, cycle="monthly") {
+  const tier = getTier(tierId);
+  if (cycle === "annual") {
+    const annualTotal  = tier.price.annual;
+    const monthlyEqv   = _r(annualTotal / 12);
+    const monthlySaved = _r(tier.price.monthly - monthlyEqv);
+    const pctSaved     = tier.price.monthly > 0 ? _r((monthlySaved / tier.price.monthly) * 100) : 0;
+    return {tierId, cycle, amount:annualTotal, perMonth:monthlyEqv,
+            savingVsMonthly:_r(monthlySaved * 12), savingPct:pctSaved};
+  }
+  return {tierId, cycle:"monthly", amount:tier.price.monthly, perMonth:tier.price.monthly, savingVsMonthly:0, savingPct:0};
+}
+
+function getFeatureComparison() {
+  const keys = Object.keys(TIERS.free.features);
+  return keys.map(key => {
+    const row = {feature:key};
+    for (const tid of TIER_ORDER) {
+      const f = TIERS[tid].features[key];
+      row[tid] = {enabled:f.enabled, note:f.note||null};
+    }
+    return row;
+  });
+}
+
+function recommendTier(requiredFeatures) {
+  const reasoning = [];
+  for (const tierId of TIER_ORDER) {
+    const tier    = TIERS[tierId];
+    const blocked = requiredFeatures.filter(f => !tier.features[f]?.enabled);
+    if (blocked.length === 0) {
+      reasoning.push(`${tier.name} enables all ${requiredFeatures.length} requested features.`);
+      return {recommendedTier:tierId, tier, reasoning};
+    }
+    reasoning.push(`${tier.name}: missing ${blocked.join(", ")}`);
+  }
+  return {recommendedTier:"enterprise", tier:TIERS.enterprise, reasoning};
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UI Logic
+// ═══════════════════════════════════════════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function fmt(n) { return (n||0).toLocaleString('en-US'); }
+
+const FEATURE_LABELS = {
+  cashFlowEngine:"Cash Flow Engine", loanEngine:"Loan Engine",
+  loanAffordabilityEngine:"Loan Affordability", riskDebtEngine:"Risk & Debt",
+  stressTestEngine:"Stress Test", multiLoanManager:"Multi-Loan Manager",
+  recommendationEngine:"Recommendations", profitLossEngine:"P&L Engine",
+  balanceSheetEngine:"Balance Sheet", cashFlowStatementEngine:"Cash Flow Statement",
+  accountingMappingEngine:"Accounting Mapping", forecastingEngine:"Forecasting",
+  loanMarketplace:"Loan Marketplace", paidReports:"Paid Reports",
+  exportCSV:"Export CSV", exportPDF:"Export PDF",
+  apiAccess:"API Access", whiteLabel:"White Label",
+};
+
+function renderPricing(cycle = 'monthly') {
+  const tiers = TIER_ORDER.map(id => {
+    const t = getTier(id);
+    const billing = calculateBilling(id, cycle);
+    return {...t, billing};
+  });
+
+  const html = `<div class="pricing-grid">` +
+    tiers.map(t => {
+      const price = t.billing.perMonth;
+      const enabled = Object.entries(t.features).filter(([,v]) => v.enabled);
+      return `<div class="tier-card${t.popular?' popular':''}">
+        ${t.popular ? '<div class="popular-badge">MOST POPULAR</div>' : ''}
+        <div class="tier-name" style="color:${t.color}">${t.name}</div>
+        <div class="tier-price" style="color:${t.color}">
+          ${price === 0 ? 'FREE' : '$' + fmt(price)}
+          ${price > 0 ? '<sub>/month</sub>' : ''}
+        </div>
+        ${cycle === 'annual' && t.billing.savingVsMonthly > 0 ?
+          `<div style="font-size:0.78rem;color:#16a34a;margin-bottom:4px">Save $${fmt(t.billing.savingVsMonthly)}/year (${t.billing.savingPct}%)</div>` : ''}
+        <div class="tier-desc">${t.description}</div>
+        <div class="tier-limits">
+          <ul>
+            <li>Calc/month: ${t.limits.calculationsPerMonth === -1 ? 'Unlimited' : t.limits.calculationsPerMonth}</li>
+            <li>Forecast: ${t.limits.forecastMonths} months</li>
+            <li>Saved reports: ${t.limits.savedReports === -1 ? 'Unlimited' : t.limits.savedReports}</li>
+            <li>Lender comparisons: ${t.limits.lenderComparisons === -1 ? 'Unlimited' : t.limits.lenderComparisons}</li>
+          </ul>
+        </div>
+        <ul class="feature-list">
+          ${Object.entries(t.features).map(([k,v]) =>
+            `<li class="${v.enabled?'on':'off'}">${FEATURE_LABELS[k]||k}${v.note?` <span class="note-text">${v.note}</span>`:''}</li>`
+          ).join('')}
+        </ul>
+        <button class="tier-cta ${t.id==='free'?'free-btn':''}" style="${t.id!=='free'?'background:'+t.color:''}">
+          ${t.id==='free'?'Start Free':t.id==='enterprise'?'Contact Sales':'Upgrade to '+t.name}
+        </button>
+      </div>`;
+    }).join('') + `</div>`;
+
+  document.getElementById('pricing-grid').innerHTML = html;
+}
+
+function renderCompareTable() {
+  const rows = getFeatureComparison();
+  let html = `<table class="compare-table"><thead><tr>
+    <th>Feature</th>
+    ${TIER_ORDER.map(t => `<th style="color:${TIERS[t].color}">${TIERS[t].name}</th>`).join('')}
+  </tr></thead><tbody>` +
+    rows.map(row => `<tr>
+      <td>${FEATURE_LABELS[row.feature]||row.feature}</td>
+      ${TIER_ORDER.map(t => {
+        const f = row[t];
+        return f.enabled
+          ? `<td class="check">✓${f.note?`<span class="note-text">${f.note}</span>`:''}</td>`
+          : `<td class="cross">—</td>`;
+      }).join('')}
+    </tr>`).join('') +
+  `</tbody></table>`;
+  document.getElementById('compare-table-container').innerHTML = html;
+}
+
+function buildMultiFeatureCheckboxes() {
+  const keys = Object.keys(TIERS.free.features);
+  const defaultOn = ['cashFlowEngine','loanEngine','riskDebtEngine','forecastingEngine'];
+  document.getElementById('multi-feature-checks').innerHTML = keys.map(k =>
+    `<label><input type="checkbox" name="mf" value="${k}" ${defaultOn.includes(k)?'checked':''}>
+      ${FEATURE_LABELS[k]||k}</label>`
+  ).join('');
+}
+
+function doCheckAccess() {
+  const tierId     = document.getElementById('fc-tier').value;
+  const featureKey = document.getElementById('fc-feature').value;
+  const access = checkFeatureAccess(tierId, featureKey);
+  const tier   = getTier(tierId);
+
+  let html = `<div class="access-result ${access.allowed?'access-allowed':'access-blocked'}">
+    <h4 style="color:${access.allowed?'#16a34a':'#dc2626'}">
+      ${access.allowed ? '✓ Access Granted' : '✗ Access Blocked'}
+    </h4>
+    <p style="font-size:0.85rem">
+      <b>${FEATURE_LABELS[featureKey]||featureKey}</b> on <b>${tier.name}</b> plan:
+      ${access.note || (access.allowed ? 'Fully enabled' : 'Not available')}
+    </p>`;
+
+  if (!access.allowed && access.requiredTier) {
+    const prompt = getUpgradePrompt(tierId, access.requiredTier, featureKey);
+    html += `<div class="upgrade-box">
+      <b>${prompt.upgradeAction}</b>
+      <p style="font-size:0.82rem;margin:6px 0;color:#6d28d9">${prompt.message}</p>
+      <p style="font-size:0.82rem;color:#374151">Monthly: $${fmt(prompt.monthlyCost)} &nbsp;|&nbsp; Annual: $${fmt(prompt.annualCost)}</p>
+      <button class="cta">${prompt.cta}</button>
+    </div>`;
+  }
+
+  html += `</div>`;
+  document.getElementById('access-result-box').innerHTML = html;
+}
+
+function doMultiCheck() {
+  const tierId = document.getElementById('mf-tier').value;
+  const selected = [...document.querySelectorAll('input[name="mf"]:checked')].map(cb => cb.value);
+  if (selected.length === 0) {
+    document.getElementById('multi-result').innerHTML = '<p style="color:#dc2626">Select at least one feature.</p>';
+    return;
+  }
+  const results = checkMultipleFeatures(tierId, selected);
+  const allowed  = selected.filter(k => results[k].allowed);
+  const blocked  = selected.filter(k => !results[k].allowed);
+
+  document.getElementById('multi-result').innerHTML = `
+    <div style="font-size:0.85rem">
+      <p style="margin-bottom:8px"><b>${allowed.length}/${selected.length}</b> features accessible on <b>${TIERS[tierId].name}</b> plan.</p>
+      ${allowed.length ? `<div style="margin-bottom:8px"><b style="color:#16a34a">Accessible:</b><br>
+        ${allowed.map(k => `<span style="color:#16a34a">✓ ${FEATURE_LABELS[k]||k}</span>`).join('&nbsp; &nbsp; ')}</div>` : ''}
+      ${blocked.length ? `<div><b style="color:#dc2626">Blocked:</b><br>
+        ${blocked.map(k => `<span style="color:#dc2626">✗ ${FEATURE_LABELS[k]||k} (${results[k].note})</span>`).join('<br>')}</div>` : ''}
+    </div>`;
+}
+
+function doBilling() {
+  const tierId = document.getElementById('bill-tier').value;
+  const cycle  = document.getElementById('bill-cycle').value;
+  const bill   = calculateBilling(tierId, cycle);
+  const tier   = getTier(tierId);
+
+  document.getElementById('billing-result').innerHTML = `
+    <div class="billing-card" style="border-color:${tier.color}">
+      <div style="color:${tier.color};font-weight:700;font-size:1rem;margin-bottom:8px">${tier.name} — ${cycle === 'annual' ? 'Annual' : 'Monthly'}</div>
+      <div class="billing-big" style="color:${tier.color}">$${fmt(bill.amount)}</div>
+      <div style="font-size:0.85rem;color:#64748b;margin:4px 0">
+        ${cycle === 'annual' ? `$${fmt(bill.perMonth)}/month effective` : 'per month'}
+      </div>
+      ${bill.savingVsMonthly > 0 ? `<div class="billing-saving">Save $${fmt(bill.savingVsMonthly)}/year (${bill.savingPct}% off)</div>` : ''}
+      ${bill.amount === 0 ? '<div class="billing-saving" style="background:#e0f2fe;color:#0369a1">Always Free — No credit card required</div>' : ''}
+    </div>`;
+}
+
+function doRecommend() {
+  const selected = [...document.querySelectorAll('input[name="rf"]:checked')].map(cb => cb.value);
+  if (selected.length === 0) {
+    document.getElementById('recommend-result').innerHTML = '<p style="color:#dc2626">Select at least one feature.</p>';
+    return;
+  }
+  const rec = recommendTier(selected);
+  const tier = rec.tier;
+
+  document.getElementById('recommend-result').innerHTML = `
+    <div class="recommend-result">
+      <div style="font-size:0.85rem;color:#6d28d9;font-weight:700;margin-bottom:4px">Recommended Plan</div>
+      <div style="font-size:1.6rem;font-weight:800;color:${tier.color};margin-bottom:6px">${tier.name}</div>
+      <div style="font-size:0.85rem;color:#374151;margin-bottom:10px">${tier.description}</div>
+      <div style="font-size:1.3rem;font-weight:700;color:${tier.color};margin-bottom:12px">
+        ${tier.price.monthly === 0 ? 'FREE' : '$' + fmt(tier.price.monthly) + '/month'}
+      </div>
+      <div style="font-size:0.82rem;color:#64748b;border-top:1px solid #e2e8f0;padding-top:10px">
+        <b>Reasoning:</b><br>
+        ${rec.reasoning.map(r => `<div>→ ${r}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Unit Tests
+// ═══════════════════════════════════════════════════════════════════════════
+function runTests() {
+  const results = [];
+  function test(name, fn) {
+    try { fn(); results.push({name, ok:true}); }
+    catch(e) { results.push({name, ok:false, err:e.message}); }
+  }
+  function assert(cond, msg) { if (!cond) throw new Error(msg || "Assertion failed"); }
+
+  test("getAllTiers returns 4 tiers", () => {
+    const t = getAllTiers();
+    assert(Object.keys(t).length === 4);
+    assert(['free','basic','pro','enterprise'].every(id => id in t));
+  });
+  test("getTier throws on unknown tier", () => {
+    let threw = false;
+    try { getTier("platinum"); } catch { threw = true; }
+    assert(threw);
+  });
+  test("free tier — cashFlowEngine allowed", () => {
+    const r = checkFeatureAccess("free", "cashFlowEngine");
+    assert(r.allowed === true);
+  });
+  test("free tier — riskDebtEngine blocked, requiredTier=basic", () => {
+    const r = checkFeatureAccess("free", "riskDebtEngine");
+    assert(r.allowed === false);
+    assert(r.requiredTier === "basic");
+  });
+  test("free tier — paidReports blocked, requiredTier=pro", () => {
+    const r = checkFeatureAccess("free", "paidReports");
+    assert(r.allowed === false);
+    assert(r.requiredTier === "pro");
+  });
+  test("pro tier — all core+statement features enabled", () => {
+    const features = ["cashFlowEngine","loanEngine","riskDebtEngine","stressTestEngine",
+                      "profitLossEngine","balanceSheetEngine","cashFlowStatementEngine","paidReports"];
+    features.forEach(f => {
+      const r = checkFeatureAccess("pro", f);
+      assert(r.allowed === true, `${f} should be enabled on pro`);
+    });
+  });
+  test("enterprise tier — apiAccess and whiteLabel enabled", () => {
+    assert(checkFeatureAccess("enterprise", "apiAccess").allowed === true);
+    assert(checkFeatureAccess("enterprise", "whiteLabel").allowed === true);
+  });
+  test("checkMultipleFeatures — returns results for each key", () => {
+    const r = checkMultipleFeatures("basic", ["cashFlowEngine","paidReports","exportCSV"]);
+    assert(r.cashFlowEngine.allowed === true);
+    assert(r.paidReports.allowed === false);
+    assert(r.exportCSV.allowed === true);
+  });
+  test("checkUsageLimit — free calc limit 10", () => {
+    const r = checkUsageLimit("free", "calculationsPerMonth", 5);
+    assert(r.allowed === true);
+    assert(r.remaining === 5);
+    assert(r.limit === 10);
+  });
+  test("checkUsageLimit — free at limit 10/10 → blocked", () => {
+    const r = checkUsageLimit("free", "calculationsPerMonth", 10);
+    assert(r.allowed === false);
+    assert(r.remaining === 0);
+  });
+  test("checkUsageLimit — pro unlimited returns 'unlimited'", () => {
+    const r = checkUsageLimit("pro", "calculationsPerMonth", 9999);
+    assert(r.allowed === true);
+    assert(r.limit === "unlimited");
+  });
+  test("calculateBilling — monthly Pro = 1499", () => {
+    const b = calculateBilling("pro", "monthly");
+    assert(b.amount === 1499);
+    assert(b.savingVsMonthly === 0);
+  });
+  test("calculateBilling — annual Pro saves > 0", () => {
+    const b = calculateBilling("pro", "annual");
+    assert(b.amount === 14990);
+    assert(b.savingVsMonthly > 0);
+    assert(b.savingPct > 0 && b.savingPct < 50);
+  });
+  test("getFeatureComparison — returns rows for all features", () => {
+    const rows = getFeatureComparison();
+    assert(rows.length === Object.keys(TIERS.free.features).length);
+    assert(rows[0].hasOwnProperty('free'));
+    assert(rows[0].hasOwnProperty('enterprise'));
+  });
+  test("recommendTier — free features → free plan", () => {
+    const r = recommendTier(["cashFlowEngine","loanEngine"]);
+    assert(r.recommendedTier === "free");
+  });
+  test("recommendTier — riskDebt + exportCSV → basic", () => {
+    const r = recommendTier(["riskDebtEngine","exportCSV"]);
+    assert(r.recommendedTier === "basic");
+  });
+  test("recommendTier — paidReports → pro", () => {
+    const r = recommendTier(["paidReports"]);
+    assert(r.recommendedTier === "pro");
+  });
+  test("recommendTier — apiAccess → enterprise", () => {
+    const r = recommendTier(["apiAccess"]);
+    assert(r.recommendedTier === "enterprise");
+  });
+  test("getUpgradePrompt — monthlyCost matches required tier price", () => {
+    const p = getUpgradePrompt("free","pro","paidReports");
+    assert(p.monthlyCost === 1499);
+    assert(p.cta.includes("Pro"));
+  });
+  test("TIER_ORDER has 4 elements in correct sequence", () => {
+    assert(TIER_ORDER.join(",") === "free,basic,pro,enterprise");
+  });
+
+  const ul = document.getElementById('unitResults');
+  const pass = results.filter(r => r.ok).length;
+  ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+window.onload = () => {
+  renderPricing('monthly');
+  renderCompareTable();
+  buildMultiFeatureCheckboxes();
+};
+</script>
+</body>
+</html>

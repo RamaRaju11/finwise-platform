@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loan Affordability Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1  { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card  { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 14px; color: #444; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number], input[type=range] { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
+    input[type=range] { padding: 4px 0; cursor: pointer; }
+    input:focus { outline: none; border-color: #2563eb; }
+
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+    button.primary {
+      margin-top: 16px; padding: 10px 24px; background: #2563eb; color: #fff;
+      border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer;
+    }
+    button.primary:hover { background: #1d4ed8; }
+
+    /* Summary cards */
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .summary-item { background: #f8fafc; border-radius: 6px; padding: 12px 14px; border: 1px solid #e2e8f0; }
+    .summary-item .s-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; }
+    .summary-item .s-val   { font-size: 1.1rem; font-weight: bold; margin-top: 4px; color: #1e293b; }
+    .summary-item.blue  .s-val { color: #2563eb; font-size: 1.3rem; }
+    .summary-item.green .s-val { color: #16a34a; }
+    .summary-item.red   .s-val { color: #dc2626; }
+    .summary-item.amber .s-val { color: #d97706; }
+
+    /* Verdict banner */
+    .verdict { border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+    .verdict.affordable      { background: #dcfce7; border: 1px solid #86efac; }
+    .verdict.tight           { background: #fef9c3; border: 1px solid #fde68a; }
+    .verdict.fully-committed { background: #fee2e2; border: 1px solid #fca5a5; }
+    .verdict.no-cash-flow    { background: #fee2e2; border: 1px solid #fca5a5; }
+    .verdict .v-title  { font-weight: bold; font-size: 1rem; margin-bottom: 6px; }
+    .verdict .v-body   { font-size: 0.88rem; color: #444; }
+    .verdict .v-rec    { margin-top: 8px; font-size: 0.85rem; font-style: italic; color: #555; }
+
+    /* Ratio slider */
+    .slider-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+    .slider-row span { min-width: 40px; font-weight: bold; color: #2563eb; }
+
+    /* Unit tests */
+    .test-result { font-family: monospace; font-size: 0.88rem; padding: 4px 0; }
+    .test-result.pass { color: #15803d; }
+    .test-result.fail { color: #dc2626; font-weight: bold; }
+    .test-summary { margin-top: 12px; font-weight: bold; font-size: 0.95rem; padding: 10px; border-radius: 6px; }
+    .test-summary.all-pass { background: #dcfce7; color: #15803d; }
+    .test-summary.has-fail  { background: #fee2e2; color: #dc2626; }
+
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
+    .section-title { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; letter-spacing: 0.05em; }
+    button.print-btn { margin-top:10px; margin-left:10px; padding:10px 20px; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; border-radius:6px; font-size:0.88rem; cursor:pointer; }
+    button.print-btn:hover { background:#e2e8f0; }
+    @media print {
+      .tabs, button { display:none !important; }
+      body { background:#fff; padding:8px; }
+      .panel { display:block !important; }
+      #panel-tests { display:none !important; }
+    }
+
+    /* Plain-English Explain Blocks */
+    .explain-block{margin-top:7px}
+    .explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+    .explain-toggle:hover{text-decoration:underline}
+    .explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+    .explain-body.open{display:block}
+    .explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+    .explain-body ul{padding-left:18px;margin-bottom:6px}
+    .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+    .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+  </style>
+</head>
+<body>
+
+<h1>Loan Affordability Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Safe EMI · Max Loan · Affordability Check</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('safe')">Safe EMI</button>
+  <button class="tab" onclick="showTab('maxloan')">Max Loan Amount</button>
+  <button class="tab" onclick="showTab('assess')">Full Assessment</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Safe EMI Panel ──────────────────────────────────────────────────── -->
+<div id="panel-safe" class="panel active">
+  <div class="card">
+    <h2>Calculate Safe EMI</h2>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:4px;">
+      Answers: <em>"How much EMI can my business safely pay each month?"</em>
+    </p>
+    <div class="input-grid">
+      <div>
+        <label>Monthly Net Cash Flow ($) <span class="hint">from Cash Flow Engine</span></label>
+        <input type="number" id="se-cashflow" value="50000" />
+      </div>
+      <div>
+        <label>Existing Monthly EMIs ($) <span class="hint">all current loan payments</span></label>
+        <input type="number" id="se-existing" value="5000" min="0" />
+      </div>
+    </div>
+    <label>Safe Ratio — % of cash flow allowed for all EMIs</label>
+    <div class="slider-row">
+      <input type="range" id="se-ratio" min="10" max="70" value="40" step="5" oninput="document.getElementById('se-ratio-val').textContent=this.value+'%'" />
+      <span id="se-ratio-val">40%</span>
+    </div>
+    <button class="primary" onclick="calcSafeEMI()">Calculate</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+  <div id="safe-result"></div>
+</div>
+
+<!-- ─── Max Loan Panel ──────────────────────────────────────────────────── -->
+<div id="panel-maxloan" class="panel">
+  <div class="card">
+    <h2>Calculate Maximum Loan Amount</h2>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:4px;">
+      Answers: <em>"Given my safe EMI, what is the biggest loan I can take?"</em>
+    </p>
+    <div class="input-grid">
+      <div>
+        <label>Safe EMI Available ($)</label>
+        <input type="number" id="ml-emi" value="15000" min="1" />
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="ml-rate" value="12" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>Tenure (Months)</label>
+        <input type="number" id="ml-tenure" value="60" min="1" step="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcMaxLoan()">Calculate</button>
+  </div>
+  <div id="maxloan-result"></div>
+</div>
+
+<!-- ─── Full Assessment Panel ──────────────────────────────────────────── -->
+<div id="panel-assess" class="panel">
+  <div class="card">
+    <h2>Full Affordability Assessment</h2>
+    <p style="font-size:0.85rem;color:#666;margin-bottom:4px;">
+      Answers: <em>"Can my business safely take this specific loan?"</em>
+    </p>
+
+    <div class="section-title" style="margin-top:14px;">Business Financials</div>
+    <div class="input-grid">
+      <div>
+        <label>Monthly Net Cash Flow ($)</label>
+        <input type="number" id="fa-cashflow" value="50000" />
+      </div>
+      <div>
+        <label>Existing Monthly EMIs ($)</label>
+        <input type="number" id="fa-existing" value="5000" min="0" />
+      </div>
+    </div>
+    <label>Safe Ratio</label>
+    <div class="slider-row">
+      <input type="range" id="fa-ratio" min="10" max="70" value="40" step="5" oninput="document.getElementById('fa-ratio-val').textContent=this.value+'%'" />
+      <span id="fa-ratio-val">40%</span>
+    </div>
+
+    <hr/>
+    <div class="section-title">Loan Being Considered</div>
+    <div class="input-grid">
+      <div>
+        <label>Desired Loan Amount ($) <span class="hint">leave 0 to skip</span></label>
+        <input type="number" id="fa-loan" value="300000" min="0" />
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="fa-rate" value="12" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>Tenure (Months)</label>
+        <input type="number" id="fa-tenure" value="60" min="1" step="1" />
+      </div>
+    </div>
+    <button class="primary" onclick="calcAssess()">Assess Affordability</button>
+  </div>
+  <div id="assess-result"></div>
+</div>
+
+<!-- ─── Unit Tests Panel ───────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Plain-English Explain Helpers ───────────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+// ─── Module 3: Loan Affordability Engine ──────────────────────────────────
+
+function _round(n) { return Math.round(n * 100) / 100; }
+
+function calculateSafeEMI(netCashFlow, existingEMIs = 0, safeRatio = 0.4) {
+  if (typeof netCashFlow !== "number")  throw new Error("netCashFlow must be a number.");
+  if (typeof existingEMIs !== "number") throw new Error("existingEMIs must be a number.");
+  if (existingEMIs < 0)                 throw new Error("existingEMIs cannot be negative.");
+  if (safeRatio <= 0 || safeRatio > 1)  throw new Error("safeRatio must be between 0 and 1.");
+
+  const maxAllowedEMI = _round(netCashFlow * safeRatio);
+  const availableEMI  = _round(maxAllowedEMI - existingEMIs);
+  const safeEMI       = Math.max(0, availableEMI);
+
+  let status;
+  if (netCashFlow <= 0)       status = "no-cash-flow";
+  else if (availableEMI <= 0) status = "fully-committed";
+  else if (availableEMI < maxAllowedEMI * 0.25) status = "tight";
+  else                        status = "affordable";
+
+  return { safeEMI, maxAllowedEMI, availableEMI, status };
+}
+
+function calculateMaxLoanAmount(emi, annualRate, tenureMonths) {
+  if (emi <= 0) throw new Error("emi must be greater than 0.");
+  if (annualRate < 0) throw new Error("annualRate cannot be negative.");
+  if (!Number.isInteger(tenureMonths) || tenureMonths <= 0) throw new Error("tenureMonths must be a positive integer.");
+
+  const r = annualRate / 12 / 100;
+  let maxLoanAmount;
+  if (r === 0) {
+    maxLoanAmount = emi * tenureMonths;
+  } else {
+    const factor = Math.pow(1 + r, tenureMonths);
+    maxLoanAmount = emi * (factor - 1) / (r * factor);
+  }
+  const totalPayment  = _round(emi * tenureMonths);
+  const totalInterest = _round(totalPayment - maxLoanAmount);
+  return { maxLoanAmount: _round(maxLoanAmount), totalPayment, totalInterest };
+}
+
+function assessAffordability({ netCashFlow, existingEMIs = 0, annualRate, tenureMonths, desiredLoan = null, safeRatio = 0.4 }) {
+  const { safeEMI, maxAllowedEMI, availableEMI, status } = calculateSafeEMI(netCashFlow, existingEMIs, safeRatio);
+
+  const maxLoanResult = safeEMI > 0
+    ? calculateMaxLoanAmount(safeEMI, annualRate, tenureMonths)
+    : { maxLoanAmount: 0, totalPayment: 0, totalInterest: 0 };
+
+  let desiredLoanEMI = null, canAffordDesiredLoan = null, shortfall = null, headroom = null;
+
+  if (desiredLoan !== null && desiredLoan > 0) {
+    const r = annualRate / 12 / 100;
+    const factor = r === 0 ? 0 : Math.pow(1 + r, tenureMonths);
+    desiredLoanEMI = r === 0
+      ? _round(desiredLoan / tenureMonths)
+      : _round((desiredLoan * r * factor) / (factor - 1));
+    canAffordDesiredLoan = desiredLoanEMI <= safeEMI;
+    shortfall = canAffordDesiredLoan ? null : _round(desiredLoanEMI - safeEMI);
+    headroom  = canAffordDesiredLoan ? _round(safeEMI - desiredLoanEMI) : null;
+  }
+
+  return {
+    safeEMI, maxAllowedEMI, availableEMI,
+    maxLoanAmount: maxLoanResult.maxLoanAmount,
+    totalPaymentOnMaxLoan: maxLoanResult.totalPayment,
+    totalInterestOnMaxLoan: maxLoanResult.totalInterest,
+    desiredLoanEMI, canAffordDesiredLoan, shortfall, headroom,
+    affordabilityStatus: status,
+  };
+}
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────
+const fmt  = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtN = n => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function showTab(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("panel-" + name).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function getInt(id) { return parseInt(document.getElementById(id).value); }
+function err(e) { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;">❌ ${e.message}</div>`; }
+
+const statusMeta = {
+  "affordable":      { icon: "✅", label: "Affordable",       cls: "affordable" },
+  "tight":           { icon: "⚠️", label: "Tight",            cls: "tight" },
+  "fully-committed": { icon: "🚫", label: "Fully Committed",  cls: "fully-committed" },
+  "no-cash-flow":    { icon: "❌", label: "No Cash Flow",     cls: "no-cash-flow" },
+};
+
+// ─── Safe EMI ─────────────────────────────────────────────────────────────
+function calcSafeEMI() {
+  const out = document.getElementById("safe-result");
+  try {
+    const ratio = getNum("se-ratio") / 100;
+    const seCashflow = getNum("se-cashflow");
+    const seExisting = getNum("se-existing");
+    const r = calculateSafeEMI(seCashflow, seExisting, ratio);
+    const m = statusMeta[r.status];
+    const seCapacityExplain = (r.status === 'fully-committed' || r.status === 'no-cash-flow')
+      ? explainHtml(
+          ['Taking this loan will strain your monthly cash flow beyond safe limits','You risk missing payments if revenue dips even slightly','Lenders may reject this amount based on your DSCR/DTI'],
+          'Your safe EMI is ' + fmt(r.safeEMI) + ' but existing EMIs are already ' + fmt(seExisting) + '/month → no room for new debt'
+        )
+      : '';
+    out.innerHTML = `
+      <div class="verdict ${m.cls}">
+        <div class="v-title">${m.icon} ${m.label}</div>
+        <div class="v-body">Your business can safely commit <strong>${fmt(r.safeEMI)}/month</strong> to a new loan EMI.</div>
+        ${seCapacityExplain}
+      </div>
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item blue"><div class="s-label">Safe EMI Available</div><div class="s-val">${fmt(r.safeEMI)}</div></div>
+          <div class="summary-item"><div class="s-label">Max Allowed (${(ratio*100).toFixed(0)}% of cash flow)</div><div class="s-val">${fmt(r.maxAllowedEMI)}</div></div>
+          <div class="summary-item ${r.availableEMI < 0 ? 'red' : 'green'}"><div class="s-label">After Existing EMIs</div><div class="s-val">${fmt(r.availableEMI)}</div></div>
+        </div>
+      </div>`;
+    saveLAE();
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Max Loan ─────────────────────────────────────────────────────────────
+function calcMaxLoan() {
+  const out = document.getElementById("maxloan-result");
+  try {
+    const r = calculateMaxLoanAmount(getNum("ml-emi"), getNum("ml-rate"), getInt("ml-tenure"));
+    out.innerHTML = `
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item blue"><div class="s-label">Max Loan Amount</div><div class="s-val">${fmt(r.maxLoanAmount)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Payment</div><div class="s-val">${fmt(r.totalPayment)}</div></div>
+          <div class="summary-item red"><div class="s-label">Total Interest</div><div class="s-val">${fmt(r.totalInterest)}</div></div>
+        </div>
+      </div>`;
+    saveLAE();
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Full Assessment ──────────────────────────────────────────────────────
+function calcAssess() {
+  const out = document.getElementById("assess-result");
+  try {
+    const desiredLoan = getNum("fa-loan");
+    const ratio = getNum("fa-ratio") / 100;
+    const r = assessAffordability({
+      netCashFlow:  getNum("fa-cashflow"),
+      existingEMIs: getNum("fa-existing"),
+      annualRate:   getNum("fa-rate"),
+      tenureMonths: getInt("fa-tenure"),
+      desiredLoan:  desiredLoan > 0 ? desiredLoan : null,
+      safeRatio:    ratio,
+    });
+
+    const m = statusMeta[r.affordabilityStatus];
+
+    let verdictBody = `Safe EMI capacity: <strong>${fmt(r.safeEMI)}/month</strong>. Max loan at these terms: <strong>${fmt(r.maxLoanAmount)}</strong>.`;
+    let verdictExtra = "";
+    if (r.desiredLoanEMI !== null) {
+      if (r.canAffordDesiredLoan) {
+        verdictBody = `✅ This loan is affordable. Required EMI: <strong>${fmt(r.desiredLoanEMI)}</strong>, Safe EMI: <strong>${fmt(r.safeEMI)}</strong>.`;
+        verdictExtra = `<div class="v-rec">Headroom: ${fmt(r.headroom)}/month remaining after this loan.</div>`;
+      } else {
+        verdictBody = `Required EMI: <strong>${fmt(r.desiredLoanEMI)}</strong> exceeds safe limit of <strong>${fmt(r.safeEMI)}</strong>.`;
+        const overBy = fmt(r.shortfall);
+        verdictExtra = `<div class="v-rec">Shortfall: ${fmt(r.shortfall)}/month. Consider borrowing ${fmt(r.maxLoanAmount)} instead, or extend tenure.</div>`
+          + explainHtml(
+              ['Taking this loan will strain your monthly cash flow beyond safe limits','You risk missing payments if revenue dips even slightly','Lenders may reject this amount based on your DSCR/DTI'],
+              'Your safe EMI is ' + fmt(r.safeEMI) + ' but this loan requires ' + fmt(r.desiredLoanEMI) + '/month → ' + overBy + ' over your safe limit'
+            );
+      }
+    }
+
+    // DTI explain: compute DTI from inputs
+    const _cashflow = getNum("fa-cashflow");
+    const _existing = getNum("fa-existing");
+    const _ratio    = getNum("fa-ratio") / 100;
+    const _totalDebtForDTI = r.desiredLoanEMI !== null ? _round(_existing + r.desiredLoanEMI) : _existing;
+    const _dti = _cashflow > 0 ? _round((_totalDebtForDTI / _cashflow) * 100) : 0;
+    const dtiExplain = _dti >= 50
+      ? explainHtml(
+          ['More than half your revenue goes to debt repayments','Lenders typically reject applicants with DTI above 40–50%','Any revenue dip will immediately create a cash shortfall'],
+          'DTI of ' + _dti.toFixed(1) + '% means: out of every $100 you earn, $' + _dti.toFixed(1) + ' goes to debt — only $' + (100 - _dti).toFixed(1) + ' left for everything else'
+        )
+      : '';
+
+    // Cash buffer explain
+    const _bufferAfterEMI = r.desiredLoanEMI !== null
+      ? _round(_cashflow - _existing - r.desiredLoanEMI)
+      : _round(_cashflow - _existing);
+    const bufferExplain = (_bufferAfterEMI >= 0 && _bufferAfterEMI < _cashflow * 0.15)
+      ? explainHtml(
+          ['Less than ' + fmt(_bufferAfterEMI) + '/month left after all payments — no safety net','One unexpected expense could push you into default','Recommended buffer is at least 3 months of expenses'],
+          'After all EMI payments you have ' + fmt(_bufferAfterEMI) + '/month remaining — a very thin cushion against surprises'
+        )
+      : '';
+
+    const desiredRow = r.desiredLoanEMI !== null ? `
+      <div class="summary-item ${r.canAffordDesiredLoan ? 'green' : 'red'}">
+        <div class="s-label">Desired Loan EMI</div>
+        <div class="s-val">${fmt(r.desiredLoanEMI)}</div>
+      </div>
+      <div class="summary-item ${r.canAffordDesiredLoan ? 'green' : 'red'}">
+        <div class="s-label">${r.canAffordDesiredLoan ? 'Headroom' : 'Shortfall'}</div>
+        <div class="s-val">${fmt(r.canAffordDesiredLoan ? r.headroom : r.shortfall)}</div>
+      </div>` : "";
+
+    out.innerHTML = `
+      <div class="verdict ${r.canAffordDesiredLoan === false ? 'fully-committed' : m.cls}">
+        <div class="v-title">${r.canAffordDesiredLoan === false ? '⚠️' : m.icon} ${r.canAffordDesiredLoan === null ? m.label : (r.canAffordDesiredLoan ? 'Loan is Affordable' : 'Loan Exceeds Safe Capacity')}</div>
+        <div class="v-body">${verdictBody}</div>
+        ${verdictExtra}
+      </div>
+      <div class="card">
+        <div class="summary-grid">
+          <div class="summary-item blue"><div class="s-label">Safe EMI Available</div><div class="s-val">${fmt(r.safeEMI)}</div></div>
+          <div class="summary-item"><div class="s-label">Max Allowed EMI</div><div class="s-val">${fmt(r.maxAllowedEMI)}</div></div>
+          <div class="summary-item green"><div class="s-label">Max Loan Amount</div><div class="s-val">${fmt(r.maxLoanAmount)}</div></div>
+          <div class="summary-item"><div class="s-label">Total Payment (Max Loan)</div><div class="s-val">${fmt(r.totalPaymentOnMaxLoan)}</div></div>
+          <div class="summary-item red"><div class="s-label">Total Interest (Max Loan)</div><div class="s-val">${fmt(r.totalInterestOnMaxLoan)}</div></div>
+          ${desiredRow}
+        </div>
+      </div>
+      ${dtiExplain}
+      ${bufferExplain}`;
+    saveLAE();
+  } catch(e) { out.innerHTML = err(e); }
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, condition) { results.push({ label, pass: !!condition }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass: false, note: "expected error not thrown" }); }
+    catch(e) { results.push({ label, pass: true }); }
+  }
+
+  // Safe EMI
+  const s1 = calculateSafeEMI(50000, 5000, 0.4);
+  assert("SafeEMI: maxAllowed = 50000×0.4 = 20000", s1.maxAllowedEMI === 20000);
+  assert("SafeEMI: availableEMI = 20000 - 5000 = 15000", s1.availableEMI === 15000);
+  assert("SafeEMI: safeEMI = 15000", s1.safeEMI === 15000);
+  assert("SafeEMI: status = affordable", s1.status === "affordable");
+
+  const s2 = calculateSafeEMI(50000, 19000, 0.4);
+  assert("SafeEMI: tight when availableEMI < 25% of max", s2.status === "tight");
+
+  const s3 = calculateSafeEMI(50000, 25000, 0.4);
+  assert("SafeEMI: fully-committed when existing ≥ maxAllowed", s3.status === "fully-committed");
+  assert("SafeEMI: safeEMI = 0 when fully committed", s3.safeEMI === 0);
+
+  const s4 = calculateSafeEMI(-1000, 0, 0.4);
+  assert("SafeEMI: no-cash-flow on negative cash flow", s4.status === "no-cash-flow");
+
+  assertThrows("SafeEMI: throws on invalid ratio > 1", () => calculateSafeEMI(50000, 0, 1.5));
+  assertThrows("SafeEMI: throws on negative existingEMIs", () => calculateSafeEMI(50000, -100, 0.4));
+
+  // Max Loan Amount
+  const ml = calculateMaxLoanAmount(11122, 12, 60);
+  assert("MaxLoan: result > 0", ml.maxLoanAmount > 0);
+  assert("MaxLoan: totalPayment = emi × tenure", Math.abs(ml.totalPayment - 11122 * 60) < 1);
+  assert("MaxLoan: totalInterest = totalPayment - principal", Math.abs(ml.totalInterest - (ml.totalPayment - ml.maxLoanAmount)) < 1);
+
+  const ml0 = calculateMaxLoanAmount(10000, 0, 12);
+  assert("MaxLoan: 0% rate → maxLoan = emi × tenure", ml0.maxLoanAmount === 120000);
+  assert("MaxLoan: 0% rate → totalInterest = 0", ml0.totalInterest === 0);
+
+  assertThrows("MaxLoan: throws on emi ≤ 0", () => calculateMaxLoanAmount(0, 12, 60));
+  assertThrows("MaxLoan: throws on float tenure", () => calculateMaxLoanAmount(10000, 12, 12.5));
+
+  // Full Assessment
+  const a1 = assessAffordability({ netCashFlow: 50000, existingEMIs: 5000, annualRate: 12, tenureMonths: 60, desiredLoan: 300000, safeRatio: 0.4 });
+  assert("Assess: safeEMI = 15000", a1.safeEMI === 15000);
+  assert("Assess: maxLoanAmount > 0", a1.maxLoanAmount > 0);
+  assert("Assess: desiredLoanEMI is calculated", a1.desiredLoanEMI !== null);
+  assert("Assess: canAfford is boolean", typeof a1.canAffordDesiredLoan === "boolean");
+
+  const a2 = assessAffordability({ netCashFlow: 50000, existingEMIs: 5000, annualRate: 12, tenureMonths: 60, desiredLoan: 10000000, safeRatio: 0.4 });
+  assert("Assess: large loan → canAfford = false", a2.canAffordDesiredLoan === false);
+  assert("Assess: large loan → shortfall > 0", a2.shortfall > 0);
+
+  const a3 = assessAffordability({ netCashFlow: 50000, existingEMIs: 5000, annualRate: 12, tenureMonths: 60, desiredLoan: null, safeRatio: 0.4 });
+  assert("Assess: no desired loan → canAfford = null", a3.canAffordDesiredLoan === null);
+
+  // Render
+  const passed = results.filter(r => r.pass).length;
+  const failed = results.filter(r => !r.pass).length;
+  const html = results.map(r =>
+    `<div class="test-result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.label}${r.note ? ' — ' + r.note : ''}</div>`
+  ).join("");
+  const sc = failed === 0 ? "all-pass" : "has-fail";
+  const st = failed === 0 ? `✅ All ${passed} tests passed` : `❌ ${failed} failed / ${passed} passed`;
+  document.getElementById("test-output").innerHTML = html + `<div class="test-summary ${sc}">${st}</div>`;
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────
+var LAE_KEY = 'fw_loan_affordability';
+function saveLAE(){
+  try{
+    localStorage.setItem(LAE_KEY, JSON.stringify({
+      'se-cashflow':document.getElementById('se-cashflow').value,
+      'se-existing':document.getElementById('se-existing').value,
+      'se-ratio':document.getElementById('se-ratio').value,
+      'ml-emi':document.getElementById('ml-emi').value,
+      'ml-rate':document.getElementById('ml-rate').value,
+      'ml-tenure':document.getElementById('ml-tenure').value,
+      'fa-cashflow':document.getElementById('fa-cashflow').value,
+      'fa-existing':document.getElementById('fa-existing').value,
+      'fa-ratio':document.getElementById('fa-ratio').value,
+      'fa-loan':document.getElementById('fa-loan').value,
+      'fa-rate':document.getElementById('fa-rate').value,
+      'fa-tenure':document.getElementById('fa-tenure').value,
+    }));
+  }catch(e){}
+}
+(function(){
+  try{
+    var s = JSON.parse(localStorage.getItem(LAE_KEY)||'null');
+    if(s){
+      ['se-cashflow','se-existing','se-ratio','ml-emi','ml-rate','ml-tenure','fa-cashflow','fa-existing','fa-ratio','fa-loan','fa-rate','fa-tenure'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el && s[id]!==undefined && s[id]!=='') el.value = s[id];
+      });
+      var rv = document.getElementById('se-ratio-val');
+      if(rv) rv.textContent = (document.getElementById('se-ratio').value||40)+'%';
+      var fv = document.getElementById('fa-ratio-val');
+      if(fv) fv.textContent = (document.getElementById('fa-ratio').value||40)+'%';
+      return;
+    }
+  }catch(e){}
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx] || JSON.parse(localStorage.getItem('fw_profile')||'null');
+    if(!p) return;
+    if(p.emi)  { document.getElementById('ml-emi').value = p.emi; document.getElementById('se-existing').value = p.emi; document.getElementById('fa-existing').value = p.emi; }
+    if(p.loan) { document.getElementById('fa-loan').value = p.loan; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

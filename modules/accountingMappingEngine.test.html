@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Accounting Mapping</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; font-size: 14px; }
+
+  /* ── Header ── */
+  .header { background: linear-gradient(135deg, #7c2d12 0%, #b45309 100%); color: #fff; padding: 20px 28px; }
+  .header h1 { font-size: 1.4rem; font-weight: 700; }
+  .header p  { opacity: .8; font-size: .85rem; margin-top: 4px; }
+  .breadcrumb { font-size: .75rem; opacity: .65; margin-bottom: 6px; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; border-bottom: 2px solid #e2e8f0; background: #fff; padding: 0 28px; flex-wrap: wrap; }
+  .tab  { padding: 12px 18px; cursor: pointer; font-size: .85rem; font-weight: 500; color: #64748b;
+          border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .15s; white-space: nowrap; }
+  .tab.active { color: #b45309; border-bottom-color: #b45309; }
+  .tab:hover:not(.active) { color: #0f172a; }
+
+  /* ── Layout ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 28px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Cards ── */
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-weight: 600; font-size: .9rem; color: #0f172a; margin-bottom: 14px;
+                padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  /* ── Form ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .form-group label { display: block; font-size: .78rem; color: #64748b; margin-bottom: 4px; font-weight: 500; }
+  .form-group input, .form-group select {
+    width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px;
+    font-size: .85rem; outline: none; transition: border-color .15s; }
+  .form-group input:focus, .form-group select:focus { border-color: #b45309; box-shadow: 0 0 0 3px rgba(180,83,9,.1); }
+  .hint { font-size: .7rem; color: #94a3b8; margin-top: 3px; }
+
+  /* ── Buttons ── */
+  .btn { padding: 10px 22px; border: none; border-radius: 7px; font-weight: 600; cursor: pointer;
+         font-size: .88rem; transition: transform .1s; }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: #b45309; color: #fff; }
+  .btn-primary:hover { background: #92400e; }
+  .btn-secondary { background: #f1f5f9; color: #475569; }
+  .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+  /* ── Split bar ── */
+  .split-bar-wrap { margin: 16px 0; }
+  .split-bar { height: 28px; border-radius: 6px; overflow: hidden; display: flex; }
+  .split-interest  { background: #ef4444; display: flex; align-items: center; justify-content: center;
+                     color: #fff; font-size: .75rem; font-weight: 700; transition: width .4s; }
+  .split-principal { background: #2563eb; display: flex; align-items: center; justify-content: center;
+                     color: #fff; font-size: .75rem; font-weight: 700; transition: width .4s; }
+  .split-legend { display: flex; gap: 20px; margin-top: 8px; font-size: .8rem; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 5px; }
+
+  /* ── Statement mapping cards ── */
+  .stmt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 700px) { .stmt-grid { grid-template-columns: 1fr; } }
+  .stmt-card { border-radius: 10px; padding: 16px; border: 2px solid transparent; }
+  .stmt-pnl  { background: #fff7ed; border-color: #fed7aa; }
+  .stmt-bs   { background: #eff6ff; border-color: #bfdbfe; }
+  .stmt-cfs  { background: #f0fdf4; border-color: #bbf7d0; }
+  .stmt-card-title { font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+  .stmt-pnl  .stmt-card-title { color: #9a3412; }
+  .stmt-bs   .stmt-card-title { color: #1e40af; }
+  .stmt-cfs  .stmt-card-title { color: #166534; }
+  .stmt-item { display: flex; justify-content: space-between; font-size: .85rem; padding: 5px 0;
+               border-bottom: 1px solid rgba(0,0,0,.06); }
+  .stmt-item:last-child { border-bottom: none; }
+  .stmt-item-label { color: #475569; }
+  .stmt-amount-neg { font-weight: 700; color: #dc2626; }
+  .stmt-amount-pos { font-weight: 700; color: #16a34a; }
+  .stmt-amount-neu { font-weight: 700; color: #0369a1; }
+
+  /* ── Misconception box ── */
+  .misconception-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  @media (max-width: 600px) { .misconception-grid { grid-template-columns: 1fr; } }
+  .misc-card { border-radius: 10px; padding: 16px; }
+  .misc-wrong { background: #fee2e2; border: 1px solid #fecaca; }
+  .misc-right { background: #dcfce7; border: 1px solid #bbf7d0; }
+  .misc-title { font-weight: 700; font-size: .82rem; margin-bottom: 10px; }
+  .misc-wrong .misc-title { color: #991b1b; }
+  .misc-right .misc-title { color: #166534; }
+  .misc-row { display: flex; justify-content: space-between; font-size: .83rem; padding: 4px 0; }
+  .misc-val { font-weight: 700; }
+  .text-red { color: #dc2626; }
+  .text-grn { color: #16a34a; }
+  .text-blu { color: #1d4ed8; }
+
+  /* ── Journal entry ── */
+  .je-table { width: 100%; border-collapse: collapse; font-size: .83rem; margin-top: 8px; }
+  .je-table th { background: #f1f5f9; padding: 8px 12px; text-align: left; font-weight: 600;
+                 color: #475569; border: 1px solid #e2e8f0; }
+  .je-table td { padding: 8px 12px; border: 1px solid #f1f5f9; }
+  .je-table .debit-row  { background: #fff7ed; }
+  .je-table .credit-row { background: #eff6ff; }
+  .je-table .total-row  { background: #f8fafc; font-weight: 700; }
+  .je-debit  { color: #9a3412; font-weight: 600; }
+  .je-credit { color: #1e40af; font-weight: 600; padding-left: 28px !important; font-style: italic; }
+  .je-stmt-badge { font-size: .7rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; margin-left: 4px; }
+  .badge-pnl { background: #fed7aa; color: #9a3412; }
+  .badge-bs  { background: #bfdbfe; color: #1e40af; }
+  .badge-cfs { background: #bbf7d0; color: #166534; }
+  .je-balance-ok  { color: #166534; font-size: .82rem; font-weight: 600; margin-top: 8px; }
+  .je-balance-err { color: #dc2626; font-size: .82rem; font-weight: 600; margin-top: 8px; }
+  .num { text-align: right; font-family: 'Courier New', monospace; }
+
+  /* ── Amortization split preview ── */
+  .amort-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .amort-table th { background: #f1f5f9; padding: 7px 10px; text-align: right; font-weight: 600;
+                    color: #475569; border: 1px solid #e2e8f0; }
+  .amort-table th:first-child { text-align: left; }
+  .amort-table td { padding: 6px 10px; border: 1px solid #f1f5f9; text-align: right; }
+  .amort-table td:first-child { text-align: left; }
+  .amort-table tr:nth-child(even) { background: #fafcfe; }
+  .int-cell { color: #dc2626; font-weight: 600; }
+  .pri-cell { color: #1d4ed8; font-weight: 600; }
+
+  /* ── Period mapping ── */
+  .loan-row-pm { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;
+                 margin-bottom: 10px; position: relative; }
+  .remove-btn { position: absolute; top: 10px; right: 10px; background: none; border: none;
+                cursor: pointer; color: #94a3b8; font-size: .85rem; }
+  .remove-btn:hover { color: #ef4444; }
+
+  /* ── Reconcile ── */
+  .recon-result { padding: 14px 18px; border-radius: 8px; font-size: .9rem; font-weight: 600; margin-top: 12px; }
+  .recon-ok  { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .recon-err { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+  /* ── Unit tests ── */
+  .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .test-item { border-radius: 8px; padding: 12px 14px; font-size: .82rem; border: 1px solid transparent; }
+  .test-pass { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .test-fail { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+  .test-name   { font-weight: 600; margin-bottom: 2px; }
+  .test-detail { opacity: .8; }
+
+  .err-box { background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px;
+             color: #991b1b; font-size: .85rem; margin-bottom: 12px; display: none; }
+  .section-label { font-size: .8rem; font-weight: 600; color: #64748b; text-transform: uppercase;
+                   letter-spacing: .05em; margin: 14px 0 8px; }
+  .info-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px;
+              font-size: .83rem; color: #92400e; margin-bottom: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="breadcrumb">← <a href="../index.html" style="color:#fed7aa;">SmallBiz Platform</a> › Financial Statements</div>
+  <h1>🔑 Accounting Mapping</h1>
+  <p>EMI = Interest (P&amp;L) + Principal (Balance Sheet) · Depreciation mapping · Double-entry journal entries</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active"  onclick="switchTab('split')">EMI Splitter</div>
+  <div class="tab" onclick="switchTab('journal')">Journal Entries</div>
+  <div class="tab" onclick="switchTab('depreciation')">Depreciation</div>
+  <div class="tab" onclick="switchTab('period')">Period Mapping</div>
+  <div class="tab" onclick="switchTab('reconcile')">Reconcile</div>
+  <div class="tab" onclick="switchTab('tests')">Unit Tests</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 1 — EMI Splitter
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-split" class="main panel active">
+
+  <div class="info-box">
+    💡 <strong>The #1 accounting mistake small businesses make:</strong>
+    Treating the entire EMI as a business expense. Only the <strong>interest portion</strong> is a P&amp;L expense.
+    The <strong>principal portion</strong> simply reduces your loan liability on the Balance Sheet — it does NOT reduce your profit.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#b45309"></span>Loan Details</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Outstanding Principal ($)</label>
+        <input id="sp-principal" type="number" value="500000"/>
+        <div class="hint">Balance at start of this period</div>
+      </div>
+      <div class="form-group">
+        <label>Annual Interest Rate (%)</label>
+        <input id="sp-rate" type="number" value="12" step="0.1"/>
+      </div>
+      <div class="form-group">
+        <label>Monthly EMI ($)</label>
+        <input id="sp-emi" type="number" value="11122"/>
+        <div class="hint">From Loan Engine</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildSplit()">Analyse EMI Split</button>
+    </div>
+  </div>
+
+  <div id="split-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 2 — Journal Entries
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-journal" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#1e40af"></span>Generate Journal Entry for EMI Payment</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Loan Name</label>
+        <input id="je-name" type="text" value="Bank Business Loan"/>
+      </div>
+      <div class="form-group">
+        <label>Period</label>
+        <input id="je-period" type="text" value="Jan 2025"/>
+      </div>
+      <div class="form-group">
+        <label>Outstanding Principal ($)</label>
+        <input id="je-principal" type="number" value="500000"/>
+      </div>
+      <div class="form-group">
+        <label>Annual Rate (%)</label>
+        <input id="je-rate" type="number" value="12" step="0.1"/>
+      </div>
+      <div class="form-group">
+        <label>Monthly EMI ($)</label>
+        <input id="je-emi" type="number" value="11122"/>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildJournal()">Generate Journal Entry</button>
+    </div>
+  </div>
+  <div id="journal-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 3 — Depreciation
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-depreciation" class="main panel">
+
+  <div class="info-box">
+    💡 <strong>Depreciation maps to all three statements:</strong>
+    It's a <strong>P&amp;L expense</strong> (reduces profit) but <strong>no cash leaves the business</strong> —
+    so it must be added back in the <strong>Cash Flow Statement</strong> (operating section) and
+    it reduces the <strong>net book value</strong> of the asset on the Balance Sheet.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#7c3aed"></span>Asset Depreciation Details</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Asset Name</label>
+        <input id="dep-name" type="text" value="Delivery Vehicle"/>
+      </div>
+      <div class="form-group">
+        <label>Period</label>
+        <input id="dep-period" type="text" value="Jan 2025"/>
+      </div>
+      <div class="form-group">
+        <label>Cost / Purchase Price ($)</label>
+        <input id="dep-cost" type="number" value="800000"/>
+      </div>
+      <div class="form-group">
+        <label>Salvage Value ($)</label>
+        <input id="dep-salvage" type="number" value="50000"/>
+        <div class="hint">Residual value at end of life</div>
+      </div>
+      <div class="form-group">
+        <label>Useful Life (years)</label>
+        <input id="dep-life" type="number" value="5"/>
+      </div>
+      <div class="form-group">
+        <label>Method</label>
+        <select id="dep-method">
+          <option value="straight-line">Straight-Line</option>
+          <option value="double-declining">Double-Declining Balance</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="buildDepreciation()">Calculate &amp; Map Depreciation</button>
+    </div>
+  </div>
+  <div id="dep-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 4 — Period Mapping
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-period" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#b45309"></span>Full Period Accounting Mapping</div>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:14px;">
+      Enter all loans and depreciable assets for a single period to see the complete accounting impact across all three financial statements.
+    </p>
+    <div class="form-group" style="max-width:200px;margin-bottom:14px;">
+      <label>Period Label</label>
+      <input id="pm-period" type="text" value="Jan 2025"/>
+    </div>
+
+    <div class="section-label">Loans</div>
+    <div id="pm-loans"></div>
+    <button class="btn btn-secondary" onclick="addPMLoan()" style="margin-bottom:16px;">+ Add Loan</button>
+
+    <div class="section-label">Depreciable Assets</div>
+    <div id="pm-deps"></div>
+    <button class="btn btn-secondary" onclick="addPMDep()">+ Add Asset</button>
+
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn btn-primary" onclick="buildPeriodMapping()">Generate Period Mapping</button>
+    </div>
+  </div>
+  <div id="period-output"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 5 — Reconcile
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-reconcile" class="main panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:#166534"></span>Cross-Statement Reconciliation</div>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:16px;">
+      Verify that the interest expense in your P&amp;L and the loan balance on your Balance Sheet
+      are consistent with the amortization schedule from Loan Engine.
+    </p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>P&amp;L Interest Expense ($)</label>
+        <input id="r-pnlInt" type="number" value="5000"/>
+      </div>
+      <div class="form-group">
+        <label>Schedule Interest Sum ($)</label>
+        <input id="r-schedInt" type="number" value="5000"/>
+        <div class="hint">Sum from amortization schedule (Loan Engine)</div>
+      </div>
+      <div class="form-group">
+        <label>B/S Loan Balance ($)</label>
+        <input id="r-bsBalance" type="number" value="450000"/>
+      </div>
+      <div class="form-group">
+        <label>Original Principal ($)</label>
+        <input id="r-original" type="number" value="500000"/>
+      </div>
+      <div class="form-group">
+        <label>Cumulative Principal Repaid ($)</label>
+        <input id="r-repaid" type="number" value="50000"/>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="runReconcile()">Check Reconciliation</button>
+    </div>
+    <div id="recon-output"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PANEL 6 — Unit Tests
+══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-tests" class="main panel">
+  <div class="card">
+    <div class="card-title">Automated Unit Tests</div>
+    <button class="btn btn-primary" onclick="runTests()" style="margin-bottom:14px;">Run All Tests</button>
+    <div id="test-output" class="test-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ENGINE (inlined) ═══════════════════════════ -->
+<script>
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function splitEMIPayment(outstandingPrincipal, annualRate, emi) {
+  if (typeof outstandingPrincipal !== "number" || outstandingPrincipal < 0)
+    throw new Error("outstandingPrincipal must be a non-negative number.");
+  if (typeof annualRate !== "number" || annualRate < 0)
+    throw new Error("annualRate must be a non-negative number.");
+  if (typeof emi !== "number" || emi < 0)
+    throw new Error("emi must be a non-negative number.");
+  const monthlyRate      = annualRate / 12 / 100;
+  const interestPortion  = _r(outstandingPrincipal * monthlyRate);
+  const principalPortion = _r(Math.min(emi - interestPortion, outstandingPrincipal));
+  const outstandingAfter = _r(outstandingPrincipal - principalPortion);
+  return { outstandingBefore: _r(outstandingPrincipal), emi: _r(emi),
+           interestPortion, principalPortion, outstandingAfter,
+           interestPct:  emi > 0 ? _r((interestPortion  / emi) * 100) : 0,
+           principalPct: emi > 0 ? _r((principalPortion / emi) * 100) : 0 };
+}
+
+function generateLoanJournalEntry({ loanName="Loan", outstandingPrincipal, annualRate, emi, period="" }) {
+  const split = splitEMIPayment(outstandingPrincipal, annualRate, emi);
+  const debits = [];
+  if (split.interestPortion > 0)
+    debits.push({ account:"Interest Expense", amount:split.interestPortion,
+                  statement:"P&L", note:"Operating expense — reduces net profit" });
+  if (split.principalPortion > 0)
+    debits.push({ account:`${loanName} Payable`, amount:split.principalPortion,
+                  statement:"Balance Sheet", note:"Reduces loan liability — does NOT affect profit" });
+  const credits = [{ account:"Cash / Bank Account", amount:_r(split.emi),
+                     statement:"Cash Flow Statement", note:"Financing outflow — total cash paid" }];
+  const totalDebits  = _r(debits.reduce((s,d)=>s+d.amount, 0));
+  const totalCredits = _r(credits.reduce((s,c)=>s+c.amount, 0));
+  return { type:"loan_payment", period, loanName, split, debits, credits,
+           totalDebits, totalCredits, isBalanced: Math.abs(totalDebits-totalCredits)<0.02,
+           statementMapping:{
+             pnl:          { label:"Interest Expense",          amount:split.interestPortion },
+             balanceSheet: { label:`${loanName} Liability ↓`,   amount:split.principalPortion },
+             cfs:          { label:"Financing Outflow",          amount:split.emi },
+           }};
+}
+
+function generateDepreciationEntry({ assetName, cost, salvageValue=0, usefulLifeYears,
+    method="straight-line", yearNumber=1, currentBookValue, period="" }) {
+  if (typeof cost !== "number" || cost <= 0)     throw new Error("cost must be a positive number.");
+  if (!usefulLifeYears || usefulLifeYears <= 0)  throw new Error("usefulLifeYears must be positive.");
+  if (salvageValue < 0)                          throw new Error("salvageValue cannot be negative.");
+  if (salvageValue >= cost)                      throw new Error("salvageValue must be less than cost.");
+  let annualDepreciation;
+  if (method === "straight-line") {
+    annualDepreciation = _r((cost - salvageValue) / usefulLifeYears);
+  } else if (method === "double-declining") {
+    const ddRate   = 2 / usefulLifeYears;
+    const bookVal  = currentBookValue !== undefined ? currentBookValue : cost;
+    annualDepreciation = _r(Math.min(bookVal * ddRate, bookVal - salvageValue));
+  } else throw new Error("Unknown method: " + method);
+  const monthlyDepreciation = _r(annualDepreciation / 12);
+  return { type:"depreciation", period, assetName, cost, salvageValue, usefulLifeYears, method,
+           annualDepreciation, monthlyDepreciation,
+           debits:[{ account:"Depreciation Expense", amount:monthlyDepreciation, statement:"P&L",
+                     note:"Non-cash expense — add back in CFS" }],
+           credits:[{ account:`Accumulated Depreciation — ${assetName}`, amount:monthlyDepreciation,
+                      statement:"Balance Sheet", note:"Reduces net book value" }],
+           totalDebits:monthlyDepreciation, totalCredits:monthlyDepreciation, isBalanced:true,
+           statementMapping:{
+             pnl:          { label:"Depreciation Expense",          amount:monthlyDepreciation },
+             balanceSheet: { label:`Acc. Dep. ↑ (${assetName})`,    amount:monthlyDepreciation },
+             cfs:          { label:"Non-cash Add-back (Operating)",  amount:monthlyDepreciation, addback:true },
+           }};
+}
+
+function buildPeriodMapping({ period="", loans=[], depreciationItems=[] }) {
+  const loanEntries = loans.map(l => generateLoanJournalEntry({ ...l, period }));
+  const depEntries  = depreciationItems.map(d => generateDepreciationEntry({ ...d, period }));
+  const totalInterestExpense = _r(loanEntries.reduce((s,e)=>s+e.split.interestPortion, 0));
+  const totalDepreciation    = _r(depEntries.reduce((s,e)=>s+e.monthlyDepreciation, 0));
+  const totalEMIPaid         = _r(loanEntries.reduce((s,e)=>s+e.split.emi, 0));
+  const totalPrincipalRepaid = _r(loanEntries.reduce((s,e)=>s+e.split.principalPortion, 0));
+  return {
+    period, loanEntries, depreciationEntries:depEntries,
+    pnlImpacts:{ interestExpense:totalInterestExpense, depreciation:totalDepreciation,
+                 totalReduction: _r(totalInterestExpense+totalDepreciation) },
+    balanceSheetImpacts:{ loanLiabilityReduction:totalPrincipalRepaid, accumulatedDepreciation:totalDepreciation },
+    cashFlowImpacts:{ financingOutflow:totalEMIPaid, nonCashAddback:totalDepreciation },
+    allJournalEntries:[...loanEntries,...depEntries],
+    isAllBalanced: [...loanEntries,...depEntries].every(e=>e.isBalanced),
+  };
+}
+
+function reconcileStatements({ pnlInterestExpense, scheduleInterestSum,
+    bsLoanBalance, originalPrincipal, cumulativePrincipalRepaid }) {
+  const expectedLoanBalance = _r(originalPrincipal - cumulativePrincipalRepaid);
+  const interestMatch    = Math.abs(pnlInterestExpense - scheduleInterestSum) < 0.02;
+  const loanBalanceMatch = Math.abs(bsLoanBalance - expectedLoanBalance) < 0.02;
+  const alerts = [];
+  if (!interestMatch)    alerts.push(`Interest mismatch — P&L: ${fmt(pnlInterestExpense)}, schedule: ${fmt(scheduleInterestSum)}`);
+  if (!loanBalanceMatch) alerts.push(`Loan balance mismatch — B/S: ${fmt(bsLoanBalance)}, expected: ${fmt(expectedLoanBalance)}`);
+  return { interestMatch, loanBalanceMatch,
+           isReconciled: interestMatch && loanBalanceMatch,
+           expectedLoanBalance, alerts };
+}
+
+function explainEMIMisconception(emi, interestPortion, principalPortion) {
+  return {
+    misconception: { profitReduction: emi },
+    reality:       { profitReduction: interestPortion, liabilityReduction: principalPortion },
+    overstatement: _r(emi - interestPortion),
+    overstatementPct: emi > 0 ? _r(((emi - interestPortion) / emi) * 100) : 0,
+  };
+}
+
+/* ── Helpers ── */
+function fmt(n) {
+  if (n === null || n === undefined) return "—";
+  return Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function badgeHtml(stmt) {
+  if (stmt === "P&L")                return `<span class="je-stmt-badge badge-pnl">P&amp;L</span>`;
+  if (stmt === "Balance Sheet")      return `<span class="je-stmt-badge badge-bs">B/S</span>`;
+  if (stmt === "Cash Flow Statement")return `<span class="je-stmt-badge badge-cfs">CFS</span>`;
+  return "";
+}
+
+/* ── Render statement mapping cards ── */
+function renderStmtCards(pnlItems, bsItems, cfsItems) {
+  const row = (label, amount, cls, note) =>
+    `<div class="stmt-item">
+       <span class="stmt-item-label">${label}</span>
+       <div><span class="${cls}">$${fmt(amount)}</span>${note?`<div style="font-size:.7rem;color:#94a3b8;margin-top:1px;">${note}</div>`:""}</div>
+     </div>`;
+
+  return `<div class="stmt-grid">
+    <div class="stmt-card stmt-pnl">
+      <div class="stmt-card-title">📊 Profit &amp; Loss</div>
+      ${pnlItems.map(i => row(i.label, i.amount, "stmt-amount-neg", i.note || "Reduces profit")).join("")}
+    </div>
+    <div class="stmt-card stmt-bs">
+      <div class="stmt-card-title">⚖️ Balance Sheet</div>
+      ${bsItems.map(i => row(i.label, i.amount, "stmt-amount-neg", i.note || "Reduces on B/S")).join("")}
+    </div>
+    <div class="stmt-card stmt-cfs">
+      <div class="stmt-card-title">💧 Cash Flow Statement</div>
+      ${cfsItems.map(i => row(i.label, i.amount, i.addback ? "stmt-amount-pos" : "stmt-amount-neg",
+                               i.note || (i.addback ? "Add-back (non-cash)" : "Cash outflow"))).join("")}
+    </div>
+  </div>`;
+}
+
+/* ── Render journal table ── */
+function renderJournalTable(entry) {
+  const rows = [
+    ...entry.debits.map(d =>
+      `<tr class="debit-row">
+         <td class="je-debit">DR</td>
+         <td>${d.account} ${badgeHtml(d.statement)}</td>
+         <td class="num">$${fmt(d.amount)}</td>
+         <td class="num">—</td>
+         <td style="font-size:.75rem;color:#64748b;">${d.note}</td>
+       </tr>`),
+    ...entry.credits.map(c =>
+      `<tr class="credit-row">
+         <td class="je-credit">CR</td>
+         <td class="je-credit">${c.account} ${badgeHtml(c.statement)}</td>
+         <td class="num">—</td>
+         <td class="num">$${fmt(c.amount)}</td>
+         <td style="font-size:.75rem;color:#64748b;">${c.note}</td>
+       </tr>`),
+    `<tr class="total-row">
+       <td colspan="2" style="text-align:right;font-weight:700;">Totals</td>
+       <td class="num">$${fmt(entry.totalDebits)}</td>
+       <td class="num">$${fmt(entry.totalCredits)}</td>
+       <td></td>
+     </tr>`,
+  ].join("");
+
+  return `<table class="je-table">
+    <thead><tr><th style="width:40px"></th><th>Account</th><th class="num">Debit ($)</th><th class="num">Credit ($)</th><th>Note</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="${entry.isBalanced?'je-balance-ok':'je-balance-err'}">
+    ${entry.isBalanced ? "✅ Entry is balanced — Total Debits = Total Credits" : "❌ Entry is NOT balanced"}
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 1 — EMI Splitter
+══════════════════════════════════════════════════════════ */
+function buildSplit() {
+  const principal = parseFloat(document.getElementById("sp-principal").value) || 0;
+  const rate      = parseFloat(document.getElementById("sp-rate").value)      || 0;
+  const emi       = parseFloat(document.getElementById("sp-emi").value)       || 0;
+  try {
+    const split = splitEMIPayment(principal, rate, emi);
+    const misc  = explainEMIMisconception(emi, split.interestPortion, split.principalPortion);
+
+    // Split bar
+    const iw = split.interestPct, pw = split.principalPct;
+
+    // Amortization preview — first 6 months
+    const rows = [];
+    let op = principal, mRate = rate / 12 / 100;
+    for (let m = 1; m <= Math.min(6, 120); m++) {
+      const int = _r(op * mRate);
+      const pri = _r(Math.min(emi - int, op));
+      if (pri <= 0) break;
+      const after = _r(op - pri);
+      rows.push({ m, op, int, pri, after });
+      op = after;
+    }
+
+    document.getElementById("split-output").innerHTML = `
+      <div class="card">
+        <div class="card-title">EMI Split Analysis</div>
+
+        <div class="split-bar-wrap">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.82rem;font-weight:600;">
+            <span>Monthly EMI: $${fmt(emi)}</span>
+          </div>
+          <div class="split-bar">
+            <div class="split-interest"  style="width:${iw}%">${iw > 10 ? iw.toFixed(1)+"%" : ""}</div>
+            <div class="split-principal" style="width:${pw}%">${pw > 10 ? pw.toFixed(1)+"%" : ""}</div>
+          </div>
+          <div class="split-legend">
+            <span><span class="legend-dot" style="background:#ef4444"></span>Interest: $${fmt(split.interestPortion)} (${iw}%)</span>
+            <span><span class="legend-dot" style="background:#2563eb"></span>Principal: $${fmt(split.principalPortion)} (${pw}%)</span>
+          </div>
+        </div>
+
+        <div style="font-size:.82rem;color:#64748b;margin-bottom:14px;">
+          After this payment: Outstanding balance = <strong>$${fmt(split.outstandingAfter)}</strong>
+          &nbsp;(was $${fmt(split.outstandingBefore)})
+        </div>
+
+        ${renderStmtCards(
+          [{ label: "Interest Expense", amount: split.interestPortion }],
+          [{ label: "Loan Liability ↓ (principal repaid)", amount: split.principalPortion }],
+          [{ label: "Financing Outflow (total EMI)", amount: split.emi }],
+        )}
+      </div>
+
+      <div class="card">
+        <div class="card-title">Confusion vs Reality</div>
+        <div class="misconception-grid">
+          <div class="misc-card misc-wrong">
+            <div class="misc-title">❌ Common Mistake — Full EMI as Expense</div>
+            <div class="misc-row"><span>Profit reduced by</span><span class="misc-val text-red">$${fmt(misc.misconception.profitReduction)}</span></div>
+            <div class="misc-row"><span>Loan liability reduced by</span><span class="misc-val">$0</span></div>
+            <div style="margin-top:8px;font-size:.78rem;color:#991b1b;">Overstates costs by $${fmt(misc.overstatement)} (${misc.overstatementPct}% of EMI)</div>
+          </div>
+          <div class="misc-card misc-right">
+            <div class="misc-title">✅ Correct Accounting Treatment</div>
+            <div class="misc-row"><span>Profit reduced by (P&amp;L)</span><span class="misc-val text-grn">$${fmt(misc.reality.profitReduction)}</span></div>
+            <div class="misc-row"><span>Loan liability reduced (B/S)</span><span class="misc-val text-blu">$${fmt(misc.reality.liabilityReduction)}</span></div>
+            <div style="margin-top:8px;font-size:.78rem;color:#166534;">Only interest affects profit. Principal is a balance sheet movement.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">First 6 Months — How the Split Changes Over Time</div>
+        <p style="font-size:.82rem;color:#64748b;margin-bottom:12px;">
+          Early in the loan, more of the EMI is interest. As principal reduces, interest reduces and more goes to principal repayment.
+        </p>
+        <div style="overflow-x:auto;">
+          <table class="amort-table">
+            <thead><tr>
+              <th style="text-align:left">Month</th>
+              <th>Opening Balance ($)</th>
+              <th>Interest (P&amp;L) $</th>
+              <th>Principal (B/S) $</th>
+              <th>Closing Balance ($)</th>
+              <th>Int %</th>
+            </tr></thead>
+            <tbody>
+              ${rows.map(r => {
+                const pct = _r((r.int / emi) * 100);
+                return `<tr>
+                  <td>Month ${r.m}</td>
+                  <td class="num">${fmt(r.op)}</td>
+                  <td class="num int-cell">${fmt(r.int)}</td>
+                  <td class="num pri-cell">${fmt(r.pri)}</td>
+                  <td class="num">${fmt(r.after)}</td>
+                  <td class="num">${pct}%</td>
+                </tr>`;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  } catch(e) {
+    document.getElementById("split-output").innerHTML =
+      `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 2 — Journal Entry
+══════════════════════════════════════════════════════════ */
+function buildJournal() {
+  try {
+    const entry = generateLoanJournalEntry({
+      loanName:             document.getElementById("je-name").value || "Loan",
+      period:               document.getElementById("je-period").value,
+      outstandingPrincipal: parseFloat(document.getElementById("je-principal").value)||0,
+      annualRate:           parseFloat(document.getElementById("je-rate").value)||0,
+      emi:                  parseFloat(document.getElementById("je-emi").value)||0,
+    });
+    document.getElementById("journal-output").innerHTML = `
+      <div class="card">
+        <div class="card-title">Journal Entry — ${entry.period || "Loan Payment"}</div>
+        <p style="font-size:.82rem;color:#64748b;margin-bottom:12px;">
+          <strong>DR = Debit</strong> (increases asset/expense) &nbsp;|&nbsp;
+          <strong>CR = Credit</strong> (decreases asset, increases liability/equity/income)
+        </p>
+        ${renderJournalTable(entry)}
+      </div>
+      <div class="card">
+        <div class="card-title">Statement Routing</div>
+        ${renderStmtCards(
+          [{ label: "Interest Expense", amount: entry.split.interestPortion }],
+          [{ label: `${entry.loanName} Liability ↓`, amount: entry.split.principalPortion }],
+          [{ label: "Financing Outflow", amount: entry.split.emi }],
+        )}
+      </div>`;
+  } catch(e) {
+    document.getElementById("journal-output").innerHTML =
+      `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 3 — Depreciation
+══════════════════════════════════════════════════════════ */
+function buildDepreciation() {
+  try {
+    const entry = generateDepreciationEntry({
+      assetName:     document.getElementById("dep-name").value || "Asset",
+      period:        document.getElementById("dep-period").value,
+      cost:          parseFloat(document.getElementById("dep-cost").value)||0,
+      salvageValue:  parseFloat(document.getElementById("dep-salvage").value)||0,
+      usefulLifeYears: parseFloat(document.getElementById("dep-life").value)||0,
+      method:        document.getElementById("dep-method").value,
+    });
+
+    // Year-by-year schedule (straight-line)
+    const yearRows = [];
+    for (let y = 1; y <= entry.usefulLifeYears; y++) {
+      const dep = entry.annualDepreciation;
+      const bv  = _r(entry.cost - dep * y);
+      yearRows.push({ y, dep, bv: Math.max(bv, entry.salvageValue) });
+    }
+
+    document.getElementById("dep-output").innerHTML = `
+      <div class="card">
+        <div class="card-title">Depreciation: ${entry.assetName}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:16px;">
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:700;color:#7c3aed;">$${fmt(entry.annualDepreciation)}</div>
+            <div style="font-size:.72rem;color:#64748b;text-transform:uppercase;">Annual Depreciation</div>
+          </div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:700;color:#9a3412;">$${fmt(entry.monthlyDepreciation)}</div>
+            <div style="font-size:.72rem;color:#64748b;text-transform:uppercase;">Monthly Dep. (P&L)</div>
+          </div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:700;color:#1e40af;">$${fmt(entry.monthlyDepreciation)}</div>
+            <div style="font-size:.72rem;color:#64748b;text-transform:uppercase;">Acc. Dep ↑ (B/S)</div>
+          </div>
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:700;color:#166534;">+$${fmt(entry.monthlyDepreciation)}</div>
+            <div style="font-size:.72rem;color:#64748b;text-transform:uppercase;">CFS Add-back</div>
+          </div>
+        </div>
+
+        ${renderStmtCards(
+          [{ label: "Depreciation Expense", amount: entry.monthlyDepreciation, note: "Reduces profit (non-cash)" }],
+          [{ label: `Acc. Dep ↑ — Net BV ↓`, amount: entry.monthlyDepreciation, note: "Reduces asset net book value" }],
+          [{ label: "Non-cash Add-back", amount: entry.monthlyDepreciation, note: "Added to net profit in operating CF", addback: true }],
+        )}
+      </div>
+
+      <div class="card">
+        <div class="card-title">Journal Entry — Monthly Depreciation</div>
+        ${renderJournalTable(entry)}
+      </div>
+
+      <div class="card">
+        <div class="card-title">Year-by-Year Depreciation Schedule (${entry.method})</div>
+        <div style="overflow-x:auto;">
+          <table class="amort-table">
+            <thead><tr>
+              <th style="text-align:left">Year</th>
+              <th>Annual Depreciation ($)</th>
+              <th>Net Book Value ($)</th>
+            </tr></thead>
+            <tbody>
+              ${yearRows.map(r=>`<tr>
+                <td>Year ${r.y}</td>
+                <td class="num int-cell">${fmt(r.dep)}</td>
+                <td class="num">${fmt(r.bv)}</td>
+              </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  } catch(e) {
+    document.getElementById("dep-output").innerHTML =
+      `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 4 — Period Mapping
+══════════════════════════════════════════════════════════ */
+let pmLoanCount = 0, pmDepCount = 0;
+
+function addPMLoan(d) {
+  const i = pmLoanCount++;
+  d = d || {};
+  const container = document.getElementById("pm-loans");
+  const div = document.createElement("div");
+  div.id = "pm-loan-" + i;
+  div.className = "loan-row-pm";
+  div.innerHTML = `
+    <button class="remove-btn" onclick="document.getElementById('pm-loan-${i}').remove()">✕</button>
+    <div class="form-grid">
+      <div class="form-group"><label>Loan Name</label>
+        <input id="pml-${i}-name" value="${d.name||'Business Loan'}"/></div>
+      <div class="form-group"><label>Outstanding Principal ($)</label>
+        <input id="pml-${i}-op" type="number" value="${d.op||500000}"/></div>
+      <div class="form-group"><label>Annual Rate (%)</label>
+        <input id="pml-${i}-rate" type="number" value="${d.rate||12}" step="0.1"/></div>
+      <div class="form-group"><label>Monthly EMI ($)</label>
+        <input id="pml-${i}-emi" type="number" value="${d.emi||11122}"/></div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function addPMDep(d) {
+  const i = pmDepCount++;
+  d = d || {};
+  const container = document.getElementById("pm-deps");
+  const div = document.createElement("div");
+  div.id = "pm-dep-" + i;
+  div.className = "loan-row-pm";
+  div.innerHTML = `
+    <button class="remove-btn" onclick="document.getElementById('pm-dep-${i}').remove()">✕</button>
+    <div class="form-grid">
+      <div class="form-group"><label>Asset Name</label>
+        <input id="pmd-${i}-name" value="${d.name||'Asset'}"/></div>
+      <div class="form-group"><label>Cost ($)</label>
+        <input id="pmd-${i}-cost" type="number" value="${d.cost||800000}"/></div>
+      <div class="form-group"><label>Salvage Value ($)</label>
+        <input id="pmd-${i}-salvage" type="number" value="${d.salvage||50000}"/></div>
+      <div class="form-group"><label>Useful Life (yrs)</label>
+        <input id="pmd-${i}-life" type="number" value="${d.life||5}"/></div>
+      <div class="form-group"><label>Method</label>
+        <select id="pmd-${i}-method">
+          <option value="straight-line">Straight-Line</option>
+          <option value="double-declining">Double-Declining</option>
+        </select></div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function buildPeriodMapping() {
+  const period = document.getElementById("pm-period").value;
+  const loans = [], depreciationItems = [];
+  for (let i = 0; i < pmLoanCount; i++) {
+    if (!document.getElementById("pm-loan-" + i)) continue;
+    const gv = id => parseFloat(document.getElementById(id)?.value)||0;
+    const gs2 = id => document.getElementById(id)?.value?.trim()||"";
+    loans.push({ loanName: gs2(`pml-${i}-name`),
+      outstandingPrincipal: gv(`pml-${i}-op`),
+      annualRate: gv(`pml-${i}-rate`), emi: gv(`pml-${i}-emi`) });
+  }
+  for (let i = 0; i < pmDepCount; i++) {
+    if (!document.getElementById("pm-dep-" + i)) continue;
+    const gv = id => parseFloat(document.getElementById(id)?.value)||0;
+    const gs2 = id => document.getElementById(id)?.value?.trim()||"";
+    depreciationItems.push({ assetName: gs2(`pmd-${i}-name`),
+      cost: gv(`pmd-${i}-cost`), salvageValue: gv(`pmd-${i}-salvage`),
+      usefulLifeYears: gv(`pmd-${i}-life`),
+      method: document.getElementById(`pmd-${i}-method`)?.value||"straight-line" });
+  }
+  try {
+    const pm = buildPeriodMapping({ period, loans, depreciationItems });
+    let html = `
+      <div class="card">
+        <div class="card-title">Period: ${period || "—"} — Combined Statement Impact</div>
+        ${renderStmtCards(
+          [{ label:"Total Interest Expense", amount:pm.pnlImpacts.interestExpense },
+           { label:"Total Depreciation",     amount:pm.pnlImpacts.depreciation    },
+           { label:"TOTAL P&L Reduction",    amount:pm.pnlImpacts.totalReduction  }],
+          [{ label:"Loan Liabilities ↓",     amount:pm.balanceSheetImpacts.loanLiabilityReduction  },
+           { label:"Accumulated Dep ↑",      amount:pm.balanceSheetImpacts.accumulatedDepreciation }],
+          [{ label:"Financing Outflow (EMI)", amount:pm.cashFlowImpacts.financingOutflow  },
+           { label:"Non-cash Add-back",       amount:pm.cashFlowImpacts.nonCashAddback, addback:true }],
+        )}
+      </div>`;
+
+    pm.allJournalEntries.forEach(entry => {
+      html += `<div class="card">
+        <div class="card-title">${entry.type==="loan_payment" ? "Loan Payment: " + entry.loanName : "Depreciation: " + entry.assetName}</div>
+        ${renderJournalTable(entry)}
+      </div>`;
+    });
+
+    html += `<div class="card" style="background:#f0fdf4;border-color:#bbf7d0;">
+      <div style="font-weight:700;font-size:.9rem;color:#166534;">
+        ${pm.isAllBalanced ? "✅ All journal entries are balanced" : "❌ Some entries are not balanced — check inputs"}
+      </div>
+    </div>`;
+
+    document.getElementById("period-output").innerHTML = html;
+  } catch(e) {
+    document.getElementById("period-output").innerHTML =
+      `<div class="err-box" style="display:block;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 5 — Reconcile
+══════════════════════════════════════════════════════════ */
+function runReconcile() {
+  const gv = id => parseFloat(document.getElementById(id).value)||0;
+  const result = reconcileStatements({
+    pnlInterestExpense:      gv("r-pnlInt"),
+    scheduleInterestSum:     gv("r-schedInt"),
+    bsLoanBalance:           gv("r-bsBalance"),
+    originalPrincipal:       gv("r-original"),
+    cumulativePrincipalRepaid: gv("r-repaid"),
+  });
+  let html = `<div class="recon-result ${result.isReconciled?'recon-ok':'recon-err'}">
+    ${result.isReconciled
+      ? "✅ All statements are consistent with the loan schedule."
+      : "❌ Discrepancies detected — see details below."}
+  </div>
+  <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:${result.interestMatch?'#dcfce7':'#fee2e2'};border-radius:8px;padding:12px;">
+      <div style="font-weight:700;font-size:.82rem;">Interest Reconciliation</div>
+      <div style="font-size:.82rem;margin-top:4px;">${result.interestMatch ? "✅ Match" : "❌ Mismatch"}</div>
+    </div>
+    <div style="background:${result.loanBalanceMatch?'#dcfce7':'#fee2e2'};border-radius:8px;padding:12px;">
+      <div style="font-weight:700;font-size:.82rem;">Loan Balance Reconciliation</div>
+      <div style="font-size:.82rem;margin-top:4px;">${result.loanBalanceMatch ? "✅ Match" : `❌ Expected $${fmt(result.expectedLoanBalance)}`}</div>
+    </div>
+  </div>`;
+  if (result.alerts.length) {
+    html += `<div class="err-box" style="display:block;margin-top:10px;">
+      ${result.alerts.map(a=>`• ${a}`).join("<br>")}
+    </div>`;
+  }
+  document.getElementById("recon-output").innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Panel 6 — Unit Tests
+══════════════════════════════════════════════════════════ */
+function assert(name, condition, detail) { return { name, pass: !!condition, detail: detail||"" }; }
+
+function runTests() {
+  const results = [];
+
+  // T1 — Interest + Principal = EMI
+  {
+    const s = splitEMIPayment(500000, 12, 11122);
+    results.push(assert("T1: Interest + Principal = EMI",
+      Math.abs((s.interestPortion + s.principalPortion) - s.emi) < 0.02,
+      `Int=${s.interestPortion} + Pri=${s.principalPortion} = ${s.interestPortion+s.principalPortion}, EMI=${s.emi}`));
+  }
+
+  // T2 — Interest portion correct (500000 × 12/12/100 = 5000)
+  {
+    const s = splitEMIPayment(500000, 12, 11122);
+    results.push(assert("T2: Interest = Principal × monthlyRate",
+      s.interestPortion === 5000, `Got ${s.interestPortion}, expected 5000`));
+  }
+
+  // T3 — Outstanding after = before - principal
+  {
+    const s = splitEMIPayment(500000, 12, 11122);
+    results.push(assert("T3: Outstanding after = before - principalPortion",
+      Math.abs(s.outstandingAfter - (s.outstandingBefore - s.principalPortion)) < 0.02,
+      `After=${s.outstandingAfter}`));
+  }
+
+  // T4 — Final payment: principal can't exceed outstanding
+  {
+    const s = splitEMIPayment(5000, 12, 11122);
+    results.push(assert("T4: Final payment — principalPortion ≤ outstandingBefore",
+      s.principalPortion <= 5000, `Got principalPortion=${s.principalPortion}`));
+  }
+
+  // T5 — Zero rate loan: all principal
+  {
+    const s = splitEMIPayment(100000, 0, 5000);
+    results.push(assert("T5: Zero rate → interestPortion = 0",
+      s.interestPortion === 0, `Got ${s.interestPortion}`));
+  }
+
+  // T6 — Journal entry is balanced
+  {
+    const e = generateLoanJournalEntry({ loanName:"BL", outstandingPrincipal:500000, annualRate:12, emi:11122 });
+    results.push(assert("T6: Loan journal entry is balanced", e.isBalanced,
+      `Debits=${e.totalDebits}, Credits=${e.totalCredits}`));
+  }
+
+  // T7 — Journal entry has 2 debits (interest + principal)
+  {
+    const e = generateLoanJournalEntry({ outstandingPrincipal:500000, annualRate:12, emi:11122 });
+    results.push(assert("T7: Loan journal entry has 2 debit lines", e.debits.length === 2,
+      `Got ${e.debits.length} debits`));
+  }
+
+  // T8 — Depreciation: straight-line annual = (cost - salvage) / life
+  {
+    const d = generateDepreciationEntry({ assetName:"Van", cost:800000, salvageValue:50000, usefulLifeYears:5 });
+    results.push(assert("T8: SL annual depreciation = (800000-50000)/5 = 150000",
+      d.annualDepreciation === 150000, `Got ${d.annualDepreciation}`));
+  }
+
+  // T9 — Depreciation monthly = annual / 12
+  {
+    const d = generateDepreciationEntry({ assetName:"Van", cost:800000, salvageValue:50000, usefulLifeYears:5 });
+    results.push(assert("T9: Monthly depreciation = annual/12",
+      d.monthlyDepreciation === _r(d.annualDepreciation / 12),
+      `Got monthly=${d.monthlyDepreciation}`));
+  }
+
+  // T10 — Depreciation journal is always balanced
+  {
+    const d = generateDepreciationEntry({ assetName:"X", cost:100000, usefulLifeYears:4 });
+    results.push(assert("T10: Depreciation journal entry is balanced", d.isBalanced));
+  }
+
+  // T11 — buildPeriodMapping aggregates correctly
+  {
+    const pm = buildPeriodMapping({
+      loans: [{ loanName:"L1", outstandingPrincipal:500000, annualRate:12, emi:11122 }],
+      depreciationItems: [{ assetName:"V", cost:800000, salvageValue:50000, usefulLifeYears:5 }],
+    });
+    const depEntry = generateDepreciationEntry({ assetName:"V", cost:800000, salvageValue:50000, usefulLifeYears:5 });
+    results.push(assert("T11: Period mapping — total P&L = interest + depreciation",
+      pm.pnlImpacts.totalReduction === _r(pm.pnlImpacts.interestExpense + pm.pnlImpacts.depreciation),
+      `Total=${pm.pnlImpacts.totalReduction}`));
+  }
+
+  // T12 — reconcileStatements detects mismatch
+  {
+    const r = reconcileStatements({ pnlInterestExpense:5000, scheduleInterestSum:4500,
+      bsLoanBalance:450000, originalPrincipal:500000, cumulativePrincipalRepaid:50000 });
+    results.push(assert("T12: reconcileStatements detects interest mismatch",
+      !r.interestMatch && r.alerts.length > 0, `Alerts: ${r.alerts.join("; ")}`));
+  }
+
+  // T13 — reconcileStatements passes when data is consistent
+  {
+    const r = reconcileStatements({ pnlInterestExpense:5000, scheduleInterestSum:5000,
+      bsLoanBalance:450000, originalPrincipal:500000, cumulativePrincipalRepaid:50000 });
+    results.push(assert("T13: reconcileStatements passes consistent data", r.isReconciled,
+      `isReconciled=${r.isReconciled}`));
+  }
+
+  // T14 — Negative principal throws
+  {
+    let threw = false;
+    try { splitEMIPayment(-1000, 12, 11122); } catch(e) { threw = true; }
+    results.push(assert("T14: Negative principal throws error", threw));
+  }
+
+  const passed = results.filter(r=>r.pass).length;
+  document.getElementById("test-output").innerHTML = `
+    <div style="grid-column:1/-1;margin-bottom:10px;font-weight:600;font-size:.9rem;color:#475569;">
+      ${passed}/${results.length} tests passed
+    </div>
+    ${results.map(r=>`
+      <div class="test-item ${r.pass?'test-pass':'test-fail'}">
+        <div class="test-name">${r.pass?'✅':'❌'} ${r.name}</div>
+        ${r.detail?`<div class="test-detail">${r.detail}</div>`:""}
+      </div>`).join("")}`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Init
+══════════════════════════════════════════════════════════ */
+function switchTab(tab) {
+  const names = ["split","journal","depreciation","period","reconcile","tests"];
+  document.querySelectorAll(".tab").forEach((t,i) => t.classList.toggle("active", names[i]===tab));
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-"+tab).classList.add("active");
+}
+
+// Seed period mapping
+addPMLoan({ name:"Bank Business Loan", op:500000, rate:12, emi:11122 });
+addPMDep({ name:"Delivery Vehicle", cost:800000, salvage:50000, life:5 });
+</script>
+</body>
+</html>

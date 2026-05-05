@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contractor & Payroll Tax — FinWise</title>
+<script src="../sidebar.js" defer></script>
+<link rel="manifest" href="../manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:12px}}
+h1{font-size:1.45rem;font-weight:700;margin-bottom:4px}
+.sub{color:#64748b;font-size:.9rem;margin-bottom:20px}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:9px 18px;border:none;border-radius:8px;background:#e2e8f0;color:#475569;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:#2563eb;color:#fff}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card h2{font-size:1rem;font-weight:700;margin-bottom:14px;color:#1e293b}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+label{display:block;font-size:.82rem;font-weight:600;color:#475569;margin-bottom:4px}
+input,select{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.9rem;background:#fff;color:#1e293b;outline:none;transition:border .2s}
+input:focus,select:focus{border-color:#2563eb}
+.btn{padding:9px 18px;border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
+.btn-red{background:#ef4444;color:#fff}.btn-red:hover{background:#dc2626}
+.btn-sm{padding:5px 11px;font-size:.8rem}
+.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
+.stat-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center}
+.stat-box .val{font-size:1.5rem;font-weight:800;color:#2563eb}
+.stat-box .lbl{font-size:.78rem;color:#64748b;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:#f1f5f9;padding:9px 10px;text-align:left;font-weight:700;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:8px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+tr:hover td{background:#f8fafc}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.75rem;font-weight:700}
+.b-req{background:#fee2e2;color:#dc2626}
+.b-apr{background:#fef3c7;color:#b45309}
+.b-ok{background:#dcfce7;color:#16a34a}
+.b-ex{background:#f1f5f9;color:#64748b}
+.warn{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:8px;padding:12px;font-size:.84rem;color:#92400e;margin-bottom:12px}
+.info{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:8px;padding:12px;font-size:.84rem;color:#1e40af;margin-bottom:12px}
+.row-form{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.row-form>div{flex:1;min-width:120px}
+.row-form>.btn{flex:none;margin-bottom:0}
+#fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
+#fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.section-title{font-size:.9rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px}
+.deadline-box{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:#f8fafc;border:1.5px solid #e2e8f0;margin-bottom:12px}
+.deadline-box .icon{font-size:1.4rem}
+.deadline-box .txt{font-size:.85rem;color:#475569}
+.deadline-box .txt strong{color:#1e293b;display:block}
+.cr-warn{background:#fce7f3;border:1.5px solid #f9a8d4;border-radius:8px;padding:12px;font-size:.84rem;color:#9d174d;margin-bottom:12px}
+
+/* ── 1099 ALERT CARD ── */
+.alert-card{border-radius:10px;padding:16px 18px;margin-bottom:10px}
+.al-urgent{background:#fff5f5;border:1.5px solid #fca5a5}
+.al-warn  {background:#fffbeb;border:1.5px solid #fde68a}
+.al-head  {font-size:.9rem;font-weight:800;color:#1e293b;margin-bottom:10px}
+.al-grid  {display:flex;flex-direction:column;gap:5px}
+.al-row   {display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border-radius:7px;border:1px solid #f1f5f9;flex-wrap:wrap}
+.al-name  {font-weight:700;font-size:.85rem;flex:1;min-width:100px}
+.al-amt   {font-size:.82rem;color:#475569;font-weight:600}
+
+/* ── W-9 INLINE SELECT ── */
+.w9-sel{font-size:.78rem;padding:3px 7px;border-radius:5px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;color:#1e293b;font-family:'Segoe UI',sans-serif}
+.w9-sel:focus{outline:none;border-color:#2563eb}
+.w9-sel.w9-ok{border-color:#86efac;background:#f0fdf4;color:#166534}
+.w9-sel.w9-no{border-color:#fca5a5;background:#fff5f5;color:#dc2626;font-weight:700}
+.w9-sel.w9-pend{border-color:#fcd34d;background:#fffbeb;color:#92400e}
+
+/* ── INTEGRATION STRIP ── */
+.int-strip{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 14px;font-size:.78rem;color:#166534;margin-bottom:14px}
+
+/* ── PRINT / EXPORT ── */
+.print-hdr{display:none}
+.btn-csv{padding:7px 14px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer}
+.btn-csv:hover{background:#15803d}
+@media print{
+  .print-hdr{display:block;padding:14px 0 10px;border-bottom:2px solid #1e293b;margin-bottom:18px}
+  .print-hdr-name{font-size:1.1rem;font-weight:800;color:#1e293b}
+  .print-hdr-meta{font-size:.78rem;color:#64748b;margin-top:3px}
+  .no-print{display:none!important}
+  #fwSidebar{display:none!important}
+  #mainWrap{margin-left:0!important}
+  .tabs{display:none!important}
+  .panel{display:block!important}
+  .btn-red,.btn-csv,.btn-green,.btn-blue{display:none!important}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="print-hdr" id="printHdr">
+  <div class="print-hdr-name" id="printBizName">Contractor &amp; Payroll Summary</div>
+  <div class="print-hdr-meta" id="printMeta"></div>
+</div>
+<div id="fwSidebar"></div>
+<div id="mainWrap">
+  <h1>&#128203; Contractor &amp; Payroll Tax</h1>
+  <p class="sub">1099-NEC contractor tracking &bull; FUTA &bull; SUTA payroll tax estimates</p>
+  <div id="intStrip" class="int-strip no-print" style="display:none"></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('nec')">&#128203; 1099-NEC Contractors</button>
+    <button class="tab-btn" onclick="switchTab('futa')">&#128184; FUTA / SUTA</button>
+  </div>
+
+  <!-- 1099-NEC TAB -->
+  <div class="panel active" id="panel-nec">
+    <div class="card">
+      <h2>Add Contractor</h2>
+      <div class="row-form">
+        <div><label>Name / Business</label><input id="cName" placeholder="Jane Doe" /></div>
+        <div><label>Contractor Type</label>
+          <select id="cType">
+            <option value="individual">Individual / Sole Prop</option>
+            <option value="llc_sole">LLC (sole member)</option>
+            <option value="llc_partner">LLC (partnership)</option>
+            <option value="llc_corp">LLC (taxed as corp)</option>
+            <option value="corp">Corporation (S or C)</option>
+            <option value="attorney">Attorney (any entity)</option>
+            <option value="medical">Medical Provider (any entity)</option>
+          </select>
+        </div>
+        <div><label>W-9 on file?</label>
+          <select id="cW9">
+            <option value="yes">Yes</option>
+            <option value="no">No — backup withhold 24%</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+        <button class="btn btn-blue" onclick="addContractor()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Log Payment</h2>
+      <div class="row-form">
+        <div><label>Contractor</label>
+          <select id="pCon"></select>
+        </div>
+        <div><label>Amount ($)</label><input id="pAmt" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+        <div><label>Date</label><input id="pDate" type="date" /></div>
+        <div><label>Tax Year</label>
+          <select id="pYear"></select>
+        </div>
+        <button class="btn btn-blue" onclick="logPayment()">Log</button>
+      </div>
+    </div>
+
+    <div id="necAlertCard" style="display:none"></div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <h2 style="margin:0">Contractor Summary</h2>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label style="margin:0;font-size:.82rem">Year:</label>
+          <select id="viewYear" onchange="renderNEC()" style="width:90px"></select>
+          <button class="btn-csv no-print" onclick="exportCSV()">&#8595; Export CSV</button>
+          <button class="btn no-print" style="padding:6px 14px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">🖨️ Print</button>
+        </div>
+      </div>
+      <div id="necDeadline" class="deadline-box">
+        <span class="icon">&#128197;</span>
+        <span class="txt"><strong>1099-NEC Filing Deadline</strong>January 31 — recipient copy &amp; IRS e-file</span>
+      </div>
+      <div id="necSummaryStats" class="grid3" style="margin-bottom:16px"></div>
+      <table id="necTable">
+        <thead><tr><th>Contractor</th><th>Type</th><th>W-9</th><th>YTD Paid</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="necTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FUTA/SUTA TAB -->
+  <div class="panel" id="panel-futa">
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h2>Business Info</h2>
+        <div style="margin-bottom:10px">
+          <label>State (for SUTA)</label>
+          <select id="futaState" onchange="saveFutaSetup();renderFUTA()">
+            <option value="">— Select State —</option>
+          </select>
+        </div>
+        <div>
+          <label>Tax Year</label>
+          <select id="futaYear" onchange="saveFutaSetup();renderFUTA()"></select>
+        </div>
+      </div>
+      <div class="card">
+        <h2>FUTA Reference</h2>
+        <div class="stat-box" style="margin-bottom:10px">
+          <div class="val">0.6%</div>
+          <div class="lbl">Net FUTA rate (after 5.4% state credit)</div>
+        </div>
+        <div class="info" style="margin:0;font-size:.82rem">Gross rate 6% minus 5.4% FUTA credit = <strong>0.6% net</strong>. Wage base: <strong>$7,000/employee</strong>. Deposit when cumulative liability ≥ $500.</div>
+      </div>
+    </div>
+
+    <div id="crWarn" style="display:none" class="cr-warn">
+      &#9888;&#65039; <strong>Credit Reduction State:</strong> <span id="crText"></span>. Your effective FUTA rate is higher — verify with IRS Schedule A (Form 940).
+    </div>
+
+    <div class="card">
+      <h2>Add Employee</h2>
+      <div class="row-form">
+        <div><label>Employee Name</label><input id="empName" placeholder="John Smith" /></div>
+        <div><label>Annual Gross Wages ($)</label><input id="empWages" type="number" min="0" step="1" placeholder="0" /></div>
+        <div><label>Override SUTA Rate % (optional)</label><input id="empSutaOvr" type="number" min="0" max="20" step=".01" placeholder="use state default" /></div>
+        <button class="btn btn-blue" onclick="addEmployee()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <h2 style="margin:0">FUTA / SUTA Summary</h2>
+        <button class="btn btn-sm btn-green" onclick="renderFUTA()">&#8635; Refresh</button>
+      </div>
+      <div id="futaSummaryStats" class="grid3" style="margin-bottom:16px"></div>
+      <table>
+        <thead><tr><th>Employee</th><th>Annual Wages</th><th>FUTA Taxable</th><th>FUTA Tax</th><th>SUTA Taxable</th><th>SUTA Tax</th><th></th></tr></thead>
+        <tbody id="futaTbody"></tbody>
+        <tfoot id="futaTfoot"></tfoot>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Quarterly FUTA Deposit Schedule</h2>
+      <div id="futaSchedule"></div>
+      <p style="font-size:.8rem;color:#64748b;margin-top:10px">Deposit required when cumulative FUTA liability reaches $500. Final Q4 balance due Jan 31 even if under $500.</p>
+    </div>
+  </div>
+</div>
+<div id="fwToast"></div>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+var SUTA = {
+  AL:{name:'Alabama',    wb:8000,  nr:2.70},
+  AK:{name:'Alaska',     wb:49700, nr:1.78, ee:true},
+  AZ:{name:'Arizona',    wb:8000,  nr:2.00},
+  AR:{name:'Arkansas',   wb:10000, nr:2.90},
+  CA:{name:'California', wb:7000,  nr:3.40, cr:.009},
+  CO:{name:'Colorado',   wb:20400, nr:1.70},
+  CT:{name:'Connecticut',wb:25000, nr:3.00},
+  DC:{name:'Washington DC',wb:9000,nr:2.70},
+  DE:{name:'Delaware',   wb:10500, nr:1.80},
+  FL:{name:'Florida',    wb:7000,  nr:2.70},
+  GA:{name:'Georgia',    wb:9500,  nr:2.70},
+  HI:{name:'Hawaii',     wb:56700, nr:4.00},
+  ID:{name:'Idaho',      wb:50000, nr:1.23},
+  IL:{name:'Illinois',   wb:13590, nr:3.18},
+  IN:{name:'Indiana',    wb:9500,  nr:2.50},
+  IA:{name:'Iowa',       wb:38200, nr:1.00},
+  KS:{name:'Kansas',     wb:14000, nr:2.70},
+  KY:{name:'Kentucky',   wb:11100, nr:2.70},
+  LA:{name:'Louisiana',  wb:7700,  nr:1.16},
+  ME:{name:'Maine',      wb:12000, nr:2.26},
+  MD:{name:'Maryland',   wb:8500,  nr:2.30},
+  MA:{name:'Massachusetts',wb:15000,nr:2.42},
+  MI:{name:'Michigan',   wb:9500,  nr:2.70},
+  MN:{name:'Minnesota',  wb:42000, nr:1.10},
+  MS:{name:'Mississippi',wb:14000, nr:1.00},
+  MO:{name:'Missouri',   wb:10000, nr:2.38},
+  MT:{name:'Montana',    wb:43000, nr:1.00},
+  NE:{name:'Nebraska',   wb:9000,  nr:5.00},
+  NV:{name:'Nevada',     wb:40600, nr:2.95},
+  NH:{name:'New Hampshire',wb:14000,nr:1.70},
+  NJ:{name:'New Jersey', wb:42300, nr:2.80, ee:true},
+  NM:{name:'New Mexico', wb:31700, nr:1.00},
+  NY:{name:'New York',   wb:12500, nr:4.03, cr:.009},
+  NC:{name:'North Carolina',wb:29600,nr:1.00},
+  ND:{name:'North Dakota',wb:43800,nr:1.04},
+  OH:{name:'Ohio',       wb:9000,  nr:2.70},
+  OK:{name:'Oklahoma',   wb:25700, nr:1.50},
+  OR:{name:'Oregon',     wb:52800, nr:2.40},
+  PA:{name:'Pennsylvania',wb:10000,nr:3.69, ee:true},
+  RI:{name:'Rhode Island',wb:29200,nr:1.09},
+  SC:{name:'South Carolina',wb:14000,nr:0.55},
+  SD:{name:'South Dakota',wb:15000,nr:1.20},
+  TN:{name:'Tennessee',  wb:7000,  nr:2.70},
+  TX:{name:'Texas',      wb:9000,  nr:2.70},
+  UT:{name:'Utah',       wb:44800, nr:1.00},
+  VT:{name:'Vermont',    wb:14300, nr:1.00},
+  VA:{name:'Virginia',   wb:8000,  nr:2.73},
+  WA:{name:'Washington', wb:67600, nr:1.00},
+  WV:{name:'West Virginia',wb:9000,nr:2.70},
+  WI:{name:'Wisconsin',  wb:14000, nr:3.05},
+  WY:{name:'Wyoming',    wb:30900, nr:1.22}
+};
+
+var FUTA_WB = 7000;
+var FUTA_NET = 0.006;
+var QUARTERS = [
+  {label:'Q1 (Jan–Mar)', due:'Apr 30'},
+  {label:'Q2 (Apr–Jun)', due:'Jul 31'},
+  {label:'Q3 (Jul–Sep)', due:'Oct 31'},
+  {label:'Q4 (Oct–Dec)', due:'Jan 31 (next year)'}
+];
+
+// ── STORAGE ─────────────────────────────────────────────────────────────────
+function getContractors(){ return JSON.parse(localStorage.getItem('fw_contractors')||'[]'); }
+function setContractors(a){ localStorage.setItem('fw_contractors', JSON.stringify(a)); }
+function getPayments(){ return JSON.parse(localStorage.getItem('fw_contractor_payments')||'[]'); }
+function setPayments(a){ localStorage.setItem('fw_contractor_payments', JSON.stringify(a)); }
+function getEmployees(){ return JSON.parse(localStorage.getItem('fw_employees')||'[]'); }
+function setEmployees(a){ localStorage.setItem('fw_employees', JSON.stringify(a)); }
+function getFutaSetup(){ return JSON.parse(localStorage.getItem('fw_futa_setup')||'{}'); }
+function setFutaSetup(o){ localStorage.setItem('fw_futa_setup', JSON.stringify(o)); }
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 3500); }
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('panel-'+id).classList.add('active');
+  var idx = {nec:0,futa:1}[id];
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ── YEAR HELPERS ─────────────────────────────────────────────────────────────
+function thisYear(){ return new Date().getFullYear(); }
+function populateYearSelects(){
+  var yr = thisYear();
+  var years = [yr, yr-1, yr-2];
+  ['pYear','viewYear','futaYear'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = '';
+    years.forEach(function(y){
+      var o = document.createElement('option');
+      o.value = y; o.textContent = y;
+      el.appendChild(o);
+    });
+  });
+}
+
+// ── 1099-NEC: CONTRACTOR TYPE LABELS ─────────────────────────────────────────
+var TYPE_LABEL = {
+  individual:'Individual / Sole Prop',
+  llc_sole:'LLC (sole member)',
+  llc_partner:'LLC (partnership)',
+  llc_corp:'LLC (corp)',
+  corp:'Corporation',
+  attorney:'Attorney',
+  medical:'Medical Provider'
+};
+
+function needs1099(type, totalPaid){
+  if(type === 'corp' || type === 'llc_corp') return false;
+  return totalPaid >= 600;
+}
+
+function getStatus(type, totalPaid){
+  var exempt = (type === 'corp' || type === 'llc_corp');
+  if(exempt) return {cls:'b-ex', txt:'Exempt'};
+  if(totalPaid >= 600) return {cls:'b-req', txt:'1099 Required'};
+  if(totalPaid >= 400) return {cls:'b-apr', txt:'Approaching $600'};
+  return {cls:'b-ok', txt:'Under $600'};
+}
+
+// ── 1099-NEC: ADD CONTRACTOR ─────────────────────────────────────────────────
+function addContractor(){
+  var name = document.getElementById('cName').value.trim();
+  if(!name){ toast('Enter contractor name'); return; }
+  var list = getContractors();
+  list.push({id: Date.now(), name: name, type: document.getElementById('cType').value, w9: document.getElementById('cW9').value});
+  setContractors(list);
+  document.getElementById('cName').value = '';
+  populateContractorSelect();
+  renderNEC();
+  pushContractorTotals();
+  toast('Contractor added');
+}
+
+// ── 1099-NEC: LOG PAYMENT ────────────────────────────────────────────────────
+function logPayment(){
+  var cid = parseInt(document.getElementById('pCon').value);
+  var amt = parseFloat(document.getElementById('pAmt').value);
+  var dt  = document.getElementById('pDate').value;
+  var yr  = parseInt(document.getElementById('pYear').value);
+  if(!cid || isNaN(amt) || amt <= 0 || !dt){ toast('Fill all payment fields'); return; }
+  var pmts = getPayments();
+  pmts.push({id: Date.now(), cid: cid, amt: amt, date: dt, year: yr});
+  setPayments(pmts);
+  document.getElementById('pAmt').value = '';
+  renderNEC();
+  pushContractorTotals();
+  toast('Payment logged — $' + fmt(amt));
+}
+
+// ── 1099-NEC: RENDER ─────────────────────────────────────────────────────────
+function populateContractorSelect(){
+  var list = getContractors();
+  var sel = document.getElementById('pCon');
+  sel.innerHTML = list.length ? '' : '<option value="">No contractors yet</option>';
+  list.forEach(function(c){
+    var o = document.createElement('option');
+    o.value = c.id; o.textContent = c.name;
+    sel.appendChild(o);
+  });
+}
+
+function renderNEC(){
+  var yr = parseInt(document.getElementById('viewYear').value) || thisYear();
+  var list = getContractors();
+  var pmts = getPayments().filter(function(p){ return p.year === yr; });
+
+  // Totals per contractor
+  var totals = {};
+  pmts.forEach(function(p){ totals[p.cid] = (totals[p.cid]||0) + p.amt; });
+
+  var reqCount = 0, total1099 = 0;
+  list.forEach(function(c){
+    var paid = totals[c.id]||0;
+    if(needs1099(c.type, paid)){ reqCount++; total1099 += paid; }
+  });
+
+  // Stats
+  document.getElementById('necSummaryStats').innerHTML =
+    stat(list.length, 'Total Contractors') +
+    stat(reqCount, '1099s Required') +
+    stat('$'+fmt(total1099), 'Total to Reportable Contractors');
+
+  // Deadline countdown
+  var now = new Date();
+  var deadline = new Date(yr+1, 0, 31);
+  var diff = Math.ceil((deadline - now)/(1000*60*60*24));
+  var dStr = diff > 0 ? diff + ' days until Jan 31, '+(yr+1) : (diff === 0 ? 'Due TODAY' : 'Past deadline');
+  var dColor = diff <= 30 ? '#dc2626' : diff <= 60 ? '#b45309' : '#16a34a';
+  document.getElementById('necDeadline').innerHTML =
+    '<span class="icon">&#128197;</span><span class="txt"><strong style="color:'+dColor+'">1099-NEC: '+dStr+'</strong>Recipient copy &amp; IRS e-file both due Jan 31</span>';
+
+  // Table
+  var rows = '';
+  if(!list.length){
+    rows = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px">No contractors yet — add one above</td></tr>';
+  } else {
+    list.forEach(function(c){
+      var paid = totals[c.id]||0;
+      var st = getStatus(c.type, paid);
+      var w9SelCls = c.w9==='yes'?'w9-ok':c.w9==='no'?'w9-no':'w9-pend';
+      var w9Sel = '<select class="w9-sel '+w9SelCls+'" onchange="updateW9('+c.id+',this.value)">' +
+        '<option value="yes"'+(c.w9==='yes'?' selected':'')+'>&#10003; On file</option>' +
+        '<option value="no"'+(c.w9==='no'?' selected':'')+'>&#9888; Missing</option>' +
+        '<option value="pending"'+(c.w9==='pending'?' selected':'')+'>&#8987; Pending</option>' +
+        '</select>';
+      rows += '<tr>' +
+        '<td><strong>'+esc(c.name)+'</strong></td>' +
+        '<td>'+TYPE_LABEL[c.type]+'</td>' +
+        '<td>'+w9Sel+'</td>' +
+        '<td>$'+fmt(paid)+'</td>' +
+        '<td><span class="badge '+st.cls+'">'+st.txt+'</span></td>' +
+        '<td><button class="btn btn-sm btn-red" onclick="deleteContractor('+c.id+')">&#128465;</button></td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('necTbody').innerHTML = rows;
+  renderNECAlerts(yr);
+}
+
+function deleteContractor(id){
+  if(!confirm('Delete contractor and all their payments?')) return;
+  setContractors(getContractors().filter(function(c){ return c.id !== id; }));
+  setPayments(getPayments().filter(function(p){ return p.cid !== id; }));
+  populateContractorSelect();
+  renderNEC();
+  pushContractorTotals();
+  toast('Contractor deleted');
+}
+
+// ── INTEGRATION: PUSH CONTRACTOR TOTALS ──────────────────────────────────────
+function pushContractorTotals(){
+  var pmts = getPayments();
+  var ctrs = getContractors();
+  var curYr = thisYear();
+  var byYear = {};
+  pmts.forEach(function(p){ var yr = p.year||curYr; byYear[yr]=(byYear[yr]||0)+p.amt; });
+  var curTotal = byYear[curYr]||0;
+  localStorage.setItem('fw_contractor_totals', JSON.stringify({
+    byYear: byYear, currentYear: curYr, currentYearTotal: curTotal,
+    count: ctrs.length, updatedAt: Date.now()
+  }));
+  var strip = document.getElementById('intStrip');
+  if(curTotal > 0){
+    strip.style.display = '';
+    strip.innerHTML = '&#128203; Contractor expenses synced &mdash; <strong>'+curYr+' total: $'+fmt(curTotal)+'</strong> shared with Tax Estimator &amp; Owner\'s Pay';
+  }
+}
+
+// ── 1099-NEC ALERTS ──────────────────────────────────────────────────────────
+function renderNECAlerts(yr){
+  var list = getContractors();
+  var pmts = getPayments().filter(function(p){ return p.year === yr; });
+  var totals = {};
+  pmts.forEach(function(p){ totals[p.cid]=(totals[p.cid]||0)+p.amt; });
+
+  var urgentRows = [], warnRows = [];
+  var daysLeft = Math.ceil((new Date(yr+1,0,31) - new Date())/(864e5));
+
+  list.forEach(function(c){
+    var paid = totals[c.id]||0;
+    if(!paid) return;
+    if(needs1099(c.type, paid)) urgentRows.push({name:c.name, paid:paid});
+    if(c.w9==='no'||c.w9==='pending') warnRows.push({name:c.name, w9:c.w9, paid:paid});
+  });
+
+  var card = document.getElementById('necAlertCard');
+  if(!urgentRows.length && !warnRows.length){ card.style.display='none'; card.innerHTML=''; return; }
+
+  var html = '';
+  if(urgentRows.length){
+    var cls = daysLeft<=30 ? 'al-urgent' : 'al-warn';
+    html += '<div class="alert-card '+cls+'"><div class="al-head">&#128203; 1099-NEC Required &mdash; ';
+    html += (daysLeft>0 ? daysLeft+' days until Jan 31, '+(yr+1) : 'PAST DEADLINE')+'</div>';
+    html += '<div class="al-grid">';
+    urgentRows.forEach(function(r){
+      html += '<div class="al-row"><span class="al-name">'+esc(r.name)+'</span><span class="al-amt">$'+fmt(r.paid)+' YTD</span><span class="badge b-req">1099 Required</span></div>';
+    });
+    html += '</div></div>';
+  }
+  if(warnRows.length){
+    html += '<div class="alert-card al-warn"><div class="al-head">&#9888;&#65039; W-9 Not Collected &mdash; backup withholding may apply</div>';
+    html += '<div class="al-grid">';
+    warnRows.forEach(function(r){
+      var lbl = r.w9==='no' ? '&#9888; Missing' : '&#8987; Pending';
+      html += '<div class="al-row"><span class="al-name">'+esc(r.name)+'</span><span class="al-amt">$'+fmt(r.paid)+' paid</span><span class="badge b-apr">'+lbl+'</span></div>';
+    });
+    html += '</div></div>';
+  }
+  card.innerHTML = html;
+  card.style.display = '';
+}
+
+// ── W-9 INLINE UPDATE ────────────────────────────────────────────────────────
+function updateW9(id, status){
+  var list = getContractors();
+  list.forEach(function(c){ if(c.id===id) c.w9=status; });
+  setContractors(list);
+  renderNEC();
+  pushContractorTotals();
+}
+
+// ── EXPORT CSV ───────────────────────────────────────────────────────────────
+function exportCSV(){
+  var yr = parseInt(document.getElementById('viewYear').value)||thisYear();
+  var list = getContractors();
+  var pmts = getPayments().filter(function(p){ return p.year===yr; });
+  var totals = {};
+  pmts.forEach(function(p){ totals[p.cid]=(totals[p.cid]||0)+p.amt; });
+
+  var rows = [['Contractor 1099 Summary — '+yr],[]];
+  rows.push(['Name','Type','W-9 Status','YTD Paid','1099 Required','Reportable Amount']);
+  list.forEach(function(c){
+    var paid = totals[c.id]||0;
+    var req = needs1099(c.type, paid);
+    rows.push([c.name, TYPE_LABEL[c.type]||c.type,
+      c.w9==='yes'?'On File':c.w9==='no'?'Missing':'Pending',
+      paid.toFixed(2), req?'Yes':'No', req?paid.toFixed(2):'']);
+  });
+
+  rows.push([],['Payment Detail'],['Date','Contractor','Amount']);
+  var cMap = {};
+  list.forEach(function(c){ cMap[c.id]=c.name; });
+  pmts.slice().sort(function(a,b){ return a.date<b.date?-1:1; }).forEach(function(p){
+    rows.push([p.date, cMap[p.cid]||'Unknown', p.amt.toFixed(2)]);
+  });
+
+  var csv = rows.map(function(r){
+    return r.map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\r\n');
+  var blob = new Blob([csv],{type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='contractors_'+yr+'.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV downloaded');
+}
+
+// ── FUTA/SUTA: STATE SELECT ──────────────────────────────────────────────────
+function populateStateSelect(){
+  var sel = document.getElementById('futaState');
+  Object.keys(SUTA).sort(function(a,b){ return SUTA[a].name.localeCompare(SUTA[b].name); }).forEach(function(k){
+    var o = document.createElement('option');
+    o.value = k; o.textContent = SUTA[k].name;
+    sel.appendChild(o);
+  });
+}
+
+function saveFutaSetup(){
+  setFutaSetup({state: document.getElementById('futaState').value, year: document.getElementById('futaYear').value});
+}
+
+// ── FUTA/SUTA: ADD EMPLOYEE ──────────────────────────────────────────────────
+function addEmployee(){
+  var name  = document.getElementById('empName').value.trim();
+  var wages = parseFloat(document.getElementById('empWages').value);
+  var ovr   = document.getElementById('empSutaOvr').value.trim();
+  if(!name || isNaN(wages) || wages < 0){ toast('Enter employee name and wages'); return; }
+  var emps = getEmployees();
+  var emp = {id: Date.now(), name: name, wages: wages};
+  if(ovr !== '') emp.sutaOvr = parseFloat(ovr);
+  emps.push(emp);
+  setEmployees(emps);
+  document.getElementById('empName').value = '';
+  document.getElementById('empWages').value = '';
+  document.getElementById('empSutaOvr').value = '';
+  renderFUTA();
+  toast('Employee added');
+}
+
+// ── FUTA/SUTA: RENDER ────────────────────────────────────────────────────────
+function renderFUTA(){
+  var setup = getFutaSetup();
+  var stKey = document.getElementById('futaState').value || setup.state || '';
+  var sutaInfo = stKey ? SUTA[stKey] : null;
+
+  // Credit reduction warning
+  var crDiv = document.getElementById('crWarn');
+  if(sutaInfo && sutaInfo.cr){
+    crDiv.style.display = '';
+    document.getElementById('crText').textContent =
+      sutaInfo.name + ' has a FUTA credit reduction of ' + (sutaInfo.cr*100).toFixed(1) + '% — effective net FUTA rate is ' + ((FUTA_NET + sutaInfo.cr)*100).toFixed(2) + '%';
+  } else {
+    crDiv.style.display = 'none';
+  }
+
+  var emps = getEmployees();
+  var totalFUTA = 0, totalSUTA = 0, totalWages = 0;
+  var rows = '';
+
+  if(!emps.length){
+    rows = '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:20px">No employees yet — add one above</td></tr>';
+  } else {
+    emps.forEach(function(e){
+      var futaTaxable = Math.min(e.wages, FUTA_WB);
+      var futaTax = futaTaxable * FUTA_NET;
+      var sutaTaxable = sutaInfo ? Math.min(e.wages, sutaInfo.wb) : 0;
+      var sutaRate = e.sutaOvr != null ? e.sutaOvr/100 : (sutaInfo ? sutaInfo.nr/100 : 0);
+      var sutaTax = sutaTaxable * sutaRate;
+      totalWages += e.wages;
+      totalFUTA += futaTax;
+      totalSUTA += sutaTax;
+      rows += '<tr>' +
+        '<td><strong>'+esc(e.name)+'</strong></td>' +
+        '<td>$'+fmt(e.wages)+'</td>' +
+        '<td>$'+fmt(futaTaxable)+'</td>' +
+        '<td>$'+fmt(futaTax)+'</td>' +
+        '<td>$'+(sutaInfo ? fmt(sutaTaxable) : '—')+'</td>' +
+        '<td>$'+(sutaInfo ? fmt(sutaTax) : '—')+'</td>' +
+        '<td><button class="btn btn-sm btn-red" onclick="deleteEmployee('+e.id+')">&#128465;</button></td>' +
+        '</tr>';
+    });
+  }
+
+  document.getElementById('futaTbody').innerHTML = rows;
+  document.getElementById('futaTfoot').innerHTML = emps.length ?
+    '<tr style="font-weight:800;background:#f8fafc">' +
+    '<td>TOTAL ('+emps.length+' employees)</td>' +
+    '<td>$'+fmt(totalWages)+'</td>' +
+    '<td></td><td>$'+fmt(totalFUTA)+'</td>' +
+    '<td></td><td>$'+(sutaInfo ? fmt(totalSUTA) : '—')+'</td><td></td></tr>' : '';
+
+  // Summary stats
+  var sutaRateDisp = sutaInfo ? sutaInfo.nr.toFixed(2)+'%' : 'N/A';
+  var sutaWbDisp   = sutaInfo ? '$'+fmt(sutaInfo.wb) : 'N/A';
+  document.getElementById('futaSummaryStats').innerHTML =
+    stat('$'+fmt(totalFUTA), 'Est. Annual FUTA') +
+    stat(sutaInfo ? '$'+fmt(totalSUTA) : 'Select State', 'Est. Annual SUTA') +
+    stat(emps.length, 'Employees');
+
+  // Quarterly FUTA schedule
+  var qFUTA = totalFUTA / 4;
+  var cumul = 0;
+  var schedHTML = '<table><thead><tr><th>Quarter</th><th>Est. FUTA</th><th>Cumulative</th><th>Due Date</th><th>Deposit?</th></tr></thead><tbody>';
+  QUARTERS.forEach(function(q, i){
+    cumul += qFUTA;
+    var dep = cumul >= 500;
+    schedHTML += '<tr>' +
+      '<td>'+q.label+'</td>' +
+      '<td>$'+fmt(qFUTA)+'</td>' +
+      '<td>$'+fmt(cumul)+'</td>' +
+      '<td>'+q.due+'</td>' +
+      '<td><span class="badge '+(dep ? 'b-req' : 'b-ok')+'">'+(dep ? 'Deposit Due' : 'Carry forward')+'</span></td>' +
+      '</tr>';
+    if(dep) cumul = 0;
+  });
+  schedHTML += '</tbody></table>';
+  document.getElementById('futaSchedule').innerHTML = schedHTML;
+}
+
+function deleteEmployee(id){
+  setEmployees(getEmployees().filter(function(e){ return e.id !== id; }));
+  renderFUTA();
+  toast('Employee removed');
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function stat(val, lbl){
+  return '<div class="stat-box"><div class="val">'+val+'</div><div class="lbl">'+lbl+'</div></div>';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+(function init(){
+  populateYearSelects();
+  populateContractorSelect();
+  populateStateSelect();
+
+  // Restore FUTA setup
+  var setup = getFutaSetup();
+  if(setup.state) document.getElementById('futaState').value = setup.state;
+  if(setup.year)  document.getElementById('futaYear').value  = setup.year;
+
+  // Default payment date to today
+  document.getElementById('pDate').value = new Date().toISOString().split('T')[0];
+
+  renderNEC();
+  renderFUTA();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profit & Loss Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
+    .tab.active { background: #0369a1; color: #fff; border-color: #0369a1; }
+
+    .panel { display: none; } .panel.active { display: block; }
+
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; margin-bottom: 6px; color: #444; }
+    .desc { font-size: 0.83rem; color: #666; margin-bottom: 14px; }
+
+    label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 4px; margin-top: 12px; }
+    .hint { font-size: 0.75rem; color: #999; }
+    input[type=number], input[type=text] { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:5px; font-size:0.9rem; }
+    input:focus { outline:none; border-color:#0369a1; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+    .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 16px; }
+
+    button.primary { margin-top:14px; padding:10px 24px; background:#0369a1; color:#fff; border:none; border-radius:6px; font-size:0.9rem; cursor:pointer; }
+    button.primary:hover { background:#075985; }
+    button.add-btn { padding:7px 16px; background:#0369a1; color:#fff; border:none; border-radius:5px; font-size:0.83rem; cursor:pointer; }
+    button.del-btn { padding:5px 10px; background:#dc2626; color:#fff; border:none; border-radius:4px; font-size:0.78rem; cursor:pointer; }
+
+    hr { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
+    .section-title { font-size:0.75rem; font-weight:bold; text-transform:uppercase; color:#94a3b8; margin:14px 0 6px; letter-spacing:0.05em; }
+
+    /* P&L Statement */
+    .pl-statement { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .pl-statement td { padding:7px 12px; border-bottom:1px solid #f1f5f9; }
+    .pl-statement td:last-child { text-align:right; font-weight:500; min-width:120px; }
+    .pl-statement .line-header { background:#f8fafc; font-weight:bold; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:#64748b; }
+    .pl-statement .line-total { font-weight:bold; background:#f1f5f9; }
+    .pl-statement .line-total td:last-child { font-size:1rem; }
+    .pl-statement .line-subtotal { background:#fafafa; font-weight:600; }
+    .pl-statement .line-indent td:first-child { padding-left:24px; color:#475569; }
+    .pl-statement .c-green td:last-child { color:#16a34a; }
+    .pl-statement .c-red   td:last-child { color:#dc2626; }
+    .pl-statement .c-blue  td:last-child { color:#2563eb; }
+    .pl-statement .c-amber td:last-child { color:#d97706; }
+
+    /* Margin pills */
+    .margin-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .margin-item { background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 16px; text-align:center; }
+    .margin-item .m-label { font-size:0.72rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
+    .margin-item .m-val   { font-size:1.1rem; font-weight:bold; margin-top:3px; }
+    .m-green { color:#16a34a; } .m-red { color:#dc2626; } .m-blue { color:#2563eb; }
+
+    /* Status banner */
+    .status-banner { border-radius:6px; padding:12px 16px; margin-bottom:14px; font-weight:bold; font-size:0.95rem; }
+    .status-profit   { background:#dcfce7; color:#15803d; border:1px solid #86efac; }
+    .status-loss     { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+    .status-breakeven { background:#fef9c3; color:#92400e; border:1px solid #fde68a; }
+
+    /* Multi-period table */
+    .mp-table { width:100%; border-collapse:collapse; font-size:0.82rem; overflow-x:auto; display:block; }
+    .mp-table th { background:#0f172a; color:#fff; padding:8px 10px; text-align:right; white-space:nowrap; position:sticky; top:0; }
+    .mp-table th:first-child { text-align:left; }
+    .mp-table td { padding:6px 10px; border-bottom:1px solid #f1f5f9; text-align:right; white-space:nowrap; }
+    .mp-table td:first-child { text-align:left; font-weight:600; color:#475569; }
+    .mp-table tr.row-total { background:#f1f5f9; font-weight:bold; }
+    .mp-table tr.row-total td:first-child { color:#1e293b; }
+    .mp-table .positive { color:#16a34a; } .mp-table .negative { color:#dc2626; }
+    .scroll-wrap { overflow-x:auto; border-radius:6px; border:1px solid #e2e8f0; }
+
+    /* Summary grid */
+    .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+    .s-item { background:#f8fafc; border-radius:6px; padding:12px 14px; border:1px solid #e2e8f0; }
+    .s-label { font-size:0.72rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
+    .s-val { font-size:1.1rem; font-weight:bold; margin-top:4px; }
+
+    /* Period row */
+    .period-row { display:grid; grid-template-columns:0.8fr 1fr 1fr 1fr 1fr 1fr auto; gap:6px; align-items:end; margin-bottom:8px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0; }
+
+    /* Sparkline */
+    .spark-row { display:flex; align-items:flex-end; gap:3px; height:40px; margin-top:8px; }
+    .spark-bar { flex:1; border-radius:3px 3px 0 0; min-width:8px; transition:opacity 0.2s; cursor:default; }
+    .spark-bar:hover { opacity:0.8; }
+
+    /* Unit tests */
+    .test-result { font-family:monospace; font-size:0.88rem; padding:4px 0; }
+    .test-result.pass { color:#15803d; } .test-result.fail { color:#dc2626; font-weight:bold; }
+    .test-summary { margin-top:12px; font-weight:bold; font-size:0.95rem; padding:10px; border-radius:6px; }
+    .test-summary.all-pass { background:#dcfce7; color:#15803d; }
+    .test-summary.has-fail  { background:#fee2e2; color:#dc2626; }
+    @media print{.tabs,button,#panel-tests,.add-btn,.del-btn{display:none!important}body{background:#fff;padding:8px}.panel{display:block!important}}
+
+    /* Plain-English Explain Blocks */
+    .explain-block{margin-top:7px}
+    .explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+    .explain-toggle:hover{text-decoration:underline}
+    .explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+    .explain-body.open{display:block}
+    .explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+    .explain-body ul{padding-left:18px;margin-bottom:6px}
+    .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+    .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+  </style>
+</head>
+<body>
+
+<h1>Profit &amp; Loss Engine</h1>
+<p class="subtitle">Small Business Financial Platform · Revenue · Gross Profit · EBIT · Net Profit · Margins</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('single')">Single Period P&amp;L</button>
+  <button class="tab" onclick="showTab('multi')">Multi-Period P&amp;L</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
+</div>
+
+<!-- ─── Single Period ──────────────────────────────────────────────────── -->
+<div id="panel-single" class="panel active">
+  <div class="card">
+    <h2>Single Period P&amp;L</h2>
+    <p class="desc">Enter one month (or year) of financials to see a full Profit &amp; Loss statement.</p>
+    <div class="grid3">
+      <div><label>Period Label <span class="hint">e.g. Jan 2025</span></label><input type="text" id="s-period" value="Jan 2025" /></div>
+      <div><label>Revenue ($)</label><input type="number" id="s-rev" value="200000" min="0" /></div>
+      <div><label>Cost of Goods Sold ($) <span class="hint">direct costs</span></label><input type="number" id="s-cogs" value="60000" min="0" /></div>
+    </div>
+    <hr/>
+    <div class="section-title">Operating Expenses</div>
+    <div class="grid2">
+      <div><label>Fixed OpEx ($/mo) <span class="hint">rent, salaries, insurance</span></label><input type="number" id="s-fixed" value="40000" min="0" /></div>
+      <div><label>Variable OpEx ($/mo) <span class="hint">commissions, utilities</span></label><input type="number" id="s-var" value="20000" min="0" /></div>
+    </div>
+    <hr/>
+    <div class="section-title">Below-the-Line</div>
+    <div class="grid2">
+      <div><label>Interest Expense ($) <span class="hint">from Loan Engine EMI</span></label><input type="number" id="s-int" value="8000" min="0" /></div>
+      <div><label>Tax Rate (%) <span class="hint">0 if not applicable</span></label><input type="number" id="s-tax" value="25" min="0" max="100" /></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:14px">
+      <button class="primary" onclick="calcSingle()">Generate P&amp;L</button>
+      <button style="padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.85rem;cursor:pointer" onclick="window.print()">🖨️ Print / PDF</button>
+    </div>
+  </div>
+  <div id="single-result"></div>
+</div>
+
+<!-- ─── Multi-Period ───────────────────────────────────────────────────── -->
+<div id="panel-multi" class="panel">
+  <div class="card">
+    <h2>Multi-Period P&amp;L</h2>
+    <p class="desc">Enter monthly data to see a full-year statement with trends and totals.</p>
+    <div style="display:grid;grid-template-columns:0.8fr 1fr 1fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:4px;font-size:0.78rem;color:#94a3b8;font-weight:bold;padding:0 10px;">
+      <span>Period</span><span>Revenue</span><span>COGS</span><span>Fixed OpEx</span><span>Variable OpEx</span><span>Interest</span><span></span>
+    </div>
+    <div id="mp-rows"></div>
+    <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
+      <button class="add-btn" onclick="addMPRow()">+ Add Period</button>
+      <label style="margin:0;display:flex;align-items:center;gap:6px;font-size:0.83rem;cursor:pointer;">
+        <input type="checkbox" id="mp-tax-toggle" style="width:auto;" />
+        Apply tax rate:
+        <input type="number" id="mp-tax" value="25" min="0" max="100" style="width:60px;padding:4px 6px;" /> %
+      </label>
+    </div>
+    <button class="primary" onclick="calcMulti()">Generate Multi-Period P&amp;L</button>
+  </div>
+  <div id="multi-result"></div>
+</div>
+
+<!-- ─── Unit Tests ─────────────────────────────────────────────────────── -->
+<div id="panel-tests" class="panel">
+  <div class="card">
+    <h2>Automated Unit Tests</h2>
+    <button class="primary" onclick="runTests()">Run Tests</button>
+    <div id="test-output" style="margin-top:16px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── Plain-English Explain Helpers ───────────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+
+// ─── Module 8: Profit & Loss Engine ──────────────────────────────────────
+
+function _r(n) { return Math.round(n * 100) / 100; }
+
+function calculatePeriodPL({ revenue, cogs=0, fixedOpex=0, variableOpex=0, interestExpense=0, taxRate=0, period="" }) {
+  if (typeof revenue !== "number" || revenue < 0)               throw new Error("revenue must be a non-negative number.");
+  if (typeof cogs !== "number" || cogs < 0)                     throw new Error("cogs must be a non-negative number.");
+  if (typeof fixedOpex !== "number" || fixedOpex < 0)           throw new Error("fixedOpex must be a non-negative number.");
+  if (typeof variableOpex !== "number" || variableOpex < 0)     throw new Error("variableOpex must be a non-negative number.");
+  if (typeof interestExpense !== "number" || interestExpense < 0) throw new Error("interestExpense must be a non-negative number.");
+  if (typeof taxRate !== "number" || taxRate < 0 || taxRate > 100) throw new Error("taxRate must be 0–100.");
+
+  const grossProfit        = _r(revenue - cogs);
+  const totalOpex          = _r(fixedOpex + variableOpex);
+  const operatingProfit    = _r(grossProfit - totalOpex);
+  const netProfitBeforeTax = _r(operatingProfit - interestExpense);
+  const taxAmount          = taxRate > 0 ? _r(netProfitBeforeTax > 0 ? netProfitBeforeTax * (taxRate / 100) : 0) : 0;
+  const netProfitAfterTax  = _r(netProfitBeforeTax - taxAmount);
+  const grossMargin        = revenue > 0 ? _r((grossProfit / revenue) * 100) : 0;
+  const operatingMargin    = revenue > 0 ? _r((operatingProfit / revenue) * 100) : 0;
+  const netMargin          = revenue > 0 ? _r((netProfitAfterTax / revenue) * 100) : 0;
+
+  return { period, revenue, cogs, grossProfit, fixedOpex, variableOpex, totalOpex,
+           operatingProfit, interestExpense, netProfitBeforeTax, taxRate, taxAmount,
+           netProfitAfterTax, grossMargin, operatingMargin, netMargin,
+           isProfitable: netProfitAfterTax > 0,
+           status: netProfitAfterTax > 0 ? "profit" : netProfitAfterTax === 0 ? "breakeven" : "loss" };
+}
+
+function generateMultiPeriodPL(periods) {
+  if (!Array.isArray(periods) || periods.length === 0) throw new Error("periods must be a non-empty array.");
+  const results = periods.map(p => calculatePeriodPL(p));
+  const n = results.length;
+  const sum = key => _r(results.reduce((s, r) => s + r[key], 0));
+  const totals = {
+    revenue: sum("revenue"), cogs: sum("cogs"), grossProfit: sum("grossProfit"),
+    totalOpex: sum("totalOpex"), operatingProfit: sum("operatingProfit"),
+    interestExpense: sum("interestExpense"), netProfitBeforeTax: sum("netProfitBeforeTax"),
+    taxAmount: sum("taxAmount"), netProfitAfterTax: sum("netProfitAfterTax"),
+  };
+  totals.grossMargin     = totals.revenue > 0 ? _r((totals.grossProfit / totals.revenue) * 100) : 0;
+  totals.operatingMargin = totals.revenue > 0 ? _r((totals.operatingProfit / totals.revenue) * 100) : 0;
+  totals.netMargin       = totals.revenue > 0 ? _r((totals.netProfitAfterTax / totals.revenue) * 100) : 0;
+  const averages = {}; Object.keys(totals).forEach(k => averages[k] = _r(totals[k] / n));
+  return {
+    periods: results, totals, averages,
+    profitableMonths: results.filter(r => r.isProfitable).length,
+    lossMonths: results.filter(r => r.status === "loss").length,
+    bestPeriod:  results.reduce((a, b) => a.netProfitAfterTax > b.netProfitAfterTax ? a : b),
+    worstPeriod: results.reduce((a, b) => a.netProfitAfterTax < b.netProfitAfterTax ? a : b),
+  };
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────
+const fmt  = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits:2, maximumFractionDigits:2 });
+const fmtP = n => n.toFixed(1) + "%";
+function showTab(n) {
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById("panel-"+n).classList.add("active");
+  event.target.classList.add("active");
+}
+function getNum(id) { return parseFloat(document.getElementById(id)?.value)||0; }
+function getStr(id) { return document.getElementById(id)?.value||""; }
+function errBox(e)  { return `<div style="padding:12px;background:#fee2e2;border-radius:6px;color:#dc2626;margin-top:12px;">❌ ${e.message}</div>`; }
+
+// ─── Single Period ─────────────────────────────────────────────────────────
+function calcSingle() {
+  const out = document.getElementById("single-result");
+  try {
+    const r = calculatePeriodPL({
+      revenue: getNum("s-rev"), cogs: getNum("s-cogs"),
+      fixedOpex: getNum("s-fixed"), variableOpex: getNum("s-var"),
+      interestExpense: getNum("s-int"), taxRate: getNum("s-tax"),
+      period: getStr("s-period"),
+    });
+    out.innerHTML = renderPLStatement(r);
+    savePLInputs();
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+function renderPLStatement(r) {
+  const statusCls = { profit:"status-profit", loss:"status-loss", breakeven:"status-breakeven" }[r.status];
+  const statusIcon = { profit:"✅", loss:"❌", breakeven:"➖" }[r.status];
+  const statusLabel = { profit:"Profitable", loss:"Operating at a Loss", breakeven:"Break-Even" }[r.status];
+
+  // Build explain blocks for warning conditions
+  var lossExplain = "";
+  if (r.status === "loss") {
+    lossExplain = explainHtml(
+      ["Your business spent more than it earned this period",
+       "Continued losses deplete savings and make it impossible to repay loans",
+       "Lenders will not approve loans to businesses consistently running at a loss"],
+      "Revenue " + fmt(r.revenue) + " − Total Costs " + fmt(r.cogs + r.totalOpex + r.interestExpense + r.taxAmount) + " = Net Loss of " + fmt(Math.abs(r.netProfitAfterTax)) + " — every month this continues, your reserves shrink by " + fmt(Math.abs(r.netProfitAfterTax))
+    );
+  }
+  var lowGrossMarginExplain = "";
+  if (r.grossMargin < 20) {
+    lowGrossMarginExplain = explainHtml(
+      ["Less than 20 cents of gross profit for every $1 of sales",
+       "Very little left to cover operating expenses, salaries, and loan payments after COGS",
+       "Industry average gross margin for most SMBs is 30–50%"],
+      "Gross margin of " + fmtP(r.grossMargin) + " means: you earn $" + (r.grossMargin/100).toFixed(2) + " in gross profit for every $1 in revenue. At 20%+ you’d have $0.20 per $1"
+    );
+  }
+  var operatingLossExplain = "";
+  if (r.operatingProfit < 0) {
+    operatingLossExplain = explainHtml(
+      ["Core business operations are losing money — even before interest and tax",
+       "This signals the business model itself may need to change",
+       "Cannot qualify for most bank loans with negative operating income"],
+      "Operating Profit (EBIT) of " + fmt(r.operatingProfit) + " means your revenue does not cover your operating costs before interest or tax is even considered"
+    );
+  }
+
+  return `
+  <div class="card">
+    <div class="status-banner ${statusCls}">${statusIcon} ${r.period ? r.period + " — " : ""}${statusLabel}</div>
+    ${lossExplain}
+
+    <table class="pl-statement">
+      <tr class="line-header"><td colspan="2">Revenue</td></tr>
+      <tr class="line-indent"><td>Total Revenue</td><td>${fmt(r.revenue)}</td></tr>
+      <tr class="line-indent c-red"><td>(-) Cost of Goods Sold (COGS)</td><td>(${fmt(r.cogs)})</td></tr>
+      <tr class="line-subtotal c-blue"><td>= Gross Profit</td><td>${fmt(r.grossProfit)}</td></tr>
+
+      <tr class="line-header"><td colspan="2">Operating Expenses</td></tr>
+      <tr class="line-indent"><td>Fixed Expenses</td><td>${fmt(r.fixedOpex)}</td></tr>
+      <tr class="line-indent"><td>Variable Expenses</td><td>${fmt(r.variableOpex)}</td></tr>
+      <tr class="line-indent c-red"><td>(-) Total Operating Expenses</td><td>(${fmt(r.totalOpex)})</td></tr>
+      <tr class="line-subtotal c-blue"><td>= Operating Profit (EBIT)</td><td>${fmt(r.operatingProfit)}</td></tr>
+
+      <tr class="line-header"><td colspan="2">Below the Line</td></tr>
+      <tr class="line-indent c-red"><td>(-) Interest Expense</td><td>(${fmt(r.interestExpense)})</td></tr>
+      <tr class="line-subtotal"><td>= Net Profit Before Tax (EBT)</td><td>${fmt(r.netProfitBeforeTax)}</td></tr>
+      <tr class="line-indent c-amber"><td>(-) Tax (${r.taxRate}%)</td><td>(${fmt(r.taxAmount)})</td></tr>
+      <tr class="line-total ${r.netProfitAfterTax >= 0 ? 'c-green' : 'c-red'}">
+        <td>= Net Profit After Tax</td><td>${fmt(r.netProfitAfterTax)}</td>
+      </tr>
+    </table>
+
+    <div class="margin-row">
+      <div class="margin-item"><div class="m-label">Gross Margin</div><div class="m-val ${r.grossMargin>=0?'m-blue':'m-red'}">${fmtP(r.grossMargin)}</div></div>
+      <div class="margin-item"><div class="m-label">Operating Margin</div><div class="m-val ${r.operatingMargin>=0?'m-blue':'m-red'}">${fmtP(r.operatingMargin)}</div></div>
+      <div class="margin-item"><div class="m-label">Net Margin</div><div class="m-val ${r.netMargin>=0?'m-green':'m-red'}">${fmtP(r.netMargin)}</div></div>
+    </div>
+    ${lowGrossMarginExplain}
+    ${operatingLossExplain}
+  </div>`;
+}
+
+// ─── Multi-Period ──────────────────────────────────────────────────────────
+let mpCount = 0;
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function addMPRow(d={}) {
+  const id = `mp-${mpCount}`;
+  const mo = months[mpCount % 12];
+  document.getElementById("mp-rows").insertAdjacentHTML("beforeend", `
+    <div class="period-row" id="${id}">
+      <div><input type="text"   id="${id}-p" value="${d.period||mo+' 2025'}" /></div>
+      <div><input type="number" id="${id}-r" value="${d.rev||200000}"  min="0" /></div>
+      <div><input type="number" id="${id}-c" value="${d.cogs||60000}"  min="0" /></div>
+      <div><input type="number" id="${id}-f" value="${d.fix||40000}"  min="0" /></div>
+      <div><input type="number" id="${id}-v" value="${d.var||20000}"  min="0" /></div>
+      <div><input type="number" id="${id}-i" value="${d.int||8000}"   min="0" /></div>
+      <button class="del-btn" onclick="document.getElementById('${id}').remove()">✕</button>
+    </div>`);
+  mpCount++;
+}
+
+function calcMulti() {
+  const out = document.getElementById("multi-result");
+  try {
+    const useTax = document.getElementById("mp-tax-toggle").checked;
+    const taxRate = useTax ? getNum("mp-tax") : 0;
+    const rows = Array.from(document.getElementById("mp-rows").querySelectorAll(".period-row"));
+    if (rows.length === 0) throw new Error("Add at least one period.");
+    const periods = rows.map(row => {
+      const id = row.id;
+      return {
+        period:          document.getElementById(id+"-p")?.value||"",
+        revenue:         parseFloat(document.getElementById(id+"-r")?.value)||0,
+        cogs:            parseFloat(document.getElementById(id+"-c")?.value)||0,
+        fixedOpex:       parseFloat(document.getElementById(id+"-f")?.value)||0,
+        variableOpex:    parseFloat(document.getElementById(id+"-v")?.value)||0,
+        interestExpense: parseFloat(document.getElementById(id+"-i")?.value)||0,
+        taxRate,
+      };
+    });
+    const mp = generateMultiPeriodPL(periods);
+    out.innerHTML = renderMultiPL(mp);
+  } catch(e) { out.innerHTML = errBox(e); }
+}
+
+function renderMultiPL(mp) {
+  const cols = mp.periods.map(p => p.period || "—");
+  const totRow = mp.totals;
+  const avgRow = mp.averages;
+
+  const rows = [
+    { label:"Revenue",            key:"revenue",            cls:"" },
+    { label:"(-) COGS",           key:"cogs",               cls:"negative", neg:true },
+    { label:"= Gross Profit",     key:"grossProfit",        cls:"", bold:true },
+    { label:"(-) Total OpEx",     key:"totalOpex",          cls:"negative", neg:true },
+    { label:"= Operating Profit", key:"operatingProfit",    cls:"", bold:true },
+    { label:"(-) Interest",       key:"interestExpense",    cls:"negative", neg:true },
+    { label:"Net Profit (BT)",    key:"netProfitBeforeTax", cls:"", bold:true },
+    { label:"(-) Tax",            key:"taxAmount",          cls:"negative", neg:true },
+    { label:"Net Profit (AT)",    key:"netProfitAfterTax",  cls:"", bold:true, highlight:true },
+  ];
+
+  const tableHTML = `
+    <div class="scroll-wrap">
+    <table class="mp-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Line Item</th>
+          ${cols.map(c=>`<th>${c}</th>`).join("")}
+          <th style="background:#1e3a5f">Total</th>
+          <th style="background:#1e3a5f">Avg/Period</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => {
+          const vals = mp.periods.map(p => {
+            const v = p[row.key];
+            const cls = row.highlight ? (v>=0?"positive":"negative") : row.neg ? "" : (v<0?"negative":"");
+            return `<td class="${cls}">${row.neg ? `(${fmt(v)})` : fmt(v)}</td>`;
+          }).join("");
+          const tot = totRow[row.key];
+          const avg = avgRow[row.key];
+          const totCls = row.highlight ? (tot>=0?"positive":"negative") : "";
+          return `<tr ${row.highlight?"class='row-total'":""}>
+            <td>${row.bold?`<strong>${row.label}</strong>`:row.label}</td>
+            ${vals}
+            <td class="${totCls}" style="font-weight:bold">${row.neg?`(${fmt(tot)})`:fmt(tot)}</td>
+            <td style="color:#64748b">${row.neg?`(${fmt(avg)})`:fmt(avg)}</td>
+          </tr>`;
+        }).join("")}
+        <tr style="background:#f8fafc;">
+          <td><strong>Gross Margin %</strong></td>
+          ${mp.periods.map(p=>`<td style="color:#2563eb">${fmtP(p.grossMargin)}</td>`).join("")}
+          <td style="color:#2563eb;font-weight:bold">${fmtP(totRow.grossMargin)}</td><td style="color:#94a3b8">${fmtP(avgRow.grossMargin)}</td>
+        </tr>
+        <tr style="background:#f8fafc;">
+          <td><strong>Net Margin %</strong></td>
+          ${mp.periods.map(p=>`<td class="${p.netMargin>=0?'positive':'negative'}">${fmtP(p.netMargin)}</td>`).join("")}
+          <td class="${totRow.netMargin>=0?'positive':'negative'}" style="font-weight:bold">${fmtP(totRow.netMargin)}</td><td style="color:#94a3b8">${fmtP(avgRow.netMargin)}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>`;
+
+  // Sparkline for net profit
+  const profits = mp.periods.map(p => p.netProfitAfterTax);
+  const maxAbs = Math.max(...profits.map(Math.abs), 1);
+  const sparkHTML = profits.map(v => {
+    const h = Math.max(4, Math.round(Math.abs(v) / maxAbs * 36));
+    const col = v >= 0 ? "#16a34a" : "#dc2626";
+    return `<div class="spark-bar" style="height:${h}px;background:${col};" title="${fmt(v)}"></div>`;
+  }).join("");
+
+  return `
+  <div class="card">
+    <div class="summary-grid">
+      <div class="s-item"><div class="s-label">Total Revenue</div><div class="s-val" style="color:#2563eb">${fmt(totRow.revenue)}</div></div>
+      <div class="s-item"><div class="s-label">Total Net Profit</div><div class="s-val" style="color:${totRow.netProfitAfterTax>=0?'#16a34a':'#dc2626'}">${fmt(totRow.netProfitAfterTax)}</div></div>
+      <div class="s-item"><div class="s-label">Net Margin</div><div class="s-val" style="color:${totRow.netMargin>=0?'#16a34a':'#dc2626'}">${fmtP(totRow.netMargin)}</div></div>
+      <div class="s-item"><div class="s-label">Profitable Periods</div><div class="s-val" style="color:#16a34a">${mp.profitableMonths} / ${mp.periods.length}</div></div>
+      <div class="s-item"><div class="s-label">Best Period</div><div class="s-val" style="font-size:0.9rem">${mp.bestPeriod.period||"—"} (${fmt(mp.bestPeriod.netProfitAfterTax)})</div></div>
+      <div class="s-item"><div class="s-label">Worst Period</div><div class="s-val" style="font-size:0.9rem">${mp.worstPeriod.period||"—"} (${fmt(mp.worstPeriod.netProfitAfterTax)})</div></div>
+    </div>
+    <div class="section-title">Net Profit Trend</div>
+    <div class="spark-row">${sparkHTML}</div>
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#94a3b8;margin-top:2px;">
+      <span>${mp.periods[0]?.period||""}</span><span>${mp.periods[mp.periods.length-1]?.period||""}</span>
+    </div>
+    <div class="section-title" style="margin-top:16px;">Full Statement</div>
+    ${tableHTML}
+  </div>`;
+}
+
+// ─── Unit Tests ───────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  function assert(label, cond) { results.push({ label, pass:!!cond }); }
+  function assertThrows(label, fn) {
+    try { fn(); results.push({ label, pass:false, note:"expected error not thrown" }); }
+    catch(e) { results.push({ label, pass:true }); }
+  }
+
+  // Single period
+  const r1 = calculatePeriodPL({ revenue:200000, cogs:60000, fixedOpex:40000, variableOpex:20000, interestExpense:8000, taxRate:25, period:"Jan" });
+  assert("P&L: grossProfit = 200000 - 60000 = 140000", r1.grossProfit === 140000);
+  assert("P&L: totalOpex = 40000 + 20000 = 60000", r1.totalOpex === 60000);
+  assert("P&L: operatingProfit (EBIT) = 140000 - 60000 = 80000", r1.operatingProfit === 80000);
+  assert("P&L: netProfitBeforeTax = 80000 - 8000 = 72000", r1.netProfitBeforeTax === 72000);
+  assert("P&L: taxAmount = 72000 × 25% = 18000", r1.taxAmount === 18000);
+  assert("P&L: netProfitAfterTax = 72000 - 18000 = 54000", r1.netProfitAfterTax === 54000);
+  assert("P&L: grossMargin = 140000/200000 × 100 = 70%", r1.grossMargin === 70);
+  assert("P&L: netMargin = 54000/200000 × 100 = 27%", r1.netMargin === 27);
+  assert("P&L: status = profit", r1.status === "profit");
+  assert("P&L: isProfitable = true", r1.isProfitable === true);
+
+  // Loss scenario
+  const r2 = calculatePeriodPL({ revenue:50000, cogs:30000, fixedOpex:40000, variableOpex:10000, interestExpense:5000, taxRate:0 });
+  assert("P&L(loss): netProfitAfterTax < 0", r2.netProfitAfterTax < 0);
+  assert("P&L(loss): status = loss", r2.status === "loss");
+  assert("P&L(loss): no tax on loss", r2.taxAmount === 0);
+
+  // Break-even
+  const r3 = calculatePeriodPL({ revenue:100000, cogs:30000, fixedOpex:50000, variableOpex:20000, interestExpense:0, taxRate:0 });
+  assert("P&L(breakeven): netProfitAfterTax = 0", r3.netProfitAfterTax === 0);
+  assert("P&L(breakeven): status = breakeven", r3.status === "breakeven");
+
+  // Zero tax
+  const r4 = calculatePeriodPL({ revenue:100000, cogs:30000, fixedOpex:20000, variableOpex:10000, interestExpense:5000, taxRate:0 });
+  assert("P&L: taxRate=0 → taxAmount=0", r4.taxAmount === 0);
+  assert("P&L: taxRate=0 → EBT = net profit", r4.netProfitBeforeTax === r4.netProfitAfterTax);
+
+  // Validations
+  assertThrows("Throws on negative revenue", () => calculatePeriodPL({ revenue:-1000, cogs:0 }));
+  assertThrows("Throws on negative cogs", () => calculatePeriodPL({ revenue:1000, cogs:-100 }));
+  assertThrows("Throws on taxRate > 100", () => calculatePeriodPL({ revenue:1000, cogs:0, taxRate:110 }));
+
+  // Multi-period
+  const periods = [
+    { period:"Jan", revenue:200000, cogs:60000, fixedOpex:40000, variableOpex:20000, interestExpense:8000, taxRate:25 },
+    { period:"Feb", revenue:220000, cogs:66000, fixedOpex:40000, variableOpex:22000, interestExpense:8000, taxRate:25 },
+    { period:"Mar", revenue:180000, cogs:54000, fixedOpex:40000, variableOpex:18000, interestExpense:8000, taxRate:25 },
+  ];
+  const mp = generateMultiPeriodPL(periods);
+  assert("Multi: 3 period results", mp.periods.length === 3);
+  assert("Multi: totals.revenue = 600000", mp.totals.revenue === 600000);
+  assert("Multi: profitableMonths = 3", mp.profitableMonths === 3);
+  assert("Multi: bestPeriod is Feb (highest revenue)", mp.bestPeriod.period === "Feb");
+  assert("Multi: worstPeriod is Mar (lowest revenue)", mp.worstPeriod.period === "Mar");
+  assert("Multi: averages.revenue = 200000", mp.averages.revenue === 200000);
+  assertThrows("Multi: throws on empty array", () => generateMultiPeriodPL([]));
+
+  const passed = results.filter(r=>r.pass).length;
+  const failed = results.filter(r=>!r.pass).length;
+  document.getElementById("test-output").innerHTML =
+    results.map(r=>`<div class="test-result ${r.pass?'pass':'fail'}">${r.pass?'✓':'✗'} ${r.label}${r.note?' — '+r.note:''}</div>`).join("") +
+    `<div class="test-summary ${failed===0?'all-pass':'has-fail'}">${failed===0?`✅ All ${passed} tests passed`:`❌ ${failed} failed / ${passed} passed`}</div>`;
+}
+
+// ─── persistence ─────────────────────────────────────────────────────────
+const PL_KEY = 'fw_pl_inputs';
+function savePLInputs(){
+  try{
+    localStorage.setItem(PL_KEY, JSON.stringify({
+      period:document.getElementById('s-period').value,
+      rev:document.getElementById('s-rev').value,
+      cogs:document.getElementById('s-cogs').value,
+      fixed:document.getElementById('s-fixed').value,
+      varOp:document.getElementById('s-var').value,
+      interest:document.getElementById('s-int').value,
+      tax:document.getElementById('s-tax').value
+    }));
+  }catch(e){}
+}
+(function restorePL(){
+  try{
+    var s=JSON.parse(localStorage.getItem(PL_KEY)||'null');
+    if(!s){
+      /* Profile seed */
+      var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
+      var p=JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx]||JSON.parse(localStorage.getItem('fw_profile')||'null');
+      if(p){
+        if(p.rev) document.getElementById('s-rev').value=p.rev;
+        if(p.exp){ document.getElementById('s-fixed').value=Math.round((p.exp||0)*0.7)||''; document.getElementById('s-var').value=Math.round((p.exp||0)*0.3)||''; }
+        if(p.emi) document.getElementById('s-int').value=p.emi;
+      }
+      return;
+    }
+    if(s.period)   document.getElementById('s-period').value  = s.period;
+    if(s.rev)      document.getElementById('s-rev').value     = s.rev;
+    if(s.cogs)     document.getElementById('s-cogs').value    = s.cogs;
+    if(s.fixed)    document.getElementById('s-fixed').value   = s.fixed;
+    if(s.varOp)    document.getElementById('s-var').value     = s.varOp;
+    if(s.interest) document.getElementById('s-int').value     = s.interest;
+    if(s.tax)      document.getElementById('s-tax').value     = s.tax;
+  }catch(e){}
+})();
+
+// ─── Seed multi-period rows ────────────────────────────────────────────────
+const seedData = [
+  { period:"Jan 2025", rev:200000, cogs:60000, fix:40000, var:20000, int:8000 },
+  { period:"Feb 2025", rev:220000, cogs:66000, fix:40000, var:22000, int:8000 },
+  { period:"Mar 2025", rev:180000, cogs:54000, fix:40000, var:18000, int:8000 },
+  { period:"Apr 2025", rev:240000, cogs:72000, fix:40000, var:24000, int:8000 },
+  { period:"May 2025", rev:210000, cogs:63000, fix:40000, var:21000, int:8000 },
+  { period:"Jun 2025", rev:260000, cogs:78000, fix:40000, var:26000, int:8000 },
+];
+seedData.forEach(d => addMPRow(d));
+</script>
+</body>
+</html>

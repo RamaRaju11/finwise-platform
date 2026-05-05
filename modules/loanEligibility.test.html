@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Loan Eligibility Pre-Checker — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.subtitle{color:#666;font-size:.88rem;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card h2{font-size:1rem;margin-bottom:12px;color:#444}
+label{display:block;font-size:.83rem;color:#555;margin-bottom:3px;margin-top:10px;font-weight:600}
+input[type=number],select{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:.9rem}
+input:focus,select:focus{outline:none;border-color:#2563eb}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#1d4ed8}
+.lender-card{background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;margin-bottom:12px;overflow:hidden}
+.lc-head{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f1f5f9}
+.lc-icon{font-size:1.6rem;flex-shrink:0}
+.lc-name{font-size:.92rem;font-weight:800;color:#1e293b}
+.lc-range{font-size:.75rem;color:#64748b}
+.lc-verdict{margin-left:auto;padding:.3rem .9rem;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap}
+.verdict-likely{background:#dcfce7;color:#166534}
+.verdict-maybe{background:#fef9c3;color:#854d0e}
+.verdict-unlikely{background:#fee2e2;color:#991b1b}
+.lc-body{padding:12px 16px}
+.criteria-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:.8rem;color:#374151;border-bottom:1px solid #f8fafc}
+.criteria-row:last-child{border-bottom:none}
+.cr-icon{flex-shrink:0;font-size:.9rem}
+.cr-miss{color:#dc2626;font-size:.8rem;font-style:italic}
+.lc-foot{padding:10px 16px;background:#fafafa;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.btn-visit{padding:7px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.btn-visit:hover{background:#1d4ed8}
+.summary-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.sb-item{background:#fff;border-radius:8px;padding:12px 16px;border:1px solid #e2e8f0;text-align:center;flex:1;min-width:80px}
+.sb-num{font-size:1.4rem;font-weight:900}
+.sb-num.green{color:#16a34a}
+.sb-num.yellow{color:#d97706}
+.sb-num.red{color:#dc2626}
+.sb-lbl{font-size:.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
+.back-link:hover{text-decoration:underline}
+@media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
+/* Plain-English Explain Blocks */
+.explain-block{margin-top:7px}
+.explain-toggle{font-size:.76rem;color:#2563eb;cursor:pointer;background:none;border:none;padding:0;font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:Arial,sans-serif}
+.explain-toggle:hover{text-decoration:underline}
+.explain-body{display:none;background:#f8fafc;border:1px solid #dbeafe;border-radius:6px;padding:10px 14px;margin-top:6px}
+.explain-body.open{display:block}
+.explain-body p{font-size:.8rem;color:#374151;margin-bottom:5px;font-weight:600}
+.explain-body ul{padding-left:18px;margin-bottom:6px}
+.explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
+.explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="nav.js"></script>
+<script src="fw-auth.js"></script>
+<script src="help.js"></script>
+
+<a href="lenderMarketplace.html" class="back-link">← Lender Marketplace</a>
+<h1>Loan Eligibility Pre-Checker</h1>
+<p class="subtitle">FinWise · See which lenders you'd likely qualify for — before you apply</p>
+
+<div class="card">
+  <h2>Your Business Profile</h2>
+  <div class="input-grid">
+    <div>
+      <label>Annual Revenue ($)</label>
+      <input type="number" id="annualRev" placeholder="e.g. 120000"/>
+    </div>
+    <div>
+      <label>Time in Business (months)</label>
+      <input type="number" id="bizAge" placeholder="e.g. 24"/>
+    </div>
+    <div>
+      <label>Personal Credit Score (estimate)</label>
+      <select id="creditScore">
+        <option value="750">750+ (Excellent)</option>
+        <option value="700">700–749 (Good)</option>
+        <option value="650">650–699 (Fair)</option>
+        <option value="600">600–649 (Poor)</option>
+        <option value="550">Below 600 (Very Poor)</option>
+      </select>
+    </div>
+    <div>
+      <label>Monthly Business Expenses ($)</label>
+      <input type="number" id="monthlyExp" placeholder="e.g. 7000"/>
+    </div>
+    <div>
+      <label>Existing Monthly Debt Payments ($)</label>
+      <input type="number" id="existingDebt" placeholder="e.g. 500"/>
+    </div>
+    <div>
+      <label>Loan Amount Needed ($)</label>
+      <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
+    </div>
+  </div>
+  <button class="primary" onclick="checkEligibility()">Check My Eligibility →</button>
+</div>
+
+<div id="resultsSection" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <span style="font-size:.78rem;font-weight:700;color:#475569">Eligibility Results</span>
+    <button onclick="window.print()" class="secondary" style="padding:5px 12px;font-size:.75rem">🖨️ Print / Save PDF</button>
+  </div>
+  <div class="summary-bar" id="summaryBar"></div>
+  <div id="lenderResults"></div>
+</div>
+
+<script>
+// ── Plain-English Explain Helpers ────────────────────────────────
+function toggleExplain(btn){
+  var body=btn.nextElementSibling;
+  var open=body.classList.toggle('open');
+  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+}
+function explainHtml(bullets,example){
+  return '<div class="explain-block">'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<div class="explain-body">'+
+    '<p>Your business may:</p>'+
+    '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
+    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '</div></div>';
+}
+function failExplain(missText, profile){
+  var fmtD = function(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); };
+  // Credit score failures
+  if(/credit score/i.test(missText) && /below|too low/i.test(missText)){
+    var scoreVal = profile.credit;
+    var category = scoreVal >= 650 ? 'fair' : scoreVal >= 600 ? 'poor' : 'very poor';
+    return explainHtml(
+      ['Credit score below 650 signals past missed payments or high debt to most lenders',
+       'SBA loans typically require 680+, online lenders accept 550+',
+       'Each rejected application further lowers your score — don\'t apply until score improves'],
+      'A credit score of '+scoreVal+' puts you in the '+category+' range. Lenders see scores below 650 as high-risk'
+    );
+  }
+  // Revenue failures
+  if(/revenue/i.test(missText) && /below|minimum/i.test(missText)){
+    // Extract threshold from miss text if possible
+    var threshMatch = missText.match(/\$?([\d,]+[KkMm]?)/);
+    var thresh = threshMatch ? threshMatch[0] : '$100K';
+    return explainHtml(
+      ['Most lenders require minimum $100K–$250K annual revenue to qualify',
+       'Revenue shows your ability to generate consistent cash to repay the loan',
+       'Below-threshold revenue means the loan size you need may exceed what your income can support'],
+      'Your annual revenue is '+fmtD(profile.annualRev)+' but this lender requires '+thresh+' minimum'
+    );
+  }
+  // Time in business failures
+  if(/months|years|business/i.test(missText) && /need|less than/i.test(missText)){
+    return explainHtml(
+      ['Most lenders require 1–2 years in business before approving loans',
+       'New businesses have no track record — lenders cannot predict repayment ability',
+       'Consider SBA microloans or CDFI lenders who specialize in early-stage businesses'],
+      'You\'ve been in business '+profile.bizAge+' months. Most conventional lenders require at least 24 months'
+    );
+  }
+  return '';
+}
+
+var LENDERS = [
+  {icon:'🏛️', name:'SBA 7(a) Loan', range:'Up to $5,000,000', url:'https://www.sba.gov/funding-programs/loans/7a-loans',
+   criteria:[
+     {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
+     {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K minimum'},
+     {label:'Credit score 680+', check:function(p){ return p.credit>=680; }, miss:'Credit score below 680'},
+     {label:'US for-profit business', check:function(p){ return true; }, miss:''},
+     {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 — cash flow too tight'}
+   ]},
+  {icon:'🌱', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
+   criteria:[
+     {label:'Any stage business (startups OK)', check:function(p){ return true; }, miss:''},
+     {label:'Credit score 575+', check:function(p){ return p.credit>=575; }, miss:'Credit score too low'},
+     {label:'Loan need ≤ $50,000', check:function(p){ return p.loanNeed<=50000; }, miss:'Loan needed exceeds $50K limit'},
+     {label:'Business plan or collateral', check:function(p){ return true; }, miss:''}
+   ]},
+  {icon:'🔵', name:'BlueVine (Line of Credit)', range:'Up to $250,000', url:'https://www.bluevine.com',
+   criteria:[
+     {label:'Min 24 months in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 24+ months in business'},
+     {label:'Annual revenue $120K+', check:function(p){ return p.annualRev>=120000; }, miss:'Revenue below $120K minimum'},
+     {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
+     {label:'Loan need ≤ $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
+   ]},
+  {icon:'⚡', name:'OnDeck', range:'$5K – $250,000', url:'https://www.ondeck.com',
+   criteria:[
+     {label:'Min 12 months in business', check:function(p){ return p.bizAge>=12; }, miss:'Need 12+ months in business'},
+     {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K'},
+     {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
+     {label:'Loan need ≤ $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
+   ]},
+  {icon:'🟠', name:'Funding Circle', range:'$25K – $500,000', url:'https://www.fundingcircle.com/us/',
+   criteria:[
+     {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
+     {label:'Annual revenue $150K+', check:function(p){ return p.annualRev>=150000; }, miss:'Revenue below $150K'},
+     {label:'Credit score 660+', check:function(p){ return p.credit>=660; }, miss:'Credit score below 660'},
+     {label:'Loan $25K–$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K–$500K range'}
+   ]},
+  {icon:'🏪', name:'Lendio (Marketplace)', range:'$1K – $5,000,000', url:'https://www.lendio.com',
+   criteria:[
+     {label:'Any stage (matches 75+ lenders)', check:function(p){ return true; }, miss:''},
+     {label:'Credit score 550+', check:function(p){ return p.credit>=550; }, miss:'Credit score below 550'},
+     {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months — fewer options available'}
+   ]},
+  {icon:'💛', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
+   criteria:[
+     {label:'Open to all — no minimum revenue', check:function(p){ return true; }, miss:''},
+     {label:'No credit score requirement', check:function(p){ return true; }, miss:''},
+     {label:'Loan need ≤ $15,000', check:function(p){ return p.loanNeed<=15000; }, miss:'Loan needed exceeds $15K limit'},
+     {label:'US-based business', check:function(p){ return true; }, miss:''}
+   ]}
+];
+
+function checkEligibility(){
+  var annualRev  = parseFloat(document.getElementById('annualRev').value)||0;
+  var bizAge     = parseInt(document.getElementById('bizAge').value)||0;
+  var credit     = parseInt(document.getElementById('creditScore').value)||0;
+  var monthlyExp = parseFloat(document.getElementById('monthlyExp').value)||0;
+  var existDebt  = parseFloat(document.getElementById('existingDebt').value)||0;
+  var loanNeed   = parseFloat(document.getElementById('loanNeed').value)||0;
+
+  if(!annualRev||!bizAge||!loanNeed){ alert('Please fill Annual Revenue, Business Age, and Loan Amount.'); return; }
+
+  var monthlyRev = annualRev / 12;
+  var totalDebt  = existDebt;
+  var dscr = totalDebt > 0 ? (monthlyRev - monthlyExp) / totalDebt : 99;
+
+  var profile = { annualRev:annualRev, bizAge:bizAge, credit:credit, monthlyExp:monthlyExp, loanNeed:loanNeed, dscr:dscr };
+
+  var likely=0, maybe=0, unlikely=0;
+  var html = '';
+
+  LENDERS.forEach(function(l){
+    var passes=[]; var fails=[];
+    l.criteria.forEach(function(c){
+      if(c.check(profile)) passes.push(c.label);
+      else if(c.miss) fails.push(c.miss);
+    });
+    var verdict, vcls;
+    if(fails.length===0){ verdict='✅ Likely'; vcls='verdict-likely'; likely++; }
+    else if(fails.length===1){ verdict='⚠️ Maybe'; vcls='verdict-maybe'; maybe++; }
+    else { verdict='✗ Unlikely'; vcls='verdict-unlikely'; unlikely++; }
+
+    html += '<div class="lender-card">';
+    html += '<div class="lc-head"><div class="lc-icon">'+l.icon+'</div>';
+    html += '<div><div class="lc-name">'+l.name+'</div><div class="lc-range">'+l.range+'</div></div>';
+    html += '<span class="lc-verdict '+vcls+'">'+verdict+'</span></div>';
+    html += '<div class="lc-body">';
+    passes.forEach(function(p){ html += '<div class="criteria-row"><span class="cr-icon">✅</span>'+p+'</div>'; });
+    fails.forEach(function(f){ html += '<div class="criteria-row"><span class="cr-icon">❌</span><span class="cr-miss">'+f+'</span>'+failExplain(f, profile)+'</div>'; });
+    html += '</div>';
+    html += '<div class="lc-foot"><span style="font-size:.74rem;color:#94a3b8">Visit lender website to apply</span>';
+    html += '<a href="'+l.url+'" target="_blank" class="btn-visit">Apply →</a></div>';
+    html += '</div>';
+  });
+
+  document.getElementById('summaryBar').innerHTML =
+    '<div class="sb-item"><div class="sb-num green">'+likely+'</div><div class="sb-lbl">Likely</div></div>'+
+    '<div class="sb-item"><div class="sb-num yellow">'+maybe+'</div><div class="sb-lbl">Maybe</div></div>'+
+    '<div class="sb-item"><div class="sb-num red">'+unlikely+'</div><div class="sb-lbl">Unlikely</div></div>'+
+    '<div class="sb-item"><div class="sb-num" style="color:#2563eb">'+LENDERS.length+'</div><div class="sb-lbl">Total Checked</div></div>';
+
+  document.getElementById('lenderResults').innerHTML = html;
+  document.getElementById('resultsSection').style.display = 'block';
+  saveLE();
+}
+
+var LE_KEY = 'fw_loan_eligibility';
+function saveLE(){
+  try{localStorage.setItem(LE_KEY,JSON.stringify({
+    annualRev:document.getElementById('annualRev').value,
+    bizAge:document.getElementById('bizAge').value,
+    creditScore:document.getElementById('creditScore').value,
+    monthlyExp:document.getElementById('monthlyExp').value,
+    existingDebt:document.getElementById('existingDebt').value,
+    loanNeed:document.getElementById('loanNeed').value
+  }));}catch(e){}
+}
+
+(function(){
+  /* Restore saved state first */
+  try{
+    var s=JSON.parse(localStorage.getItem(LE_KEY)||'null');
+    if(s){
+      if(s.annualRev)   document.getElementById('annualRev').value   = s.annualRev;
+      if(s.bizAge)      document.getElementById('bizAge').value      = s.bizAge;
+      if(s.creditScore) document.getElementById('creditScore').value = s.creditScore;
+      if(s.monthlyExp)  document.getElementById('monthlyExp').value  = s.monthlyExp;
+      if(s.existingDebt)document.getElementById('existingDebt').value= s.existingDebt;
+      if(s.loanNeed)    document.getElementById('loanNeed').value    = s.loanNeed;
+      return;
+    }
+  }catch(e){}
+  /* Profile fallback */
+  try{
+    var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
+    var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
+    if(!p){ p = JSON.parse(localStorage.getItem('fw_profile')||'null'); }
+    if(p){
+      document.getElementById('annualRev').value    = (p.rev||0)*12||'';
+      document.getElementById('monthlyExp').value   = p.exp||'';
+      document.getElementById('existingDebt').value = p.emi||'';
+      document.getElementById('loanNeed').value     = p.loan||'';
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
+

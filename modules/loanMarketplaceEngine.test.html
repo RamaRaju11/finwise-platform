@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Loan Marketplace Engine</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f1f5f9; color: #1e293b; }
+  header { background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 24px 32px; }
+  header h1 { font-size: 1.5rem; }
+  header p  { font-size: 0.85rem; opacity: .75; margin-top: 4px; }
+  .tabs { display: flex; gap: 4px; background: #e2e8f0; padding: 8px; }
+  .tab  { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer;
+          background: transparent; font-size: 0.9rem; color: #475569; }
+  .tab.active { background: #fff; color: #0f172a; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .panel { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+  .panel.active { display: block; }
+  .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 6px rgba(0,0,0,.07); margin-bottom: 16px; }
+  .card h3 { font-size: 1rem; margin-bottom: 12px; color: #1e293b; }
+  label { display: block; font-size: 0.82rem; color: #64748b; margin-bottom: 4px; margin-top: 10px; }
+  input, select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  button.btn { margin-top: 14px; padding: 9px 22px; background: #1e3a8a; color: #fff;
+              border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+  button.btn:hover { background: #1e40af; }
+  .lender-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
+  .lender-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+  .lender-card.best { border-color: #16a34a; box-shadow: 0 0 0 2px #16a34a; }
+  .lender-card .badge-best { background: #dcfce7; color: #16a34a; font-size: 0.72rem;
+                              font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+  .lender-name { font-weight: 700; font-size: 1rem; display: flex; align-items: center; margin-bottom: 4px; }
+  .lender-inst { font-size: 0.8rem; color: #64748b; margin-bottom: 10px; }
+  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .stat-pill { background: #f1f5f9; border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; }
+  .stat-pill b { color: #1e293b; }
+  .highlights { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f1f5f9; }
+  .highlights li { font-size: 0.78rem; color: #475569; list-style: none; padding: 2px 0; }
+  .highlights li::before { content: "✓ "; color: #16a34a; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: #f8fafc; text-align: left; padding: 10px 12px; font-size: 0.78rem;
+       text-transform: uppercase; letter-spacing: .05em; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
+  tr.rank1 td { background: #f0fdf4; font-weight: 600; }
+  .rank-badge { display: inline-block; width: 24px; height: 24px; border-radius: 50%; text-align: center;
+                line-height: 24px; font-size: 0.78rem; font-weight: 700; background: #e2e8f0; color: #64748b; }
+  .rank-badge.gold { background: #fef08a; color: #854d0e; }
+  .savings-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 16px; margin-top: 16px; }
+  .savings-box h4 { color: #16a34a; margin-bottom: 8px; }
+  .savings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+  .savings-item { text-align: center; }
+  .savings-item .val { font-size: 1.3rem; font-weight: 700; color: #15803d; }
+  .savings-item .lbl { font-size: 0.75rem; color: #64748b; }
+  .ref-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 16px; margin-top: 16px; }
+  .ref-url { background: #fff; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px;
+             font-family: monospace; font-size: 0.8rem; word-break: break-all; margin: 8px 0; }
+  .no-result { text-align: center; padding: 40px; color: #94a3b8; }
+  #unitResults .pass { color: #16a34a; }
+  #unitResults .fail { color: #dc2626; }
+  #unitResults li { padding: 4px 0; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; }
+  .type-badge { font-size: 0.7rem; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+  .government   { background: #dcfce7; color: #166534; }
+  .public_bank  { background: #dbeafe; color: #1d4ed8; }
+  .fintech      { background: #d1fae5; color: #065f46; }
+  .marketplace  { background: #fce7f3; color: #9d174d; }
+
+  /* Sort / export toolbar */
+  .search-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .sort-select { padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; background: #fff; cursor: pointer; }
+  .btn-sm { padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.82rem; font-weight: 600; }
+  .btn-export { background: #475569; color: #fff; }
+  .btn-export:hover { background: #334155; }
+
+  /* Apply Now button */
+  .btn-apply { display: inline-block; margin-top: 10px; padding: 7px 14px; background: #1e3a8a; color: #fff; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .btn-apply:hover { background: #1e40af; }
+
+  /* Compare checkbox + bar */
+  .cmp-check-wrap { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.8rem; color: #475569; }
+  .cmp-check { width: 16px; height: 16px; cursor: pointer; accent-color: #1e3a8a; }
+  .compare-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: #fff; padding: 12px 24px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 999; flex-wrap: wrap; box-shadow: 0 -4px 20px rgba(0,0,0,.3); }
+  .compare-bar.show { display: flex; }
+  .cmp-bar-names { font-size: 0.85rem; color: #94a3b8; flex: 1; }
+  .btn-cmp-go { padding: 8px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
+  .btn-cmp-go:hover { background: #1d4ed8; }
+  .btn-cmp-clear { padding: 8px 16px; background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 0.82rem; cursor: pointer; }
+
+  /* Side-by-side compare table */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .cmp-table th { background: #f8fafc; padding: 10px 14px; border: 1px solid #e2e8f0; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .04em; color: #64748b; }
+  .cmp-table td { padding: 10px 14px; border: 1px solid #f1f5f9; vertical-align: top; }
+  .cmp-table tr:first-child td { font-weight: 700; font-size: 0.95rem; }
+  .cmp-best-cell { background: #f0fdf4; }
+
+  /* Eligibility score */
+  .elig-badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 20px; padding: 3px 10px; font-size: 0.72rem; font-weight: 700; margin-top: 8px; }
+  .elig-reasons { margin-top: 6px; font-size: 0.76rem; line-height: 1.6; color: #475569; }
+  .elig-reasons .er-good { color: #16a34a; }
+  .elig-reasons .er-warn { color: #d97706; }
+  .elig-reasons .er-bad  { color: #dc2626; }
+
+  /* Integration banner */
+  .int-banner { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 6px; padding: 10px 14px; margin: 0 24px 12px; font-size: 0.84rem; line-height: 1.6; display: none; }
+  .int-banner.show { display: block; }
+
+  /* Print */
+  .print-only { display: none; }
+  @media print {
+    header, .tabs, .card:not(#printCard), .compare-bar { display: none !important; }
+    .panel { display: block !important; padding: 0; }
+    #tab-search { display: block !important; }
+    .search-toolbar, .cmp-check-wrap { display: none !important; }
+    .print-only { display: block; font-size: 0.78rem; color: #64748b; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 12px; }
+    .lender-card { break-inside: avoid; }
+    .btn-apply { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Loan Marketplace Engine</h1>
+  <p>Search US lenders · Compare total cost · Generate referral links</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('search')">🔍 Lender Search</button>
+  <button class="tab" onclick="showTab('compare')">📊 Compare Offers</button>
+  <button class="tab" onclick="showTab('referral')">🔗 Referral Link</button>
+  <button class="tab" onclick="showTab('tests')">✅ Unit Tests</button>
+</div>
+
+<!-- Integration banner -->
+<div class="int-banner" id="intBanner"></div>
+
+<!-- ═══════ TAB 1: LENDER SEARCH ═══════ -->
+<div id="tab-search" class="panel active">
+  <div class="card">
+    <h3>Search Eligible Lenders</h3>
+    <div class="row3">
+      <div>
+        <label>Loan Type</label>
+        <select id="s-type" onchange="saveFilters()">
+          <option value="">All types</option>
+          <option value="business">Business Loan</option>
+          <option value="sba">SBA Loan</option>
+          <option value="line_of_credit">Line of Credit</option>
+        </select>
+      </div>
+      <div>
+        <label>Loan Amount ($)</label>
+        <input type="number" id="s-amount" value="100000" min="0" oninput="saveFilters()">
+      </div>
+      <div>
+        <label>Tenure (months)</label>
+        <input type="number" id="s-tenure" value="36" min="1" oninput="saveFilters()">
+      </div>
+      <div>
+        <label>Max Interest Rate (%)</label>
+        <input type="number" id="s-maxrate" value="" placeholder="Leave blank for any" oninput="saveFilters()">
+      </div>
+      <div>
+        <label>Credit Score (FICO)</label>
+        <input type="number" id="s-cibil" value="720" min="300" max="850" oninput="saveFilters()">
+      </div>
+      <div>
+        <label>Sort Results By</label>
+        <select id="s-sortby" onchange="saveFilters()">
+          <option value="eligScore">Best Match (Eligibility)</option>
+          <option value="minRate">Lowest Rate First</option>
+          <option value="maxAmount">Highest Loan Limit</option>
+          <option value="turnaround">Fastest Approval</option>
+          <option value="minCreditScore">Most Accessible (Low FICO)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doSearch()">Search Lenders</button>
+  </div>
+  <div class="search-toolbar" id="searchToolbar" style="display:none">
+    <span id="searchCount" style="font-size:0.85rem;color:#64748b"></span>
+    <button class="btn-sm btn-export" onclick="exportSearchPDF()">🖨️ Export / Print PDF</button>
+    <span style="font-size:0.78rem;color:#94a3b8">— or select up to 3 lenders below to compare side-by-side</span>
+  </div>
+  <div id="search-results"></div>
+</div>
+
+<!-- ═══════ TAB 2: COMPARE OFFERS ═══════ -->
+<div id="tab-compare" class="panel">
+  <div class="card">
+    <h3>Compare Loan Offers</h3>
+    <div class="row2">
+      <div>
+        <label>Principal ($)</label>
+        <input type="number" id="c-principal" value="150000">
+      </div>
+      <div>
+        <label>Tenure (months)</label>
+        <input type="number" id="c-tenure" value="36">
+      </div>
+      <div>
+        <label>Credit Score (FICO)</label>
+        <input type="number" id="c-cibil" value="720">
+      </div>
+      <div>
+        <label>Rate Scenario</label>
+        <select id="c-ratescenario">
+          <option value="min">Best Case (Min Rate)</option>
+          <option value="max">Worst Case (Max Rate)</option>
+        </select>
+      </div>
+      <div>
+        <label>Rank Offers By</label>
+        <select id="c-rankby">
+          <option value="totalCost">Total Cost</option>
+          <option value="emi">Monthly EMI</option>
+          <option value="appliedRate">Interest Rate</option>
+          <option value="turnaroundDays.min">Fastest Approval</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doCompare()">Compare All Eligible Lenders</button>
+  </div>
+  <div id="compare-results"></div>
+</div>
+
+<!-- ═══════ TAB 3: REFERRAL LINK ═══════ -->
+<div id="tab-referral" class="panel">
+  <div class="card">
+    <h3>Generate Referral Link</h3>
+    <div class="row2">
+      <div>
+        <label>Lender</label>
+        <select id="r-lender">
+          <option value="sba-7a">SBA 7(a) Business Loan</option>
+          <option value="wells-biz">Wells Fargo Small Business Loan</option>
+          <option value="chase-biz">Chase Business Line of Credit</option>
+          <option value="bofa-biz">Bank of America Business Loan</option>
+          <option value="ondeck">OnDeck Business Loan</option>
+          <option value="bluevine">Bluevine Line of Credit</option>
+          <option value="kabbage">Kabbage (AmEx) Business Financing</option>
+          <option value="fundbox">Fundbox Line of Credit</option>
+          <option value="lendio">Lendio Business Loan Marketplace</option>
+        </select>
+      </div>
+      <div>
+        <label>Referral Code</label>
+        <input type="text" id="r-code" value="SMALLBIZ2025">
+      </div>
+      <div>
+        <label>Loan Amount ($)</label>
+        <input type="number" id="r-amount" value="100000">
+      </div>
+    </div>
+    <button class="btn" onclick="doReferral()">Generate Link</button>
+  </div>
+  <div id="referral-result"></div>
+
+  <div class="card" style="margin-top:0">
+    <h3>Savings Summary</h3>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:12px">Compare best vs worst offer across eligible lenders.</p>
+    <div class="row2">
+      <div>
+        <label>Principal ($)</label>
+        <input type="number" id="ss-principal" value="100000">
+      </div>
+      <div>
+        <label>Tenure (months)</label>
+        <input type="number" id="ss-tenure" value="36">
+      </div>
+    </div>
+    <button class="btn" onclick="doSavings()">Show Savings Summary</button>
+    <div id="savings-result"></div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 4: UNIT TESTS ═══════ -->
+<div id="tab-tests" class="panel">
+  <div class="card">
+    <h3>Automated Unit Tests</h3>
+    <button class="btn" onclick="runTests()">Run All Tests</button>
+    <ul id="unitResults" style="margin-top:16px; list-style:none;"></ul>
+  </div>
+</div>
+
+<!-- Compare bar (fixed bottom) -->
+<div class="compare-bar" id="compareBar">
+  <div>
+    <div style="font-size:0.88rem;font-weight:700;color:#f1f5f9;margin-bottom:3px">Compare Selected Lenders</div>
+    <div class="cmp-bar-names" id="cmpBarNames"></div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn-cmp-clear" onclick="clearCompare()">✕ Clear</button>
+    <button class="btn-cmp-go" onclick="showCompare()">Compare Side-by-Side →</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// LOAN MARKETPLACE ENGINE
+// ═══════════════════════════════════════════════════════════════════════════
+function _r(n) { return Math.round(n * 100) / 100; }
+
+const LENDER_CATALOG = [
+  { id:"sba-7a",    name:"SBA 7(a) Business Loan",           institution:"SBA / Partner Bank Network",  type:"government",
+    icon:"🏛️", minRate:8.5,  maxRate:11.5, minAmount:10000,   maxAmount:5000000,
+    minTenure:12, maxTenure:120, processingFee:0.5,  prepaymentPenalty:0,
+    turnaroundDays:{min:30,max:90}, requiresCollateral:true,  minCreditScore:680,
+    loanTypes:["business","sba"],
+    highlights:["Lowest rates for small business","SBA-guaranteed up to 85%","Up to $5M / 10-year term","No prepayment penalty"] },
+  { id:"wells-biz", name:"Wells Fargo Small Business Loan",  institution:"Wells Fargo Bank",            type:"public_bank",
+    icon:"🏦", minRate:9.0,  maxRate:14.0, minAmount:10000,   maxAmount:500000,
+    minTenure:12, maxTenure:60,  processingFee:1.0,  prepaymentPenalty:0,
+    turnaroundDays:{min:5,max:14}, requiresCollateral:false, minCreditScore:680,
+    loanTypes:["business","line_of_credit"],
+    highlights:["No collateral for loans under $100K","Online application","Relationship account discounts"] },
+  { id:"chase-biz", name:"Chase Business Line of Credit",    institution:"JPMorgan Chase",              type:"public_bank",
+    icon:"🏦", minRate:9.25, maxRate:15.5, minAmount:10000,   maxAmount:500000,
+    minTenure:12, maxTenure:60,  processingFee:1.5,  prepaymentPenalty:0,
+    turnaroundDays:{min:3,max:10}, requiresCollateral:false, minCreditScore:700,
+    loanTypes:["business","line_of_credit"],
+    highlights:["Revolving credit access","Dedicated business banker","Instant approval for existing customers"] },
+  { id:"bofa-biz",  name:"Bank of America Business Loan",    institution:"Bank of America",             type:"public_bank",
+    icon:"🏦", minRate:8.75, maxRate:14.5, minAmount:25000,   maxAmount:750000,
+    minTenure:12, maxTenure:60,  processingFee:1.0,  prepaymentPenalty:0,
+    turnaroundDays:{min:5,max:14}, requiresCollateral:false, minCreditScore:700,
+    loanTypes:["business"],
+    highlights:["Preferred Rewards rate discount up to 0.5%","Fixed monthly payments","No origination fee"] },
+  { id:"ondeck",    name:"OnDeck Business Loan",              institution:"OnDeck Capital",              type:"fintech",
+    icon:"💻", minRate:18.0, maxRate:35.0, minAmount:5000,    maxAmount:250000,
+    minTenure:3,  maxTenure:24,  processingFee:2.5,  prepaymentPenalty:0,
+    turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:600,
+    loanTypes:["business"],
+    highlights:["FICO 600+ accepted","Same-day funding available","Simple factor-rate pricing"] },
+  { id:"bluevine",  name:"Bluevine Line of Credit",           institution:"Bluevine",                   type:"fintech",
+    icon:"💻", minRate:15.0, maxRate:38.0, minAmount:6000,    maxAmount:250000,
+    minTenure:6,  maxTenure:12,  processingFee:0,    prepaymentPenalty:0,
+    turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:625,
+    loanTypes:["business","line_of_credit"],
+    highlights:["No draw fees","Pay only on what you use","Weekly repayment option"] },
+  { id:"kabbage",   name:"Kabbage (AmEx) Business Financing", institution:"American Express",           type:"fintech",
+    icon:"💻", minRate:12.0, maxRate:35.0, minAmount:2000,    maxAmount:250000,
+    minTenure:6,  maxTenure:18,  processingFee:0,    prepaymentPenalty:0,
+    turnaroundDays:{min:1,max:2},  requiresCollateral:false, minCreditScore:600,
+    loanTypes:["business","line_of_credit"],
+    highlights:["AmEx-backed security","Instant digital decision","No early payoff fees"] },
+  { id:"fundbox",   name:"Fundbox Line of Credit",            institution:"Fundbox",                    type:"fintech",
+    icon:"💻", minRate:10.0, maxRate:28.0, minAmount:1000,    maxAmount:150000,
+    minTenure:3,  maxTenure:24,  processingFee:0,    prepaymentPenalty:0,
+    turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:600,
+    loanTypes:["business","line_of_credit"],
+    highlights:["Lowest FICO requirement (600)","No minimum revenue needed","Early repayment discounts"] },
+  { id:"lendio",    name:"Lendio Business Loan Marketplace",  institution:"Lendio",                     type:"marketplace",
+    icon:"🔗", minRate:9.0,  maxRate:30.0, minAmount:5000,    maxAmount:5000000,
+    minTenure:1,  maxTenure:120, processingFee:1.0,  prepaymentPenalty:0,
+    turnaroundDays:{min:1,max:14}, requiresCollateral:false, minCreditScore:560,
+    loanTypes:["business","sba","line_of_credit"],
+    highlights:["Matches 75+ lenders in one app","FICO 560+ accepted","SBA loan assistance","Widest amount range"] },
+];
+
+function getAllLenders() { return [...LENDER_CATALOG]; }
+
+function searchLenders({ loanType=null, amount=0, tenureMonths=12, maxRate=null, creditScore=null } = {}) {
+  return LENDER_CATALOG.filter(l => {
+    if (loanType && !l.loanTypes.includes(loanType)) return false;
+    if (amount > 0 && (amount < l.minAmount || amount > l.maxAmount)) return false;
+    if (tenureMonths && (tenureMonths < l.minTenure || tenureMonths > l.maxTenure)) return false;
+    if (maxRate !== null && l.minRate > maxRate) return false;
+    if (creditScore !== null && creditScore < l.minCreditScore) return false;
+    return true;
+  });
+}
+
+function compareOffers(lenders, principal, tenureMonths, useMinRate = true) {
+  if (!Array.isArray(lenders) || lenders.length === 0) throw new Error("lenders must be a non-empty array.");
+  if (typeof principal !== "number" || principal <= 0) throw new Error("principal must be a positive number.");
+  if (typeof tenureMonths !== "number" || tenureMonths < 1) throw new Error("tenureMonths must be at least 1.");
+  const offers = lenders.map(l => {
+    const rate = useMinRate ? l.minRate : l.maxRate;
+    const emi  = _r(_calcEMI(principal, rate, tenureMonths));
+    const totalPayment     = _r(emi * tenureMonths);
+    const totalInterest    = _r(totalPayment - principal);
+    const processingFeeAmt = _r(principal * (l.processingFee / 100));
+    const totalCost        = _r(totalInterest + processingFeeAmt);
+    const effectiveRate    = _r(rate + (l.processingFee / (tenureMonths / 12)));
+    return { ...l, appliedRate:rate, emi, totalPayment, totalInterest, processingFeeAmt, totalCost, effectiveRate, isBestDeal:false };
+  });
+  offers.sort((a, b) => a.totalCost - b.totalCost);
+  if (offers.length > 0) offers[0].isBestDeal = true;
+  return offers.map((o, i) => ({ ...o, rank:i+1 }));
+}
+
+function rankOffers(offers, rankBy = "totalCost") {
+  const getVal = (o, key) => key === "turnaroundDays.min" ? o.turnaroundDays.min : o[key];
+  const sorted = [...offers].sort((a, b) => getVal(a, rankBy) - getVal(b, rankBy));
+  sorted.forEach((o, i) => { o.rank = i+1; o.isBestDeal = i === 0; });
+  return sorted;
+}
+
+function getBestOffer(offers) {
+  if (!offers || offers.length === 0) throw new Error("No offers to compare.");
+  return offers.reduce((best, o) => o.totalCost < best.totalCost ? o : best);
+}
+
+function generateReferralLink(lenderId, referralCode, loanAmount) {
+  const base   = "https://smallbiz.app/apply";
+  const params = `lender=${lenderId}&ref=${encodeURIComponent(referralCode)}&amt=${loanAmount}&ts=${Date.now()}`;
+  return {
+    url:                `${base}?${params}`,
+    lenderId, referralCode, loanAmount,
+    estimatedReferralFee: _r(loanAmount * 0.005),
+  };
+}
+
+function getSavingsSummary(rankedOffers) {
+  if (rankedOffers.length < 2) return null;
+  const best  = rankedOffers[0];
+  const worst = rankedOffers[rankedOffers.length - 1];
+  return {
+    bestLender:      best.name,  worstLender:     worst.name,
+    emiSaving:       _r(worst.emi - best.emi),
+    totalCostSaving: _r(worst.totalCost - best.totalCost),
+    rateDifference:  _r(worst.appliedRate - best.appliedRate),
+  };
+}
+
+function _calcEMI(principal, annualRate, tenureMonths) {
+  if (annualRate === 0) return principal / tenureMonths;
+  const r = annualRate / 12 / 100;
+  const factor = Math.pow(1 + r, tenureMonths);
+  return (principal * r * factor) / (factor - 1);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// APPLY URLS
+// ═══════════════════════════════════════════════════════════════════════════
+const APPLY_URLS = {
+  'sba-7a':    'https://www.sba.gov/funding-programs/loans/7a-loans',
+  'wells-biz': 'https://www.wellsfargo.com/biz/business-credit/loans-and-lines/small-business-loan/',
+  'chase-biz': 'https://www.chase.com/business/banking/business-lending/line-of-credit',
+  'bofa-biz':  'https://www.bankofamerica.com/smallbusiness/business-financing/',
+  'ondeck':    'https://www.ondeck.com/apply',
+  'bluevine':  'https://app.bluevine.com/signup/',
+  'kabbage':   'https://www.kabbage.com/business-loans/',
+  'fundbox':   'https://app.fundbox.com/signup',
+  'lendio':    'https://www.lendio.com/apply/',
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════════════════════════════════════
+const LME_KEY = 'fw_lme';
+function saveFilters() {
+  try {
+    localStorage.setItem(LME_KEY, JSON.stringify({
+      type:    document.getElementById('s-type').value,
+      amount:  document.getElementById('s-amount').value,
+      tenure:  document.getElementById('s-tenure').value,
+      maxrate: document.getElementById('s-maxrate').value,
+      cibil:   document.getElementById('s-cibil').value,
+      sortby:  document.getElementById('s-sortby').value,
+    }));
+  } catch(e) {}
+}
+
+function restoreFilters() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(LME_KEY) || 'null');
+    if (!saved) return;
+    if (saved.type)    document.getElementById('s-type').value    = saved.type;
+    if (saved.amount)  document.getElementById('s-amount').value  = saved.amount;
+    if (saved.tenure)  document.getElementById('s-tenure').value  = saved.tenure;
+    if (saved.maxrate) document.getElementById('s-maxrate').value = saved.maxrate;
+    if (saved.cibil)   document.getElementById('s-cibil').value   = saved.cibil;
+    if (saved.sortby)  document.getElementById('s-sortby').value  = saved.sortby;
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INTEGRATION: pre-fill from other modules
+// ═══════════════════════════════════════════════════════════════════════════
+function prefillFromModules() {
+  var msgs = [];
+  var urlScore = null, urlAmount = null;
+
+  // Check URL params from loanDecisionScoreEngine shareLender()
+  try {
+    var params = new URLSearchParams(window.location.search);
+    urlScore  = parseFloat(params.get('score')) || null;
+    urlAmount = parseFloat(params.get('loanAmount')) || null;
+    var urlRate   = parseFloat(params.get('rate')) || null;
+    var urlTenure = parseInt(params.get('tenure')) || null;
+    if (urlAmount) {
+      document.getElementById('s-amount').value = urlAmount;
+      msgs.push('Loan amount $' + urlAmount.toLocaleString() + ' from Score Engine');
+    }
+    if (urlTenure) document.getElementById('s-tenure').value = urlTenure;
+    if (urlRate)   document.getElementById('s-maxrate').value = urlRate;
+  } catch(e) {}
+
+  // Credit score from fw_ldse (loanDecisionScoreEngine inputs)
+  try {
+    var ldse = JSON.parse(localStorage.getItem('fw_ldse') || 'null');
+    if (ldse && ldse.creditScore && !urlScore) {
+      document.getElementById('s-cibil').value = ldse.creditScore;
+      msgs.push('Credit score ' + ldse.creditScore + ' from Score Engine');
+    }
+  } catch(e) {}
+
+  // Loan amount from fw_wcc (workingCapitalCalc) if not already set by URL
+  if (!urlAmount) {
+    try {
+      var wcc = JSON.parse(localStorage.getItem('fw_wcc') || 'null');
+      if (wcc && wcc.needed && parseFloat(wcc.needed) > 0) {
+        document.getElementById('s-amount').value = Math.round(parseFloat(wcc.needed));
+        msgs.push('Loan amount $' + Math.round(parseFloat(wcc.needed)).toLocaleString() + ' from Working Capital calc');
+      }
+    } catch(e) {}
+  }
+
+  // Fallback: fw_profile
+  if (!document.getElementById('s-amount').value || document.getElementById('s-amount').value === '100000') {
+    try {
+      var prof = JSON.parse(localStorage.getItem('fw_profile') || 'null');
+      if (prof && prof.loan) {
+        document.getElementById('s-amount').value = prof.loan;
+        msgs.push('Loan amount $' + Number(prof.loan).toLocaleString() + ' from Profile');
+      }
+    } catch(e) {}
+  }
+
+  if (msgs.length > 0) {
+    var b = document.getElementById('intBanner');
+    b.innerHTML = '🔗 <strong>Auto-filled from your data:</strong> ' + msgs.join(' &nbsp;·&nbsp; ') +
+      ' &nbsp;<button onclick="this.parentNode.style.display=\'none\'" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.8rem">✕</button>';
+    b.classList.add('show');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ELIGIBILITY SCORE
+// ═══════════════════════════════════════════════════════════════════════════
+function calcEligibility(lender, amount, tenure, creditScore) {
+  var score = 100;
+  var reasons = [];
+
+  // Credit score factor (40 pts)
+  if (creditScore) {
+    var gap = creditScore - lender.minCreditScore;
+    if (gap < 0) {
+      score -= 40;
+      reasons.push({ cls: 'er-bad', text: 'Credit score ' + Math.abs(gap) + ' pts below minimum (' + lender.minCreditScore + ' required)' });
+    } else if (gap < 30) {
+      score -= 15;
+      reasons.push({ cls: 'er-warn', text: 'Credit score only ' + gap + ' pts above minimum — borderline' });
+    } else if (gap < 80) {
+      score -= 5;
+      reasons.push({ cls: 'er-good', text: 'Credit score meets requirement (+' + gap + ' pts headroom)' });
+    } else {
+      reasons.push({ cls: 'er-good', text: 'Credit score well above minimum (+' + gap + ' pts)' });
+    }
+  }
+
+  // Amount factor (30 pts)
+  if (amount > 0) {
+    if (amount < lender.minAmount) {
+      score -= 25;
+      reasons.push({ cls: 'er-bad', text: 'Amount below minimum ($' + lender.minAmount.toLocaleString() + ')' });
+    } else if (amount > lender.maxAmount) {
+      score -= 25;
+      reasons.push({ cls: 'er-bad', text: 'Amount exceeds maximum ($' + lender.maxAmount.toLocaleString() + ')' });
+    } else {
+      reasons.push({ cls: 'er-good', text: 'Loan amount within eligible range' });
+    }
+  }
+
+  // Rate factor (20 pts)
+  if (lender.minRate > 20) {
+    score -= 15;
+    reasons.push({ cls: 'er-warn', text: 'High minimum rate (' + lender.minRate + '%) — expensive option' });
+  } else if (lender.minRate <= 10) {
+    reasons.push({ cls: 'er-good', text: 'Competitive starting rate (' + lender.minRate + '%)' });
+  }
+
+  // Turnaround (10 pts)
+  if (lender.turnaroundDays.min <= 1) {
+    reasons.push({ cls: 'er-good', text: 'Same-day / next-day approval possible' });
+  } else if (lender.turnaroundDays.min > 14) {
+    score -= 8;
+    reasons.push({ cls: 'er-warn', text: 'Slow approval (' + lender.turnaroundDays.min + '–' + lender.turnaroundDays.max + ' days)' });
+  }
+
+  score = Math.max(0, Math.min(100, score));
+  var label = score >= 80 ? 'Strong Match' : score >= 60 ? 'Good Match' : score >= 40 ? 'Fair Match' : 'Weak Match';
+  var bg    = score >= 80 ? '#dcfce7' : score >= 60 ? '#dbeafe' : score >= 40 ? '#fef9c3' : '#fee2e2';
+  var color = score >= 80 ? '#166534' : score >= 60 ? '#1d4ed8' : score >= 40 ? '#854d0e' : '#991b1b';
+  return { score, label, bg, color, reasons };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// COMPARE FEATURE
+// ═══════════════════════════════════════════════════════════════════════════
+var compareSet = {};  // id → lender object
+var _lastSearchResults = [];
+
+function toggleCompare(id) {
+  var lender = LENDER_CATALOG.find(function(l) { return l.id === id; });
+  if (!lender) return;
+  if (compareSet[id]) {
+    delete compareSet[id];
+  } else {
+    var count = Object.keys(compareSet).length;
+    if (count >= 3) {
+      alert('Select up to 3 lenders to compare.');
+      // Uncheck the box
+      var cb = document.getElementById('cmp-' + id);
+      if (cb) cb.checked = false;
+      return;
+    }
+    compareSet[id] = lender;
+  }
+  updateCompareBar();
+}
+
+function updateCompareBar() {
+  var ids = Object.keys(compareSet);
+  var bar = document.getElementById('compareBar');
+  var names = document.getElementById('cmpBarNames');
+  if (ids.length === 0) {
+    bar.classList.remove('show');
+    return;
+  }
+  bar.classList.add('show');
+  names.textContent = ids.map(function(id) { return compareSet[id].name.split(' ').slice(0,3).join(' '); }).join(' · ');
+}
+
+function clearCompare() {
+  compareSet = {};
+  document.querySelectorAll('.cmp-check').forEach(function(cb) { cb.checked = false; });
+  updateCompareBar();
+  var prev = document.getElementById('cmpTable');
+  if (prev) prev.remove();
+}
+
+function showCompare() {
+  var lenders = Object.values(compareSet);
+  if (lenders.length < 2) { alert('Select at least 2 lenders to compare.'); return; }
+
+  var amount  = parseFloat(document.getElementById('s-amount').value) || 100000;
+  var tenure  = parseInt(document.getElementById('s-tenure').value)   || 36;
+  var creditScore = parseFloat(document.getElementById('s-cibil').value) || null;
+
+  var offers = compareOffers(lenders, amount, tenure, true);
+
+  var rows = [
+    { label: 'Lender',          fn: function(o) { return o.icon + ' <strong>' + o.name + '</strong>'; } },
+    { label: 'Type',            fn: function(o) { return '<span class="type-badge ' + o.type + '">' + o.type.replace('_',' ') + '</span>'; } },
+    { label: 'Rate Range',      fn: function(o) { return o.minRate + '–' + o.maxRate + '%'; } },
+    { label: 'Monthly EMI',     fn: function(o) { return '<strong>$' + fmt(o.emi) + '</strong>'; } },
+    { label: 'Total Interest',  fn: function(o) { return '$' + fmt(o.totalInterest); } },
+    { label: 'Processing Fee',  fn: function(o) { return '$' + fmt(o.processingFeeAmt) + ' (' + o.processingFee + '%)'; } },
+    { label: 'Total Cost',      fn: function(o) { return '<strong>$' + fmt(o.totalCost) + '</strong>'; } },
+    { label: 'Min FICO',        fn: function(o) { return o.minCreditScore + (creditScore && creditScore < o.minCreditScore ? ' <span style="color:#dc2626">⚠ below yours</span>' : ''); } },
+    { label: 'Approval Time',   fn: function(o) { return o.turnaroundDays.min + '–' + o.turnaroundDays.max + ' days'; } },
+    { label: 'Eligibility',     fn: function(o) { var e = calcEligibility(o, amount, tenure, creditScore); return '<span class="elig-badge" style="background:' + e.bg + ';color:' + e.color + '">' + e.score + '/100 ' + e.label + '</span>'; } },
+    { label: 'Apply',           fn: function(o) { return '<a href="' + (APPLY_URLS[o.id]||'#') + '" target="_blank" class="btn-apply" style="display:inline-block;margin-top:0">Apply Now →</a>'; } },
+  ];
+
+  var bestId = offers[0].id;
+  var html = '<div class="card" id="cmpTable" style="margin-top:16px"><h3>Side-by-Side Comparison</h3>' +
+    '<div style="overflow-x:auto"><table class="cmp-table"><thead><tr><th>Metric</th>' +
+    offers.map(function(o) { return '<th' + (o.id === bestId ? ' class="cmp-best-cell"' : '') + '>' + o.icon + ' ' + o.name.split(' ').slice(0,3).join(' ') + (o.id === bestId ? ' 🏆' : '') + '</th>'; }).join('') +
+    '</tr></thead><tbody>';
+
+  rows.forEach(function(row) {
+    html += '<tr><td style="color:#64748b;font-size:0.8rem;white-space:nowrap">' + row.label + '</td>' +
+      offers.map(function(o) { return '<td' + (o.id === bestId ? ' class="cmp-best-cell"' : '') + '>' + row.fn(o) + '</td>'; }).join('') + '</tr>';
+  });
+
+  html += '</tbody></table></div>' +
+    '<p style="font-size:0.75rem;color:#94a3b8;margin-top:8px">🏆 = lowest total cost for $' + fmt(amount) + ' over ' + tenure + ' months</p></div>';
+
+  // Insert before search-results or replace existing
+  var prev = document.getElementById('cmpTable');
+  if (prev) prev.remove();
+  var el = document.createElement('div');
+  el.innerHTML = html;
+  var container = document.getElementById('tab-search');
+  container.appendChild(el.firstChild);
+  document.getElementById('cmpTable').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EXPORT PDF
+// ═══════════════════════════════════════════════════════════════════════════
+function exportSearchPDF() {
+  window.print();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UI Logic
+// ═══════════════════════════════════════════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function fmt(n) { return (n||0).toLocaleString('en-US'); }
+
+function doSearch() {
+  saveFilters();
+  const loanType    = document.getElementById('s-type').value || null;
+  const amount      = parseFloat(document.getElementById('s-amount').value) || 0;
+  const tenureMonths= parseInt(document.getElementById('s-tenure').value) || 12;
+  const maxRateVal  = document.getElementById('s-maxrate').value;
+  const maxRate     = maxRateVal ? parseFloat(maxRateVal) : null;
+  const creditScore = parseFloat(document.getElementById('s-cibil').value) || null;
+  const sortBy      = document.getElementById('s-sortby').value || 'eligScore';
+
+  var results = searchLenders({ loanType, amount, tenureMonths, maxRate, creditScore });
+
+  // Attach eligibility scores
+  results.forEach(function(l) { l._elig = calcEligibility(l, amount, tenureMonths, creditScore); });
+
+  // Sort
+  results.sort(function(a, b) {
+    if (sortBy === 'eligScore')      return b._elig.score - a._elig.score;
+    if (sortBy === 'minRate')        return a.minRate - b.minRate;
+    if (sortBy === 'maxAmount')      return b.maxAmount - a.maxAmount;
+    if (sortBy === 'turnaround')     return a.turnaroundDays.min - b.turnaroundDays.min;
+    if (sortBy === 'minCreditScore') return a.minCreditScore - b.minCreditScore;
+    return 0;
+  });
+
+  _lastSearchResults = results;
+  const el = document.getElementById('search-results');
+
+  // Toolbar
+  var toolbar = document.getElementById('searchToolbar');
+  toolbar.style.display = results.length > 0 ? 'flex' : 'none';
+  document.getElementById('searchCount').textContent = results.length + ' lender' + (results.length !== 1 ? 's' : '') + ' matched';
+
+  if (results.length === 0) {
+    el.innerHTML = '<div class="no-result"><h2>No lenders found</h2><p>Try relaxing your criteria — lower the loan amount, increase the credit score, or remove the rate cap.</p></div>';
+    return;
+  }
+
+  el.innerHTML = '<div class="print-only"><strong>FinWise Loan Marketplace — Matched Lenders</strong><br>Amount: $' + fmt(amount) + ' · Tenure: ' + tenureMonths + ' months · FICO: ' + (creditScore||'—') + ' · Generated: ' + new Date().toLocaleDateString() + '</div>' +
+    '<div class="lender-grid" id="lenderGrid">' +
+    results.map(function(l) {
+      var e = l._elig;
+      var applyUrl = APPLY_URLS[l.id] || '#';
+      return '<div class="lender-card" id="lc-' + l.id + '">' +
+        '<div class="lender-name">' + l.icon + ' ' + l.name + ' <span class="type-badge ' + l.type + '">' + l.type.replace('_',' ') + '</span></div>' +
+        '<div class="lender-inst">' + l.institution + '</div>' +
+        '<div class="stat-row">' +
+          '<div class="stat-pill"><b>' + l.minRate + '–' + l.maxRate + '%</b> p.a.</div>' +
+          '<div class="stat-pill">$<b>' + fmt(l.minAmount) + '–' + fmt(l.maxAmount) + '</b></div>' +
+          '<div class="stat-pill"><b>' + l.minTenure + '–' + l.maxTenure + '</b> mo</div>' +
+          '<div class="stat-pill">FICO <b>' + l.minCreditScore + '+</b></div>' +
+          '<div class="stat-pill">Fee <b>' + l.processingFee + '%</b></div>' +
+          '<div class="stat-pill">TAT <b>' + l.turnaroundDays.min + '–' + l.turnaroundDays.max + 'd</b></div>' +
+        '</div>' +
+        '<ul class="highlights">' + l.highlights.map(function(h) { return '<li>' + h + '</li>'; }).join('') + '</ul>' +
+        // Eligibility score
+        '<div><span class="elig-badge" style="background:' + e.bg + ';color:' + e.color + '">' +
+          '<span style="font-size:1rem;font-weight:900">' + e.score + '</span>/100 &nbsp;' + e.label +
+        '</span></div>' +
+        '<div class="elig-reasons">' +
+          e.reasons.map(function(r) { return '<div class="' + r.cls + '">' + (r.cls==='er-good'?'✓ ':r.cls==='er-bad'?'✗ ':'⚠ ') + r.text + '</div>'; }).join('') +
+        '</div>' +
+        // Action row
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px">' +
+          '<label class="cmp-check-wrap"><input type="checkbox" class="cmp-check" id="cmp-' + l.id + '" onchange="toggleCompare(\'' + l.id + '\')"> Compare</label>' +
+          '<a href="' + applyUrl + '" target="_blank" class="btn-apply">Apply Now →</a>' +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+}
+
+function doCompare() {
+  const principal    = parseFloat(document.getElementById('c-principal').value);
+  const tenureMonths = parseInt(document.getElementById('c-tenure').value);
+  const creditScore  = parseFloat(document.getElementById('c-cibil').value) || null;
+  const useMinRate   = document.getElementById('c-ratescenario').value === 'min';
+  const rankBy       = document.getElementById('c-rankby').value;
+
+  const eligible = searchLenders({ amount: principal, tenureMonths, creditScore });
+  if (eligible.length === 0) {
+    document.getElementById('compare-results').innerHTML = '<div class="no-result"><h2>No eligible lenders</h2></div>';
+    return;
+  }
+
+  let offers = compareOffers(eligible, principal, tenureMonths, useMinRate);
+  if (rankBy !== 'totalCost') offers = rankOffers(offers, rankBy);
+
+  const savings = getSavingsSummary(offers);
+
+  let html = `<div class="card"><h3>Ranked Offers — ${offers.length} Lenders ($${fmt(principal)}, ${tenureMonths} months)</h3>
+    <div style="overflow-x:auto"><table>
+    <thead><tr>
+      <th>Rank</th><th>Lender</th><th>Rate</th><th>EMI/mo</th>
+      <th>Processing Fee</th><th>Total Interest</th><th>Total Cost</th><th>TAT</th>
+    </tr></thead><tbody>` +
+    offers.map(o => `<tr class="${o.rank===1?'rank1':''}">
+      <td><span class="rank-badge ${o.rank===1?'gold':''}">#{o.rank}</span></td>
+      <td>${o.icon} ${o.name}${o.isBestDeal?'<span class="badge-best">BEST DEAL</span>':''}</td>
+      <td>${o.appliedRate}%</td>
+      <td>$${fmt(o.emi)}</td>
+      <td>$${fmt(o.processingFeeAmt)} (${o.processingFee}%)</td>
+      <td>$${fmt(o.totalInterest)}</td>
+      <td><b>$${fmt(o.totalCost)}</b></td>
+      <td>${o.turnaroundDays.min}–${o.turnaroundDays.max}d</td>
+    </tr>`.replace('#{o.rank}', o.rank)).join('') +
+    `</tbody></table></div>`;
+
+  if (savings) {
+    html += `<div class="savings-box">
+      <h4>Potential Savings — ${savings.bestLender} vs ${savings.worstLender}</h4>
+      <div class="savings-grid">
+        <div class="savings-item"><div class="val">$${fmt(savings.emiSaving)}/mo</div><div class="lbl">EMI Saving</div></div>
+        <div class="savings-item"><div class="val">$${fmt(savings.totalCostSaving)}</div><div class="lbl">Total Cost Saving</div></div>
+        <div class="savings-item"><div class="val">${savings.rateDifference}%</div><div class="lbl">Rate Difference</div></div>
+      </div>
+    </div>`;
+  }
+
+  html += '</div>';
+  document.getElementById('compare-results').innerHTML = html;
+}
+
+function doReferral() {
+  const lenderId     = document.getElementById('r-lender').value;
+  const referralCode = document.getElementById('r-code').value.trim() || 'SMALLBIZ';
+  const loanAmount   = parseFloat(document.getElementById('r-amount').value);
+  const result = generateReferralLink(lenderId, referralCode, loanAmount);
+
+  document.getElementById('referral-result').innerHTML = `
+    <div class="ref-box">
+      <b>Referral Link Generated</b>
+      <div class="ref-url">${result.url}</div>
+      <div style="font-size:0.82rem;color:#0369a1">
+        Estimated Referral Fee: <b>$${fmt(result.estimatedReferralFee)}</b>
+        (0.5% of $${fmt(loanAmount)})
+      </div>
+    </div>`;
+}
+
+function doSavings() {
+  const principal    = parseFloat(document.getElementById('ss-principal').value);
+  const tenureMonths = parseInt(document.getElementById('ss-tenure').value);
+  const lenders = getAllLenders().filter(l => principal >= l.minAmount && principal <= l.maxAmount
+    && tenureMonths >= l.minTenure && tenureMonths <= l.maxTenure);
+  if (lenders.length < 2) {
+    document.getElementById('savings-result').innerHTML = '<p style="color:#dc2626;margin-top:8px">Need at least 2 eligible lenders to compute savings.</p>';
+    return;
+  }
+  const offers  = compareOffers(lenders, principal, tenureMonths);
+  const savings = getSavingsSummary(offers);
+  if (!savings) {
+    document.getElementById('savings-result').innerHTML = '<p style="color:#dc2626;margin-top:8px">Could not compute savings.</p>';
+    return;
+  }
+  document.getElementById('savings-result').innerHTML = `
+    <div class="savings-box" style="margin-top:16px">
+      <h4>Savings Summary — ${offers.length} Offers Compared</h4>
+      <div style="font-size:0.85rem;color:#166534;margin-bottom:8px">
+        Best: <b>${savings.bestLender}</b> &nbsp;|&nbsp; Worst: <b>${savings.worstLender}</b>
+      </div>
+      <div class="savings-grid">
+        <div class="savings-item"><div class="val">$${fmt(savings.emiSaving)}/mo</div><div class="lbl">EMI Saving</div></div>
+        <div class="savings-item"><div class="val">$${fmt(savings.totalCostSaving)}</div><div class="lbl">Total Cost Saving</div></div>
+        <div class="savings-item"><div class="val">${savings.rateDifference}%</div><div class="lbl">Rate Difference</div></div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Unit Tests
+// ═══════════════════════════════════════════════════════════════════════════
+function runTests() {
+  const results = [];
+  function test(name, fn) {
+    try { fn(); results.push({ name, ok: true }); }
+    catch(e) { results.push({ name, ok: false, err: e.message }); }
+  }
+  function assert(cond, msg) { if (!cond) throw new Error(msg || "Assertion failed"); }
+
+  test("getAllLenders returns 9 lenders", () => assert(getAllLenders().length === 9));
+  test("searchLenders — no criteria returns all", () => assert(searchLenders().length === 9));
+  test("searchLenders — filters by loanType sba", () => {
+    const res = searchLenders({ loanType: "sba" });
+    assert(res.every(l => l.loanTypes.includes("sba")));
+    assert(res.length > 0);
+  });
+  test("searchLenders — filters by amount $100K", () => {
+    const res = searchLenders({ amount: 100000 });
+    assert(res.every(l => l.minAmount <= 100000 && l.maxAmount >= 100000));
+  });
+  test("searchLenders — filters by FICO 700", () => {
+    const res = searchLenders({ creditScore: 700 });
+    assert(res.every(l => l.minCreditScore <= 700));
+    const blocked = res.filter(l => l.minCreditScore > 700);
+    assert(blocked.length === 0);
+  });
+  test("compareOffers — ranked by totalCost ascending", () => {
+    const lenders = getAllLenders();
+    const offers  = compareOffers(lenders, 100000, 36);
+    for (let i = 1; i < offers.length; i++) {
+      assert(offers[i].totalCost >= offers[i-1].totalCost, "Not sorted");
+    }
+  });
+  test("compareOffers — rank 1 is best deal", () => {
+    const offers = compareOffers(getAllLenders(), 100000, 36);
+    assert(offers[0].isBestDeal === true && offers[0].rank === 1);
+    assert(offers.slice(1).every(o => !o.isBestDeal));
+  });
+  test("compareOffers — EMI formula validation", () => {
+    const lenders = [LENDER_CATALOG[0]]; // SBA 7a 8.5%
+    const offers  = compareOffers(lenders, 120000, 24);
+    const r = 8.5 / 12 / 100;
+    const factor = Math.pow(1 + r, 24);
+    const expected = _r((120000 * r * factor) / (factor - 1));
+    assert(Math.abs(offers[0].emi - expected) < 1, `EMI mismatch: ${offers[0].emi} vs ${expected}`);
+  });
+  test("compareOffers — total cost = interest + processing fee", () => {
+    const offers = compareOffers(getAllLenders(), 50000, 24);
+    offers.forEach(o => {
+      const expected = _r(o.totalInterest + o.processingFeeAmt);
+      assert(Math.abs(o.totalCost - expected) < 1, `totalCost mismatch for ${o.name}`);
+    });
+  });
+  test("rankOffers — re-sort by EMI", () => {
+    const offers = compareOffers(getAllLenders(), 100000, 36);
+    const ranked = rankOffers(offers, "emi");
+    for (let i = 1; i < ranked.length; i++) assert(ranked[i].emi >= ranked[i-1].emi);
+  });
+  test("getBestOffer — returns lowest total cost", () => {
+    const offers = compareOffers(getAllLenders(), 100000, 36);
+    const best = getBestOffer(offers);
+    const minCost = Math.min(...offers.map(o => o.totalCost));
+    assert(best.totalCost === minCost);
+  });
+  test("generateReferralLink — URL contains lenderId and referralCode", () => {
+    const link = generateReferralLink("sba-7a", "TEST123", 100000);
+    assert(link.url.includes("sba-7a"));
+    assert(link.url.includes("TEST123"));
+    assert(link.estimatedReferralFee === 500); // 0.5% of $100K
+  });
+  test("getSavingsSummary — returns correct fields", () => {
+    const offers  = compareOffers(getAllLenders(), 100000, 36);
+    const summary = getSavingsSummary(offers);
+    assert(typeof summary.emiSaving === "number");
+    assert(typeof summary.totalCostSaving === "number");
+    assert(summary.totalCostSaving >= 0);
+  });
+  test("getSavingsSummary — null for single offer", () => {
+    const offers = compareOffers([LENDER_CATALOG[0]], 100000, 36);
+    assert(getSavingsSummary(offers) === null);
+  });
+  test("compareOffers — throws on empty lenders array", () => {
+    let threw = false;
+    try { compareOffers([], 1000000, 36); } catch { threw = true; }
+    assert(threw);
+  });
+  test("compareOffers — worst case rate higher EMI", () => {
+    const lenders = [LENDER_CATALOG[0]];
+    const best  = compareOffers(lenders, 1000000, 36, true)[0].emi;
+    const worst = compareOffers(lenders, 1000000, 36, false)[0].emi;
+    assert(worst > best, `worst (${worst}) should be > best (${best})`);
+  });
+
+  const ul = document.getElementById('unitResults');
+  const pass = results.filter(r => r.ok).length;
+  ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+// Auto-run search on load — restore filters, prefill from other modules, then search
+window.onload = function() {
+  restoreFilters();
+  prefillFromModules();
+  doSearch();
+};
+</script>
+</body>
+</html>

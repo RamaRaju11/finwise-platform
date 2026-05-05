@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinWise — Telugu Reel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#050a00;display:flex;align-items:center;justify-content:center;font-family:Arial,'Noto Sans Telugu',sans-serif;overflow:hidden}
+
+/* ── START OVERLAY ── */
+#startOv{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#050a00,#001a08);display:flex;align-items:center;justify-content:center}
+.start-card{text-align:center;padding:44px 36px;max-width:370px;background:linear-gradient(145deg,#012a10,#003d20);border-radius:28px;border:1.5px solid rgba(74,222,128,.2);box-shadow:0 28px 80px rgba(0,0,0,.9)}
+.start-emoji{font-size:3.5rem;margin-bottom:14px;display:block;animation:popIn .6s cubic-bezier(.34,1.7,.64,1) both}
+.start-title{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:8px}
+.start-title em{color:#4ade80;font-style:normal}
+.start-sub{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:600;line-height:1.7;margin-bottom:10px}
+.voice-note{font-size:.8rem;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:10px 14px;color:rgba(255,255,255,.55);margin-bottom:22px;line-height:1.55;text-align:left}
+.voice-note strong{color:#4ade80}
+.start-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 38px;background:linear-gradient(135deg,#16a34a,#4ade80);color:#052e16;border:none;border-radius:50px;font-size:1.05rem;font-weight:900;cursor:pointer;box-shadow:0 8px 28px rgba(74,222,128,.35);transition:transform .2s}
+.start-btn:hover{transform:scale(1.05)}
+.start-note{margin-top:14px;font-size:.72rem;color:rgba(255,255,255,.25);font-weight:700;letter-spacing:.5px}
+
+/* ── REEL ── */
+.reel{position:relative;width:390px;height:100vh;max-height:780px;overflow:hidden;border-radius:0;box-shadow:0 0 100px rgba(74,222,128,.15)}
+@media(min-width:500px){.reel{border-radius:24px;height:780px}}
+.reel::before{content:'';position:absolute;top:0;left:0;right:0;height:72px;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);z-index:150;pointer-events:none}
+
+/* ── PROGRESS DOTS ── */
+.prog-dots{position:absolute;top:14px;left:0;right:0;display:flex;gap:4px;padding:0 16px;z-index:200}
+.dot{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.dot-fill{height:100%;background:#4ade80;border-radius:99px;width:0%}
+
+/* ── CONTROLS ── */
+.ctrl-bar{position:absolute;top:10px;right:14px;z-index:300;display:flex;gap:6px}
+.ctrl-btn{background:rgba(0,0,0,.45);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:.88rem;cursor:pointer;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.ctrl-btn:hover{background:rgba(0,0,0,.7)}
+
+/* ── SLIDES ── */
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 28px 112px;text-align:center;opacity:0;pointer-events:none;transition:opacity .38s ease,transform .38s ease;transform:scale(1.06)}
+.slide.active{opacity:1;pointer-events:auto;transform:scale(1)}
+.slide.out{opacity:0;transform:scale(.92)}
+
+.s1{background:linear-gradient(160deg,#1a0800,#3d1500)}
+.s2{background:linear-gradient(160deg,#001018,#002535)}
+.s3{background:linear-gradient(160deg,#100020,#200040)}
+.s4{background:radial-gradient(ellipse at top,#1a1200 0%,#000000 100%)}
+.s5{background:linear-gradient(160deg,#001a0a,#003318)}
+.s6{background:linear-gradient(160deg,#040408,#0d1020)}
+.s7{background:linear-gradient(160deg,#1a0a00,#3d1f00)}
+
+/* ── SUBTITLE BAR ── */
+.sub-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);padding:11px 16px 22px;font-size:.88rem;font-weight:700;color:rgba(255,255,255,.82);line-height:1.65;min-height:72px;z-index:200;text-align:center}
+.sub-bar mark{background:none;color:#4ade80;font-weight:900;font-style:normal;text-decoration:underline;text-underline-offset:2px}
+
+/* ── TEXT ── */
+.big-emoji{font-size:4.2rem;line-height:1;margin-bottom:16px;display:block;animation:popIn .52s cubic-bezier(.34,1.7,.64,1) both}
+.hd{font-size:1.8rem;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-.3px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.13s}
+.sd{font-size:.95rem;font-weight:700;color:rgba(255,255,255,.6);line-height:1.55;animation:riseUp .44s ease both;animation-delay:.28s}
+
+/* ── SLIDE 1 — CA fees dialog ── */
+.chat-wrap{margin-top:14px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.38s}
+.bubble{padding:11px 16px;border-radius:14px;font-size:.86rem;font-weight:700;margin-bottom:8px;text-align:left;line-height:1.5}
+.b-ca{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);color:#fca5a5;border-top-left-radius:4px}
+.b-you{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);border-top-right-radius:4px;text-align:right}
+.b-from{font-size:.62rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;opacity:.6}
+.result-pill{margin-top:6px;display:inline-block;background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid rgba(220,38,38,.4);border-radius:99px;font-size:.72rem;font-weight:900;padding:5px 14px;animation:riseUp .44s ease both;animation-delay:.62s}
+
+/* ── SLIDE 2 — Monthly stress ── */
+.stress-grid{margin-top:14px;width:100%;max-width:300px;display:flex;flex-direction:column;gap:8px;animation:riseUp .44s ease both;animation-delay:.3s}
+.stress-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border-radius:12px;padding:10px 14px;border-left:3px solid}
+.sr-emi{border-color:#f87171}
+.sr-sal{border-color:#fbbf24}
+.sr-gst{border-color:#60a5fa}
+.sr-icon{font-size:1.4rem;flex-shrink:0}
+.sr-text{flex:1;text-align:left}
+.sr-title{font-size:.82rem;font-weight:900;color:#fff}
+.sr-amount{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.45);margin-top:1px}
+.sr-due{font-size:.7rem;font-weight:900;color:#f87171;white-space:nowrap}
+.stress-total{margin-top:4px;text-align:right;font-size:.88rem;font-weight:900;color:#fbbf24;animation:riseUp .4s ease both;animation-delay:.6s}
+
+/* ── SLIDE 3 — Before / After ── */
+.ba-wrap{display:flex;gap:10px;margin-top:14px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.3s}
+.ba-panel{flex:1;border-radius:14px;padding:14px 10px;text-align:center}
+.ba-before{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.ba-after{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25)}
+.ba-lbl{font-size:.62rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;color:rgba(255,255,255,.4)}
+.ba-after .ba-lbl{color:rgba(74,222,128,.7)}
+.ba-icon{font-size:2rem;margin-bottom:6px;display:block}
+.ba-item{font-size:.72rem;font-weight:700;margin-bottom:4px;line-height:1.35;color:rgba(255,255,255,.45)}
+.ba-after .ba-item{color:#86efac;text-decoration:none}
+.ba-before .ba-item{text-decoration:line-through}
+
+/* ── SLIDE 4 — Pivot ── */
+.pivot-wrap{animation:zoomBounce .62s cubic-bezier(.34,1.7,.64,1) both}
+.pivot-big{font-size:2.8rem;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1px}
+.pivot-big em{color:#fbbf24;font-style:normal}
+.pivot-sub{font-size:.95rem;color:rgba(255,255,255,.45);font-weight:700;margin-top:16px;line-height:1.65;animation:riseUp .44s ease both;animation-delay:.5s}
+
+/* ── SLIDE 5 — Brand ── */
+.brand{font-size:3.8rem;font-weight:900;letter-spacing:-3px;color:#fff;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both;font-family:'Arial Black',Arial,sans-serif}
+.brand em{color:#4ade80;font-style:normal}
+.brand-tag{font-size:.88rem;color:rgba(255,255,255,.45);font-weight:700;margin-top:4px;animation:riseUp .44s ease both;animation-delay:.3s}
+.pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:18px;animation:riseUp .44s ease both;animation-delay:.5s}
+.pill{background:rgba(74,222,128,.08);color:#86efac;border:1.5px solid rgba(74,222,128,.25);border-radius:99px;padding:7px 14px;font-size:.78rem;font-weight:800}
+.big-stat{font-size:1.65rem;font-weight:900;color:#fbbf24;margin-top:16px;line-height:1.35;animation:riseUp .44s ease both;animation-delay:.7s}
+
+/* ── SLIDE 6 — Features ── */
+.feat-lbl{font-size:1rem;font-weight:900;color:#4ade80;margin-bottom:14px;animation:riseUp .4s ease both;animation-delay:.1s}
+.feat-ul{width:100%;list-style:none;text-align:left}
+.feat-ul li{padding:10px 14px;margin-bottom:7px;background:rgba(74,222,128,.04);border-radius:11px;border-left:3px solid #4ade80;font-size:.88rem;font-weight:700;color:#e2e8f0;opacity:0;transform:translateX(-18px);transition:opacity .38s ease,transform .38s ease}
+.feat-ul li.show{opacity:1;transform:translateX(0)}
+.feat-ul li .fi{margin-right:7px}
+
+/* ── SLIDE 7 — CTA ── */
+.cta-head{font-size:1.8rem;font-weight:900;color:#fff;line-height:1.15;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both}
+.cta-checks{margin-top:16px;width:100%;max-width:300px;text-align:left;animation:riseUp .44s ease both;animation-delay:.35s}
+.chk{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:.88rem;font-weight:700;color:rgba(255,255,255,.82)}
+.chk .tk{color:#4ade80;font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:14px 34px;background:#4ade80;color:#052e16;border:none;border-radius:50px;font-size:.98rem;font-weight:900;cursor:pointer;text-decoration:none;box-shadow:0 8px 28px rgba(74,222,128,.35);animation:riseUp .44s ease both;animation-delay:.6s;transition:transform .2s;font-family:'Arial Black',Arial,sans-serif}
+.cta-btn:hover{transform:translateY(-3px) scale(1.04)}
+.replay-lnk{display:inline-block;margin-top:10px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.15);border-radius:50px;padding:8px 24px;font-size:.8rem;font-weight:800;cursor:pointer;animation:riseUp .44s ease both;animation-delay:.8s}
+
+@keyframes popIn{0%{transform:scale(0) rotate(-14deg);opacity:0}75%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes riseUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zoomBounce{0%{opacity:0;transform:scale(.45)}72%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<!-- ── START OVERLAY ── -->
+<div id="startOv">
+  <div class="start-card">
+    <span class="start-emoji">🎙️</span>
+    <div class="start-title">Fin<em>Wise</em> — నిజమైన విషయం</div>
+    <div class="start-sub">ప్రతి చిన్న business owner అనుభవించే కష్టాలు.<br>Telugu లో. Google Voice తో.</div>
+    <div class="voice-note">
+      <strong>🔊 Google Telugu Voice</strong> — ఈ reel<br>
+      Google Translate యొక్క natural Telugu<br>
+      voice ఉపయోగిస్తుంది. Internet అవసరం.
+    </div>
+    <button class="start-btn" onclick="beginReel()">▶&nbsp;&nbsp;చూడండి</button>
+    <div class="start-note">🔊 PHONE UNMUTE చేయండి &nbsp;·&nbsp; TAP = NEXT SLIDE</div>
+  </div>
+</div>
+
+<!-- ── REEL ── -->
+<div class="reel" id="reel">
+
+  <div class="prog-dots" id="progDots"></div>
+  <div class="ctrl-bar">
+    <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+    <button class="ctrl-btn" onclick="restartReel()">↺</button>
+  </div>
+
+  <!-- SLIDE 1 — CA Bill Shock -->
+  <div class="slide s1" id="s1">
+    <span class="big-emoji">🧾</span>
+    <div class="hd">మీ CA కి fees అడిగారు...</div>
+    <div class="chat-wrap">
+      <div class="bubble b-ca">
+        <div class="b-from">CA గారు</div>
+        ఈ నెల consultation, GST filing, audit review అన్నీ కలిపి ₹8,000 అవుతుంది అన్నా.
+      </div>
+      <div class="bubble b-you">
+        <div class="b-from">మీరు</div>
+        ₹8,000?! 😶 మరి నా profit ఎంత అని చెప్పారు?
+      </div>
+      <div class="bubble b-ca">
+        <div class="b-from">CA గారు</div>
+        అది... next month చెప్తాను. 😊
+      </div>
+    </div>
+    <div class="result-pill">💸 ₹8,000 gone. Answers: 0.</div>
+  </div>
+
+  <!-- SLIDE 2 — Month-End Stress -->
+  <div class="slide s2" id="s2">
+    <span class="big-emoji">😰</span>
+    <div class="hd">నెల చివర్లో ఒకేసారి...</div>
+    <div class="stress-grid">
+      <div class="stress-row sr-emi">
+        <span class="sr-icon">🏦</span>
+        <div class="sr-text">
+          <div class="sr-title">Bank EMI</div>
+          <div class="sr-amount">₹35,000 / month</div>
+        </div>
+        <div class="sr-due">Due 28th 🚨</div>
+      </div>
+      <div class="stress-row sr-sal">
+        <span class="sr-icon">👥</span>
+        <div class="sr-text">
+          <div class="sr-title">Staff Salary</div>
+          <div class="sr-amount">₹55,000 / month</div>
+        </div>
+        <div class="sr-due">Due 1st 🚨</div>
+      </div>
+      <div class="stress-row sr-gst">
+        <span class="sr-icon">📋</span>
+        <div class="sr-text">
+          <div class="sr-title">GST Payment</div>
+          <div class="sr-amount">₹18,000 / month</div>
+        </div>
+        <div class="sr-due">Due 20th 🚨</div>
+      </div>
+    </div>
+    <div class="stress-total">Account లో: ₹42,000 మాత్రమే 😩</div>
+  </div>
+
+  <!-- SLIDE 3 — Before vs After FinWise -->
+  <div class="slide s3" id="s3">
+    <span class="big-emoji">🔄</span>
+    <div class="hd">ముందు vs FinWise తో</div>
+    <div class="ba-wrap">
+      <div class="ba-panel ba-before">
+        <div class="ba-lbl">ముందు 😩</div>
+        <span class="ba-icon">😵</span>
+        <div class="ba-item">CA కోసం వేచి ఉండటం</div>
+        <div class="ba-item">Excel లో confusion</div>
+        <div class="ba-item">Loan safe అో కాదో తెలియదు</div>
+        <div class="ba-item">Grants miss అవడం</div>
+      </div>
+      <div class="ba-panel ba-after">
+        <div class="ba-lbl" >తర్వాత 🚀</div>
+        <span class="ba-icon">😎</span>
+        <div class="ba-item">Second లో answers</div>
+        <div class="ba-item">Plain గా చెప్పడం</div>
+        <div class="ba-item">Loan risk తెలుసు</div>
+        <div class="ba-item">Free grants దొరుకుతాయి</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — Pivot -->
+  <div class="slide s4" id="s4">
+    <div style="font-size:3.2rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">💡</div>
+    <div class="pivot-wrap">
+      <div class="pivot-big">మారాల్సిన<br><em>సమయం వచ్చింది.</em></div>
+    </div>
+    <div class="pivot-sub">
+      పెద్ద companies కి మాత్రమే ఉన్న financial tools<br>
+      ఇప్పుడు మీ browser లో. Free గా. Telugu లో.
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — Brand -->
+  <div class="slide s5" id="s5">
+    <div class="brand">Fin<em>Wise</em></div>
+    <div class="brand-tag">మీ AI financial దోస్తు</div>
+    <div class="pills">
+      <div class="pill">🆓 పూర్తిగా Free</div>
+      <div class="pill">🌐 Browser లో</div>
+      <div class="pill">🔒 Data మీకే</div>
+      <div class="pill">💬 Plain భాషలో</div>
+    </div>
+    <div class="big-stat">30 Tools.<br>₹0 Monthly Fee. 🎉</div>
+  </div>
+
+  <!-- SLIDE 6 — Features -->
+  <div class="slide s6" id="s6">
+    <div class="feat-lbl">FinWise మీ కోసం చేసేది 👇</div>
+    <ul class="feat-ul" id="featList">
+      <li><span class="fi">🏦</span><strong>Loan Analysis</strong> — తీసుకోవడం safe అా? Second లో తెలుసుకోండి</li>
+      <li><span class="fi">⏳</span><strong>Cash Runway</strong> — Cash ఎన్ని నెలలు చాలుతుందో exact గా</li>
+      <li><span class="fi">🎯</span><strong>Grant Finder</strong> — మీకు apply అయ్యే Government grants</li>
+      <li><span class="fi">🤖</span><strong>AI CFO Chat</strong> — ఏ question అడిగినా, plain గా జవాబు</li>
+      <li><span class="fi">📊</span><strong>Business Health Score</strong> — మీ business ఎంత strong?</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 7 — CTA -->
+  <div class="slide s7" id="s7">
+    <div class="cta-head">ఇప్పుడే<br>మొదలుపెట్టండి. 🚀</div>
+    <div class="cta-checks">
+      <div class="chk"><span class="tk">✓</span><span>CA fees కి ₹8,000 ఇవ్వడం ఆపండి</span></div>
+      <div class="chk"><span class="tk">✓</span><span>నెల చివర్లో panic లేకుండా plan చేయండి</span></div>
+      <div class="chk"><span class="tk">✓</span><span>మీకు రావాల్సిన grants miss చేయకండి</span></div>
+    </div>
+    <a href="try.html" class="cta-btn">FinWise Try చేయండి — Free →</a><br>
+    <button class="replay-lnk" onclick="restartReel()">↺ మళ్ళీ చూడండి</button>
+  </div>
+
+  <div class="sub-bar" id="subBar">&nbsp;</div>
+
+</div>
+
+<script>
+var SLIDES = ['s1','s2','s3','s4','s5','s6','s7'];
+
+/* Telugu script — natural Telugish (Telugu + English business terms) */
+var LINES = [
+  "అన్నా, ఒక్క విషయం చెప్తాను. మీ CA గారికి fees అడిగారు. ఆయన చెప్పారు — consultation, GST filing, audit అన్నీ కలిపి ఎనిమిది వేలు. మీరు అడిగారు — నా profit ఎంత అని. ఆయన చెప్పారు — next month చెప్తాను. ఎనిమిది వేలు పోయింది. జవాబు రాలేదు.",
+  "నెల చివరికి వచ్చేసరికి అదే story. Bank EMI, staff salary, GST — అన్నీ ఒకేసారి. Account లో చూస్తే కొంచెమే ఉంది. ఏది ముందు కట్టాలో తెలియదు. ఇది మీకు మాత్రమే కాదు అన్నా. అందరికీ ఇదే situation.",
+  "FinWise తో ముందు ఏమి చేస్తారో చూడండి. CA కోసం weeks వేచి ఉండటం పోతుంది. Loan safe అా కాదా second లో తెలుసుకోవచ్చు. Cash ఎన్ని నెలలు చాలుతుందో exact గా చూడవచ్చు. మీకు రావాల్సిన government grants దొరుకుతాయి.",
+  "అన్నా, మారాల్సిన సమయం వచ్చింది. పెద్ద companies కి మాత్రమే ఉన్న financial tools ఇప్పుడు మీ browser లో available. పూర్తిగా free. Setup అవడానికి రెండే రెండు minutes.",
+  "FinWise. మీ AI financial దోస్తు. ఇరవై powerful tools. Browser లో నే. ఏ app download చేయక్కర్లేదు. Login అక్కర్లేదు. Monthly fee ఏమీ లేదు. అన్నీ plain Telugu లో.",
+  "Loan తీసుకోవడం safe అా కాదా — ఒక్క second లో తెలుసుకోండి. Cash ఎన్ని నెలలు చాలుతుందో exact number చూడండి. Government grants మీకు apply అవుతాయా — FinWise వెతికి చెప్తుంది. ఏ financial question అడిగినా AI CFO plain గా జవాబు చెప్తుంది. Judge చేయదు. Bill చేయదు.",
+  "Setup రెండు minutes. CA appointment రెండు వారాలు. FinWise try చేయండి — ఇప్పుడే. పూర్తిగా free. CA fees ₹8,000 కి బదులు zero. అది మీ pocket లో ఉండనివ్వండి అన్నా."
+];
+
+var FEAT_DELAYS = [150, 420, 690, 960, 1230];
+var cur = 0, muted = false;
+var currentAudio = null, playTimeouts = [];
+
+/* progress dots */
+(function(){
+  var wrap = document.getElementById('progDots');
+  SLIDES.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.innerHTML = '<div class="dot-fill" id="df'+i+'"></div>';
+    wrap.appendChild(d);
+  });
+})();
+
+/* stop all audio */
+function stopAll(){
+  if(currentAudio){ try{currentAudio.pause();}catch(e){} currentAudio.src=''; currentAudio=null; }
+  playTimeouts.forEach(clearTimeout);
+  playTimeouts=[];
+}
+
+/* subtitle helpers */
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function setSub(text){ document.getElementById('subBar').textContent = text||'\u00a0'; }
+function hlWord(words, idx){
+  var html = words.map(function(w,i){ return i===idx?'<mark>'+esc(w)+'</mark>':esc(w); }).join(' ');
+  document.getElementById('subBar').innerHTML = html;
+}
+
+/* split text into chunks ≤ 180 chars */
+function splitChunks(text, maxLen){
+  maxLen = maxLen||180;
+  if(text.length<=maxLen) return [text];
+  var out=[],words=text.split(/\s+/),cur='';
+  words.forEach(function(w){
+    var t=cur?cur+' '+w:w;
+    if(t.length>maxLen&&cur){out.push(cur);cur=w;}else cur=t;
+  });
+  if(cur) out.push(cur);
+  return out;
+}
+
+/* Google TTS — Telugu lang */
+function ttsUrl(text){
+  return 'https://translate.google.com/translate_tts?ie=UTF-8&tl=te&client=tw-ob&q='+encodeURIComponent(text);
+}
+
+/* speak line */
+function speakLine(text, onDone){
+  stopAll();
+  setSub(text);
+  if(muted){
+    var t=setTimeout(onDone, Math.max(3000,(text.split(/\s+/).length/2)*1000));
+    playTimeouts.push(t); return;
+  }
+
+  var chunks=splitChunks(text,180);
+  var allWords=text.split(/\s+/);
+  var chunkWordStart=0, ci=0;
+
+  function playNext(){
+    if(ci>=chunks.length){onDone();return;}
+    var chunk=chunks[ci];
+    var chunkWords=chunk.split(/\s+/);
+    var startW=chunkWordStart;
+    ci++;
+    chunkWordStart+=chunkWords.length;
+
+    var audio=new Audio(ttsUrl(chunk));
+    currentAudio=audio;
+    audio.volume=1;
+
+    audio.addEventListener('timeupdate',function(){
+      if(!audio.duration||isNaN(audio.duration)) return;
+      var p=audio.currentTime/audio.duration;
+      var idx=Math.min(Math.floor(p*chunkWords.length),chunkWords.length-1);
+      hlWord(allWords, startW+idx);
+    });
+
+    audio.onended=playNext;
+    audio.onerror=function(){
+      var ms=Math.max(2000,chunkWords.length*600);
+      playTimeouts.push(setTimeout(playNext,ms));
+    };
+    audio.play().catch(function(){
+      var ms=Math.max(2000,chunkWords.length*600);
+      playTimeouts.push(setTimeout(playNext,ms));
+    });
+  }
+  playNext();
+}
+
+/* show slide */
+function showSlide(idx){
+  SLIDES.forEach(function(id,i){
+    var el=document.getElementById(id);
+    el.classList.remove('active','out');
+    if(i<idx) el.classList.add('out');
+    if(i===idx) el.classList.add('active');
+  });
+  for(var i=0;i<SLIDES.length;i++){
+    var df=document.getElementById('df'+i);
+    df.style.transition='none';
+    df.style.width=i<idx?'100%':'0%';
+  }
+  if(SLIDES[idx]==='s6'){
+    var items=document.querySelectorAll('#featList li');
+    items.forEach(function(li){li.classList.remove('show');});
+    FEAT_DELAYS.forEach(function(d,i){setTimeout(function(){if(items[i])items[i].classList.add('show');},d);});
+  }
+}
+
+/* run */
+function runSlide(idx){
+  cur=idx;
+  showSlide(idx);
+  speakLine(LINES[idx],function(){
+    if(idx<SLIDES.length-1) runSlide(idx+1);
+    else setSub('');
+  });
+}
+
+function beginReel(){
+  document.getElementById('startOv').style.display='none';
+  setTimeout(function(){runSlide(0);},150);
+}
+function restartReel(){
+  stopAll();
+  document.querySelectorAll('#featList li').forEach(function(li){li.classList.remove('show');});
+  runSlide(0);
+}
+function toggleMute(){
+  muted=!muted;
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  if(currentAudio) currentAudio.volume=muted?0:1;
+}
+
+/* tap to skip */
+document.getElementById('reel').addEventListener('click',function(e){
+  if(e.target.closest('a')||e.target.closest('button')) return;
+  if(cur<SLIDES.length-1){stopAll();runSlide(cur+1);}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>White-Label Settings — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
+a{text-decoration:none;color:inherit}
+
+.topnav{background:#0f172a;padding:0 24px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:999}
+.tn-logo{font-size:1rem;font-weight:900;color:#fff}
+.tn-logo span{color:#818cf8}
+.tn-back{font-size:.78rem;color:#94a3b8;margin-left:4px}
+.tn-back:hover{color:#fff}
+.tn-spacer{flex:1}
+.tn-btn{padding:6px 14px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:1px solid #334155;font-family:Arial,sans-serif;background:transparent;color:#94a3b8}
+.tn-btn:hover{color:#fff;border-color:#475569}
+
+.hero{background:linear-gradient(135deg,#0f172a 0%,#312e81 100%);padding:28px 24px 22px;color:#fff}
+.hero-inner{max-width:980px;margin:0 auto}
+.hero h1{font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.hero p{font-size:.84rem;color:#a5b4fc;line-height:1.5}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:4px 14px;font-size:.72rem;font-weight:700;color:#c7d2fe;margin-top:10px}
+
+.layout{max-width:980px;margin:0 auto;padding:24px 18px;display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+@media(max-width:760px){.layout{grid-template-columns:1fr}}
+
+.card{background:#fff;border-radius:10px;padding:22px 24px;box-shadow:0 1px 5px rgba(0,0,0,.07);margin-bottom:18px}
+.card-title{font-size:.95rem;font-weight:900;color:#1e293b;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title span{font-size:1.2rem}
+
+label{display:block;font-size:.79rem;font-weight:600;color:#555;margin-bottom:3px;margin-top:12px}
+label:first-of-type{margin-top:0}
+input,select,textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;font-family:inherit;color:#1e293b}
+input:focus,select:focus{outline:none;border-color:#4f46e5}
+.hint{font-size:.7rem;color:#94a3b8;margin-top:3px}
+
+/* Color row */
+.color-row{display:flex;align-items:center;gap:10px;margin-top:4px}
+.color-swatch{width:36px;height:36px;border-radius:7px;border:2px solid #e2e8f0;cursor:pointer;flex-shrink:0}
+.color-picker-inp{width:36px;height:36px;border-radius:7px;border:2px solid #e2e8f0;padding:2px;cursor:pointer;background:none;flex-shrink:0}
+.color-text{flex:1}
+.preset-colors{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.color-preset{width:24px;height:24px;border-radius:5px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .15s}
+.color-preset:hover{transform:scale(1.15);border-color:rgba(0,0,0,.2)}
+.color-preset.active{border-color:#0f172a;transform:scale(1.1)}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f5f9}
+.toggle-row:last-child{border-bottom:none}
+.tr-label{font-size:.84rem;font-weight:700;color:#1e293b}
+.tr-sub{font-size:.72rem;color:#94a3b8;margin-top:2px}
+.toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:#e2e8f0;border-radius:999px;cursor:pointer;transition:.2s}
+.toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle-switch input:checked+.toggle-slider{background:#4f46e5}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(18px)}
+
+/* Buttons */
+.btn{padding:9px 20px;border-radius:7px;font-size:.85rem;font-weight:800;cursor:pointer;border:none;font-family:Arial,sans-serif;transition:background .15s}
+.btn-brand{background:#4f46e5;color:#fff}.btn-brand:hover{background:#4338ca}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.save-status{font-size:.78rem;color:#16a34a;font-weight:700}
+
+/* Preview card */
+.preview-sticky{position:sticky;top:72px}
+.preview-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:10px}
+
+.prev-report{border-radius:10px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.prev-header{padding:16px 18px;color:#fff;display:flex;align-items:center;gap:12px}
+.prev-logo-img{width:32px;height:32px;border-radius:6px;object-fit:cover;background:rgba(255,255,255,.2)}
+.prev-logo-emoji{width:32px;height:32px;border-radius:6px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.prev-brand-name{font-size:.95rem;font-weight:900}
+.prev-tagline{font-size:.7rem;opacity:.75;margin-top:2px}
+.prev-body{background:#fff;padding:16px 18px}
+.prev-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:.78rem}
+.prev-row:last-child{border-bottom:none}
+.prev-row .label{color:#94a3b8;font-weight:600}
+.prev-row .val{font-weight:800;color:#1e293b}
+.prev-footer{background:#f8fafc;padding:10px 18px;text-align:center;font-size:.7rem;color:#94a3b8;border-top:1px solid #f1f5f9}
+.prev-footer span{color:#4f46e5;font-weight:700}
+
+/* Domain section */
+.domain-card{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:14px 16px;margin-top:12px}
+.domain-card h4{font-size:.84rem;font-weight:800;color:#1e293b;margin-bottom:8px}
+.cname-box{background:#1e293b;border-radius:6px;padding:12px 14px;font-family:monospace;font-size:.78rem;color:#a5f3fc;line-height:1.7;margin-top:8px;white-space:pre;overflow-x:auto}
+.cname-copy{margin-top:8px;padding:6px 14px;background:#4f46e5;color:#fff;border:none;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.cname-copy.copied{background:#16a34a}
+.domain-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.78rem}
+.ds-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* Lock */
+.lock-msg{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:8px;padding:16px 20px;text-align:center}
+.lock-msg h3{font-size:.95rem;font-weight:900;color:#92400e;margin-bottom:6px}
+.lock-msg p{font-size:.82rem;color:#78350f;margin-bottom:12px}
+.lock-msg a{display:inline-block;padding:9px 22px;background:#d97706;color:#fff;border-radius:7px;font-size:.82rem;font-weight:800;text-decoration:none}
+</style>
+</head>
+<body>
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="../sidebar.js"></script>
+<script src="fw-auth.js"></script>
+
+<nav class="topnav">
+  <a href="../dashboard.html" class="tn-logo">💡 Fin<span>Wise</span></a>
+  <a href="clientPortal.test.html" class="tn-back">← Client Portal</a>
+  <div class="tn-spacer"></div>
+  <button class="tn-btn" onclick="if(window.fwAuth) window.fwAuth.signOut()">Sign Out</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>🎨 White-Label Settings</h1>
+    <p>Replace FinWise branding with your own — clients see your name, logo, and colors on every report.</p>
+    <div class="hero-badge">⭐ Advisor Feature</div>
+  </div>
+</div>
+
+<div style="max-width:980px;margin:0 auto;padding:20px 18px 0">
+  <div id="lockMsg" style="display:none" class="lock-msg">
+    <h3>🔒 Advisor Plan Required</h3>
+    <p>White-label branding is available on the Advisor plan.</p>
+    <a href="../pricing.html">Upgrade to Advisor →</a>
+  </div>
+</div>
+
+<div class="layout" id="mainLayout" style="display:none">
+  <!-- Left: Settings -->
+  <div>
+
+    <!-- Brand Identity -->
+    <div class="card">
+      <div class="card-title"><span>🏷</span> Brand Identity</div>
+
+      <label>Brand Name</label>
+      <input type="text" id="wlBrandName" placeholder="Acme Financial Advisors" oninput="updatePreview()"/>
+      <div class="hint">Replaces "FinWise" everywhere in client-facing reports</div>
+
+      <label>Tagline</label>
+      <input type="text" id="wlTagline" placeholder="Financial Advisory Services" oninput="updatePreview()"/>
+
+      <label>Primary Color</label>
+      <div class="color-row">
+        <input type="color" class="color-picker-inp" id="colorPicker" value="#4f46e5" oninput="syncColor(this.value)"/>
+        <input type="text" class="color-text" id="colorText" value="#4f46e5" placeholder="#4f46e5" oninput="syncColorText(this.value)" maxlength="7"/>
+      </div>
+      <div class="preset-colors" id="presetColors">
+        <div class="color-preset active" style="background:#4f46e5" onclick="pickPreset('#4f46e5',this)" title="Indigo"></div>
+        <div class="color-preset" style="background:#2563eb" onclick="pickPreset('#2563eb',this)" title="Blue"></div>
+        <div class="color-preset" style="background:#0891b2" onclick="pickPreset('#0891b2',this)" title="Cyan"></div>
+        <div class="color-preset" style="background:#16a34a" onclick="pickPreset('#16a34a',this)" title="Green"></div>
+        <div class="color-preset" style="background:#ca8a04" onclick="pickPreset('#ca8a04',this)" title="Amber"></div>
+        <div class="color-preset" style="background:#dc2626" onclick="pickPreset('#dc2626',this)" title="Red"></div>
+        <div class="color-preset" style="background:#9333ea" onclick="pickPreset('#9333ea',this)" title="Purple"></div>
+        <div class="color-preset" style="background:#0f172a" onclick="pickPreset('#0f172a',this)" title="Dark"></div>
+      </div>
+
+      <label>Logo URL (optional)</label>
+      <input type="url" id="wlLogoUrl" placeholder="https://yoursite.com/logo.png" oninput="updatePreview()"/>
+      <div class="hint">Square logo, min 64×64px. Leave blank to use emoji icon.</div>
+    </div>
+
+    <!-- Display options -->
+    <div class="card">
+      <div class="card-title"><span>⚙️</span> Display Options</div>
+      <div class="toggle-row">
+        <div>
+          <div class="tr-label">Hide "Powered by FinWise"</div>
+          <div class="tr-sub">Remove the FinWise footer from client reports</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="wlHideFinwise" onchange="updatePreview()"/><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <!-- Custom Domain -->
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Custom Domain</div>
+      <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Serve client report links from your own subdomain (e.g., <em>reports.yourfirm.com</em>). Requires deploying FinWise on Netlify or Vercel.</p>
+
+      <label>Your Desired Domain</label>
+      <input type="text" id="wlDomain" placeholder="reports.yourfirm.com" oninput="updateDomainInstructions()"/>
+      <div class="hint">Enter without https:// (e.g., reports.acmefinance.com)</div>
+
+      <div class="domain-card" id="domainInstructions" style="display:none">
+        <h4>DNS Setup Instructions</h4>
+        <p style="font-size:.78rem;color:#64748b;margin-bottom:2px">Add this CNAME record at your DNS provider (Cloudflare, GoDaddy, Namecheap, etc.):</p>
+        <div class="cname-box" id="cnameBox"></div>
+        <button class="cname-copy" id="cnameCopyBtn" onclick="copyCname()">Copy Instructions</button>
+        <div class="domain-status">
+          <div class="ds-dot" style="background:#f59e0b"></div>
+          <span style="color:#92400e">Pending — set up DNS first, then deploy to Netlify/Vercel with this custom domain</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-brand" onclick="saveSettings()">💾 Save White-Label Settings</button>
+      <span class="save-status" id="saveStatus"></span>
+    </div>
+
+  </div>
+
+  <!-- Right: Live Preview -->
+  <div class="preview-sticky">
+    <div class="preview-label">Live Preview</div>
+
+    <div class="prev-report" id="prevReport">
+      <div class="prev-header" id="prevHeader" style="background:#4f46e5">
+        <div class="prev-logo-emoji" id="prevLogoEmoji">💡</div>
+        <div>
+          <div class="prev-brand-name" id="prevBrandName">Your Brand Name</div>
+          <div class="prev-tagline" id="prevTagline">Financial Advisory Services</div>
+        </div>
+      </div>
+      <div class="prev-body">
+        <div style="font-size:.88rem;font-weight:700;color:#1e293b;margin-bottom:10px">Client Report — March 2025</div>
+        <div class="prev-row"><span class="label">Revenue</span><span class="val" style="color:#2563eb">$15,000</span></div>
+        <div class="prev-row"><span class="label">Expenses</span><span class="val" style="color:#d97706">$10,000</span></div>
+        <div class="prev-row"><span class="label">Net Profit</span><span class="val" style="color:#16a34a">$5,000</span></div>
+        <div class="prev-row"><span class="label">Cash Runway</span><span class="val" style="color:#16a34a">6 months</span></div>
+        <div style="margin-top:12px;text-align:center">
+          <div id="prevBtn" style="display:inline-block;padding:8px 18px;background:#4f46e5;color:#fff;border-radius:6px;font-size:.78rem;font-weight:800">View Full Report →</div>
+        </div>
+      </div>
+      <div class="prev-footer" id="prevFooter">Powered by <span>FinWise</span></div>
+    </div>
+
+    <div style="font-size:.7rem;color:#94a3b8;text-align:center;margin-top:10px">This is how clients see their report</div>
+  </div>
+
+</div>
+
+<script>
+var SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+var SUPA_KEY = 'sb_publishable_MT6Yw204o8Ho5nY-82IvkA_Ys_00yGO';
+var advisorId = null;
+
+function syncColor(val){
+  document.getElementById('colorText').value = val;
+  updatePreview();
+}
+function syncColorText(val){
+  if(/^#[0-9a-fA-F]{6}$/.test(val)){
+    document.getElementById('colorPicker').value = val;
+    updatePreview();
+  }
+}
+function pickPreset(color, el){
+  document.querySelectorAll('.color-preset').forEach(function(e){ e.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('colorPicker').value = color;
+  document.getElementById('colorText').value = color;
+  updatePreview();
+}
+
+function updatePreview(){
+  var name    = document.getElementById('wlBrandName').value.trim() || 'Your Brand Name';
+  var tagline = document.getElementById('wlTagline').value.trim() || 'Financial Advisory Services';
+  var color   = document.getElementById('colorText').value.trim();
+  if(!/^#[0-9a-fA-F]{6}$/.test(color)) color = document.getElementById('colorPicker').value;
+  var logoUrl = document.getElementById('wlLogoUrl').value.trim();
+  var hide    = document.getElementById('wlHideFinwise').checked;
+
+  document.getElementById('prevHeader').style.background = color;
+  document.getElementById('prevBrandName').textContent = name;
+  document.getElementById('prevTagline').textContent = tagline;
+  document.getElementById('prevBtn').style.background = color;
+
+  var logoWrap = document.getElementById('prevLogoEmoji');
+  if(logoUrl){
+    logoWrap.innerHTML = '<img src="'+logoUrl+'" style="width:28px;height:28px;border-radius:4px;object-fit:cover" onerror="this.style.display=\'none\'">';
+  } else {
+    logoWrap.innerHTML = '💡';
+  }
+
+  var footer = document.getElementById('prevFooter');
+  if(hide){ footer.style.display='none'; }
+  else { footer.style.display='block'; }
+}
+
+function updateDomainInstructions(){
+  var domain = document.getElementById('wlDomain').value.trim();
+  var box = document.getElementById('domainInstructions');
+  if(!domain){ box.style.display='none'; return; }
+  box.style.display='block';
+  var netlifyDomain = 'finwise.netlify.app';
+  document.getElementById('cnameBox').textContent =
+    'Type:  CNAME\nName:  '+domain+'\nValue: '+netlifyDomain+'\nTTL:   Auto (or 3600)';
+}
+
+function copyCname(){
+  var text = document.getElementById('cnameBox').textContent;
+  navigator.clipboard.writeText(text).catch(function(){});
+  var btn = document.getElementById('cnameCopyBtn');
+  btn.textContent='Copied!';btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent='Copy Instructions';btn.classList.remove('copied'); },2000);
+}
+
+function getAccessToken(){
+  try{
+    var keys=Object.keys(localStorage).filter(function(k){ return k.indexOf('supabase.auth.token')>-1||k.indexOf('sb-')>-1; });
+    for(var i=0;i<keys.length;i++){
+      var v=JSON.parse(localStorage.getItem(keys[i])||'null');
+      if(v&&v.access_token) return v.access_token;
+      if(v&&v.session&&v.session.access_token) return v.session.access_token;
+    }
+  }catch(e){}
+  return SUPA_KEY;
+}
+
+function saveSettings(){
+  if(!advisorId){ alert('Not signed in.'); return; }
+  var updates = {
+    wl_brand_name   : document.getElementById('wlBrandName').value.trim() || null,
+    wl_tagline      : document.getElementById('wlTagline').value.trim() || null,
+    wl_color        : document.getElementById('colorText').value.trim() || '#4f46e5',
+    wl_logo_url     : document.getElementById('wlLogoUrl').value.trim() || null,
+    wl_domain       : document.getElementById('wlDomain').value.trim() || null,
+    wl_hide_finwise : document.getElementById('wlHideFinwise').checked
+  };
+  var status = document.getElementById('saveStatus');
+  status.textContent = 'Saving…';
+  fetch(SUPA_URL+'/rest/v1/profiles?id=eq.'+advisorId,{
+    method:'PATCH',
+    headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken(),'Content-Type':'application/json','Prefer':'return=minimal' },
+    body: JSON.stringify(updates)
+  }).then(function(r){
+    if(r.ok){ status.textContent='✅ Saved! New portals will use this branding.'; setTimeout(function(){ status.textContent=''; },4000); }
+    else { status.textContent='❌ Save failed — try again.'; }
+  }).catch(function(){ status.textContent='❌ Network error.'; });
+}
+
+window.addEventListener('load', function(){
+  if(!window.fwAuth){ document.getElementById('lockMsg').style.display='block'; return; }
+  window.fwAuth.init(function(){
+    var auth = window.fwAuth;
+    if(!auth.user){ window.location.href='../auth.html'; return; }
+    var plan = auth.plan||'free';
+    if(localStorage.getItem('fw_advisor')) plan='advisor';
+    if(plan !== 'advisor'){
+      document.getElementById('lockMsg').style.display='block'; return;
+    }
+    document.getElementById('mainLayout').style.display='grid';
+    advisorId = auth.user.id;
+
+    /* Pre-fill from existing profile */
+    var p = auth.profile || {};
+    if(p.wl_brand_name){ document.getElementById('wlBrandName').value = p.wl_brand_name; }
+    if(p.wl_tagline)   { document.getElementById('wlTagline').value   = p.wl_tagline; }
+    if(p.wl_color){
+      document.getElementById('colorPicker').value = p.wl_color;
+      document.getElementById('colorText').value   = p.wl_color;
+      document.querySelectorAll('.color-preset').forEach(function(el){
+        el.classList.remove('active');
+        if(el.style.background === p.wl_color || el.getAttribute('onclick') && el.getAttribute('onclick').indexOf(p.wl_color) > -1)
+          el.classList.add('active');
+      });
+    }
+    if(p.wl_logo_url)     { document.getElementById('wlLogoUrl').value = p.wl_logo_url; }
+    if(p.wl_domain)       { document.getElementById('wlDomain').value = p.wl_domain; updateDomainInstructions(); }
+    if(p.wl_hide_finwise) { document.getElementById('wlHideFinwise').checked = true; }
+    updatePreview();
+  });
+});
+</script>
+</body>
+</html>
+

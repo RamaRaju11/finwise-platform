@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinWise — Sign In</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:Arial,sans-serif;background:linear-gradient(160deg,#0f172a,#1e3a5f);display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.logo{font-size:1.9rem;font-weight:900;color:#1e293b;letter-spacing:-1px;margin-bottom:6px;font-family:'Arial Black',Arial,sans-serif}
+.logo em{color:#2563eb;font-style:normal}
+.tagline{font-size:.84rem;color:#64748b;font-weight:600;margin-bottom:28px}
+.tabs{display:flex;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:24px;gap:4px}
+.tab{flex:1;padding:9px;border:none;border-radius:8px;font-size:.88rem;font-weight:800;cursor:pointer;background:transparent;color:#64748b;transition:all .2s}
+.tab.active{background:#fff;color:#1e293b;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+label{display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:4px;margin-top:14px}
+input[type=text],input[type=email],input[type=password]{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.9rem;color:#1e293b;transition:border .2s;font-family:Arial,sans-serif}
+input:focus{outline:none;border-color:#2563eb}
+.btn{width:100%;margin-top:20px;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:900;cursor:pointer;transition:background .2s}
+.btn:hover{background:#1d4ed8}
+.btn:disabled{background:#93c5fd;cursor:not-allowed}
+.err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;border-radius:8px;padding:10px 12px;font-size:.82rem;font-weight:700;margin-top:12px;display:none}
+.ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#16a34a;border-radius:8px;padding:10px 12px;font-size:.82rem;font-weight:700;margin-top:12px;display:none}
+.forgot{text-align:right;margin-top:6px}
+.forgot a{font-size:.78rem;color:#2563eb;text-decoration:none;font-weight:700}
+.forgot a:hover{text-decoration:underline}
+.divider{text-align:center;color:#94a3b8;font-size:.78rem;font-weight:700;margin:18px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#e2e8f0}
+.divider::before{left:0}.divider::after{right:0}
+.plan-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#1e40af;font-weight:700;margin-top:16px;text-align:center}
+.plan-note span{color:#2563eb}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Fin<em>Wise</em></div>
+  <div class="tagline">20 free financial tools · Your data stays private</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" onclick="switchTab('signup')">Create Account</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginForm">
+    <label>Email Address</label>
+    <input type="email" id="li_email" placeholder="you@example.com" autocomplete="email"/>
+    <label>Password</label>
+    <input type="password" id="li_pass" placeholder="Your password" autocomplete="current-password"/>
+    <div class="forgot"><a href="#" onclick="showReset();return false;">Forgot password?</a></div>
+    <div class="err" id="li_err"></div>
+    <button class="btn" id="li_btn" onclick="doLogin()">Sign In →</button>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signupForm" style="display:none">
+    <label>Full Name</label>
+    <input type="text" id="su_name" placeholder="Your name"/>
+    <label>Email Address</label>
+    <input type="email" id="su_email" placeholder="you@example.com" autocomplete="email"/>
+    <label>Password</label>
+    <input type="password" id="su_pass" placeholder="Min 6 characters" autocomplete="new-password"/>
+    <div class="err" id="su_err"></div>
+    <div class="ok" id="su_ok"></div>
+    <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account →</button>
+    <div class="plan-note">✓ Free plan — no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
+  </div>
+
+  <!-- RESET -->
+  <div id="resetForm" style="display:none">
+    <div style="font-size:.9rem;font-weight:700;color:#374151;margin-bottom:14px">Enter your email and we'll send a reset link.</div>
+    <label>Email Address</label>
+    <input type="email" id="rs_email" placeholder="you@example.com"/>
+    <div class="err" id="rs_err"></div>
+    <div class="ok" id="rs_ok"></div>
+    <button class="btn" id="rs_btn" onclick="doReset()">Send Reset Link</button>
+    <div style="margin-top:12px;text-align:center"><a href="#" onclick="switchTab('login');return false;" style="font-size:.82rem;color:#2563eb;font-weight:700">← Back to Sign In</a></div>
+  </div>
+</div>
+
+<script src="modules/fw-auth.js"></script>
+<script>
+/* Capture referral code from URL and store it */
+(function(){
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if(ref) localStorage.setItem('fw_ref', ref);
+})();
+
+/* If already signed in, redirect */
+fwAuth.init(function(){
+  if(fwAuth.user){
+    window.location.href = localStorage.getItem('fw_onboarded') ? 'dashboard.html' : 'onboarding.html';
+  }
+});
+
+/* Check for redirect from email confirm */
+var hash = window.location.hash;
+if(hash && hash.includes('type=recovery')){
+  document.querySelector('.tabs').style.display='none';
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('signupForm').style.display='none';
+  document.getElementById('resetForm').style.display='block';
+  document.getElementById('resetForm').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:2rem;margin-bottom:12px">✅</div><div style="font-weight:900;color:#1e293b;font-size:1.1rem">Email confirmed!</div><div style="color:#64748b;font-size:.88rem;margin-top:8px">You can now sign in with your new password.</div><div style="margin-top:20px"><a href="auth.html" style="background:#2563eb;color:#fff;padding:10px 28px;border-radius:8px;font-weight:900;text-decoration:none;font-size:.9rem">Sign In →</a></div></div>';
+}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(function(b,i){ b.classList.toggle('active', (i===0&&t==='login')||(i===1&&t==='signup')); });
+  document.getElementById('loginForm').style.display  = t==='login'  ? 'block':'none';
+  document.getElementById('signupForm').style.display = t==='signup' ? 'block':'none';
+  document.getElementById('resetForm').style.display  = 'none';
+}
+
+function showReset(){
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('signupForm').style.display='none';
+  document.getElementById('resetForm').style.display='block';
+}
+
+function showErr(id, msg){ var el=document.getElementById(id); el.textContent=msg; el.style.display='block'; }
+function hideErr(id){ document.getElementById(id).style.display='none'; }
+function showOk(id, msg){ var el=document.getElementById(id); el.textContent=msg; el.style.display='block'; }
+
+function doLogin(){
+  var email=document.getElementById('li_email').value.trim();
+  var pass =document.getElementById('li_pass').value;
+  hideErr('li_err');
+  if(!email||!pass){ showErr('li_err','Please enter email and password.'); return; }
+  var btn=document.getElementById('li_btn');
+  btn.disabled=true; btn.textContent='Signing in...';
+  fwAuth.signIn(email, pass, function(err, data){
+    btn.disabled=false; btn.textContent='Sign In →';
+    if(err){ showErr('li_err', err.message || 'Sign in failed. Check your credentials.'); return; }
+    /* New users go to onboarding, returning users go to try.html */
+    if(!localStorage.getItem('fw_onboarded')){
+      window.location.href = 'onboarding.html';
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  });
+}
+
+function doSignup(){
+  var name =document.getElementById('su_name').value.trim();
+  var email=document.getElementById('su_email').value.trim();
+  var pass =document.getElementById('su_pass').value;
+  hideErr('su_err');
+  if(!name){ showErr('su_err','Please enter your name.'); return; }
+  if(!email){ showErr('su_err','Please enter your email.'); return; }
+  if(pass.length<6){ showErr('su_err','Password must be at least 6 characters.'); return; }
+  var btn=document.getElementById('su_btn');
+  btn.disabled=true; btn.textContent='Creating account...';
+  var refCode = localStorage.getItem('fw_ref') || '';
+  fwAuth.signUp(email, pass, name, function(err, data){
+    btn.disabled=false; btn.textContent='Create Free Account →';
+    if(err){ showErr('su_err', err.message || 'Signup failed. Please try again.'); return; }
+    if(data && data.user && data.user.identities && data.user.identities.length===0){
+      showErr('su_err','An account with this email already exists. Please sign in.'); return;
+    }
+    /* Clear all stale data — list must stay in sync with USER_KEYS in fw-auth.js */
+    ['fw_ref','fw_onboarded','fw_profile','fw_profiles','fw_active_idx',
+     'fw_recent','fw_biz_profile','fw_starter','fw_pro','fw_advisor',
+     'fw_checkup','fw_score_history','fw_grant_tracker','fw_bills',
+     'fw_savings_goals','fw_invoices','fw_uid'].forEach(function(k){ localStorage.removeItem(k); });
+    window.location.href = 'onboarding.html';
+  }, refCode);
+}
+
+function doReset(){
+  var email=document.getElementById('rs_email').value.trim();
+  hideErr('rs_err');
+  if(!email){ showErr('rs_err','Please enter your email.'); return; }
+  var btn=document.getElementById('rs_btn');
+  btn.disabled=true; btn.textContent='Sending...';
+  fwAuth.resetPassword(email, function(err){
+    btn.disabled=false; btn.textContent='Send Reset Link';
+    if(err){ showErr('rs_err', err.message || 'Failed to send reset link.'); return; }
+    showOk('rs_ok','✅ Reset link sent! Check your email inbox.');
+  });
+}
+
+/* Enter key support */
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Enter') return;
+  if(document.getElementById('loginForm').style.display!=='none') doLogin();
+  else if(document.getElementById('signupForm').style.display!=='none') doSignup();
+  else if(document.getElementById('resetForm').style.display!=='none') doReset();
+});
+</script>
+</body>
+</html>

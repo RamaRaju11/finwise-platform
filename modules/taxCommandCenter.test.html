@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Command Center — FinWise</title>
+<script src="../sidebar.js" defer></script>
+<link rel="manifest" href="../manifest.json">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+#mainWrap{margin-left:220px;padding:24px;transition:margin .25s}
+@media(max-width:700px){#mainWrap{margin-left:0;padding:14px}}
+
+h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.sub{color:#64748b;font-size:.9rem;margin-bottom:4px}
+
+/* page header */
+.page-hdr{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.year-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.year-row label{font-size:.82rem;font-weight:700;color:#475569}
+.year-row select{padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.88rem;font-weight:600;background:#fff;color:#1e293b;outline:none;cursor:pointer}
+.year-row select:focus{border-color:#2563eb}
+.btn-refresh{padding:7px 14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer}
+.btn-refresh:hover{background:#1d4ed8}
+
+/* card base */
+.card{background:#fff;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card-title{font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b}
+
+/* ── HEALTH BANNER ── */
+.health-banner{border-radius:14px;padding:22px 26px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.hb-green{background:linear-gradient(135deg,#052e16,#14532d)}
+.hb-amber{background:linear-gradient(135deg,#1c1400,#451a00)}
+.hb-red  {background:linear-gradient(135deg,#1a0000,#450a0a)}
+.hb-grey {background:#1e293b}
+.hb-left{flex:1}
+.hb-title{font-size:1.15rem;font-weight:900;color:#fff;margin-bottom:5px}
+.hb-sub{font-size:.85rem;color:rgba(255,255,255,.78);line-height:1.55;max-width:580px}
+.hb-badge{padding:9px 22px;border-radius:999px;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.badge-green{background:#22c55e;color:#fff}
+.badge-amber{background:#f59e0b;color:#fff}
+.badge-red  {background:#ef4444;color:#fff}
+.badge-grey {background:#475569;color:#fff}
+
+/* ── 4-CARD GRID ── */
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+@media(max-width:700px){.quad-grid{grid-template-columns:1fr}}
+
+.tax-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-top:4px solid #e2e8f0;display:flex;flex-direction:column;min-height:280px}
+.tc-blue  {border-top-color:#2563eb}
+.tc-green {border-top-color:#16a34a}
+.tc-purple{border-top-color:#7c3aed}
+.tc-orange{border-top-color:#ea580c}
+
+.tc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.tc-it{display:flex;align-items:center;gap:9px}
+.tc-ico{font-size:1.4rem}
+.tc-ttl{font-size:.9rem;font-weight:800;color:#1e293b}
+.tc-stt{font-size:.73rem;color:#64748b;margin-top:1px}
+
+.sdot{width:11px;height:11px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dg{background:#22c55e} .da{background:#f59e0b} .dr{background:#ef4444} .dn{background:#94a3b8}
+
+.big-num{font-size:1.75rem;font-weight:900;color:#1e293b;margin-bottom:2px}
+.big-lbl{font-size:.73rem;color:#64748b;margin-bottom:12px}
+
+.mrow{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.ml-{display:flex;justify-content:space-between;align-items:center;font-size:.81rem}
+.ml- .lft{color:#64748b}
+.ml- .rgt{font-weight:700;color:#1e293b}
+.rgt.ok{color:#16a34a} .rgt.wn{color:#b45309} .rgt.bd{color:#dc2626}
+
+.blurb{background:#f8fafc;border-radius:8px;padding:10px 12px;font-size:.78rem;color:#475569;line-height:1.65;margin-bottom:12px;flex:1}
+.blurb strong{color:#1e293b}
+
+.tc-cta{display:inline-flex;align-items:center;gap:5px;font-size:.8rem;font-weight:700;color:#2563eb;text-decoration:none;margin-top:auto}
+.tc-cta:hover{text-decoration:underline}
+
+/* quarter paid grid */
+.qg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
+.qc{border-radius:8px;padding:8px 4px;text-align:center;font-size:.72rem}
+.qc .qn{font-weight:800;margin-bottom:2px}
+.qc .qd{font-size:.65rem;color:#94a3b8;margin-bottom:4px}
+.qc .qs{font-size:.68rem;font-weight:700}
+.q-paid{background:#f0fdf4;border:1.5px solid #86efac} .q-paid .qs{color:#16a34a}
+.q-due {background:#fef2f2;border:1.5px solid #fecaca} .q-due  .qs{color:#dc2626}
+.q-future{background:#f8fafc;border:1.5px solid #e2e8f0} .q-future .qs{color:#94a3b8}
+
+/* not-set-up state */
+.ns{text-align:center;padding:18px 8px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ns-ico{font-size:2rem;margin-bottom:8px}
+.ns-txt{font-size:.8rem;color:#64748b;margin-bottom:14px;line-height:1.5}
+.btn-go{display:inline-block;padding:8px 18px;background:#2563eb;color:#fff;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none}
+.btn-go:hover{background:#1d4ed8}
+
+/* ── IMPACT SECTION ── */
+.impact-card{background:#fff;border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:2px solid #16a34a}
+.impact-title{font-size:1.05rem;font-weight:800;color:#1e293b;margin-bottom:4px}
+.impact-sub{font-size:.83rem;color:#64748b;margin-bottom:20px;line-height:1.5}
+.cmp-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:14px;align-items:center;margin-bottom:20px}
+@media(max-width:580px){.cmp-grid{grid-template-columns:1fr;gap:8px}}
+.cmp-box{padding:18px;border-radius:12px;text-align:center}
+.cmp-before{background:#fef2f2;border:2px solid #fecaca}
+.cmp-after {background:#f0fdf4;border:2px solid #86efac}
+.cmp-lbl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;margin-bottom:6px}
+.cmp-val{font-size:1.55rem;font-weight:900;margin-bottom:4px}
+.cmp-before .cmp-val{color:#dc2626} .cmp-after .cmp-val{color:#16a34a}
+.cmp-sub{font-size:.7rem;color:#64748b}
+.cmp-arrow{text-align:center;font-size:1.4rem;color:#64748b}
+.savings-strip{background:linear-gradient(135deg,#052e16,#14532d);border-radius:10px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sv-txt{color:rgba(255,255,255,.8);font-size:.85rem;line-height:1.4}
+.sv-amt{font-size:1.55rem;font-weight:900;color:#4ade80}
+.ded-bars{margin-top:16px}
+.db-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.db-lbl{font-size:.78rem;color:#475569;width:150px;flex-shrink:0}
+.db-track{flex:1;background:#e2e8f0;border-radius:99px;height:8px;overflow:hidden}
+.db-fill{height:100%;border-radius:99px;background:#16a34a;min-width:4px;transition:width .7s}
+.db-val{font-size:.78rem;font-weight:700;color:#16a34a;width:80px;text-align:right;flex-shrink:0}
+
+/* ── DEADLINE TIMELINE ── */
+.dl-list{display:flex;flex-direction:column}
+.dl-item{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.dl-item:last-child{border-bottom:none}
+.dl-dc{display:flex;flex-direction:column;align-items:center}
+.dl-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.dl-line{flex:1;width:2px;background:#f1f5f9;margin-top:3px}
+.s-past  .dl-dot{background:#94a3b8}
+.s-done  .dl-dot{background:#22c55e}
+.s-soon  .dl-dot{background:#f59e0b;box-shadow:0 0 0 3px #fef3c7}
+.s-overdue .dl-dot{background:#ef4444;box-shadow:0 0 0 3px #fecaca}
+.s-future .dl-dot{background:#f1f5f9;border:2px solid #cbd5e1}
+
+.dl-date{font-size:.72rem;font-weight:700;margin-bottom:2px}
+.s-past   .dl-date{color:#94a3b8} .s-done .dl-date{color:#16a34a}
+.s-soon   .dl-date{color:#b45309} .s-overdue .dl-date{color:#dc2626}
+.s-future .dl-date{color:#94a3b8}
+
+.dl-label{font-size:.88rem;font-weight:700;color:#1e293b}
+.s-past .dl-label{color:#94a3b8}
+.dl-desc{font-size:.76rem;color:#64748b;margin-top:2px;line-height:1.4}
+.dl-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.67rem;font-weight:800;margin-left:6px;vertical-align:middle}
+.pill-done  {background:#dcfce7;color:#16a34a}
+.pill-soon  {background:#fef3c7;color:#92400e}
+.pill-overdue{background:#fee2e2;color:#dc2626}
+
+/* ── ACTION LIST ── */
+.al-wrap{display:flex;flex-direction:column;gap:10px}
+.al-item{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc}
+.al-item.urgent{border-color:#fca5a5;background:#fff5f5}
+.al-item.warn  {border-color:#fde68a;background:#fffbeb}
+.al-item.ok    {border-color:#86efac;background:#f0fdf4;opacity:.8}
+.al-ico{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.al-body{flex:1}
+.al-title{font-size:.87rem;font-weight:700;color:#1e293b;margin-bottom:2px}
+.al-item.ok .al-title{color:#16a34a;text-decoration:line-through}
+.al-desc{font-size:.77rem;color:#64748b;line-height:1.45}
+.al-link{font-size:.77rem;font-weight:700;color:#2563eb;text-decoration:none;margin-top:4px;display:inline-block}
+
+/* ── GLOSSARY ── */
+.glos{display:flex;flex-direction:column}
+.gi{border-bottom:1px solid #f1f5f9}
+.gi:last-child{border-bottom:none}
+.gi-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:13px 4px;background:none;border:none;cursor:pointer;text-align:left;border-radius:8px}
+.gi-btn:hover{background:#f8fafc;padding-left:8px;padding-right:8px}
+.gi-term{font-size:.9rem;font-weight:700;color:#1e293b}
+.gi-ch{font-size:.75rem;color:#94a3b8;transition:transform .2s;flex-shrink:0}
+.gi-btn.open .gi-ch{transform:rotate(180deg)}
+.gi-body{padding:0 4px 14px;font-size:.83rem;color:#475569;line-height:1.7;display:none}
+.gi-body.open{display:block}
+.gi-body strong{color:#1e293b}
+.eg{background:#eff6ff;border-left:3px solid #2563eb;padding:9px 12px;border-radius:0 6px 6px 0;margin-top:8px;font-size:.78rem;color:#1e40af;line-height:1.5}
+
+/* disclaimer */
+.disclaimer{font-size:.74rem;color:#94a3b8;text-align:center;margin-top:8px;line-height:1.5}
+
+/* ── PRINT ── */
+.print-hdr{display:none}
+@media print{.print-hdr{display:block;padding:16px 0 10px;border-bottom:2px solid #1e293b;margin-bottom:18px}.print-hdr-name{font-size:1.2rem;font-weight:800;color:#1e293b}.print-hdr-meta{font-size:.8rem;color:#64748b;margin-top:3px}.no-print{display:none!important}#fwSidebar{display:none}#mainWrap{margin-left:0}.health-banner,.tax-card,.card,.impact-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+/* ── MODULE CONN STRIP ── */
+.mod-conn-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.mod-conn-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:700}
+.mcp-on{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.mcp-off{background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0}
+
+/* ── TAX SAVINGS OPP ── */
+.opp-card{background:#fff;border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:2px solid #7c3aed}
+.opp-grid{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.opp-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:10px;background:#faf5ff;border:1.5px solid #ddd6fe}
+.opp-ico{font-size:1.5rem;flex-shrink:0;margin-top:2px}
+.opp-body{flex:1}
+.opp-title{font-size:.9rem;font-weight:800;color:#1e293b;margin-bottom:3px}
+.opp-desc{font-size:.78rem;color:#64748b;line-height:1.45;margin-bottom:6px}
+.opp-save{font-size:.82rem;font-weight:800;color:#16a34a}
+.opp-link{font-size:.78rem;font-weight:700;color:#7c3aed;text-decoration:none;margin-top:4px;display:inline-block}
+
+/* ── DEADLINE MARK-DONE ── */
+.dl-check-wrap{display:flex;align-items:center;gap:6px;margin-top:5px}
+.dl-check{width:15px;height:15px;cursor:pointer;accent-color:#16a34a}
+.dl-check-lbl{font-size:.74rem;color:#64748b;cursor:pointer;user-select:none}
+
+/* ── EXPORT BTN ── */
+.btn-export-pkg{padding:7px 14px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer}
+.btn-export-pkg:hover{background:#6d28d9}
+
+#fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
+#fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="fwSidebar"></div>
+<div class="print-hdr" id="printHdr">
+  <div class="print-hdr-name" id="printBizName">FinWise Tax Package</div>
+  <div class="print-hdr-meta" id="printMeta"></div>
+</div>
+<div id="mainWrap">
+
+  <!-- ── PAGE HEADER ── -->
+  <div class="page-hdr">
+    <div>
+      <h1>&#129534; Tax Command Center</h1>
+      <p class="sub">All your tax obligations in one place — no jargon, just clear answers and next steps.</p>
+      <p style="font-size:.75rem;color:#94a3b8;margin-top:3px">Pulls live data from: Tax Estimator &bull; Key Deductions &bull; Sales Tax Tracker &bull; Contractor &amp; Payroll Tax</p>
+    </div>
+    <div class="year-row">
+      <label>Tax Year</label>
+      <select id="yearSel" onchange="init()"></select>
+      <button class="btn-refresh" onclick="init()">&#8635; Refresh</button>
+      <button class="btn-export-pkg no-print" onclick="exportTaxPackage()">&#128230; Tax Package PDF</button>
+    </div>
+  </div>
+
+  <!-- ── HEALTH BANNER ── -->
+  <div id="healthBanner"></div>
+  <div id="modConnStrip" class="no-print"></div>
+
+  <!-- ── 4-CARD GRID ── -->
+  <div class="quad-grid">
+    <div id="incomeTaxCard" class="tax-card tc-blue"></div>
+    <div id="deductionsCard" class="tax-card tc-green"></div>
+    <div id="salesTaxCard"  class="tax-card tc-purple"></div>
+    <div id="contractorCard" class="tax-card tc-orange"></div>
+  </div>
+
+  <!-- ── DEDUCTION IMPACT ── -->
+  <div id="deductionImpact"></div>
+
+  <!-- ── DEADLINE CALENDAR ── -->
+  <div class="card">
+    <div class="card-title">&#128197; Upcoming Tax Deadlines</div>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:16px">All federal tax due dates for your selected year. Stay ahead — late payments cost 5% per month in penalties.</p>
+    <div id="deadlineList"></div>
+  </div>
+
+  <!-- ── ACTION CHECKLIST ── -->
+  <div class="card">
+    <div class="card-title">&#9989; Your Tax Action Checklist</div>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:16px">Auto-generated from your data. Work through these to stay compliant and avoid penalties.</p>
+    <div id="actionList"></div>
+  </div>
+
+  <!-- ── TAX SAVINGS OPPORTUNITIES ── -->
+  <div id="taxSavingsCard" class="no-print"></div>
+
+  <!-- ── GLOSSARY ── -->
+  <div class="card">
+    <div class="card-title">&#128218; Tax Terms in Plain English</div>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:16px">Click any term to read a plain-English explanation. No accounting degree needed.</p>
+    <div class="glos" id="glossary"></div>
+  </div>
+
+  <p class="disclaimer">&#9888; All figures are estimates for planning purposes only. Tax laws change annually. Consult a licensed CPA or tax professional for advice specific to your situation.</p>
+
+</div>
+<div id="fwToast"></div>
+<script>
+
+/* ══════════════════════════════════════════════════════
+   CONSTANTS
+══════════════════════════════════════════════════════ */
+var ML_RATES = {2026:.70,2025:.70,2024:.67,2023:.655};
+var S179_DATA = {2026:{lim:1250000,po:3130000,bon:.20},2025:{lim:1250000,po:3130000,bon:.40},2024:{lim:1220000,po:3050000,bon:.60},2023:{lim:1160000,po:2890000,bon:.80}};
+var STD_DED = {single:15000,mfj:30000,hoh:22500};
+var TODAY = new Date();
+var TCC_KEY = 'fw_tcc_state';
+var TCC_DL_PREFIX = 'fw_tcc_dl_';
+
+/* ══════════════════════════════════════════════════════
+   YEAR SETUP
+══════════════════════════════════════════════════════ */
+function buildYearSelect(){
+  var y = TODAY.getFullYear();
+  var sel = document.getElementById('yearSel');
+  [y, y-1, y-2].forEach(function(yr){
+    var o = document.createElement('option');
+    o.value = yr; o.textContent = yr;
+    sel.appendChild(o);
+  });
+}
+
+function selectedYear(){
+  return parseInt(document.getElementById('yearSel').value) || TODAY.getFullYear();
+}
+
+function saveTCCState(){
+  try{ localStorage.setItem(TCC_KEY, JSON.stringify({year: selectedYear()})); }catch(e){}
+}
+function restoreTCCState(){
+  try{
+    var s = JSON.parse(localStorage.getItem(TCC_KEY)||'null');
+    if(s && s.year){
+      var sel = document.getElementById('yearSel');
+      for(var i=0; i<sel.options.length; i++){
+        if(parseInt(sel.options[i].value) === s.year){ sel.selectedIndex = i; break; }
+      }
+    }
+  }catch(e){}
+}
+function saveDLDone(year, dlDone){
+  try{ localStorage.setItem(TCC_DL_PREFIX+year, JSON.stringify(dlDone)); }catch(e){}
+}
+function loadDLDone(year){
+  try{ return JSON.parse(localStorage.getItem(TCC_DL_PREFIX+year)||'{}'); }catch(e){ return {}; }
+}
+function toggleDL(year, dlKey, cbId){
+  var done = loadDLDone(year);
+  var cb = document.getElementById(cbId);
+  var isDone = cb && cb.checked;
+  done[dlKey] = isDone;
+  saveDLDone(year, done);
+  var lbl = document.getElementById(cbId+'_lbl');
+  if(lbl){ lbl.style.textDecoration = isDone ? 'line-through' : ''; lbl.textContent = isDone ? 'Marked done — click to undo' : 'Mark as done'; }
+  var row = document.getElementById(cbId+'_row');
+  if(row){ row.className = row.className.replace(/\bs-(past|done|soon|overdue|future)\b/g,'').trim() + (isDone ? ' s-done' : ' s-past'); }
+}
+
+/* ══════════════════════════════════════════════════════
+   DATA READERS
+══════════════════════════════════════════════════════ */
+function readData(year){
+  var d = {year: year};
+
+  // ── Profile ──
+  d.profile = {};
+  try{ d.profile = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+  d.rev = parseFloat(d.profile.rev)||0;
+  d.exp = parseFloat(d.profile.exp)||0;
+  d.annualProfit = (d.rev - d.exp) * 12;
+  d.structure = d.profile.structure || '';
+  d.isCorp = /c.corp|c-corp/i.test(d.structure);
+  d.isSCorp = /s.corp|s-corp/i.test(d.structure);
+  d.hasSE = !d.isCorp && !d.isSCorp; // SE tax applies
+
+  // ── Income Tax payments ──
+  d.taxPmts = {};
+  try{ d.taxPmts = JSON.parse(localStorage.getItem('fw_tax_payments_'+year)||'{}'); }catch(e){}
+  // format: {q1:{paid:true,date:'YYYY-MM-DD'}, q2:...}
+  d.hasIncomeSetup = d.rev > 0 || d.exp > 0;
+
+  // ── Tax Estimator quarterly data (overrides profile if present) ──
+  d.taxInputs = null;
+  try{ d.taxInputs = JSON.parse(localStorage.getItem('fw_tax_inputs_'+year)||'null'); }catch(e){}
+  if(d.taxInputs){
+    var _qrev=(parseFloat(d.taxInputs.q1rev)||0)+(parseFloat(d.taxInputs.q2rev)||0)+(parseFloat(d.taxInputs.q3rev)||0)+(parseFloat(d.taxInputs.q4rev)||0);
+    var _qexp=(parseFloat(d.taxInputs.q1exp)||0)+(parseFloat(d.taxInputs.q2exp)||0)+(parseFloat(d.taxInputs.q3exp)||0)+(parseFloat(d.taxInputs.q4exp)||0);
+    if(_qrev > 0){ d.annualProfit = _qrev - _qexp; d.hasIncomeSetup = true; }
+    if(d.taxInputs.bizType){ var bt=d.taxInputs.bizType; d.isCorp=/c.corp|c-corp/i.test(bt); d.isSCorp=/s.corp|s-corp/i.test(bt); d.hasSE=!d.isCorp&&!d.isSCorp; }
+  }
+  d.taxQuarterly = [];
+  try{ d.taxQuarterly = JSON.parse(localStorage.getItem('fw_tax_quarterly')||'[]').filter(function(q){ return parseInt(q.year||0)===year; }); }catch(e){}
+  d.hasTaxEstimator = !!d.taxInputs;
+  d.hasTaxQuarterly = d.taxQuarterly.length > 0;
+
+  // Estimate annual tax (no deductions)
+  d.estimatedTax = calcTax(Math.max(0, d.annualProfit), d.hasSE, d.isCorp);
+  d.quarterlyEst = d.estimatedTax / 4;
+  // Use computed quarterly totals from taxEstimator if available
+  if(d.taxQuarterly.length > 0){
+    var _qtot = d.taxQuarterly.reduce(function(s,q){ return s+(q.payment||0); }, 0);
+    if(_qtot > 0){ d.estimatedTax = _qtot; d.quarterlyEst = _qtot/4; }
+  }
+
+  // Payments made
+  d.qPaid = {q1:false,q2:false,q3:false,q4:false};
+  ['q1','q2','q3','q4'].forEach(function(q){
+    d.qPaid[q] = !!(d.taxPmts[q] && d.taxPmts[q].paid);
+  });
+  d.paidCount = ['q1','q2','q3','q4'].filter(function(q){ return d.qPaid[q]; }).length;
+
+  // ── Deductions ──
+  d.ho = null;
+  try{ d.ho = JSON.parse(localStorage.getItem('fw_ho')||'null'); }catch(e){}
+  d.hoDeduction = calcHO(d.ho);
+  d.hoSetup = d.ho && (d.ho.off > 0);
+
+  d.trips = [];
+  try{ d.trips = JSON.parse(localStorage.getItem('fw_ml_trips')||'[]'); }catch(e){}
+  var bizTrips = d.trips.filter(function(t){ return t.cat === 'business' && parseInt(t.year||0) === year; });
+  d.totalBizMiles = bizTrips.reduce(function(s,t){ return s + (parseFloat(t.miles)||0); }, 0);
+  d.mileageDeduction = bizTrips.reduce(function(s,t){ return s + (parseFloat(t.deduction)||0); }, 0);
+  d.mileageSetup = d.trips.length > 0;
+
+  d.s179Assets = [];
+  try{ d.s179Assets = JSON.parse(localStorage.getItem('fw_s179')||'[]'); }catch(e){}
+  var yrAssets = d.s179Assets.filter(function(a){ return parseInt(a.year||0) === year; });
+  d.s179Deduction = calcS179(yrAssets, year);
+  d.s179Count = yrAssets.length;
+  d.s179Setup = yrAssets.length > 0;
+
+  d.totalDeductions = d.hoDeduction + d.mileageDeduction + d.s179Deduction;
+  d.deductionsSetup = d.hoSetup || d.mileageSetup || d.s179Setup;
+
+  // Tax with deductions applied
+  d.adjustedProfit = Math.max(0, d.annualProfit - d.totalDeductions);
+  d.adjustedTax = calcTax(d.adjustedProfit, d.hasSE, d.isCorp);
+  d.deductionSavings = Math.max(0, d.estimatedTax - d.adjustedTax);
+
+  // ── Sales Tax ──
+  d.salesSetup = null;
+  try{ d.salesSetup = JSON.parse(localStorage.getItem('fw_sales_setup')||'null'); }catch(e){}
+  d.salesTx = [];
+  try{ d.salesTx = JSON.parse(localStorage.getItem('fw_sales_tx')||'[]'); }catch(e){}
+  d.salesFiled = {};
+  try{ d.salesFiled = JSON.parse(localStorage.getItem('fw_sales_filed')||'{}'); }catch(e){}
+  d.salesConfigured = !!d.salesSetup;
+
+  var yrSales = d.salesTx.filter(function(t){ return t.date && t.date.startsWith(''+year); });
+  d.salesCollected = yrSales.reduce(function(s,t){ return s + (parseFloat(t.tax)||0); }, 0);
+  d.salesState = d.salesSetup ? (d.salesSetup.state||'') : '';
+  d.salesFreq = d.salesSetup ? (d.salesSetup.freq||d.salesSetup.frequency||'quarterly') : 'quarterly';
+
+  // Filed amounts (values may be objects or numbers)
+  d.salesFiledTotal = Object.values(d.salesFiled).reduce(function(s,v){
+    var amt = (v && typeof v === 'object') ? (parseFloat(v.amount||v.amt)||0) : parseFloat(v)||0;
+    return s + amt;
+  }, 0);
+  d.salesUnfiled = Math.max(0, d.salesCollected - d.salesFiledTotal);
+
+  // ── Contractors & Payroll ──
+  d.contractors = [];
+  try{ d.contractors = JSON.parse(localStorage.getItem('fw_contractors')||'[]'); }catch(e){}
+  d.contractorPmts = [];
+  try{ d.contractorPmts = JSON.parse(localStorage.getItem('fw_contractor_payments')||'[]'); }catch(e){}
+  d.employees = [];
+  try{ d.employees = JSON.parse(localStorage.getItem('fw_employees')||'[]'); }catch(e){}
+  d.futaSetup = {};
+  try{ d.futaSetup = JSON.parse(localStorage.getItem('fw_futa_setup')||'{}'); }catch(e){}
+  d.contractorSetup = d.contractors.length > 0;
+  d.employeeSetup = d.employees.length > 0;
+
+  var yrPmts = d.contractorPmts.filter(function(p){ return parseInt(p.year||0) === year; });
+  var totByC = {};
+  yrPmts.forEach(function(p){ totByC[p.cid] = (totByC[p.cid]||0) + (parseFloat(p.amt)||0); });
+
+  d.necRequired = [];
+  d.necApproaching = [];
+  d.noW9 = 0;
+  d.contractors.forEach(function(c){
+    var paid = totByC[c.id]||0;
+    var exempt = c.type === 'corp' || c.type === 'llc_corp';
+    if(c.w9 === 'no') d.noW9++;
+    if(!exempt && paid >= 600) d.necRequired.push({name:c.name, paid:paid});
+    else if(!exempt && paid >= 400) d.necApproaching.push({name:c.name, paid:paid});
+  });
+
+  d.futaLiability = d.employees.reduce(function(s,e){
+    return s + Math.min(parseFloat(e.wages)||0, 7000) * 0.006;
+  }, 0);
+
+  // ── Action items ──
+  d.actions = buildActions(d);
+
+  // ── Overall health ──
+  var urgentCount = d.actions.filter(function(a){ return a.sev === 'urgent'; }).length;
+  var warnCount = d.actions.filter(function(a){ return a.sev === 'warn'; }).length;
+  if(urgentCount >= 3 || (urgentCount >= 1 && warnCount >= 2)){
+    d.health = 'red';
+    d.healthLabel = 'Urgent Action Needed';
+    d.healthMsg = 'You have ' + urgentCount + ' urgent tax issues. Act soon to avoid penalties and interest charges from the IRS.';
+  } else if(urgentCount >= 1 || warnCount >= 2){
+    d.health = 'amber';
+    d.healthLabel = 'A Few Things Need Attention';
+    d.healthMsg = 'You\'re mostly on track, but ' + (urgentCount + warnCount) + ' items need your attention before the next deadline.';
+  } else if(warnCount === 1){
+    d.health = 'amber';
+    d.healthLabel = 'Almost There';
+    d.healthMsg = 'Just one thing to take care of. Your tax situation is in decent shape.';
+  } else if(d.actions.length > 0 && d.actions.every(function(a){ return a.sev === 'ok'; })){
+    d.health = 'green';
+    d.healthLabel = 'Tax Health: Excellent';
+    d.healthMsg = 'Everything looks good! All quarterly payments tracked, deductions logged, and filings up to date.';
+  } else {
+    d.health = 'grey';
+    d.healthLabel = 'Set Up Your Tax Tracking';
+    d.healthMsg = 'Connect your tax modules to see your full tax picture here. The more you set up, the better guidance you\'ll get.';
+  }
+
+  return d;
+}
+
+/* ══════════════════════════════════════════════════════
+   CALCULATIONS
+══════════════════════════════════════════════════════ */
+function calcTax(profit, hasSE, isCorp){
+  if(profit <= 0) return 0;
+  if(isCorp) return profit * 0.21; // flat 21% corporate rate
+  var seTax = hasSE ? profit * 0.9235 * 0.153 : 0;
+  var seDeduct = seTax / 2;
+  var qbi = hasSE ? profit * 0.20 : 0; // 20% QBI deduction (simplified)
+  var taxable = Math.max(0, profit - seDeduct - qbi - STD_DED.single);
+  return seTax + fedBrackets(taxable);
+}
+
+function fedBrackets(income){
+  if(income <= 0) return 0;
+  var b = [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[1e9,.37]];
+  var tax = 0, prev = 0;
+  for(var i=0; i<b.length; i++){
+    if(income <= b[i][0]){ tax += (income-prev)*b[i][1]; break; }
+    tax += (b[i][0]-prev)*b[i][1]; prev = b[i][0];
+  }
+  return tax;
+}
+
+function calcHO(ho){
+  if(!ho || !(parseFloat(ho.off)||0)) return 0;
+  var off = parseFloat(ho.off)||0, tot = parseFloat(ho.tot)||0, inc = parseFloat(ho.inc)||0;
+  var bizPct = tot > 0 ? off/tot : 0;
+  var simp = Math.min(off,300) * 5;
+  if(inc > 0) simp = Math.min(simp, inc);
+  var totalExp = ['rent','ptax','ins','util','rep','oth'].reduce(function(s,k){ return s+(parseFloat(ho[k])||0); },0);
+  var reg = totalExp * bizPct;
+  if(inc > 0) reg = Math.min(reg, inc);
+  return ho.method === 'regular' ? reg : simp;
+}
+
+function calcS179(assets, year){
+  if(!assets.length) return 0;
+  var lim = S179_DATA[year] || S179_DATA[2025];
+  var totalElig = assets.reduce(function(s,a){ return s + (a.cost||0)*(a.bizPct||100)/100; }, 0);
+  var reduction = Math.max(0, totalElig - lim.po);
+  var maxS179 = Math.max(0, lim.lim - reduction);
+  var running = 0, tot179 = 0, totBonus = 0;
+  assets.forEach(function(a){
+    var elig = (a.cost||0)*(a.bizPct||100)/100;
+    var cap = a.type === 'vehicle-light' ? 12400 : a.type === 'vehicle-suv' ? 30500 : 0;
+    var s179e = cap > 0 ? Math.min(elig, cap) : elig;
+    var s179 = Math.min(s179e, Math.max(0, maxS179 - running));
+    running += s179;
+    tot179 += s179;
+    totBonus += (elig - s179) * lim.bon;
+  });
+  return tot179 + totBonus;
+}
+
+/* ══════════════════════════════════════════════════════
+   BUILD ACTION ITEMS
+══════════════════════════════════════════════════════ */
+function buildActions(d){
+  var items = [];
+  var now = TODAY;
+  var y = d.year;
+  var qDates = [
+    {q:'q1', due: new Date(y,3,15),  label:'Q1 (Jan–Mar)'},
+    {q:'q2', due: new Date(y,5,16),  label:'Q2 (Apr–May)'},
+    {q:'q3', due: new Date(y,8,15),  label:'Q3 (Jun–Aug)'},
+    {q:'q4', due: new Date(y+1,0,15),label:'Q4 (Sep–Dec)'}
+  ];
+
+  if(d.hasIncomeSetup){
+    qDates.forEach(function(qd){
+      var past = now > qd.due;
+      if(d.qPaid[qd.q]){
+        items.push({sev:'ok', ico:'✅', title:'Q'+qd.q[1]+' estimated tax paid', desc:qd.label+' payment recorded.'});
+      } else if(past){
+        items.push({sev:'urgent', ico:'🚨', title:'Missed Q'+qd.q[1]+' estimated tax payment', desc:'Due date ('+fmtDate(qd.due)+') has passed. Pay ASAP — IRS charges 0.5% penalty per month plus interest.', href:'taxEstimator.test.html'});
+      } else if(daysBetween(now, qd.due) <= 21){
+        items.push({sev:'warn', ico:'⚠️', title:'Q'+qd.q[1]+' estimated tax due in '+daysBetween(now,qd.due)+' days', desc:'Payment of approximately '+fmtD(d.quarterlyEst)+' due '+fmtDate(qd.due)+'.', href:'taxEstimator.test.html'});
+      }
+    });
+  } else {
+    items.push({sev:'warn', ico:'💡', title:'Set up income & expenses to estimate your tax bill', desc:'Enter your monthly revenue and expenses in your profile or in the Tax Estimator.', href:'taxEstimator.test.html'});
+  }
+
+  if(!d.hoSetup) items.push({sev:'warn', ico:'🏠', title:'Check if you qualify for the Home Office deduction', desc:'If you have a dedicated workspace at home, you could deduct $1,500 or more per year.', href:'keyDeductions.test.html'});
+  if(!d.mileageSetup) items.push({sev:'warn', ico:'🚗', title:'Start logging business miles', desc:'Every business mile driven is worth 70¢ in deductions (2025). 1,000 miles = $700 off your taxable income.', href:'keyDeductions.test.html'});
+  if(!d.s179Setup) items.push({sev:'warn', ico:'💻', title:'Have you bought equipment this year?', desc:'Computers, machinery, software — you can write off the full cost in the year you bought it (Section 179).', href:'keyDeductions.test.html'});
+
+  if(d.salesConfigured && d.salesUnfiled > 0){
+    items.push({sev:'urgent', ico:'🏷️', title:'You have '+fmtD(d.salesUnfiled)+' in unfiled sales tax', desc:'Sales tax you collected belongs to the state — holding it too long can result in penalties.', href:'salesTaxTracker.test.html'});
+  } else if(d.salesConfigured){
+    items.push({sev:'ok', ico:'✅', title:'Sales tax filings are up to date', desc:'All collected sales tax has been accounted for.'});
+  } else {
+    items.push({sev:'warn', ico:'🏷️', title:'Set up Sales Tax tracking', desc:'If your business sells goods or taxable services, you may be required to collect and remit sales tax.', href:'salesTaxTracker.test.html'});
+  }
+
+  if(d.necRequired.length > 0){
+    var jan31 = new Date(d.year+1, 0, 31);
+    var daysLeft = daysBetween(now, jan31);
+    var sev = daysLeft <= 30 ? 'urgent' : 'warn';
+    items.push({sev:sev, ico:'📋', title:'Send 1099-NEC to '+d.necRequired.length+' contractor'+(d.necRequired.length>1?'s':''), desc:'Contractors who received $600+ this year: '+d.necRequired.slice(0,3).map(function(c){return c.name;}).join(', ')+(d.necRequired.length>3?'...':'')+'. Deadline: Jan 31, '+(d.year+1)+'.', href:'contractorPayroll.test.html'});
+  }
+  if(d.noW9 > 0){
+    items.push({sev:'urgent', ico:'📄', title:'Collect W-9 forms from '+d.noW9+' contractor'+(d.noW9>1?'s':''), desc:'Without a W-9, you\'re required to withhold 24% of every payment as "backup withholding" for the IRS.', href:'contractorPayroll.test.html'});
+  }
+  if(d.necApproaching.length > 0){
+    items.push({sev:'warn', ico:'👀', title:d.necApproaching.length+' contractor'+(d.necApproaching.length>1?'s are':' is')+' approaching the $600 reporting threshold', desc:d.necApproaching.map(function(c){return c.name+' ('+fmtD(c.paid)+')';}).join(', ')+'. A 1099 will be required once they reach $600.', href:'contractorPayroll.test.html'});
+  }
+
+  return items;
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+══════════════════════════════════════════════════════ */
+function renderHealth(d){
+  var cls = {green:'hb-green',amber:'hb-amber',red:'hb-red',grey:'hb-grey'}[d.health];
+  var bcls = {green:'badge-green',amber:'badge-amber',red:'badge-red',grey:'badge-grey'}[d.health];
+  document.getElementById('healthBanner').innerHTML =
+    '<div class="health-banner '+cls+'">'+
+    '<div class="hb-left"><div class="hb-title">'+d.healthLabel+'</div><div class="hb-sub">'+d.healthMsg+'</div></div>'+
+    '<span class="hb-badge '+bcls+'">'+d.year+' Tax Year</span>'+
+    '</div>';
+}
+
+function renderModConnStrip(d){
+  var modules = [
+    {name:'Tax Estimator', on:d.hasTaxEstimator, ico:'📊'},
+    {name:'Key Deductions', on:d.deductionsSetup, ico:'💸'},
+    {name:'Sales Tax', on:d.salesConfigured, ico:'🏷️'},
+    {name:'Contractor / Payroll', on:d.contractorSetup||d.employeeSetup, ico:'👥'}
+  ];
+  var html = '<div class="mod-conn-strip">';
+  modules.forEach(function(m){
+    html += '<span class="mod-conn-pill '+(m.on?'mcp-on':'mcp-off')+'">'+m.ico+' '+(m.on?'✓ ':'○ ')+m.name+'</span>';
+  });
+  html += '</div>';
+  document.getElementById('modConnStrip').innerHTML = html;
+}
+
+function renderIncomeTaxCard(d){
+  var el = document.getElementById('incomeTaxCard');
+  var qDates = ['Apr 15','Jun 16','Sep 15','Jan 15'];
+  var qLabels = ['Q1','Q2','Q3','Q4'];
+
+  if(!d.hasIncomeSetup){
+    el.innerHTML =
+      '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#128181;</span><div><div class="tc-ttl">Your Income Tax Bill</div><div class="tc-stt">Quarterly estimated tax</div></div></div><span class="sdot dn"></span></div>'+
+      '<div class="ns"><div class="ns-ico">&#128181;</div><div class="ns-txt">Enter your monthly revenue &amp; expenses in your profile to see your estimated tax bill and quarterly payment schedule.</div><a href="taxEstimator.test.html" class="btn-go">&#8594; Open Tax Estimator</a></div>';
+    return;
+  }
+
+  var dotCls = d.paidCount === 4 ? 'dg' : d.paidCount >= 2 ? 'da' : 'dr';
+  var now = TODAY, y = d.year;
+  var qInfo = [
+    {n:'q1',due:new Date(y,3,15)}, {n:'q2',due:new Date(y,5,16)},
+    {n:'q3',due:new Date(y,8,15)}, {n:'q4',due:new Date(y+1,0,15)}
+  ];
+  var qHtml = '<div class="qg">';
+  qInfo.forEach(function(qi, i){
+    var paid = d.qPaid[qi.n];
+    var past = now > qi.due;
+    var cls = paid ? 'q-paid' : (past ? 'q-due' : 'q-future');
+    var status = paid ? '✓ Paid' : (past ? '⚠ Overdue' : 'Upcoming');
+    qHtml += '<div class="qc '+cls+'"><div class="qn">'+qLabels[i]+'</div><div class="qd">'+qDates[i]+'</div><div class="qs">'+status+'</div></div>';
+  });
+  qHtml += '</div>';
+
+  var owed = d.estimatedTax - (d.paidCount * d.quarterlyEst);
+  el.innerHTML =
+    '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#128181;</span><div><div class="tc-ttl">Your Income Tax Bill</div><div class="tc-stt">Quarterly estimated tax</div></div></div><span class="sdot '+dotCls+'"></span></div>'+
+    '<div class="big-num">'+fmtD(d.estimatedTax)+'</div><div class="big-lbl">Estimated annual tax (before deductions)</div>'+
+    qHtml+
+    '<div class="mrow">'+
+      ml('Quarterly payment (approx.)', fmtD(d.quarterlyEst))+
+      ml('Payments made this year', d.paidCount + ' of 4 quarters', d.paidCount===4?'ok':d.paidCount>=2?'wn':'bd')+
+      ml('Still estimated to owe', fmtD(Math.max(0, owed)), owed<=0?'ok':'bd')+
+    '</div>'+
+    '<div class="blurb">The IRS doesn\'t wait until April — you must pay in <strong>4 smaller payments during the year</strong> (April, June, September, January). Missing these results in a penalty of ~0.5% per month.</div>'+
+    '<a href="taxEstimator.test.html" class="tc-cta">&#8594; Open Tax Estimator</a>';
+}
+
+function renderDeductionsCard(d){
+  var el = document.getElementById('deductionsCard');
+  var hasSome = d.deductionsSetup;
+  var dot = d.totalDeductions > 0 ? 'dg' : 'da';
+  el.innerHTML =
+    '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#128184;</span><div><div class="tc-ttl">Your Tax Deductions</div><div class="tc-stt">Legal ways to reduce your tax bill</div></div></div><span class="sdot '+dot+'"></span></div>'+
+    '<div class="big-num">'+fmtD(d.totalDeductions)+'</div><div class="big-lbl">Total deductions tracked this year</div>'+
+    '<div class="mrow">'+
+      ml('Home office', d.hoSetup ? fmtD(d.hoDeduction) : '— Not set up', d.hoSetup?'ok':'wn')+
+      ml('Business mileage ('+(d.totalBizMiles|0)+' mi)', d.mileageSetup ? fmtD(d.mileageDeduction) : '— No trips logged', d.mileageSetup?'ok':'wn')+
+      ml('Equipment write-offs ('+d.s179Count+' items)', d.s179Setup ? fmtD(d.s179Deduction) : '— No equipment added', d.s179Setup?'ok':'wn')+
+    '</div>'+
+    '<div class="blurb">Every dollar of deductions <strong>reduces the income the IRS taxes you on</strong>. $10,000 in deductions saves roughly $2,500–$4,000 in actual taxes depending on your bracket.</div>'+
+    '<a href="keyDeductions.test.html" class="tc-cta">&#8594; Open Key Deductions</a>';
+}
+
+function renderSalesTaxCard(d){
+  var el = document.getElementById('salesTaxCard');
+  if(!d.salesConfigured){
+    el.innerHTML =
+      '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#127991;</span><div><div class="tc-ttl">Sales Tax You Collected</div><div class="tc-stt">Tax collected from customers</div></div></div><span class="sdot dn"></span></div>'+
+      '<div class="ns"><div class="ns-ico">&#127991;</div><div class="ns-txt">If you sell products or certain services, you collect sales tax from customers and must forward it to your state government on a schedule.</div><a href="salesTaxTracker.test.html" class="btn-go">&#8594; Set Up Sales Tax</a></div>';
+    return;
+  }
+  var dot = d.salesUnfiled > 0 ? 'dr' : 'dg';
+  el.innerHTML =
+    '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#127991;</span><div><div class="tc-ttl">Sales Tax You Collected</div><div class="tc-stt">Tax collected from customers</div></div></div><span class="sdot '+dot+'"></span></div>'+
+    '<div class="big-num">'+fmtD(d.salesCollected)+'</div><div class="big-lbl">Total sales tax collected this year'+(d.salesState?' — '+d.salesState:'')+' ('+d.salesFreq+')</div>'+
+    '<div class="mrow">'+
+      ml('Collected from customers', fmtD(d.salesCollected))+
+      ml('Filed &amp; sent to state', fmtD(d.salesFiledTotal), 'ok')+
+      ml('Unfiled — in your account', fmtD(d.salesUnfiled), d.salesUnfiled>0?'bd':'ok')+
+    '</div>'+
+    '<div class="blurb"><strong>Sales tax is not your money.</strong> You collect it on behalf of the state and must send it in on your filing schedule ('+d.salesFreq+'). Keeping it too long triggers penalties.</div>'+
+    '<a href="salesTaxTracker.test.html" class="tc-cta">&#8594; Open Sales Tax Tracker</a>';
+}
+
+function renderContractorCard(d){
+  var el = document.getElementById('contractorCard');
+  var hasAny = d.contractorSetup || d.employeeSetup;
+  if(!hasAny){
+    el.innerHTML =
+      '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#128203;</span><div><div class="tc-ttl">Contractor &amp; Payroll Tax</div><div class="tc-stt">1099-NEC · FUTA · SUTA</div></div></div><span class="sdot dn"></span></div>'+
+      '<div class="ns"><div class="ns-ico">&#128203;</div><div class="ns-txt">Track freelancers you\'ve paid (IRS reporting required at $600+) and estimate payroll taxes for any employees you have.</div><a href="contractorPayroll.test.html" class="btn-go">&#8594; Set Up Contractor Tracking</a></div>';
+    return;
+  }
+  var dot = (d.noW9 > 0 || (d.necRequired.length > 0 && daysBetween(TODAY, new Date(d.year+1,0,31)) <= 30)) ? 'dr' : d.necRequired.length > 0 ? 'da' : 'dg';
+  el.innerHTML =
+    '<div class="tc-head"><div class="tc-it"><span class="tc-ico">&#128203;</span><div><div class="tc-ttl">Contractor &amp; Payroll Tax</div><div class="tc-stt">1099-NEC · FUTA · SUTA</div></div></div><span class="sdot '+dot+'"></span></div>'+
+    '<div class="big-num">'+d.necRequired.length+'</div><div class="big-lbl">Contractors requiring 1099-NEC forms (paid $600+)</div>'+
+    '<div class="mrow">'+
+      ml('Contractors nearing $600 threshold', d.necApproaching.length, d.necApproaching.length>0?'wn':'')+
+      ml('Missing W-9 forms', d.noW9, d.noW9>0?'bd':'ok')+
+      ml('1099-NEC filing deadline', 'Jan 31, '+(d.year+1), d.necRequired.length>0?'wn':'')+
+      (d.employeeSetup ? ml('Estimated annual FUTA tax', fmtD(d.futaLiability)) : '')+
+    '</div>'+
+    '<div class="blurb">If you paid any freelancer or contractor <strong>$600 or more this year</strong>, you must file a 1099-NEC form by January 31. Failure to file carries a $60–$310 penalty per form.</div>'+
+    '<a href="contractorPayroll.test.html" class="tc-cta">&#8594; Open Contractor &amp; Payroll</a>';
+}
+
+function renderDeductionImpact(d){
+  var el = document.getElementById('deductionImpact');
+  if(!d.hasIncomeSetup){
+    el.innerHTML = '';
+    return;
+  }
+  var pct = d.estimatedTax > 0 ? Math.round((d.deductionSavings/d.estimatedTax)*100) : 0;
+  var maxBar = Math.max(d.hoDeduction, d.mileageDeduction, d.s179Deduction, 1);
+
+  var bars = '';
+  if(d.hoDeduction > 0 || d.hoSetup){
+    bars += barRow('Home office', d.hoDeduction, maxBar);
+  }
+  if(d.mileageDeduction > 0 || d.mileageSetup){
+    bars += barRow('Business mileage', d.mileageDeduction, maxBar);
+  }
+  if(d.s179Deduction > 0 || d.s179Setup){
+    bars += barRow('Equipment (Sec 179)', d.s179Deduction, maxBar);
+  }
+
+  el.innerHTML =
+    '<div class="impact-card">'+
+    '<div class="impact-title">&#128161; How Your Deductions Cut Your Tax Bill</div>'+
+    '<div class="impact-sub">This shows the real-dollar impact of the deductions you\'ve tracked so far. '+
+    'The more you log, the lower your tax bill — completely legally.</div>'+
+    '<div class="cmp-grid">'+
+      '<div class="cmp-box cmp-before"><div class="cmp-lbl">Without Deductions</div><div class="cmp-val">'+fmtD(d.estimatedTax)+'</div><div class="cmp-sub">Based on '+fmtD(d.annualProfit)+' net profit</div></div>'+
+      '<div class="cmp-arrow">&#8594;</div>'+
+      '<div class="cmp-box cmp-after"><div class="cmp-lbl">With Your Deductions</div><div class="cmp-val">'+fmtD(d.adjustedTax)+'</div><div class="cmp-sub">After '+fmtD(d.totalDeductions)+' in deductions</div></div>'+
+    '</div>'+
+    '<div class="savings-strip">'+
+      '<div><div class="sv-txt">Your deductions are estimated to save you</div><div style="font-size:.72rem;color:rgba(255,255,255,.55);margin-top:3px">Based on '+pct+'% reduction in taxable income</div></div>'+
+      '<div class="sv-amt">'+fmtD(d.deductionSavings)+'</div>'+
+    '</div>'+
+    (bars ? '<div class="ded-bars" style="margin-top:16px"><div style="font-size:.78rem;font-weight:700;color:#475569;margin-bottom:8px">Deduction breakdown</div>'+bars+'</div>' : '')+
+    '</div>';
+}
+
+function barRow(label, val, maxVal){
+  var w = maxVal > 0 ? Math.max(4, Math.round((val/maxVal)*100)) : 4;
+  return '<div class="db-row"><span class="db-lbl">'+label+'</span><div class="db-track"><div class="db-fill" style="width:'+w+'%"></div></div><span class="db-val">'+fmtD(val)+'</span></div>';
+}
+
+function renderDeadlines(d){
+  var y = d.year;
+  var done = loadDLDone(y);
+  var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MNF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  var items = [];
+  // S-Corp / Partnership return (Mar 15 — one month before personal)
+  if(d.isSCorp){
+    items.push({date:new Date(y,2,15), key:'scorp_return', label:'S-Corp Tax Return (Form 1120-S)', desc:'S-Corp returns are due March 15 — one month earlier than personal returns. File Form 7004 by this date to request a 6-month extension.', type:'income', check:true});
+    items.push({date:new Date(y,2,15), key:'scorp_election', label:'New S-Corp Election Deadline (Form 2553)', desc:'To elect S-Corp status for this tax year, Form 2553 must be filed by March 15 (75 days from start of year).', type:'income', check:true});
+  }
+  // Quarterly estimated payments
+  [{n:1,date:new Date(y,3,15)},{n:2,date:new Date(y,5,17)},{n:3,date:new Date(y,8,16)},{n:4,date:new Date(y+1,0,15)}].forEach(function(q){
+    items.push({date:q.date, key:'est_q'+q.n, label:'Q'+q.n+' Estimated Tax Payment', desc:'Pay estimated income tax to IRS. Covers '+(['Jan–Mar','Apr–May','Jun–Aug','Sep–Dec'][q.n-1])+'. Missing this triggers a penalty of ~0.5%/month.', type:'income', check:true});
+  });
+  // Annual return + extension
+  items.push({date:new Date(y,3,15), key:'annual_return', label:'Annual Tax Return (Form 1040)', desc:'File personal tax return or request Form 4868 extension — taxes owed are still due today even with an extension.', type:'income', check:true});
+  items.push({date:new Date(y,9,15), key:'ext_personal', label:'Extended Personal Return Deadline', desc:'Final deadline if you filed for extension on April 15. No further extensions are available.', type:'income', check:true});
+  if(d.isSCorp) items.push({date:new Date(y,8,15), key:'scorp_ext', label:'Extended S-Corp Return Deadline', desc:'If you filed Form 7004 by March 15, this is the final extended deadline for Form 1120-S.', type:'income', check:true});
+
+  // W-2 to employees
+  if(d.employeeSetup){
+    items.push({date:new Date(y+1,0,31), key:'w2_dist', label:'W-2 Distribution to Employees', desc:'All employees must receive their W-2 forms for wages paid in '+y+'. File Copy A with SSA by this date too.', type:'payroll', check:true});
+  }
+  // 1099-NEC
+  items.push({date:new Date(y+1,0,31), key:'nec_filing', label:'1099-NEC Filing Deadline', desc:'Send 1099-NEC to any contractor paid $600+ in '+y+'. File Copy A with IRS by the same date. Penalty: $60–$310 per form.', type:'contractor', check:true});
+
+  // FUTA deposits
+  [{m:3,d:30,lbl:'Q1'},{m:6,d:31,lbl:'Q2'},{m:9,d:31,lbl:'Q3'}].forEach(function(q){
+    items.push({date:new Date(y,q.m,q.d), key:'futa_'+q.lbl.toLowerCase(), label:q.lbl+' FUTA Deposit', desc:'Deposit federal unemployment tax (FUTA) if your cumulative balance reaches $500 or more.', type:'payroll', check:false});
+  });
+  items.push({date:new Date(y+1,1,28), key:'form940', label:'Form 940 (Annual FUTA Return)', desc:'File the annual federal unemployment tax return with the IRS.', type:'payroll', check:true});
+
+  // Sales tax
+  if(d.salesConfigured){
+    if(d.salesFreq === 'monthly'){
+      for(var m=0; m<12; m++){
+        var due = new Date(y, m+1<12?m+1:0, 20, 0,0,0); if(m===11) due.setFullYear(y+1);
+        items.push({date:due, key:'sales_m'+m, label:'Monthly Sales Tax — '+MN[m], desc:'File and pay collected sales tax for '+MNF[m]+' with your state.', type:'sales', check:true});
+      }
+    } else if(d.salesFreq === 'annual'){
+      items.push({date:new Date(y+1,2,31), key:'sales_annual', label:'Annual Sales Tax Return', desc:'File your full-year sales tax return with your state.', type:'sales', check:true});
+    } else {
+      [{m:3,d:20,lbl:'Q1'},{m:6,d:20,lbl:'Q2'},{m:9,d:20,lbl:'Q3'},{m:0,d:20,lbl:'Q4',yr:1}].forEach(function(q){
+        items.push({date:new Date(y+(q.yr||0),q.m,q.d), key:'sales_'+q.lbl.toLowerCase(), label:q.lbl+' Sales Tax Return', desc:'File and pay sales tax collected from customers for the quarter.', type:'sales', check:true});
+      });
+    }
+  }
+
+  items.sort(function(a,b){ return a.date-b.date; });
+
+  var now = TODAY;
+  var typeIco = {income:'💰',sales:'🏷️',contractor:'📋',payroll:'👥'};
+  var html = '<div class="dl-list">';
+
+  items.forEach(function(item, idx){
+    var isDone = !!done[item.key];
+    var diff = daysBetween(now, item.date);
+    var pill = '', stateClass;
+    if(isDone){ stateClass = 's-done'; }
+    else if(now > item.date){ stateClass = 's-past'; }
+    else if(diff === 0){ stateClass = 's-overdue'; pill = '<span class="dl-pill pill-overdue">TODAY</span>'; }
+    else if(diff < 0 && diff > -7){ stateClass = 's-overdue'; pill = '<span class="dl-pill pill-overdue">'+Math.abs(diff)+'d overdue</span>'; }
+    else if(diff <= 30){ stateClass = 's-soon'; pill = '<span class="dl-pill pill-soon">'+diff+' days left</span>'; }
+    else{ stateClass = 's-future'; }
+
+    var cbId = 'dlcb_'+item.key+'_'+y;
+    var checkHtml = '';
+    if(item.check){
+      checkHtml = '<div class="dl-check-wrap"><input type="checkbox" class="dl-check" id="'+cbId+'" '+(isDone?'checked':'')+' onchange="toggleDL('+y+',\''+item.key+'\',\''+cbId+'\')">'
+        +'<label class="dl-check-lbl" id="'+cbId+'_lbl" for="'+cbId+'" style="'+(isDone?'text-decoration:line-through':'')+'">'+(isDone?'Marked done — click to undo':'Mark as done')+'</label></div>';
+    }
+
+    var nextHasLine = idx < items.length - 1;
+    html += '<div class="dl-item '+stateClass+'" id="'+cbId+'_row">'+
+      '<div class="dl-dc"><div class="dl-dot"></div>'+(nextHasLine?'<div class="dl-line" style="height:24px"></div>':'')+'</div>'+
+      '<div style="flex:1">'+
+        '<div class="dl-date">'+fmtDateFull(item.date)+'</div>'+
+        '<div class="dl-label">'+typeIco[item.type]+' '+item.label+pill+'</div>'+
+        '<div class="dl-desc">'+item.desc+'</div>'+
+        checkHtml+
+      '</div>'+
+    '</div>';
+  });
+
+  html += '</div>';
+  document.getElementById('deadlineList').innerHTML = html;
+}
+
+function renderActions(d){
+  if(!d.actions.length){
+    document.getElementById('actionList').innerHTML = '<div style="color:#94a3b8;font-size:.85rem;padding:16px;text-align:center">No actions needed — set up tax modules to see your checklist here.</div>';
+    return;
+  }
+  var html = '<div class="al-wrap">';
+  d.actions.forEach(function(a){
+    var cls = a.sev === 'urgent' ? 'urgent' : a.sev === 'warn' ? 'warn' : 'ok';
+    html += '<div class="al-item '+cls+'"><span class="al-ico">'+a.ico+'</span><div class="al-body"><div class="al-title">'+a.title+'</div><div class="al-desc">'+a.desc+'</div>'+(a.href?'<a class="al-link" href="'+a.href+'">&#8594; Fix this now</a>':'')+'</div></div>';
+  });
+  html += '</div>';
+  document.getElementById('actionList').innerHTML = html;
+}
+
+function renderGlossary(){
+  var terms = [
+    {term:'Estimated Quarterly Tax — What is it?',
+     body:'The IRS does not want one big payment in April. If you are self-employed or earn significant income without automatic withholding, you must make <strong>4 prepayments</strong> during the year — in April, June, September, and January. Think of it like making monthly rent payments instead of paying a year\'s rent all at once.<div class="eg">📌 Example: Your estimated annual tax is $12,000. You pay $3,000 four times a year instead of $12,000 at once. Miss a payment and the IRS charges an underpayment penalty (roughly 5–10% extra).</div>'},
+    {term:'Self-Employment Tax — Why do I pay 15.3%?',
+     body:'When you work for a company, your employer pays half of your Social Security and Medicare taxes (7.65%) and you pay the other half (7.65%). When you work for yourself, <strong>there is no employer — you pay both sides: 15.3%</strong> of your net profit. The good news: the IRS lets you deduct half of this as a business expense to soften the blow.<div class="eg">📌 Example: Net profit = $60,000. SE tax = $60,000 × 92.35% × 15.3% = ~$8,478. You can then deduct $4,239 from your income.</div>'},
+    {term:'Business Deduction — How does it actually save me money?',
+     body:'A deduction reduces the amount of income the IRS is allowed to tax you on. It does not give you a dollar-for-dollar refund — but it cuts your <strong>taxable income</strong>, which lowers your tax bill based on your tax rate.<div class="eg">📌 Example: You are in the 22% bracket and have $5,000 in valid deductions. Your tax bill drops by $5,000 × 22% = $1,100. You spent $5,000 but saved $1,100 in taxes — the deduction effectively cost you $3,900 instead of $5,000.</div>'},
+    {term:'Home Office Deduction — Who qualifies?',
+     body:'You can deduct home costs if part of your home is used <strong>regularly and exclusively for business</strong>. There are two methods: <strong>Simplified</strong> ($5 per square foot of your office space, up to 300 sq ft = $1,500 max) or <strong>Regular</strong> (your actual rent/mortgage/utilities × the percentage of your home used for business).<div class="eg">📌 Example: Your home is 1,000 sq ft. Your office is 150 sq ft. That\'s 15%. If your annual home expenses are $20,000, you can deduct $3,000. Or use simplified: 150 × $5 = $750.</div>'},
+    {term:'Standard Mileage Deduction — How does it work?',
+     body:'Every time you drive for business purposes, you can deduct <strong>70 cents per mile</strong> (2025 IRS rate). You must keep a log showing: the date, where you drove to, the business purpose, and how many miles. Personal commuting does NOT count.<div class="eg">📌 Example: You drive 3,000 business miles in a year. Your deduction = 3,000 × $0.70 = $2,100 off your taxable income. That\'s roughly $462–$630 in actual tax savings (at 22–30% bracket).</div>'},
+    {term:'Section 179 — The equipment write-off',
+     body:'Normally, if you buy a $10,000 computer, the IRS makes you spread the deduction over 5 years ($2,000/year). Section 179 lets you <strong>deduct the full $10,000 in the year you bought it</strong>. This applies to computers, machinery, office furniture, software, and most business equipment. The 2025 limit is $1,250,000.<div class="eg">📌 Example: You buy a $5,000 laptop for business in December. Instead of deducting $1,000/year for 5 years, you deduct the full $5,000 this year — saving ~$1,100 in taxes right now instead of spreading it out.</div>'},
+    {term:'Sales Tax — What is my job as a business owner?',
+     body:'Sales tax is a tax your <strong>customers</strong> pay on purchases. Your job is to: (1) charge the right rate at checkout, (2) hold the collected money, and (3) send it to the state government on a filing schedule (monthly, quarterly, or annually). <strong>This money is never yours</strong> — think of yourself as a tax collector for the state.<div class="eg">📌 Example: You sell $10,000 of products in Texas (8.25% rate). You collect $825 in sales tax. That $825 belongs to Texas — you must file and pay it on your next due date.</div>'},
+    {term:'Sales Tax Nexus — When do I have to collect it?',
+     body:'You must collect sales tax from customers in a state only if you have "nexus" there. You get nexus when you <strong>have a physical presence</strong> (office, warehouse, employees) OR when you cross the <strong>economic nexus threshold</strong> (usually $100,000 in sales OR 200 transactions in a year).<div class="eg">📌 Example: Your Texas business sells to customers in California. Once you hit $100,000 in California sales, California requires you to collect and remit California sales tax, even though you\'ve never set foot there.</div>'},
+    {term:'1099-NEC — When do I need to file one?',
+     body:'If you <strong>paid a freelancer, independent contractor, or self-employed person $600 or more</strong> in a calendar year, you must file a 1099-NEC form. You send one copy to the contractor and one to the IRS. The deadline is <strong>January 31</strong>. Corporations (S-Corp, C-Corp) are generally exempt — except attorneys and medical providers.<div class="eg">📌 Example: You paid your web designer Jane $2,500 this year. You must send Jane a 1099-NEC showing $2,500 by January 31. Penalty for not filing: $60–$310 per form.</div>'},
+    {term:'W-9 Form — Why must I collect it?',
+     body:'Before you make your first payment to a contractor, ask them to complete a W-9 form. It captures their legal name, tax ID (Social Security or EIN), and business type. <strong>Without a W-9, you are required by law to withhold 24%</strong> of every payment as "backup withholding" and send it to the IRS.<div class="eg">📌 Example: You pay a contractor $1,000. If they refuse to give you a W-9, you must send $240 directly to the IRS and pay only $760 to the contractor. Getting a W-9 upfront avoids this entirely.</div>'},
+    {term:'FUTA — What is federal unemployment tax?',
+     body:'FUTA (Federal Unemployment Tax Act) funds the federal unemployment benefit system. As an employer, you pay <strong>6% on each employee\'s first $7,000 of wages per year</strong>. However, if your state\'s unemployment taxes are paid on time, you receive a 5.4% credit — making your effective rate just <strong>0.6%</strong> ($42 max per employee per year). Employees never pay FUTA — it is entirely your cost.<div class="eg">📌 Example: You have 3 employees, each earning over $7,000. Your FUTA = 3 × $7,000 × 0.6% = $126 per year total.</div>'},
+    {term:'SUTA — State unemployment tax',
+     body:'SUTA (State Unemployment Tax Act) is the state counterpart to FUTA. Every state has its own wage base and tax rate. New businesses start at a set "new employer rate" which changes over time based on how many of your former employees have filed for unemployment. <strong>Higher claims = higher rate next year.</strong><div class="eg">📌 Example: Texas new employer SUTA rate is 2.7% on the first $9,000 of wages. One employee earning $50,000 = $9,000 × 2.7% = $243 in SUTA per year.</div>'},
+    {term:'QBI Deduction — The 20% pass-through deduction',
+     body:'If your business is a sole proprietorship, LLC, S-Corp, or partnership, you may deduct up to <strong>20% of your qualified business income</strong> from your taxable income. This was introduced by the 2017 Tax Cuts and Jobs Act and is one of the largest tax benefits available to small business owners. (Phase-outs apply for high earners in certain professions.)<div class="eg">📌 Example: Your business earns $80,000 in net profit. QBI deduction = $80,000 × 20% = $16,000 less that the IRS taxes you on. At 22%, that saves $3,520.</div>'}
+  ];
+
+  var html = '';
+  terms.forEach(function(t, i){
+    html += '<div class="gi"><button class="gi-btn" onclick="toggleGlos('+i+',this)"><span class="gi-term">'+t.term+'</span><span class="gi-ch">&#9660;</span></button><div class="gi-body" id="glos-'+i+'">'+t.body+'</div></div>';
+  });
+  document.getElementById('glossary').innerHTML = html;
+}
+
+function toggleGlos(i, btn){
+  var body = document.getElementById('glos-'+i);
+  var open = body.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════ */
+function fmtD(n){ return '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function fmtDate(d){ return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function fmtDateFull(d){ return d.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}); }
+function daysBetween(a, b){ return Math.ceil((b-a)/(1000*60*60*24)); }
+
+function ml(label, val, cls){
+  return '<div class="ml-"><span class="lft">'+label+'</span><span class="rgt'+(cls?' '+cls:'')+'">'+val+'</span></div>';
+}
+
+function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },3500); }
+
+function renderTaxSavingsOpps(d){
+  var el = document.getElementById('taxSavingsCard');
+  if(!d.hasIncomeSetup){ el.innerHTML = ''; return; }
+  var opps = [];
+  if(!d.hoSetup) opps.push({ico:'🏠',title:'Home Office Deduction',desc:'If you have a dedicated workspace at home, deduct $5/sq ft (up to 300 sq ft) or actual home expenses × business-use %.',save:'Potential savings: $750 – $3,500+',href:'keyDeductions.test.html'});
+  if(!d.mileageSetup) opps.push({ico:'🚗',title:'Business Mileage Deduction',desc:'Every business mile is worth 70¢ in deductions (2025 IRS rate). Log trips in Key Deductions — takes 60 seconds each.',save:'Potential savings: $700 – $3,500+ per year',href:'keyDeductions.test.html'});
+  if(!d.s179Setup && d.annualProfit > 5000) opps.push({ico:'💻',title:'Section 179 Equipment Write-Off',desc:'Computers, phones, furniture, software — deduct the full purchase price in the year you bought it. No waiting 5 years.',save:'Potential savings: $500 – $10,000+ depending on purchases',href:'keyDeductions.test.html'});
+  if(d.hasSE && d.annualProfit > 30000) opps.push({ico:'🏦',title:'SEP-IRA Retirement Contribution',desc:'Contribute up to 25% of net self-employment income (max $69,000 for 2025) to a SEP-IRA. 100% deductible.',save:'Potential savings: $3,000 – $15,000+',href:'taxEstimator.test.html'});
+  if(d.hasSE) opps.push({ico:'💊',title:'Self-Employed Health Insurance',desc:'If you pay for your own health, dental, or vision insurance, you can deduct 100% of premiums directly from gross income.',save:'Potential savings: $2,000 – $8,000+',href:'taxEstimator.test.html'});
+  if(opps.length === 0){
+    el.innerHTML = '<div class="opp-card"><div class="card-title">✨ Tax Savings Opportunities</div><p style="color:#16a34a;font-size:.85rem;padding:8px 0">You\'ve set up all key deductions we track. Make sure your Tax Estimator has current income and expense figures to keep estimates accurate.</p></div>';
+    return;
+  }
+  opps = opps.slice(0, 3);
+  var html = '<div class="opp-card"><div class="card-title">✨ Tax Savings Opportunities <span style="font-size:.75rem;font-weight:500;color:#7c3aed;margin-left:6px">'+opps.length+' unclaimed</span></div>'
+    +'<p style="font-size:.78rem;color:#64748b;margin-bottom:4px">These deductions are available to you but haven\'t been set up yet. Each one legally reduces your tax bill.</p>'
+    +'<div class="opp-grid">';
+  opps.forEach(function(o){
+    html += '<div class="opp-item"><div class="opp-ico">'+o.ico+'</div><div class="opp-body"><div class="opp-title">'+o.title+'</div><div class="opp-desc">'+o.desc+'</div><div class="opp-save">'+o.save+'</div><a class="opp-link" href="'+o.href+'">→ Set this up now</a></div></div>';
+  });
+  html += '</div></div>';
+  el.innerHTML = html;
+}
+
+function exportTaxPackage(){
+  try{
+    var p = JSON.parse(localStorage.getItem('fw_profile')||'{}');
+    document.getElementById('printBizName').textContent = (p.name||p.biz||'My Business') + ' — Tax Package';
+  }catch(e){ document.getElementById('printBizName').textContent = 'Tax Package'; }
+  document.getElementById('printMeta').textContent = 'Tax Year: '+selectedYear()+' | Generated: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  window.print();
+}
+
+/* ══════════════════════════════════════════════════════
+   MAIN INIT
+══════════════════════════════════════════════════════ */
+function init(){
+  var year = selectedYear();
+  var d = readData(year);
+  saveTCCState();
+  renderHealth(d);
+  renderModConnStrip(d);
+  renderIncomeTaxCard(d);
+  renderDeductionsCard(d);
+  renderSalesTaxCard(d);
+  renderContractorCard(d);
+  renderDeductionImpact(d);
+  renderDeadlines(d);
+  renderActions(d);
+  renderTaxSavingsOpps(d);
+}
+
+buildYearSelect();
+restoreTCCState();
+renderGlossary();
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "FinWise — Small Business Finance",
+  "short_name": "FinWise",
+  "description": "Free financial tools for small business owners — loan safety, cash flow, health score, and more.",
+  "start_url": "./dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "shortcuts": [
+    { "name": "Dashboard", "short_name": "Dashboard", "url": "./dashboard.html", "description": "View your financial dashboard" },
+    { "name": "Loan Safety Score", "short_name": "Loan Score", "url": "./modules/loanDecisionScoreEngine.test.html", "description": "Check loan risk" },
+    { "name": "Lender Marketplace", "short_name": "Lenders", "url": "./modules/lenderMarketplace.html", "description": "Find pre-qualified loans" },
+    { "name": "Cash Runway", "short_name": "Runway", "url": "./modules/cashRunway.test.html", "description": "Check cash runway" }
+  ]
+}

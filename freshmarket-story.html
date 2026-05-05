@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FreshMarket × FinWise — Demo Story</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#16a34a;--blue:#2563eb;--indigo:#4f46e5;--amber:#d97706;--red:#dc2626;--bg:#0f172a}
+html,body{height:100%;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#fff;overflow:hidden}
+
+/* ── Progress bar ── */
+#progressBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#16a34a,#2563eb,#7c3aed);z-index:99;transition:width .5s ease}
+
+/* ── Slide container ── */
+#stage{width:100%;height:100vh;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;opacity:0;transform:translateX(60px);pointer-events:none;transition:opacity .55s ease,transform .55s ease}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* ── Nav ── */
+#navBar{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:99;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:10px 20px}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s}
+.nav-dot.on{background:#60a5fa;transform:scale(1.3)}
+#prevBtn,#nextBtn{background:none;border:1px solid rgba(255,255,255,.2);border-radius:999px;color:#fff;padding:6px 16px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s}
+#prevBtn:hover,#nextBtn:hover{background:rgba(255,255,255,.1)}
+#slideLabel{font-size:.72rem;color:#94a3b8;min-width:70px;text-align:center}
+
+/* ── Typography ── */
+.scene-tag{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;padding:4px 14px;border-radius:999px;margin-bottom:16px;display:inline-block}
+.tag-intro{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.tag-module{background:rgba(37,99,235,.15);color:#93c5fd;border:1px solid rgba(37,99,235,.3)}
+.tag-result{background:rgba(124,58,237,.15);color:#c4b5fd;border:1px solid rgba(124,58,237,.3)}
+.tag-tax{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3)}
+h1.hero{font-size:clamp(1.8rem,5vw,3.2rem);font-weight:900;line-height:1.15;text-align:center;max-width:800px}
+h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:center;max-width:720px;margin-bottom:8px}
+.scene-sub{font-size:clamp(.82rem,2vw,1rem);color:#94a3b8;text-align:center;max-width:620px;line-height:1.6;margin-bottom:24px}
+.highlight{color:#60a5fa}
+.green{color:#4ade80}
+.amber{color:#fbbf24}
+.red{color:#f87171}
+.pink{color:#f472b6}
+
+/* ── Cards ── */
+.card-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;max-width:860px}
+.mini-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 20px;min-width:160px;flex:1;max-width:220px}
+.mc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:6px}
+.mc-val{font-size:1.4rem;font-weight:900;line-height:1;margin-bottom:4px}
+.mc-sub{font-size:.72rem;color:#64748b}
+.mc-green{border-color:rgba(74,222,128,.35)}
+.mc-green .mc-val{color:#4ade80}
+.mc-red{border-color:rgba(248,113,113,.35)}
+.mc-red .mc-val{color:#f87171}
+.mc-amber{border-color:rgba(251,191,36,.35)}
+.mc-amber .mc-val{color:#fbbf24}
+.mc-blue{border-color:rgba(147,197,253,.35)}
+.mc-blue .mc-val{color:#93c5fd}
+.mc-purple{border-color:rgba(196,181,253,.35)}
+.mc-purple .mc-val{color:#c4b5fd}
+
+/* ── Verdict badge ── */
+.verdict{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;font-size:1rem;font-weight:900;letter-spacing:.06em;margin:12px 0}
+.v-safe{background:rgba(74,222,128,.15);border:2px solid rgba(74,222,128,.4);color:#4ade80}
+.v-risky{background:rgba(251,191,36,.15);border:2px solid rgba(251,191,36,.4);color:#fbbf24}
+.v-danger{background:rgba(248,113,113,.15);border:2px solid rgba(248,113,113,.4);color:#f87171}
+
+/* ── Story quote ── */
+.quote-box{background:rgba(255,255,255,.05);border-left:4px solid #60a5fa;border-radius:0 10px 10px 0;padding:16px 20px;max-width:680px;font-size:.95rem;line-height:1.65;color:#cbd5e1;font-style:italic;margin:12px 0}
+.quote-author{font-size:.78rem;font-weight:700;color:#60a5fa;font-style:normal;margin-top:8px}
+
+/* ── Module screen mockup ── */
+.screen-mock{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:18px 22px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.sm-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sm-dots{display:flex;gap:5px}
+.sm-dot{width:10px;height:10px;border-radius:50%}
+.sm-title{font-size:.82rem;font-weight:700;color:#94a3b8}
+.sm-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.82rem}
+.sm-row:last-child{border-bottom:none}
+.sm-key{color:#94a3b8}
+.sm-val{font-weight:700}
+.sm-bar-wrap{background:rgba(255,255,255,.08);border-radius:999px;height:6px;flex:1;margin:0 12px;overflow:hidden}
+.sm-bar{height:100%;border-radius:999px}
+
+/* ── Chat bubble ── */
+.chat-area{max-width:560px;width:100%;display:flex;flex-direction:column;gap:10px}
+.bubble{padding:12px 16px;border-radius:12px;font-size:.85rem;line-height:1.55;max-width:90%}
+.bubble.ai{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:4px 12px 12px 12px;align-self:flex-start;color:#e2e8f0}
+.bubble.user{background:#4f46e5;border-radius:12px 4px 12px 12px;align-self:flex-end}
+.bubble-label{font-size:.65rem;font-weight:700;color:#64748b;margin-bottom:3px}
+
+/* ── Waterfall ── */
+.wf{max-width:460px;width:100%}
+.wf-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.84rem}
+.wf-row:last-child{border-bottom:none;font-weight:800;font-size:.9rem}
+.wf-label{color:#94a3b8}
+
+/* ── Deductions list ── */
+.ded-list{max-width:500px;width:100%;display:flex;flex-direction:column;gap:8px}
+.ded-item{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,.05);border-radius:8px;border:1px solid rgba(255,255,255,.08);font-size:.85rem}
+.ded-name{color:#cbd5e1}
+.ded-amt{font-weight:800;color:#4ade80}
+
+/* ── Grade circle ── */
+.grade-circle{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3.5rem;font-weight:900;border:4px solid;margin:0 auto 12px}
+.grade-C{border-color:#fbbf24;color:#fbbf24;background:rgba(251,191,36,.1)}
+.grade-B{border-color:#93c5fd;color:#93c5fd;background:rgba(147,197,253,.1)}
+
+/* ── Timeline ── */
+.timeline{max-width:600px;width:100%;display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:16px;padding-bottom:18px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:rgba(255,255,255,.1)}
+.tl-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;border:2px solid}
+.tl-before{border-color:#f87171;background:rgba(248,113,113,.15);color:#f87171}
+.tl-after{border-color:#4ade80;background:rgba(74,222,128,.15);color:#4ade80}
+.tl-body{flex:1;padding-top:4px}
+.tl-head{font-size:.88rem;font-weight:700;margin-bottom:2px}
+.tl-desc{font-size:.78rem;color:#64748b;line-height:1.4}
+
+/* ── Pill badges ── */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.pill{padding:5px 14px;border-radius:999px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#cbd5e1}
+.pill.active{background:rgba(37,99,235,.2);border-color:#3b82f6;color:#93c5fd}
+
+/* ── Animations ── */
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes barGrow{from{width:0}to{width:var(--w)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .mini-card{animation:fadeIn .5s ease both}
+.slide.active .mini-card:nth-child(2){animation-delay:.1s}
+.slide.active .mini-card:nth-child(3){animation-delay:.2s}
+.slide.active .mini-card:nth-child(4){animation-delay:.3s}
+.slide.active .mini-card:nth-child(5){animation-delay:.4s}
+.slide.active .tl-item{animation:fadeIn .5s ease both}
+.slide.active .tl-item:nth-child(2){animation-delay:.15s}
+.slide.active .tl-item:nth-child(3){animation-delay:.3s}
+.slide.active .tl-item:nth-child(4){animation-delay:.45s}
+.slide.active .tl-item:nth-child(5){animation-delay:.6s}
+.slide.active .bubble{animation:fadeIn .4s ease both}
+.slide.active .bubble:nth-child(2){animation-delay:.2s}
+.slide.active .bubble:nth-child(3){animation-delay:.5s}
+.slide.active .bubble:nth-child(4){animation-delay:.8s}
+.slide.active .ded-item{animation:fadeIn .4s ease both}
+.slide.active .ded-item:nth-child(2){animation-delay:.12s}
+.slide.active .ded-item:nth-child(3){animation-delay:.24s}
+.slide.active .ded-item:nth-child(4){animation-delay:.36s}
+
+/* ── BG gradient per slide ── */
+.bg-intro    {background:linear-gradient(135deg,#0f172a 0%,#1a1032 100%)}
+.bg-profile  {background:linear-gradient(135deg,#0f172a 0%,#0c1a2e 100%)}
+.bg-runway   {background:linear-gradient(135deg,#0f172a 0%,#1c1200 100%)}
+.bg-loan     {background:linear-gradient(135deg,#0f172a 0%,#1a0a0a 100%)}
+.bg-optimizer{background:linear-gradient(135deg,#0f172a 0%,#080f2a 100%)}
+.bg-pay      {background:linear-gradient(135deg,#0f172a 0%,#001a0d 100%)}
+.bg-forecast {background:linear-gradient(135deg,#0f172a 0%,#080a1f 100%)}
+.bg-health   {background:linear-gradient(135deg,#0f172a 0%,#140c1f 100%)}
+.bg-tax      {background:linear-gradient(135deg,#0f172a 0%,#1a1200 100%)}
+.bg-chat     {background:linear-gradient(135deg,#0f172a 0%,#0a0f1a 100%)}
+.bg-snapshot {background:linear-gradient(135deg,#0f172a 0%,#001214 100%)}
+.bg-ending   {background:linear-gradient(135deg,#0a1628 0%,#051a0e 100%)}
+
+/* ── Keyboard hint ── */
+#keyHint{position:fixed;top:16px;right:20px;font-size:.68rem;color:rgba(255,255,255,.25);z-index:99}
+
+/* ── Voice button ── */
+#voiceBtn{background:none;border:1px solid rgba(255,255,255,.2);border-radius:999px;color:#fff;padding:6px 13px;font-size:.85rem;cursor:pointer;transition:all .15s;line-height:1}
+#voiceBtn:hover{background:rgba(255,255,255,.1)}
+#voiceBtn.muted{opacity:.4}
+</style>
+</head>
+<body>
+
+<div id="progressBar" style="width:0%"></div>
+<div id="keyHint">← → keys or click arrows</div>
+
+<div id="stage">
+
+<!-- ══ SLIDE 0: OPENING ══ -->
+<div class="slide active bg-intro" id="s0">
+  <span class="scene-tag tag-intro">The Story</span>
+  <h1 class="hero">How <span class="highlight">FreshMarket</span><br/>took control of its<br/><span class="green">financial future</span></h1>
+  <p class="scene-sub" style="margin-top:16px">A neighborhood supermarket. An Advisor subscription. And one platform that changed everything.</p>
+  <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+    <span class="pill active">📍 Springfield, IL</span>
+    <span class="pill active">🛒 Neighborhood Supermarket</span>
+    <span class="pill active">👤 12 Employees</span>
+    <span class="pill active">💳 Advisor Plan</span>
+    <span class="pill active">💰 $84K/mo Revenue</span>
+  </div>
+  <div class="quote-box" style="margin-top:28px">
+    "Every January I'd hold my breath — would I make payroll? Would the walk-in fridge hold up?<br/>I was running a $1M/year business from gut feel."
+    <div class="quote-author">— Tony Rivera, Owner, FreshMarket</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 1: LOGIN & PROFILE ══ -->
+<div class="slide bg-profile" id="s1">
+  <span class="scene-tag tag-module">Step 1 · Login &amp; Setup</span>
+  <h2 class="scene-title">Tony logs in. FinWise knows his numbers in <span class="highlight">60 seconds.</span></h2>
+  <p class="scene-sub">One profile. Auto-fills 22 financial tools instantly.</p>
+  <div class="screen-mock" style="max-width:520px">
+    <div class="sm-header">
+      <div class="sm-dots"><div class="sm-dot" style="background:#ff5f57"></div><div class="sm-dot" style="background:#febc2e"></div><div class="sm-dot" style="background:#28c840"></div></div>
+      <div class="sm-title">FinWise · Business Profile — FreshMarket</div>
+    </div>
+    <div class="sm-row"><span class="sm-key">Business Name</span><span class="sm-val">FreshMarket Supermarket</span></div>
+    <div class="sm-row"><span class="sm-key">Monthly Revenue</span><span class="sm-val green">$84,000</span></div>
+    <div class="sm-row"><span class="sm-key">Monthly Expenses</span><span class="sm-val amber">$66,500</span></div>
+    <div class="sm-row"><span class="sm-key">Existing EMI</span><span class="sm-val">$3,200 / mo</span></div>
+    <div class="sm-row"><span class="sm-key">Cash Reserve</span><span class="sm-val">$18,400</span></div>
+    <div class="sm-row"><span class="sm-key">Industry</span><span class="sm-val">Retail / Grocery</span></div>
+    <div class="sm-row"><span class="sm-key">Plan</span><span class="sm-val" style="color:#a78bfa">⭐ Advisor</span></div>
+  </div>
+  <p style="font-size:.78rem;color:#4ade80;margin-top:14px">✅ Profile saved — all 22 tools auto-populated</p>
+</div>
+
+<!-- ══ SLIDE 2: CASH RUNWAY ══ -->
+<div class="slide bg-runway" id="s2">
+  <span class="scene-tag tag-module">Module 1 · Cash Runway</span>
+  <h2 class="scene-title">First alert: FreshMarket has <span class="amber">2.8 months</span> of runway.</h2>
+  <p class="scene-sub">January is the slowest month for grocery. FinWise flags the risk before it becomes a crisis.</p>
+  <div class="card-row" style="max-width:680px">
+    <div class="mini-card mc-amber">
+      <div class="mc-label">Cash Runway</div>
+      <div class="mc-val">2.8 mo</div>
+      <div class="mc-sub">⚠ Below 3-month target</div>
+    </div>
+    <div class="mini-card mc-red">
+      <div class="mc-label">Monthly Burn</div>
+      <div class="mc-val">$69,700</div>
+      <div class="mc-sub">Expenses + EMI</div>
+    </div>
+    <div class="mini-card mc-blue">
+      <div class="mc-label">Cash Reserve</div>
+      <div class="mc-val">$18,400</div>
+      <div class="mc-sub">In checking account</div>
+    </div>
+    <div class="mini-card mc-green">
+      <div class="mc-label">3-Mo Target</div>
+      <div class="mc-val">$24,000</div>
+      <div class="mc-sub">Need $5,600 more</div>
+    </div>
+  </div>
+  <div class="quote-box" style="margin-top:20px">
+    FinWise detected 8 recurring bills totaling <strong style="color:#fbbf24">$14,200/mo</strong> from the Bill Tracker and auto-imported them into the runway calculation — no manual entry needed.
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: LOAN DECISION ══ -->
+<div class="slide bg-loan" id="s3">
+  <span class="scene-tag tag-module">Module 2 · Loan Decision Score Engine</span>
+  <h2 class="scene-title">Tony needs a <span class="highlight">$50,000</span> refrigeration upgrade.<br/>Can he afford the loan?</h2>
+  <p class="scene-sub">FinWise runs the numbers — not gut feel.</p>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:580px">
+    <div class="screen-mock" style="max-width:580px">
+      <div class="sm-header">
+        <div class="sm-dots"><div class="sm-dot" style="background:#ff5f57"></div><div class="sm-dot" style="background:#febc2e"></div><div class="sm-dot" style="background:#28c840"></div></div>
+        <div class="sm-title">Loan Decision Score Engine — $50,000 @ 11.5% / 48 months</div>
+      </div>
+      <div class="sm-row"><span class="sm-key">New Monthly EMI</span><span class="sm-val amber">+ $1,301</span></div>
+      <div class="sm-row"><span class="sm-key">Total EMI after loan</span><span class="sm-val red">$4,501 / mo</span></div>
+      <div class="sm-row"><span class="sm-key">Net Cash Flow</span><span class="sm-val">$17,500 / mo</span></div>
+      <div class="sm-row"><span class="sm-key">EMI as % of Net CF</span><span class="sm-val amber">25.7%</span></div>
+      <div class="sm-row"><span class="sm-key">DSCR (Debt Coverage)</span><span class="sm-val green">1.49x</span></div>
+      <div class="sm-row"><span class="sm-key">Stress test (−20% rev)</span><span class="sm-val red">Only $9,476 CF left</span></div>
+    </div>
+    <div class="verdict v-risky">⚠️ &nbsp; RISKY — Proceed with caution</div>
+    <p style="font-size:.8rem;color:#94a3b8;text-align:center;max-width:460px">FinWise advice: Reduce loan to <strong style="color:#4ade80">$35,000</strong> or extend tenure to 60 months to bring EMI below 20% of net cash flow before the January slow season.</p>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: LOAN REPAYMENT OPTIMIZER ══ -->
+<div class="slide bg-optimizer" id="s4">
+  <span class="scene-tag tag-module">Module 3 · Loan Repayment Optimizer</span>
+  <h2 class="scene-title">Tony already has 3 loans.<br/>FinWise shows him the <span class="highlight">fastest payoff path.</span></h2>
+  <p class="scene-sub">Snowball vs Avalanche — visualized with his real loan data.</p>
+  <div class="screen-mock">
+    <div class="sm-header">
+      <div class="sm-dots"><div class="sm-dot" style="background:#ff5f57"></div><div class="sm-dot" style="background:#febc2e"></div><div class="sm-dot" style="background:#28c840"></div></div>
+      <div class="sm-title">Loan Repayment Optimizer — FreshMarket</div>
+    </div>
+    <div class="sm-row">
+      <span class="sm-key">Equipment Loan (Freezer)</span>
+      <div class="sm-bar-wrap"><div class="sm-bar" style="width:65%;background:#ef4444"></div></div>
+      <span class="sm-val red">$28,400 @ 12%</span>
+    </div>
+    <div class="sm-row">
+      <span class="sm-key">SBA Micro Loan</span>
+      <div class="sm-bar-wrap"><div class="sm-bar" style="width:40%;background:#f59e0b"></div></div>
+      <span class="sm-val amber">$11,200 @ 7.5%</span>
+    </div>
+    <div class="sm-row">
+      <span class="sm-key">POS System Loan</span>
+      <div class="sm-bar-wrap"><div class="sm-bar" style="width:20%;background:#22c55e"></div></div>
+      <span class="sm-val green">$5,600 @ 6%</span>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:16px">
+      <div style="flex:1;text-align:center">
+        <div style="font-size:.67rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:4px">Snowball Payoff</div>
+        <div style="font-size:1.3rem;font-weight:900;color:#93c5fd">38 months</div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:.67rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:4px">Avalanche Payoff</div>
+        <div style="font-size:1.3rem;font-weight:900;color:#4ade80">34 months</div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:.67rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:4px">Interest Saved</div>
+        <div style="font-size:1.3rem;font-weight:900;color:#fbbf24">$1,840</div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:.78rem;color:#4ade80;margin-top:14px">💾 EMI of $3,200/mo saved to profile — auto-synced to Cash Runway &amp; Owner's Pay</p>
+</div>
+
+<!-- ══ SLIDE 5: OWNER'S PAY ══ -->
+<div class="slide bg-pay" id="s5">
+  <span class="scene-tag tag-module">Module 4 · Owner's Pay Optimizer</span>
+  <h2 class="scene-title">Tony was paying himself <span class="red">$6,000/mo.</span><br/>The business couldn't sustain it.</h2>
+  <p class="scene-sub">FinWise calculates what's truly safe — before the bank account reveals it painfully.</p>
+  <div class="wf">
+    <div class="wf-row"><span class="wf-label">Monthly Revenue</span><span class="green">$84,000</span></div>
+    <div class="wf-row"><span class="wf-label">− Business Expenses</span><span class="red">− $66,500</span></div>
+    <div class="wf-row"><span class="wf-label">− Loan EMI Payments</span><span class="red">− $3,200</span></div>
+    <div class="wf-row"><span class="wf-label">= Net Before Owner Pay</span><span style="color:#93c5fd">$14,300</span></div>
+    <div class="wf-row"><span class="wf-label">Conservative Pay (60%)</span><span class="green">$8,580</span></div>
+    <div class="wf-row"><span class="wf-label">Moderate Pay (75%)</span><span class="amber">$10,725</span></div>
+  </div>
+  <div style="margin-top:16px;padding:12px 18px;border-radius:8px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);max-width:480px;font-size:.84rem;color:#86efac;text-align:center">
+    ✅ Tony's $6,000 desired pay is well within the <strong>Conservative</strong> range.<br/>The business retains $8,300/mo buffer — enough for the January dip.
+  </div>
+  <p style="font-size:.78rem;color:#94a3b8;margin-top:10px">12 employee wages + 2 contractor payments auto-imported from Payroll module</p>
+</div>
+
+<!-- ══ SLIDE 6: 12-MONTH FORECAST ══ -->
+<div class="slide bg-forecast" id="s6">
+  <span class="scene-tag tag-module">Module 5 · 12-Month Forecast Pro</span>
+  <h2 class="scene-title">January hits hard. But now <span class="highlight">Tony sees it coming</span> — 12 months in advance.</h2>
+  <p class="scene-sub">Seasonal presets for Retail show the post-holiday revenue dip in Feb–March. No surprises.</p>
+  <div class="screen-mock">
+    <div class="sm-header">
+      <div class="sm-dots"><div class="sm-dot" style="background:#ff5f57"></div><div class="sm-dot" style="background:#febc2e"></div><div class="sm-dot" style="background:#28c840"></div></div>
+      <div class="sm-title">12-Month Forecast · Base Scenario · FreshMarket</div>
+    </div>
+    <div style="display:flex;gap:4px;align-items:flex-end;height:80px;margin:8px 0 4px">
+      <!-- Mini bar chart simulation -->
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="flex:1;background:#4f46e5;border-radius:3px 3px 0 0;width:100%;min-height:4px;height:62px"></div>
+        <span style="font-size:.55rem;color:#64748b">Jan</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="flex:1;background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:55px;position:relative">
+          <div style="position:absolute;inset:0;background:#ef4444;opacity:.3"></div>
+        </div>
+        <span style="font-size:.55rem;color:#64748b">Feb</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:52px"></div>
+        <span style="font-size:.55rem;color:#64748b">Mar</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:60px"></div>
+        <span style="font-size:.55rem;color:#64748b">Apr</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:63px"></div>
+        <span style="font-size:.55rem;color:#64748b">May</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:68px"></div>
+        <span style="font-size:.55rem;color:#64748b">Jun</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:65px"></div>
+        <span style="font-size:.55rem;color:#64748b">Jul</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:64px"></div>
+        <span style="font-size:.55rem;color:#64748b">Aug</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:67px"></div>
+        <span style="font-size:.55rem;color:#64748b">Sep</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:70px"></div>
+        <span style="font-size:.55rem;color:#64748b">Oct</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:74px"></div>
+        <span style="font-size:.55rem;color:#64748b">Nov</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="background:#4f46e5;border-radius:3px 3px 0 0;width:100%;height:80px"></div>
+        <span style="font-size:.55rem;color:#64748b">Dec</span>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:14px">
+      <div style="flex:1;text-align:center"><div style="font-size:.62rem;color:#94a3b8;margin-bottom:4px">12-Mo Revenue</div><div style="font-size:1.1rem;font-weight:900;color:#93c5fd">$1.03M</div></div>
+      <div style="flex:1;text-align:center"><div style="font-size:.62rem;color:#94a3b8;margin-bottom:4px">Deficit Months</div><div style="font-size:1.1rem;font-weight:900;color:#f87171">2 months</div></div>
+      <div style="flex:1;text-align:center"><div style="font-size:.62rem;color:#94a3b8;margin-bottom:4px">Year-End Balance</div><div style="font-size:1.1rem;font-weight:900;color:#4ade80">+$24,800</div></div>
+    </div>
+  </div>
+  <p style="font-size:.78rem;color:#fbbf24;margin-top:12px">⚠ Feb–Mar deficit months flagged · Tony sets aside $5,000 buffer in November</p>
+</div>
+
+<!-- ══ SLIDE 7: BUSINESS HEALTH SCORE ══ -->
+<div class="slide bg-health" id="s7">
+  <span class="scene-tag tag-module">Module 6 · Business Health Score</span>
+  <h2 class="scene-title">FreshMarket scores a <span class="amber">Grade C.</span><br/>FinWise hands Tony a 90-day plan.</h2>
+  <p class="scene-sub">13 signals. 6 core ratios + 7 live data signals. One honest grade.</p>
+  <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:700px">
+    <div style="text-align:center">
+      <div class="grade-circle grade-C">C</div>
+      <div style="font-size:.78rem;color:#94a3b8">Overall Score: 58 / 100</div>
+      <div style="margin-top:8px;font-size:.72rem;color:#fbbf24">Fair health — areas need attention</div>
+    </div>
+    <div style="flex:1;min-width:260px">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot tl-before">1</div>
+          <div class="tl-body"><div class="tl-head">Month 1 — Quick Wins</div><div class="tl-desc">Auto-transfer $5,000/mo to reserve · Contact 2 overdue invoices ($4,200) · Collect W-9 from cleaning contractor</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-before">2</div>
+          <div class="tl-body"><div class="tl-head">Month 2 — Build Momentum</div><div class="tl-desc">Renegotiate 2 vendor contracts · Prepare 1099-NEC for maintenance tech · Set up savings goal auto-transfer</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-after">3</div>
+          <div class="tl-body"><div class="tl-head">Month 3 — Re-Score</div><div class="tl-desc">Target Grade B · Reserve grows to $27,000 · DSCR improves to 1.7x</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8: TAX DEDUCTIONS ══ -->
+<div class="slide bg-tax" id="s8">
+  <span class="scene-tag tag-tax">Module 7 · Key Deductions</span>
+  <h2 class="scene-title">Tony was leaving <span class="amber">$8,420</span> on the table<br/>every year in missed deductions.</h2>
+  <p class="scene-sub">FinWise found them in under 5 minutes.</p>
+  <div class="ded-list">
+    <div class="ded-item">
+      <span class="ded-name">🏠 Home Office (280 sq ft, simplified method)</span>
+      <span class="ded-amt">+ $1,400</span>
+    </div>
+    <div class="ded-item">
+      <span class="ded-name">🚗 Business Mileage — 6,200 miles @ $0.67</span>
+      <span class="ded-amt">+ $4,154</span>
+    </div>
+    <div class="ded-item">
+      <span class="ded-name">🖥 Section 179 — New POS System ($12,000)</span>
+      <span class="ded-amt">+ $2,400</span>
+    </div>
+    <div class="ded-item">
+      <span class="ded-name">📦 Section 179 — Delivery Van (partial)</span>
+      <span class="ded-amt">+ $466</span>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding:12px 22px;border-radius:10px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);text-align:center">
+    <div style="font-size:1.6rem;font-weight:900;color:#fbbf24">$8,420 total deductions</div>
+    <div style="font-size:.8rem;color:#94a3b8;margin-top:4px">Estimated tax savings: <strong style="color:#4ade80">$2,105 – $3,115</strong> (at 25–37% effective rate)</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 9: AI CFO CHAT ══ -->
+<div class="slide bg-chat" id="s9">
+  <span class="scene-tag tag-module">Module 8 · AI CFO Advisor</span>
+  <h2 class="scene-title">Tony asks his AI CFO one question<br/>that changes his plan.</h2>
+  <p class="scene-sub">Powered by Claude AI. Knows every number. No jargon.</p>
+  <div class="chat-area">
+    <div>
+      <div class="bubble-label">Tony · FreshMarket</div>
+      <div class="bubble user">If I take the $50k refrigeration loan now, can I survive a bad February?</div>
+    </div>
+    <div>
+      <div class="bubble-label">AI CFO · FinWise</div>
+      <div class="bubble ai">
+        📊 <strong>Based on your numbers — it's tight but manageable, with conditions.</strong><br/><br/>
+        Your net cash flow is $14,300/mo. A $50k loan at 11.5% adds <strong style="color:#fbbf24">$1,301/mo EMI</strong>, leaving $12,999 — which is 15.5% below your current buffer.<br/><br/>
+        In a typical February (retail seasonal dip of ~20%), your cash flow drops to roughly <strong style="color:#f87171">$8,100/mo</strong>. With the new loan that falls to $6,800 — still positive, but only <strong>0.97× DSCR</strong>.<br/><br/>
+        ✅ <strong>My recommendation:</strong> Take the loan at 60 months instead of 48. EMI drops to $1,094, keeping DSCR above 1.25x even in the February dip. Also consider delaying the start to March.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 10: MONTHLY SNAPSHOT ══ -->
+<div class="slide bg-snapshot" id="s10">
+  <span class="scene-tag tag-module">Module 9 · Monthly Snapshot</span>
+  <h2 class="scene-title">End of March. Tony shares this<br/>with his <span class="highlight">business partner</span> and banker.</h2>
+  <p class="scene-sub">One tap. PNG downloaded. WhatsApp sent. Meeting done.</p>
+  <div class="screen-mock" style="background:#0f172a;max-width:500px">
+    <div style="height:4px;background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777);margin-bottom:16px;border-radius:2px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div><div style="font-size:.82rem;font-weight:900;color:#fff">Fin<span style="color:#60a5fa">Wise</span></div><div style="font-size:.72rem;color:#94a3b8;margin-top:2px">FreshMarket · March 2025</div></div>
+      <div style="font-size:.72rem;color:#94a3b8">01 Apr 2025</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div style="text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:10px 6px">
+        <div style="font-size:.58rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Loan Score</div>
+        <div style="font-size:1.2rem;font-weight:900;color:#4ade80">74</div>
+        <div style="font-size:.55rem;background:#dcfce720;color:#4ade80;border-radius:99px;padding:1px 6px;margin-top:2px">SAFE</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:10px 6px">
+        <div style="font-size:.58rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Runway</div>
+        <div style="font-size:1.2rem;font-weight:900;color:#4ade80">3.8mo</div>
+        <div style="font-size:.55rem;background:#dcfce720;color:#4ade80;border-radius:99px;padding:1px 6px;margin-top:2px">STRONG</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:10px 6px">
+        <div style="font-size:.58rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Health</div>
+        <div style="font-size:1.2rem;font-weight:900;color:#93c5fd">B</div>
+        <div style="font-size:.55rem;background:#dbeafe20;color:#93c5fd;border-radius:99px;padding:1px 6px;margin-top:2px">GOOD</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:10px 6px">
+        <div style="font-size:.58rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Net Flow</div>
+        <div style="font-size:1.2rem;font-weight:900;color:#4ade80">+$14.3k</div>
+        <div style="font-size:.55rem;background:#dcfce720;color:#4ade80;border-radius:99px;padding:1px 6px;margin-top:2px">POSITIVE</div>
+      </div>
+    </div>
+    <div style="font-size:.65rem;color:#475569;text-align:center;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)">Generated by FinWise · finwise.app</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center">
+    <span style="padding:6px 14px;background:#25d366;border-radius:6px;font-size:.78rem;font-weight:700">💬 Sent via WhatsApp</span>
+    <span style="padding:6px 14px;background:#2563eb;border-radius:6px;font-size:.78rem;font-weight:700">⬇ Downloaded PNG</span>
+  </div>
+</div>
+
+<!-- ══ SLIDE 11: ENDING ══ -->
+<div class="slide bg-ending" id="s11">
+  <span class="scene-tag tag-result">90 Days Later</span>
+  <h1 class="hero" style="font-size:clamp(1.5rem,4vw,2.6rem)">FreshMarket went from <span class="red">Grade C</span><br/>to <span style="color:#93c5fd">Grade B</span> — in 90 days.</h1>
+  <div class="card-row" style="max-width:820px;margin-top:24px">
+    <div class="mini-card mc-green">
+      <div class="mc-label">Cash Reserve</div>
+      <div class="mc-val">$27,200</div>
+      <div class="mc-sub">Was $18,400 (+48%)</div>
+    </div>
+    <div class="mini-card mc-green">
+      <div class="mc-label">Tax Saved</div>
+      <div class="mc-val">$2,800</div>
+      <div class="mc-sub">Deductions filed</div>
+    </div>
+    <div class="mini-card mc-blue">
+      <div class="mc-label">Loan Decision</div>
+      <div class="mc-val">Approved</div>
+      <div class="mc-sub">$35k @ 60 months</div>
+    </div>
+    <div class="mini-card mc-green">
+      <div class="mc-label">Overdue AR</div>
+      <div class="mc-val">$0</div>
+      <div class="mc-sub">Collected all 3 invoices</div>
+    </div>
+    <div class="mini-card mc-purple">
+      <div class="mc-label">Health Grade</div>
+      <div class="mc-val">B</div>
+      <div class="mc-sub">Was Grade C</div>
+    </div>
+  </div>
+  <div class="quote-box" style="margin-top:24px">
+    "I knew I needed a CFO. I couldn't afford one. FinWise Advisor gave me one for $29 a month — with my real numbers, not generic advice."
+    <div class="quote-author">— Tony Rivera, FreshMarket · Springfield, IL</div>
+  </div>
+  <div style="margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+    <span class="pill active">✅ Cash Runway: 3.8 months</span>
+    <span class="pill active">✅ DSCR: 1.52x (Safe)</span>
+    <span class="pill active">✅ W-9 compliance: 100%</span>
+    <span class="pill active">✅ 1099-NECs filed on time</span>
+    <span class="pill active">✅ $2,800 in taxes saved</span>
+  </div>
+</div>
+
+</div><!-- /stage -->
+
+<!-- ── Navigation ── -->
+<div id="navBar">
+  <button id="prevBtn" onclick="go(-1)">← Prev</button>
+  <div id="dots"></div>
+  <div id="slideLabel">1 / 12</div>
+  <button id="nextBtn" onclick="go(1)">Next →</button>
+  <button id="voiceBtn" title="Toggle narration">🔊</button>
+</div>
+
+<script>
+var slides=document.querySelectorAll('.slide');
+var total=slides.length;
+var cur=0;
+var voiceMuted=false;
+var autoEnabled=true;   // false while mouse is hovering
+var pendingAdvance=null;
+var speechDone=false;
+
+// ── Narration scripts ──
+var narrations=[
+  "Welcome to the FreshMarket story. Tony Rivera owns a neighborhood supermarket in Springfield, Illinois — running eighty-four thousand dollars a month in revenue, but managing his finances entirely on gut feel. This is how FinWise Advisor changed everything.",
+  "Tony logs in for the first time. He fills in one simple business profile — monthly revenue, expenses, loan payments, and cash reserve. In sixty seconds, FinWise automatically fills all twenty-two financial tools with his real numbers. No spreadsheets. No re-entry.",
+  "The very first alert: FreshMarket has only two-point-eight months of cash runway — below the three-month safety target. With January being grocery's slowest month, FinWise flags this risk before it becomes a cash crisis. Tony needs to build his reserve by five thousand six hundred dollars.",
+  "Tony needs a fifty-thousand-dollar refrigeration upgrade. FinWise runs the full numbers. The loan adds thirteen hundred dollars a month. A stress test shows that if revenue drops twenty percent — as it can in February — cash flow falls dangerously low. FinWise verdict: Risky. Proceed with caution.",
+  "Tony already carries three existing loans. The Loan Repayment Optimizer compares Snowball versus Avalanche payoff strategies. Avalanche wins — paying off the twelve-percent freezer loan first saves Tony eighteen hundred forty dollars in interest and gets him completely debt-free four months sooner.",
+  "Tony was paying himself six thousand dollars a month. FinWise builds the cash waterfall: revenue minus expenses minus loan payments equals fourteen thousand three hundred dollars net. The conservative pay threshold is eighty-five hundred. Tony's salary is safe — and the business still keeps a healthy buffer for the January slowdown.",
+  "The twelve-month Forecast Pro maps the full year ahead. February and March are flagged as deficit months due to the post-holiday grocery slowdown. Tony sees this six months in advance — so he sets aside five thousand dollars as a seasonal buffer in November. No surprises. No panic.",
+  "The Business Health Score evaluates thirteen signals — from cash ratios to invoice collection to tax compliance. FreshMarket scores fifty-eight out of a hundred: Grade C. FinWise doesn't just give a grade. It delivers a ninety-day action plan. Month one: build reserves and collect overdue invoices. Month three target: Grade B.",
+  "Tony was leaving eight thousand four hundred dollars every year on the table in missed deductions. FinWise found them in under five minutes: fourteen hundred in home office, over four thousand in business mileage, and twenty-eight hundred in Section 179 deductions for his POS system and delivery van. Estimated tax savings: up to three thousand dollars this year.",
+  "Tony asks his AI CFO one question: If I take the fifty-thousand-dollar loan now, can I survive a bad February? The AI runs the live scenario and recommends extending the loan to sixty months instead of forty-eight. That drops the monthly payment to just ten ninety-four, keeping Tony safely above the required debt coverage ratio even in the slowest month of the year.",
+  "End of March. Tony pulls his Monthly Snapshot — one tap, one beautiful card. Loan score seventy-four, runway three-point-eight months, health grade B, cash flow positive. He downloads it as a PNG and sends it to his business partner on WhatsApp. The banker meeting takes ten minutes instead of a full hour.",
+  "Ninety days later — FreshMarket went from Grade C to Grade B. Cash reserve grew from eighteen thousand to twenty-seven thousand dollars. Tax deductions saved twenty-eight hundred dollars. The refrigeration loan was approved at thirty-five thousand over sixty months. All overdue invoices collected. As Tony says: I knew I needed a CFO. FinWise Advisor gave me one for just twenty-nine dollars a month."
+];
+
+// ── Female voice selector ──
+function pickVoice(){
+  var voices=window.speechSynthesis.getVoices();
+  if(!voices.length) return null;
+  var femaleNames=['zira','jenny','aria','hazel','susan','kate','victoria','samantha','moira','fiona','karen','natasha',
+                   'google uk english female','google us english female','microsoft zira','microsoft jenny'];
+  for(var fi=0;fi<femaleNames.length;fi++){
+    var kw=femaleNames[fi];
+    var v=voices.find(function(vv){ return vv.name.toLowerCase().indexOf(kw)!==-1 && /en/i.test(vv.lang); });
+    if(v) return v;
+  }
+  // Fallback: any female-sounding en-US voice
+  return voices.find(function(v){ return /en[-_]US/i.test(v.lang); })
+      || voices.find(function(v){ return /en/i.test(v.lang); })
+      || null;
+}
+
+// ── Pending advance helpers ──
+function clearPending(){ if(pendingAdvance){ clearTimeout(pendingAdvance); pendingAdvance=null; } }
+
+function scheduleAdvance(){
+  clearPending();
+  if(!autoEnabled||cur>=total-1) return;
+  // Wait 3 seconds after narration ends, then advance
+  pendingAdvance=setTimeout(function(){ if(autoEnabled&&cur<total-1) go(1); },3000);
+}
+
+// ── TTS speak ──
+function speak(idx){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  clearPending();
+  speechDone=false;
+
+  if(voiceMuted){
+    // Muted: auto-advance after fixed 13s
+    if(autoEnabled&&idx<total-1){
+      pendingAdvance=setTimeout(function(){ if(autoEnabled&&cur===idx) go(1); },13000);
+    }
+    return;
+  }
+
+  var txt=narrations[idx];
+  if(!txt) return;
+  var u=new SpeechSynthesisUtterance(txt);
+  u.rate=0.88;   // a little slower — warm, clear pacing
+  u.pitch=1.15;  // slightly higher pitch for a gentle female tone
+  u.volume=1.0;
+  var v=pickVoice(); if(v) u.voice=v;
+
+  u.onend=function(){
+    speechDone=true;
+    if(cur===idx) scheduleAdvance();
+  };
+  u.onerror=function(){
+    speechDone=true;
+    if(cur===idx) scheduleAdvance();
+  };
+
+  window.speechSynthesis.speak(u);
+}
+
+// Chrome bug: SpeechSynthesis silently stops after ~15s — keep it alive
+setInterval(function(){
+  if(window.speechSynthesis&&window.speechSynthesis.speaking&&!window.speechSynthesis.paused){
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+  }
+},10000);
+
+// Load voices async (Chrome)
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=function(){ window.speechSynthesis.getVoices(); };
+}
+
+// ── Voice toggle ──
+var voiceBtn=document.getElementById('voiceBtn');
+voiceBtn.onclick=function(){
+  voiceMuted=!voiceMuted;
+  voiceBtn.textContent=voiceMuted?'🔇':'🔊';
+  voiceBtn.classList.toggle('muted',voiceMuted);
+  if(voiceMuted){
+    window.speechSynthesis&&window.speechSynthesis.cancel();
+    clearPending();
+    if(autoEnabled&&cur<total-1)
+      pendingAdvance=setTimeout(function(){ if(autoEnabled&&cur<total-1) go(1); },13000);
+  } else {
+    clearPending();
+    speak(cur);
+  }
+};
+
+// Build dots
+var dotsEl=document.getElementById('dots');
+for(var i=0;i<total;i++){
+  var d=document.createElement('div');
+  d.className='nav-dot'+(i===0?' on':'');
+  d.setAttribute('data-i',i);
+  d.onclick=(function(ii){return function(){goTo(ii);};})(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(n){
+  if(n<0||n>=total) return;
+  clearPending();
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+  var prev=cur;
+  setTimeout(function(){ slides[prev].classList.remove('exit'); },600);
+  cur=n;
+  slides[cur].classList.add('active');
+  var dots=dotsEl.querySelectorAll('.nav-dot');
+  dots.forEach(function(d,i){ d.className='nav-dot'+(i===cur?' on':''); });
+  document.getElementById('slideLabel').textContent=(cur+1)+' / '+total;
+  document.getElementById('progressBar').style.width=((cur/(total-1))*100)+'%';
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===total-1;
+  speak(cur);
+}
+
+function go(delta){ goTo(cur+delta); }
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+
+// Hover: pause auto-advance and speech; resume on leave
+document.getElementById('stage').addEventListener('mouseenter',function(){
+  autoEnabled=false;
+  clearPending();
+  if(window.speechSynthesis&&!voiceMuted) window.speechSynthesis.pause();
+});
+document.getElementById('stage').addEventListener('mouseleave',function(){
+  autoEnabled=true;
+  if(window.speechSynthesis&&!voiceMuted){
+    window.speechSynthesis.resume();
+    if(speechDone) scheduleAdvance(); // speech already finished while hovering
+  } else if(voiceMuted){
+    if(cur<total-1)
+      pendingAdvance=setTimeout(function(){ if(autoEnabled&&cur<total-1) go(1); },8000);
+  }
+});
+
+window.addEventListener('beforeunload',function(){ window.speechSynthesis&&window.speechSynthesis.cancel(); });
+
+goTo(0);
+</script>
+</body>
+</html>

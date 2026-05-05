@@ -1,0 +1,1347 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shareable Results Engine</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b}
+  header{background:linear-gradient(135deg,#0f172a,#1e40af);color:#fff;padding:24px 32px}
+  header h1{font-size:1.5rem}
+  header p{font-size:.85rem;opacity:.75;margin-top:4px}
+
+  /* currency bar */
+  .currency-bar{display:flex;align-items:center;gap:8px;background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 24px;flex-wrap:wrap}
+  .currency-bar span{font-size:.78rem;color:#64748b;font-weight:600;margin-right:4px}
+  .cbtn{padding:5px 14px;border:1px solid #cbd5e1;border-radius:20px;background:#f8fafc;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}
+  .cbtn.active{background:#1e40af;color:#fff;border-color:#1e40af;font-weight:700}
+
+  .tabs{display:flex;gap:4px;background:#e2e8f0;padding:8px;flex-wrap:wrap}
+  .tab{padding:8px 18px;border:none;border-radius:6px;cursor:pointer;background:transparent;font-size:.9rem;color:#475569}
+  .tab.active{background:#fff;color:#0f172a;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+  .panel{display:none;padding:24px;max-width:1000px;margin:0 auto}
+  .panel.active{display:block}
+  .card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.07);margin-bottom:16px}
+  .card h3{font-size:1rem;margin-bottom:12px}
+  label{display:block;font-size:.82rem;color:#64748b;margin-bottom:4px;margin-top:10px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:.9rem}
+  textarea{resize:vertical;min-height:100px;font-family:monospace;font-size:.82rem}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  button.btn{margin-top:14px;padding:9px 22px;background:#1e40af;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem}
+  button.btn:hover{background:#1d4ed8}
+  button.btn.green{background:#16a34a}
+  button.btn.green:hover{background:#15803d}
+  button.btn.wa{background:#25D366;color:#fff}
+  button.btn.wa:hover{background:#1ebe5a}
+  button.btn.gray{background:#64748b}
+  button.btn.gray:hover{background:#475569}
+  .output-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-top:12px;font-family:monospace;font-size:.8rem;word-break:break-all;white-space:pre-wrap}
+  .share-url-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-top:12px;font-size:.85rem;word-break:break-all}
+  .info-row{display:flex;gap:16px;margin-top:10px;font-size:.82rem;color:#64748b;flex-wrap:wrap}
+  .info-row b{color:#1e293b}
+  .dl-btn{display:inline-block;margin-top:10px;padding:8px 18px;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:600}
+  .dl-csv{background:#dbeafe;color:#1e40af}
+  .dl-json{background:#dcfce7;color:#16a34a}
+  .print-preview{background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:24px;margin-top:14px;font-size:.85rem;line-height:1.6}
+  .print-preview h2{font-size:1.1rem;border-bottom:2px solid #0f172a;padding-bottom:8px;margin-bottom:16px}
+  #unitResults .pass{color:#16a34a}
+  #unitResults .fail{color:#dc2626}
+  #unitResults li{padding:4px 0;font-size:.85rem;border-bottom:1px solid #f1f5f9}
+  .decode-result{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;margin-top:12px}
+
+  /* ── Score Card styles ── */
+  .score-card-wrap{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:16px}
+  .score-card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:28px 32px;width:380px;min-width:320px;position:relative;overflow:hidden}
+  .score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:var(--card-accent,#1e40af)}
+  .score-card.safe::before{background:linear-gradient(90deg,#16a34a,#22c55e)}
+  .score-card.risky::before{background:linear-gradient(90deg,#d97706,#f59e0b)}
+  .score-card.dangerous::before{background:linear-gradient(90deg,#dc2626,#ef4444)}
+  .sc-brand{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#94a3b8;text-transform:uppercase;margin-bottom:16px}
+  .sc-biz{font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:2px}
+  .sc-date{font-size:.75rem;color:#94a3b8;margin-bottom:20px}
+  .sc-score-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:8px}
+  .sc-score-num{font-size:3rem;font-weight:800;line-height:1;color:#0f172a}
+  .sc-score-denom{font-size:1rem;color:#94a3b8;margin-bottom:10px}
+  .sc-bar-wrap{flex:1;margin-bottom:14px}
+  .sc-bar-track{height:10px;background:#f1f5f9;border-radius:10px;overflow:hidden;margin-bottom:4px}
+  .sc-bar-fill{height:100%;border-radius:10px;transition:width .6s}
+  .sc-verdict{display:inline-block;padding:6px 18px;border-radius:20px;font-weight:800;font-size:.9rem;margin-bottom:20px;letter-spacing:.05em}
+  .sc-verdict.safe{background:#dcfce7;color:#16a34a}
+  .sc-verdict.risky{background:#fef9c3;color:#d97706}
+  .sc-verdict.dangerous{background:#fee2e2;color:#dc2626}
+  .sc-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .sc-metric{background:#f8fafc;border-radius:8px;padding:10px 12px}
+  .sc-metric-label{font-size:.68rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+  .sc-metric-value{font-size:.95rem;font-weight:700;color:#0f172a}
+  .sc-footer{font-size:.68rem;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:10px}
+  .share-btns{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .share-btns .btn{margin-top:0;width:100%}
+  .tip-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:.82rem;color:#92400e;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Shareable Results Engine</h1>
+  <p>Loan Score Card · WhatsApp Share · URL encoding · Printable reports · CSV &amp; JSON export</p>
+</header>
+
+<!-- Region indicator -->
+<div class="currency-bar">
+  <span>Region:</span>
+  <button class="cbtn active">$ USD — United States</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('scorecard')">🏆 Loan Score Card</button>
+  <button class="tab" onclick="showTab('url')">🔗 URL Sharing</button>
+  <button class="tab" onclick="showTab('print')">🖨️ Print Report</button>
+  <button class="tab" onclick="showTab('csv')">📊 CSV Export</button>
+  <button class="tab" onclick="showTab('json')">📄 JSON Export</button>
+  <button class="tab" onclick="showTab('tests')">✅ Unit Tests</button>
+</div>
+
+<!-- ══════════ LOAN SCORE CARD TAB ══════════ -->
+<div id="tab-scorecard" class="panel active">
+  <div class="card">
+    <h3>Generate Loan Decision Score Card</h3>
+    <p style="font-size:.83rem;color:#64748b;margin-bottom:8px">Enter your business numbers to get a shareable score card.</p>
+    <div class="row2">
+      <div>
+        <label>Business Name</label>
+        <input type="text" id="sc-biz" value="My Business">
+      </div>
+      <div>
+        <label>Monthly Revenue (<span class="csym">$</span>)</label>
+        <input type="number" id="sc-rev" placeholder="e.g. 200000">
+      </div>
+      <div>
+        <label>Monthly Expenses (<span class="csym">$</span>)</label>
+        <input type="number" id="sc-exp" placeholder="e.g. 100000">
+      </div>
+      <div>
+        <label>Existing Monthly EMI (<span class="csym">$</span>, or 0)</label>
+        <input type="number" id="sc-emi" value="0">
+      </div>
+      <div>
+        <label>Loan Amount Requested (<span class="csym">$</span>)</label>
+        <input type="number" id="sc-loan" placeholder="e.g. 1000000">
+      </div>
+      <div>
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="sc-rate" value="12" step="0.1">
+      </div>
+      <div>
+        <label>Tenure (months)</label>
+        <input type="number" id="sc-months" value="36">
+      </div>
+    </div>
+    <button class="btn" onclick="generateScoreCard()">Generate Score Card</button>
+  </div>
+  <div id="scorecard-output"></div>
+</div>
+
+<!-- URL SHARING -->
+<div id="tab-url" class="panel">
+  <div class="card">
+    <h3>Encode Module State to Shareable URL</h3>
+    <div class="row2">
+      <div>
+        <label>Module ID</label>
+        <select id="us-module">
+          <option value="loanEngine">loanEngine</option>
+          <option value="cashFlowEngine">cashFlowEngine</option>
+          <option value="riskDebtEngine">riskDebtEngine</option>
+          <option value="forecastingEngine">forecastingEngine</option>
+        </select>
+      </div>
+      <div>
+        <label>Base URL</label>
+        <input type="text" id="us-base" value="https://smallbiz.app/calculators">
+      </div>
+    </div>
+    <label>State Object (JSON)</label>
+    <textarea id="us-state">{"principal":1500000,"annualRate":10.5,"tenureMonths":36,"emi":48767,"totalInterest":255372}</textarea>
+    <button class="btn" onclick="doEncode()">Encode & Build URL</button>
+  </div>
+  <div id="url-output"></div>
+  <div class="card">
+    <h3>Decode URL State</h3>
+    <label>Encoded String (paste from above)</label>
+    <input type="text" id="dec-input" placeholder="Paste encoded string here...">
+    <button class="btn" onclick="doDecode()">Decode</button>
+    <div id="decode-output"></div>
+  </div>
+</div>
+
+<!-- PRINT REPORT -->
+<div id="tab-print" class="panel">
+  <div class="card">
+    <h3>Generate Printable HTML Report</h3>
+    <div class="row2">
+      <div><label>Module ID</label><input type="text" id="pr-module" value="loanEngine"></div>
+      <div><label>Report Title</label><input type="text" id="pr-title" value="Loan Analysis Report"></div>
+      <div><label>Business Name</label><input type="text" id="pr-biz" value="Ravi's Trading Co."></div>
+      <div><label>Verdict (optional)</label><input type="text" id="pr-verdict" value="SAFE TO PROCEED"></div>
+      <div>
+        <label>Verdict Color</label>
+        <select id="pr-color">
+          <option value="green">Green (Safe)</option>
+          <option value="amber">Amber (Caution)</option>
+          <option value="red">Red (Risk)</option>
+          <option value="blue">Blue (Info)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="doPrint()">Generate Report</button>
+    <button class="btn gray" style="margin-left:8px" onclick="doOpenPrint()">Open in New Tab</button>
+  </div>
+  <div id="print-preview-box"></div>
+</div>
+
+<!-- CSV EXPORT -->
+<div id="tab-csv" class="panel">
+  <div class="card">
+    <h3>Export Data as CSV</h3>
+    <p style="font-size:.85rem;color:#64748b;margin-bottom:12px">Sample: Amortization schedule for a loan at 10.5% over 6 months.</p>
+    <button class="btn" onclick="doCSV()">Generate CSV</button>
+    <div id="csv-output"></div>
+  </div>
+</div>
+
+<!-- JSON EXPORT -->
+<div id="tab-json" class="panel">
+  <div class="card">
+    <h3>Export Data as JSON</h3>
+    <label>Data Object (JSON)</label>
+    <textarea id="jx-data">{"reportType":"loanAnalysis","businessName":"Ravi's Trading Co.","loan":{"principal":1500000,"annualRate":10.5,"tenureMonths":36,"emi":48767},"risk":{"dscr":2.47,"dtiPct":20.3,"riskLevel":"Low"},"verdict":"SAFE TO PROCEED"}</textarea>
+    <div class="row2">
+      <div>
+        <label>Indent Spaces</label>
+        <select id="jx-indent">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+        </select>
+      </div>
+      <div>
+        <label>Filename</label>
+        <input type="text" id="jx-filename" value="loan-analysis.json">
+      </div>
+    </div>
+    <button class="btn" onclick="doJSON()">Generate JSON</button>
+    <div id="json-output"></div>
+  </div>
+</div>
+
+<!-- UNIT TESTS -->
+<div id="tab-tests" class="panel">
+  <div class="card">
+    <h3>Automated Unit Tests</h3>
+    <button class="btn" onclick="runTests()">Run All Tests</button>
+    <ul id="unitResults" style="margin-top:16px;list-style:none"></ul>
+  </div>
+</div>
+
+<script>
+// ═══ CURRENCY CONFIG (shared pattern) ════════════════════════════════════════
+const CURRENCIES = {
+  USD:{ code:'USD', symbol:'
+
+function setCurrency(code){
+  activeCurrency = CURRENCIES['USD'];
+  localStorage.setItem('finwise_currency', code);
+  document.querySelectorAll('.cbtn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.includes(activeCurrency.symbol) || b.textContent.includes(code));
+  });
+  document.querySelectorAll('.csym').forEach(el=>{ el.textContent = activeCurrency.symbol; });
+  // update placeholders
+  const p = activeCurrency.placeholders;
+  const sc_rev = document.getElementById('sc-rev');
+  const sc_exp = document.getElementById('sc-exp');
+  const sc_loan = document.getElementById('sc-loan');
+  if(sc_rev) sc_rev.placeholder = 'e.g. ' + p.rev;
+  if(sc_exp) sc_exp.placeholder = 'e.g. ' + p.exp;
+  if(sc_loan) sc_loan.placeholder = 'e.g. ' + p.loan;
+}
+
+function fmt(n){
+  const c = activeCurrency;
+  const abs = Math.abs(n);
+  if(abs >= c.mDiv) return c.symbol+(n/c.mDiv).toFixed(2)+c.mSuffix;
+  if(abs >= c.kThreshold) return c.symbol+(n/c.kDiv).toFixed(1)+c.kSuffix;
+  return c.symbol+Math.round(n).toLocaleString(c.locale);
+}
+
+// ═══ SCORE ENGINE (embedded) ═════════════════════════════════════════════════
+function calcEMI(principal, annualRate, months){
+  if(annualRate === 0) return principal/months;
+  const r = annualRate/12/100;
+  return principal * r * Math.pow(1+r,months) / (Math.pow(1+r,months)-1);
+}
+
+function computeScore(revenue, expenses, existingEmi, loanAmount, annualRate, months){
+  const netCF = revenue - expenses - existingEmi;
+  const newEMI = calcEMI(loanAmount, annualRate, months);
+  const cashLeft = netCF - newEMI;
+  const totalDebt = existingEmi + newEMI;
+
+  // C1: Cash Flow Strength (0–30)
+  const cfRatio = netCF / revenue;
+  let c1 = cfRatio >= 0.4 ? 30 : cfRatio >= 0.25 ? 22 : cfRatio >= 0.15 ? 14 : cfRatio >= 0.05 ? 6 : 0;
+
+  // C2: Loan Affordability (0–30)
+  const emiRatio = newEMI / netCF;
+  let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.45 ? 22 : emiRatio <= 0.6 ? 14 : emiRatio <= 0.8 ? 6 : 0;
+
+  // C3: Debt Coverage DSCR (0–25)
+  const dscr = netCF / (newEMI || 1);
+  let c3 = dscr >= 2.5 ? 25 : dscr >= 1.75 ? 19 : dscr >= 1.25 ? 13 : dscr >= 1.0 ? 6 : 0;
+
+  // C4: Stress Resilience (0–15)
+  const stressedCF = revenue * 0.8 - expenses - totalDebt;
+  let c4 = stressedCF > revenue*0.15 ? 15 : stressedCF > revenue*0.05 ? 10 : stressedCF > 0 ? 5 : 0;
+
+  const total = c1+c2+c3+c4;
+  const cls = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'dangerous';
+  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK — AVOID';
+
+  return{total,cls,verdict,c1,c2,c3,c4,netCF,newEMI,totalDebt,cashLeft,dscr};
+}
+
+function findMaxSafeLoan(revenue, expenses, existingEmi, annualRate, months){
+  let lo=0, hi=revenue*200, best=0;
+  for(let i=0;i<40;i++){
+    const mid=(lo+hi)/2;
+    const s=computeScore(revenue,expenses,existingEmi,mid,annualRate,months);
+    if(s.total>=70){best=mid;lo=mid;}else{hi=mid;}
+  }
+  return best;
+}
+
+// ═══ SCORE CARD UI ═══════════════════════════════════════════════════════════
+function generateScoreCard(){
+  const biz   = document.getElementById('sc-biz').value.trim() || 'My Business';
+  const rev   = parseFloat(document.getElementById('sc-rev').value)||0;
+  const exp   = parseFloat(document.getElementById('sc-exp').value)||0;
+  const emi   = parseFloat(document.getElementById('sc-emi').value)||0;
+  const loan  = parseFloat(document.getElementById('sc-loan').value)||0;
+  const rate  = parseFloat(document.getElementById('sc-rate').value)||12;
+  const months= parseInt(document.getElementById('sc-months').value)||36;
+
+  if(!rev||!exp||!loan){
+    document.getElementById('scorecard-output').innerHTML=
+      '<p style="color:#dc2626;font-size:.9rem;padding:8px 0">Please fill in Revenue, Expenses, and Loan Amount.</p>';
+    return;
+  }
+
+  const s = computeScore(rev, exp, emi, loan, rate, months);
+  const maxLoan = findMaxSafeLoan(rev, exp, emi, rate, months);
+  const dateStr = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const barColor = s.cls==='safe'?'#22c55e':s.cls==='risky'?'#f59e0b':'#ef4444';
+  const dscrStr  = s.dscr.toFixed(2)+'x';
+
+  const cardHTML = `
+  <div class="score-card-wrap">
+    <div id="the-score-card" class="score-card ${s.cls}">
+      <div class="sc-brand">SmallBiz AI · Loan Decision Score</div>
+      <div class="sc-biz">${escHtml(biz)}</div>
+      <div class="sc-date">${dateStr}</div>
+      <div class="sc-score-row">
+        <span class="sc-score-num">${s.total}</span>
+        <span class="sc-score-denom">/ 100</span>
+      </div>
+      <div class="sc-bar-wrap">
+        <div class="sc-bar-track"><div class="sc-bar-fill" style="width:${s.total}%;background:${barColor}"></div></div>
+      </div>
+      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'✅':s.cls==='risky'?'⚠️':'🚫'} ${s.verdict}</div>
+      <div class="sc-metrics">
+        <div class="sc-metric">
+          <div class="sc-metric-label">Revenue/mo</div>
+          <div class="sc-metric-value">${fmt(rev)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Loan Requested</div>
+          <div class="sc-metric-value">${fmt(loan)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Max Safe Loan</div>
+          <div class="sc-metric-value">${fmt(maxLoan)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">New EMI/mo</div>
+          <div class="sc-metric-value">${fmt(s.newEMI)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Net Cash After EMI</div>
+          <div class="sc-metric-value" style="color:${s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(s.cashLeft)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Debt Coverage</div>
+          <div class="sc-metric-value">${dscrStr}</div>
+        </div>
+      </div>
+      <div class="sc-footer">Powered by SmallBiz AI Platform · smallbiz.app</div>
+    </div>
+
+    <div style="flex:1;min-width:220px">
+      <div class="card" style="margin-bottom:12px">
+        <h3>Score Breakdown</h3>
+        ${scoreBar('Cash Flow Strength', s.c1, 30)}
+        ${scoreBar('Loan Affordability', s.c2, 30)}
+        ${scoreBar('Debt Coverage', s.c3, 25)}
+        ${scoreBar('Stress Resilience', s.c4, 15)}
+      </div>
+      <div class="card">
+        <h3>Share This Result</h3>
+        <div class="share-btns">
+          <button class="btn wa" onclick="shareWhatsApp()">📱 Share on WhatsApp</button>
+          <button class="btn green" onclick="printScoreCard()">🖨️ Print / Save as PDF</button>
+          <button class="btn gray" onclick="copyScoreText()">📋 Copy as Text</button>
+        </div>
+        <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
+      </div>
+      ${s.cls!=='safe'?`<div class="tip-box">
+        💡 <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
+      </div>`:''}
+    </div>
+  </div>`;
+
+  document.getElementById('scorecard-output').innerHTML = cardHTML;
+
+  // store result for share functions
+  window._sc = {biz, rev, exp, emi, loan, rate, months, s, maxLoan, dateStr, dscrStr};
+}
+
+function scoreBar(label, score, max){
+  const pct = Math.round(score/max*100);
+  const color = pct>=70?'#22c55e':pct>=45?'#f59e0b':'#ef4444';
+  return `<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:.78rem;color:#64748b;margin-bottom:3px">
+      <span>${label}</span><span style="font-weight:700;color:#0f172a">${score}/${max}</span>
+    </div>
+    <div style="height:6px;background:#f1f5f9;border-radius:6px;overflow:hidden">
+      <div style="width:${pct}%;height:100%;background:${color};border-radius:6px"></div>
+    </div>
+  </div>`;
+}
+
+function buildShareText(){
+  if(!window._sc) return '';
+  const {biz, s, rev, loan, maxLoan, dateStr, dscrStr} = window._sc;
+  const sym = activeCurrency.symbol;
+  return `🏆 *Loan Decision Score Card*
+*Business:* ${biz}
+*Date:* ${dateStr}
+
+*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'⚠️ PROCEED WITH CAUTION':'🚫 HIGH RISK'}*
+
+📊 *Key Numbers:*
+• Revenue: ${fmt(rev)}/mo
+• Loan Requested: ${fmt(loan)}
+• Max Safe Loan: ${fmt(maxLoan)}
+• New EMI: ${fmt(s.newEMI)}/mo
+• Net Cash After EMI: ${fmt(s.cashLeft)}/mo
+• Debt Coverage Ratio: ${dscrStr}
+
+💡 Powered by SmallBiz AI Platform`;
+}
+
+function shareWhatsApp(){
+  const text = buildShareText();
+  if(!text){alert('Generate a score card first.');return;}
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
+function printScoreCard(){
+  const card = document.getElementById('the-score-card');
+  if(!card){alert('Generate a score card first.');return;}
+  const sc = window._sc;
+  const barColor = sc.s.cls==='safe'?'#22c55e':sc.s.cls==='risky'?'#f59e0b':'#ef4444';
+  const accentColor = sc.s.cls==='safe'?'linear-gradient(90deg,#16a34a,#22c55e)':sc.s.cls==='risky'?'linear-gradient(90deg,#d97706,#f59e0b)':'linear-gradient(90deg,#dc2626,#ef4444)';
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card — ${escHtml(sc.biz)}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-content:center;padding:40px}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:32px 36px;width:420px;position:relative;overflow:hidden;border:1px solid #e2e8f0}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:${accentColor}}
+.brand{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#94a3b8;text-transform:uppercase;margin-bottom:16px}
+.biz{font-size:1.1rem;font-weight:700;color:#0f172a;margin-bottom:2px}
+.date{font-size:.75rem;color:#94a3b8;margin-bottom:20px}
+.score-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:8px}
+.score-num{font-size:3.2rem;font-weight:800;line-height:1;color:#0f172a}
+.score-denom{font-size:1rem;color:#94a3b8;margin-bottom:12px}
+.bar-track{height:10px;background:#f1f5f9;border-radius:10px;overflow:hidden;margin-bottom:16px}
+.bar-fill{height:100%;width:${sc.s.total}%;background:${barColor};border-radius:10px}
+.verdict{display:inline-block;padding:6px 18px;border-radius:20px;font-weight:800;font-size:.9rem;margin-bottom:20px;background:${sc.s.cls==='safe'?'#dcfce7':sc.s.cls==='risky'?'#fef9c3':'#fee2e2'};color:${sc.s.cls==='safe'?'#16a34a':sc.s.cls==='risky'?'#d97706':'#dc2626'}}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.metric{background:#f8fafc;border-radius:8px;padding:10px 12px}
+.metric-label{font-size:.68rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.metric-value{font-size:.95rem;font-weight:700;color:#0f172a}
+.footer{font-size:.68rem;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:10px;text-align:center}
+@media print{body{padding:0}@page{margin:20mm}}
+</style></head><body>
+<div class="card">
+  <div class="brand">SmallBiz AI · Loan Decision Score</div>
+  <div class="biz">${escHtml(sc.biz)}</div>
+  <div class="date">${sc.dateStr}</div>
+  <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
+  <div class="bar-track"><div class="bar-fill"></div></div>
+  <div class="verdict">${sc.s.cls==='safe'?'✅':sc.s.cls==='risky'?'⚠️':'🚫'} ${sc.s.verdict}</div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Revenue/mo</div><div class="metric-value">${fmt(sc.rev)}</div></div>
+    <div class="metric"><div class="metric-label">Loan Requested</div><div class="metric-value">${fmt(sc.loan)}</div></div>
+    <div class="metric"><div class="metric-label">Max Safe Loan</div><div class="metric-value">${fmt(sc.maxLoan)}</div></div>
+    <div class="metric"><div class="metric-label">New EMI/mo</div><div class="metric-value">${fmt(sc.s.newEMI)}</div></div>
+    <div class="metric"><div class="metric-label">Net Cash After EMI</div><div class="metric-value" style="color:${sc.s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(sc.s.cashLeft)}</div></div>
+    <div class="metric"><div class="metric-label">Debt Coverage</div><div class="metric-value">${sc.dscrStr}</div></div>
+  </div>
+  <div class="footer">Powered by SmallBiz AI Platform · ${sc.dateStr}</div>
+</div>
+<script>window.onload=()=>{window.print();}<\/script>
+</body></html>`;
+  const w = window.open('','_blank');
+  w.document.write(printHTML);
+  w.document.close();
+}
+
+function copyScoreText(){
+  const text = buildShareText();
+  if(!text){alert('Generate a score card first.');return;}
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      const fb = document.getElementById('share-feedback');
+      fb.textContent = '✓ Copied to clipboard';
+      fb.style.display = 'block';
+      setTimeout(()=>{fb.style.display='none';},2500);
+    });
+  }
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══ SHAREABLE RESULTS ENGINE (core functions) ════════════════════════════════
+function _r(n){return Math.round(n*100)/100;}
+
+function encodeState(moduleId,stateObj){
+  if(!moduleId||typeof moduleId!=="string")throw new Error("moduleId must be a non-empty string.");
+  const payload=JSON.stringify({moduleId,data:stateObj,v:1,ts:Date.now()});
+  const encoded=btoa(encodeURIComponent(payload).replace(/%([0-9A-F]{2})/g,(_,p1)=>String.fromCharCode(parseInt(p1,16))));
+  return encoded.replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"");
+}
+
+function decodeState(encoded){
+  if(!encoded||typeof encoded!=="string")throw new Error("encoded must be a non-empty string.");
+  const b64=encoded.replace(/-/g,"+").replace(/_/g,"/");
+  const padded=b64+"=".repeat((4-b64.length%4)%4);
+  const payload=decodeURIComponent(atob(padded).split("").map(c=>"%"+("00"+c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+  return JSON.parse(payload);
+}
+
+function buildShareURL(moduleId,stateObj,{baseUrl="https://smallbiz.app/calculators"}={}){
+  const encoded=encodeState(moduleId,stateObj);
+  const url=`${baseUrl}/${moduleId}#state=${encoded}`;
+  return{url,encoded,moduleId,characterCount:url.length};
+}
+
+function generatePrintHTML({moduleId,title,businessName="Business",date,sections=[],verdict=null,verdictColor="green",disclaimer=""}){
+  const reportDate=date||new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const vc={green:"#16a34a",amber:"#d97706",red:"#dc2626",blue:"#2563eb"}[verdictColor]||"#1e293b";
+  const sectionsHTML=sections.map(s=>`<div class="section"><h3>${s.heading}</h3><table><tbody>${(s.rows||[]).map(r=>`<tr><td class="label">${r.label}</td><td class="value">${r.value}</td><td class="note">${r.note||""}</td></tr>`).join("")}</tbody></table></div>`).join("");
+  return`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;color:#1e293b;padding:40px;font-size:13px;max-width:800px;margin:0 auto}.report-header{border-bottom:3px solid #0f172a;padding-bottom:16px;margin-bottom:24px}.report-title{font-size:22px;font-weight:700}.report-meta{font-size:11px;color:#64748b;margin-top:6px}.verdict-box{border:2px solid ${vc};border-radius:8px;padding:14px;margin-bottom:24px}.verdict-text{font-size:16px;font-weight:800;color:${vc}}.section{margin-bottom:24px}h3{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:8px;border-bottom:1px solid #e2e8f0;padding-bottom:4px}table{width:100%;border-collapse:collapse}td{padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:12px}.label{color:#64748b;width:45%}.value{font-weight:600}.note{color:#94a3b8;font-size:11px}.footer{text-align:center;font-size:10px;color:#94a3b8;margin-top:24px}@media print{body{padding:20px}}</style></head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} · ${reportDate} · Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform · ${reportDate}</div></body></html>`;
+}
+
+function exportCSV(headers,rows){
+  if(!Array.isArray(headers)||headers.length===0)throw new Error("headers must be a non-empty array.");
+  if(!Array.isArray(rows))throw new Error("rows must be an array.");
+  const esc=v=>{const s=String(v==null?"":v);return s.includes(",")||s.includes('"')||s.includes("\n")?`"${s.replace(/"/g,'""')}"`:s;};
+  return[headers.map(esc).join(","),...rows.map(r=>r.map(esc).join(","))].join("\r\n");
+}
+
+function exportJSON(data,{indent=2,filename="export.json"}={}){
+  const json=JSON.stringify(data,null,indent);
+  const bytes=new TextEncoder().encode(json).length;
+  const size=bytes<1024?`${bytes} B`:`${_r(bytes/1024)} KB`;
+  return{json,size,filename,characterCount:json.length};
+}
+
+function buildDownloadURI(content,mimeType,filename){
+  return{uri:`data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`,filename};
+}
+
+// ═══ UI ═══════════════════════════════════════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function doEncode(){
+  const moduleId=document.getElementById('us-module').value;
+  const baseUrl=document.getElementById('us-base').value;
+  let stateObj;
+  try{stateObj=JSON.parse(document.getElementById('us-state').value);}
+  catch(e){alert("Invalid JSON in state object: "+e.message);return;}
+  const result=buildShareURL(moduleId,stateObj,{baseUrl});
+  document.getElementById('url-output').innerHTML=`
+    <div class="card">
+      <h3>Shareable URL</h3>
+      <div class="share-url-box">${result.url}</div>
+      <div class="info-row">
+        <span>Encoded length: <b>${result.encoded.length} chars</b></span>
+        <span>Full URL length: <b>${result.characterCount} chars</b></span>
+      </div>
+      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">📋 Copy URL</button>
+      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">→ Test Decode</button>
+    </div>
+    <div class="card">
+      <h3>Encoded String Only</h3>
+      <div class="output-box">${result.encoded}</div>
+    </div>`;
+  document.getElementById('dec-input').value=result.encoded;
+}
+
+function doDecode(){
+  const encoded=document.getElementById('dec-input').value.trim();
+  if(!encoded){alert("Paste an encoded string first.");return;}
+  try{
+    const result=decodeState(encoded);
+    document.getElementById('decode-output').innerHTML=`
+      <div class="decode-result">
+        <b>Module:</b> ${result.moduleId}<br>
+        <b>Encoded at:</b> ${new Date(result.ts).toLocaleString('en-US')}<br>
+        <b>Data:</b><br>
+        <div class="output-box" style="margin-top:8px">${JSON.stringify(result.data,null,2)}</div>
+      </div>`;
+  }catch(e){
+    document.getElementById('decode-output').innerHTML=`<p style="color:#dc2626;margin-top:8px">Decode error: ${e.message}</p>`;
+  }
+}
+
+function doPrint(){
+  const title=document.getElementById('pr-title').value;
+  const moduleId=document.getElementById('pr-module').value;
+  const biz=document.getElementById('pr-biz').value;
+  const verdict=document.getElementById('pr-verdict').value;
+  const color=document.getElementById('pr-color').value;
+  const html=generatePrintHTML({
+    moduleId,title,businessName:biz,verdict,verdictColor:color,
+    sections:[
+      {heading:"Loan Details",rows:[{label:"Principal",value:fmt(1500000)},{label:"Annual Rate",value:"10.5%"},{label:"Tenure",value:"36 months"},{label:"Monthly EMI",value:fmt(48767)}]},
+      {heading:"Risk Assessment",rows:[{label:"DSCR",value:"2.47",note:"Strong ≥ 1.25"},{label:"DTI",value:"20.3%",note:"Acceptable < 35%"},{label:"Risk Level",value:"Low"}]},
+    ],
+    disclaimer:"This report is generated for informational purposes only."
+  });
+  document.getElementById('print-preview-box').innerHTML=`
+    <div class="card"><h3>Report Preview</h3>
+      <iframe srcdoc="${html.replace(/"/g,'&quot;')}" style="width:100%;height:500px;border:1px solid #e2e8f0;border-radius:8px;margin-top:10px"></iframe>
+    </div>`;
+  window._lastPrintHTML=html;
+}
+
+function doOpenPrint(){
+  if(!window._lastPrintHTML){doPrint();}
+  const w=window.open('','_blank');
+  w.document.write(window._lastPrintHTML);
+  w.document.close();
+}
+
+function doCSV(){
+  const headers=["Month","Opening Balance","EMI","Interest","Principal","Closing Balance"];
+  const rows=[];
+  let bal=1500000;const rate=10.5/12/100;const emi=48767;
+  for(let i=1;i<=6;i++){
+    const interest=Math.round(bal*rate);
+    const principal=Math.round(emi-interest);
+    const closing=Math.round(bal-principal);
+    rows.push([i,bal,emi,interest,principal,closing]);
+    bal=closing;
+  }
+  const csv=exportCSV(headers,rows);
+  const dl=buildDownloadURI(csv,"text/csv","amortization.csv");
+  document.getElementById('csv-output').innerHTML=`
+    <div class="output-box" style="margin-top:12px">${csv}</div>
+    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">⬇ Download amortization.csv</a>
+    <div class="info-row"><span>Rows: <b>${rows.length}</b></span><span>Columns: <b>${headers.length}</b></span></div>`;
+}
+
+function doJSON(){
+  let data;
+  try{data=JSON.parse(document.getElementById('jx-data').value);}
+  catch(e){alert("Invalid JSON: "+e.message);return;}
+  const indent=parseInt(document.getElementById('jx-indent').value);
+  const filename=document.getElementById('jx-filename').value||"export.json";
+  const result=exportJSON(data,{indent,filename});
+  const dl=buildDownloadURI(result.json,"application/json",filename);
+  document.getElementById('json-output').innerHTML=`
+    <div class="output-box" style="margin-top:12px">${result.json}</div>
+    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">⬇ Download ${filename}</a>
+    <div class="info-row"><span>Size: <b>${result.size}</b></span><span>Characters: <b>${result.characterCount}</b></span></div>`;
+}
+
+// ═══ Unit Tests ═══════════════════════════════════════════════════════════════
+function runTests(){
+  const results=[];
+  function test(n,fn){try{fn();results.push({n,ok:true});}catch(e){results.push({n,ok:false,err:e.message});}}
+  function assert(c,m){if(!c)throw new Error(m||"fail");}
+
+  test("encodeState returns non-empty string",()=>{
+    const e=encodeState("loanEngine",{principal:1000000});
+    assert(typeof e==="string"&&e.length>10);
+  });
+  test("encode/decode round-trip preserves data",()=>{
+    const data={a:1,b:"hello",c:[1,2,3]};
+    const enc=encodeState("testModule",data);
+    const dec=decodeState(enc);
+    assert(dec.moduleId==="testModule");
+    assert(JSON.stringify(dec.data)===JSON.stringify(data));
+  });
+  test("encodeState output is URL-safe (no +/=/)",()=>{
+    const enc=encodeState("loanEngine",{x:1});
+    assert(!enc.includes("+")&&!enc.includes("/")&&!enc.includes("="));
+  });
+  test("decodeState throws on invalid input",()=>{
+    let threw=false;try{decodeState("not-valid-base64!!!");}catch{threw=true;}
+    assert(threw);
+  });
+  test("buildShareURL contains moduleId and encoded state",()=>{
+    const r=buildShareURL("riskDebtEngine",{dscr:1.8});
+    assert(r.url.includes("riskDebtEngine"));
+    assert(r.url.includes("#state="));
+    assert(r.encoded.length>0);
+  });
+  test("exportCSV produces correct header row",()=>{
+    const csv=exportCSV(["A","B","C"],[[1,2,3],[4,5,6]]);
+    assert(csv.startsWith("A,B,C"));
+  });
+  test("exportCSV escapes values with commas",()=>{
+    const csv=exportCSV(["Name","Value"],[["Ravi, Inc.",1000]]);
+    assert(csv.includes('"Ravi, Inc."'));
+  });
+  test("exportCSV throws on empty headers",()=>{
+    let threw=false;try{exportCSV([],[[1,2]]);}catch{threw=true;}
+    assert(threw);
+  });
+  test("exportJSON returns formatted string",()=>{
+    const r=exportJSON({a:1,b:2},{indent:2});
+    assert(r.json.includes("  \"a\""));
+    assert(typeof r.size==="string");
+  });
+  test("exportJSON size reported correctly",()=>{
+    const r=exportJSON({x:"hello"});
+    assert(r.characterCount===r.json.length);
+  });
+  test("buildDownloadURI returns data URI",()=>{
+    const r=buildDownloadURI("a,b,c","text/csv","test.csv");
+    assert(r.uri.startsWith("data:text/csv"));
+    assert(r.filename==="test.csv");
+  });
+  test("generatePrintHTML returns valid HTML string",()=>{
+    const html=generatePrintHTML({moduleId:"loanEngine",title:"Test Report",sections:[]});
+    assert(html.includes("<!DOCTYPE html>"));
+    assert(html.includes("Test Report"));
+  });
+  test("generatePrintHTML includes verdict when provided",()=>{
+    const html=generatePrintHTML({moduleId:"x",title:"T",verdict:"SAFE TO PROCEED",verdictColor:"green",sections:[]});
+    assert(html.includes("SAFE TO PROCEED"));
+    assert(html.includes("#16a34a"));
+  });
+  test("encode handles unicode characters",()=>{
+    const data={name:"Suresh's Café"};
+    const enc=encodeState("m",data);
+    const dec=decodeState(enc);
+    assert(dec.data.name===data.name);
+  });
+  test("computeScore SAFE scenario",()=>{
+    const s=computeScore(200000,80000,0,500000,12,36);
+    assert(s.total>=70,'Expected SAFE score');
+    assert(s.cls==='safe');
+  });
+  test("computeScore DANGEROUS scenario",()=>{
+    const s=computeScore(50000,48000,0,2000000,12,36);
+    assert(s.total<40,'Expected DANGEROUS score');
+    assert(s.cls==='dangerous');
+  });
+  test("calcEMI standard formula",()=>{
+    const emi=calcEMI(100000,12,12);
+    assert(Math.abs(emi-8884.88)<2,'EMI mismatch');
+  });
+  test("fmt uses active currency symbol",()=>{
+    activeCurrency=CURRENCIES['USD'];
+    assert(fmt(10000).startsWith('$'));
+    activeCurrency=CURRENCIES['USD'];
+  });
+  test("buildShareText includes score",()=>{
+    window._sc={biz:'Test Co',s:{total:75,cls:'safe',verdict:'SAFE TO BORROW',newEMI:8000,cashLeft:30000,dscr:2.5},rev:100000,loan:500000,maxLoan:600000,dateStr:'01 January 2026',dscrStr:'2.50x'};
+    const t=buildShareText();
+    assert(t.includes('75/100'));
+    assert(t.includes('SAFE'));
+  });
+
+  const ul=document.getElementById('unitResults');
+  const pass=results.filter(r=>r.ok).length;
+  ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+// ═══ Init ═════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  const saved = localStorage.getItem('finwise_currency');
+  setCurrency(saved && CURRENCIES[saved] ? saved : 'USD');
+});
+</script>
+</body>
+</html>
+, locale:'en-US', kDiv:1e3, kSuffix:'K', mDiv:1e6, mSuffix:'M', kThreshold:1e4,
+        placeholders:{rev:'15000',exp:'8000',emi:'0',loan:'75000'},
+        examples:{loan5L:'$50,000',loan1L:'$10,000',rev:'$15K/mo'} },
+};
+let activeCurrency = CURRENCIES['USD'];
+
+function setCurrency(code){
+  activeCurrency = CURRENCIES['USD'];
+  localStorage.setItem('finwise_currency', code);
+  document.querySelectorAll('.cbtn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.includes(activeCurrency.symbol) || b.textContent.includes(code));
+  });
+  document.querySelectorAll('.csym').forEach(el=>{ el.textContent = activeCurrency.symbol; });
+  // update placeholders
+  const p = activeCurrency.placeholders;
+  const sc_rev = document.getElementById('sc-rev');
+  const sc_exp = document.getElementById('sc-exp');
+  const sc_loan = document.getElementById('sc-loan');
+  if(sc_rev) sc_rev.placeholder = 'e.g. ' + p.rev;
+  if(sc_exp) sc_exp.placeholder = 'e.g. ' + p.exp;
+  if(sc_loan) sc_loan.placeholder = 'e.g. ' + p.loan;
+}
+
+function fmt(n){
+  const c = activeCurrency;
+  const abs = Math.abs(n);
+  if(abs >= c.mDiv) return c.symbol+(n/c.mDiv).toFixed(2)+c.mSuffix;
+  if(abs >= c.kThreshold) return c.symbol+(n/c.kDiv).toFixed(1)+c.kSuffix;
+  return c.symbol+Math.round(n).toLocaleString(c.locale);
+}
+
+// ═══ SCORE ENGINE (embedded) ═════════════════════════════════════════════════
+function calcEMI(principal, annualRate, months){
+  if(annualRate === 0) return principal/months;
+  const r = annualRate/12/100;
+  return principal * r * Math.pow(1+r,months) / (Math.pow(1+r,months)-1);
+}
+
+function computeScore(revenue, expenses, existingEmi, loanAmount, annualRate, months){
+  const netCF = revenue - expenses - existingEmi;
+  const newEMI = calcEMI(loanAmount, annualRate, months);
+  const cashLeft = netCF - newEMI;
+  const totalDebt = existingEmi + newEMI;
+
+  // C1: Cash Flow Strength (0–30)
+  const cfRatio = netCF / revenue;
+  let c1 = cfRatio >= 0.4 ? 30 : cfRatio >= 0.25 ? 22 : cfRatio >= 0.15 ? 14 : cfRatio >= 0.05 ? 6 : 0;
+
+  // C2: Loan Affordability (0–30)
+  const emiRatio = newEMI / netCF;
+  let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.45 ? 22 : emiRatio <= 0.6 ? 14 : emiRatio <= 0.8 ? 6 : 0;
+
+  // C3: Debt Coverage DSCR (0–25)
+  const dscr = netCF / (newEMI || 1);
+  let c3 = dscr >= 2.5 ? 25 : dscr >= 1.75 ? 19 : dscr >= 1.25 ? 13 : dscr >= 1.0 ? 6 : 0;
+
+  // C4: Stress Resilience (0–15)
+  const stressedCF = revenue * 0.8 - expenses - totalDebt;
+  let c4 = stressedCF > revenue*0.15 ? 15 : stressedCF > revenue*0.05 ? 10 : stressedCF > 0 ? 5 : 0;
+
+  const total = c1+c2+c3+c4;
+  const cls = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'dangerous';
+  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK — AVOID';
+
+  return{total,cls,verdict,c1,c2,c3,c4,netCF,newEMI,totalDebt,cashLeft,dscr};
+}
+
+function findMaxSafeLoan(revenue, expenses, existingEmi, annualRate, months){
+  let lo=0, hi=revenue*200, best=0;
+  for(let i=0;i<40;i++){
+    const mid=(lo+hi)/2;
+    const s=computeScore(revenue,expenses,existingEmi,mid,annualRate,months);
+    if(s.total>=70){best=mid;lo=mid;}else{hi=mid;}
+  }
+  return best;
+}
+
+// ═══ SCORE CARD UI ═══════════════════════════════════════════════════════════
+function generateScoreCard(){
+  const biz   = document.getElementById('sc-biz').value.trim() || 'My Business';
+  const rev   = parseFloat(document.getElementById('sc-rev').value)||0;
+  const exp   = parseFloat(document.getElementById('sc-exp').value)||0;
+  const emi   = parseFloat(document.getElementById('sc-emi').value)||0;
+  const loan  = parseFloat(document.getElementById('sc-loan').value)||0;
+  const rate  = parseFloat(document.getElementById('sc-rate').value)||12;
+  const months= parseInt(document.getElementById('sc-months').value)||36;
+
+  if(!rev||!exp||!loan){
+    document.getElementById('scorecard-output').innerHTML=
+      '<p style="color:#dc2626;font-size:.9rem;padding:8px 0">Please fill in Revenue, Expenses, and Loan Amount.</p>';
+    return;
+  }
+
+  const s = computeScore(rev, exp, emi, loan, rate, months);
+  const maxLoan = findMaxSafeLoan(rev, exp, emi, rate, months);
+  const dateStr = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const barColor = s.cls==='safe'?'#22c55e':s.cls==='risky'?'#f59e0b':'#ef4444';
+  const dscrStr  = s.dscr.toFixed(2)+'x';
+
+  const cardHTML = `
+  <div class="score-card-wrap">
+    <div id="the-score-card" class="score-card ${s.cls}">
+      <div class="sc-brand">SmallBiz AI · Loan Decision Score</div>
+      <div class="sc-biz">${escHtml(biz)}</div>
+      <div class="sc-date">${dateStr}</div>
+      <div class="sc-score-row">
+        <span class="sc-score-num">${s.total}</span>
+        <span class="sc-score-denom">/ 100</span>
+      </div>
+      <div class="sc-bar-wrap">
+        <div class="sc-bar-track"><div class="sc-bar-fill" style="width:${s.total}%;background:${barColor}"></div></div>
+      </div>
+      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'✅':s.cls==='risky'?'⚠️':'🚫'} ${s.verdict}</div>
+      <div class="sc-metrics">
+        <div class="sc-metric">
+          <div class="sc-metric-label">Revenue/mo</div>
+          <div class="sc-metric-value">${fmt(rev)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Loan Requested</div>
+          <div class="sc-metric-value">${fmt(loan)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Max Safe Loan</div>
+          <div class="sc-metric-value">${fmt(maxLoan)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">New EMI/mo</div>
+          <div class="sc-metric-value">${fmt(s.newEMI)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Net Cash After EMI</div>
+          <div class="sc-metric-value" style="color:${s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(s.cashLeft)}</div>
+        </div>
+        <div class="sc-metric">
+          <div class="sc-metric-label">Debt Coverage</div>
+          <div class="sc-metric-value">${dscrStr}</div>
+        </div>
+      </div>
+      <div class="sc-footer">Powered by SmallBiz AI Platform · smallbiz.app</div>
+    </div>
+
+    <div style="flex:1;min-width:220px">
+      <div class="card" style="margin-bottom:12px">
+        <h3>Score Breakdown</h3>
+        ${scoreBar('Cash Flow Strength', s.c1, 30)}
+        ${scoreBar('Loan Affordability', s.c2, 30)}
+        ${scoreBar('Debt Coverage', s.c3, 25)}
+        ${scoreBar('Stress Resilience', s.c4, 15)}
+      </div>
+      <div class="card">
+        <h3>Share This Result</h3>
+        <div class="share-btns">
+          <button class="btn wa" onclick="shareWhatsApp()">📱 Share on WhatsApp</button>
+          <button class="btn green" onclick="printScoreCard()">🖨️ Print / Save as PDF</button>
+          <button class="btn gray" onclick="copyScoreText()">📋 Copy as Text</button>
+        </div>
+        <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
+      </div>
+      ${s.cls!=='safe'?`<div class="tip-box">
+        💡 <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
+      </div>`:''}
+    </div>
+  </div>`;
+
+  document.getElementById('scorecard-output').innerHTML = cardHTML;
+
+  // store result for share functions
+  window._sc = {biz, rev, exp, emi, loan, rate, months, s, maxLoan, dateStr, dscrStr};
+}
+
+function scoreBar(label, score, max){
+  const pct = Math.round(score/max*100);
+  const color = pct>=70?'#22c55e':pct>=45?'#f59e0b':'#ef4444';
+  return `<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:.78rem;color:#64748b;margin-bottom:3px">
+      <span>${label}</span><span style="font-weight:700;color:#0f172a">${score}/${max}</span>
+    </div>
+    <div style="height:6px;background:#f1f5f9;border-radius:6px;overflow:hidden">
+      <div style="width:${pct}%;height:100%;background:${color};border-radius:6px"></div>
+    </div>
+  </div>`;
+}
+
+function buildShareText(){
+  if(!window._sc) return '';
+  const {biz, s, rev, loan, maxLoan, dateStr, dscrStr} = window._sc;
+  const sym = activeCurrency.symbol;
+  return `🏆 *Loan Decision Score Card*
+*Business:* ${biz}
+*Date:* ${dateStr}
+
+*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'⚠️ PROCEED WITH CAUTION':'🚫 HIGH RISK'}*
+
+📊 *Key Numbers:*
+• Revenue: ${fmt(rev)}/mo
+• Loan Requested: ${fmt(loan)}
+• Max Safe Loan: ${fmt(maxLoan)}
+• New EMI: ${fmt(s.newEMI)}/mo
+• Net Cash After EMI: ${fmt(s.cashLeft)}/mo
+• Debt Coverage Ratio: ${dscrStr}
+
+💡 Powered by SmallBiz AI Platform`;
+}
+
+function shareWhatsApp(){
+  const text = buildShareText();
+  if(!text){alert('Generate a score card first.');return;}
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
+function printScoreCard(){
+  const card = document.getElementById('the-score-card');
+  if(!card){alert('Generate a score card first.');return;}
+  const sc = window._sc;
+  const barColor = sc.s.cls==='safe'?'#22c55e':sc.s.cls==='risky'?'#f59e0b':'#ef4444';
+  const accentColor = sc.s.cls==='safe'?'linear-gradient(90deg,#16a34a,#22c55e)':sc.s.cls==='risky'?'linear-gradient(90deg,#d97706,#f59e0b)':'linear-gradient(90deg,#dc2626,#ef4444)';
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card — ${escHtml(sc.biz)}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-content:center;padding:40px}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:32px 36px;width:420px;position:relative;overflow:hidden;border:1px solid #e2e8f0}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:${accentColor}}
+.brand{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#94a3b8;text-transform:uppercase;margin-bottom:16px}
+.biz{font-size:1.1rem;font-weight:700;color:#0f172a;margin-bottom:2px}
+.date{font-size:.75rem;color:#94a3b8;margin-bottom:20px}
+.score-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:8px}
+.score-num{font-size:3.2rem;font-weight:800;line-height:1;color:#0f172a}
+.score-denom{font-size:1rem;color:#94a3b8;margin-bottom:12px}
+.bar-track{height:10px;background:#f1f5f9;border-radius:10px;overflow:hidden;margin-bottom:16px}
+.bar-fill{height:100%;width:${sc.s.total}%;background:${barColor};border-radius:10px}
+.verdict{display:inline-block;padding:6px 18px;border-radius:20px;font-weight:800;font-size:.9rem;margin-bottom:20px;background:${sc.s.cls==='safe'?'#dcfce7':sc.s.cls==='risky'?'#fef9c3':'#fee2e2'};color:${sc.s.cls==='safe'?'#16a34a':sc.s.cls==='risky'?'#d97706':'#dc2626'}}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.metric{background:#f8fafc;border-radius:8px;padding:10px 12px}
+.metric-label{font-size:.68rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.metric-value{font-size:.95rem;font-weight:700;color:#0f172a}
+.footer{font-size:.68rem;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:10px;text-align:center}
+@media print{body{padding:0}@page{margin:20mm}}
+</style></head><body>
+<div class="card">
+  <div class="brand">SmallBiz AI · Loan Decision Score</div>
+  <div class="biz">${escHtml(sc.biz)}</div>
+  <div class="date">${sc.dateStr}</div>
+  <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
+  <div class="bar-track"><div class="bar-fill"></div></div>
+  <div class="verdict">${sc.s.cls==='safe'?'✅':sc.s.cls==='risky'?'⚠️':'🚫'} ${sc.s.verdict}</div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Revenue/mo</div><div class="metric-value">${fmt(sc.rev)}</div></div>
+    <div class="metric"><div class="metric-label">Loan Requested</div><div class="metric-value">${fmt(sc.loan)}</div></div>
+    <div class="metric"><div class="metric-label">Max Safe Loan</div><div class="metric-value">${fmt(sc.maxLoan)}</div></div>
+    <div class="metric"><div class="metric-label">New EMI/mo</div><div class="metric-value">${fmt(sc.s.newEMI)}</div></div>
+    <div class="metric"><div class="metric-label">Net Cash After EMI</div><div class="metric-value" style="color:${sc.s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(sc.s.cashLeft)}</div></div>
+    <div class="metric"><div class="metric-label">Debt Coverage</div><div class="metric-value">${sc.dscrStr}</div></div>
+  </div>
+  <div class="footer">Powered by SmallBiz AI Platform · ${sc.dateStr}</div>
+</div>
+<script>window.onload=()=>{window.print();}<\/script>
+</body></html>`;
+  const w = window.open('','_blank');
+  w.document.write(printHTML);
+  w.document.close();
+}
+
+function copyScoreText(){
+  const text = buildShareText();
+  if(!text){alert('Generate a score card first.');return;}
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      const fb = document.getElementById('share-feedback');
+      fb.textContent = '✓ Copied to clipboard';
+      fb.style.display = 'block';
+      setTimeout(()=>{fb.style.display='none';},2500);
+    });
+  }
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══ SHAREABLE RESULTS ENGINE (core functions) ════════════════════════════════
+function _r(n){return Math.round(n*100)/100;}
+
+function encodeState(moduleId,stateObj){
+  if(!moduleId||typeof moduleId!=="string")throw new Error("moduleId must be a non-empty string.");
+  const payload=JSON.stringify({moduleId,data:stateObj,v:1,ts:Date.now()});
+  const encoded=btoa(encodeURIComponent(payload).replace(/%([0-9A-F]{2})/g,(_,p1)=>String.fromCharCode(parseInt(p1,16))));
+  return encoded.replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"");
+}
+
+function decodeState(encoded){
+  if(!encoded||typeof encoded!=="string")throw new Error("encoded must be a non-empty string.");
+  const b64=encoded.replace(/-/g,"+").replace(/_/g,"/");
+  const padded=b64+"=".repeat((4-b64.length%4)%4);
+  const payload=decodeURIComponent(atob(padded).split("").map(c=>"%"+("00"+c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+  return JSON.parse(payload);
+}
+
+function buildShareURL(moduleId,stateObj,{baseUrl="https://smallbiz.app/calculators"}={}){
+  const encoded=encodeState(moduleId,stateObj);
+  const url=`${baseUrl}/${moduleId}#state=${encoded}`;
+  return{url,encoded,moduleId,characterCount:url.length};
+}
+
+function generatePrintHTML({moduleId,title,businessName="Business",date,sections=[],verdict=null,verdictColor="green",disclaimer=""}){
+  const reportDate=date||new Date().toLocaleDateString("en-US",{day:"2-digit",month:"long",year:"numeric"});
+  const vc={green:"#16a34a",amber:"#d97706",red:"#dc2626",blue:"#2563eb"}[verdictColor]||"#1e293b";
+  const sectionsHTML=sections.map(s=>`<div class="section"><h3>${s.heading}</h3><table><tbody>${(s.rows||[]).map(r=>`<tr><td class="label">${r.label}</td><td class="value">${r.value}</td><td class="note">${r.note||""}</td></tr>`).join("")}</tbody></table></div>`).join("");
+  return`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;color:#1e293b;padding:40px;font-size:13px;max-width:800px;margin:0 auto}.report-header{border-bottom:3px solid #0f172a;padding-bottom:16px;margin-bottom:24px}.report-title{font-size:22px;font-weight:700}.report-meta{font-size:11px;color:#64748b;margin-top:6px}.verdict-box{border:2px solid ${vc};border-radius:8px;padding:14px;margin-bottom:24px}.verdict-text{font-size:16px;font-weight:800;color:${vc}}.section{margin-bottom:24px}h3{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:8px;border-bottom:1px solid #e2e8f0;padding-bottom:4px}table{width:100%;border-collapse:collapse}td{padding:6px 10px;border-bottom:1px solid #f1f5f9;font-size:12px}.label{color:#64748b;width:45%}.value{font-weight:600}.note{color:#94a3b8;font-size:11px}.footer{text-align:center;font-size:10px;color:#94a3b8;margin-top:24px}@media print{body{padding:20px}}</style></head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} · ${reportDate} · Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform · ${reportDate}</div></body></html>`;
+}
+
+function exportCSV(headers,rows){
+  if(!Array.isArray(headers)||headers.length===0)throw new Error("headers must be a non-empty array.");
+  if(!Array.isArray(rows))throw new Error("rows must be an array.");
+  const esc=v=>{const s=String(v==null?"":v);return s.includes(",")||s.includes('"')||s.includes("\n")?`"${s.replace(/"/g,'""')}"`:s;};
+  return[headers.map(esc).join(","),...rows.map(r=>r.map(esc).join(","))].join("\r\n");
+}
+
+function exportJSON(data,{indent=2,filename="export.json"}={}){
+  const json=JSON.stringify(data,null,indent);
+  const bytes=new TextEncoder().encode(json).length;
+  const size=bytes<1024?`${bytes} B`:`${_r(bytes/1024)} KB`;
+  return{json,size,filename,characterCount:json.length};
+}
+
+function buildDownloadURI(content,mimeType,filename){
+  return{uri:`data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`,filename};
+}
+
+// ═══ UI ═══════════════════════════════════════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function doEncode(){
+  const moduleId=document.getElementById('us-module').value;
+  const baseUrl=document.getElementById('us-base').value;
+  let stateObj;
+  try{stateObj=JSON.parse(document.getElementById('us-state').value);}
+  catch(e){alert("Invalid JSON in state object: "+e.message);return;}
+  const result=buildShareURL(moduleId,stateObj,{baseUrl});
+  document.getElementById('url-output').innerHTML=`
+    <div class="card">
+      <h3>Shareable URL</h3>
+      <div class="share-url-box">${result.url}</div>
+      <div class="info-row">
+        <span>Encoded length: <b>${result.encoded.length} chars</b></span>
+        <span>Full URL length: <b>${result.characterCount} chars</b></span>
+      </div>
+      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">📋 Copy URL</button>
+      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">→ Test Decode</button>
+    </div>
+    <div class="card">
+      <h3>Encoded String Only</h3>
+      <div class="output-box">${result.encoded}</div>
+    </div>`;
+  document.getElementById('dec-input').value=result.encoded;
+}
+
+function doDecode(){
+  const encoded=document.getElementById('dec-input').value.trim();
+  if(!encoded){alert("Paste an encoded string first.");return;}
+  try{
+    const result=decodeState(encoded);
+    document.getElementById('decode-output').innerHTML=`
+      <div class="decode-result">
+        <b>Module:</b> ${result.moduleId}<br>
+        <b>Encoded at:</b> ${new Date(result.ts).toLocaleString('en-US')}<br>
+        <b>Data:</b><br>
+        <div class="output-box" style="margin-top:8px">${JSON.stringify(result.data,null,2)}</div>
+      </div>`;
+  }catch(e){
+    document.getElementById('decode-output').innerHTML=`<p style="color:#dc2626;margin-top:8px">Decode error: ${e.message}</p>`;
+  }
+}
+
+function doPrint(){
+  const title=document.getElementById('pr-title').value;
+  const moduleId=document.getElementById('pr-module').value;
+  const biz=document.getElementById('pr-biz').value;
+  const verdict=document.getElementById('pr-verdict').value;
+  const color=document.getElementById('pr-color').value;
+  const html=generatePrintHTML({
+    moduleId,title,businessName:biz,verdict,verdictColor:color,
+    sections:[
+      {heading:"Loan Details",rows:[{label:"Principal",value:fmt(1500000)},{label:"Annual Rate",value:"10.5%"},{label:"Tenure",value:"36 months"},{label:"Monthly EMI",value:fmt(48767)}]},
+      {heading:"Risk Assessment",rows:[{label:"DSCR",value:"2.47",note:"Strong ≥ 1.25"},{label:"DTI",value:"20.3%",note:"Acceptable < 35%"},{label:"Risk Level",value:"Low"}]},
+    ],
+    disclaimer:"This report is generated for informational purposes only."
+  });
+  document.getElementById('print-preview-box').innerHTML=`
+    <div class="card"><h3>Report Preview</h3>
+      <iframe srcdoc="${html.replace(/"/g,'&quot;')}" style="width:100%;height:500px;border:1px solid #e2e8f0;border-radius:8px;margin-top:10px"></iframe>
+    </div>`;
+  window._lastPrintHTML=html;
+}
+
+function doOpenPrint(){
+  if(!window._lastPrintHTML){doPrint();}
+  const w=window.open('','_blank');
+  w.document.write(window._lastPrintHTML);
+  w.document.close();
+}
+
+function doCSV(){
+  const headers=["Month","Opening Balance","EMI","Interest","Principal","Closing Balance"];
+  const rows=[];
+  let bal=1500000;const rate=10.5/12/100;const emi=48767;
+  for(let i=1;i<=6;i++){
+    const interest=Math.round(bal*rate);
+    const principal=Math.round(emi-interest);
+    const closing=Math.round(bal-principal);
+    rows.push([i,bal,emi,interest,principal,closing]);
+    bal=closing;
+  }
+  const csv=exportCSV(headers,rows);
+  const dl=buildDownloadURI(csv,"text/csv","amortization.csv");
+  document.getElementById('csv-output').innerHTML=`
+    <div class="output-box" style="margin-top:12px">${csv}</div>
+    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">⬇ Download amortization.csv</a>
+    <div class="info-row"><span>Rows: <b>${rows.length}</b></span><span>Columns: <b>${headers.length}</b></span></div>`;
+}
+
+function doJSON(){
+  let data;
+  try{data=JSON.parse(document.getElementById('jx-data').value);}
+  catch(e){alert("Invalid JSON: "+e.message);return;}
+  const indent=parseInt(document.getElementById('jx-indent').value);
+  const filename=document.getElementById('jx-filename').value||"export.json";
+  const result=exportJSON(data,{indent,filename});
+  const dl=buildDownloadURI(result.json,"application/json",filename);
+  document.getElementById('json-output').innerHTML=`
+    <div class="output-box" style="margin-top:12px">${result.json}</div>
+    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">⬇ Download ${filename}</a>
+    <div class="info-row"><span>Size: <b>${result.size}</b></span><span>Characters: <b>${result.characterCount}</b></span></div>`;
+}
+
+// ═══ Unit Tests ═══════════════════════════════════════════════════════════════
+function runTests(){
+  const results=[];
+  function test(n,fn){try{fn();results.push({n,ok:true});}catch(e){results.push({n,ok:false,err:e.message});}}
+  function assert(c,m){if(!c)throw new Error(m||"fail");}
+
+  test("encodeState returns non-empty string",()=>{
+    const e=encodeState("loanEngine",{principal:1000000});
+    assert(typeof e==="string"&&e.length>10);
+  });
+  test("encode/decode round-trip preserves data",()=>{
+    const data={a:1,b:"hello",c:[1,2,3]};
+    const enc=encodeState("testModule",data);
+    const dec=decodeState(enc);
+    assert(dec.moduleId==="testModule");
+    assert(JSON.stringify(dec.data)===JSON.stringify(data));
+  });
+  test("encodeState output is URL-safe (no +/=/)",()=>{
+    const enc=encodeState("loanEngine",{x:1});
+    assert(!enc.includes("+")&&!enc.includes("/")&&!enc.includes("="));
+  });
+  test("decodeState throws on invalid input",()=>{
+    let threw=false;try{decodeState("not-valid-base64!!!");}catch{threw=true;}
+    assert(threw);
+  });
+  test("buildShareURL contains moduleId and encoded state",()=>{
+    const r=buildShareURL("riskDebtEngine",{dscr:1.8});
+    assert(r.url.includes("riskDebtEngine"));
+    assert(r.url.includes("#state="));
+    assert(r.encoded.length>0);
+  });
+  test("exportCSV produces correct header row",()=>{
+    const csv=exportCSV(["A","B","C"],[[1,2,3],[4,5,6]]);
+    assert(csv.startsWith("A,B,C"));
+  });
+  test("exportCSV escapes values with commas",()=>{
+    const csv=exportCSV(["Name","Value"],[["Ravi, Inc.",1000]]);
+    assert(csv.includes('"Ravi, Inc."'));
+  });
+  test("exportCSV throws on empty headers",()=>{
+    let threw=false;try{exportCSV([],[[1,2]]);}catch{threw=true;}
+    assert(threw);
+  });
+  test("exportJSON returns formatted string",()=>{
+    const r=exportJSON({a:1,b:2},{indent:2});
+    assert(r.json.includes("  \"a\""));
+    assert(typeof r.size==="string");
+  });
+  test("exportJSON size reported correctly",()=>{
+    const r=exportJSON({x:"hello"});
+    assert(r.characterCount===r.json.length);
+  });
+  test("buildDownloadURI returns data URI",()=>{
+    const r=buildDownloadURI("a,b,c","text/csv","test.csv");
+    assert(r.uri.startsWith("data:text/csv"));
+    assert(r.filename==="test.csv");
+  });
+  test("generatePrintHTML returns valid HTML string",()=>{
+    const html=generatePrintHTML({moduleId:"loanEngine",title:"Test Report",sections:[]});
+    assert(html.includes("<!DOCTYPE html>"));
+    assert(html.includes("Test Report"));
+  });
+  test("generatePrintHTML includes verdict when provided",()=>{
+    const html=generatePrintHTML({moduleId:"x",title:"T",verdict:"SAFE TO PROCEED",verdictColor:"green",sections:[]});
+    assert(html.includes("SAFE TO PROCEED"));
+    assert(html.includes("#16a34a"));
+  });
+  test("encode handles unicode characters",()=>{
+    const data={name:"Suresh's Café"};
+    const enc=encodeState("m",data);
+    const dec=decodeState(enc);
+    assert(dec.data.name===data.name);
+  });
+  test("computeScore SAFE scenario",()=>{
+    const s=computeScore(200000,80000,0,500000,12,36);
+    assert(s.total>=70,'Expected SAFE score');
+    assert(s.cls==='safe');
+  });
+  test("computeScore DANGEROUS scenario",()=>{
+    const s=computeScore(50000,48000,0,2000000,12,36);
+    assert(s.total<40,'Expected DANGEROUS score');
+    assert(s.cls==='dangerous');
+  });
+  test("calcEMI standard formula",()=>{
+    const emi=calcEMI(100000,12,12);
+    assert(Math.abs(emi-8884.88)<2,'EMI mismatch');
+  });
+  test("fmt uses active currency symbol",()=>{
+    activeCurrency=CURRENCIES['USD'];
+    assert(fmt(10000).startsWith('$'));
+    activeCurrency=CURRENCIES['USD'];
+  });
+  test("buildShareText includes score",()=>{
+    window._sc={biz:'Test Co',s:{total:75,cls:'safe',verdict:'SAFE TO BORROW',newEMI:8000,cashLeft:30000,dscr:2.5},rev:100000,loan:500000,maxLoan:600000,dateStr:'01 January 2026',dscrStr:'2.50x'};
+    const t=buildShareText();
+    assert(t.includes('75/100'));
+    assert(t.includes('SAFE'));
+  });
+
+  const ul=document.getElementById('unitResults');
+  const pass=results.filter(r=>r.ok).length;
+  ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+}
+
+// ═══ Init ═════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  const saved = localStorage.getItem('finwise_currency');
+  setCurrency(saved && CURRENCIES[saved] ? saved : 'USD');
+});
+</script>
+</body>
+</html>

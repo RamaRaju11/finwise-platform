@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Payment Successful — FinWise</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a5f);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:100%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.check{font-size:4rem;margin-bottom:16px}
+h1{font-size:1.5rem;font-weight:900;color:#1e293b;margin-bottom:8px}
+p{font-size:.9rem;color:#64748b;line-height:1.6;margin-bottom:28px}
+.btn{display:inline-block;background:#2563eb;color:#fff;padding:13px 32px;border-radius:10px;font-size:.95rem;font-weight:800;text-decoration:none}
+.btn:hover{background:#1d4ed8}
+.note{font-size:.75rem;color:#94a3b8;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="check">✅</div>
+  <h1>Payment Successful!</h1>
+  <p>Your plan has been upgraded. It may take a few seconds to reflect — your dashboard will show the new plan shortly.</p>
+  <a href="dashboard.html" class="btn">Go to My Dashboard →</a>
+  <div class="note" id="countdown">Redirecting in 5 seconds...</div>
+</div>
+<script src="modules/fw-auth.js"></script>
+<script>
+var secs = 5;
+var el = document.getElementById('countdown');
+var t = setInterval(function(){
+  secs--;
+  el.textContent = 'Redirecting in ' + secs + ' second' + (secs !== 1 ? 's' : '') + '...';
+  if(secs <= 0){
+    clearInterval(t);
+    /* Guard: only go to dashboard if user session is still active */
+    if(window.fwAuth && window.fwAuth.user){
+      window.location.href = 'dashboard.html';
+    } else {
+      fwAuth.init(function(){
+        window.location.href = fwAuth.user ? 'dashboard.html' : 'auth.html';
+      });
+    }
+  }
+}, 1000);
+</script>
+</body>
+</html>

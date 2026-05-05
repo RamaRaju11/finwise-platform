@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Industry Benchmarks Engine</title>
+<style>
+  :root {
+    --bg:#0f1117; --surface:#1a1d27; --card:#22263a;
+    --border:#2e3350; --accent:#6c63ff; --accent2:#00d4aa;
+    --text:#e8eaf6; --muted:#8892b0; --danger:#ff5370;
+    --warn:#ffcb6b; --success:#c3e88d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  header{background:linear-gradient(135deg,#1a1d27,#22263a);border-bottom:1px solid var(--border);padding:1.5rem 2rem}
+  header h1{font-size:1.5rem;font-weight:700}
+  header p{color:var(--muted);font-size:.875rem;margin-top:.25rem}
+  .badge{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:600;padding:.2rem .5rem;border-radius:999px;margin-left:.5rem;vertical-align:middle}
+  nav{display:flex;gap:.5rem;padding:1rem 2rem;border-bottom:1px solid var(--border);overflow-x:auto;flex-wrap:wrap}
+  .tab{padding:.5rem 1rem;border-radius:.5rem;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.85rem;white-space:nowrap;transition:.15s}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .panel{display:none;padding:1.5rem 2rem;max-width:1200px}
+  .panel.active{display:block}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;margin-bottom:1rem}
+  .card h3{font-size:1rem;font-weight:600;margin-bottom:.75rem;color:var(--accent)}
+  label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.3rem}
+  select,input{width:100%;padding:.55rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--text);font-size:.875rem;outline:none}
+  select:focus,input:focus{border-color:var(--accent)}
+  .btn{padding:.55rem 1.2rem;border:none;border-radius:.5rem;cursor:pointer;font-size:.875rem;font-weight:600;transition:.15s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{filter:brightness(1.1)}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+  @media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+  /* Rating chips */
+  .chip{display:inline-block;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:999px}
+  .chip-excellent{background:#1a4a30;color:#c3e88d}
+  .chip-good{background:#1a3a4a;color:#89dcff}
+  .chip-average{background:#2a2a1a;color:#ffcb6b}
+  .chip-below{background:#3a2a1a;color:#ffb86c}
+  .chip-poor{background:#3a1a1a;color:#ff5370}
+  /* Benchmark table */
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th{text-align:left;padding:.6rem .8rem;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em}
+  td{padding:.6rem .8rem;border-bottom:1px solid rgba(46,51,80,.5)}
+  tr:hover td{background:rgba(108,99,255,.05)}
+  /* Gauge bar */
+  .gauge-wrap{background:var(--border);border-radius:999px;height:6px;width:100%;overflow:hidden;margin-top:.4rem}
+  .gauge-fill{height:6px;border-radius:999px;transition:width .4s}
+  /* Industry card */
+  .ind-card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.1rem;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:.75rem}
+  .ind-card:hover,.ind-card.sel{border-color:var(--accent);background:#1e2035}
+  .ind-card .icon{font-size:1.8rem}
+  .ind-card .info h4{font-size:.9rem;font-weight:600}
+  .ind-card .info p{font-size:.75rem;color:var(--muted);margin-top:.15rem}
+  /* Comparison row colors */
+  .cmp-excellent{border-left:3px solid #c3e88d}
+  .cmp-good{border-left:3px solid #89dcff}
+  .cmp-average{border-left:3px solid #ffcb6b}
+  .cmp-below{border-left:3px solid #ffb86c}
+  .cmp-poor{border-left:3px solid #ff5370}
+  /* Score ring */
+  .score-ring{display:flex;flex-direction:column;align-items:center;justify-content:center;width:120px;height:120px;border-radius:50%;border:8px solid var(--border);position:relative;font-size:1.8rem;font-weight:700;flex-shrink:0}
+  /* Test results */
+  .test-pass{color:var(--success);font-size:.8rem}
+  .test-fail{color:var(--danger);font-size:.8rem}
+  .test-row{padding:.45rem .6rem;border-bottom:1px solid rgba(46,51,80,.4);display:flex;align-items:center;gap:.6rem}
+  .summary-box{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1rem;margin-bottom:1.25rem;font-size:.9rem}
+  .metric-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(46,51,80,.5);font-size:.85rem}
+  .metric-row:last-child{border-bottom:none}
+  pre{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:.75rem;font-size:.78rem;overflow-x:auto;color:var(--text);white-space:pre-wrap;word-break:break-word}
+  .insight-box{background:var(--card);border-left:3px solid var(--accent2);border-radius:0 .75rem .75rem 0;padding:1rem 1.25rem;margin-bottom:.75rem}
+  .insight-box h4{font-size:.85rem;font-weight:700;color:var(--accent2);margin-bottom:.35rem}
+  .insight-box p{font-size:.82rem;color:var(--muted);line-height:1.5}
+  .insight-box ul{padding-left:1.2rem;margin-top:.3rem}
+  .insight-box ul li{font-size:.82rem;color:var(--text);line-height:1.6}
+  .pct-bar-wrap{display:flex;align-items:center;gap:.75rem;margin-top:.5rem}
+  .pct-bar{flex:1;height:10px;background:var(--border);border-radius:999px;overflow:hidden;position:relative}
+  .pct-fill{height:100%;border-radius:999px}
+  .pct-label{font-size:.78rem;color:var(--muted);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 Industry Benchmarks Engine</h1>
+  <p>Compare your financial metrics against industry peers — 10 SMB sectors, 7 key ratios</p>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showTab('industries')">🏭 Industry Selector</button>
+  <button class="tab" onclick="showTab('benchmarks')">📋 Benchmark Table</button>
+  <button class="tab" onclick="showTab('compare')">🔍 Compare Your Business</button>
+  <button class="tab" onclick="showTab('percentile')">📈 Percentile Ranking</button>
+  <button class="tab" onclick="showTab('insights')">💡 Insights</button>
+  <button class="tab" onclick="showTab('tests')">✅ Unit Tests</button>
+</nav>
+
+<!-- ═══════════════════════ INDUSTRY SELECTOR ══════════════════════════════ -->
+<div id="industries" class="panel active">
+  <div class="card">
+    <h3>Select Your Industry</h3>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Click an industry to see its benchmark data on the <strong>Benchmark Table</strong> tab.</p>
+    <div id="industryGrid" class="grid-3"></div>
+  </div>
+  <div id="industryDetail" style="display:none">
+    <div class="card">
+      <h3 id="detailTitle"></h3>
+      <p id="detailDesc" style="font-size:.83rem;color:var(--muted);margin-bottom:1rem"></p>
+      <div id="detailMetrics"></div>
+      <div style="margin-top:1rem">
+        <button class="btn btn-primary" onclick="goToTab('benchmarks')">📋 View Full Benchmark Table →</button>
+        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text);margin-left:.5rem" onclick="goToTab('compare')">🔍 Compare My Business →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ BENCHMARK TABLE ════════════════════════════════ -->
+<div id="benchmarks" class="panel">
+  <div class="card">
+    <h3>Industry Benchmark Reference Table</h3>
+    <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+      <div style="flex:1;min-width:200px">
+        <label>Industry</label>
+        <select id="bmIndustry" onchange="renderBenchmarkTable()"></select>
+      </div>
+      <div style="color:var(--muted);font-size:.78rem;align-self:flex-end;padding-bottom:.35rem">
+        All benchmarks based on US small business market data
+      </div>
+    </div>
+    <div id="bmTableWrap"></div>
+  </div>
+  <div class="card">
+    <h3>How to Read This Table</h3>
+    <div class="grid-3">
+      <div><strong style="color:#ffcb6b">P25 (25th Percentile)</strong><br><span style="font-size:.8rem;color:var(--muted)">Bottom quartile — 75% of businesses in this industry perform better.</span></div>
+      <div><strong style="color:#89dcff">Median (50th Percentile)</strong><br><span style="font-size:.8rem;color:var(--muted)">Industry midpoint — use as your primary benchmark target.</span></div>
+      <div><strong style="color:#c3e88d">P75 (75th Percentile)</strong><br><span style="font-size:.8rem;color:var(--muted)">Top quartile — only 25% of businesses exceed this level.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ COMPARE ════════════════════════════════════════ -->
+<div id="compare" class="panel">
+  <div class="grid-2">
+    <div class="card">
+      <h3>Your Business Metrics</h3>
+      <div style="margin-bottom:.75rem">
+        <label>Industry</label>
+        <select id="cmpIndustry"></select>
+      </div>
+      <div class="grid-2">
+        <div style="margin-bottom:.75rem">
+          <label>Gross Margin %</label>
+          <input type="number" id="cmpGross" placeholder="e.g. 35" step="0.1"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>Net Margin %</label>
+          <input type="number" id="cmpNet" placeholder="e.g. 8" step="0.1"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>Current Ratio (×)</label>
+          <input type="number" id="cmpCurrent" placeholder="e.g. 1.5" step="0.01"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>Debt-to-Equity (×)</label>
+          <input type="number" id="cmpDTE" placeholder="e.g. 0.8" step="0.01"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>DSCR (×)</label>
+          <input type="number" id="cmpDSCR" placeholder="e.g. 1.6" step="0.01"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>Operating CF Margin %</label>
+          <input type="number" id="cmpOCF" placeholder="e.g. 10" step="0.1"/>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <label>Revenue Growth %</label>
+          <input type="number" id="cmpGrowth" placeholder="e.g. 12" step="0.1"/>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="runCompare()" style="width:100%">🔍 Compare vs Industry</button>
+    </div>
+    <div class="card">
+      <h3>Quick Start — Sample Data</h3>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:.75rem">Load a sample profile to explore the tool.</p>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text);text-align:left" onclick="loadSample('retail')">🛍️ Retail — Median Performer</button>
+        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text);text-align:left" onclick="loadSample('services')">💼 Professional Services — Strong Performer</button>
+        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text);text-align:left" onclick="loadSample('restaurant')">🍽️ Restaurant — Struggling Margins</button>
+        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text);text-align:left" onclick="loadSample('technology')">💻 Technology / SaaS — High Growth</button>
+      </div>
+    </div>
+  </div>
+  <div id="cmpResult" style="display:none">
+    <div class="card" id="cmpSummary"></div>
+    <div class="card">
+      <h3>Metric-by-Metric Comparison</h3>
+      <div id="cmpRows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PERCENTILE RANKING ═════════════════════════════ -->
+<div id="percentile" class="panel">
+  <div class="card">
+    <h3>Percentile Rank Lookup</h3>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Find out where a single metric value sits within your industry.</p>
+    <div class="grid-3">
+      <div>
+        <label>Industry</label>
+        <select id="pctIndustry"></select>
+      </div>
+      <div>
+        <label>Metric</label>
+        <select id="pctMetric">
+          <option value="grossMarginPct">Gross Profit Margin</option>
+          <option value="netMarginPct">Net Profit Margin</option>
+          <option value="currentRatio">Current Ratio</option>
+          <option value="debtToEquity">Debt-to-Equity Ratio</option>
+          <option value="dscr">DSCR</option>
+          <option value="operatingCFMarginPct">Operating CF Margin</option>
+          <option value="revenueGrowthPct">Revenue Growth Rate</option>
+        </select>
+      </div>
+      <div>
+        <label>Your Value</label>
+        <input type="number" id="pctValue" placeholder="e.g. 35" step="0.1"/>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="runPercentile()" style="margin-top:1rem">📈 Get Percentile Rank</button>
+  </div>
+  <div id="pctResult" style="display:none">
+    <div class="card" id="pctCard"></div>
+    <div class="card">
+      <h3>Industry Reference Points</h3>
+      <div id="pctRef"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ INSIGHTS ══════════════════════════════════════ -->
+<div id="insights" class="panel">
+  <div class="card">
+    <h3>Narrative Insights Generator</h3>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Uses the same metrics as the Compare tab — fill them in there first, or load a sample below.</p>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="runInsights()">💡 Generate Insights</button>
+      <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text)" onclick="loadSample('services');runInsights()">Load Services Sample &amp; Run</button>
+    </div>
+  </div>
+  <div id="insightsResult" style="display:none"></div>
+</div>
+
+<!-- ═══════════════════════ UNIT TESTS ════════════════════════════════════ -->
+<div id="tests" class="panel">
+  <div class="card">
+    <h3>Unit Tests — industryBenchmarksEngine</h3>
+    <button class="btn btn-primary" onclick="runTests()" style="margin-bottom:1rem">▶ Run All Tests</button>
+    <div id="testSummary"></div>
+    <div id="testResults"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ENGINE (INLINE) ════════════════════════════════ -->
+<script>
+// ─── industryBenchmarksEngine.js — embedded inline ───────────────────────
+function _r(n) { return Math.round(n * 100) / 100; }
+
+const BENCHMARKS = {
+  retail: {
+    label: "Retail (General)", icon: "🛍️",
+    description: "Brick-and-mortar and mixed retail stores.",
+    metrics: {
+      grossMarginPct:       { p25: 22, median: 32, p75: 45, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 1,  median: 3.5,p75: 6,  higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.0,median: 1.4,p75: 2.0,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.5,median: 1.0,p75: 2.0,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.1,median: 1.5,p75: 2.2,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 2,  median: 5,  p75: 8,  higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 2,  median: 6,  p75: 12, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  restaurant: {
+    label: "Restaurant / Food Service", icon: "🍽️",
+    description: "Full-service restaurants, cafes, and quick-service outlets.",
+    metrics: {
+      grossMarginPct:       { p25: 30, median: 55, p75: 70, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 1,  median: 4,  p75: 8,  higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 0.5,median: 0.8,p75: 1.2,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 1.0,median: 2.5,p75: 4.0,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.0,median: 1.4,p75: 2.0,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 3,  median: 7,  p75: 12, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 3,  median: 8,  p75: 15, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  manufacturing: {
+    label: "Manufacturing", icon: "🏭",
+    description: "Small to mid-size product manufacturers.",
+    metrics: {
+      grossMarginPct:       { p25: 15, median: 28, p75: 40, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 2,  median: 5,  p75: 10, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.2,median: 1.8,p75: 2.5,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.4,median: 0.9,p75: 1.8,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.2,median: 1.6,p75: 2.5,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 4,  median: 8,  p75: 14, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 2,  median: 5,  p75: 10, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  services: {
+    label: "Professional Services", icon: "💼",
+    description: "Consulting, legal, accounting, and advisory firms.",
+    metrics: {
+      grossMarginPct:       { p25: 50, median: 65, p75: 80, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 10, median: 18, p75: 30, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.5,median: 2.2,p75: 3.5,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.1,median: 0.4,p75: 1.0,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.5,median: 2.2,p75: 3.5,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 12, median: 20, p75: 30, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 5,  median: 12, p75: 20, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  healthcare: {
+    label: "Healthcare / Medical", icon: "🏥",
+    description: "Medical practices, clinics, and healthcare services.",
+    metrics: {
+      grossMarginPct:       { p25: 30, median: 45, p75: 60, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 4,  median: 8,  p75: 15, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.3,median: 1.8,p75: 2.8,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.5,median: 1.2,p75: 2.5,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.3,median: 1.8,p75: 2.8,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 6,  median: 12, p75: 20, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 4,  median: 8,  p75: 14, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  technology: {
+    label: "Technology / SaaS", icon: "💻",
+    description: "Software companies, SaaS, and technology services.",
+    metrics: {
+      grossMarginPct:       { p25: 55, median: 72, p75: 85, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: -5, median: 8,  p75: 25, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.8,median: 2.5,p75: 4.0,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.0,median: 0.3,p75: 0.8,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.0,median: 1.8,p75: 3.0,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 5,  median: 18, p75: 35, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 10, median: 25, p75: 50, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  construction: {
+    label: "Construction / Contracting", icon: "🏗️",
+    description: "General contractors, subcontractors, and specialty trades.",
+    metrics: {
+      grossMarginPct:       { p25: 15, median: 22, p75: 30, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 2,  median: 4,  p75: 8,  higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.1,median: 1.5,p75: 2.0,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.5,median: 1.2,p75: 2.5,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.1,median: 1.5,p75: 2.2,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 3,  median: 6,  p75: 10, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 3,  median: 7,  p75: 12, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  wholesale: {
+    label: "Wholesale / Distribution", icon: "📦",
+    description: "Wholesale distributors and B2B product suppliers.",
+    metrics: {
+      grossMarginPct:       { p25: 10, median: 20, p75: 30, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 1,  median: 3,  p75: 6,  higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.2,median: 1.6,p75: 2.2,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.5,median: 1.0,p75: 2.0,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.1,median: 1.5,p75: 2.0,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 2,  median: 4,  p75: 7,  higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 3,  median: 6,  p75: 10, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  ecommerce: {
+    label: "E-Commerce", icon: "🛒",
+    description: "Online retail, DTC brands, and marketplace sellers.",
+    metrics: {
+      grossMarginPct:       { p25: 25, median: 40, p75: 60, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: 1,  median: 5,  p75: 12, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 1.0,median: 1.5,p75: 2.5,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 0.3,median: 0.8,p75: 1.8,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.0,median: 1.6,p75: 2.5,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 3,  median: 8,  p75: 15, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 10, median: 20, p75: 40, higherIsBetter: true,  unit: "%" },
+    },
+  },
+  hospitality: {
+    label: "Hospitality / Hotel", icon: "🏨",
+    description: "Hotels, resorts, B&Bs, and short-term rentals.",
+    metrics: {
+      grossMarginPct:       { p25: 45, median: 60, p75: 75, higherIsBetter: true,  unit: "%" },
+      netMarginPct:         { p25: -2, median: 5,  p75: 12, higherIsBetter: true,  unit: "%" },
+      currentRatio:         { p25: 0.5,median: 0.9,p75: 1.4,higherIsBetter: true,  unit: "×" },
+      debtToEquity:         { p25: 1.5,median: 3.0,p75: 5.0,higherIsBetter: false, unit: "×" },
+      dscr:                 { p25: 1.0,median: 1.4,p75: 2.0,higherIsBetter: true,  unit: "×" },
+      operatingCFMarginPct: { p25: 5,  median: 15, p75: 25, higherIsBetter: true,  unit: "%" },
+      revenueGrowthPct:     { p25: 2,  median: 6,  p75: 12, higherIsBetter: true,  unit: "%" },
+    },
+  },
+};
+
+const METRIC_LABELS = {
+  grossMarginPct:       "Gross Profit Margin",
+  netMarginPct:         "Net Profit Margin",
+  currentRatio:         "Current Ratio",
+  debtToEquity:         "Debt-to-Equity Ratio",
+  dscr:                 "Debt Service Coverage (DSCR)",
+  operatingCFMarginPct: "Operating Cash Flow Margin",
+  revenueGrowthPct:     "Revenue Growth Rate",
+};
+
+function getIndustries() {
+  return Object.entries(BENCHMARKS).map(([key, v]) => ({
+    key, label: v.label, icon: v.icon, description: v.description,
+  }));
+}
+
+function getBenchmarks(industry) {
+  const b = BENCHMARKS[industry];
+  if (!b) throw new Error(`Unknown industry: "${industry}"`);
+  const metrics = Object.entries(b.metrics).map(([key, v]) => ({
+    key, label: METRIC_LABELS[key] || key,
+    p25: v.p25, median: v.median, p75: v.p75,
+    unit: v.unit, higherIsBetter: v.higherIsBetter,
+  }));
+  return { industry, label: b.label, icon: b.icon, description: b.description, metrics };
+}
+
+function compareMetrics(industry, userMetrics = {}) {
+  const b = BENCHMARKS[industry];
+  if (!b) throw new Error(`Unknown industry: "${industry}"`);
+  const comparisons = [];
+  let totalScore = 0, count = 0;
+  for (const [key, val] of Object.entries(userMetrics)) {
+    const bm = b.metrics[key];
+    if (!bm || val == null || isNaN(val)) continue;
+    const rating    = _getRating(val, bm);
+    const score     = _ratingScore(rating);
+    const percentile = _estimatePercentile(val, bm);
+    const delta     = bm.higherIsBetter ? _r(val - bm.median) : _r(bm.median - val);
+    const deltaDir  = delta > 0 ? "above" : delta < 0 ? "below" : "at";
+    comparisons.push({
+      key, label: METRIC_LABELS[key] || key,
+      userValue: val, unit: bm.unit,
+      p25: bm.p25, median: bm.median, p75: bm.p75,
+      higherIsBetter: bm.higherIsBetter,
+      rating, score, percentile,
+      delta: Math.abs(delta), deltaDir,
+      vsMedian: `${Math.abs(delta)}${bm.unit} ${deltaDir} industry median`,
+    });
+    totalScore += score;
+    count++;
+  }
+  const avgScore = count > 0 ? _r(totalScore / count) : 0;
+  const overallRating = avgScore >= 4 ? "Excellent" : avgScore >= 3 ? "Good"
+                      : avgScore >= 2 ? "Average"   : avgScore >= 1 ? "Below Average" : "Poor";
+  return {
+    industry, label: b.label, icon: b.icon,
+    comparisons, overallRating, overallScore: _r(avgScore * 25), metricsCompared: count,
+  };
+}
+
+function getPercentileRank(industry, metricKey, value) {
+  const b = BENCHMARKS[industry];
+  if (!b) throw new Error(`Unknown industry: "${industry}"`);
+  const bm = b.metrics[metricKey];
+  if (!bm) throw new Error(`Unknown metric: "${metricKey}"`);
+  const percentile = _estimatePercentile(value, bm);
+  const rating = _getRating(value, bm);
+  return {
+    industry, metricKey,
+    label: METRIC_LABELS[metricKey] || metricKey,
+    value, unit: bm.unit, percentile, rating,
+    interpretation: `Your value of ${value}${bm.unit} is in the ${percentile}th percentile for ${BENCHMARKS[industry].label}.`,
+  };
+}
+
+function generateInsights(industry, userMetrics = {}) {
+  const result = compareMetrics(industry, userMetrics);
+  const strengths = [], weaknesses = [], suggestions = [];
+  result.comparisons.forEach(c => {
+    if (c.rating === "Excellent" || c.rating === "Good") {
+      strengths.push(`${c.label}: ${c.userValue}${c.unit} — ${c.rating.toLowerCase()} (top ${100 - c.percentile}% of ${result.label} businesses).`);
+    } else if (c.rating === "Below Average" || c.rating === "Poor") {
+      weaknesses.push(`${c.label}: ${c.userValue}${c.unit} — ${c.rating.toLowerCase()} (industry median: ${c.median}${c.unit}).`);
+      suggestions.push(_getSuggestion(c.key, c.userValue, c.median, c.unit));
+    }
+  });
+  return {
+    industry, label: result.label,
+    overallRating: result.overallRating, overallScore: result.overallScore,
+    strengths, weaknesses,
+    suggestions: suggestions.filter(Boolean),
+    summary: `Overall ${result.overallRating} compared to ${result.label} industry. ${strengths.length} strength(s), ${weaknesses.length} area(s) below industry median.`,
+  };
+}
+
+function _getRating(value, bm) {
+  if (bm.higherIsBetter) {
+    if (value >= bm.p75) return "Excellent";
+    if (value >= bm.median) return "Good";
+    if (value >= bm.p25) return "Average";
+    return value >= bm.p25 * 0.6 ? "Below Average" : "Poor";
+  } else {
+    if (value <= bm.p25) return "Excellent";
+    if (value <= bm.median) return "Good";
+    if (value <= bm.p75) return "Average";
+    return value <= bm.p75 * 1.5 ? "Below Average" : "Poor";
+  }
+}
+
+function _ratingScore(rating) {
+  return { Excellent: 5, Good: 4, Average: 3, "Below Average": 2, Poor: 1 }[rating] || 0;
+}
+
+function _estimatePercentile(value, bm) {
+  if (bm.higherIsBetter) {
+    if (value <= bm.p25)   return Math.max(1, Math.round(25 * (value / bm.p25)));
+    if (value <= bm.median) return Math.round(25 + 25 * ((value - bm.p25) / (bm.median - bm.p25)));
+    if (value <= bm.p75)    return Math.round(50 + 25 * ((value - bm.median) / (bm.p75 - bm.median)));
+    return Math.min(99, Math.round(75 + 24 * ((value - bm.p75) / (bm.p75 * 0.5))));
+  } else {
+    if (value >= bm.p75)   return Math.max(1, Math.round(25 * (bm.p75 / value)));
+    if (value >= bm.median) return Math.round(25 + 25 * ((bm.p75 - value) / (bm.p75 - bm.median)));
+    if (value >= bm.p25)    return Math.round(50 + 25 * ((bm.median - value) / (bm.median - bm.p25)));
+    return Math.min(99, Math.round(75 + 24 * ((bm.p25 - value) / (bm.p25 * 0.5))));
+  }
+}
+
+function _getSuggestion(metricKey, value, median, unit) {
+  const gap = _r(Math.abs(value - median));
+  const s = {
+    grossMarginPct:       `Improve gross margin by ${gap}${unit}: renegotiate supplier contracts and review pricing on top-selling items.`,
+    netMarginPct:         `Net margin is ${gap}${unit} below median. Identify and eliminate the highest-cost, lowest-value expense lines.`,
+    currentRatio:         `Current ratio is ${gap}${unit} below median. Speed up receivables collection and defer non-essential payables.`,
+    debtToEquity:         `Debt-to-equity is ${gap}${unit} above median. Prioritize debt repayment or consider equity injection.`,
+    dscr:                 `DSCR is ${gap}${unit} below median. Increase net operating income or reduce total debt service obligations.`,
+    operatingCFMarginPct: `Operating cash flow margin is ${gap}${unit} below median. Review working capital cycle.`,
+    revenueGrowthPct:     `Revenue growth is ${gap}${unit} below median. Audit customer acquisition channels and pricing strategy.`,
+  };
+  return s[metricKey] || null;
+}
+</script>
+
+<!-- ═══════════════════════ UI LOGIC ═══════════════════════════════════════ -->
+<script>
+// ── helpers ──────────────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes(`'${id}'`)) t.classList.add('active');
+  });
+}
+function goToTab(id) { showTab(id); }
+
+function ratingChip(r) {
+  const cls = { Excellent:'chip-excellent', Good:'chip-good', Average:'chip-average',
+                'Below Average':'chip-below', Poor:'chip-poor' }[r] || 'chip-average';
+  return `<span class="chip ${cls}">${r}</span>`;
+}
+
+function ratingColor(r) {
+  return { Excellent:'#c3e88d', Good:'#89dcff', Average:'#ffcb6b',
+           'Below Average':'#ffb86c', Poor:'#ff5370' }[r] || '#888';
+}
+
+function scoreColor(s) {
+  if (s >= 75) return '#c3e88d';
+  if (s >= 50) return '#89dcff';
+  if (s >= 25) return '#ffcb6b';
+  return '#ff5370';
+}
+
+// populate all <select> for industry
+function populateIndustrySelects() {
+  const industries = getIndustries();
+  const ids = ['bmIndustry','cmpIndustry','pctIndustry'];
+  ids.forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = industries.map(i => `<option value="${i.key}">${i.icon} ${i.label}</option>`).join('');
+  });
+}
+
+// ── INDUSTRY SELECTOR tab ─────────────────────────────────────────────────
+function renderIndustryGrid() {
+  const industries = getIndustries();
+  const grid = document.getElementById('industryGrid');
+  grid.innerHTML = industries.map(i => `
+    <div class="ind-card" onclick="selectIndustry('${i.key}')" id="ind-${i.key}">
+      <span class="icon">${i.icon}</span>
+      <div class="info">
+        <h4>${i.label}</h4>
+        <p>${i.description}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectIndustry(key) {
+  document.querySelectorAll('.ind-card').forEach(c => c.classList.remove('sel'));
+  const card = document.getElementById('ind-' + key);
+  if (card) card.classList.add('sel');
+
+  const data = getBenchmarks(key);
+  document.getElementById('detailTitle').textContent = `${data.icon} ${data.label}`;
+  document.getElementById('detailDesc').textContent = data.description;
+
+  const metricsHtml = data.metrics.map(m => `
+    <div class="metric-row">
+      <span>${m.label} ${m.higherIsBetter ? '↑ higher better' : '↓ lower better'}</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span style="font-size:.75rem;color:var(--muted)">P25: <strong style="color:#ffcb6b">${m.p25}${m.unit}</strong></span>
+        <span style="font-size:.75rem;color:var(--muted)">Median: <strong style="color:#89dcff">${m.median}${m.unit}</strong></span>
+        <span style="font-size:.75rem;color:var(--muted)">P75: <strong style="color:#c3e88d">${m.p75}${m.unit}</strong></span>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('detailMetrics').innerHTML = metricsHtml;
+  document.getElementById('industryDetail').style.display = 'block';
+}
+
+// ── BENCHMARK TABLE tab ───────────────────────────────────────────────────
+function renderBenchmarkTable() {
+  const industry = document.getElementById('bmIndustry').value;
+  const data = getBenchmarks(industry);
+  const html = `
+    <div style="margin-bottom:.5rem;font-size:.83rem;color:var(--muted)">${data.icon} ${data.description}</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th style="color:#ffcb6b">P25 (Bottom Quartile)</th>
+          <th style="color:#89dcff">Median (50th Pct)</th>
+          <th style="color:#c3e88d">P75 (Top Quartile)</th>
+          <th>Direction</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.metrics.map(m => `
+          <tr>
+            <td><strong>${m.label}</strong></td>
+            <td style="color:#ffcb6b">${m.p25}${m.unit}</td>
+            <td style="color:#89dcff">${m.median}${m.unit}</td>
+            <td style="color:#c3e88d">${m.p75}${m.unit}</td>
+            <td style="font-size:.75rem;color:var(--muted)">${m.higherIsBetter ? '↑ higher better' : '↓ lower better'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('bmTableWrap').innerHTML = html;
+}
+
+// ── COMPARE tab ───────────────────────────────────────────────────────────
+const SAMPLES = {
+  retail: {
+    industry: 'retail',
+    metrics: { grossMarginPct: 32, netMarginPct: 3.5, currentRatio: 1.4, debtToEquity: 1.0, dscr: 1.5, operatingCFMarginPct: 5, revenueGrowthPct: 6 },
+  },
+  services: {
+    industry: 'services',
+    metrics: { grossMarginPct: 75, netMarginPct: 22, currentRatio: 2.8, debtToEquity: 0.3, dscr: 2.5, operatingCFMarginPct: 25, revenueGrowthPct: 18 },
+  },
+  restaurant: {
+    industry: 'restaurant',
+    metrics: { grossMarginPct: 38, netMarginPct: 2, currentRatio: 0.65, debtToEquity: 3.2, dscr: 1.1, operatingCFMarginPct: 4, revenueGrowthPct: 3 },
+  },
+  technology: {
+    industry: 'technology',
+    metrics: { grossMarginPct: 78, netMarginPct: 12, currentRatio: 3.2, debtToEquity: 0.2, dscr: 2.2, operatingCFMarginPct: 22, revenueGrowthPct: 35 },
+  },
+};
+
+function loadSample(key) {
+  const s = SAMPLES[key];
+  if (!s) return;
+  document.getElementById('cmpIndustry').value = s.industry;
+  const m = s.metrics;
+  document.getElementById('cmpGross').value   = m.grossMarginPct;
+  document.getElementById('cmpNet').value     = m.netMarginPct;
+  document.getElementById('cmpCurrent').value = m.currentRatio;
+  document.getElementById('cmpDTE').value     = m.debtToEquity;
+  document.getElementById('cmpDSCR').value    = m.dscr;
+  document.getElementById('cmpOCF').value     = m.operatingCFMarginPct;
+  document.getElementById('cmpGrowth').value  = m.revenueGrowthPct;
+  // also sync insights tab
+}
+
+function getV(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? undefined : v;
+}
+
+function runCompare() {
+  const industry = document.getElementById('cmpIndustry').value;
+  const userMetrics = {};
+  const raw = {
+    grossMarginPct: getV('cmpGross'), netMarginPct: getV('cmpNet'),
+    currentRatio: getV('cmpCurrent'), debtToEquity: getV('cmpDTE'),
+    dscr: getV('cmpDSCR'), operatingCFMarginPct: getV('cmpOCF'),
+    revenueGrowthPct: getV('cmpGrowth'),
+  };
+  for (const [k, v] of Object.entries(raw)) { if (v !== undefined) userMetrics[k] = v; }
+  if (Object.keys(userMetrics).length === 0) { alert('Enter at least one metric to compare.'); return; }
+
+  const result = compareMetrics(industry, userMetrics);
+  const col = scoreColor(result.overallScore);
+
+  document.getElementById('cmpSummary').innerHTML = `
+    <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+      <div class="score-ring" style="border-color:${col};color:${col}">${result.overallScore}</div>
+      <div style="flex:1">
+        <h3 style="font-size:1.1rem;font-weight:700;color:${col}">${result.icon} ${result.label}</h3>
+        <div style="font-size:1rem;margin:.25rem 0">Overall Rating: <strong style="color:${col}">${result.overallRating}</strong></div>
+        <div style="font-size:.83rem;color:var(--muted)">${result.metricsCompared} metric(s) compared</div>
+        <div class="gauge-wrap" style="margin-top:.75rem;max-width:300px">
+          <div class="gauge-fill" style="width:${result.overallScore}%;background:${col}"></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const rows = result.comparisons.map(c => {
+    const cmpClass = c.rating.toLowerCase().replace(' ','-');
+    const fillPct = Math.min(99, c.percentile);
+    const dir = c.deltaDir === 'above' ? '▲' : c.deltaDir === 'below' ? '▼' : '=';
+    const dirCol = c.deltaDir === 'above' ? '#c3e88d' : c.deltaDir === 'below' ? '#ff5370' : '#ffcb6b';
+    return `
+      <div class="card cmp-${cmpClass}" style="padding:.85rem;margin-bottom:.65rem">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem">
+          <div>
+            <div style="font-weight:600;font-size:.9rem">${c.label}</div>
+            <div style="font-size:.78rem;color:var(--muted);margin-top:.15rem">
+              Your value: <strong style="color:var(--text)">${c.userValue}${c.unit}</strong> &nbsp;|&nbsp;
+              Median: ${c.median}${c.unit} &nbsp;|&nbsp;
+              <span style="color:${dirCol}">${dir} ${c.delta}${c.unit} ${c.deltaDir} median</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            ${ratingChip(c.rating)}
+            <div style="font-size:.75rem;color:var(--muted);margin-top:.25rem">${c.percentile}th percentile</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">
+          <span style="font-size:.7rem;color:var(--muted);width:25px">0</span>
+          <div style="flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden;position:relative">
+            <!-- p25 marker -->
+            <div style="position:absolute;top:0;left:25%;width:2px;height:100%;background:rgba(255,203,107,.6)"></div>
+            <!-- median marker -->
+            <div style="position:absolute;top:0;left:50%;width:2px;height:100%;background:rgba(137,220,255,.6)"></div>
+            <!-- p75 marker -->
+            <div style="position:absolute;top:0;left:75%;width:2px;height:100%;background:rgba(195,232,141,.6)"></div>
+            <!-- user position -->
+            <div style="position:absolute;top:-3px;left:${fillPct}%;width:12px;height:12px;border-radius:50%;background:${ratingColor(c.rating)};transform:translateX(-50%);border:2px solid var(--bg)"></div>
+          </div>
+          <span style="font-size:.7rem;color:var(--muted);width:30px">P99</span>
+        </div>
+        <div style="display:flex;justify-content:space-around;font-size:.7rem;color:var(--muted);margin-top:.2rem">
+          <span>P25: ${c.p25}${c.unit}</span><span>Median: ${c.median}${c.unit}</span><span>P75: ${c.p75}${c.unit}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('cmpRows').innerHTML = rows;
+  document.getElementById('cmpResult').style.display = 'block';
+}
+
+// ── PERCENTILE tab ────────────────────────────────────────────────────────
+function runPercentile() {
+  const industry = document.getElementById('pctIndustry').value;
+  const metricKey = document.getElementById('pctMetric').value;
+  const value = parseFloat(document.getElementById('pctValue').value);
+  if (isNaN(value)) { alert('Enter a valid numeric value.'); return; }
+
+  const r = getPercentileRank(industry, metricKey, value);
+  const bm = BENCHMARKS[industry].metrics[metricKey];
+  const col = ratingColor(r.rating);
+  const fillPct = Math.min(99, r.percentile);
+
+  document.getElementById('pctCard').innerHTML = `
+    <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+      <div class="score-ring" style="border-color:${col};color:${col};font-size:1.4rem">${r.percentile}<sup style="font-size:.6rem">th</sup></div>
+      <div style="flex:1">
+        <h3 style="font-size:1rem;font-weight:700">${r.label}</h3>
+        <div style="font-size:.9rem;margin:.2rem 0">
+          Value: <strong style="color:${col}">${r.value}${r.unit}</strong> &nbsp;|&nbsp; ${ratingChip(r.rating)}
+        </div>
+        <div style="font-size:.82rem;color:var(--muted);margin-top:.3rem">${r.interpretation}</div>
+        <div class="pct-bar-wrap" style="margin-top:.75rem;max-width:400px">
+          <span class="pct-label">0th</span>
+          <div class="pct-bar">
+            <div style="position:absolute;top:0;left:25%;width:2px;height:100%;background:rgba(255,203,107,.7)"></div>
+            <div style="position:absolute;top:0;left:50%;width:2px;height:100%;background:rgba(137,220,255,.7)"></div>
+            <div style="position:absolute;top:0;left:75%;width:2px;height:100%;background:rgba(195,232,141,.7)"></div>
+            <div style="position:absolute;top:-4px;left:${fillPct}%;width:16px;height:16px;border-radius:50%;background:${col};transform:translateX(-50%);border:2px solid var(--bg)"></div>
+          </div>
+          <span class="pct-label">99th</span>
+        </div>
+        <div style="display:flex;justify-content:space-around;font-size:.7rem;color:var(--muted);margin-top:.25rem;max-width:400px;margin-left:2.5rem">
+          <span>P25: ${bm.p25}${bm.unit}</span>
+          <span>Median: ${bm.median}${bm.unit}</span>
+          <span>P75: ${bm.p75}${bm.unit}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const refHtml = `
+    <table>
+      <thead>
+        <tr>
+          <th>Percentile</th><th>Benchmark Value</th><th>Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>25th (P25)</td><td style="color:#ffcb6b">${bm.p25}${bm.unit}</td><td style="color:var(--muted);font-size:.8rem">Bottom quartile — 75% perform better</td></tr>
+        <tr><td>50th (Median)</td><td style="color:#89dcff">${bm.median}${bm.unit}</td><td style="color:var(--muted);font-size:.8rem">Industry midpoint</td></tr>
+        <tr><td>75th (P75)</td><td style="color:#c3e88d">${bm.p75}${bm.unit}</td><td style="color:var(--muted);font-size:.8rem">Top quartile — only 25% exceed this</td></tr>
+        <tr style="background:rgba(108,99,255,.08)"><td>Your Value</td><td style="color:${col};font-weight:700">${r.value}${r.unit}</td><td style="font-size:.8rem">${r.percentile}th percentile — ${r.rating}</td></tr>
+      </tbody>
+    </table>
+  `;
+  document.getElementById('pctRef').innerHTML = refHtml;
+  document.getElementById('pctResult').style.display = 'block';
+}
+
+// ── INSIGHTS tab ──────────────────────────────────────────────────────────
+function runInsights() {
+  const industry = document.getElementById('cmpIndustry').value;
+  const raw = {
+    grossMarginPct: getV('cmpGross'), netMarginPct: getV('cmpNet'),
+    currentRatio: getV('cmpCurrent'), debtToEquity: getV('cmpDTE'),
+    dscr: getV('cmpDSCR'), operatingCFMarginPct: getV('cmpOCF'),
+    revenueGrowthPct: getV('cmpGrowth'),
+  };
+  const userMetrics = {};
+  for (const [k, v] of Object.entries(raw)) { if (v !== undefined) userMetrics[k] = v; }
+  if (Object.keys(userMetrics).length === 0) {
+    document.getElementById('insightsResult').innerHTML = '<div class="card" style="color:var(--warn)">⚠ Enter metrics in the Compare tab first, or load a sample.</div>';
+    document.getElementById('insightsResult').style.display = 'block';
+    return;
+  }
+
+  const ins = generateInsights(industry, userMetrics);
+  const col = scoreColor(ins.overallScore);
+
+  let html = `
+    <div class="summary-box" style="border-left:3px solid ${col};background:var(--card)">
+      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+        <div style="font-size:2rem;font-weight:700;color:${col}">${ins.overallScore}</div>
+        <div>
+          <div style="font-weight:600">${ins.label} — <span style="color:${col}">${ins.overallRating}</span></div>
+          <div style="font-size:.83rem;color:var(--muted);margin-top:.2rem">${ins.summary}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  if (ins.strengths.length) {
+    html += `
+      <div class="insight-box" style="border-left-color:#c3e88d">
+        <h4>✅ Strengths (${ins.strengths.length})</h4>
+        <ul>${ins.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    `;
+  }
+
+  if (ins.weaknesses.length) {
+    html += `
+      <div class="insight-box" style="border-left-color:#ff5370">
+        <h4>⚠ Areas Below Industry Median (${ins.weaknesses.length})</h4>
+        <ul>${ins.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
+      </div>
+    `;
+  }
+
+  if (ins.suggestions.length) {
+    html += `
+      <div class="insight-box" style="border-left-color:#ffcb6b">
+        <h4>💡 Actionable Suggestions</h4>
+        <ul>${ins.suggestions.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    `;
+  }
+
+  if (!ins.strengths.length && !ins.weaknesses.length) {
+    html += `<div class="insight-box"><h4>ℹ Note</h4><p>All entered metrics are at or near industry median — no outstanding strengths or weaknesses detected.</p></div>`;
+  }
+
+  document.getElementById('insightsResult').innerHTML = html;
+  document.getElementById('insightsResult').style.display = 'block';
+  showTab('insights');
+}
+
+// ── UNIT TESTS ─────────────────────────────────────────────────────────────
+function runTests() {
+  const results = [];
+  let pass = 0, fail = 0;
+
+  function test(name, fn) {
+    try {
+      fn();
+      results.push({ name, ok: true });
+      pass++;
+    } catch(e) {
+      results.push({ name, ok: false, err: e.message });
+      fail++;
+    }
+  }
+  function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
+  function approx(a, b, tol = 0.01) { return Math.abs(a - b) <= tol; }
+
+  // getIndustries
+  test('getIndustries returns 10 entries', () => {
+    const list = getIndustries();
+    assert(list.length === 10, `Expected 10, got ${list.length}`);
+  });
+  test('getIndustries entries have key/label/icon/description', () => {
+    const list = getIndustries();
+    list.forEach(i => {
+      assert(i.key && i.label && i.icon && i.description, `Missing field in ${JSON.stringify(i)}`);
+    });
+  });
+
+  // getBenchmarks
+  test('getBenchmarks returns 7 metrics for retail', () => {
+    const b = getBenchmarks('retail');
+    assert(b.metrics.length === 7, `Expected 7, got ${b.metrics.length}`);
+  });
+  test('getBenchmarks throws on unknown industry', () => {
+    let threw = false;
+    try { getBenchmarks('nonexistent'); } catch(e) { threw = true; }
+    assert(threw, 'Should throw for unknown industry');
+  });
+  test('getBenchmarks p25 < median < p75 for all metrics (retail)', () => {
+    const b = getBenchmarks('retail');
+    b.metrics.forEach(m => {
+      assert(m.p25 < m.median, `P25 >= median for ${m.key}`);
+      assert(m.median < m.p75, `median >= p75 for ${m.key}`);
+    });
+  });
+
+  // compareMetrics
+  test('compareMetrics returns correct count for partial metrics', () => {
+    const r = compareMetrics('retail', { grossMarginPct: 35, netMarginPct: 4 });
+    assert(r.metricsCompared === 2, `Expected 2, got ${r.metricsCompared}`);
+  });
+  test('compareMetrics overallScore between 0 and 100', () => {
+    const r = compareMetrics('services', { grossMarginPct: 70, netMarginPct: 20, currentRatio: 2.5, dscr: 2.0 });
+    assert(r.overallScore >= 0 && r.overallScore <= 100, `Score out of range: ${r.overallScore}`);
+  });
+  test('compareMetrics overallRating is valid string', () => {
+    const r = compareMetrics('manufacturing', { grossMarginPct: 28, dscr: 1.6 });
+    const valid = ['Excellent','Good','Average','Below Average','Poor'];
+    assert(valid.includes(r.overallRating), `Invalid rating: ${r.overallRating}`);
+  });
+  test('compareMetrics median performer gets rating Good or Average', () => {
+    const r = compareMetrics('retail', { grossMarginPct: 32, netMarginPct: 3.5, currentRatio: 1.4, dscr: 1.5 });
+    const valid = ['Good','Average','Excellent'];
+    assert(valid.includes(r.overallRating), `Expected Good/Average for median performer, got ${r.overallRating}`);
+  });
+  test('compareMetrics ignores null/NaN/unknown keys', () => {
+    const r = compareMetrics('retail', { grossMarginPct: 30, unknownMetric: 99, anotherBad: null });
+    assert(r.metricsCompared === 1, `Expected 1, got ${r.metricsCompared}`);
+  });
+
+  // getPercentileRank
+  test('getPercentileRank median value returns ~50th percentile', () => {
+    const r = getPercentileRank('retail', 'grossMarginPct', 32); // median=32
+    assert(approx(r.percentile, 50, 5), `Expected ~50, got ${r.percentile}`);
+  });
+  test('getPercentileRank p75 value returns >=75th percentile', () => {
+    const r = getPercentileRank('retail', 'grossMarginPct', 45); // p75=45
+    assert(r.percentile >= 74, `Expected >=74, got ${r.percentile}`);
+  });
+  test('getPercentileRank throws on unknown metric', () => {
+    let threw = false;
+    try { getPercentileRank('retail', 'unknownMetric', 10); } catch(e) { threw = true; }
+    assert(threw, 'Should throw for unknown metric');
+  });
+
+  // generateInsights
+  test('generateInsights returns strengths array', () => {
+    const ins = generateInsights('services', { grossMarginPct: 80, netMarginPct: 25 });
+    assert(Array.isArray(ins.strengths), 'strengths should be array');
+  });
+  test('generateInsights summary string present', () => {
+    const ins = generateInsights('retail', { grossMarginPct: 10 });
+    assert(typeof ins.summary === 'string' && ins.summary.length > 0, 'summary missing');
+  });
+  test('generateInsights strong performer has 0 weaknesses', () => {
+    const ins = generateInsights('retail', { grossMarginPct: 50, netMarginPct: 8, currentRatio: 2.5, dscr: 2.5 });
+    assert(ins.weaknesses.length === 0, `Expected 0 weaknesses for strong performer, got ${ins.weaknesses.length}`);
+  });
+  test('generateInsights poor performer has suggestions', () => {
+    const ins = generateInsights('retail', { grossMarginPct: 5, netMarginPct: 0.2, dscr: 0.8 });
+    assert(ins.suggestions.length > 0, 'Expected suggestions for poor performer');
+  });
+
+  // render
+  const summary = document.getElementById('testSummary');
+  summary.innerHTML = `
+    <div style="margin-bottom:.75rem;padding:.75rem;border-radius:.5rem;background:${fail===0?'rgba(195,232,141,.1)':'rgba(255,83,112,.1)'};border:1px solid ${fail===0?'#c3e88d':'#ff5370'}">
+      <strong style="color:${fail===0?'#c3e88d':'#ff5370'}">${fail===0?'✅ All tests passed':'❌ Some tests failed'}</strong>
+      &nbsp;—&nbsp; ${pass} passed, ${fail} failed out of ${pass+fail} total
+    </div>
+  `;
+  const out = document.getElementById('testResults');
+  out.innerHTML = results.map(r => `
+    <div class="test-row">
+      <span style="color:${r.ok?'#c3e88d':'#ff5370'}">${r.ok?'✅':'❌'}</span>
+      <span class="${r.ok?'test-pass':'test-fail'}">${r.name}</span>
+      ${r.err ? `<span style="color:var(--danger);font-size:.75rem">— ${r.err}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  populateIndustrySelects();
+  renderIndustryGrid();
+  renderBenchmarkTable();
+  // auto-run tests
+  runTests();
+});
+</script>
+</body>
+</html>
