@@ -15,10 +15,10 @@
     /* hide nav.js secondary bar — sidebar replaces it */
     'body.fw-sb-page .fnav-bar{display:none!important}',
 
-    /* standalone page content area — always fill viewport, fix dark mode */
-    'body.fw-sb-page .main{width:100%;min-height:calc(100vh - 52px);box-sizing:border-box}',
-    'html.dark body.fw-sb-page .main{background:#f8fafc!important;color:#1e293b!important}',
-    'html.dark body.fw-sb-page .main *{color:inherit}',
+    /* standalone page content area — always fill viewport, always light theme */
+    'body.fw-sb-page .main{width:100%;min-height:calc(100vh - 52px);box-sizing:border-box;background:#f8fafc!important;color:#1e293b!important}',
+    'html.dark body.fw-sb-page .main *{color:#1e293b!important}',
+    'html.dark body.fw-sb-page .main .btn-primary{color:#fff!important}',
 
     /* convert dark standalone hero sections to a clean light page header */
     'body.fw-sb-page .hero{background:#fff!important;color:#1e293b!important;padding:18px 24px 14px!important;text-align:left!important;border-bottom:1px solid #e2e8f0!important}',

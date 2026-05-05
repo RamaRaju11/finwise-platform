@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'bizscale-v4';
+﻿const CACHE_NAME = 'bizscale-v6';
 
 const SHELL_FILES = [
   './index.html',
