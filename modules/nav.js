@@ -427,6 +427,8 @@ alertPanel.innerHTML='<div class="fnav-ap-hd"><h3>🔔 Alerts</h3><button class=
   '<div class="fnav-ap-body" id="fnavAlertBody"><div class="fnav-ap-empty">Loading alerts…</div></div>';
 
 function inject(){
+  /* Skip nav bar if sidebar.js is active — sidebar replaces this nav */
+  if(document.body.classList.contains('fw-sb-page')){return;}
   document.body.insertBefore(bar,document.body.firstChild);
   document.body.appendChild(toolsModal);
   document.body.appendChild(profModal);

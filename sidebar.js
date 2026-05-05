@@ -12,6 +12,8 @@
   style.textContent = [
     'body.fw-sb-page{margin-left:220px!important;padding-top:52px!important}',
     'body.fw-sb-page .hdr{display:none!important}',
+    /* hide nav.js secondary bar — sidebar replaces it */
+    'body.fw-sb-page .fnav-bar{display:none!important}',
 
     /* standalone page content area — always fill viewport, fix dark mode */
     'body.fw-sb-page .main{width:100%;min-height:calc(100vh - 52px);box-sizing:border-box}',
