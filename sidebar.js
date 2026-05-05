@@ -15,6 +15,9 @@
     /* hide nav.js secondary bar — sidebar replaces it */
     'body.fw-sb-page .fnav-bar{display:none!important}',
 
+    /* module pages: cancel the old margin-left:220px on #mainWrap (now handled by body margin) */
+    'body.fw-sb-page #mainWrap{margin-left:0!important}',
+
     /* standalone page content area — always fill viewport, always light theme */
     'body.fw-sb-page .main{width:100%;min-height:calc(100vh - 52px);box-sizing:border-box;background:#f8fafc!important;color:#1e293b!important}',
     'html.dark body.fw-sb-page .main *{color:#1e293b!important}',
