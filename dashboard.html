@@ -284,6 +284,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .inv-stat-val.red{color:#dc2626}
 .inv-stat-val.amber{color:#d97706}
 .inv-stat-val.green{color:#16a34a}
+.inv-stat-val.blue{color:#2563eb}
 .inv-stat-lbl{font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
 
 /* ── Action Items ── */
@@ -605,6 +606,15 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <div id="alertsList"></div>
     </div>
 
+    <!-- VENDOR BILLS WIDGET -->
+    <div class="inv-widget" id="billsWidget" style="display:none">
+      <div class="inv-widget-header">
+        <span class="inv-widget-title">📋 Monthly Bills</span>
+        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All →</a>
+      </div>
+      <div class="inv-stat-row" id="billsStatRow"></div>
+    </div>
+
     <!-- INVOICE WIDGET -->
     <div class="inv-widget" id="invoiceWidget" style="display:none">
       <div class="inv-widget-header">
@@ -819,6 +829,25 @@ function getLiveMetrics(){
 }
 
 /* ── Action Items ── */
+function renderBillsWidget(){
+  var bills = sg('fw_bills') || [];
+  if(!bills.length){ document.getElementById('billsWidget').style.display='none'; return; }
+  var today = new Date();
+  var todayDay = today.getDate();
+  var totalMonthly = bills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  var overdue = bills.filter(function(b){ return b.dueDay < todayDay; });
+  var dueThisWeek = bills.filter(function(b){ return b.dueDay>=todayDay && b.dueDay<=todayDay+6; });
+  var autoPay = bills.filter(function(b){ return b.autoPay; }).length;
+
+  var html = '';
+  html += '<div class="inv-stat"><div class="inv-stat-val">'+(bills.length)+'</div><div class="inv-stat-lbl">Bills</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(overdue.length?'red':'green')+'">'+overdue.length+'</div><div class="inv-stat-lbl">Overdue</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(dueThisWeek.length?'amber':'green')+'">'+dueThisWeek.length+'</div><div class="inv-stat-lbl">Due This Week</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val blue">'+fmt(totalMonthly)+'</div><div class="inv-stat-lbl">Monthly Total</div></div>';
+  document.getElementById('billsStatRow').innerHTML = html;
+  document.getElementById('billsWidget').style.display = '';
+}
+
 function renderInvoiceWidget(){
   var invs = sg('fw_invoices') || sg('fw_invoice_list') || [];
   if(!invs.length){ document.getElementById('invoiceWidget').style.display='none'; return; }
@@ -1163,6 +1192,7 @@ function renderDashboard(plan){
     document.getElementById('startHereCard').style.display = 'block';
   }
 
+  renderBillsWidget();
   renderInvoiceWidget();
   renderActionItems();
 

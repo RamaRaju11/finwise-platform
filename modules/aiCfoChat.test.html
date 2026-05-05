@@ -214,8 +214,16 @@
   <!-- ══ SIDEBAR ══ -->
   <div class="sidebar">
 
-    <!-- API Key -->
-    <div class="sidebar-section">
+    <!-- Auth status (logged-in users) -->
+    <div class="sidebar-section" id="authStatusSection" style="display:none">
+      <h3>✅ Signed In</h3>
+      <div style="font-size:.75rem;color:#16a34a;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:8px 10px;line-height:1.6">
+        AI CFO is using a secure server-side connection. No API key needed.
+      </div>
+    </div>
+
+    <!-- API Key (guest users only) -->
+    <div class="sidebar-section" id="apiKeySection">
       <h3>🔑 Your Anthropic API Key</h3>
       <div class="api-key-wrap">
         <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-..."/>
@@ -435,6 +443,14 @@ function saveApiKey(){
 }
 
 function updateKeyStatus(){
+  const loggedIn = window.fwAuth && fwAuth.user;
+  if(loggedIn){
+    document.getElementById('authStatusSection').style.display='';
+    document.getElementById('apiKeySection').style.display='none';
+    return;
+  }
+  document.getElementById('authStatusSection').style.display='none';
+  document.getElementById('apiKeySection').style.display='';
   const key=getApiKey();
   const el=document.getElementById('apiStatus');
   const fromConfig = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX');
@@ -1149,8 +1165,6 @@ async function generateActionItems(){
   if(isLoading) return;
   const aiExchanges=conversation.filter(function(m){return m.role==='assistant';}).length;
   if(aiExchanges<1){showToast('Have a conversation first, then generate action items.');return;}
-  const apiKey=getApiKey();
-  if(!apiKey){showToast('⚠️ Add your Anthropic API key first.');return;}
   const actionPrompt='Based on our entire conversation, generate a numbered list of 5–7 specific, concrete action items I should take THIS WEEK to improve my business finances. Format each as: [PRIORITY: High/Med/Low] Action — specific detail or dollar amount where applicable. Be concrete, not generic.';
   addMessage('user','📋 Generate Action Items from this conversation');
   const msgs=conversation.concat([{role:'user',content:actionPrompt}]);
@@ -1159,19 +1173,36 @@ async function generateActionItems(){
   const aib=document.getElementById('actionItemsBtn');
   if(aib) aib.disabled=true;
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:typeof FINWISE_CONFIG!=='undefined'?FINWISE_CONFIG.MODEL:'claude-haiku-4-5-20251001',
-        max_tokens:800,
-        system:buildSystemPrompt(),
-        messages:msgs.slice(-14)
-      })
-    });
-    if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`API error ${resp.status}`);}
-    const data=await resp.json();
-    const reply=data.content?.[0]?.text||'Could not generate action items.';
+    let reply;
+    const loggedIn=window.fwAuth && fwAuth.user && fwAuth.client;
+    if(loggedIn){
+      const session=await fwAuth.client.auth.getSession();
+      const token=session.data?.session?.access_token;
+      const resp=await fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/ai-cfo-chat',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body:JSON.stringify({system:buildSystemPrompt(),messages:msgs.slice(-14)})
+      });
+      if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error||`Edge Function error ${resp.status}`);}
+      const data=await resp.json();
+      reply=data.reply||'Could not generate action items.';
+    } else {
+      const apiKey=getApiKey();
+      if(!apiKey){showToast('⚠️ Sign in or add your API key first.');setLoading(false);if(aib)aib.disabled=false;return;}
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({
+          model:typeof FINWISE_CONFIG!=='undefined'?FINWISE_CONFIG.MODEL:'claude-haiku-4-5-20251001',
+          max_tokens:800,
+          system:buildSystemPrompt(),
+          messages:msgs.slice(-14)
+        })
+      });
+      if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`API error ${resp.status}`);}
+      const data=await resp.json();
+      reply=data.content?.[0]?.text||'Could not generate action items.';
+    }
     conversation.push({role:'assistant',content:reply});
     addMessage('ai',reply);
     saveConversation();
@@ -1198,6 +1229,11 @@ function initApp(){
 if(localStorage.getItem('fw_pro')==='1'){
   document.getElementById('paywallOverlay').style.display='none';
   initApp();
+}
+
+// Re-check auth status after fw-auth resolves (may update key section visibility)
+if(window.fwAuth){
+  fwAuth.init(function(){ updateKeyStatus(); });
 }
 </script>
 </body>

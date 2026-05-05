@@ -6,6 +6,7 @@
 <title>Business Health Score — FinWise</title>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="../sidebar.js" defer></script>
+<script src="fw-auth.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
@@ -804,6 +805,19 @@ function calculate(){
     if(snaps3[curMo3]){snaps3[curMo3].healthScore=pctScore;snaps3[curMo3].grade=grade;localStorage.setItem('fw_monthly_snapshots',JSON.stringify(snaps3));}
     document.getElementById('shareBanner').style.display='flex';
   }catch(e2){}
+
+  // Sync to Supabase health_scores (powers health-drop-alert emails)
+  if(window.fwAuth && fwAuth.user && fwAuth.client){
+    var today3=new Date().toISOString().slice(0,10);
+    fwAuth.client.from('health_scores').upsert({
+      user_id: fwAuth.user.id,
+      overall_score: pctScore,
+      score_date: today3,
+      dimension_data: {grade:grade,coreScore:coreScore,coreMax:coreMax,liveScore:liveScore,liveMax:liveMax,
+        profitMargin:Math.round(profitMargin*10)/10,expenseRatio:Math.round(expenseRatio*10)/10,
+        cashBuffer:Math.round(cashBuffer*10)/10,dscr:Math.round(dscr*100)/100,debtToEquity:Math.round(debtToEquity*100)/100}
+    },{onConflict:'user_id,score_date'}).then(function(){});
+  }
   renderSparkline();
 }
 
