@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'bizscale-v3';
+﻿const CACHE_NAME = 'bizscale-v4';
 
 const SHELL_FILES = [
   './index.html',
@@ -55,17 +55,14 @@ self.addEventListener('fetch', event => {
         .catch(() => caches.match(event.request))
     );
   } else if (isAsset) {
-    // Stale-while-revalidate for JS/CSS/images
+    // Network-first for JS/CSS — always get latest code, fall back to cache
     event.respondWith(
-      caches.open(CACHE_NAME).then(cache =>
-        cache.match(event.request).then(cached => {
-          const networkFetch = fetch(event.request).then(res => {
-            cache.put(event.request, res.clone());
-            return res;
-          });
-          return cached || networkFetch;
+      fetch(event.request)
+        .then(res => {
+          caches.open(CACHE_NAME).then(c => c.put(event.request, res.clone()));
+          return res;
         })
-      )
+        .catch(() => caches.match(event.request))
     );
   }
 });
