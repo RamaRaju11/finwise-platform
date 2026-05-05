@@ -395,7 +395,7 @@ var bar=document.createElement('div');
 bar.className='fnav-bar';
 bar.id='fnavBar';
 bar.innerHTML=
-  '<a href="../try.html" class="fnav-logo">💡 Fin<b>Wise</b></a>'+
+  '<a href="../try.html" class="fnav-logo">📈 Biz<b>Scale</b></a>'+
   '<span class="fnav-badge">'+pc.label+'</span>'+
   (savedP.bizName?'<span class="fnav-bizname" id="fnavBizChip">🏪 '+savedP.bizName+'</span>':'<span class="fnav-bizname" id="fnavBizChip" style="display:none"></span>')+
   '<div class="fnav-spacer"></div>'+
