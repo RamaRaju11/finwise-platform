@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendor Bill Tracker — FinWise</title>
 <script src="../sidebar.js" defer></script>
+<script src="fw-auth.js"></script>
 <link rel="manifest" href="../manifest.json">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -194,6 +195,9 @@ input:focus,select:focus{border-color:#2563eb}
 
 <script>
 var STORAGE_KEY = 'fw_bills';
+var _bills = null;
+var _db = null;
+var _userId = null;
 
 var DEFAULT_BILLS = [
   {id:uid(), vendor:'Office Rent',           amount:2500, dueDay:1,  category:'Rent',          autoPay:true,  contractExpiry:null, scheduledPayDate:null},
@@ -206,14 +210,36 @@ var DEFAULT_BILLS = [
 function uid(){ return Math.random().toString(36).slice(2,10); }
 
 function loadBills(){
+  if(_bills!==null) return _bills;
   var raw=localStorage.getItem(STORAGE_KEY);
   if(raw===null){
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(DEFAULT_BILLS));
-    return JSON.parse(JSON.stringify(DEFAULT_BILLS));
+    _bills=JSON.parse(JSON.stringify(DEFAULT_BILLS));
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(_bills));
+    return _bills;
   }
-  try{ return JSON.parse(raw); }catch(e){ return []; }
+  try{ _bills=JSON.parse(raw); return _bills; }catch(e){ _bills=[]; return _bills; }
 }
-function saveBills(bills){ localStorage.setItem(STORAGE_KEY,JSON.stringify(bills)); }
+function saveBills(bills){
+  _bills=bills;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(bills));
+}
+function toSupaRow(b){
+  return {id:b.id,user_id:_userId,vendor:b.vendor,amount:parseFloat(b.amount)||0,
+    due_day:b.dueDay,category:b.category,auto_pay:!!b.autoPay,
+    contract_expiry:b.contractExpiry||null,scheduled_pay_date:b.scheduledPayDate||null};
+}
+function fromSupaRow(r){
+  return {id:r.id,vendor:r.vendor,amount:r.amount,dueDay:r.due_day,category:r.category,
+    autoPay:r.auto_pay,contractExpiry:r.contract_expiry,scheduledPayDate:r.scheduled_pay_date};
+}
+function supaUpsertBill(bill){
+  if(!_db||!_userId) return;
+  _db.from('vendor_bills').upsert(toSupaRow(bill),{onConflict:'id'}).then(function(){});
+}
+function supaDeleteBill(id){
+  if(!_db||!_userId) return;
+  _db.from('vendor_bills').delete().eq('id',id).eq('user_id',_userId).then(function(){});
+}
 
 // ── UTILS ────────────────────────────────────────────────────────────────────
 function fmt$(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2}); }
@@ -399,10 +425,14 @@ function renderAll(){
 
 // ── P2 FEATURE: SCHEDULE PAYMENT ─────────────────────────────────────────────
 function schedulePayment(id, date){
+  var updated;
   var bills=loadBills().map(function(b){
-    return b.id===id?Object.assign({},b,{scheduledPayDate:date||null}):b;
+    if(b.id!==id) return b;
+    updated=Object.assign({},b,{scheduledPayDate:date||null});
+    return updated;
   });
   saveBills(bills);
+  if(updated) supaUpsertBill(updated);
   renderAll();
   if(date) toast('Payment scheduled for '+date);
 }
@@ -456,9 +486,11 @@ function addBill(){
   if(isNaN(dueDay)||dueDay<1||dueDay>31){ toast('Due day must be 1–31'); return; }
 
   var bills=loadBills();
-  bills.push({id:uid(),vendor:vendor,amount:amount,dueDay:dueDay,category:category,
-              autoPay:autoPay,contractExpiry:expiry,scheduledPayDate:null});
+  var newBill={id:uid(),vendor:vendor,amount:amount,dueDay:dueDay,category:category,
+               autoPay:autoPay,contractExpiry:expiry,scheduledPayDate:null};
+  bills.push(newBill);
   saveBills(bills);
+  supaUpsertBill(newBill);
 
   document.getElementById('vendorName').value='';
   document.getElementById('billAmount').value='';
@@ -473,12 +505,35 @@ function addBill(){
 function deleteBill(id){
   var bills=loadBills().filter(function(b){ return b.id!==id; });
   saveBills(bills);
+  supaDeleteBill(id);
   renderAll();
   toast('Bill removed');
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-renderAll();
+renderAll(); // immediate render from localStorage
+
+function initDb(){
+  if(!window.fwAuth) return;
+  fwAuth.init(function(){
+    if(!fwAuth.user||!fwAuth.client) return;
+    _db=fwAuth.client;
+    _userId=fwAuth.user.id;
+    _db.from('vendor_bills').select('*').eq('user_id',_userId)
+      .then(function(res){
+        if(res.error||!res.data||!res.data.length) return;
+        var remote=res.data.map(fromSupaRow);
+        var local=loadBills();
+        // merge: remote wins for bills not in local; local takes precedence
+        var localIds=local.reduce(function(m,b){ m[b.id]=true; return m; },{});
+        var merged=local.slice();
+        remote.forEach(function(r){ if(!localIds[r.id]) merged.push(r); });
+        saveBills(merged);
+        renderAll();
+      });
+  });
+}
+initDb();
 </script>
 </body>
 </html>

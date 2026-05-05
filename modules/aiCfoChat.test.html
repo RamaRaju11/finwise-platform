@@ -1021,12 +1021,6 @@ async function sendMessage(){
   const text=input.value.trim();
   if(!text) return;
 
-  const apiKey=getApiKey();
-  if(!apiKey){
-    showToast('⚠️ Add your API key in config.js or the sidebar.');
-    return;
-  }
-
   input.value='';
   input.style.height='auto';
 
@@ -1036,36 +1030,68 @@ async function sendMessage(){
   setLoading(true);
 
   try{
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MODEL : 'claude-haiku-4-5-20251001'),
-        max_tokens: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MAX_TOKENS : 600),
-        system: buildSystemPrompt(),
-        messages: conversation.slice(-12) // last 12 messages for context
-      })
-    });
+    let reply;
 
-    if(!resp.ok){
-      const err=await resp.json().catch(()=>({}));
-      throw new Error(err.error?.message || `API error ${resp.status}`);
+    const loggedIn = window.fwAuth && fwAuth.user && fwAuth.client;
+    if(loggedIn){
+      // Use Edge Function — API key stays server-side
+      const session = await fwAuth.client.auth.getSession();
+      const token = session.data?.session?.access_token;
+      const resp = await fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/ai-cfo-chat',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization':'Bearer '+token
+        },
+        body:JSON.stringify({
+          system: buildSystemPrompt(),
+          messages: conversation.slice(-12)
+        })
+      });
+      if(!resp.ok){
+        const err=await resp.json().catch(()=>({}));
+        throw new Error(err.error || `Edge Function error ${resp.status}`);
+      }
+      const data=await resp.json();
+      reply=data.reply||'Sorry, I could not generate a response.';
+    } else {
+      // Guest fallback — requires local API key
+      const apiKey=getApiKey();
+      if(!apiKey){
+        addMessage('ai','⚠️ Sign in for AI CFO, or add your Anthropic API key in the sidebar.');
+        setLoading(false);
+        return;
+      }
+      const resp = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({
+          model: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MODEL : 'claude-haiku-4-5-20251001'),
+          max_tokens: (typeof FINWISE_CONFIG!=='undefined' ? FINWISE_CONFIG.MAX_TOKENS : 600),
+          system: buildSystemPrompt(),
+          messages: conversation.slice(-12)
+        })
+      });
+      if(!resp.ok){
+        const err=await resp.json().catch(()=>({}));
+        throw new Error(err.error?.message || `API error ${resp.status}`);
+      }
+      const data=await resp.json();
+      reply=data.content?.[0]?.text||'Sorry, I could not generate a response.';
     }
 
-    const data=await resp.json();
-    const reply=data.content?.[0]?.text||'Sorry, I could not generate a response.';
     conversation.push({role:'assistant', content:reply});
     addMessage('ai', reply);
     saveConversation();
 
   } catch(e){
     let msg = e.message||'Unknown error';
-    if(msg.includes('401')) msg='Invalid API key. Check your key in the sidebar.';
+    if(msg.includes('401')) msg='Invalid API key or session expired. Try signing in again.';
     else if(msg.includes('429')) msg='Rate limit hit. Wait a moment and try again.';
     else if(msg.includes('Failed to fetch')) msg='Network error. Check your internet connection.';
     addMessage('ai','⚠️ Error: '+msg);

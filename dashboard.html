@@ -271,6 +271,21 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   .metrics-row{grid-template-columns:1fr 1fr}
 }
 
+/* ── Invoice Widget ── */
+.inv-widget{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:20px}
+.inv-widget-header{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f1f5f9}
+.inv-widget-title{font-size:.82rem;font-weight:800;color:#0f172a}
+.inv-widget-link{font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none}
+.inv-widget-link:hover{text-decoration:underline}
+.inv-stat-row{display:flex;gap:0}
+.inv-stat{flex:1;padding:12px 16px;text-align:center;border-right:1px solid #f1f5f9}
+.inv-stat:last-child{border-right:none}
+.inv-stat-val{font-size:1.25rem;font-weight:900;color:#0f172a;line-height:1}
+.inv-stat-val.red{color:#dc2626}
+.inv-stat-val.amber{color:#d97706}
+.inv-stat-val.green{color:#16a34a}
+.inv-stat-lbl{font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+
 /* ── Action Items ── */
 .ai-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:0}
 .ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f1f5f9}
@@ -590,6 +605,15 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <div id="alertsList"></div>
     </div>
 
+    <!-- INVOICE WIDGET -->
+    <div class="inv-widget" id="invoiceWidget" style="display:none">
+      <div class="inv-widget-header">
+        <span class="inv-widget-title">🧾 Invoice Summary</span>
+        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All →</a>
+      </div>
+      <div class="inv-stat-row" id="invStatRow"></div>
+    </div>
+
     <!-- ACTION ITEMS -->
     <div class="action-items" id="actionItemsWidget" style="display:none;margin-bottom:20px">
       <div class="sec-title">🎯 Action Items</div>
@@ -795,6 +819,30 @@ function getLiveMetrics(){
 }
 
 /* ── Action Items ── */
+function renderInvoiceWidget(){
+  var invs = sg('fw_invoices') || sg('fw_invoice_list') || [];
+  if(!invs.length){ document.getElementById('invoiceWidget').style.display='none'; return; }
+  var today = new Date(); today.setHours(0,0,0,0);
+  var pending = invs.filter(function(i){ return i.status==='pending'||i.status==='unpaid'; });
+  var overdue = pending.filter(function(i){
+    var d = new Date(i.dueDate||i.due_date); d.setHours(0,0,0,0); return d<today;
+  });
+  var totalOut = pending.reduce(function(s,i){ return s+parseFloat(i.amount||0); },0);
+  var paid30 = invs.filter(function(i){
+    if(i.status!=='paid') return false;
+    var d = new Date(i.paidDate||i.paid_date||0);
+    return (today-d)<30*86400000;
+  }).reduce(function(s,i){ return s+parseFloat(i.amount||0); },0);
+
+  var html = '';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(overdue.length?'red':'green')+'">'+overdue.length+'</div><div class="inv-stat-lbl">Overdue</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val amber">'+pending.length+'</div><div class="inv-stat-lbl">Pending</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val red">'+fmt(totalOut)+'</div><div class="inv-stat-lbl">Outstanding</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val green">'+fmt(paid30)+'</div><div class="inv-stat-lbl">Paid (30d)</div></div>';
+  document.getElementById('invStatRow').innerHTML = html;
+  document.getElementById('invoiceWidget').style.display = '';
+}
+
 function renderActionItems(){
   var items = [];
   var today = new Date(); today.setHours(0,0,0,0);
@@ -1115,6 +1163,7 @@ function renderDashboard(plan){
     document.getElementById('startHereCard').style.display = 'block';
   }
 
+  renderInvoiceWidget();
   renderActionItems();
 
   /* Profile summary */
