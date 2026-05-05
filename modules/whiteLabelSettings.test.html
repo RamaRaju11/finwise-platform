@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>White-Label Settings — FinWise</title>
+<title>White-Label Settings — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
@@ -105,7 +105,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <script src="fw-auth.js"></script>
 
 <nav class="topnav">
-  <a href="../dashboard.html" class="tn-logo">💡 Fin<span>Wise</span></a>
+  <a href="../dashboard.html" class="tn-logo">📈 Biz<span>Scale</span></a>
   <a href="clientPortal.test.html" class="tn-back">← Client Portal</a>
   <div class="tn-spacer"></div>
   <button class="tn-btn" onclick="if(window.fwAuth) window.fwAuth.signOut()">Sign Out</button>
@@ -114,7 +114,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <div class="hero">
   <div class="hero-inner">
     <h1>🎨 White-Label Settings</h1>
-    <p>Replace FinWise branding with your own — clients see your name, logo, and colors on every report.</p>
+    <p>Replace BizScale branding with your own — clients see your name, logo, and colors on every report.</p>
     <div class="hero-badge">⭐ Advisor Feature</div>
   </div>
 </div>
@@ -137,7 +137,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 
       <label>Brand Name</label>
       <input type="text" id="wlBrandName" placeholder="Acme Financial Advisors" oninput="updatePreview()"/>
-      <div class="hint">Replaces "FinWise" everywhere in client-facing reports</div>
+      <div class="hint">Replaces "BizScale" everywhere in client-facing reports</div>
 
       <label>Tagline</label>
       <input type="text" id="wlTagline" placeholder="Financial Advisory Services" oninput="updatePreview()"/>
@@ -168,8 +168,8 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
       <div class="card-title"><span>⚙️</span> Display Options</div>
       <div class="toggle-row">
         <div>
-          <div class="tr-label">Hide "Powered by FinWise"</div>
-          <div class="tr-sub">Remove the FinWise footer from client reports</div>
+          <div class="tr-label">Hide "Powered by BizScale"</div>
+          <div class="tr-sub">Remove the BizScale footer from client reports</div>
         </div>
         <label class="toggle-switch"><input type="checkbox" id="wlHideFinwise" onchange="updatePreview()"/><span class="toggle-slider"></span></label>
       </div>
@@ -178,7 +178,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
     <!-- Custom Domain -->
     <div class="card">
       <div class="card-title"><span>🌐</span> Custom Domain</div>
-      <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Serve client report links from your own subdomain (e.g., <em>reports.yourfirm.com</em>). Requires deploying FinWise on Netlify or Vercel.</p>
+      <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Serve client report links from your own subdomain (e.g., <em>reports.yourfirm.com</em>). Requires deploying BizScale on Netlify or Vercel.</p>
 
       <label>Your Desired Domain</label>
       <input type="text" id="wlDomain" placeholder="reports.yourfirm.com" oninput="updateDomainInstructions()"/>
@@ -225,7 +225,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
           <div id="prevBtn" style="display:inline-block;padding:8px 18px;background:#4f46e5;color:#fff;border-radius:6px;font-size:.78rem;font-weight:800">View Full Report →</div>
         </div>
       </div>
-      <div class="prev-footer" id="prevFooter">Powered by <span>FinWise</span></div>
+      <div class="prev-footer" id="prevFooter">Powered by <span>BizScale</span></div>
     </div>
 
     <div style="font-size:.7rem;color:#94a3b8;text-align:center;margin-top:10px">This is how clients see their report</div>
@@ -286,7 +286,7 @@ function updateDomainInstructions(){
   var box = document.getElementById('domainInstructions');
   if(!domain){ box.style.display='none'; return; }
   box.style.display='block';
-  var netlifyDomain = 'finwise.netlify.app';
+  var netlifyDomain = 'bizscale.netlify.app';
   document.getElementById('cnameBox').textContent =
     'Type:  CNAME\nName:  '+domain+'\nValue: '+netlifyDomain+'\nTTL:   Auto (or 3600)';
 }
@@ -319,7 +319,7 @@ function saveSettings(){
     wl_color        : document.getElementById('colorText').value.trim() || '#4f46e5',
     wl_logo_url     : document.getElementById('wlLogoUrl').value.trim() || null,
     wl_domain       : document.getElementById('wlDomain').value.trim() || null,
-    wl_hide_finwise : document.getElementById('wlHideFinwise').checked
+    wl_hide_bizscale : document.getElementById('wlHideFinwise').checked
   };
   var status = document.getElementById('saveStatus');
   status.textContent = 'Saving…';
@@ -361,7 +361,7 @@ window.addEventListener('load', function(){
     }
     if(p.wl_logo_url)     { document.getElementById('wlLogoUrl').value = p.wl_logo_url; }
     if(p.wl_domain)       { document.getElementById('wlDomain').value = p.wl_domain; updateDomainInstructions(); }
-    if(p.wl_hide_finwise) { document.getElementById('wlHideFinwise').checked = true; }
+    if(p.wl_hide_bizscale) { document.getElementById('wlHideFinwise').checked = true; }
     updatePreview();
   });
 });

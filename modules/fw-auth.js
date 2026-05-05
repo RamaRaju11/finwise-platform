@@ -1,4 +1,4 @@
-/* FinWise Auth — Supabase wrapper loaded by every page */
+﻿/* BizScale Auth — Supabase wrapper loaded by every page */
 (function(){
   var SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
   var SUPA_KEY = 'sb_publishable_MT6Yw204o8Ho5nY-82IvkA_Ys_00yGO';

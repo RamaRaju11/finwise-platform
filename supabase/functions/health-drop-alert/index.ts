@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+﻿import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const cors = {
@@ -19,7 +19,7 @@ function buildDropEmail(bizName: string, prev: number, curr: number, drop: numbe
 <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
 
   <tr><td style="background:#0f172a;border-radius:12px 12px 0 0;padding:24px 32px">
-    <span style="font-size:20px;font-weight:900;color:#fff">💡 Fin<span style="color:#a5b4fc">Wise</span></span>
+    <span style="font-size:20px;font-weight:900;color:#fff">📈 Biz<span style="color:#a5b4fc">Scale</span></span>
   </td></tr>
 
   <tr><td style="background:#fff;padding:32px">
@@ -59,7 +59,7 @@ function buildDropEmail(bizName: string, prev: number, curr: number, drop: numbe
   </td></tr>
 
   <tr><td style="background:#f8fafc;border-radius:0 0 12px 12px;padding:16px 32px;text-align:center;border-top:1px solid #e2e8f0">
-    <span style="font-size:12px;color:#94a3b8">FinWise · Free financial tools for small businesses</span>
+    <span style="font-size:12px;color:#94a3b8">BizScale · Free financial tools for small businesses</span>
   </td></tr>
 
 </table>
@@ -100,7 +100,7 @@ serve(async (req) => {
       const resendRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}` },
-        body: JSON.stringify({ from: 'FinWise <alerts@resend.dev>', to: [email], subject: `⚠️ Your health score dropped ${Math.round(drop_points)} points — action needed`, html })
+        body: JSON.stringify({ from: 'BizScale <alerts@resend.dev>', to: [email], subject: `⚠️ Your health score dropped ${Math.round(drop_points)} points — action needed`, html })
       })
 
       if (resendRes.ok) {

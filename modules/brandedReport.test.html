@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Report — FinWise</title>
+<title>Client Report — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -280,7 +280,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 /* ── Currency ── */
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return s==='INR'?'₹':s==='EUR'?'€':s==='GBP'?'£':'$';
 })();
 function fmt(n){return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();}
@@ -320,7 +320,7 @@ function findMaxSafe(rev,exp,emi,res,rate,ten){
 }
 
 /* ── White-label ── */
-var WL={brand:'FinWise',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+var WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
 function loadWL(){
   try{var s=localStorage.getItem('fw_wl');if(s)WL=Object.assign(WL,JSON.parse(s));}catch(e){}
 }

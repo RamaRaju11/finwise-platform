@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Portal — FinWise</title>
+<title>Client Portal — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
@@ -148,7 +148,7 @@ textarea{resize:vertical;min-height:68px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <nav class="topnav">
-  <a href="../dashboard.html" class="tn-logo">💡 Fin<span>Wise</span></a>
+  <a href="../dashboard.html" class="tn-logo">📈 Biz<span>Scale</span></a>
   <a href="../dashboard.html" class="tn-back">← Dashboard</a>
   <div class="tn-spacer"></div>
   <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">🎨 White-Label Settings</a>
@@ -373,7 +373,7 @@ function createPortal(){
     document.getElementById('linkResult').style.display = 'block';
     var waMsg = 'Hi '+name+'! Here is your financial report portal: '+url;
     var emSubj = 'Your Financial Report — '+(bizName||advisorName);
-    var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by FinWise';
+    var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by BizScale';
     document.getElementById('waShareBtn').onclick = function(){ window.open('https://wa.me/?text='+encodeURIComponent(waMsg)); };
     document.getElementById('emShareBtn').onclick = function(){ window.location.href='mailto:'+email+'?subject='+encodeURIComponent(emSubj)+'&body='+encodeURIComponent(emBody); };
     document.getElementById('clientName').value='';
@@ -631,7 +631,7 @@ window.addEventListener('load', function(){
       tagline     : p.wl_tagline      || '',
       color       : p.wl_color        || '#4f46e5',
       logo_url    : p.wl_logo_url     || '',
-      hide_finwise: p.wl_hide_finwise  || false
+      hide_bizscale: p.wl_hide_bizscale  || false
     };
     loadClients();
   });

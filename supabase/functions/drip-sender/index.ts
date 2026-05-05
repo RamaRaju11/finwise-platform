@@ -1,20 +1,20 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+﻿import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const RESEND_KEY  = Deno.env.get('RESEND_API_KEY') ?? ''
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
 const serviceKey  = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-const FROM_EMAIL  = 'FinWise <hello@finwise.app>'
+const FROM_EMAIL  = 'BizScale <hello@bizscale.app>'
 
 /* ── Email content per day ── */
 const EMAILS: Record<number, { subject: string; html: (name: string) => string }> = {
 
   1: {
-    subject: 'Your FinWise trial is ready — 3 things to do first',
+    subject: 'Your BizScale trial is ready — 3 things to do first',
     html: (name) => `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f4f6f9;padding:32px 0;margin:0">
 <table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden">
   <tr><td style="background:#0f172a;padding:24px 32px">
-    <div style="font-size:1.4rem;font-weight:900;color:#fff">💡 Fin<span style="color:#818cf8">Wise</span></div>
+    <div style="font-size:1.4rem;font-weight:900;color:#fff">📈 Biz<span style="color:#818cf8">Scale</span></div>
   </td></tr>
   <tr><td style="padding:32px">
     <h1 style="font-size:1.3rem;color:#1e293b;margin:0 0 12px">Welcome, ${name}! Your 7-day trial has started 🎉</h1>
@@ -43,7 +43,7 @@ const EMAILS: Record<number, { subject: string; html: (name: string) => string }
     <p style="font-size:.75rem;color:#94a3b8;margin-top:24px">Your trial ends in 7 days. No charge until you choose to upgrade.</p>
   </td></tr>
   <tr><td style="background:#f8fafc;padding:16px 32px;text-align:center;font-size:.72rem;color:#94a3b8">
-    © 2026 FinWise · You received this because you signed up for a free trial
+    © 2026 BizScale · You received this because you signed up for a free trial
   </td></tr>
 </table></body></html>`
   },
@@ -53,7 +53,7 @@ const EMAILS: Record<number, { subject: string; html: (name: string) => string }
     html: (name) => `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f4f6f9;padding:32px 0;margin:0">
 <table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden">
   <tr><td style="background:#0f172a;padding:24px 32px">
-    <div style="font-size:1.4rem;font-weight:900;color:#fff">💡 Fin<span style="color:#818cf8">Wise</span></div>
+    <div style="font-size:1.4rem;font-weight:900;color:#fff">📈 Biz<span style="color:#818cf8">Scale</span></div>
   </td></tr>
   <tr><td style="padding:32px">
     <h1 style="font-size:1.3rem;color:#1e293b;margin:0 0 12px">Hey ${name}, 4 days left on your trial</h1>
@@ -68,22 +68,22 @@ const EMAILS: Record<number, { subject: string; html: (name: string) => string }
       <strong>Also unlocked in your trial:</strong> Business Health Score (A–F grade), Grant Finder (free money you may qualify for), and Owner's Pay Optimizer.
     </p>
     <table cellpadding="0" cellspacing="0" style="margin-bottom:16px"><tr><td style="background:#2563eb;border-radius:8px">
-      <a href="https://yoursite.com/dashboard.html" style="display:inline-block;padding:12px 28px;color:#fff;font-weight:800;text-decoration:none;font-size:.9rem">Continue Using FinWise →</a>
+      <a href="https://yoursite.com/dashboard.html" style="display:inline-block;padding:12px 28px;color:#fff;font-weight:800;text-decoration:none;font-size:.9rem">Continue Using BizScale →</a>
     </td></tr></table>
     <p style="font-size:.82rem;color:#64748b">Upgrade to Starter ($9/mo) to keep all these tools after your trial ends.</p>
   </td></tr>
   <tr><td style="background:#f8fafc;padding:16px 32px;text-align:center;font-size:.72rem;color:#94a3b8">
-    © 2026 FinWise · Unsubscribe
+    © 2026 BizScale · Unsubscribe
   </td></tr>
 </table></body></html>`
   },
 
   7: {
-    subject: '⚠️ Your FinWise trial ends today — lock in your plan',
+    subject: '⚠️ Your BizScale trial ends today — lock in your plan',
     html: (name) => `<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f4f6f9;padding:32px 0;margin:0">
 <table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden">
   <tr><td style="background:#dc2626;padding:24px 32px">
-    <div style="font-size:1.4rem;font-weight:900;color:#fff">💡 Fin<span style="color:#fca5a5">Wise</span></div>
+    <div style="font-size:1.4rem;font-weight:900;color:#fff">📈 Biz<span style="color:#fca5a5">Scale</span></div>
   </td></tr>
   <tr><td style="padding:32px">
     <h1 style="font-size:1.3rem;color:#1e293b;margin:0 0 12px">⚠️ ${name}, your trial ends today</h1>
@@ -118,7 +118,7 @@ const EMAILS: Record<number, { subject: string; html: (name: string) => string }
     <p style="font-size:.75rem;color:#94a3b8;margin-top:16px">You'll keep your business profile and all saved data regardless.</p>
   </td></tr>
   <tr><td style="background:#f8fafc;padding:16px 32px;text-align:center;font-size:.72rem;color:#94a3b8">
-    © 2026 FinWise · Unsubscribe
+    © 2026 BizScale · Unsubscribe
   </td></tr>
 </table></body></html>`
   }

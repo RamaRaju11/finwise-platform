@@ -1,4 +1,4 @@
-// FinWise Shared Amortization Utility — fw-amortize.js
+﻿// BizScale Shared Amortization Utility — fw-amortize.js
 // Canonical debt simulation used by: debtCommandCenter, loanRepaymentOptimizer
 // Both modules delegate their local simulateFull() to this function.
 function fwSimulateFull(loans, extra, sortFn) {

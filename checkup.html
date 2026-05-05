@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Free Financial Checkup — FinWise</title>
+<title>Free Financial Checkup — BizScale</title>
 <link rel="manifest" href="manifest.json">
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});</script>
@@ -200,7 +200,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script src="sidebar.js"></script>
 <header class="hdr">
-  <a href="index.html" class="logo">Fin<span>Wise</span></a>
+  <a href="index.html" class="logo">Biz<span>Scale</span></a>
   <a href="dashboard.html" class="back">← Dashboard</a>
 </header>
 
@@ -588,7 +588,7 @@ function fillRunway(){
   },200);
   var pts=[];
   if(r.ncf>=0)pts.push({i:'✅',t:'Business is <strong>cash-flow positive</strong> (+$'+fmt(r.ncf)+'/mo). Runway concern is low — income exceeds expenses.'});
-  if(r.rmo>=6)pts.push({i:'✅',t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the FinWise 6-month recommended minimum.'});
+  if(r.rmo>=6)pts.push({i:'✅',t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the BizScale 6-month recommended minimum.'});
   else if(r.rmo>=3)pts.push({i:'⚠️',t:'<strong>'+Math.round(r.rmo)+' months</strong> runway is below the 6-month target. Build reserves by $'+fmt(Math.round(Math.max(0,(6-r.rmo)*Math.max(D.exp-D.rev,500)/3)))+'/mo.'});
   else if(r.rmo>0)pts.push({i:'🔴',t:'Only <strong>'+r.rDisp+' month(s)</strong> of reserves — critically low. One bad month could trigger cash flow failure.'});
   else pts.push({i:'⚠️',t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
@@ -862,7 +862,7 @@ function renderCard(){
   g.addColorStop(0,'#2563eb'); g.addColorStop(1,'#7c3aed');
   ctx.fillStyle=g; ctx.fillRect(0,0,W,5);
 
-  /* FinWise logo */
+  /* BizScale logo */
   ctx.textBaseline='middle';
   ctx.font='bold 19px system-ui,sans-serif';
   ctx.fillStyle='#f1f5f9'; ctx.fillText('Fin',44,46);
@@ -910,7 +910,7 @@ function renderCard(){
   ctx.font='13px system-ui,sans-serif'; ctx.fillStyle='#64748b'; ctx.textAlign='center';
   ctx.fillText('Get your free financial checkup →',W/2,H-32);
   ctx.font='bold 13px system-ui,sans-serif'; ctx.fillStyle='#60a5fa';
-  ctx.fillText('finwise.app/checkup.html',W/2,H-13);
+  ctx.fillText('bizscale.app/checkup.html',W/2,H-13);
   ctx.textAlign='left';
 }
 
@@ -925,7 +925,7 @@ function rrect(ctx,x,y,w,h,r,fill){
 
 function downloadCard(){
   var cv=$('scoreCanvas'), a=document.createElement('a');
-  a.download='finwise-health-report.png';
+  a.download='bizscale-health-report.png';
   a.href=cv.toDataURL('image/png');
   a.click();
 }
@@ -950,7 +950,7 @@ function copyShareLink(){
 function shareWA(){
   var url=buildShareUrl(), bn='My business';
   try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp&&pp.bizName)bn=pp.bizName;}catch(e){}
-  var msg=bn+' scored '+R.loanScore+'/100 on FinWise — '+R.loanVerdict+' loan position, Grade '+R.grade+' health.\nSee full report: '+url;
+  var msg=bn+' scored '+R.loanScore+'/100 on BizScale — '+R.loanVerdict+' loan position, Grade '+R.grade+' health.\nSee full report: '+url;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 function shareLI(){
@@ -959,8 +959,8 @@ function shareLI(){
 function shareEmail(){
   var url=buildShareUrl(), bn='my business';
   try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp&&pp.bizName)bn=pp.bizName;}catch(e){}
-  var sub=encodeURIComponent('My FinWise Financial Health Report — Grade '+R.grade);
-  var body=encodeURIComponent('Hi,\n\nI ran a free financial checkup on '+bn+' and wanted to share the results:\n\n• Loan Safety: '+R.loanScore+'/100 ('+R.loanVerdict+')\n• Cash Runway: '+(R.rmo>=24?'24+':Math.round(R.rmo))+' months ('+R.rStat+')\n• Health Grade: '+R.grade+' ('+R.glabel+')\n• Funding Matches: '+R.grantCount+'+ programs\n\nView the full report: '+url+'\n\nGenerated free by FinWise — finwise.app');
+  var sub=encodeURIComponent('My BizScale Financial Health Report — Grade '+R.grade);
+  var body=encodeURIComponent('Hi,\n\nI ran a free financial checkup on '+bn+' and wanted to share the results:\n\n• Loan Safety: '+R.loanScore+'/100 ('+R.loanVerdict+')\n• Cash Runway: '+(R.rmo>=24?'24+':Math.round(R.rmo))+' months ('+R.rStat+')\n• Health Grade: '+R.grade+' ('+R.glabel+')\n• Funding Matches: '+R.grantCount+'+ programs\n\nView the full report: '+url+'\n\nGenerated free by BizScale — bizscale.app');
   window.location.href='mailto:?subject='+sub+'&body='+body;
 }
 

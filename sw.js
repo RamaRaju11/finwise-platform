@@ -1,4 +1,4 @@
-const CACHE_NAME = 'finwise-v3';
+﻿const CACHE_NAME = 'bizscale-v3';
 
 const SHELL_FILES = [
   './index.html',

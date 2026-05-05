@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+﻿import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const cors = {
@@ -34,7 +34,7 @@ serve(async (req) => {
       body: JSON.stringify({
         client_id: Deno.env.get('PLAID_CLIENT_ID'),
         secret:    Deno.env.get('PLAID_SECRET'),
-        client_name: 'FinWise',
+        client_name: 'BizScale',
         country_codes: ['US'],
         language: 'en',
         user: { client_user_id: user.id },

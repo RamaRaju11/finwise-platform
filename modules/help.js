@@ -1,4 +1,4 @@
-/* FinWise — Contextual Help System (Option B + C)
+﻿/* BizScale — Contextual Help System (Option B + C)
    B: Floating coach panel per tool   C: Plain-English glossary underlines
    Add <script src="help.js"></script> after nav.js in every module page. */
 (function(){
@@ -142,7 +142,7 @@ var COACH = {
   'caExport.test.html':{
     title:'CPA Export Pack', icon:'📤',
     what:'Packages all your financial data into a neat summary you can hand to your accountant or tax advisor. Saves time explaining your numbers and reduces your accounting bill.',
-    example:'Lisa prepares taxes for a client. Instead of sorting through a folder of receipts, the client exports a clean FinWise summary. Lisa has everything needed in minutes — the client saves 1–2 hours of billable time.',
+    example:'Lisa prepares taxes for a client. Instead of sorting through a folder of receipts, the client exports a clean BizScale summary. Lisa has everything needed in minutes — the client saves 1–2 hours of billable time.',
     results:[
       {icon:'📦',label:'Complete package',desc:'All key numbers, statements, and loan analysis in one clean file.'},
       {icon:'🖨',label:'Print or email ready',desc:'Professional formatting for sharing with your accountant or bank.'},
@@ -197,7 +197,7 @@ var COACH = {
   },
   'brandedReport.test.html':{
     title:'Branded Client Report', icon:'📝',
-    what:'Generates a professional PDF report with YOUR firm\'s name and logo — not FinWise\'s. You give this to clients as your own advisory document. Builds trust and looks 100% professional.',
+    what:'Generates a professional PDF report with YOUR firm\'s name and logo — not BizScale\'s. You give this to clients as your own advisory document. Builds trust and looks 100% professional.',
     example:'Lisa prepares a loan readiness report for Tony\'s Diner. The PDF shows "Chen & Associates — Certified Financial Advisors" at the top. Tony sees professional advice from his CPA, not a generic tool.',
     results:[
       {icon:'🏷',label:'Your brand on it',desc:'Your name, firm, and contact details — fully customisable white-label output.'},

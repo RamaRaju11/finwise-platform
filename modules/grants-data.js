@@ -1,5 +1,5 @@
-/* ═══════════════════════════════════════════════════════════════
-   FinWise — USA Grant & Scheme Database
+﻿/* ═══════════════════════════════════════════════════════════════
+   BizScale — USA Grant & Scheme Database
    Shared across: grantFinder.test.html, grants-usa-reference.html
    Last updated: April 2026
 ═══════════════════════════════════════════════════════════════ */

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Advisor Dashboard — FinWise</title>
+<title>Advisor Dashboard — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -354,7 +354,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="modal-box">
     <div class="sc-modal-header">
       <div class="sc-brand-block">
-        <div class="sc-bname" id="scm_brand">FinWise</div>
+        <div class="sc-bname" id="scm_brand">BizScale</div>
         <div class="sc-btag" id="scm_tag">AI-Powered Loan Safety Platform</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
@@ -376,7 +376,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
         <tbody id="scm_tbody"></tbody>
       </table>
       <div class="sc-rec-box" id="scm_rec"></div>
-      <div class="sc-foot">Prepared by <strong id="scm_foot_brand">FinWise</strong> · <span id="scm_date">—</span> · Indicative only — not financial advice.</div>
+      <div class="sc-foot">Prepared by <strong id="scm_foot_brand">BizScale</strong> · <span id="scm_date">—</span> · Indicative only — not financial advice.</div>
     </div>
   </div>
 </div>
@@ -427,12 +427,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="ph-brand">
     <div class="ph-brand-icon" id="hdr_icon">🏢</div>
     <div>
-      <div class="ph-brand-name" id="hdr_brand">FinWise</div>
+      <div class="ph-brand-name" id="hdr_brand">BizScale</div>
       <div class="ph-brand-tag" id="hdr_tag">Advisor Dashboard · Client Management</div>
     </div>
   </div>
   <div class="ph-right">
-    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <a href="../index.html" class="ph-back">← Back to BizScale</a>
     <div class="ph-badge">Advisor · $79/month</div>
   </div>
 </div>
@@ -444,7 +444,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="wl-toggle" id="wlToggle" onclick="toggleWL()">
     <div class="wl-toggle-icon">▶</div>
     <div style="flex:1"><strong>🎨 White-Label Settings</strong> — Customise your brand name, color &amp; tagline</div>
-    <div style="font-size:.75rem;color:#94a3b8" id="wlBrandLabel">FinWise</div>
+    <div style="font-size:.75rem;color:#94a3b8" id="wlBrandLabel">BizScale</div>
   </div>
   <div class="wl-body" id="wlBody">
     <div class="g4">
@@ -483,12 +483,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
     </div>
     <div class="wl-preview" id="wlPreview">
       <span id="wl_prev_icon" style="font-size:1.3rem">🏢</span>
-      <div><div id="wl_prev_name" style="font-weight:900;font-size:.95rem">FinWise</div>
+      <div><div id="wl_prev_name" style="font-weight:900;font-size:.95rem">BizScale</div>
         <div id="wl_prev_tag" style="font-size:.7rem;opacity:.65">Advisor Dashboard · Client Management</div></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-brand" onclick="applyWL()">✓ Apply Branding</button>
-      <button class="btn btn-gray" onclick="resetWL()">Reset to FinWise</button>
+      <button class="btn btn-gray" onclick="resetWL()">Reset to BizScale</button>
     </div>
   </div>
 </div>
@@ -539,7 +539,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="modal-box">
     <div class="rpt-header">
       <div>
-        <div style="font-size:1rem;font-weight:900" id="rpt_brand">FinWise</div>
+        <div style="font-size:1rem;font-weight:900" id="rpt_brand">BizScale</div>
         <div style="font-size:.7rem;opacity:.6" id="rpt_tag">AI-Powered Loan Safety Platform</div>
       </div>
       <div style="display:flex;gap:8px">
@@ -867,7 +867,7 @@ function renderWidgets(){
 ════════════════════════════════════════════════ */
 function openAdvisorReport(){
   var k=readLiveKPIs();
-  var brand=WL.brand||'FinWise';
+  var brand=WL.brand||'BizScale';
   document.getElementById('rpt_brand').textContent=brand;
   document.getElementById('rpt_tag').textContent=WL.tag||'AI-Powered Loan Safety Platform';
 
@@ -948,7 +948,7 @@ function showToast(m){
   setTimeout(function(){ t.classList.remove('show'); },2800);
 }
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return '$';
 })();
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
@@ -984,7 +984,7 @@ function loadClients(){ try{ clients=JSON.parse(localStorage.getItem('fw_clients
 function saveClients(){ localStorage.setItem('fw_clients',JSON.stringify(clients)); }
 
 /* ── White-label store ── */
-var WL={brand:'FinWise',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+var WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
 function loadWL(){
   try{
     var s=localStorage.getItem('fw_wl');
@@ -1021,7 +1021,7 @@ function toggleWL(){
   }
 }
 function previewWL(){
-  var name=document.getElementById('wl_brand').value||'FinWise';
+  var name=document.getElementById('wl_brand').value||'BizScale';
   var tag=document.getElementById('wl_tag').value||'Advisor Dashboard';
   var icon=document.getElementById('wl_icon').value||'🏢';
   var color=document.getElementById('wl_color').value||'#4f46e5';
@@ -1042,7 +1042,7 @@ function setColor(c){
   previewWL();
 }
 function applyWL(){
-  WL.brand=document.getElementById('wl_brand').value.trim()||'FinWise';
+  WL.brand=document.getElementById('wl_brand').value.trim()||'BizScale';
   WL.tag=document.getElementById('wl_tag').value.trim()||'AI-Powered Loan Safety Platform';
   WL.email=document.getElementById('wl_email').value.trim();
   WL.icon=document.getElementById('wl_icon').value.trim()||'🏢';
@@ -1052,7 +1052,7 @@ function applyWL(){
   toggleWL();
 }
 function resetWL(){
-  WL={brand:'FinWise',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+  WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
   saveWL(); applyWLToDOM();
   document.getElementById('wl_brand').value=WL.brand;
   document.getElementById('wl_tag').value=WL.tag;
@@ -1060,7 +1060,7 @@ function resetWL(){
   document.getElementById('wl_color').value=WL.color;
   document.getElementById('wl_colorhex').value=WL.color;
   previewWL();
-  showToast('Reset to FinWise defaults.');
+  showToast('Reset to BizScale defaults.');
 }
 
 /* ── Color helpers ── */
@@ -1583,7 +1583,7 @@ function exportCSV(){
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url; a.download=(WL.brand||'FinWise')+'_clients_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.href=url; a.download=(WL.brand||'BizScale')+'_clients_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   showToast('✅ Exported '+clients.length+' clients as CSV.');
 }

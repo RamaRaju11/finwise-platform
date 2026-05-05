@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cash Flow Calendar — FinWise SmallBiz</title>
+  <title>Cash Flow Calendar — BizScale SmallBiz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
@@ -173,7 +173,7 @@
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a class="back-link" href="../try.html">&larr; Back to FinWise Platform</a>
+<a class="back-link" href="../try.html">&larr; Back to BizScale Platform</a>
 
 <h1>Cash Flow Calendar</h1>
 <p class="subtitle">Visualise income and expense events day-by-day across any month.</p>
@@ -680,9 +680,9 @@
     var mm = String(month + 1).padStart(2, '0');
     var lines = [
       'BEGIN:VCALENDAR', 'VERSION:2.0',
-      'PRODID:-//FinWise SmallBiz//Cash Flow Calendar//EN',
+      'PRODID:-//BizScale SmallBiz//Cash Flow Calendar//EN',
       'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
-      'X-WR-CALNAME:FinWise Cash Flow — ' + MONTH_NAMES[month] + ' ' + year
+      'X-WR-CALNAME:BizScale Cash Flow — ' + MONTH_NAMES[month] + ' ' + year
     ];
     var uid = 0;
     Object.keys(dayMap).sort(function(a,b){ return a-b; }).forEach(function(dStr) {
@@ -694,7 +694,7 @@
         var dtEnd   = '' + nextD.getFullYear() + String(nextD.getMonth()+1).padStart(2,'0') + String(nextD.getDate()).padStart(2,'0');
         var cat = evt._source === 'tax' ? 'Tax' : evt._source === 'invoice' ? 'Invoice' : evt._source === 'bill' ? 'Bill' : evt._source === 'debt' ? 'DebtPayment' : 'Manual';
         lines.push('BEGIN:VEVENT');
-        lines.push('UID:finwise-' + (++uid) + '-' + dtStart + '@cashflow');
+        lines.push('UID:bizscale-' + (++uid) + '-' + dtStart + '@cashflow');
         lines.push('DTSTART;VALUE=DATE:' + dtStart);
         lines.push('DTEND;VALUE=DATE:' + dtEnd);
         lines.push('SUMMARY:' + escIcs((evt.type === 'income' ? '[+] ' : '[-] ') + evt.name + ' ' + fmt(evt.amount)));
@@ -708,7 +708,7 @@
     var url  = URL.createObjectURL(blob);
     var a    = document.createElement('a');
     a.href   = url;
-    a.download = 'finwise-cashflow-' + year + '-' + mm + '.ics';
+    a.download = 'bizscale-cashflow-' + year + '-' + mm + '.ics';
     a.click();
     URL.revokeObjectURL(url);
   }

@@ -1,7 +1,7 @@
 {
-  "name": "FinWise — Small Business Finance",
-  "short_name": "FinWise",
-  "description": "Free financial tools for small business owners — loan safety, cash flow, health score, and more.",
+  "name": "BizScale — Analyze, Fund, Grow",
+  "short_name": "BizScale",
+  "description": "Analyze your finances, fund your growth, and scale your business — 30 tools for small business owners. Loan safety, health score, AI CFO, and more.",
   "start_url": "./dashboard.html",
   "scope": "./",
   "display": "standalone",

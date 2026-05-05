@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Financial Statements — FinWise Pro</title>
+<title>Financial Statements — BizScale Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -182,7 +182,7 @@ table.fs .muted{color:#94a3b8}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <a href="../index.html" class="ph-back">← Back to BizScale</a>
     <h1>📑 Full Financial Statements</h1>
     <p>P&amp;L · Balance Sheet · Cash Flow · Key Ratios</p>
   </div>
@@ -631,11 +631,11 @@ function showToast(m){
 }
 
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return '$';
 })();
 var CUR_NAME=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return 'USD';
 })();
 

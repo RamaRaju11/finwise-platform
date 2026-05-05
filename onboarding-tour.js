@@ -1,4 +1,4 @@
-/* FinWise First-Time Onboarding Tour
+﻿/* BizScale First-Time Onboarding Tour
    Include on dashboard.html or try.html — shows once per browser session
    localStorage key: fw_tour_done = '1'
 */
@@ -7,8 +7,8 @@
 
   var STEPS = [
     {
-      title: 'Welcome to FinWise!',
-      body:  'Your free financial toolkit for small business owners. Let\'s take a 30-second tour to show you where everything is.',
+      title: 'Welcome to BizScale!',
+      body:  'Analyze your finances, fund your growth, and scale your business — 30 tools built for small business owners. Let\'s take a 30-second tour.',
       icon:  '👋',
       anchor: null  /* centered overlay */
     },

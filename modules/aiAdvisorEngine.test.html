@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -360,7 +360,7 @@ function fmt(n) {
 
 function setCurrency(code) {
   activeCurrency = CURRENCIES[code];
-  localStorage.setItem('finwise_currency', code);
+  localStorage.setItem('bizscale_currency', code);
   document.querySelectorAll('.cb-pill').forEach(p => p.classList.remove('active'));
   event.target.closest('.cb-pill').classList.add('active');
   // Update all currency symbol spans in labels
@@ -1001,7 +1001,7 @@ function runTests(){
 
 // ── Init: restore currency from localStorage ───────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('finwise_currency');
+  const saved = localStorage.getItem('bizscale_currency');
   if (saved && CURRENCIES[saved]) {
     activeCurrency = CURRENCIES[saved];
     document.querySelectorAll('.cb-pill').forEach(pill => {

@@ -1,4 +1,4 @@
-// FinWise PWA — service worker registration + install prompt
+﻿// BizScale PWA — service worker registration + install prompt
 
 (function() {
   'use strict';
@@ -29,10 +29,10 @@
     installBanner.id = 'fwInstallBanner';
     installBanner.innerHTML =
       '<div style="display:flex;align-items:center;gap:12px;flex:1">' +
-        '<span style="font-size:1.4rem">💡</span>' +
+        '<span style="font-size:1.4rem">📈</span>' +
         '<div>' +
-          '<div style="font-size:.85rem;font-weight:800;color:#fff">Install FinWise App</div>' +
-          '<div style="font-size:.75rem;color:#94a3b8">Works offline · No app store needed</div>' +
+          '<div style="font-size:.85rem;font-weight:800;color:#fff">Install BizScale App</div>' +
+          '<div style="font-size:.75rem;color:#94a3b8">Analyze, Fund, Grow · Works offline</div>' +
         '</div>' +
       '</div>' +
       '<button id="fwInstallBtn" style="background:#6366f1;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:.8rem;font-weight:800;cursor:pointer;flex-shrink:0">Install</button>' +

@@ -1,4 +1,4 @@
-/* FinWise — Tool Launcher + Business Profile
+﻿/* BizScale — Tool Launcher + Business Profile
    Add <script src="nav.js"></script> right after <body> in any module page. */
 (function(){
 

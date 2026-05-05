@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Loan Decision Score Engine — FinWise</title>
+  <title>Loan Decision Score Engine — BizScale</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
@@ -233,7 +233,7 @@
 </head>
 <body>
 <div class="print-hdr" id="printHdr">
-  <strong>FinWise Loan Decision Score Report</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span>
+  <strong>BizScale Loan Decision Score Report</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span>
 </div>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="../sidebar.js"></script>
@@ -242,7 +242,7 @@
 <script src="help.js"></script>
 
 <h1>Will this loan help or destroy your business?</h1>
-<p class="subtitle">FinWise · Get a clear YES / NO answer in 60 seconds — free</p>
+<p class="subtitle">BizScale · Get a clear YES / NO answer in 60 seconds — free</p>
 
 <div class="checkup-banner" id="checkupBanner">
   <div class="ch-icon">📋</div>
@@ -513,7 +513,7 @@ let activeCurrency = CURRENCIES['USD'];
 
 function setCurrency(code) {
   activeCurrency = CURRENCIES[code];
-  localStorage.setItem('finwise_currency', code);   // ← share across modules
+  localStorage.setItem('bizscale_currency', code);   // ← share across modules
   // Update pill UI
   document.querySelectorAll('.cb-pill').forEach(p => p.classList.remove('active'));
   event.target.closest('.cb-pill').classList.add('active');
@@ -951,7 +951,7 @@ function shareWhatsApp() {
   var verdict = lastResult.cls === 'safe' ? 'SAFE' : lastResult.cls === 'risky' ? 'RISKY' : 'DANGEROUS';
   var emoji = lastResult.cls === 'safe' ? '✅' : lastResult.cls === 'risky' ? '⚠️' : '🔴';
   var text = emoji + ' My Loan Risk Score: ' + score + ' / 100 (' + verdict + ')\n\n' +
-    'Checked with FinWise — Free AI Loan Decision Engine\n' +
+    'Checked with BizScale — Free AI Loan Decision Engine\n' +
     'Know if your business can safely take a loan in 60 seconds.\n\n' +
     'Try it free: ' + window.location.href;
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
@@ -961,7 +961,7 @@ function copyScoreLink() {
   if (!lastResult) return;
   var score = lastResult.total;
   var verdict = lastResult.cls === 'safe' ? 'SAFE' : lastResult.cls === 'risky' ? 'RISKY' : 'DANGEROUS';
-  var text = 'My Loan Risk Score: ' + score + ' / 100 (' + verdict + ') — Checked with FinWise. Try it free: ' + window.location.href;
+  var text = 'My Loan Risk Score: ' + score + ' / 100 (' + verdict + ') — Checked with BizScale. Try it free: ' + window.location.href;
   navigator.clipboard.writeText(text).then(function() {
     var toast = document.getElementById('copyToast');
     toast.style.display = 'inline';
@@ -1357,7 +1357,7 @@ window.fwToolAutoFill = applyProfileFill;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Restore currency from localStorage (set by any module)
-  const saved = localStorage.getItem('finwise_currency');
+  const saved = localStorage.getItem('bizscale_currency');
   if (saved && CURRENCIES[saved]) {
     activeCurrency = CURRENCIES[saved];
     document.querySelectorAll('.cb-pill').forEach(pill => {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -746,7 +746,7 @@ function doSearch() {
     return;
   }
 
-  el.innerHTML = '<div class="print-only"><strong>FinWise Loan Marketplace — Matched Lenders</strong><br>Amount: $' + fmt(amount) + ' · Tenure: ' + tenureMonths + ' months · FICO: ' + (creditScore||'—') + ' · Generated: ' + new Date().toLocaleDateString() + '</div>' +
+  el.innerHTML = '<div class="print-only"><strong>BizScale Loan Marketplace — Matched Lenders</strong><br>Amount: $' + fmt(amount) + ' · Tenure: ' + tenureMonths + ' months · FICO: ' + (creditScore||'—') + ' · Generated: ' + new Date().toLocaleDateString() + '</div>' +
     '<div class="lender-grid" id="lenderGrid">' +
     results.map(function(l) {
       var e = l._elig;

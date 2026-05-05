@@ -1,4 +1,4 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+﻿import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const RESEND_KEY = Deno.env.get('RESEND_API_KEY')!
@@ -34,10 +34,10 @@ function calcScore(d: Record<string, number>) {
 function buildEmailHtml(portal: any, advisor: any) {
   const d = portal.shared_data || {}
   const wl = {
-    brand: advisor?.wl_brand_name || 'FinWise',
+    brand: advisor?.wl_brand_name || 'BizScale',
     color: advisor?.wl_color || '#4f46e5',
     tagline: advisor?.wl_tagline || 'Financial Advisory Services',
-    hide: advisor?.wl_hide_finwise || false,
+    hide: advisor?.wl_hide_bizscale || false,
   }
   const rev = d.rev || 0, exp = d.exp || 0, emi = d.emi || 0, reserve = d.reserve || 0
   const net = rev - exp - emi
@@ -122,7 +122,7 @@ function buildEmailHtml(portal: any, advisor: any) {
     : ''
 
   const portalBtn = `<tr><td style="padding:20px 24px;text-align:center">
-    <a href="https://app.finwise.ai/client-view.html?token=${portal.token}"
+    <a href="https://app.bizscale.ai/client-view.html?token=${portal.token}"
        style="display:inline-block;padding:12px 28px;background:${wl.color};color:#fff;border-radius:8px;font-size:14px;font-weight:800;text-decoration:none">
       View Full Report →
     </a>
@@ -131,7 +131,7 @@ function buildEmailHtml(portal: any, advisor: any) {
   const footer = wl.hide
     ? ''
     : `<tr><td style="padding:16px 24px;text-align:center;border-top:1px solid #f1f5f9;margin-top:8px">
-        <p style="font-size:11px;color:#94a3b8;margin:0">Powered by <strong style="color:#4f46e5">FinWise</strong> — Financial Platform for Small Businesses</p>
+        <p style="font-size:11px;color:#94a3b8;margin:0">Powered by <strong style="color:#4f46e5">BizScale</strong> — Financial Platform for Small Businesses</p>
       </td></tr>`
 
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:20px;background:#f0f4ff;font-family:Arial,sans-serif">
@@ -173,7 +173,7 @@ serve(async (req) => {
   for (const portal of portals) {
     const advisor = portal.profiles
     const html = buildEmailHtml(portal, advisor)
-    const brandName = advisor?.wl_brand_name || 'FinWise'
+    const brandName = advisor?.wl_brand_name || 'BizScale'
 
     try {
       const res = await fetch('https://api.resend.com/emails', {

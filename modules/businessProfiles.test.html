@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Business Profiles — FinWise</title>
+<title>Business Profiles — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -160,9 +160,9 @@ input:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <a href="../index.html" class="ph-back">← Back to BizScale</a>
     <h1>💼 Business Profiles Manager</h1>
-    <p>Save and switch between business profiles across all FinWise tools</p>
+    <p>Save and switch between business profiles across all BizScale tools</p>
   </div>
   <div class="ph-badge" id="planBadge">Pro · $29/month</div>
 </div>
@@ -243,7 +243,7 @@ function showToast(m){
 
 /* ── Currency ── */
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return '
 })();
 function fmt(n){

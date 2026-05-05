@@ -1,5 +1,5 @@
-/* ══════════════════════════════════════════════════════
-   FinWise Platform — API Configuration
+﻿/* ══════════════════════════════════════════════════════
+   BizScale Platform — API Configuration
    Update ANTHROPIC_API_KEY below with your actual key.
    Get your key at: https://console.anthropic.com
 ══════════════════════════════════════════════════════ */

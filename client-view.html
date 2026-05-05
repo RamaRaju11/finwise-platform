@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -111,7 +111,7 @@ body{font-family:Arial,sans-serif;background:#f0f4ff;color:#1e293b;font-size:14p
     <div class="brand-area">
       <div class="brand-logo" id="brandLogo">💡</div>
       <div>
-        <div class="brand-name" id="brandName">FinWise</div>
+        <div class="brand-name" id="brandName">BizScale</div>
         <div class="brand-tag" id="brandTag">Financial Advisory Services</div>
       </div>
     </div>
@@ -138,8 +138,8 @@ body{font-family:Arial,sans-serif;background:#f0f4ff;color:#1e293b;font-size:14p
 </div>
 
 <div class="powered-by" id="poweredBy" style="display:none">
-  <span class="pw-logo">💡 Fin<span>Wise</span></span>
-  This report was prepared using FinWise — the financial platform for small businesses.<br>
+  <span class="pw-logo">📈 Biz<span>Scale</span></span>
+  This report was prepared using BizScale — the financial platform for small businesses.<br>
   <a href="index.html">Get your own free dashboard →</a>
 </div>
 
@@ -169,7 +169,7 @@ function applyWhiteLabel(wl){
   if(wl.logo_url){
     document.getElementById('brandLogo').innerHTML = '<img src="'+esc(wl.logo_url)+'" alt="logo" onerror="this.parentElement.textContent=\'💡\'">';
   }
-  if(wl.hide_finwise) document.getElementById('poweredBy').style.display='none';
+  if(wl.hide_bizscale) document.getElementById('poweredBy').style.display='none';
 }
 
 function runwayColor(months){
@@ -311,7 +311,7 @@ window.addEventListener('load', function(){
     document.getElementById('reportContent').style.display='block';
 
     /* Show/hide powered-by */
-    var hideFinwise = wl && wl.hide_finwise;
+    var hideFinwise = wl && wl.hide_bizscale;
     if(!hideFinwise) document.getElementById('poweredBy').style.display='block';
 
     /* Page title */

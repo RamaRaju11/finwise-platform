@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>AI CFO Advisor — FinWise Pro</title>
+  <title>AI CFO Advisor — BizScale Pro</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,system-ui,sans-serif;background:#f4f6f9;color:#222;min-height:100vh}
@@ -199,7 +199,7 @@
 <!-- Page header -->
 <div class="page-header">
   <div class="ph-left">
-    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <a href="../index.html" class="ph-back">← Back to BizScale</a>
     <h1>🤖 AI CFO Advisor</h1>
     <p>Ask anything about your business finances — powered by Claude AI</p>
   </div>
@@ -837,7 +837,7 @@ function buildSystemPrompt(){
   const margin    = c.rev  ? ((netCF/c.rev)*100).toFixed(0) : 'N/A';
   const moduleData = buildModuleDataText(gatherModuleData());
 
-  return `You are an expert AI CFO advisor for small businesses, built into FinWise — a financial management platform.
+  return `You are an expert AI CFO advisor for small businesses, built into BizScale — a financial management platform.
 
 Your role: Give clear, direct, personalised financial advice based on the user's actual business numbers below. Be concise, use plain English, and always connect advice back to specific numbers. Never give generic advice.
 

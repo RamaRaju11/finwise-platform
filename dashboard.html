@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Dashboard — FinWise</title>
+<title>Dashboard — BizScale</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FinWise">
+<meta name="apple-mobile-web-app-title" content="BizScale">
 <meta name="theme-color" content="#0f172a">
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="pwa.js" defer></script>
-<meta name="description" content="Your FinWise financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
+<meta name="description" content="Your BizScale financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;min-height:100vh;display:flex}
@@ -341,8 +341,9 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 ════════════════════════════════════════ -->
 <aside class="sidebar" id="sidebar">
   <a href="dashboard.html" class="sb-logo">
-    <div class="sb-logo-text">💡 Fin<span>Wise</span></div>
+    <div class="sb-logo-text">📈 Biz<span>Scale</span></div>
   </a>
+  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>
   <div class="sb-biz" id="heroBiz">Your dashboard</div>
   <span class="sb-plan-chip badge-free" id="planBadge">Free Plan</span>
 
@@ -576,7 +577,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- START HERE CARD (new users) -->
     <div class="start-here" id="startHereCard" style="display:none">
-      <div class="sh-title">👋 Welcome to FinWise — here's how to get started</div>
+      <div class="sh-title">👋 Welcome to BizScale — here's how to get started</div>
       <div class="sh-sub">Three quick steps to unlock your personalized financial picture</div>
       <div class="sh-steps">
         <a href="onboarding.html" class="sh-step" onclick="localStorage.removeItem('fw_onboarded')">
@@ -1022,7 +1023,7 @@ document.querySelectorAll('.sb-link').forEach(function(a){
 var PLAN_CONFIG = {
   free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools — no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
   starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools — grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
-  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access — AI CFO, forecasting, P&L, benchmarks and more. You\'re using FinWise at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
+  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access — AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizScale at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
   advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite — manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
 };
 
@@ -1507,10 +1508,10 @@ function loadReferral(userId){
   document.getElementById('refLink').value = link;
   document.getElementById('referralCard').style.display = 'flex';
 
-  var msg = 'Join me on FinWise — 20 free financial tools for your small business! Use my link: ' + link;
+  var msg = 'Join me on BizScale — 20 free financial tools for your small business! Use my link: ' + link;
   document.getElementById('refWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  document.getElementById('refEmail').href = 'mailto:?subject=Try FinWise — free financial tools for small business&body=' + encodeURIComponent(msg);
-  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try FinWise — 20 free financial tools for small businesses! ' + link);
+  document.getElementById('refEmail').href = 'mailto:?subject=Try BizScale — free financial tools for small business&body=' + encodeURIComponent(msg);
+  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizScale — 20 free financial tools for small businesses! ' + link);
 
   if(!window.fwAuth || !window.fwAuth.client) return;
 

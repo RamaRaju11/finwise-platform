@@ -249,7 +249,7 @@ const CURRENCIES = {
 
 function setCurrency(code){
   activeCurrency = CURRENCIES['USD'];
-  localStorage.setItem('finwise_currency', code);
+  localStorage.setItem('bizscale_currency', code);
   document.querySelectorAll('.cbtn').forEach(b=>{
     b.classList.toggle('active', b.textContent.includes(activeCurrency.symbol) || b.textContent.includes(code));
   });
@@ -787,7 +787,7 @@ function runTests(){
 
 // ═══ Init ═════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  const saved = localStorage.getItem('finwise_currency');
+  const saved = localStorage.getItem('bizscale_currency');
   setCurrency(saved && CURRENCIES[saved] ? saved : 'USD');
 });
 </script>
@@ -801,7 +801,7 @@ let activeCurrency = CURRENCIES['USD'];
 
 function setCurrency(code){
   activeCurrency = CURRENCIES['USD'];
-  localStorage.setItem('finwise_currency', code);
+  localStorage.setItem('bizscale_currency', code);
   document.querySelectorAll('.cbtn').forEach(b=>{
     b.classList.toggle('active', b.textContent.includes(activeCurrency.symbol) || b.textContent.includes(code));
   });
@@ -1339,7 +1339,7 @@ function runTests(){
 
 // ═══ Init ═════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  const saved = localStorage.getItem('finwise_currency');
+  const saved = localStorage.getItem('bizscale_currency');
   setCurrency(saved && CURRENCIES[saved] ? saved : 'USD');
 });
 </script>

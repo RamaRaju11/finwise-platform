@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Industry Benchmarks — FinWise Pro</title>
+<title>Industry Benchmarks — BizScale Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:48px}
@@ -177,7 +177,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to FinWise</a>
+    <a href="../index.html" class="ph-back">← Back to BizScale</a>
     <h1>🏭 Industry Benchmark Comparison</h1>
     <p>Compare your business metrics against real industry averages</p>
   </div>
@@ -234,7 +234,7 @@ function showToast(m){
 }
 
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('finwise_currency')||'USD';
+  var s=localStorage.getItem('bizscale_currency')||'USD';
   return s==='INR'?'₹':s==='EUR'?'€':s==='GBP'?'£':'$';
 })();
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
@@ -419,7 +419,7 @@ function loadLiveData(){
   var badge=document.getElementById('liveBadge');
   if(sources.length&&badge){
     badge.classList.add('show');
-    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' — from FinWise modules';
+    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' — from BizScale modules';
   }
   return sources.length>0;
 }

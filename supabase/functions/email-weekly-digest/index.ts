@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+﻿import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const cors = {
@@ -32,7 +32,7 @@ function buildEmail(biz: any, score: any, priorities: any[], unsubToken: string)
 
   <!-- Header -->
   <tr><td style="background:#0f172a;border-radius:12px 12px 0 0;padding:24px 32px">
-    <span style="font-size:20px;font-weight:900;color:#fff">💡 Fin<span style="color:#a5b4fc">Wise</span></span>
+    <span style="font-size:20px;font-weight:900;color:#fff">📈 Biz<span style="color:#a5b4fc">Scale</span></span>
     <span style="float:right;font-size:12px;color:#64748b;margin-top:4px">Weekly Digest</span>
   </td></tr>
 
@@ -76,7 +76,7 @@ function buildEmail(biz: any, score: any, priorities: any[], unsubToken: string)
 
   <!-- Footer -->
   <tr><td style="background:#f8fafc;border-radius:0 0 12px 12px;padding:16px 32px;text-align:center;border-top:1px solid #e2e8f0">
-    <span style="font-size:12px;color:#94a3b8">FinWise Weekly Digest · Sent every Monday</span><br/>
+    <span style="font-size:12px;color:#94a3b8">BizScale Weekly Digest · Sent every Monday</span><br/>
     <a href="https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/email-unsubscribe?token=${unsubToken}" style="font-size:11px;color:#94a3b8">Unsubscribe</a>
   </td></tr>
 
@@ -119,9 +119,9 @@ serve(async (req) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}` },
       body: JSON.stringify({
-        from: 'FinWise Weekly <onboarding@resend.dev>',
+        from: 'BizScale Weekly <onboarding@resend.dev>',
         to: [toEmail],
-        subject: `Your FinWise Weekly: Score ${Math.round(score?.overall_score || 0)}/100 — ${score?.overall_score >= 70 ? 'Healthy' : score?.overall_score >= 45 ? 'Caution' : 'At Risk'}`,
+        subject: `Your BizScale Weekly: Score ${Math.round(score?.overall_score || 0)}/100 — ${score?.overall_score >= 70 ? 'Healthy' : score?.overall_score >= 45 ? 'Caution' : 'At Risk'}`,
         html,
       })
     })

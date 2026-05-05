@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Lender Marketplace — FinWise</title>
+<title>Lender Marketplace — BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -95,7 +95,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 <a href="loanDecisionScoreEngine.test.html" class="back-link">← Back to Loan Score</a>
 
 <h1>Lender Marketplace</h1>
-<p class="subtitle">FinWise · Trusted lenders for US small businesses — apply directly on their websites</p>
+<p class="subtitle">BizScale · Trusted lenders for US small businesses — apply directly on their websites</p>
 
 <!-- Live Pre-Qualified Offers -->
 <div class="live-offers-section" id="liveOffersSection">
@@ -103,7 +103,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
     <div class="live-title">⚡ Your Pre-Qualified Offers</div>
     <button class="btn-refresh" id="refreshOffersBtn" onclick="loadOffers(true)">↻ Refresh</button>
   </div>
-  <div class="live-sub" id="offersSubtitle">Personalized offers based on your FinWise profile</div>
+  <div class="live-sub" id="offersSubtitle">Personalized offers based on your BizScale profile</div>
   <div id="profileStrip" style="display:none" class="live-profile-strip"></div>
   <div id="offersContainer" class="loading-offers">Loading your offers…</div>
 </div>
@@ -281,7 +281,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 </div>
 
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> Pre-qualified offers are estimates based on your FinWise profile data and do not guarantee approval. FinWise partners with Lendio and Bluevine — we may earn a referral fee on funded loans at no cost to you. Interest rates, amounts, and terms are approximate and subject to change. FinWise is not a lender.
+  <strong>Disclaimer:</strong> Pre-qualified offers are estimates based on your BizScale profile data and do not guarantee approval. BizScale partners with Lendio and Bluevine — we may earn a referral fee on funded loans at no cost to you. Interest rates, amounts, and terms are approximate and subject to change. BizScale is not a lender.
 </div>
 
 <script>
@@ -396,7 +396,7 @@ async function loadOffers(refresh) {
 
     if (offers.length === 0) {
       container.innerHTML = '<div class="no-offers">No matching offers yet. <a href="#" onclick="loadOffers(true);return false" style="color:#6366f1">Build your profile →</a></div>'
-      subtitle.textContent = 'Complete your FinWise profile to unlock personalized offers'
+      subtitle.textContent = 'Complete your BizScale profile to unlock personalized offers'
     } else {
       subtitle.textContent = `${offers.length} personalized offer${offers.length > 1 ? 's' : ''} matched to your business profile`
       container.innerHTML = '<div class="offers-grid">' + offers.map((o, i) => renderOfferCard(o, i)).join('') + '</div>'
