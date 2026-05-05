@@ -283,6 +283,53 @@
         if(window.innerWidth <= 900) fwCloseSidebar();
       });
     });
+
+    /* ── Scroll-zone: fade + arrow at bottom (and top) that auto-scrolls nav ── */
+    var scrollStyle = document.createElement('style');
+    scrollStyle.textContent =
+      '.fw-scroll-zone{position:absolute;left:0;right:0;height:44px;z-index:10;pointer-events:auto;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;cursor:pointer}'+
+      '.fw-scroll-zone.bottom{bottom:52px;background:linear-gradient(to top,#0f172a 30%,transparent)}'+
+      '.fw-scroll-zone.top{top:0;background:linear-gradient(to bottom,#0f172a 30%,transparent)}'+
+      '.fw-scroll-zone .fw-sz-arrow{font-size:.75rem;color:#64748b;line-height:1;user-select:none}'+
+      '.fw-scroll-zone.visible{opacity:1}';
+    document.head.appendChild(scrollStyle);
+
+    aside.style.position = 'relative'; /* needed for absolute children */
+
+    var szBottom = document.createElement('div');
+    szBottom.className = 'fw-scroll-zone bottom';
+    szBottom.innerHTML = '<span class="fw-sz-arrow">▼</span>';
+    aside.appendChild(szBottom);
+
+    var szTop = document.createElement('div');
+    szTop.className = 'fw-scroll-zone top';
+    szTop.innerHTML = '<span class="fw-sz-arrow">▲</span>';
+    aside.appendChild(szTop);
+
+    var nav = aside.querySelector('.fw-sb-nav');
+    var scrollTimer = null;
+
+    function startScroll(dir){
+      stopScroll();
+      scrollTimer = setInterval(function(){ nav.scrollTop += dir * 4; updateZones(); }, 16);
+    }
+    function stopScroll(){ clearInterval(scrollTimer); scrollTimer = null; }
+
+    function updateZones(){
+      var atTop    = nav.scrollTop <= 2;
+      var atBottom = nav.scrollTop + nav.clientHeight >= nav.scrollHeight - 2;
+      szTop.classList.toggle('visible',    !atTop);
+      szBottom.classList.toggle('visible', !atBottom);
+    }
+
+    szBottom.addEventListener('mouseenter', function(){ startScroll(1); });
+    szBottom.addEventListener('mouseleave', stopScroll);
+    szTop.addEventListener('mouseenter',    function(){ startScroll(-1); });
+    szTop.addEventListener('mouseleave',    stopScroll);
+
+    nav.addEventListener('scroll', updateZones);
+    /* slight delay so nav has rendered height */
+    setTimeout(updateZones, 200);
   }
 
   /* ── Dark mode ── */
