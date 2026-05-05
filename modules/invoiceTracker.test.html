@@ -281,10 +281,50 @@ input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
 <script>
 var filter = 'all';
 var KEY = 'fw_invoices';
+var _invoices = [];
+var _db = null;
+var _userId = null;
 
 // ── STORAGE ──────────────────────────────────────────────────────────────────
-function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
-function save(inv){ localStorage.setItem(KEY,JSON.stringify(inv)); }
+function load(){ return _invoices; }
+function save(invs){
+  _invoices = invs;
+  localStorage.setItem(KEY, JSON.stringify(invs));
+}
+
+// ── SUPABASE ROW CONVERSION ───────────────────────────────────────────────────
+function toSupaRow(inv){
+  return {
+    id: inv.id, user_id: _userId,
+    client: inv.client, client_email: inv.clientEmail||null,
+    inv_no: inv.invNo||null, amount: inv.amount,
+    issued: inv.issued||null, due_date: inv.dueDate,
+    notes: inv.notes||null, status: inv.status||'pending',
+    paid_date: inv.paidDate||null,
+    recurring: inv.recurring||null, recurring_end: inv.recurringEnd||null,
+    recurring_parent_id: inv.recurringParentId||null,
+    created_at: inv.createdAt||new Date().toISOString()
+  };
+}
+function fromSupaRow(r){
+  return {
+    id: r.id, client: r.client, clientEmail: r.client_email,
+    invNo: r.inv_no, amount: r.amount,
+    issued: r.issued, dueDate: r.due_date,
+    notes: r.notes, status: r.status,
+    paidDate: r.paid_date, recurring: r.recurring,
+    recurringEnd: r.recurring_end, recurringParentId: r.recurring_parent_id,
+    createdAt: r.created_at
+  };
+}
+function supaUpsert(inv){
+  if(!_db||!_userId) return;
+  _db.from('invoices').upsert(toSupaRow(inv),{onConflict:'id'}).then(function(){});
+}
+function supaDelete(id){
+  if(!_db||!_userId) return;
+  _db.from('invoices').delete().eq('id',id).eq('user_id',_userId).then(function(){});
+}
 
 // ── UTC DATE HELPERS (P1 Calculation: timezone-safe) ─────────────────────────
 function parseUTCDate(str){
@@ -616,13 +656,17 @@ function saveInvoice(){
     recurringEnd:isRecurring?recurEnd:null
   };
 
+  var savedInv;
   if(editId){
     invs=invs.map(function(i){ return i.id===editId?Object.assign({},i,patch):i; });
+    savedInv=invs.find(function(i){ return i.id===editId; });
   } else {
-    invs.push(Object.assign({id:Date.now().toString(), status:'pending', createdAt:new Date().toISOString()}, patch));
+    savedInv=Object.assign({id:Date.now().toString(), status:'pending', createdAt:new Date().toISOString()}, patch);
+    invs.push(savedInv);
   }
 
   save(invs);
+  supaUpsert(savedInv);
   closeModal();
   renderTable();
   toast('Invoice saved');
@@ -630,10 +674,13 @@ function saveInvoice(){
 
 function markPaid(id){
   var paidDate=new Date().toISOString().split('T')[0];
+  var paid;
   var invs=load().map(function(i){
-    return i.id===id?Object.assign({},i,{status:'paid',paidDate:paidDate}):i;
+    if(i.id===id){ paid=Object.assign({},i,{status:'paid',paidDate:paidDate}); return paid; }
+    return i;
   });
   save(invs);
+  if(paid) supaUpsert(paid);
   renderTable();
   toast('Marked as paid');
 }
@@ -641,6 +688,7 @@ function markPaid(id){
 function deleteInvoice(id){
   if(!confirm('Delete this invoice?')) return;
   save(load().filter(function(i){ return i.id!==id; }));
+  supaDelete(id);
   renderTable();
 }
 
@@ -689,6 +737,7 @@ function generateRecurring(){
 
   if(added>0){
     save(newInvs);
+    newInvs.filter(function(i){ return i.recurringParentId; }).forEach(supaUpsert);
     toast(added+' recurring invoice'+(added>1?'s':'')+' generated');
     return true;
   }
@@ -793,10 +842,29 @@ function renderAgingReport(){
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-(function init(){
+async function init(){
+  // Load localStorage immediately so UI is instant
+  try{ _invoices=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ _invoices=[]; }
   generateRecurring();
   renderTable();
-})();
+
+  if(!window.fwAuth) return;
+  fwAuth.init(async function(){
+    if(!fwAuth.user||!fwAuth.client) return;
+    _db=fwAuth.client; _userId=fwAuth.user.id;
+    var res=await _db.from('invoices').select('*').eq('user_id',_userId).order('created_at',{ascending:false});
+    if(res.data&&res.data.length>0){
+      _invoices=res.data.map(fromSupaRow);
+      localStorage.setItem(KEY,JSON.stringify(_invoices));
+    } else if(_invoices.length>0&&!res.error){
+      // Migrate existing localStorage invoices to Supabase
+      await _db.from('invoices').upsert(_invoices.map(toSupaRow),{onConflict:'id'});
+    }
+    renderTable();
+  });
+}
+init();
 </script>
+<script src="fw-auth.js"></script>
 </body>
 </html>
