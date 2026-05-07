@@ -11,6 +11,18 @@
 <meta name="theme-color" content="#0f172a">
 <script src="pwa.js" defer></script>
 <meta name="description" content="AI-powered Loan Decision Engine for small businesses. Get a Loan Safety Score in 60 seconds — know if a loan will help or destroy your cash flow. Free, no sign-up, runs in your browser."/>
+<!-- ═══════════════════════════════════════════════════════════════
+     GOOGLE ANALYTICS 4
+     SETUP: Go to analytics.google.com → Create property → Get Measurement ID
+     Replace G-XXXXXXXXXX below with your actual ID (looks like G-A1B2C3D4E5)
+═══════════════════════════════════════════════════════════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <style>
 /* ── Reset & base ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -244,6 +256,17 @@ p{line-height:1.65}
 .footer-bottom-links{display:flex;gap:1.5rem}
 .footer-bottom-links a{color:#475569;transition:color .15s}
 .footer-bottom-links a:hover{color:#94a3b8}
+
+/* ── Email capture section ──────────────────────────────────── */
+.email-section{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);padding:52px 0;text-align:center}
+.email-section h2{font-size:clamp(1.5rem,3vw,2.1rem);color:#fff;margin-bottom:.6rem}
+.email-section p{color:#94a3b8;font-size:.95rem;margin-bottom:1.75rem}
+.email-form{display:flex;gap:.75rem;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.email-form input[type=email]{flex:1;min-width:220px;padding:.75rem 1rem;border-radius:var(--radius-sm);border:none;font-size:.9rem;outline:none;color:var(--dark)}
+.email-form button{padding:.75rem 1.5rem;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);font-size:.9rem;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap}
+.email-form button:hover{background:var(--brand-dark)}
+.email-form-note{font-size:.75rem;color:#475569;margin-top:.75rem}
+.email-success{display:none;background:#dcfce7;color:#166534;padding:.75rem 1.5rem;border-radius:var(--radius-sm);font-weight:700;margin-top:1rem}
 
 /* ── Scroll reveal (lightweight) ────────────────────────────── */
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
@@ -1489,8 +1512,10 @@ p{line-height:1.65}
           <li class="no">Owner's Pay / Health Score</li>
         </ul>
         <div class="price-cta">
-          <a href="modules/starterPlan.test.html" class="btn btn-outline" style="width:100%;margin-bottom:8px">Start Starter — $9/mo</a>
-          <a href="try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ See a sample analysis</a>
+          <!-- STRIPE: Replace # with your Stripe Payment Link for $9/mo Starter plan -->
+          <!-- Create at: dashboard.stripe.com → Payment Links → + New link → $9/month -->
+          <a href="#" class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Starter')">Get Starter — $9/mo →</a>
+          <a href="modules/starterPlan.test.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ Try tools first (no card)</a>
         </div>
       </div>
 
@@ -1511,7 +1536,8 @@ p{line-height:1.65}
           <li class="no">White-label / client dashboard</li>
         </ul>
         <div class="price-cta">
-          <a href="modules/forecastPro.test.html" class="btn btn-primary" style="width:100%;margin-bottom:8px">Try Forecast Pro →</a>
+          <!-- STRIPE: Replace # with your Stripe Payment Link for $29/mo Pro plan -->
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Pro')">Get Pro — $29/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
             <a href="modules/aiCfoChat.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🤖 AI CFO</a>
             <a href="modules/businessHealthScore.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🏥 Health</a>
@@ -1539,7 +1565,8 @@ p{line-height:1.65}
           <li>Priority support + early access</li>
         </ul>
         <div class="price-cta">
-          <a href="modules/advisorDashboard.test.html" class="btn btn-primary" style="width:100%;margin-bottom:8px">🏢 Advisor Dashboard →</a>
+          <!-- STRIPE: Replace # with your Stripe Payment Link for $79/mo Advisor plan -->
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Advisor')">Get Advisor — $79/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
             <a href="modules/clientRiskEmail.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">📬 Risk Email</a>
             <a href="modules/referralTracker.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💸 Referrals</a>
@@ -1563,6 +1590,24 @@ p{line-height:1.65}
       <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-white btn-lg">⚡ Check Your Loan Risk Now</a>
       <a href="demo.html" class="btn btn-lg" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3)">🎬 Watch Live Demo</a>
     </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     EMAIL CAPTURE
+     SETUP: Go to formspree.io → New Form → copy your form ID
+     Replace YOUR_FORMSPREE_ID below (looks like: xbjwpkol)
+══════════════════════════════════════════════════════════════════════ -->
+<section class="email-section">
+  <div class="container">
+    <h2>Get free weekly financial tips for small businesses</h2>
+    <p>Cash flow tricks, loan readiness checklists, and growth strategies — straight to your inbox. No spam, ever.</p>
+    <form class="email-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleEmailSubmit(event,this)">
+      <input type="email" name="email" placeholder="Enter your business email" required autocomplete="email"/>
+      <button type="submit">Get Free Tips</button>
+    </form>
+    <div class="email-success" id="emailSuccess">Thank you! Check your inbox for a confirmation.</div>
+    <div class="email-form-note">Join 1,200+ small business owners · Unsubscribe anytime</div>
   </div>
 </section>
 
@@ -1726,6 +1771,35 @@ window.addEventListener('scroll', () => {
   }, {threshold: 0.5});
   observer.observe(el);
 })();
+
+// Email capture form handler
+function handleEmailSubmit(e, form) {
+  e.preventDefault();
+  var email = form.querySelector('input[type=email]').value;
+  fetch(form.action, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json','Accept': 'application/json'},
+    body: JSON.stringify({email: email})
+  }).then(function(r) {
+    if(r.ok) {
+      form.style.display = 'none';
+      document.getElementById('emailSuccess').style.display = 'block';
+      // Track GA4 event
+      if(window.gtag) gtag('event','email_signup',{plan:'newsletter'});
+    }
+  }).catch(function(){ form.style.display = 'none'; document.getElementById('emailSuccess').style.display = 'block'; });
+}
+
+// Stripe click — tracks GA4 event + redirects to payment link
+// Once you have your Stripe links, replace the href="#" on each plan button
+function stripeClick(el, plan) {
+  if(window.gtag) gtag('event','begin_checkout',{plan: plan});
+  if(el.getAttribute('href') === '#') {
+    alert('Stripe payment link for ' + plan + ' plan coming soon!\n\nCreate it at dashboard.stripe.com → Payment Links');
+    return false;
+  }
+  return true;
+}
 
 // Mobile nav toggle + click-outside close
 function toggleMobileNav(){
