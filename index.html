@@ -544,135 +544,131 @@ p{line-height:1.65}
 .cmdpal-foot{padding:8px 18px;border-top:1px solid #f1f5f9;display:flex;gap:16px;font-size:.68rem;color:#94a3b8}
 .cmdpal-foot kbd{background:#f1f5f9;padding:.15rem .45rem;border-radius:4px;font-size:.67rem;font-weight:700;color:#64748b}
 
-/* ═══════════════════════════════════════════════════════════════
-   BOLD & MINIMAL THEME (Option B)
-═══════════════════════════════════════════════════════════════ */
+/* =================================================================
+   CLEAN & POLISHED THEME
+================================================================= */
 
-/* Base — bright white, high contrast */
+/* Base */
 body{background:#fff;color:var(--dark)}
 h1,h2,h3,h4{color:var(--dark)}
-.section{padding:72px 0}
+.section{padding:80px 0}
+.section-title-block{margin-bottom:3rem}
+.section-title-block h2{font-size:clamp(2rem,4vw,2.75rem)!important;font-weight:900;color:var(--dark);letter-spacing:-.04em;line-height:1.15}
+.section-title-block p{color:var(--gray);font-size:1rem;margin-top:.6rem}
+.eyebrow{color:var(--brand);font-size:.72rem;letter-spacing:.14em;font-weight:800}
 
-/* Bigger bolder section headings */
-.section-title-block h2{font-size:clamp(2rem,4vw,3rem)!important;font-weight:900;color:var(--dark);letter-spacing:-.04em}
-.section-title-block p{color:var(--gray);font-size:1rem}
-.eyebrow{color:var(--brand);font-size:.75rem;letter-spacing:.14em}
-
-/* Nav — crisp white with bold bottom line */
-.nav{background:rgba(255,255,255,.97);border-bottom:2px solid var(--border)}
-.nav-links a{color:var(--gray)}
-.nav-links a:hover{color:var(--dark)}
-
-/* Divider */
-.divider{background:var(--border);height:2px}
+/* Nav */
+.nav{background:rgba(255,255,255,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-links a{color:var(--gray);font-size:.88rem;font-weight:600;transition:color .15s}
+.nav-links a:hover{color:var(--brand)}
+.announce{font-size:.75rem;padding:.45rem 1rem}
 
 /* Trust bar */
-.trust-bar{background:#f8fafc;border-top:2px solid var(--border);border-bottom:2px solid var(--border)}
-.trust-item{color:var(--dark2);font-weight:700}
+.trust-bar{background:#fafafa;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.trust-item{color:var(--dark2);font-size:.82rem}
+.divider{background:var(--border);height:1px}
 
-/* Features strip — white, thick left-border cards */
+/* Card base - clean shadow, rounded */
+.feature-card,.flow-card,.start-card,.price-card,.testi-card{background:#fff;border:1px solid var(--border)!important;border-radius:16px!important;box-shadow:0 2px 12px rgba(0,0,0,.05)!important;transition:box-shadow .2s,transform .2s,border-color .2s!important}
+.feature-card:hover,.flow-card:hover,.start-card:hover,.price-card:hover,.testi-card:hover{box-shadow:0 12px 40px rgba(79,70,229,.13)!important;transform:translateY(-4px)!important;border-color:rgba(79,70,229,.22)!important}
+
+/* Features */
 .features-strip{background:#fff}
-.feature-card{border:1px solid var(--border)!important;border-left:5px solid var(--brand)!important;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.feature-card:hover{box-shadow:0 10px 36px rgba(79,70,229,.14)!important;transform:translateY(-4px);border-left-color:var(--brand-light)!important}
-.feature-card h3{color:var(--dark);font-size:1.05rem}
-.feature-card p{color:var(--gray)}
-.feature-icon{background:#eef2ff!important}
+.feature-card h3{font-size:1.05rem;font-weight:800;color:var(--dark)}
+.feature-card p{color:var(--gray);font-size:.88rem}
+.feature-icon{background:#eef2ff!important;border-radius:12px!important}
 
-/* How it works — strong indigo block */
-.how-section{background:#eef2ff}
-.how-step h3{color:var(--dark);font-size:1.1rem;font-weight:800}
-.how-step p{color:var(--gray)}
-.step-chip{background:#fff!important;border:2px solid var(--border)!important;color:var(--dark2)!important;font-weight:700}
-.step-num{box-shadow:0 0 0 6px #eef2ff,0 0 0 8px var(--brand)!important}
-.how-steps::before{height:3px;background:var(--brand)}
+/* How it works */
+.how-section{background:#f8fafc}
+.how-step h3{font-size:1.05rem;font-weight:800;color:var(--dark)}
+.how-step p{color:var(--gray);font-size:.88rem}
+.step-chip{background:#fff!important;border:1.5px solid var(--border)!important;color:var(--dark2)!important;font-weight:600;border-radius:999px!important}
+.step-num{width:64px;height:64px;font-size:1.4rem;box-shadow:0 0 0 6px #f8fafc,0 0 0 8px #c7d2fe!important}
+.how-steps::before{background:linear-gradient(90deg,var(--brand),var(--sky))}
 
-/* Problem section — white */
+/* Problem */
 .problem-section{background:#fff}
-.problem-stat{border:1px solid var(--border)!important;border-left:5px solid var(--amber)!important;background:#fff!important}
-.problem-stat h4{color:var(--dark)}
-.problem-stat p{color:var(--gray)}
+.problem-stat{border:1px solid var(--border)!important;border-left:4px solid var(--amber)!important;background:#fff!important;border-radius:12px!important;box-shadow:0 2px 8px rgba(0,0,0,.04)!important}
+.problem-stat:hover{box-shadow:0 8px 28px rgba(245,158,11,.12)!important;transform:translateY(-2px)}
+.problem-stat h4{font-size:1rem;font-weight:800;color:var(--dark)}
+.problem-stat p{color:var(--gray);font-size:.85rem}
 
-/* Solution / flows — light green block */
-.solution-section{background:#f0fdf4}
-.flow-card{border:1px solid #bbf7d0!important;border-left:5px solid var(--green)!important;background:#fff!important;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.flow-card.flow-1{border-left-color:var(--brand)!important}
-.flow-card.flow-2{border-left-color:var(--green)!important}
-.flow-card.flow-3{border-left-color:var(--amber)!important}
-.flow-card::before{display:none}
-.flow-card:hover{box-shadow:0 10px 36px rgba(16,185,129,.14)!important;transform:translateY(-4px)}
-.flow-card h3{color:var(--dark)}
-.flow-card p{color:var(--gray)}
-.flow-num{color:var(--brand);font-size:.8rem}
-.flow-output{color:var(--dark2)}
+/* Solution flows */
+.solution-section{background:#fff}
+.flow-card{border:1px solid var(--border)!important}
+.flow-card.flow-1::before{background:linear-gradient(90deg,var(--brand),var(--sky))}
+.flow-card.flow-2::before{background:linear-gradient(90deg,var(--green),var(--sky))}
+.flow-card.flow-3::before{background:linear-gradient(90deg,var(--amber),var(--green))}
+.flow-card h3{font-size:1.1rem;font-weight:800;color:var(--dark)}
+.flow-card p{color:var(--gray);font-size:.88rem}
+.flow-num{color:var(--brand);font-weight:800}
+.flow-output{color:var(--dark2);font-size:.85rem}
 .flow-output::before{color:var(--brand)}
 
-/* Before/After — white */
-.before-after{background:#fff}
+/* Before/After */
+.before-after{background:#f8fafc}
 
-/* Start section — soft purple block */
-.start-section{background:#faf5ff}
-.start-card{border:1px solid #e9d5ff!important;border-left:5px solid var(--brand)!important;background:#fff!important;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.start-card.s2{border-left-color:var(--green)!important}
-.start-card.s3{border-left-color:var(--amber)!important}
-.start-card::after{display:none}
-.start-card:hover{box-shadow:0 12px 40px rgba(79,70,229,.14)!important;transform:translateY(-5px)}
-.start-card h3{color:var(--dark)}
-.start-card p{color:var(--gray)}
-.start-outputs li{color:var(--dark2)}
+/* Start section */
+.start-section{background:#fff}
+.start-card{border:1px solid var(--border)!important}
+.start-card h3{font-size:1.2rem;font-weight:900;color:var(--dark)}
+.start-card p{color:var(--gray);font-size:.88rem}
+.start-outputs li{color:var(--dark2);font-size:.85rem}
 .start-outputs li::before{color:var(--brand)}
 .s1 .start-badge{background:#eef2ff;color:var(--brand)}
 .s2 .start-badge{background:#dcfce7;color:#166534}
 .s3 .start-badge{background:#fef3c7;color:#92400e}
+.s2 .start-card:hover{border-color:rgba(16,185,129,.3)!important;box-shadow:0 12px 40px rgba(16,185,129,.12)!important}
+.s3 .start-card:hover{border-color:rgba(245,158,11,.3)!important;box-shadow:0 12px 40px rgba(245,158,11,.1)!important}
 
-/* Modules — white, clean borders */
-.modules-section{background:#fff}
-.phase-tab{color:var(--gray);background:transparent;border-color:var(--border)}
+/* Modules */
+.modules-section{background:#f8fafc}
+.phase-tab{color:var(--gray);border-color:var(--border);background:#fff}
 .phase-tab:hover{background:var(--light);color:var(--dark)}
 .phase-tab.active{background:#eef2ff;border-color:var(--brand);color:var(--brand)}
-.mod-card{background:#fff!important;border:1px solid var(--border)!important;border-left:4px solid var(--accent,var(--brand))!important}
-.mod-card:hover{box-shadow:0 8px 28px rgba(79,70,229,.12)!important;border-color:var(--brand)!important;transform:translateY(-3px)}
-.mod-name{color:var(--dark)}
-.mod-desc{color:var(--gray)}
+.mod-card{background:#fff!important;border:1px solid var(--border)!important;border-radius:12px!important;box-shadow:0 1px 6px rgba(0,0,0,.04)!important}
+.mod-card:hover{box-shadow:0 8px 28px rgba(79,70,229,.12)!important;border-color:rgba(79,70,229,.2)!important;transform:translateY(-3px)}
+.mod-name{color:var(--dark);font-size:.95rem;font-weight:700}
+.mod-desc{color:var(--gray);font-size:.82rem}
 .mod-tag{background:var(--light);color:var(--gray);border-color:var(--border)}
 .adv-toggle-btn{border-color:var(--border);color:var(--gray)}
 .adv-toggle-btn:hover{border-color:var(--brand);color:var(--brand)}
 
-/* Stats — keep dark but bolder */
+/* Stats */
 .stats-section{background:linear-gradient(135deg,#1e1b4b 0%,#0f172a 50%,#1e1b4b 100%)}
 
-/* Pricing — sky blue block */
-.pricing-section{background:#f0f9ff}
-.price-card{background:#fff!important;border:2px solid var(--border)!important;box-shadow:0 2px 12px rgba(0,0,0,.05)}
-.price-card:hover{box-shadow:0 12px 40px rgba(79,70,229,.16)!important;border-color:var(--brand)!important;transform:translateY(-4px)}
-.price-card.featured{border-color:var(--brand)!important;background:#fafaff!important;box-shadow:0 8px 40px rgba(79,70,229,.18)!important}
-.price-tier{color:var(--brand);font-size:.8rem;letter-spacing:.12em}
-.price-amount{color:var(--dark)}
+/* Pricing */
+.pricing-section{background:#f8fafc}
+.price-card{background:#fff!important;border:1.5px solid var(--border)!important;border-radius:18px!important;box-shadow:0 2px 16px rgba(0,0,0,.06)!important}
+.price-card:hover{box-shadow:0 16px 48px rgba(79,70,229,.15)!important;border-color:rgba(79,70,229,.3)!important;transform:translateY(-5px)!important}
+.price-card.featured{border:2px solid var(--brand)!important;background:#fff!important;box-shadow:0 8px 40px rgba(79,70,229,.16)!important}
+.price-tier{color:var(--brand);font-size:.78rem;font-weight:800;letter-spacing:.14em}
+.price-amount{color:var(--dark);font-size:2.5rem}
 .price-amount span{color:var(--gray)}
-.price-desc{color:var(--gray)}
-.price-features li{color:var(--dark2)}
+.price-desc{color:var(--gray);font-size:.85rem}
+.price-features li{color:var(--dark2);font-size:.84rem}
 .price-features li.no{color:var(--border)}
 
-/* Testimonials — white */
-.social-stats{background:linear-gradient(135deg,#f8faff 0%,#f0fdf4 100%)}
-.ss-val{color:var(--dark)}
-.ss-lbl{color:var(--gray)}
+/* Social proof */
+.social-stats{background:linear-gradient(135deg,#f0f6ff 0%,#f0fdf4 100%);padding:2.5rem 1.5rem}
+.ss-val{color:var(--dark);font-size:2.2rem;font-weight:900}
+.ss-lbl{color:var(--gray);font-size:.78rem}
 .testimonials-section{background:#fff}
-.testi-card{background:#f8fafc!important;border:2px solid var(--border)!important}
-.testi-card:hover{box-shadow:0 10px 36px rgba(37,99,235,.12)!important;transform:translateY(-4px);border-color:var(--brand)!important}
+.testi-card{background:#fafbff!important;border:1.5px solid var(--border)!important;border-radius:16px!important}
 .testi-card.featured{background:linear-gradient(135deg,#eff6ff,#f0fdf4)!important;border-color:#bfdbfe!important}
-.testi-quote{color:#374151}
+.testi-quote{color:#374151;font-size:.93rem;line-height:1.65}
 .testi-quote::before,.testi-quote::after{color:var(--brand)}
-.testi-name{color:var(--dark)}
-.testi-role{color:var(--gray)}
-.testi-metric{background:#dbeafe;color:#1e40af}
-.testi-badge{background:#dcfce7;color:#166534}
+.testi-name{color:var(--dark);font-weight:700}
+.testi-role{color:var(--gray);font-size:.75rem}
+.testi-metric{background:#eef2ff;color:var(--brand)}
+.testi-badge{background:#dcfce7;color:#166634}
 
-/* CTA Banner — bold solid gradient */
+/* CTA Banner */
 .cta-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand) 50%,var(--sky-dark) 100%)}
 
 /* Email section */
 .email-section{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%)}
-.email-form input[type=email]{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);color:#f1f5f9}
+.email-form input[type=email]{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);color:#f1f5f9;border-radius:var(--radius-sm)}
 .email-form input[type=email]::placeholder{color:#94a3b8}
 .email-form input[type=email]:focus{border-color:rgba(99,102,241,.7);outline:none;box-shadow:0 0 0 3px rgba(99,102,241,.2)}
 
@@ -680,12 +676,14 @@ h1,h2,h3,h4{color:var(--dark)}
 .footer{background:var(--dark)}
 
 /* Recent bar */
-.recent-card{background:var(--light);border-color:var(--border);color:var(--dark2)}
+.recent-card{background:#fff;border-color:var(--border);color:var(--dark2);border-radius:8px}
 .recent-card:hover{border-color:var(--brand);color:var(--brand);background:#eef2ff}
 
-/* Buttons — bolder shadows */
-.btn-primary{box-shadow:0 4px 16px rgba(79,70,229,.3)}
-.btn-primary:hover{box-shadow:0 8px 28px rgba(79,70,229,.4)}
+/* Buttons */
+.btn{border-radius:10px!important}
+.btn-lg{border-radius:12px!important;padding:.9rem 2.2rem!important;font-size:1rem!important}
+.btn-primary{box-shadow:0 4px 16px rgba(79,70,229,.28)}
+.btn-primary:hover{box-shadow:0 8px 28px rgba(79,70,229,.4);transform:translateY(-2px)}
 </style>
 </head>
 <body>
@@ -709,16 +707,10 @@ h1,h2,h3,h4{color:var(--dark)}
       <li><a href="#how-it-works">How It Works</a></li>
       <li><a href="#modules">Tools</a></li>
       <li><a href="#pricing">Pricing</a></li>
-      <li><a href="checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
-      <li><a href="try.html#tools-directory">All 30 Tools</a></li>
       <li><a href="try.html" style="color:var(--green);font-weight:700">▶ Try Live</a></li>
-      <li><a href="free-demo.html" style="color:#0ea5e9;font-weight:700">▶ Free Demo</a></li>
-      <li><a href="starter-demo.html" style="color:#16a34a;font-weight:700">▶ Starter Demo</a></li>
-      <li><a href="pro-demo.html" style="color:#7c3aed;font-weight:700">▶ Pro Demo</a></li>
-      <li><a href="advisor-demo.html" style="color:#0d9488;font-weight:700">▶ Advisor Demo</a></li>
+      <li><a href="checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="pricing.html" class="btn btn-outline btn-sm">💳 Pricing</a>
       <a href="auth.html" class="btn btn-outline btn-sm">Sign In</a>
       <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-sm">⚡ Check Loan Risk Free →</a>
     </div>
@@ -739,11 +731,11 @@ h1,h2,h3,h4{color:var(--dark)}
       Analyze · Fund · Grow — 30 tools for small business owners
     </div>
     <h1>
-      <span class="grad">Analyze, Fund, Grow</span><br>
-      your business
+      Will your next loan<br>
+      <span class="grad">help or hurt</span> your business?
     </h1>
     <p class="hero-sub">
-      BizScale gives you everything to understand your finances, secure the right funding, and grow with confidence — Loan Safety Score, Health Grade, Cash Runway, AI CFO, and 27 more tools. Free to start, no sign-up needed.
+      Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds — plus 29 more tools for cash flow, health score, grants, and AI-powered financial advice. Free. No sign-up.
     </p>
     <div class="hero-ctas">
       <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg">
