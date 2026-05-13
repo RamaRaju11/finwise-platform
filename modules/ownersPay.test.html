@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Owner's Pay Optimizer � BizSco</title>
+<title>Owner's Pay Optimizer — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -126,7 +126,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Owner's Pay Optimizer</h1>
-<p class="subtitle">BizSco � How much can you safely pay yourself without hurting your business?</p>
+<p class="subtitle">BizSco — How much can you safely pay yourself without hurting your business?</p>
 
 <div class="conn-band" id="payrollBanner"></div>
 
@@ -167,7 +167,7 @@ button.print-btn:hover{background:#e2e8f0}
     <div>
       <label>Industry <span style="font-weight:400;color:#94a3b8">for benchmark comparison</span></label>
       <select id="industry" onchange="saveInputs()">
-        <option value="">Select industry�</option>
+        <option value="">Select industry—</option>
         <option value="retail">Retail</option>
         <option value="restaurant">Restaurant / Food Service</option>
         <option value="service">Professional Services</option>
@@ -204,7 +204,7 @@ button.print-btn:hover{background:#e2e8f0}
   <div id="desiredCheck" style="margin-bottom:16px;display:none"></div>
 
   <div class="card" id="benchmarkCard" style="display:none">
-    <h2>&#128202; Industry Benchmark � Owner Pay</h2>
+    <h2>&#128202; Industry Benchmark — Owner Pay</h2>
     <div id="benchmarkContent"></div>
   </div>
 
@@ -215,11 +215,11 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" id="scorpCard" style="display:none">
     <h2>&#127963; S-Corp: Reasonable Salary vs Distribution Split</h2>
-    <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Distributions avoid FICA/SE tax � splitting compensation can save thousands per year.</p>
+    <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Distributions avoid FICA/SE tax — splitting compensation can save thousands per year.</p>
     <div style="max-width:340px">
       <label>Annual Total Compensation ($)</label>
       <input type="number" id="scorpAnnual" placeholder="e.g. 84000" min="0" oninput="renderSCorpSplit()"/>
-      <label>Reasonable Salary Portion ($) <span style="font-weight:400;color:#94a3b8">IRS requires &quot;reasonable comp&quot; � typically 40�60%</span></label>
+      <label>Reasonable Salary Portion ($) <span style="font-weight:400;color:#94a3b8">IRS requires &quot;reasonable comp&quot; — typically 40—60%</span></label>
       <input type="number" id="scorpSalary" placeholder="e.g. 50000" min="0" oninput="renderSCorpSplit()"/>
       <input type="range" id="scorpSalaryPct" min="20" max="80" step="5" value="50" style="width:100%;accent-color:#7c3aed;margin-top:8px" oninput="syncSCorpSlider()"/>
       <div style="font-size:.7rem;color:#94a3b8;display:flex;justify-content:space-between;margin-top:2px"><span>20% salary</span><span>Salary: <span class="scorp-pct" id="scorpPctLabel">50%</span> of total</span><span>80% salary</span></div>
@@ -245,16 +245,16 @@ var SE_WAGE_CAP_2026 = 168600;
 var OP_HISTORY_KEY   = 'fw_op_history';
 
 var INDUSTRY_BENCHMARKS = {
-  retail:       { label:'Retail',                   pct:[0.08,0.12], text:'8�12%' },
-  restaurant:   { label:'Restaurant / Food Service', pct:[0.05,0.09], text:'5�9%'  },
-  service:      { label:'Professional Services',     pct:[0.15,0.35], text:'15�35%'},
-  construction: { label:'Construction / Trades',     pct:[0.10,0.20], text:'10�20%'},
-  tech:         { label:'Technology / Software',     pct:[0.20,0.40], text:'20�40%'},
-  healthcare:   { label:'Healthcare / Medical',      pct:[0.15,0.30], text:'15�30%'},
-  real_estate:  { label:'Real Estate',               pct:[0.10,0.25], text:'10�25%'},
-  ecommerce:    { label:'E-Commerce',                pct:[0.10,0.20], text:'10�20%'},
-  manufacturing:{ label:'Manufacturing',             pct:[0.08,0.15], text:'8�15%' },
-  other:        { label:'Other / General',           pct:[0.10,0.20], text:'10�20%'}
+  retail:       { label:'Retail',                   pct:[0.08,0.12], text:'8—12%' },
+  restaurant:   { label:'Restaurant / Food Service', pct:[0.05,0.09], text:'5—9%'  },
+  service:      { label:'Professional Services',     pct:[0.15,0.35], text:'15—35%'},
+  construction: { label:'Construction / Trades',     pct:[0.10,0.20], text:'10—20%'},
+  tech:         { label:'Technology / Software',     pct:[0.20,0.40], text:'20—40%'},
+  healthcare:   { label:'Healthcare / Medical',      pct:[0.15,0.30], text:'15—30%'},
+  real_estate:  { label:'Real Estate',               pct:[0.10,0.25], text:'10—25%'},
+  ecommerce:    { label:'E-Commerce',                pct:[0.10,0.20], text:'10—20%'},
+  manufacturing:{ label:'Manufacturing',             pct:[0.08,0.15], text:'8—15%' },
+  other:        { label:'Other / General',           pct:[0.10,0.20], text:'10—20%'}
 };
 
 // SE entity types (subject to SE tax)
@@ -307,7 +307,7 @@ function renderPayrollBanner(){
   el.className='conn-band has-data';
   el.innerHTML='<div class="cb-icon">&#128203;</div>'
     +'<div class="cb-body">'
-    +'<div class="cb-title">Payroll &amp; Contractor data found � owner draw is calculated after subtracting wages</div>'
+    +'<div class="cb-title">Payroll &amp; Contractor data found — owner draw is calculated after subtracting wages</div>'
     +'<div class="cb-pills">'+pills+'</div>'
     +'<button class="cb-btn" onclick="importPayrollToBizExp(this)">&#11015;&#65039; Import '+fmt(d.total)+'/mo as business expenses</button>'
     +'</div>';
@@ -456,7 +456,7 @@ function renderBenchmark(industry, modPay, rev){
     ? '&#9650; Your moderate pay ('+(pct*100).toFixed(1)+'% of revenue) is below the '+bm.text+' benchmark. You may be under-paying yourself.'
     : '&#9660; Your moderate pay ('+(pct*100).toFixed(1)+'% of revenue) is above the '+bm.text+' benchmark for '+bm.label+'. Ensure the business can sustain this.';
 
-  // Visual bar: 0�50% revenue range, benchmark zone highlighted
+  // Visual bar: 0—50% revenue range, benchmark zone highlighted
   var maxPct = 0.50;
   var loX    = Math.min(lo / maxPct * 100, 100).toFixed(1);
   var hiX    = Math.min(hi / maxPct * 100, 100).toFixed(1);
@@ -503,9 +503,9 @@ function renderSETax(entityType, modMonthly){
       '<div class="se-box"><div class="se-box-lbl">Annual SE Tax</div><div class="se-box-val" style="color:#dc2626">'+fmt(seTax)+'</div><div class="se-box-sub">15.3% on 92.35% of net SE income up to $'+SE_WAGE_CAP_2026.toLocaleString()+' (2026)</div></div>'+
       '<div class="se-box"><div class="se-box-lbl">Monthly Equivalent</div><div class="se-box-val" style="color:#d97706">'+fmt(monthly)+'/mo</div><div class="se-box-sub">Set aside each month for estimated taxes</div></div>'+
       '<div class="se-box"><div class="se-box-lbl">Effective Rate on Draw</div><div class="se-box-val">'+effRate+'%</div><div class="se-box-sub">Actual SE tax as % of gross draw</div></div>'+
-      '<div class="se-box"><div class="se-box-lbl">&#189; SE Tax Deduction</div><div class="se-box-val" style="color:#16a34a">'+fmt(half)+'</div><div class="se-box-sub">Deductible from gross income � reduces your income tax bill</div></div>'+
+      '<div class="se-box"><div class="se-box-lbl">&#189; SE Tax Deduction</div><div class="se-box-val" style="color:#16a34a">'+fmt(half)+'</div><div class="se-box-sub">Deductible from gross income — reduces your income tax bill</div></div>'+
     '</div>'+
-    '<div class="se-note">&#128161; <strong>Tip:</strong> Pay quarterly estimated taxes (Apr 15, Jun 16, Sep 15, Jan 15) to avoid underpayment penalties. Consider an S-Corp election if annual draw exceeds ~$50,000 � it can eliminate SE tax on the distribution portion.</div>';
+    '<div class="se-note">&#128161; <strong>Tip:</strong> Pay quarterly estimated taxes (Apr 15, Jun 16, Sep 15, Jan 15) to avoid underpayment penalties. Consider an S-Corp election if annual draw exceeds ~$50,000 — it can eliminate SE tax on the distribution portion.</div>';
   card.style.display = 'block';
 }
 
@@ -543,7 +543,7 @@ function renderSCorpSplit(){
 
   // IRS "reasonable compensation" guidance
   var rcWarning = '';
-  if(salaryPct < 30) rcWarning = '<div style="padding:8px 12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:7px;font-size:.8rem;color:#991b1b;margin-top:10px">&#9888; <strong>IRS Risk:</strong> A salary of only '+salaryPct+'% of total compensation may be considered unreasonably low. The IRS can reclassify distributions as wages, triggering back FICA taxes and penalties. Most advisors recommend 40�60% as salary.</div>';
+  if(salaryPct < 30) rcWarning = '<div style="padding:8px 12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:7px;font-size:.8rem;color:#991b1b;margin-top:10px">&#9888; <strong>IRS Risk:</strong> A salary of only '+salaryPct+'% of total compensation may be considered unreasonably low. The IRS can reclassify distributions as wages, triggering back FICA taxes and penalties. Most advisors recommend 40—60% as salary.</div>';
   else if(salaryPct < 40) rcWarning = '<div style="padding:8px 12px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;font-size:.8rem;color:#92400e;margin-top:10px">&#9888; A salary of '+salaryPct+'% is on the low end. Ensure it reflects market-rate compensation for your role to satisfy IRS reasonable comp requirements.</div>';
 
   el.innerHTML =
@@ -556,7 +556,7 @@ function renderSCorpSplit(){
       '<div class="scorp-box dist-box">'+
         '<div class="scorp-lbl" style="color:#16a34a">Distributions</div>'+
         '<div class="scorp-val" style="color:#16a34a">'+fmt(distrib)+'/yr</div>'+
-        '<div class="scorp-sub">'+(100-salaryPct)+'% of total &bull; No SE tax<br>Pass-through � taxed as ordinary income</div>'+
+        '<div class="scorp-sub">'+(100-salaryPct)+'% of total &bull; No SE tax<br>Pass-through — taxed as ordinary income</div>'+
       '</div>'+
       '<div class="scorp-box saving-box" style="grid-column:1/-1">'+
         '<div class="scorp-lbl" style="color:#7c3aed">&#127881; Estimated Annual Savings vs Sole Prop</div>'+

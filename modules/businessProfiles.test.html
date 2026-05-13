@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Business Profiles � BizSco</title>
+<title>Business Profiles — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -138,7 +138,7 @@ input:focus{outline:none;border-color:#4f46e5}
       <div class="pw-feat">?? Edit anytime</div>
       <div class="pw-feat">?? Shared across all tools</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -168,7 +168,7 @@ input:focus{outline:none;border-color:#4f46e5}
     <h1>?? Business Profiles Manager</h1>
     <p>Save and switch between business profiles across all BizSco tools</p>
   </div>
-  <div class="ph-badge" id="planBadge">Pro � $29/month</div>
+  <div class="ph-badge" id="planBadge">Pro — $29/month</div>
 </div>
 
 <div class="wrap">
@@ -179,7 +179,7 @@ input:focus{outline:none;border-color:#4f46e5}
   <div class="upgrade-banner" id="upgradeBanner" style="display:none">
     <div>?</div>
     <div class="ub-text">
-      <h3>Profile limit reached � Upgrade to Unlimited</h3>
+      <h3>Profile limit reached — Upgrade to Unlimited</h3>
       <p>Pro plan allows 3 profiles. Unlock unlimited profiles for teams managing multiple businesses.</p>
       <div class="ub-hint">Demo code: <code>FWUNLIMITED</code></div>
     </div>
@@ -303,11 +303,11 @@ function renderUsageBar(profiles){
   }
 
   var labelText=unlimited
-    ? 'Unlimited profiles � '+(used>0?used+' saved':'none yet')
+    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
     : used+' of '+limit+' profiles used';
   var subText=unlimited
     ? 'Unlimited tier active'
-    : (used>=limit?'Limit reached � Upgrade for more':'Add up to '+limit+' business profiles');
+    : (used>=limit?'Limit reached — Upgrade for more':'Add up to '+limit+' business profiles');
 
   var atLimit=(!unlimited && used>=limit);
 
@@ -319,7 +319,7 @@ function renderUsageBar(profiles){
     +'</button>';
 
   /* Update plan badge */
-  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro � 3 Profiles';
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro — 3 Profiles';
 
   /* Show/hide upgrade banner */
   document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
@@ -395,7 +395,7 @@ function escHtml(s){
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('? Profile set as active � all tools will load this profile.');
+  showToast('? Profile set as active — all tools will load this profile.');
 }
 
 /* -- Open create form -- */
@@ -614,11 +614,11 @@ function renderUsageBar(profiles){
   }
 
   var labelText=unlimited
-    ? 'Unlimited profiles � '+(used>0?used+' saved':'none yet')
+    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
     : used+' of '+limit+' profiles used';
   var subText=unlimited
     ? 'Unlimited tier active'
-    : (used>=limit?'Limit reached � Upgrade for more':'Add up to '+limit+' business profiles');
+    : (used>=limit?'Limit reached — Upgrade for more':'Add up to '+limit+' business profiles');
 
   var atLimit=(!unlimited && used>=limit);
 
@@ -630,7 +630,7 @@ function renderUsageBar(profiles){
     +'</button>';
 
   /* Update plan badge */
-  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro � 3 Profiles';
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro — 3 Profiles';
 
   /* Show/hide upgrade banner */
   document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
@@ -706,7 +706,7 @@ function escHtml(s){
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('? Profile set as active � all tools will load this profile.');
+  showToast('? Profile set as active — all tools will load this profile.');
 }
 
 /* -- Open create form -- */

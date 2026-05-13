@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Working Capital Calculator � BizSco</title>
+<title>Working Capital Calculator — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -101,17 +101,17 @@ button.primary:hover{background:#1d4ed8}
 <div id="fwToast" class="fw-toast"></div>
 
 <div class="print-hdr" id="printHdr">
-  <h2>Working Capital Report � BizSco SmallBiz Platform</h2>
+  <h2>Working Capital Report — BizSco SmallBiz Platform</h2>
   <p>Prepared for bank loan application purposes &nbsp;|&nbsp; Generated: <span id="printDate"></span></p>
   <p style="font-size:.72rem;color:#94a3b8;margin-top:2px">All figures based on inputs provided. Verify with your accountant or CPA before submission.</p>
 </div>
 
 <a href="../try.html" class="back-link no-print">? Back to Demo</a>
 <h1>?? Working Capital Calculator</h1>
-<p class="subtitle">BizSco � Measure your 30/60/90-day cash coverage and spot funding gaps before they hit.</p>
+<p class="subtitle">BizSco — Measure your 30/60/90-day cash coverage and spot funding gaps before they hit.</p>
 
 <div class="conn-band no-print" id="connBand" style="display:none">
-  <div class="conn-band-title">?? Module Data Available � click Import to pre-fill fields</div>
+  <div class="conn-band-title">?? Module Data Available — click Import to pre-fill fields</div>
   <div class="conn-row" id="arRow" style="display:none">
     <span class="conn-pill" id="arPill"></span>
     <button class="import-btn" id="arImportBtn" onclick="importAR()">Import to Current Assets ?</button>
@@ -194,7 +194,7 @@ button.primary:hover{background:#1d4ed8}
       <button class="btn-export" onclick="exportPDF()">?? Export for Bank Loan</button>
       <button class="save-btn" onclick="saveWCToProfile()">?? Save to Profile</button>
     </div>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;text-align:right">Bank export: printable working capital report &nbsp;�&nbsp; Save to Profile: updates reserve &amp; COGS across 40 tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;text-align:right">Bank export: printable working capital report &nbsp;—&nbsp; Save to Profile: updates reserve &amp; COGS across 40 tools</p>
   </div>
 
 </div>
@@ -290,7 +290,7 @@ function exportPDF(){
     var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
     var p   = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
     if(!p)  p = JSON.parse(localStorage.getItem('fw_profile')||'null');
-    if(p && p.name) document.querySelector('#printHdr h2').textContent = p.name+' � Working Capital Report';
+    if(p && p.name) document.querySelector('#printHdr h2').textContent = p.name+' — Working Capital Report';
   }catch(e){}
   window.print();
 }
@@ -298,7 +298,7 @@ function exportPDF(){
 // -- P2 Feature: CCC detail card ---------------------------------------------
 function renderCCCDetail(inv, rec, pay, ccc, daily){
   var cccColor  = ccc<=0?'#7c3aed':ccc<=30?'#16a34a':ccc<=60?'#ca8a04':'#dc2626';
-  var cccStatus = ccc<=0?'Excellent � negative cycle':ccc<=30?'Good � lean cycle':ccc<=60?'Moderate � monitor terms':'High � capital tied up';
+  var cccStatus = ccc<=0?'Excellent — negative cycle':ccc<=30?'Good — lean cycle':ccc<=60?'Moderate — monitor terms':'High — capital tied up';
   var tied      = Math.round(daily * Math.max(0, ccc));
   document.getElementById('cccDetail').innerHTML =
     '<div class="ccc-breakdown">'+
@@ -321,9 +321,9 @@ function renderCCCDetail(inv, rec, pay, ccc, daily){
     '<div class="ccc-formula">'+
       '<strong style="font-size:.95rem;color:'+cccColor+'">CCC = DIO + DSO - DPO &nbsp;=&nbsp; '+inv+' + '+rec+' - '+pay+' &nbsp;=&nbsp; '+ccc+' days</strong>'+
       '<br>'+cccStatus+
-      (ccc > 0 ? ' &nbsp;�&nbsp; Capital tied up in cycle: <strong>'+fmt(tied)+'</strong>' : ' &nbsp;�&nbsp; Suppliers finance your operations � a powerful competitive advantage')+
+      (ccc > 0 ? ' &nbsp;—&nbsp; Capital tied up in cycle: <strong>'+fmt(tied)+'</strong>' : ' &nbsp;—&nbsp; Suppliers finance your operations — a powerful competitive advantage')+
     '</div>'+
-    (ccc <= 0 ? '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.82rem;color:#5b21b6">?? <strong>Negative CCC:</strong> You collect cash from customers before paying suppliers � the same structural advantage used by Amazon and Costco to fund growth without additional debt.</div>' : '')+
+    (ccc <= 0 ? '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.82rem;color:#5b21b6">?? <strong>Negative CCC:</strong> You collect cash from customers before paying suppliers — the same structural advantage used by Amazon and Costco to fund growth without additional debt.</div>' : '')+
     (ccc > 60 ? '<div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;font-size:.82rem;color:#92400e">?? <strong>Action items:</strong> Offer 2/10 net-30 early-pay discounts to reduce DSO. Negotiate net-45 supplier terms to raise DPO. Each 10-day improvement frees approximately <strong>'+fmt(daily*10)+'</strong> in working capital.</div>' : '');
 }
 
@@ -336,7 +336,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='? Saved � all 40 tools updated';
+    t.textContent='? Saved — all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -381,8 +381,8 @@ function calculate(){
     {label:'Working Capital',      val:fmt(wc),              sub:wc>=0?'Positive':'Negative',              col:wc>=0?'#16a34a':'#dc2626'},
     {label:'WC Ratio (Assets/Liab)',val:wcrLabel,             sub:wcrText,                                  col:wcrColor},
     {label:'Cash Conversion Cycle', val:ccc+' days',          sub:'Inv '+inv+' + Rec '+rec+' - Pay '+pay, col:cccColor},
-    {label:'Daily COGS',            val:fmt(daily),           sub:'Annual � 365',                           col:'#2563eb'},
-    {label:'WC Required (CCC)',     val:fmt(wcRequired),      sub:'Daily COGS � CCC',                       col:'#7c3aed'},
+    {label:'Daily COGS',            val:fmt(daily),           sub:'Annual — 365',                           col:'#2563eb'},
+    {label:'WC Required (CCC)',     val:fmt(wcRequired),      sub:'Daily COGS — CCC',                       col:'#7c3aed'},
     {label:'WC Surplus / Gap',      val:fmt(wc - wcRequired), sub:wc>=wcRequired?'Surplus':'Shortfall',     col:wc>=wcRequired?'#16a34a':'#dc2626'}
   ].map(function(m){
     return '<div class="metric-box">'+
@@ -443,14 +443,14 @@ function calculate(){
   /* Insights */
   var items = [];
   if(ccc > 60) items.push({cls:'warn', text:'Your Cash Conversion Cycle of '+ccc+' days is high. Try reducing inventory days by tightening reorder points, or shortening payment terms for customers from '+rec+' to '+Math.max(rec-10,15)+' days.'});
-  else if(ccc <= 30) items.push({cls:'good', text:'Cash Conversion Cycle of '+ccc+' days is lean � money cycles back quickly. Maintain supplier payment terms of '+pay+' days or longer to preserve this advantage.'});
+  else if(ccc <= 30) items.push({cls:'good', text:'Cash Conversion Cycle of '+ccc+' days is lean — money cycles back quickly. Maintain supplier payment terms of '+pay+' days or longer to preserve this advantage.'});
 
   if(wcr !== null && wcr < 1) {
-    items.push({cls:'warn', text:'Working Capital Ratio of '+wcrLabel+' means current liabilities exceed current assets � a sign of near-term liquidity stress. Prioritize collecting receivables and deferring non-essential purchases.'+
+    items.push({cls:'warn', text:'Working Capital Ratio of '+wcrLabel+' means current liabilities exceed current assets — a sign of near-term liquidity stress. Prioritize collecting receivables and deferring non-essential purchases.'+
       explainHtml([
         'You cannot cover all short-term obligations with available liquid assets',
         'Banks and suppliers view current ratio below 1.0 as a credit risk',
-        'Target ratio: 1.5�2.0 for healthy small businesses'
+        'Target ratio: 1.5—2.0 for healthy small businesses'
       ], 'Current ratio of '+wcr.toFixed(2)+'x means: for every $1 you owe in the next 12 months, you only have $'+wcr.toFixed(2)+' to pay it')
     });
   } else if(wcr !== null && wcr > 1.5) items.push({cls:'good', text:'WC Ratio of '+wcrLabel+' is healthy. You have adequate buffer to meet short-term obligations without emergency financing.'});

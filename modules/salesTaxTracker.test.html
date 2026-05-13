@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sales Tax Tracker � BizSco</title>
+<title>Sales Tax Tracker — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
@@ -158,7 +158,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="print-hdr-meta" id="printMeta"></div>
 </div>
 <h1>??? Sales Tax Tracker</h1>
-<p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds � all 50 states + DC.</p>
+<p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds — all 50 states + DC.</p>
 <div id="staleRatesBanner" class="stale-banner no-print">
   ?? <strong>Heads-up:</strong> <span id="staleMsg"></span> <a href="#" style="color:#92400e;font-weight:800;margin-left:6px" onclick="return false">Contact your CPA or check your state revenue website for current rates.</a>
 </div>
@@ -233,7 +233,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="form-grid" style="margin-top:14px">
     <div>
       <label>Customer State <span style="font-weight:500;color:#94a3b8">(for nexus tracking)</span></label>
-      <select id="txState"><option value="">� Same as my primary state �</option></select>
+      <select id="txState"><option value="">— Same as my primary state —</option></select>
     </div>
     <div style="display:flex;align-items:flex-end;gap:16px;padding-bottom:1px">
       <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-top:0;font-size:.84rem;font-weight:700;color:#475569">
@@ -251,7 +251,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="period-header">
     <div>
       <div class="card-title" style="margin-bottom:2px">Period Summary</div>
-      <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">�</div>
+      <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">—</div>
     </div>
     <div class="period-nav">
       <button class="btn-period" onclick="changePeriod(-1)">? Prev</button>
@@ -266,7 +266,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- NEXUS TRACKER -->
 <div class="card">
-  <div class="card-title">Economic Nexus Tracker � <span id="nexusYearLabel"></span></div>
+  <div class="card-title">Economic Nexus Tracker — <span id="nexusYearLabel"></span></div>
   <p style="font-size:.78rem;color:#64748b;margin-bottom:14px">Shows your home state plus any state where you've logged sales this year. Tag a <strong>Customer State</strong> on transactions to track exposure across multiple states.</p>
   <div id="nexusContent"></div>
   <div id="multiNexusContent"></div>
@@ -296,12 +296,12 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 </div>
 
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> Rates shown are 2024 averages. Actual local rates (county, city, special district) vary � verify your exact combined rate with your state revenue department before filing. Services taxability, digital goods, and SaaS rules vary by state. Not legal or tax advice.
+  <strong>Disclaimer:</strong> Rates shown are 2024 averages. Actual local rates (county, city, special district) vary — verify your exact combined rate with your state revenue department before filing. Services taxability, digital goods, and SaaS rules vary by state. Not legal or tax advice.
 </div>
 </div>
 
 <script>
-/* -- RATES LAST UPDATED � UPDATE THIS DATE WHENEVER RATES ARE REFRESHED -- */
+/* -- RATES LAST UPDATED — UPDATE THIS DATE WHENEVER RATES ARE REFRESHED -- */
 // UPDATE ANNUALLY: Verify state tax rates against each state's revenue dept.
 // Many states adjust rates quarterly. Flag stale if >90 days since this date.
 var RATES_DATE = '2024-01-01';
@@ -321,7 +321,7 @@ var ST = {
   DE:{name:'Delaware',      sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
   FL:{name:'Florida',       sr:0.06,    al:0.0105, nx:100000,nt:200},
   GA:{name:'Georgia',       sr:0.04,    al:0.034,  nx:100000,nt:200},
-  HI:{name:'Hawaii',        sr:0.04,    al:0.0044, nx:100000,nt:200, note:'General Excise Tax (GET) applies to gross receipts � not a traditional sales tax.'},
+  HI:{name:'Hawaii',        sr:0.04,    al:0.0044, nx:100000,nt:200, note:'General Excise Tax (GET) applies to gross receipts — not a traditional sales tax.'},
   ID:{name:'Idaho',         sr:0.06,    al:0.0003, nx:100000,nt:200},
   IL:{name:'Illinois',      sr:0.0625,  al:0.0253, nx:100000,nt:200},
   IN:{name:'Indiana',       sr:0.07,    al:0,      nx:100000,nt:200},
@@ -341,7 +341,7 @@ var ST = {
   NV:{name:'Nevada',        sr:0.0685,  al:0.0138, nx:100000,nt:200},
   NH:{name:'New Hampshire', sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
   NJ:{name:'New Jersey',    sr:0.06625, al:0,      nx:100000,nt:200},
-  NM:{name:'New Mexico',    sr:0.04875, al:0.0273, nx:100000,nt:200, note:'Gross Receipts Tax (GRT) � seller pays the tax, not the buyer.'},
+  NM:{name:'New Mexico',    sr:0.04875, al:0.0273, nx:100000,nt:200, note:'Gross Receipts Tax (GRT) — seller pays the tax, not the buyer.'},
   NY:{name:'New York',      sr:0.04,    al:0.0452, nx:500000,nt:100},
   NC:{name:'North Carolina',sr:0.0475,  al:0.0223, nx:100000,nt:200},
   ND:{name:'North Dakota',  sr:0.05,    al:0.0197, nx:100000,nt:200},
@@ -401,19 +401,19 @@ function populateStateDropdown(){
   taxKeys.forEach(function(k){
     var d = ST[k];
     var combined = ((d.sr + d.al)*100).toFixed(2);
-    html += '<option value="'+k+'">'+d.name+' � avg '+combined+'%</option>';
+    html += '<option value="'+k+'">'+d.name+' — avg '+combined+'%</option>';
   });
   html += '</optgroup><optgroup label="No State Sales Tax">';
   specialKeys.forEach(function(k){
     var d = ST[k];
-    var suffix = d.localOnly ? ' � local taxes may apply' : ' � no sales tax';
+    var suffix = d.localOnly ? ' — local taxes may apply' : ' — no sales tax';
     html += '<option value="'+k+'">'+d.name+suffix+'</option>';
   });
   html += '</optgroup>';
   sel.innerHTML = html;
   // Also populate customer state selector in transaction form
   var txSel = document.getElementById('txState');
-  var stateOpts = '<option value="">� Same as my primary state �</option>';
+  var stateOpts = '<option value="">— Same as my primary state —</option>';
   keys.forEach(function(k){ stateOpts += '<option value="'+k+'">'+ST[k].name+'</option>'; });
   txSel.innerHTML = stateOpts;
 }
@@ -500,7 +500,7 @@ function updateTaxableHint(){
     product:'Physical products are taxable in almost all states.',
     service:'Services: taxable in ~30 states. Check your state rules.',
     shipping:'Shipping: taxable in ~24 states when the sale is taxable.',
-    digital:'SaaS/digital goods: taxable in ~30 states � rules vary significantly.',
+    digital:'SaaS/digital goods: taxable in ~30 states — rules vary significantly.',
     other:'Check your state rules for this category.'
   };
   document.getElementById('taxableHint').textContent = hints[cat]||'';
@@ -529,7 +529,7 @@ function addTransaction(){
   document.getElementById('txDesc').value='';
   document.getElementById('txAmount').value='';
   renderPeriodCard(); renderNexus(); renderHistory();
-  showToast('Added � tax: '+fmt(tax));
+  showToast('Added — tax: '+fmt(tax));
 }
 
 function deleteTx(id){
@@ -565,7 +565,7 @@ function periodLabel(key){
     return new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleString('en-US',{month:'long',year:'numeric'});
   } else if(freq==='quarterly'){
     var m=key.match(/(\d+)-Q(\d)/);
-    var ranges={1:'Jan�Mar',2:'Apr�Jun',3:'Jul�Sep',4:'Oct�Dec'};
+    var ranges={1:'Jan—Mar',2:'Apr—Jun',3:'Jul—Sep',4:'Oct—Dec'};
     return 'Q'+m[2]+' '+m[1]+' ('+ranges[parseInt(m[2])]+')';
   } else { return 'Year '+key; }
 }
@@ -625,7 +625,7 @@ function renderPeriodCard(){
   var cur=isCurrent(key), fut=isFuture(key);
 
   document.getElementById('periodTitle').textContent =
-    lbl+(cur?' � Current Period':'')+(fut?' � Future Period':'');
+    lbl+(cur?' — Current Period':'')+(fut?' — Future Period':'');
 
   var totSales=0, taxableSales=0, taxColl=0;
   txs.forEach(function(t){ totSales+=t.amount; if(t.taxable){taxableSales+=t.amount;taxColl+=t.tax;} });
@@ -652,7 +652,7 @@ function renderPeriodCard(){
         '<td><span class="cat-tag cat-'+t.category+'">'+getCatLabel(t.category)+'</span></td>'+
         '<td><span class="taxbadge '+(t.taxable?'tb-yes':'tb-no')+'">'+(t.taxable?'Taxable':'Exempt')+'</span></td>'+
         '<td class="r">'+fmt(t.amount)+'</td>'+
-        '<td class="r">'+(t.taxable?fmt(t.tax):'�')+'</td>'+
+        '<td class="r">'+(t.taxable?fmt(t.tax):'—')+'</td>'+
         '<td><button class="btn-sm btn-danger" onclick="deleteTx(\''+t.id+'\')">?</button></td>'+
         '</tr>';
     });
@@ -674,7 +674,7 @@ function renderPeriodCard(){
       if(taxColl>0)
         fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">? Mark as Filed</button>';
     } else {
-      fr+='<span style="font-size:.78rem;color:#94a3b8">Future period � due '+periodDue(key)+'</span>';
+      fr+='<span style="font-size:.78rem;color:#94a3b8">Future period — due '+periodDue(key)+'</span>';
     }
     fr+='</div>';
   }
@@ -689,7 +689,7 @@ function markFiled(key,amount){
   var now=new Date();
   _filedMap[key]={date:now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),amount:amount};
   saveData(); renderPeriodCard(); renderHistory();
-  showToast('Period filed � '+fmt(amount)+' recorded');
+  showToast('Period filed — '+fmt(amount)+' recorded');
 }
 function unmarkFiled(key){
   delete _filedMap[key];
@@ -721,7 +721,7 @@ function renderNexus(){
   var warn=!reached&&(salesPct>=0.7||txPct>=0.7);
 
   var html='<div class="nexus-bar">'+
-    '<div class="nb-label">'+d.name+' � Sales Threshold: '+fmtBig(threshold)+'</div>'+
+    '<div class="nb-label">'+d.name+' — Sales Threshold: '+fmtBig(threshold)+'</div>'+
     '<div class="progress-track"><div class="progress-fill '+(reached?'pf-danger':warn?'pf-warn':'pf-safe')+
     '" style="width:'+(salesPct*100).toFixed(1)+'%"></div></div>'+
     '<div class="nb-nums"><span>'+fmt(ytdSales)+' YTD sales</span><span>'+fmtBig(threshold)+' threshold</span></div>'+
@@ -764,7 +764,7 @@ function renderHistory(){
     var statusHtml=fut?'<span class="s-future">Future</span>':
       cur?'<span class="s-current">? Current</span>':
       filed?'<span class="s-filed">? Filed</span>':
-      tax>0?'<span class="s-unfiled">? Unfiled</span>':'<span class="s-clean">�</span>';
+      tax>0?'<span class="s-unfiled">? Unfiled</span>':'<span class="s-clean">—</span>';
     rows+='<tr style="'+(cur?'background:#f0f7ff':'')+'">'+'<td style="font-weight:'+(cur?'800':'600')+'">'+periodLabel(key)+'</td>'+
       '<td class="r">'+fmt(sales)+'</td>'+
       '<td class="r">'+fmt(tax)+'</td>'+
@@ -775,7 +775,7 @@ function renderHistory(){
   }
   document.getElementById('filingHistory').innerHTML = rows
     ? '<table class="hist-table"><thead><tr><th>Period</th><th class="r">Total Sales</th><th class="r">Tax Collected</th><th class="r">Due Date</th><th class="r">Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>'
-    : '<div class="empty">No periods yet � add your first transaction above.</div>';
+    : '<div class="empty">No periods yet — add your first transaction above.</div>';
 }
 
 /* ------------------------------------------
@@ -835,13 +835,13 @@ function renderFilingFreqRec(){
   var cur = _setup.freq;
   var freqInfo = {
     monthly:{label:'Monthly', note:'Required in most states when annual tax liability exceeds $50K.'},
-    quarterly:{label:'Quarterly', note:'Common for mid-volume sellers � balance compliance with less admin overhead.'},
-    annual:{label:'Annual', note:'Best for low-volume sellers. Check your state � some require quarterly even at low volumes.'}
+    quarterly:{label:'Quarterly', note:'Common for mid-volume sellers — balance compliance with less admin overhead.'},
+    annual:{label:'Annual', note:'Best for low-volume sellers. Check your state — some require quarterly even at low volumes.'}
   };
   var match = rec === cur;
   el.innerHTML =
     '<div class="card-title" style="color:#7c3aed">?? Filing Frequency Recommendation</div>'+
-    '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months � 12).</p>'+
+    '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months — 12).</p>'+
     '<div class="freq-opts">'+
     Object.keys(freqInfo).map(function(f){
       var isCur = f === cur, isRec = f === rec;
@@ -866,7 +866,7 @@ function checkRatesStaleness(){
   var el = document.getElementById('staleRatesBanner');
   if(el && daysSince > 90){
     document.getElementById('staleMsg').textContent =
-      'Sales tax rates were last verified '+daysSince+' days ago ('+RATES_DATE+'). State rates change frequently � verify your exact combined rate before filing.';
+      'Sales tax rates were last verified '+daysSince+' days ago ('+RATES_DATE+'). State rates change frequently — verify your exact combined rate before filing.';
     el.style.display = 'flex';
   }
 }
@@ -886,7 +886,7 @@ function loadInvoiceIntegration(){
     var stateTagged = paidInv.filter(function(i){ return i.state||i.customerState; }).length;
     strip.className = 'inv-strip inv-on no-print';
     strip.style.display = 'block';
-    strip.innerHTML = '? Invoice Tracker connected � '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
+    strip.innerHTML = '? Invoice Tracker connected — '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
       (stateTagged > 0 ? '. '+stateTagged+' invoices have state tags for nexus tracking.' :
       '. Add a <em>state</em> field on invoices to enable per-state nexus tracking.')+
       ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">? Open Invoice Tracker</a>';
@@ -934,7 +934,7 @@ function exportCSV(){
     Object.keys(stateAgg).sort().forEach(function(k){
       var d = ST[k], s = stateAgg[k];
       if(!d) return;
-      var pct = d.nx > 0 ? (s.sales/d.nx*100).toFixed(1) : '�';
+      var pct = d.nx > 0 ? (s.sales/d.nx*100).toFixed(1) : '—';
       var status = s.sales >= d.nx ? 'REACHED' : s.sales/d.nx >= 0.7 ? 'APPROACHING' : 'Below';
       rows.push([d.name, s.sales.toFixed(2), s.tax.toFixed(2), s.count, d.nx, pct+'%', status,'','']);
     });
@@ -963,7 +963,7 @@ function saveProfile(u){
 }
 function saveSalesTaxToProfile(){
   saveProfile({state:_setup.state, salesTaxFreq:_setup.freq});
-  showToast('Saved � state: '+_setup.state+', freq: '+_setup.freq);
+  showToast('Saved — state: '+_setup.state+', freq: '+_setup.freq);
 }
 function autoPopulate(){
   try{

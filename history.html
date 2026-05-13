@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Score History � BizSco</title>
-<meta name="description" content="Track your small business financial progress over time � view loan score, health grade, and cash runway history with BizSco's free score tracker."/>
+<title>Score History — BizSco</title>
+<meta name="description" content="Track your small business financial progress over time — view loan score, health grade, and cash runway history with BizSco's free score tracker."/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
@@ -145,9 +145,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tooltip" id="tooltip"></div>
     </div>
     <div class="legend">
-      <div class="lg-item"><div class="lg-dot" style="background:#dcfce7;border:2px solid #22c55e"></div>Grade A�B (70+)</div>
-      <div class="lg-item"><div class="lg-dot" style="background:#fef9c3;border:2px solid #f59e0b"></div>Grade C (52�69)</div>
-      <div class="lg-item"><div class="lg-dot" style="background:#fee2e2;border:2px solid #ef4444"></div>Grade D�F (below 52)</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#dcfce7;border:2px solid #22c55e"></div>Grade A—B (70+)</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#fef9c3;border:2px solid #f59e0b"></div>Grade C (52—69)</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#fee2e2;border:2px solid #ef4444"></div>Grade D—F (below 52)</div>
     </div>
   </div>
 
@@ -203,7 +203,7 @@ function render(){
     '<div class="hm-item">Runs: <span class="hm-val">'+hist.length+'</span></div>'+
     '<div class="hm-item">Since: <span class="hm-val">'+d1+'</span></div>'+
     '<div class="hm-item">Latest: <span class="hm-val">'+d2+'</span></div>'+
-    '<div class="hm-item">Current grade: <span class="hm-val">'+latest.grade+' � '+GRADE_LABEL[latest.grade]+'</span></div>';
+    '<div class="hm-item">Current grade: <span class="hm-val">'+latest.grade+' — '+GRADE_LABEL[latest.grade]+'</span></div>';
 
   /* trend banner */
   if(hist.length>=2){
@@ -212,9 +212,9 @@ function render(){
     var lsDiff=last.loanScore-first.loanScore;
     var banner=document.getElementById('trendBanner');
     if(td>0){
-      banner.innerHTML='<div class="trend-banner trend-up"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Your health is improving</div><div class="tb-sub" style="color:#166534">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong> � Loan score '+( lsDiff>=0?'+':'')+lsDiff+' pts since you started tracking</div></div></div>';
+      banner.innerHTML='<div class="trend-banner trend-up"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Your health is improving</div><div class="tb-sub" style="color:#166534">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong> — Loan score '+( lsDiff>=0?'+':'')+lsDiff+' pts since you started tracking</div></div></div>';
     } else if(td<0){
-      banner.innerHTML='<div class="trend-banner trend-down"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Health has declined � action needed</div><div class="tb-sub" style="color:#991b1b">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong>. Review the insights in your latest checkup.</div></div></div>';
+      banner.innerHTML='<div class="trend-banner trend-down"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Health has declined — action needed</div><div class="tb-sub" style="color:#991b1b">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong>. Review the insights in your latest checkup.</div></div></div>';
     } else {
       banner.innerHTML='<div class="trend-banner trend-flat"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Score is holding steady</div><div class="tb-sub" style="color:#854d0e">Grade <strong>'+last.grade+'</strong> across your last '+hist.length+' checkups. Focus on the recommendations to push into the next grade.</div></div></div>';
     }
@@ -337,7 +337,7 @@ function drawChart(hist){
     var h=data[best];
     var tip=document.getElementById('tooltip');
     var dateStr=new Date(h.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    tip.innerHTML='<strong>'+dateStr+'</strong><br>Health: '+( h.healthScore||'�')+'/100 � Grade '+h.grade+'<br>Loan: '+h.loanScore+'/100 ('+h.loanVerdict+')<br>Runway: '+(h.runway>=24?'24+':Math.round(h.runway*10)/10)+' mo ('+h.runwayStatus+')';
+    tip.innerHTML='<strong>'+dateStr+'</strong><br>Health: '+( h.healthScore||'—')+'/100 — Grade '+h.grade+'<br>Loan: '+h.loanScore+'/100 ('+h.loanVerdict+')<br>Runway: '+(h.runway>=24?'24+':Math.round(h.runway*10)/10)+' mo ('+h.runwayStatus+')';
     var tipX=px(best)-40, tipY=py(scores[best])-80;
     if(tipX<0)tipX=4; if(tipX+180>W)tipX=W-184;
     if(tipY<0)tipY=4;

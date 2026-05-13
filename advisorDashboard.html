@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Advisor Dashboard � BizSco</title>
+<title>Advisor Dashboard — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px}
@@ -94,10 +94,10 @@ h1{font-size:1.4rem;font-weight:900;color:#0f172a;margin-bottom:4px}
 
   <!-- Stats -->
   <div class="stats-bar">
-    <div class="stat-card"><div class="stat-num" id="statTotal">�</div><div class="stat-label">Total Clients</div></div>
-    <div class="stat-card"><div class="stat-num" id="statActive">�</div><div class="stat-label">Active</div></div>
-    <div class="stat-card"><div class="stat-num" id="statPending">�</div><div class="stat-label">Pending Invite</div></div>
-    <div class="stat-card"><div class="stat-num" id="statAvgScore">�</div><div class="stat-label">Avg Health Score</div></div>
+    <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total Clients</div></div>
+    <div class="stat-card"><div class="stat-num" id="statActive">—</div><div class="stat-label">Active</div></div>
+    <div class="stat-card"><div class="stat-num" id="statPending">—</div><div class="stat-label">Pending Invite</div></div>
+    <div class="stat-card"><div class="stat-num" id="statAvgScore">—</div><div class="stat-label">Avg Health Score</div></div>
   </div>
 
   <!-- Add Client -->
@@ -118,7 +118,7 @@ h1{font-size:1.4rem;font-weight:900;color:#0f172a;margin-bottom:4px}
       <span class="cs-title">Your Clients</span>
       <span class="cs-count" id="clientCount"></span>
     </div>
-    <div id="clientList" class="loading">Loading clients�</div>
+    <div id="clientList" class="loading">Loading clients—</div>
   </div>
 
   <!-- Commission tracking -->
@@ -171,28 +171,28 @@ function renderClients(clients) {
   document.getElementById('statTotal').textContent = clients.length
   document.getElementById('statActive').textContent = active.length
   document.getElementById('statPending').textContent = pending.length
-  document.getElementById('statAvgScore').textContent = avgScore > 0 ? avgScore + '/100' : '�'
+  document.getElementById('statAvgScore').textContent = avgScore > 0 ? avgScore + '/100' : '—'
 
   if (clients.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">??</div><div>No clients yet � invite your first client above.</div></div>'
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">??</div><div>No clients yet — invite your first client above.</div></div>'
     return
   }
 
   list.innerHTML = clients.map(c => {
     const score = c.health_score?.overall_score ? Math.round(c.health_score.overall_score) : null
-    const rev = c.loan_profile?.monthly_revenue ? '$' + Math.round(c.loan_profile.monthly_revenue).toLocaleString() + '/mo' : '�'
+    const rev = c.loan_profile?.monthly_revenue ? '$' + Math.round(c.loan_profile.monthly_revenue).toLocaleString() + '/mo' : '—'
     const biz = c.loan_profile?.business_name || ''
     const inviteUrl = location.origin + '/accept-invite.html?token=' + (c.invite_token || '')
     return `<div class="client-row" id="cr-${c.id}">
       <div class="cr-avatar">${initial(c.client_name, c.client_email)}</div>
       <div class="cr-info">
-        <div class="cr-name">${c.client_name || c.client_email}${biz ? ' � ' + biz : ''}</div>
+        <div class="cr-name">${c.client_name || c.client_email}${biz ? ' — ' + biz : ''}</div>
         <div class="cr-email">${c.client_email}</div>
         ${c.notes ? '<div class="cr-notes">' + c.notes + '</div>' : ''}
       </div>
       <span class="cr-status status-${c.status}">${c.status === 'active' ? '? Active' : '? Pending'}</span>
       <div class="cr-score">
-        ${score !== null ? `<div class="cr-score-val" style="color:${scoreColor(score)}">${score}</div><div class="cr-score-label">Health</div>` : '<div class="cr-score-val" style="color:#cbd5e1">�</div><div class="cr-score-label">Health</div>'}
+        ${score !== null ? `<div class="cr-score-val" style="color:${scoreColor(score)}">${score}</div><div class="cr-score-label">Health</div>` : '<div class="cr-score-val" style="color:#cbd5e1">—</div><div class="cr-score-label">Health</div>'}
       </div>
       <div class="cr-revenue">
         <div class="cr-rev-val">${rev}</div>
@@ -224,12 +224,12 @@ async function addClient() {
   const msg = document.getElementById('addMsg')
   const btn = document.getElementById('addClientBtn')
   if (!email) { msg.style.color='#dc2626'; msg.textContent='Email is required.'; return }
-  btn.disabled = true; btn.textContent = 'Adding�'
+  btn.disabled = true; btn.textContent = 'Adding—'
   const data = await callFn('advisor-clients', 'POST', { client_email: email, client_name: name, notes })
   btn.disabled = false; btn.textContent = 'Send Invite'
-  if (!data) { msg.style.color='#dc2626'; msg.textContent='Error � please try again.'; return }
+  if (!data) { msg.style.color='#dc2626'; msg.textContent='Error — please try again.'; return }
   if (!data.ok) { msg.style.color='#d97706'; msg.textContent = data.reason === 'already_invited' ? 'Already invited (' + data.status + ').' : (data.error || 'Error'); return }
-  msg.style.color='#16a34a'; msg.textContent='? Client added � now send them the invite link below.'
+  msg.style.color='#16a34a'; msg.textContent='? Client added — now send them the invite link below.'
   document.getElementById('addEmail').value = ''
   document.getElementById('addName').value = ''
   document.getElementById('addNotes').value = ''
@@ -237,7 +237,7 @@ async function addClient() {
 }
 
 async function sendInvite(clientId, btn) {
-  btn.textContent = 'Sending�'; btn.disabled = true
+  btn.textContent = 'Sending—'; btn.disabled = true
   const baseUrl = location.origin
   const data = await callFn('advisor-invite', 'POST', { client_id: clientId, base_url: baseUrl })
   if (data && data.ok) {
@@ -274,7 +274,7 @@ async function loadCommissions() {
   const totalComm = apps.reduce((s, a) => s + (a.commission_amount || 0), 0)
   box.innerHTML = `<div style="margin-bottom:12px;font-size:.8rem;color:#64748b">Potential earnings: <strong style="color:#16a34a;font-size:1rem">$${Math.round(totalComm).toLocaleString()}</strong></div>` +
     apps.map(a => `<div class="comm-row">
-      <div><div class="comm-lender">${a.lender_name} � ${a.loan_type || ''}</div><div class="comm-meta">${new Date(a.applied_at).toLocaleDateString()} � ${a.status}</div></div>
+      <div><div class="comm-lender">${a.lender_name} — ${a.loan_type || ''}</div><div class="comm-meta">${new Date(a.applied_at).toLocaleDateString()} — ${a.status}</div></div>
       <div class="comm-amount">$${Math.round(a.commission_amount || 0).toLocaleString()}</div>
     </div>`).join('')
 }

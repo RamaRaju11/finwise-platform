@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Accept Invitation � BizSco</title>
+<title>Accept Invitation — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -33,7 +33,7 @@ p{font-size:.88rem;color:#64748b;line-height:1.6;margin-bottom:24px}
     <div class="icon">??</div>
     <h2>You've been invited!</h2>
     <p>Your advisor has invited you to connect on BizSco. Sign in or create a free account to accept.</p>
-    <div id="statusMsg" class="status loading">Checking invite�</div>
+    <div id="statusMsg" class="status loading">Checking invite—</div>
     <a href="index.html" class="btn" id="mainBtn">Sign In to Accept ?</a>
     <a href="index.html" class="btn-sec">Create Free Account</a>
   </div>
@@ -50,7 +50,7 @@ const mainBtn = document.getElementById('mainBtn')
 
 if (!token) {
   statusMsg.className = 'status error'
-  statusMsg.textContent = 'Invalid invite link � no token found.'
+  statusMsg.textContent = 'Invalid invite link — no token found.'
 } else {
   // Store token for after sign-in
   localStorage.setItem('fw_pending_invite', token)
@@ -69,7 +69,7 @@ if (!token) {
 
 async function acceptInvite() {
   statusMsg.className = 'status loading'
-  statusMsg.textContent = 'Accepting invitation�'
+  statusMsg.textContent = 'Accepting invitation—'
   const res = await window.fwAuth.client.auth.getSession()
   const jwt = res?.data?.session?.access_token
   if (!jwt) { statusMsg.className='status error'; statusMsg.textContent='Please sign in first.'; return }

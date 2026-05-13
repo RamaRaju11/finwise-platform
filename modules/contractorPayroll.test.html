@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contractor & Payroll Tax � BizSco</title>
+<title>Contractor & Payroll Tax — BizSco</title>
 <script src="../sidebar.js" defer></script>
 <link rel="manifest" href="../manifest.json">
 <style>
@@ -133,7 +133,7 @@ tr:hover td{background:#f8fafc}
         <div><label>W-9 on file?</label>
           <select id="cW9">
             <option value="yes">Yes</option>
-            <option value="no">No � backup withhold 24%</option>
+            <option value="no">No — backup withhold 24%</option>
             <option value="pending">Pending</option>
           </select>
         </div>
@@ -169,7 +169,7 @@ tr:hover td{background:#f8fafc}
       </div>
       <div id="necDeadline" class="deadline-box">
         <span class="icon">&#128197;</span>
-        <span class="txt"><strong>1099-NEC Filing Deadline</strong>January 31 � recipient copy &amp; IRS e-file</span>
+        <span class="txt"><strong>1099-NEC Filing Deadline</strong>January 31 — recipient copy &amp; IRS e-file</span>
       </div>
       <div id="necSummaryStats" class="grid3" style="margin-bottom:16px"></div>
       <table id="necTable">
@@ -187,7 +187,7 @@ tr:hover td{background:#f8fafc}
         <div style="margin-bottom:10px">
           <label>State (for SUTA)</label>
           <select id="futaState" onchange="saveFutaSetup();renderFUTA()">
-            <option value="">� Select State �</option>
+            <option value="">— Select State —</option>
           </select>
         </div>
         <div>
@@ -206,7 +206,7 @@ tr:hover td{background:#f8fafc}
     </div>
 
     <div id="crWarn" style="display:none" class="cr-warn">
-      &#9888;&#65039; <strong>Credit Reduction State:</strong> <span id="crText"></span>. Your effective FUTA rate is higher � verify with IRS Schedule A (Form 940).
+      &#9888;&#65039; <strong>Credit Reduction State:</strong> <span id="crText"></span>. Your effective FUTA rate is higher — verify with IRS Schedule A (Form 940).
     </div>
 
     <div class="card">
@@ -300,10 +300,10 @@ var SUTA = {
 var FUTA_WB = 7000;
 var FUTA_NET = 0.006;
 var QUARTERS = [
-  {label:'Q1 (Jan�Mar)', due:'Apr 30'},
-  {label:'Q2 (Apr�Jun)', due:'Jul 31'},
-  {label:'Q3 (Jul�Sep)', due:'Oct 31'},
-  {label:'Q4 (Oct�Dec)', due:'Jan 31 (next year)'}
+  {label:'Q1 (Jan—Mar)', due:'Apr 30'},
+  {label:'Q2 (Apr—Jun)', due:'Jul 31'},
+  {label:'Q3 (Jul—Sep)', due:'Oct 31'},
+  {label:'Q4 (Oct—Dec)', due:'Jan 31 (next year)'}
 ];
 
 // -- STORAGE -----------------------------------------------------------------
@@ -396,7 +396,7 @@ function logPayment(){
   document.getElementById('pAmt').value = '';
   renderNEC();
   pushContractorTotals();
-  toast('Payment logged � $' + fmt(amt));
+  toast('Payment logged — $' + fmt(amt));
 }
 
 // -- 1099-NEC: RENDER ---------------------------------------------------------
@@ -444,7 +444,7 @@ function renderNEC(){
   // Table
   var rows = '';
   if(!list.length){
-    rows = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px">No contractors yet � add one above</td></tr>';
+    rows = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px">No contractors yet — add one above</td></tr>';
   } else {
     list.forEach(function(c){
       var paid = totals[c.id]||0;
@@ -559,7 +559,7 @@ function exportCSV(){
   var totals = {};
   pmts.forEach(function(p){ totals[p.cid]=(totals[p.cid]||0)+p.amt; });
 
-  var rows = [['Contractor 1099 Summary � '+yr],[]];
+  var rows = [['Contractor 1099 Summary — '+yr],[]];
   rows.push(['Name','Type','W-9 Status','YTD Paid','1099 Required','Reportable Amount']);
   list.forEach(function(c){
     var paid = totals[c.id]||0;
@@ -629,7 +629,7 @@ function renderFUTA(){
   if(sutaInfo && sutaInfo.cr){
     crDiv.style.display = '';
     document.getElementById('crText').textContent =
-      sutaInfo.name + ' has a FUTA credit reduction of ' + (sutaInfo.cr*100).toFixed(1) + '% � effective net FUTA rate is ' + ((FUTA_NET + sutaInfo.cr)*100).toFixed(2) + '%';
+      sutaInfo.name + ' has a FUTA credit reduction of ' + (sutaInfo.cr*100).toFixed(1) + '% — effective net FUTA rate is ' + ((FUTA_NET + sutaInfo.cr)*100).toFixed(2) + '%';
   } else {
     crDiv.style.display = 'none';
   }
@@ -639,7 +639,7 @@ function renderFUTA(){
   var rows = '';
 
   if(!emps.length){
-    rows = '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:20px">No employees yet � add one above</td></tr>';
+    rows = '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:20px">No employees yet — add one above</td></tr>';
   } else {
     emps.forEach(function(e){
       var futaTaxable = Math.min(e.wages, FUTA_WB);
@@ -655,8 +655,8 @@ function renderFUTA(){
         '<td>$'+fmt(e.wages)+'</td>' +
         '<td>$'+fmt(futaTaxable)+'</td>' +
         '<td>$'+fmt(futaTax)+'</td>' +
-        '<td>$'+(sutaInfo ? fmt(sutaTaxable) : '�')+'</td>' +
-        '<td>$'+(sutaInfo ? fmt(sutaTax) : '�')+'</td>' +
+        '<td>$'+(sutaInfo ? fmt(sutaTaxable) : '—')+'</td>' +
+        '<td>$'+(sutaInfo ? fmt(sutaTax) : '—')+'</td>' +
         '<td><button class="btn btn-sm btn-red" onclick="deleteEmployee('+e.id+')">&#128465;</button></td>' +
         '</tr>';
     });
@@ -668,7 +668,7 @@ function renderFUTA(){
     '<td>TOTAL ('+emps.length+' employees)</td>' +
     '<td>$'+fmt(totalWages)+'</td>' +
     '<td></td><td>$'+fmt(totalFUTA)+'</td>' +
-    '<td></td><td>$'+(sutaInfo ? fmt(totalSUTA) : '�')+'</td><td></td></tr>' : '';
+    '<td></td><td>$'+(sutaInfo ? fmt(totalSUTA) : '—')+'</td><td></td></tr>' : '';
 
   // Summary stats
   var sutaRateDisp = sutaInfo ? sutaInfo.nr.toFixed(2)+'%' : 'N/A';

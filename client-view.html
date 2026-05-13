@@ -132,7 +132,7 @@ body{font-family:Arial,sans-serif;background:#f0f4ff;color:#1e293b;font-size:14p
 <div class="wrap">
   <div id="loadingBox" class="loading-box">
     <div class="spinner"></div>
-    <div>Loading your report�</div>
+    <div>Loading your report—</div>
   </div>
   <div id="errorBox" class="error-box" style="display:none">
     <h2>Report Not Found</h2>
@@ -143,7 +143,7 @@ body{font-family:Arial,sans-serif;background:#f0f4ff;color:#1e293b;font-size:14p
 
 <div class="powered-by" id="poweredBy" style="display:none">
   <span class="pw-logo">?? Biz<span>Scale</span></span>
-  This report was prepared using BizSco � the financial platform for small businesses.<br>
+  This report was prepared using BizSco — the financial platform for small businesses.<br>
   <a href="index.html">Get your own free dashboard ?</a>
 </div>
 
@@ -167,7 +167,7 @@ function applyWhiteLabel(wl){
 
   if(wl.brand_name){
     document.getElementById('brandName').textContent = wl.brand_name;
-    document.title = 'Your Financial Report � ' + wl.brand_name;
+    document.title = 'Your Financial Report — ' + wl.brand_name;
   }
   if(wl.tagline) document.getElementById('brandTag').textContent = wl.tagline;
   if(wl.logo_url){
@@ -242,7 +242,7 @@ function renderReport(portal){
   /* Cashflow */
   if(d.includeCashflow && reserve > 0){
     var rwColor = runwayColor(runway);
-    var rwText = runway>=6?'Healthy runway � good cash position':runway>=3?'Moderate runway � monitor spending':'Low runway � action recommended';
+    var rwText = runway>=6?'Healthy runway — good cash position':runway>=3?'Moderate runway — monitor spending':'Low runway — action recommended';
     html += '<div class="section-title">Cash Runway</div>';
     html += '<div class="metrics-row" style="grid-template-columns:1fr 1fr">';
     html += '<div class="metric"><div class="m-label">Cash Reserve</div><div class="m-value blue">'+fmt(reserve)+'</div><div class="m-sub">available</div></div>';
@@ -255,7 +255,7 @@ function renderReport(portal){
   /* Health */
   if(d.includeHealth && rev > 0){
     var score = calcScore(d), grade = healthGrade(score);
-    var gradeDesc = { A:'Excellent financial health � strong profit, healthy runway, and manageable debt.', B:'Good financial position. Some areas can be optimized further.', C:'Fair. Revenue covers costs but limited buffer. Focus on improving margins.', D:'Needs attention. Low margins or high debt exposure. Review expenses.', F:'Critical. Business may face cash or debt issues. Immediate review needed.' };
+    var gradeDesc = { A:'Excellent financial health — strong profit, healthy runway, and manageable debt.', B:'Good financial position. Some areas can be optimized further.', C:'Fair. Revenue covers costs but limited buffer. Focus on improving margins.', D:'Needs attention. Low margins or high debt exposure. Review expenses.', F:'Critical. Business may face cash or debt issues. Immediate review needed.' };
     html += '<div class="section-title">Business Health Score</div>';
     html += '<div class="health-ring-wrap"><div class="health-grade '+grade+'">'+grade+'</div>';
     html += '<div><div class="m-value" style="font-size:1rem;color:#1e293b;margin-bottom:4px">Score: '+score+'/100</div>';
@@ -265,7 +265,7 @@ function renderReport(portal){
   /* Loan */
   if(d.includeLoan && rev > 0){
     var net2 = rev-exp-emi;
-    var dscr = net2>0&&emi>0?(net2/emi).toFixed(2):(net2>0?'�':'<1');
+    var dscr = net2>0&&emi>0?(net2/emi).toFixed(2):(net2>0?'—':'<1');
     var maxLoan = net2>0?fmt(Math.round(net2*36)):'Not eligible';
     html += '<div class="section-title">Loan Readiness</div>';
     html += '<div class="loan-row">';
@@ -320,7 +320,7 @@ window.addEventListener('load', function(){
 
     /* Page title */
     var biz = portal.shared_data && portal.shared_data.bizName ? portal.shared_data.bizName : '';
-    document.title = 'Your Financial Report' + (biz ? ' � '+biz : '');
+    document.title = 'Your Financial Report' + (biz ? ' — '+biz : '');
 
     trackView(token);
   }).catch(function(){

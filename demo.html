@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizSco � Product Demo</title>
+<title>BizSco — Product Demo</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif;color:#fff}
@@ -250,7 +250,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <div class="voice-waves" id="voice-waves">
       <span></span><span></span><span></span><span></span><span></span>
     </div>
-    <span id="narration-text" style="margin-left:.6rem">Loading demo�</span>
+    <span id="narration-text" style="margin-left:.6rem">Loading demo—</span>
   </div>
 
   <div id="controls">
@@ -258,7 +258,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <button class="cbtn primary" id="play-btn" onclick="togglePlay()">? Pause</button>
     <button class="cbtn" onclick="nextScene()" title="Next (?)">?</button>
     <span id="ctr-info">1 / 13</span>
-    <button class="cbtn" id="speed-btn" onclick="cycleSpeed()">1� speed</button>
+    <button class="cbtn" id="speed-btn" onclick="cycleSpeed()">1— speed</button>
     <button class="cbtn" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute voice (M)">?? Voice</button>
     <button class="cbtn" id="voice-settings-btn" onclick="toggleVoicePanel()" title="Voice settings">?</button>
     <button class="cbtn" onclick="window.open('index.html')">?? Platform</button>
@@ -272,8 +272,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <select id="voice-select" onchange="applyVoiceSettings()"></select>
     </div>
     <div class="vp-row">
-      <div class="vp-label"><span>Speed</span><span id="rate-val">1.0�</span></div>
-      <input type="range" id="rate-slider" min="0.6" max="1.8" step="0.1" value="1.0" oninput="document.getElementById('rate-val').textContent=parseFloat(this.value).toFixed(1)+'�'"/>
+      <div class="vp-label"><span>Speed</span><span id="rate-val">1.0—</span></div>
+      <input type="range" id="rate-slider" min="0.6" max="1.8" step="0.1" value="1.0" oninput="document.getElementById('rate-val').textContent=parseFloat(this.value).toFixed(1)+'—'"/>
     </div>
     <div class="vp-row">
       <div class="vp-label"><span>Pitch</span><span id="pitch-val">1.0</span></div>
@@ -287,11 +287,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 1 � INTRO
+       SCENE 1 — INTRO
   --------------------------------------------------------- -->
   <div class="scene bg-intro"
        data-dur="7500"
-       data-narration="Welcome to BizSco � the AI-powered loan decision engine for small businesses. Know in 60 seconds if your business can safely take a loan, without risking your cash flow.">
+       data-narration="Welcome to BizSco — the AI-powered loan decision engine for small businesses. Know in 60 seconds if your business can safely take a loan, without risking your cash flow.">
 
     <div class="a0" style="font-size:clamp(3rem,7vw,5.5rem);font-weight:900;letter-spacing:-.06em" class="grad-brand">
       <span class="grad-brand">BizSco</span>
@@ -300,7 +300,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       AI LOAN DECISION ENGINE FOR SMALL BUSINESSES
     </div>
     <div class="a2" style="margin-top:1.75rem;font-size:clamp(1.2rem,3vw,1.65rem);font-weight:300;color:#8892b0;max-width:560px;text-align:center;line-height:1.5">
-      Know if your business can safely take a loan �
+      Know if your business can safely take a loan —
       <strong style="color:#e2e8f0;font-weight:600">in under 60 seconds.</strong>
     </div>
     <div class="a3" style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
@@ -316,14 +316,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 2 � PROBLEM
+       SCENE 2 — PROBLEM
   --------------------------------------------------------- -->
   <div class="scene bg-problem"
        data-dur="8500"
        data-narration="Most small businesses fail not because of bad ideas, but because of bad loan decisions. They borrow too much, too soon, without knowing if their cash flow can survive the repayments.">
 
     <div class="a0" style="font-size:clamp(3.5rem,8vw,6rem);font-weight:900;letter-spacing:-.06em;background:linear-gradient(90deg,#ef4444,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Wrong Loan.</div>
-    <div class="a1" style="font-size:1.05rem;color:#64748b;margin-top:.35rem">The #1 reason small businesses fail � taking a loan their cash flow can't survive</div>
+    <div class="a1" style="font-size:1.05rem;color:#64748b;margin-top:.35rem">The #1 reason small businesses fail — taking a loan their cash flow can't survive</div>
     <div class="pain-row">
       <div class="pain-card a2">? Is this loan amount actually safe for me?</div>
       <div class="pain-card a3" style="animation-delay:.45s">?? Will EMI payments destroy my cash flow?</div>
@@ -332,11 +332,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 3 � SOLUTION OVERVIEW
+       SCENE 3 — SOLUTION OVERVIEW
   --------------------------------------------------------- -->
   <div class="scene bg-solution"
        data-dur="8500"
-       data-narration="BizSco gives you one clear answer � SAFE, RISKY, or DANGEROUS � in under 60 seconds. Your AI CFO analyzes cash flow strength, loan affordability, debt coverage, and stress resilience � all in your browser, no sign-up required.">
+       data-narration="BizSco gives you one clear answer — SAFE, RISKY, or DANGEROUS — in under 60 seconds. Your AI CFO analyzes cash flow strength, loan affordability, debt coverage, and stress resilience — all in your browser, no sign-up required.">
 
     <div class="a0 scene-h1 grad-brand" style="text-align:center">One Score.<br>One Clear Answer.</div>
     <div class="a1 scene-sub">Your AI CFO analyzes 4 risk factors and delivers a verdict in seconds.</div>
@@ -361,20 +361,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 4 � CASH FLOW
+       SCENE 4 — CASH FLOW
   --------------------------------------------------------- -->
   <div class="scene bg-cashflow"
        data-dur="9000"
-       data-narration="It starts with cash flow. Marcus from TechBridge IT Solutions enters his monthly numbers � BizSco instantly calculates his net cash buffer, margin, and surplus status. This number directly powers the Loan Decision Score.">
+       data-narration="It starts with cash flow. Marcus from TechBridge IT Solutions enters his monthly numbers — BizSco instantly calculates his net cash buffer, margin, and surplus status. This number directly powers the Loan Decision Score.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
-      <div class="scene-eyebrow a0" style="color:#10b981">Cash Flow � TechBridge IT Solutions</div>
+      <div class="scene-eyebrow a0" style="color:#10b981">Cash Flow — TechBridge IT Solutions</div>
       <div class="scene-h2 a1" style="color:#e2e8f0">Cash Flow Engine</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">Monthly Cash Flow Analysis</div><div class="mockup-sub">Marcus Johnson � TechBridge IT Solutions</div></div>
+        <div><div class="mockup-title">Monthly Cash Flow Analysis</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="mock-row">
         <div class="mock-field"><div class="mock-lbl">Monthly Revenue</div><div class="mock-val">$22,000</div></div>
@@ -391,20 +391,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 5 � LOAN + AFFORDABILITY
+       SCENE 5 — LOAN + AFFORDABILITY
   --------------------------------------------------------- -->
   <div class="scene bg-loan"
        data-dur="9500"
        data-narration="Marcus wants an $85,000 expansion loan at 11% over 5 years. The Loan Engine calculates his exact monthly EMI and checks whether his cash flow can carry it safely. The verdict is instant.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
-      <div class="scene-eyebrow a0" style="color:#38bdf8">Loan Assessment � $85,000</div>
+      <div class="scene-eyebrow a0" style="color:#38bdf8">Loan Assessment — $85,000</div>
       <div class="scene-h2 a1" style="color:#e2e8f0">Loan Engine + Affordability Check</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">Loan Affordability Analysis</div><div class="mockup-sub">Marcus Johnson � TechBridge IT Solutions</div></div>
+        <div><div class="mockup-title">Loan Affordability Analysis</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="mock-row">
         <div class="mock-field"><div class="mock-lbl">Loan Amount</div><div class="mock-val">$85,000</div></div>
@@ -418,31 +418,31 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <div class="verdict green">
         <span style="font-size:1.3rem">?</span>
         <div>
-          <div class="verdict-text">SAFE � Well within affordable range</div>
-          <div class="verdict-sub">EMI is only 21% of the safe threshold � strong cash flow buffer</div>
+          <div class="verdict-text">SAFE — Well within affordable range</div>
+          <div class="verdict-sub">EMI is only 21% of the safe threshold — strong cash flow buffer</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 6 � RISK + STRESS TEST
+       SCENE 6 — RISK + STRESS TEST
   --------------------------------------------------------- -->
   <div class="scene bg-risk"
        data-dur="9000"
-       data-narration="The Risk Engine calculates Marcus's debt coverage ratio and debt-to-income. The Stress Test then runs a 20% revenue drop scenario � his business passes. BizSco scores him 85 out of 100 � SAFE and loan-ready.">
+       data-narration="The Risk Engine calculates Marcus's debt coverage ratio and debt-to-income. The Stress Test then runs a 20% revenue drop scenario — his business passes. BizSco scores him 85 out of 100 — SAFE and loan-ready.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
-      <div class="scene-eyebrow a0" style="color:#34d399">Score: 85 � SAFE</div>
-      <div class="scene-h2 a1" style="color:#e2e8f0">Risk & Debt � Stress Testing</div>
+      <div class="scene-eyebrow a0" style="color:#34d399">Score: 85 — SAFE</div>
+      <div class="scene-h2 a1" style="color:#e2e8f0">Risk & Debt — Stress Testing</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">?</span>
-        <div><div class="mockup-title">Risk Assessment & Stress Test</div><div class="mockup-sub">Marcus Johnson � TechBridge IT Solutions</div></div>
+        <div><div class="mockup-title">Risk Assessment & Stress Test</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="met-grid">
-        <div class="met-card"><div class="met-val" style="color:#34d399">2.24�</div><div class="met-lbl">DSCR � Strong</div></div>
+        <div class="met-card"><div class="met-val" style="color:#34d399">2.24—</div><div class="met-lbl">DSCR — Strong</div></div>
         <div class="met-card"><div class="met-val" style="color:#34d399">15%</div><div class="met-lbl">EMI-to-Revenue</div></div>
         <div class="met-card"><div class="met-val" style="color:#34d399">85 / 100</div><div class="met-lbl">Loan Safety Score</div></div>
       </div>
@@ -455,11 +455,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 7 � FINANCIAL STATEMENTS
+       SCENE 7 — FINANCIAL STATEMENTS
   --------------------------------------------------------- -->
   <div class="scene bg-statements"
        data-dur="9000"
-       data-narration="Five complete financial statements � Profit and Loss, Balance Sheet, Cash Flow Statement, Accounting Mapping, and Forecasting. All built on your core engine data.">
+       data-narration="Five complete financial statements — Profit and Loss, Balance Sheet, Cash Flow Statement, Accounting Mapping, and Forecasting. All built on your core engine data.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
       <div class="scene-eyebrow a0" style="color:#10b981">Financial Statements</div>
@@ -468,7 +468,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">Annual P&L � FY 2025</div><div class="mockup-sub">revenue � COGS � gross profit � net profit</div></div>
+        <div><div class="mockup-title">Annual P&L — FY 2025</div><div class="mockup-sub">revenue — COGS — gross profit — net profit</div></div>
       </div>
       <div class="pl-row"><span style="color:#8892b0">Gross Revenue</span><span style="color:#e2e8f0;font-weight:600">$1,020,000</span></div>
       <div class="pl-row"><span style="color:#8892b0">- Cost of Goods Sold</span><span style="color:#f87171">($612,000)</span></div>
@@ -486,20 +486,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 8 � FORECASTING
+       SCENE 8 — FORECASTING
   --------------------------------------------------------- -->
   <div class="scene bg-forecast"
        data-dur="9000"
-       data-narration="Forecasting Engine: Project your cash flow and P&L up to 36 months ahead. Three scenarios � optimistic, base case, and pessimistic � so you can plan for what you hope for and prepare for what you fear.">
+       data-narration="Forecasting Engine: Project your cash flow and P&L up to 36 months ahead. Three scenarios — optimistic, base case, and pessimistic — so you can plan for what you hope for and prepare for what you fear.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
       <div class="scene-eyebrow a0" style="color:#818cf8">Forecasting</div>
-      <div class="scene-h2 a1" style="color:#e2e8f0">Forecasting Engine � 3-Scenario Projection</div>
+      <div class="scene-h2 a1" style="color:#e2e8f0">Forecasting Engine — 3-Scenario Projection</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">12-Month Cash Flow Forecast</div><div class="mockup-sub">optimistic � base case � pessimistic</div></div>
+        <div><div class="mockup-title">12-Month Cash Flow Forecast</div><div class="mockup-sub">optimistic — base case — pessimistic</div></div>
       </div>
       <div class="chart-box">
         <svg width="100%" height="130" viewBox="0 0 640 130" preserveAspectRatio="none" style="display:block">
@@ -526,35 +526,35 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
         </svg>
       </div>
       <div style="display:flex;gap:1.5rem;font-size:.75rem">
-        <span style="color:#34d399">� Optimistic (+15%/yr)</span>
-        <span style="color:#818cf8">� Base Case (+8%/yr)</span>
-        <span style="color:#f87171">� Pessimistic (-3%/yr)</span>
+        <span style="color:#34d399">— Optimistic (+15%/yr)</span>
+        <span style="color:#818cf8">— Base Case (+8%/yr)</span>
+        <span style="color:#f87171">— Pessimistic (-3%/yr)</span>
       </div>
     </div>
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 9 � AI ADVISOR
+       SCENE 9 — AI ADVISOR
   --------------------------------------------------------- -->
   <div class="scene bg-ai"
        data-dur="9500"
-       data-narration="Your AI CFO listens to natural questions � Can I take a $50,000 loan? Why is my cash flow risky? What should I do next? � and gives instant, data-driven answers based on your actual numbers. No jargon, just clear direction.">
+       data-narration="Your AI CFO listens to natural questions — Can I take a $50,000 loan? Why is my cash flow risky? What should I do next? — and gives instant, data-driven answers based on your actual numbers. No jargon, just clear direction.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
       <div class="scene-eyebrow a0" style="color:#c084fc">AI Intelligence</div>
-      <div class="scene-h2 a1" style="color:#e2e8f0">AI CFO Advisor � Ask Anything</div>
+      <div class="scene-h2 a1" style="color:#e2e8f0">AI CFO Advisor — Ask Anything</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">AI CFO � Conversational Financial Advisor</div><div class="mockup-sub">ask questions � get instant answers � act on insights</div></div>
+        <div><div class="mockup-title">AI CFO — Conversational Financial Advisor</div><div class="mockup-sub">ask questions — get instant answers — act on insights</div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:.55rem">
         <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:.55rem .9rem;font-size:.8rem;color:#a5b4fc">
           ?? "Can I take a $50,000 loan right now?"
         </div>
         <div style="background:#22263a;border-radius:8px;padding:.65rem .9rem;font-size:.8rem;color:#e2e8f0;line-height:1.55">
-          ?? <strong style="color:#34d399">Yes � with caution.</strong> Your net cash flow is $6,800/mo. A $50K loan at 12% for 36 months gives an EMI of $1,661/mo � that's 24% of your net cash flow. You'd stay SAFE, but your buffer drops to $5,139/mo. Your max safe loan is <strong style="color:#818cf8">$74,000</strong>.
+          ?? <strong style="color:#34d399">Yes — with caution.</strong> Your net cash flow is $6,800/mo. A $50K loan at 12% for 36 months gives an EMI of $1,661/mo — that's 24% of your net cash flow. You'd stay SAFE, but your buffer drops to $5,139/mo. Your max safe loan is <strong style="color:#818cf8">$74,000</strong>.
         </div>
         <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:.55rem .9rem;font-size:.8rem;color:#a5b4fc">
           ?? "What should I do next?"
@@ -567,50 +567,50 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 10 � INDUSTRY BENCHMARKS
+       SCENE 10 — INDUSTRY BENCHMARKS
   --------------------------------------------------------- -->
   <div class="scene bg-bench"
        data-dur="9500"
-       data-narration="Industry Benchmarks: Compare your 7 key financial ratios against 10 SMB industry databases. See your exact percentile rank � not just a vague good or bad but precisely where you stand against your peers.">
+       data-narration="Industry Benchmarks: Compare your 7 key financial ratios against 10 SMB industry databases. See your exact percentile rank — not just a vague good or bad but precisely where you stand against your peers.">
 
     <div style="text-align:left;width:100%;max-width:660px;margin-bottom:.7rem">
       <div class="scene-eyebrow a0" style="color:#fbbf24">Benchmarks</div>
-      <div class="scene-h2 a1" style="color:#e2e8f0">Industry Benchmarks � Professional Services</div>
+      <div class="scene-h2 a1" style="color:#e2e8f0">Industry Benchmarks — Professional Services</div>
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
         <span class="mockup-icon">??</span>
-        <div><div class="mockup-title">Your Metrics vs. Industry Benchmarks</div><div class="mockup-sub">P25 � median � P75 � your percentile</div></div>
+        <div><div class="mockup-title">Your Metrics vs. Industry Benchmarks</div><div class="mockup-sub">P25 — median — P75 — your percentile</div></div>
       </div>
       <div class="bm-item">
-        <div class="bm-hdr"><span style="color:#8892b0">Gross Margin</span><span style="color:#34d399;font-weight:700">75% � Excellent � 84th pct</span></div>
+        <div class="bm-hdr"><span style="color:#8892b0">Gross Margin</span><span style="color:#34d399;font-weight:700">75% — Excellent — 84th pct</span></div>
         <div class="bm-track"><div class="bm-fill" style="width:84%;background:linear-gradient(90deg,#34d399,#10b981)"></div><div class="bm-dot" style="left:84%;background:#34d399"></div></div>
       </div>
       <div class="bm-item">
-        <div class="bm-hdr"><span style="color:#8892b0">Net Margin</span><span style="color:#818cf8;font-weight:700">18% � Good � 50th pct</span></div>
+        <div class="bm-hdr"><span style="color:#8892b0">Net Margin</span><span style="color:#818cf8;font-weight:700">18% — Good — 50th pct</span></div>
         <div class="bm-track"><div class="bm-fill" style="width:50%;background:linear-gradient(90deg,#818cf8,#6366f1)"></div><div class="bm-dot" style="left:50%;background:#818cf8"></div></div>
       </div>
       <div class="bm-item">
-        <div class="bm-hdr"><span style="color:#8892b0">Current Ratio</span><span style="color:#fbbf24;font-weight:700">1.8� � Average � 35th pct</span></div>
+        <div class="bm-hdr"><span style="color:#8892b0">Current Ratio</span><span style="color:#fbbf24;font-weight:700">1.8— — Average — 35th pct</span></div>
         <div class="bm-track"><div class="bm-fill" style="width:35%;background:linear-gradient(90deg,#fbbf24,#f59e0b)"></div><div class="bm-dot" style="left:35%;background:#fbbf24"></div></div>
       </div>
       <div class="bm-item">
-        <div class="bm-hdr"><span style="color:#8892b0">DSCR</span><span style="color:#34d399;font-weight:700">2.5� � Excellent � 79th pct</span></div>
+        <div class="bm-hdr"><span style="color:#8892b0">DSCR</span><span style="color:#34d399;font-weight:700">2.5— — Excellent — 79th pct</span></div>
         <div class="bm-track"><div class="bm-fill" style="width:79%;background:linear-gradient(90deg,#34d399,#10b981)"></div><div class="bm-dot" style="left:79%;background:#34d399"></div></div>
       </div>
       <div style="margin-top:.7rem;display:flex;justify-content:space-between;align-items:center;background:#22263a;border-radius:8px;padding:.6rem .9rem">
         <span style="font-size:.82rem;color:#8892b0">Overall vs. Industry</span>
-        <span style="font-size:.95rem;font-weight:800;color:#34d399">Good � Score 75 / 100</span>
+        <span style="font-size:.95rem;font-weight:800;color:#34d399">Good — Score 75 / 100</span>
       </div>
     </div>
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 11 � 3 FLOWS
+       SCENE 11 — 3 FLOWS
   --------------------------------------------------------- -->
   <div class="scene bg-all"
        data-dur="8000"
-       data-narration="Three simple flows � Check Loan Safety, Analyze Your Business, Improve Your Finances. Powered by 7 specialized tools across 4 tiers, but simplified into decisions any business owner can act on � in under 60 seconds.">
+       data-narration="Three simple flows — Check Loan Safety, Analyze Your Business, Improve Your Finances. Powered by 7 specialized tools across 4 tiers, but simplified into decisions any business owner can act on — in under 60 seconds.">
 
     <div class="scene-h1 grad-brand a0" style="text-align:center;font-size:clamp(1.6rem,3.5vw,2.5rem)">3 Simple Flows.<br>7 Tools. One Decision.</div>
     <div class="a1 scene-sub" style="margin-bottom:1.5rem">Everything powered by AI. Nothing hidden in jargon.</div>
@@ -634,14 +634,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 12 � PRICING
+       SCENE 12 — PRICING
   --------------------------------------------------------- -->
   <div class="scene bg-pricing"
        data-dur="7500"
-       data-narration="Start completely free � no sign-up, no credit card. Basic loan safety check is always free. Upgrade to unlock risk analysis, stress testing, full AI CFO, and advanced forecasting starting at $9 a month.">
+       data-narration="Start completely free — no sign-up, no credit card. Basic loan safety check is always free. Upgrade to unlock risk analysis, stress testing, full AI CFO, and advanced forecasting starting at $9 a month.">
 
     <div class="scene-h2 grad-brand a0" style="text-align:center">Check Loan Safety Free.<br>Upgrade When You Need More.</div>
-    <div class="a1 scene-sub">No sign-up � No credit card � Basic loan check always free</div>
+    <div class="a1 scene-sub">No sign-up — No credit card — Basic loan check always free</div>
     <div class="price-row">
       <div class="price-mini a2">
         <div class="pm-tier">Free</div>
@@ -668,24 +668,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <!-- --------------------------------------------------------
-       SCENE 13 � CTA
+       SCENE 13 — CTA
   --------------------------------------------------------- -->
   <div class="scene bg-cta"
        data-dur="9000"
-       data-narration="BizSco is ready right now. Enter your numbers and get your Loan Decision Score � SAFE, RISKY, or DANGEROUS � in under 60 seconds. No sign-up, no server, no complexity. Your AI CFO is waiting.">
+       data-narration="BizSco is ready right now. Enter your numbers and get your Loan Decision Score — SAFE, RISKY, or DANGEROUS — in under 60 seconds. No sign-up, no server, no complexity. Your AI CFO is waiting.">
 
     <div class="scene-h1 grad-cta a0" style="text-align:center">
-      Know if your loan is safe �<br>in under 60 seconds.
+      Know if your loan is safe —<br>in under 60 seconds.
     </div>
     <div class="a1 scene-sub" style="color:#64748b">
-      No sign-up � No server � No complexity<br>Get your SAFE / RISKY / DANGEROUS verdict now.
+      No sign-up — No server — No complexity<br>Get your SAFE / RISKY / DANGEROUS verdict now.
     </div>
     <div class="cta-btns a2">
       <a href="modules/loanDecisionScoreEngine.test.html" class="cta-btn cta-primary">? Check Loan Safety Free</a>
       <a href="index.html" class="cta-btn cta-ghost">?? Explore Full Platform ?</a>
     </div>
     <div class="a3" style="margin-top:2rem;font-size:.72rem;color:#1e293b;letter-spacing:.05em">
-      BizSco � AI Loan Decision Engine � 7 Tools � 4 Tiers � 100% Browser-Based � No Sign-up Required
+      BizSco — AI Loan Decision Engine — 7 Tools — 4 Tiers — 100% Browser-Based — No Sign-up Required
     </div>
   </div>
 
@@ -693,7 +693,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 
 <script>
 // ----------------------------------------------------------------
-// BizSco Demo Engine v2 � speech-driven timing, male voice, sync
+// BizSco Demo Engine v2 — speech-driven timing, male voice, sync
 // ----------------------------------------------------------------
 
 // -- Scene data ------------------------------------------------
@@ -716,7 +716,7 @@ let selectedVoice = null;
 let audioUnlocked = false;
 const synth       = window.speechSynthesis;
 
-// -- Chrome keepalive � fixes hard-stop after ~15 s ------------
+// -- Chrome keepalive — fixes hard-stop after ~15 s ------------
 setInterval(() => {
   if (synth && synth.speaking && !synth.paused) {
     synth.pause();
@@ -805,7 +805,7 @@ function speak(text, onDone) {
     return;
   }
 
-  // Cancel any pending speech � but do NOT restart if already going
+  // Cancel any pending speech — but do NOT restart if already going
   synth.cancel();
 
   const utter    = new SpeechSynthesisUtterance(text);
@@ -823,14 +823,14 @@ function speak(text, onDone) {
   };
 
   utter.onerror = (e) => {
-    // 'interrupted' fires when synth.cancel() is called � ignore it
+    // 'interrupted' fires when synth.cancel() is called — ignore it
     if (e.error === 'interrupted' || e.error === 'canceled') return;
     setWaveState(false);
     clearFallback();
     if (onDone) setTimeout(onDone, 400);
   };
 
-  // Safety fallback: advance after 1.8� the expected speaking time
+  // Safety fallback: advance after 1.8— the expected speaking time
   if (onDone) {
     const rate    = utter.rate || 1;
     const estMs   = Math.max(DURATIONS[cur], (text.length / 14) * 1000 / rate);
@@ -909,7 +909,7 @@ function showScene(idx, userNav = true) {
   }
 }
 
-// -- Progress bar (visual only � NOT controlling scene timing) -
+// -- Progress bar (visual only — NOT controlling scene timing) -
 function startProgressBar() {
   stopProgressBar();
   const dur  = DURATIONS[cur] / speed;
@@ -978,7 +978,7 @@ function prevScene() {
 function cycleSpeed() {
   sIdx  = (sIdx + 1) % SPEEDS.length;
   speed = SPEEDS[sIdx];
-  document.getElementById('speed-btn').textContent = speed + '� speed';
+  document.getElementById('speed-btn').textContent = speed + '— speed';
 }
 
 function toggleMute() {
@@ -1023,7 +1023,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// -- Audio unlock � Chrome requires a user gesture -------------
+// -- Audio unlock — Chrome requires a user gesture -------------
 function unlockAudio() {
   if (audioUnlocked) return;
   audioUnlocked = true;
@@ -1043,7 +1043,7 @@ document.addEventListener('keydown', unlockAudio, { once: true });
 // -- Default voice panel values --------------------------------
 // Slightly slow + slightly low pitch = clear, authoritative male voice
 document.getElementById('rate-slider').value  = '0.88';
-document.getElementById('rate-val').textContent = '0.9�';
+document.getElementById('rate-val').textContent = '0.9—';
 document.getElementById('pitch-slider').value = '0.85';
 document.getElementById('pitch-val').textContent = '0.9';
 

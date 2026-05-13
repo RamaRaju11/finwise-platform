@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Eligibility Pre-Checker � BizSco</title>
+<title>Loan Eligibility Pre-Checker — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -70,7 +70,7 @@ button.primary:hover{background:#1d4ed8}
 
 <a href="lenderMarketplace.html" class="back-link">? Lender Marketplace</a>
 <h1>Loan Eligibility Pre-Checker</h1>
-<p class="subtitle">BizSco � See which lenders you'd likely qualify for � before you apply</p>
+<p class="subtitle">BizSco — See which lenders you'd likely qualify for — before you apply</p>
 
 <div class="card">
   <h2>Your Business Profile</h2>
@@ -87,9 +87,9 @@ button.primary:hover{background:#1d4ed8}
       <label>Personal Credit Score (estimate)</label>
       <select id="creditScore">
         <option value="750">750+ (Excellent)</option>
-        <option value="700">700�749 (Good)</option>
-        <option value="650">650�699 (Fair)</option>
-        <option value="600">600�649 (Poor)</option>
+        <option value="700">700—749 (Good)</option>
+        <option value="650">650—699 (Fair)</option>
+        <option value="600">600—649 (Poor)</option>
         <option value="550">Below 600 (Very Poor)</option>
       </select>
     </div>
@@ -143,7 +143,7 @@ function failExplain(missText, profile){
     return explainHtml(
       ['Credit score below 650 signals past missed payments or high debt to most lenders',
        'SBA loans typically require 680+, online lenders accept 550+',
-       'Each rejected application further lowers your score � don\'t apply until score improves'],
+       'Each rejected application further lowers your score — don\'t apply until score improves'],
       'A credit score of '+scoreVal+' puts you in the '+category+' range. Lenders see scores below 650 as high-risk'
     );
   }
@@ -153,7 +153,7 @@ function failExplain(missText, profile){
     var threshMatch = missText.match(/\$?([\d,]+[KkMm]?)/);
     var thresh = threshMatch ? threshMatch[0] : '$100K';
     return explainHtml(
-      ['Most lenders require minimum $100K�$250K annual revenue to qualify',
+      ['Most lenders require minimum $100K—$250K annual revenue to qualify',
        'Revenue shows your ability to generate consistent cash to repay the loan',
        'Below-threshold revenue means the loan size you need may exceed what your income can support'],
       'Your annual revenue is '+fmtD(profile.annualRev)+' but this lender requires '+thresh+' minimum'
@@ -162,8 +162,8 @@ function failExplain(missText, profile){
   // Time in business failures
   if(/months|years|business/i.test(missText) && /need|less than/i.test(missText)){
     return explainHtml(
-      ['Most lenders require 1�2 years in business before approving loans',
-       'New businesses have no track record � lenders cannot predict repayment ability',
+      ['Most lenders require 1—2 years in business before approving loans',
+       'New businesses have no track record — lenders cannot predict repayment ability',
        'Consider SBA microloans or CDFI lenders who specialize in early-stage businesses'],
       'You\'ve been in business '+profile.bizAge+' months. Most conventional lenders require at least 24 months'
     );
@@ -178,7 +178,7 @@ var LENDERS = [
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K minimum'},
      {label:'Credit score 680+', check:function(p){ return p.credit>=680; }, miss:'Credit score below 680'},
      {label:'US for-profit business', check:function(p){ return true; }, miss:''},
-     {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 � cash flow too tight'}
+     {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 — cash flow too tight'}
    ]},
   {icon:'??', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
    criteria:[
@@ -194,29 +194,29 @@ var LENDERS = [
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
      {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'?', name:'OnDeck', range:'$5K � $250,000', url:'https://www.ondeck.com',
+  {icon:'?', name:'OnDeck', range:'$5K — $250,000', url:'https://www.ondeck.com',
    criteria:[
      {label:'Min 12 months in business', check:function(p){ return p.bizAge>=12; }, miss:'Need 12+ months in business'},
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K'},
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
      {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'??', name:'Funding Circle', range:'$25K � $500,000', url:'https://www.fundingcircle.com/us/',
+  {icon:'??', name:'Funding Circle', range:'$25K — $500,000', url:'https://www.fundingcircle.com/us/',
    criteria:[
      {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
      {label:'Annual revenue $150K+', check:function(p){ return p.annualRev>=150000; }, miss:'Revenue below $150K'},
      {label:'Credit score 660+', check:function(p){ return p.credit>=660; }, miss:'Credit score below 660'},
-     {label:'Loan $25K�$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K�$500K range'}
+     {label:'Loan $25K—$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K—$500K range'}
    ]},
-  {icon:'??', name:'Lendio (Marketplace)', range:'$1K � $5,000,000', url:'https://www.lendio.com',
+  {icon:'??', name:'Lendio (Marketplace)', range:'$1K — $5,000,000', url:'https://www.lendio.com',
    criteria:[
      {label:'Any stage (matches 75+ lenders)', check:function(p){ return true; }, miss:''},
      {label:'Credit score 550+', check:function(p){ return p.credit>=550; }, miss:'Credit score below 550'},
-     {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months � fewer options available'}
+     {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months — fewer options available'}
    ]},
   {icon:'??', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
    criteria:[
-     {label:'Open to all � no minimum revenue', check:function(p){ return true; }, miss:''},
+     {label:'Open to all — no minimum revenue', check:function(p){ return true; }, miss:''},
      {label:'No credit score requirement', check:function(p){ return true; }, miss:''},
      {label:'Loan need = $15,000', check:function(p){ return p.loanNeed<=15000; }, miss:'Loan needed exceeds $15K limit'},
      {label:'US-based business', check:function(p){ return true; }, miss:''}

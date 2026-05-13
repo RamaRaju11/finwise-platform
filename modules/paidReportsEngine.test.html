@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -88,7 +88,7 @@
 
 <header>
   <h1>Paid Reports Engine</h1>
-  <p>Generate structured financial reports · Loan Risk · Business Plan · Financial Summary · Loan Viability</p>
+  <p>Generate structured financial reports â€” Loan Risk â€” Business Plan â€” Financial Summary â€” Loan Viability</p>
 </header>
 
 <div class="tabs">
@@ -161,7 +161,7 @@
           <option value="Critical">Critical</option>
         </select>
       </div>
-      <div><label>Risk Score (0–100)</label><input type="number" id="lr-score" value="72"></div>
+      <div><label>Risk Score (0â€”100)</label><input type="number" id="lr-score" value="72"></div>
     </div>
     <button class="btn" onclick="doLoanRisk()">Generate Report</button>
     <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">??? Print / Save PDF</button>
@@ -194,14 +194,14 @@
       <div><label>Max Loan Amount ($)</label><input type="number" id="lv-maxloan" value="1050000"></div>
     </div>
     <hr class="section-divider">
-    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Stress Test (from Stress Test — optional)</p>
+    <p style="font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:4px">Stress Test (from Stress Test â€” optional)</p>
     <div class="row2">
       <div>
         <label>All Scenarios Passed?</label>
         <select id="lv-stresspass">
           <option value="">Skip stress test</option>
-          <option value="true">Yes — all passed</option>
-          <option value="false" selected>No — some failed</option>
+          <option value="true">Yes â€” all passed</option>
+          <option value="false" selected>No â€” some failed</option>
         </select>
       </div>
     </div>
@@ -315,25 +315,25 @@ function _fmt(n) { return (n||0).toLocaleString("en-US"); }
 
 const REPORT_CATALOG = [
   { id:"loan-risk",         name:"Loan Risk Report",
-    description:"Full risk assessment for a proposed loan — DSCR, DTI, stress scenarios, and verdict.",
+    description:"Full risk assessment for a proposed loan â€” DSCR, DTI, stress scenarios, and verdict.",
     icon:"??", price:{free:null,basic:null,pro:299,enterprise:0},
     requiredModules:["Loan Engine","Cash Flow","Risk & Debt"],
-    pages:"3–4 pages", useCases:["Loan application support","Banker presentation","Internal risk review"] },
+    pages:"3â€”4 pages", useCases:["Loan application support","Banker presentation","Internal risk review"] },
   { id:"business-plan",     name:"Business Financial Plan",
     description:"Investor-ready plan with revenue projections, P&L forecast, and loan viability.",
     icon:"??", price:{free:null,basic:null,pro:499,enterprise:0},
     requiredModules:["Cash Flow","P&L","Forecasting"],
-    pages:"5–7 pages", useCases:["Investor deck","Bank loan application","Internal business planning"] },
+    pages:"5â€”7 pages", useCases:["Investor deck","Bank loan application","Internal business planning"] },
   { id:"financial-summary", name:"Financial Statements Summary",
     description:"Three-statement report: P&L, Balance Sheet, and Cash Flow Statement in one document.",
     icon:"??", price:{free:null,basic:null,pro:399,enterprise:0},
     requiredModules:["P&L","Balance Sheet","Cash Flow Statement"],
-    pages:"4–5 pages", useCases:["Year-end review","Auditor prep","Lender package"] },
+    pages:"4â€”5 pages", useCases:["Year-end review","Auditor prep","Lender package"] },
   { id:"loan-viability",    name:"Loan Viability Report",
     description:"Clear yes/no verdict on whether your business can safely take a specific loan.",
     icon:"?", price:{free:null,basic:199,pro:199,enterprise:0},
     requiredModules:["Affordability","Stress Test","Recommendations"],
-    pages:"2–3 pages", useCases:["Quick decision making","Comparison between loan options","Business owner briefing"] },
+    pages:"2â€”3 pages", useCases:["Quick decision making","Comparison between loan options","Business owner briefing"] },
 ];
 
 function getReportCatalog() { return [...REPORT_CATALOG]; }
@@ -373,7 +373,7 @@ function generateLoanRiskReport({ businessName="Business", reportDate, loan, cas
       ],
     },
     loanDetails: { principal:loan.principal, annualRate:loan.annualRate, tenureMonths:loan.tenureMonths,
-                   emi:loan.emi, totalPayment, totalInterest, lenderName:loan.lenderName||"—" },
+                   emi:loan.emi, totalPayment, totalInterest, lenderName:loan.lenderName||"â€”" },
     cashFlowAnalysis: {
       monthlyRevenue:loan.revenue||cashFlow.revenue, monthlyFixedCosts:cashFlow.fixedExpenses,
       monthlyVarCosts:cashFlow.variableExpenses, netCashFlow:cashFlow.netCashFlow,
@@ -466,11 +466,11 @@ function generateLoanViabilityReport({ businessName="Business", affordability, s
 
 function _loanRiskVerdict(dscr, dtiPercent, riskLevel) {
   if (riskLevel==="Critical" || dscr<1.0)
-    return {decision:"DO NOT PROCEED", color:"red", message:"Critical risk — loan would severely strain your cash flow."};
+    return {decision:"DO NOT PROCEED", color:"red", message:"Critical risk â€” loan would severely strain your cash flow."};
   if (riskLevel==="High" || dscr<1.25)
-    return {decision:"HIGH RISK — RECONSIDER", color:"orange", message:"High risk — consider reducing loan amount or extending tenure."};
+    return {decision:"HIGH RISK â€” RECONSIDER", color:"orange", message:"High risk â€” consider reducing loan amount or extending tenure."};
   if (riskLevel==="Moderate" || dtiPercent>35)
-    return {decision:"PROCEED WITH CAUTION", color:"amber", message:"Moderate risk — ensure you have 2+ months cash reserve."};
+    return {decision:"PROCEED WITH CAUTION", color:"amber", message:"Moderate risk â€” ensure you have 2+ months cash reserve."};
   return {decision:"SAFE TO PROCEED", color:"green", message:"Loan appears manageable based on current cash flow and risk metrics."};
 }
 
@@ -500,7 +500,7 @@ function renderCatalog() {
           <span class="price-pill pill-free">Enterprise: Free</span>
         </div>
         <div class="modules-tag"><b>Uses:</b> ${r.requiredModules.map(m=>`<span>${m}</span>`).join('')}</div>
-        <div style="font-size:0.74rem;color:#64748b;margin-top:6px">${r.pages} &nbsp;·&nbsp; ${r.useCases.slice(0,2).join(', ')}</div>
+        <div style="font-size:0.74rem;color:#64748b;margin-top:6px">${r.pages} &nbsp;â€”&nbsp; ${r.useCases.slice(0,2).join(', ')}</div>
       </div>`).join('') + `</div>`;
 
   const tiers = ['free','basic','pro','enterprise'];
@@ -508,7 +508,7 @@ function renderCatalog() {
     `<tr><td><b>${r.icon}</b> ${r.name}</td>` +
     tiers.map(t => {
       const p = r.price[t];
-      return `<td>${p === null ? '<span style="color:#94a3b8">—</span>'
+      return `<td>${p === null ? '<span style="color:#94a3b8">â€”</span>'
                 : p === 0    ? '<span style="color:#16a34a;font-weight:600">Included</span>'
                 : `<span style="color:#5b21b6;font-weight:600">$${p}</span>`}</td>`;
     }).join('') + `</tr>`
@@ -518,7 +518,7 @@ function renderCatalog() {
 function reportHeader(title, biz, date, generatedAt) {
   return `<div class="report-header">
     <div class="report-title">${title}</div>
-    <div class="report-meta">${biz} &nbsp;·&nbsp; ${date} &nbsp;·&nbsp; Generated: ${new Date(generatedAt).toLocaleString('en-US')}</div>
+    <div class="report-meta">${biz} &nbsp;â€”&nbsp; ${date} &nbsp;â€”&nbsp; Generated: ${new Date(generatedAt).toLocaleString('en-US')}</div>
   </div>`;
 }
 
@@ -633,7 +633,7 @@ function doViability() {
 
     ${report.stressResults ? `<div class="report-section"><h4>Stress Test Results</h4>
       <p style="font-size:0.85rem;color:${report.stressResults.allPassed?'#16a34a':'#dc2626'}">
-        ${report.stressResults.allPassed ? '? All stress scenarios passed.' : '? Some stress scenarios failed — proceed carefully.'}
+        ${report.stressResults.allPassed ? '? All stress scenarios passed.' : '? Some stress scenarios failed â€” proceed carefully.'}
       </p></div>` : ''}
 
     <div class="disclaimer">${report.disclaimer}</div>
@@ -748,7 +748,7 @@ function doFinSummary() {
   document.getElementById('finsummary-output').innerHTML = `<div class="report-output">
     ${reportHeader(report.title, report.businessName, report.reportDate, report.generatedAt)}
 
-    <div class="report-section"><h4>Profit &amp; Loss — ${pl.period||''}</h4>
+    <div class="report-section"><h4>Profit &amp; Loss â€” ${pl.period||''}</h4>
       <div class="stat-grid">
         <div class="stat-cell"><div class="val">$${fmt(pl.revenue)}</div><div class="lbl">Revenue</div></div>
         <div class="stat-cell"><div class="val">$${fmt(pl.grossProfit)}</div><div class="lbl">Gross Profit (${pl.grossMargin}%)</div></div>
@@ -798,78 +798,78 @@ function runTests() {
   const sampleRisk = {dscr:2.47, dtiPercent:20.3, riskLevel:"Low", riskScore:72};
 
   test("getReportCatalog returns 4 reports", () => assert(getReportCatalog().length === 4));
-  test("getReportPrice — loan-risk on pro = $299", () => {
+  test("getReportPrice â€” loan-risk on pro = $299", () => {
     const p = getReportPrice("loan-risk","pro");
     assert(p.price === 299 && p.available === true);
   });
-  test("getReportPrice — loan-risk on free = null", () => {
+  test("getReportPrice â€” loan-risk on free = null", () => {
     const p = getReportPrice("loan-risk","free");
     assert(p.price === null && p.available === false);
   });
-  test("getReportPrice — enterprise = 0 (included)", () => {
+  test("getReportPrice â€” enterprise = 0 (included)", () => {
     const p = getReportPrice("business-plan","enterprise");
     assert(p.price === 0 && p.available === true);
   });
-  test("getReportPrice — loan-viability on basic = $199", () => {
+  test("getReportPrice â€” loan-viability on basic = $199", () => {
     const p = getReportPrice("loan-viability","basic");
     assert(p.price === 199 && p.available === true);
   });
-  test("getReportPrice — unknown report throws", () => {
+  test("getReportPrice â€” unknown report throws", () => {
     let threw = false;
     try { getReportPrice("xyz","pro"); } catch { threw = true; }
     assert(threw);
   });
 
-  test("generateLoanRiskReport — returns type loan-risk", () => {
+  test("generateLoanRiskReport â€” returns type loan-risk", () => {
     const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
     assert(r.type === "loan-risk");
   });
-  test("generateLoanRiskReport — SAFE verdict for low risk", () => {
+  test("generateLoanRiskReport â€” SAFE verdict for low risk", () => {
     const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
     assert(r.verdict.decision === "SAFE TO PROCEED");
     assert(r.verdict.color === "green");
   });
-  test("generateLoanRiskReport — DO NOT PROCEED for critical", () => {
+  test("generateLoanRiskReport â€” DO NOT PROCEED for critical", () => {
     const r = generateLoanRiskReport({
       loan:sampleLoan, cashFlow:sampleCF,
       risk:{dscr:0.8, dtiPercent:50, riskLevel:"Critical", riskScore:20}
     });
     assert(r.verdict.decision === "DO NOT PROCEED");
   });
-  test("generateLoanRiskReport — totalPayment = emi * tenure", () => {
+  test("generateLoanRiskReport â€” totalPayment = emi * tenure", () => {
     const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
     assert(Math.abs(r.loanDetails.totalPayment - (sampleLoan.emi * sampleLoan.tenureMonths)) < 1);
   });
-  test("generateLoanRiskReport — residualCashFlow = netCashFlow - emi", () => {
+  test("generateLoanRiskReport â€” residualCashFlow = netCashFlow - emi", () => {
     const r = generateLoanRiskReport({loan:sampleLoan, cashFlow:sampleCF, risk:sampleRisk});
     const expected = _r(sampleCF.netCashFlow - sampleLoan.emi);
     assert(Math.abs(r.cashFlowAnalysis.residualCashFlow - expected) < 1);
   });
-  test("generateLoanRiskReport — missing loan throws", () => {
+  test("generateLoanRiskReport â€” missing loan throws", () => {
     let threw = false;
     try { generateLoanRiskReport({cashFlow:sampleCF, risk:sampleRisk}); } catch { threw = true; }
     assert(threw);
   });
 
-  test("generateLoanViabilityReport — PROCEED for affordable", () => {
+  test("generateLoanViabilityReport â€” PROCEED for affordable", () => {
     const r = generateLoanViabilityReport({affordability:{status:"affordable",safeEMI:50000,desiredEMI:45000,headroom:5000,shortfall:0,maxLoanAmount:1500000}});
     assert(r.verdict === "PROCEED" && r.verdictColor === "green");
   });
-  test("generateLoanViabilityReport — PROCEED WITH CAUTION for tight", () => {
+  test("generateLoanViabilityReport â€” PROCEED WITH CAUTION for tight", () => {
     const r = generateLoanViabilityReport({affordability:{status:"tight",safeEMI:48000,desiredEMI:50000,headroom:0,shortfall:2000,maxLoanAmount:1200000}});
     assert(r.verdict === "PROCEED WITH CAUTION");
   });
-  test("generateLoanViabilityReport — DO NOT PROCEED for unaffordable", () => {
+  test("generateLoanViabilityReport â€” DO NOT PROCEED for unaffordable", () => {
     const r = generateLoanViabilityReport({affordability:{status:"unaffordable",safeEMI:30000,desiredEMI:60000,headroom:0,shortfall:30000,maxLoanAmount:700000}});
     assert(r.verdict === "DO NOT PROCEED" && r.verdictColor === "red");
   });
-  test("generateLoanViabilityReport — missing affordability throws", () => {
+  test("generateLoanViabilityReport â€” missing affordability throws", () => {
     let threw = false;
     try { generateLoanViabilityReport({}); } catch { threw = true; }
     assert(threw);
   });
 
-  test("generateBusinessPlan — returns type business-plan", () => {
+  test("generateBusinessPlan â€” returns type business-plan", () => {
     const r = generateBusinessPlan({
       cashFlow:{revenue:450000,totalExpenses:320000,netCashFlow:130000},
       pnl:{grossMargin:28,netMargin:14,operatingProfit:63000},
@@ -877,7 +877,7 @@ function runTests() {
     });
     assert(r.type === "business-plan");
   });
-  test("generateFinancialSummary — returns type financial-summary", () => {
+  test("generateFinancialSummary â€” returns type financial-summary", () => {
     const r = generateFinancialSummary({
       pnl:{revenue:850000,grossProfit:255000,grossMargin:30,operatingProfit:102000,netProfitAfterTax:73440,netMargin:8.64,status:"Profitable"},
       balanceSheet:{totalAssets:2150000,totalLiabilities:980000,totalEquity:1170000,isBalanced:true},
@@ -885,7 +885,7 @@ function runTests() {
     });
     assert(r.type === "financial-summary");
   });
-  test("generateFinancialSummary — missing pnl throws", () => {
+  test("generateFinancialSummary â€” missing pnl throws", () => {
     let threw = false;
     try { generateFinancialSummary({balanceSheet:{},cashFlow:{}}); } catch { threw = true; }
     assert(threw);
@@ -894,7 +894,7 @@ function runTests() {
   const ul = document.getElementById('unitResults');
   const pass = results.filter(r => r.ok).length;
   ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
-    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' â€” '+r.err}</li>`).join('');
 }
 
 window.onload = () => renderCatalog();

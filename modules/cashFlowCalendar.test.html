@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cash Flow Calendar � BizSco SmallBiz</title>
+  <title>Cash Flow Calendar — BizSco SmallBiz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
@@ -202,7 +202,7 @@
       <input type="number" id="evt-amount" min="0" step="1" placeholder="0" />
     </div>
     <div class="field">
-      <label for="evt-day">Day (1�31)</label>
+      <label for="evt-day">Day (1—31)</label>
       <input type="number" id="evt-day" min="1" max="31" placeholder="1" />
     </div>
     <div class="field">
@@ -222,14 +222,14 @@
 <!-- -- Auto-Sync Card -- -->
 <div class="card" id="sync-card">
   <div class="sync-header">
-    <h2 style="margin:0">&#128257; Live Sync � Bills &amp; Invoices</h2>
+    <h2 style="margin:0">&#128257; Live Sync — Bills &amp; Invoices</h2>
     <div class="sync-toggle-wrap">
       <div class="sync-toggle" id="sync-toggle" onclick="toggleSync()" title="Toggle auto-sync"></div>
       <span class="sync-label" id="sync-label">Sync Off</span>
     </div>
   </div>
   <p style="font-size:.83rem;color:#555;margin-bottom:10px">
-    When on, bills from <strong>Bill Tracker</strong> appear as monthly expenses and pending invoices from <strong>Invoice Tracker</strong> appear as one-time income � automatically, no manual entry needed.
+    When on, bills from <strong>Bill Tracker</strong> appear as monthly expenses and pending invoices from <strong>Invoice Tracker</strong> appear as one-time income — automatically, no manual entry needed.
   </p>
   <div class="conn-strip" id="conn-strip">
     <a href="vendorBillTracker.test.html" class="conn-pill conn-off" id="pill-bills">&#128203; Bill Tracker (no data)</a>
@@ -257,7 +257,7 @@
 <!-- -- Weekly Cash Position -- -->
 <div class="card">
   <h2>&#128200; Weekly Cash Position</h2>
-  <p style="font-size:.82rem;color:#64748b;margin-bottom:14px">Projected cash balance at end of each week � based on opening balance and all events this month.</p>
+  <p style="font-size:.82rem;color:#64748b;margin-bottom:14px">Projected cash balance at end of each week — based on opening balance and all events this month.</p>
   <div class="weekly-chart-wrap">
     <canvas id="weekly-chart" height="160" class="weekly-chart-canvas"></canvas>
   </div>
@@ -423,7 +423,7 @@
     }).filter(function(e){ return e.amount > 0 && e.day >= 1 && e.day <= 31; });
   }
 
-  // P2 UX: Parse "YYYY-MM-DD" strings using local time � prevents UTC midnight ? prev-day shift
+  // P2 UX: Parse "YYYY-MM-DD" strings using local time — prevents UTC midnight ? prev-day shift
   function parseLocalDate(str) {
     var p = String(str).split('-');
     return { year: parseInt(p[0],10), month: parseInt(p[1],10)-1, day: parseInt(p[2],10) };
@@ -440,7 +440,7 @@
       if(isNaN(d.year) || isNaN(d.month) || isNaN(d.day)) return;
       if(d.year === year && d.month === month) {
         evts.push({
-          name:    (inv.client || 'Invoice') + (inv.invNo ? ' � ' + inv.invNo : ''),
+          name:    (inv.client || 'Invoice') + (inv.invNo ? ' — ' + inv.invNo : ''),
           type:    'income',
           amount:  Number(inv.amount) || 0,
           day:     d.day,
@@ -481,7 +481,7 @@
 
   function getAllEvents(year, month) {
     var all = events.slice();
-    // Tax + invoices: always auto-imported (P1 integration � no toggle needed)
+    // Tax + invoices: always auto-imported (P1 integration — no toggle needed)
     all = all.concat(getInvoiceEvents(year, month));
     all = all.concat(getTaxEvents(year, month));
     // Bills + debt payments: controlled by sync toggle (higher noise, user opt-in)
@@ -524,7 +524,7 @@
     if(pillB) {
       if(regularBills.length > 0) {
         pillB.className   = 'conn-pill conn-bills';
-        pillB.textContent = '?? Bill Tracker � ' + regularBills.length + ' bill' + (regularBills.length !== 1 ? 's' : '');
+        pillB.textContent = '?? Bill Tracker — ' + regularBills.length + ' bill' + (regularBills.length !== 1 ? 's' : '');
       } else {
         pillB.className   = 'conn-pill conn-off';
         pillB.textContent = '?? Bill Tracker (no data)';
@@ -534,7 +534,7 @@
       var pending = invoices.filter(function(i){ return i.status !== 'paid'; });
       if(invoices.length > 0) {
         pillI.className   = 'conn-pill conn-invoices';
-        pillI.textContent = '?? Invoice Tracker � ' + pending.length + ' pending (always shown)';
+        pillI.textContent = '?? Invoice Tracker — ' + pending.length + ' pending (always shown)';
       } else {
         pillI.className   = 'conn-pill conn-off';
         pillI.textContent = '?? Invoice Tracker (no data)';
@@ -543,7 +543,7 @@
     if(pillT) {
       if(qtrs.length > 0) {
         pillT.className   = 'conn-pill conn-tax';
-        pillT.textContent = '?? Tax Estimator � ' + qtrs.length + ' payment' + (qtrs.length !== 1 ? 's' : '') + ' (always shown)';
+        pillT.textContent = '?? Tax Estimator — ' + qtrs.length + ' payment' + (qtrs.length !== 1 ? 's' : '') + ' (always shown)';
       } else {
         pillT.className   = 'conn-pill conn-off';
         pillT.textContent = '?? Tax Estimator (no data)';
@@ -552,7 +552,7 @@
     if(pillD) {
       if(dccBills.length > 0) {
         pillD.className   = 'conn-pill conn-debt';
-        pillD.textContent = '?? Debt Center � ' + dccBills.length + ' loan payment' + (dccBills.length !== 1 ? 's' : '');
+        pillD.textContent = '?? Debt Center — ' + dccBills.length + ' loan payment' + (dccBills.length !== 1 ? 's' : '');
       } else {
         pillD.className   = 'conn-pill conn-off';
         pillD.textContent = '?? Debt Center (no data)';
@@ -573,7 +573,7 @@
       info.innerHTML =
         (alwaysOn.length ? '? Auto-imported: ' + alwaysOn.join(' and ') + syncLine : '') +
         (alwaysOn.length === 0 && !syncEnabled ? 'Invoices and tax payments auto-import when available. Enable sync to also show recurring bills and debt payments.' : '') +
-        '<br/><span style="color:#94a3b8">? Orange�=�bills &nbsp;? Blue�=�invoices &nbsp;? Purple�=�tax &nbsp;? Pink�=�debt &nbsp;? Green�=�income &nbsp;? Red�=�expense</span>';
+        '<br/><span style="color:#94a3b8">? Orange—=—bills &nbsp;? Blue—=—invoices &nbsp;? Purple—=—tax &nbsp;? Pink—=—debt &nbsp;? Green—=—income &nbsp;? Red—=—expense</span>';
     }
   }
 
@@ -613,7 +613,7 @@
         });
       }
       running += wkInc - wkExp;
-      weeks.push({ label: 'Wk ' + (w + 1), range: start + '�' + end, balance: running, inc: wkInc, exp: wkExp });
+      weeks.push({ label: 'Wk ' + (w + 1), range: start + '—' + end, balance: running, inc: wkInc, exp: wkExp });
     }
 
     if(weeks.length === 0) return;
@@ -686,7 +686,7 @@
       'BEGIN:VCALENDAR', 'VERSION:2.0',
       'PRODID:-//BizSco SmallBiz//Cash Flow Calendar//EN',
       'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
-      'X-WR-CALNAME:BizSco Cash Flow � ' + MONTH_NAMES[month] + ' ' + year
+      'X-WR-CALNAME:BizSco Cash Flow — ' + MONTH_NAMES[month] + ' ' + year
     ];
     var uid = 0;
     Object.keys(dayMap).sort(function(a,b){ return a-b; }).forEach(function(dStr) {
@@ -933,11 +933,11 @@
       events.forEach((evt, idx) => addRow(evt, idx, true));
     }
     if(invoiceEvts.length > 0) {
-      addSectionHeader('?? Pending Invoices (from Invoice Tracker � always on)', 'inv-hd');
+      addSectionHeader('?? Pending Invoices (from Invoice Tracker — always on)', 'inv-hd');
       invoiceEvts.forEach(evt => addRow(evt, -1, false));
     }
     if(taxEvts.length > 0) {
-      addSectionHeader('?? Estimated Tax Payments (from Tax Estimator � always on)', 'tax-hd');
+      addSectionHeader('?? Estimated Tax Payments (from Tax Estimator — always on)', 'tax-hd');
       taxEvts.forEach(evt => addRow(evt, -1, false));
     }
     if(billEvts.length > 0) {
@@ -1000,7 +1000,7 @@
 
   // -- Init ------------------------------------------------------------------
   loadEvents();
-  // Restore opening balance (persisted separately � events key only stores events array)
+  // Restore opening balance (persisted separately — events key only stores events array)
   try {
     var savedOB = localStorage.getItem(OB_KEY);
     if(savedOB !== null) document.getElementById('opening-bal').value = savedOB;

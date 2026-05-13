@@ -87,13 +87,13 @@
 <body>
 <header>
   <h1>Shareable Results Engine</h1>
-  <p>Loan Score Card � WhatsApp Share � URL encoding � Printable reports � CSV &amp; JSON export</p>
+  <p>Loan Score Card — WhatsApp Share — URL encoding — Printable reports — CSV &amp; JSON export</p>
 </header>
 
 <!-- Region indicator -->
 <div class="currency-bar">
   <span>Region:</span>
-  <button class="cbtn active">$ USD � United States</button>
+  <button class="cbtn active">$ USD — United States</button>
 </div>
 
 <div class="tabs">
@@ -289,25 +289,25 @@ function computeScore(revenue, expenses, existingEmi, loanAmount, annualRate, mo
   const cashLeft = netCF - newEMI;
   const totalDebt = existingEmi + newEMI;
 
-  // C1: Cash Flow Strength (0�30)
+  // C1: Cash Flow Strength (0—30)
   const cfRatio = netCF / revenue;
   let c1 = cfRatio >= 0.4 ? 30 : cfRatio >= 0.25 ? 22 : cfRatio >= 0.15 ? 14 : cfRatio >= 0.05 ? 6 : 0;
 
-  // C2: Loan Affordability (0�30)
+  // C2: Loan Affordability (0—30)
   const emiRatio = newEMI / netCF;
   let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.45 ? 22 : emiRatio <= 0.6 ? 14 : emiRatio <= 0.8 ? 6 : 0;
 
-  // C3: Debt Coverage DSCR (0�25)
+  // C3: Debt Coverage DSCR (0—25)
   const dscr = netCF / (newEMI || 1);
   let c3 = dscr >= 2.5 ? 25 : dscr >= 1.75 ? 19 : dscr >= 1.25 ? 13 : dscr >= 1.0 ? 6 : 0;
 
-  // C4: Stress Resilience (0�15)
+  // C4: Stress Resilience (0—15)
   const stressedCF = revenue * 0.8 - expenses - totalDebt;
   let c4 = stressedCF > revenue*0.15 ? 15 : stressedCF > revenue*0.05 ? 10 : stressedCF > 0 ? 5 : 0;
 
   const total = c1+c2+c3+c4;
   const cls = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'dangerous';
-  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK � AVOID';
+  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK — AVOID';
 
   return{total,cls,verdict,c1,c2,c3,c4,netCF,newEMI,totalDebt,cashLeft,dscr};
 }
@@ -347,7 +347,7 @@ function generateScoreCard(){
   const cardHTML = `
   <div class="score-card-wrap">
     <div id="the-score-card" class="score-card ${s.cls}">
-      <div class="sc-brand">SmallBiz AI � Loan Decision Score</div>
+      <div class="sc-brand">SmallBiz AI — Loan Decision Score</div>
       <div class="sc-biz">${escHtml(biz)}</div>
       <div class="sc-date">${dateStr}</div>
       <div class="sc-score-row">
@@ -384,7 +384,7 @@ function generateScoreCard(){
           <div class="sc-metric-value">${dscrStr}</div>
         </div>
       </div>
-      <div class="sc-footer">Powered by SmallBiz AI Platform � smallbiz.app</div>
+      <div class="sc-footer">Powered by SmallBiz AI Platform — smallbiz.app</div>
     </div>
 
     <div style="flex:1;min-width:220px">
@@ -437,15 +437,15 @@ function buildShareText(){
 *Business:* ${biz}
 *Date:* ${dateStr}
 
-*Score: ${s.total}/100 � ${s.cls==='safe'?'? SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
+*Score: ${s.total}/100 — ${s.cls==='safe'?'? SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
 
 ?? *Key Numbers:*
-� Revenue: ${fmt(rev)}/mo
-� Loan Requested: ${fmt(loan)}
-� Max Safe Loan: ${fmt(maxLoan)}
-� New EMI: ${fmt(s.newEMI)}/mo
-� Net Cash After EMI: ${fmt(s.cashLeft)}/mo
-� Debt Coverage Ratio: ${dscrStr}
+— Revenue: ${fmt(rev)}/mo
+— Loan Requested: ${fmt(loan)}
+— Max Safe Loan: ${fmt(maxLoan)}
+— New EMI: ${fmt(s.newEMI)}/mo
+— Net Cash After EMI: ${fmt(s.cashLeft)}/mo
+— Debt Coverage Ratio: ${dscrStr}
 
 ?? Powered by SmallBiz AI Platform`;
 }
@@ -463,7 +463,7 @@ function printScoreCard(){
   const sc = window._sc;
   const barColor = sc.s.cls==='safe'?'#22c55e':sc.s.cls==='risky'?'#f59e0b':'#ef4444';
   const accentColor = sc.s.cls==='safe'?'linear-gradient(90deg,#16a34a,#22c55e)':sc.s.cls==='risky'?'linear-gradient(90deg,#d97706,#f59e0b)':'linear-gradient(90deg,#dc2626,#ef4444)';
-  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card � ${escHtml(sc.biz)}</title>
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card — ${escHtml(sc.biz)}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-content:center;padding:40px}
@@ -490,7 +490,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
 <script src="../country-switcher.js" defer></script>
 </head><body>
 <div class="card">
-  <div class="brand">SmallBiz AI � Loan Decision Score</div>
+  <div class="brand">SmallBiz AI — Loan Decision Score</div>
   <div class="biz">${escHtml(sc.biz)}</div>
   <div class="date">${sc.dateStr}</div>
   <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
@@ -504,7 +504,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
     <div class="metric"><div class="metric-label">Net Cash After EMI</div><div class="metric-value" style="color:${sc.s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(sc.s.cashLeft)}</div></div>
     <div class="metric"><div class="metric-label">Debt Coverage</div><div class="metric-value">${sc.dscrStr}</div></div>
   </div>
-  <div class="footer">Powered by SmallBiz AI Platform � ${sc.dateStr}</div>
+  <div class="footer">Powered by SmallBiz AI Platform — ${sc.dateStr}</div>
 </div>
 <script>window.onload=()=>{window.print();}<\/script>
 </body></html>`;
@@ -560,7 +560,7 @@ function generatePrintHTML({moduleId,title,businessName="Business",date,sections
 <!-- Multi-country localization -->
 <script src="../country-data.js"></script>
 <script src="../country-switcher.js" defer></script>
-</head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} � ${reportDate} � Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform � ${reportDate}</div></body></html>`;
+</head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} — ${reportDate} — Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform — ${reportDate}</div></body></html>`;
 }
 
 function exportCSV(headers,rows){
@@ -760,7 +760,7 @@ function runTests(){
     assert(html.includes("#16a34a"));
   });
   test("encode handles unicode characters",()=>{
-    const data={name:"Suresh's Caf�"};
+    const data={name:"Suresh's Caf—"};
     const enc=encodeState("m",data);
     const dec=decodeState(enc);
     assert(dec.data.name===data.name);
@@ -794,7 +794,7 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' � '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // --- Init ---------------------------------------------------------------------
@@ -849,25 +849,25 @@ function computeScore(revenue, expenses, existingEmi, loanAmount, annualRate, mo
   const cashLeft = netCF - newEMI;
   const totalDebt = existingEmi + newEMI;
 
-  // C1: Cash Flow Strength (0�30)
+  // C1: Cash Flow Strength (0—30)
   const cfRatio = netCF / revenue;
   let c1 = cfRatio >= 0.4 ? 30 : cfRatio >= 0.25 ? 22 : cfRatio >= 0.15 ? 14 : cfRatio >= 0.05 ? 6 : 0;
 
-  // C2: Loan Affordability (0�30)
+  // C2: Loan Affordability (0—30)
   const emiRatio = newEMI / netCF;
   let c2 = emiRatio <= 0.3 ? 30 : emiRatio <= 0.45 ? 22 : emiRatio <= 0.6 ? 14 : emiRatio <= 0.8 ? 6 : 0;
 
-  // C3: Debt Coverage DSCR (0�25)
+  // C3: Debt Coverage DSCR (0—25)
   const dscr = netCF / (newEMI || 1);
   let c3 = dscr >= 2.5 ? 25 : dscr >= 1.75 ? 19 : dscr >= 1.25 ? 13 : dscr >= 1.0 ? 6 : 0;
 
-  // C4: Stress Resilience (0�15)
+  // C4: Stress Resilience (0—15)
   const stressedCF = revenue * 0.8 - expenses - totalDebt;
   let c4 = stressedCF > revenue*0.15 ? 15 : stressedCF > revenue*0.05 ? 10 : stressedCF > 0 ? 5 : 0;
 
   const total = c1+c2+c3+c4;
   const cls = total >= 70 ? 'safe' : total >= 40 ? 'risky' : 'dangerous';
-  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK � AVOID';
+  const verdict = total >= 70 ? 'SAFE TO BORROW' : total >= 40 ? 'PROCEED WITH CAUTION' : 'HIGH RISK — AVOID';
 
   return{total,cls,verdict,c1,c2,c3,c4,netCF,newEMI,totalDebt,cashLeft,dscr};
 }
@@ -907,7 +907,7 @@ function generateScoreCard(){
   const cardHTML = `
   <div class="score-card-wrap">
     <div id="the-score-card" class="score-card ${s.cls}">
-      <div class="sc-brand">SmallBiz AI � Loan Decision Score</div>
+      <div class="sc-brand">SmallBiz AI — Loan Decision Score</div>
       <div class="sc-biz">${escHtml(biz)}</div>
       <div class="sc-date">${dateStr}</div>
       <div class="sc-score-row">
@@ -944,7 +944,7 @@ function generateScoreCard(){
           <div class="sc-metric-value">${dscrStr}</div>
         </div>
       </div>
-      <div class="sc-footer">Powered by SmallBiz AI Platform � smallbiz.app</div>
+      <div class="sc-footer">Powered by SmallBiz AI Platform — smallbiz.app</div>
     </div>
 
     <div style="flex:1;min-width:220px">
@@ -997,15 +997,15 @@ function buildShareText(){
 *Business:* ${biz}
 *Date:* ${dateStr}
 
-*Score: ${s.total}/100 � ${s.cls==='safe'?'? SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
+*Score: ${s.total}/100 — ${s.cls==='safe'?'? SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
 
 ?? *Key Numbers:*
-� Revenue: ${fmt(rev)}/mo
-� Loan Requested: ${fmt(loan)}
-� Max Safe Loan: ${fmt(maxLoan)}
-� New EMI: ${fmt(s.newEMI)}/mo
-� Net Cash After EMI: ${fmt(s.cashLeft)}/mo
-� Debt Coverage Ratio: ${dscrStr}
+— Revenue: ${fmt(rev)}/mo
+— Loan Requested: ${fmt(loan)}
+— Max Safe Loan: ${fmt(maxLoan)}
+— New EMI: ${fmt(s.newEMI)}/mo
+— Net Cash After EMI: ${fmt(s.cashLeft)}/mo
+— Debt Coverage Ratio: ${dscrStr}
 
 ?? Powered by SmallBiz AI Platform`;
 }
@@ -1023,7 +1023,7 @@ function printScoreCard(){
   const sc = window._sc;
   const barColor = sc.s.cls==='safe'?'#22c55e':sc.s.cls==='risky'?'#f59e0b':'#ef4444';
   const accentColor = sc.s.cls==='safe'?'linear-gradient(90deg,#16a34a,#22c55e)':sc.s.cls==='risky'?'linear-gradient(90deg,#d97706,#f59e0b)':'linear-gradient(90deg,#dc2626,#ef4444)';
-  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card � ${escHtml(sc.biz)}</title>
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loan Score Card — ${escHtml(sc.biz)}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-content:center;padding:40px}
@@ -1050,7 +1050,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
 <script src="../country-switcher.js" defer></script>
 </head><body>
 <div class="card">
-  <div class="brand">SmallBiz AI � Loan Decision Score</div>
+  <div class="brand">SmallBiz AI — Loan Decision Score</div>
   <div class="biz">${escHtml(sc.biz)}</div>
   <div class="date">${sc.dateStr}</div>
   <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
@@ -1064,7 +1064,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
     <div class="metric"><div class="metric-label">Net Cash After EMI</div><div class="metric-value" style="color:${sc.s.cashLeft>=0?'#16a34a':'#dc2626'}">${fmt(sc.s.cashLeft)}</div></div>
     <div class="metric"><div class="metric-label">Debt Coverage</div><div class="metric-value">${sc.dscrStr}</div></div>
   </div>
-  <div class="footer">Powered by SmallBiz AI Platform � ${sc.dateStr}</div>
+  <div class="footer">Powered by SmallBiz AI Platform — ${sc.dateStr}</div>
 </div>
 <script>window.onload=()=>{window.print();}<\/script>
 </body></html>`;
@@ -1120,7 +1120,7 @@ function generatePrintHTML({moduleId,title,businessName="Business",date,sections
 <!-- Multi-country localization -->
 <script src="../country-data.js"></script>
 <script src="../country-switcher.js" defer></script>
-</head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} � ${reportDate} � Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform � ${reportDate}</div></body></html>`;
+</head><body><div class="report-header"><div class="report-title">${title}</div><div class="report-meta">${businessName} — ${reportDate} — Module: ${moduleId}</div></div>${verdict?`<div class="verdict-box"><div class="verdict-text">${verdict}</div></div>`:""}${sectionsHTML}${disclaimer?`<div style="font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:24px">${disclaimer}</div>`:""}<div class="footer">Generated by SmallBiz Financial Platform — ${reportDate}</div></body></html>`;
 }
 
 function exportCSV(headers,rows){
@@ -1320,7 +1320,7 @@ function runTests(){
     assert(html.includes("#16a34a"));
   });
   test("encode handles unicode characters",()=>{
-    const data={name:"Suresh's Caf�"};
+    const data={name:"Suresh's Caf—"};
     const enc=encodeState("m",data);
     const dec=decodeState(enc);
     assert(dec.data.name===data.name);
@@ -1354,7 +1354,7 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' � '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // --- Init ---------------------------------------------------------------------

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Risk Summary Email � BizSco Advisor</title>
+<title>Client Risk Summary Email — BizSco Advisor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -51,7 +51,7 @@ button.copy-btn:hover{background:#e2e8f0}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Client Risk Summary Email</h1>
-<p class="subtitle">BizSco Advisor � Generate a white-labelled risk summary email for any client � one click</p>
+<p class="subtitle">BizSco Advisor — Generate a white-labelled risk summary email for any client — one click</p>
 
 <div class="card">
   <h2>Select Client</h2>
@@ -153,13 +153,13 @@ function generateEmail(){
 
   var email =
 'To: '+clientEmail+'\n'+
-'Subject: Your Business Financial Risk Summary � '+p.name+'\n\n'+
+'Subject: Your Business Financial Risk Summary — '+p.name+'\n\n'+
 'Dear '+p.name.split(' ')[0]+',\n\n'+
 'I have completed a financial risk review for '+p.name+' as of '+date+'. Please find the summary below.\n\n'+
 '-------------------------------------\n'+
 'FINANCIAL RISK ASSESSMENT\n'+
 'Business: '+p.name+'\n'+
-'Industry: '+(p.industry||'�')+'\n'+
+'Industry: '+(p.industry||'—')+'\n'+
 'Assessment Date: '+date+'\n'+
 '-------------------------------------\n\n'+
 'RISK VERDICT: '+s.cls+' (Score: '+s.score+' / 100)\n\n'+
@@ -170,7 +170,7 @@ verdict+'\n\n'+
 '  Monthly EMI / Debt:    '+fmt(emi)+'\n'+
 '  Net Monthly Cash Flow: '+fmt(netFlow)+'\n'+
 '  Cash Reserve:          '+fmt(reserve)+'\n'+
-'  Debt Coverage Ratio:   '+(emi>0?dscr.toFixed(2):'N/A � no existing debt')+'\n'+
+'  Debt Coverage Ratio:   '+(emi>0?dscr.toFixed(2):'N/A — no existing debt')+'\n'+
 '  Cash Runway:           '+runway+' months\n\n'+
 'RECOMMENDED ACTION:\n'+
 action+'\n'+
@@ -212,7 +212,7 @@ function copyEmail(){
     var s = calcScore(c);
     var btn = document.createElement('button');
     btn.className = 'cs-btn';
-    btn.innerHTML = '<div class="cs-name">'+c.name+'</div><div class="cs-score">'+c.industry+' � Score: '+s.score+' '+s.cls+'</div>';
+    btn.innerHTML = '<div class="cs-name">'+c.name+'</div><div class="cs-score">'+c.industry+' — Score: '+s.score+' '+s.cls+'</div>';
     btn.onclick = function(){ selectClient(i); };
     sel.appendChild(btn);
   });

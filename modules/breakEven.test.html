@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Break-Even Analyzer � BizSco</title>
+<title>Break-Even Analyzer — BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -75,7 +75,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Break-Even Analyzer</h1>
-<p class="subtitle">BizSco � How much extra revenue does your new loan require to stay profitable?</p>
+<p class="subtitle">BizSco — How much extra revenue does your new loan require to stay profitable?</p>
 
 <div class="card">
   <h2>Your Business Numbers</h2>
@@ -131,7 +131,7 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" style="text-align:right">
     <button class="save-btn" onclick="saveBreakEvenToProfile()">?? Save Numbers to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, fixed costs &amp; EMI � auto-fills all 40 tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, fixed costs &amp; EMI — auto-fills all 40 tools</p>
   </div>
 
 </div>
@@ -165,7 +165,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='? Saved � all 40 tools updated';
+    t.textContent='? Saved — all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -240,9 +240,9 @@ function calculate(){
     recCls += ' danger';
     var varCostPerSale = rev > 0 ? rev * varRate : 0;
     var lossPerSale = varCostPerSale - rev;
-    recText = '?? Danger: Your variable costs exceed your revenue � you are losing money on every sale.';
+    recText = '?? Danger: Your variable costs exceed your revenue — you are losing money on every sale.';
     recExplain = explainHtml(
-      ['You\'re losing money on every single sale � selling more makes things worse, not better',
+      ['You\'re losing money on every single sale — selling more makes things worse, not better',
        'Variable costs (materials, commission, delivery) exceed your selling price',
        'You must either raise your price or reduce per-unit costs before scaling'],
       'Each sale at '+fmt(rev)+' costs '+fmt(varCostAmt)+' in variable costs ? you lose on every transaction'
@@ -251,7 +251,7 @@ function calculate(){
     recCls += ' danger';
     recText = '?? Danger: At your current revenue of '+fmt(rev)+'/mo, you cannot cover the new loan. Your break-even rises to '+fmt(beAfter)+'/mo. You need '+fmt(Math.abs(safetyMarginAfter))+'/mo more revenue just to survive.';
     recExplain = explainHtml(
-      ['You need to earn more than you currently do just to cover costs � you\'re operating at a loss',
+      ['You need to earn more than you currently do just to cover costs — you\'re operating at a loss',
        'Every unit/dollar of revenue below break-even means you\'re losing money',
        'Options: raise prices, cut fixed costs, or reduce variable cost per unit'],
       'You currently earn '+fmt(rev)+'/month but need '+fmt(beAfter)+' to break even ? you\'re '+fmt(Math.abs(safetyMarginAfter))+' short every month'
@@ -262,7 +262,7 @@ function calculate(){
         ['Fixed costs consume most of your revenue before you earn a profit',
          'Reducing fixed costs (rent, subscriptions, staff) has the highest impact on profitability',
          'Even a 10% cut in fixed costs can move you from loss to profit'],
-        'Your fixed costs are '+pct(fixedPctOfRev)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') � reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
+        'Your fixed costs are '+pct(fixedPctOfRev)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') — reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
       );
     }
   } else if(safetyPctAfter < 15){
@@ -274,7 +274,7 @@ function calculate(){
         ['Fixed costs consume most of your revenue before you earn a profit',
          'Reducing fixed costs (rent, subscriptions, staff) has the highest impact on profitability',
          'Even a 10% cut in fixed costs can move you from loss to profit'],
-        'Your fixed costs are '+pct(fixedPctOfRevWarn)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') � reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
+        'Your fixed costs are '+pct(fixedPctOfRevWarn)+' of revenue ('+fmt(fixedTotalAfter)+' of '+fmt(rev)+') — reducing them by 10% would save '+fmt(fixedTotalAfter*0.1)+'/month'
       );
     }
   } else {

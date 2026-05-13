@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Financial Statements � BizSco Pro</title>
+<title>Financial Statements — BizSco Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -172,7 +172,7 @@ table.fs .muted{color:#94a3b8}
       <div class="pw-feat">??? Print-ready A4 format</div>
       <div class="pw-feat">?? Monthly + Annual view</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -188,9 +188,9 @@ table.fs .muted{color:#94a3b8}
   <div>
     <a href="../index.html" class="ph-back">? Back to BizSco</a>
     <h1>?? Full Financial Statements</h1>
-    <p>P&amp;L � Balance Sheet � Cash Flow � Key Ratios</p>
+    <p>P&amp;L — Balance Sheet — Cash Flow — Key Ratios</p>
   </div>
-  <div class="ph-badge">Pro � $29/month</div>
+  <div class="ph-badge">Pro — $29/month</div>
 </div>
 
 <div class="wrap">
@@ -380,10 +380,10 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_pl">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="pl_company">�</div>
+        <div class="stmt-company" id="pl_company">—</div>
         <div class="stmt-title">Profit &amp; Loss Statement</div>
-        <div class="stmt-period" id="pl_period">�</div>
-        <div class="stmt-note">Projected based on current monthly run rate � All amounts in <span id="pl_cur">USD</span></div>
+        <div class="stmt-period" id="pl_period">—</div>
+        <div class="stmt-note">Projected based on current monthly run rate — All amounts in <span id="pl_cur">USD</span></div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="pl_table"></table>
@@ -404,10 +404,10 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_bs" style="display:none">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="bs_company">�</div>
+        <div class="stmt-company" id="bs_company">—</div>
         <div class="stmt-title">Balance Sheet</div>
-        <div class="stmt-period" id="bs_period">�</div>
-        <div class="stmt-note">As at the balance sheet date � All amounts in <span id="bs_cur">USD</span></div>
+        <div class="stmt-period" id="bs_period">—</div>
+        <div class="stmt-note">As at the balance sheet date — All amounts in <span id="bs_cur">USD</span></div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="bs_table"></table>
@@ -427,10 +427,10 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_cf" style="display:none">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="cf_company">�</div>
+        <div class="stmt-company" id="cf_company">—</div>
         <div class="stmt-title">Statement of Cash Flows</div>
-        <div class="stmt-period" id="cf_period">�</div>
-        <div class="stmt-note">Indirect method � Projected from current run rate � Operating / Investing / Financing</div>
+        <div class="stmt-period" id="cf_period">—</div>
+        <div class="stmt-note">Indirect method — Projected from current run rate — Operating / Investing / Financing</div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="cf_table"></table>
@@ -450,7 +450,7 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_ratios" style="display:none">
     <div class="card">
       <h2>?? Key Financial Ratios</h2>
-      <p class="card-desc" id="ratios_period">�</p>
+      <p class="card-desc" id="ratios_period">—</p>
       <div class="ratios-grid" id="ratios_grid"></div>
     </div>
   </div>
@@ -551,7 +551,7 @@ function renderComparison(currentData){
   var keys=Object.keys(snaps).sort().slice(-6);
   var el=document.getElementById('pl_compare');
   if(!el) return;
-  if(keys.length<2){el.innerHTML='<p class="no-compare">No prior month snapshots found � save Monthly Snapshots over time to enable comparative statements.</p>';return;}
+  if(keys.length<2){el.innerHTML='<p class="no-compare">No prior month snapshots found — save Monthly Snapshots over time to enable comparative statements.</p>';return;}
 
   var cur=currentData;
   var cols=keys.map(function(k){
@@ -570,7 +570,7 @@ function renderComparison(currentData){
     return '<span class="cmp-delta '+cls+'">'+(pct>0?'+':'')+pct+'%</span>';
   }
 
-  var html='<div class="compare-hd">?? Comparative P&amp;L � Last '+keys.length+' Months (from Monthly Snapshots)</div>'
+  var html='<div class="compare-hd">?? Comparative P&amp;L — Last '+keys.length+' Months (from Monthly Snapshots)</div>'
     +'<div class="compare-grid">';
 
   cols.forEach(function(col,i){
@@ -645,7 +645,7 @@ var CUR_NAME=(function(){
 
 function fmtN(n){
   /* Format number with commas, no symbol */
-  if(n===null||n===undefined||isNaN(n)) return '�';
+  if(n===null||n===undefined||isNaN(n)) return '—';
   var abs=Math.round(Math.abs(n));
   return (n<0?'('+abs.toLocaleString()+')':abs.toLocaleString());
 }
@@ -653,8 +653,8 @@ function fmtNS(n){
   /* With sign: (negative in brackets) */
   return fmtN(n);
 }
-function pct(n){ return isNaN(n)||!isFinite(n)?'�':n.toFixed(1)+'%'; }
-function x(n){ return isNaN(n)||!isFinite(n)?'�':n.toFixed(2)+'x'; }
+function pct(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(1)+'%'; }
+function x(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(2)+'x'; }
 
 /* -- FY dropdown -- */
 (function(){
@@ -847,7 +847,7 @@ function fillTechBridge(){
   document.getElementById('fs_detailed').checked = true;
   toggleDetailed();
 
-  /* Detailed expenses � IT services company, 4 full-time staff */
+  /* Detailed expenses — IT services company, 4 full-time staff */
   document.getElementById('fs_cogs').value    = 4400;   /* contractor fees + project software licences */
   document.getElementById('fs_sal').value     = 6800;   /* 4 employees incl. Marcus's own salary draw */
   document.getElementById('fs_rent').value    = 1200;   /* co-working + office lease */
@@ -860,7 +860,7 @@ function fillTechBridge(){
   /* Balance sheet */
   document.getElementById('fs_cash').value    = 32000;  /* current bank balance */
   document.getElementById('fs_rec').value     = 18000;  /* ~1 month outstanding client invoices */
-  document.getElementById('fs_inv').value     = 0;      /* service business � no inventory */
+  document.getElementById('fs_inv').value     = 0;      /* service business — no inventory */
   document.getElementById('fs_pay').value     = 5200;   /* pending vendor + contractor payments */
   document.getElementById('fs_fixed').value   = 48000;  /* 6 laptops + server + networking (gross) */
   document.getElementById('fs_accdep').value  = 14400;  /* 4 years of depreciation */
@@ -868,7 +868,7 @@ function fillTechBridge(){
   document.getElementById('fs_loanrate').value= 11;     /* 11% p.a. */
   document.getElementById('fs_capital').value = 50000;  /* owner's initial capital investment */
 
-  showToast('? TechBridge IT Solutions data loaded � click Generate to view statements.');
+  showToast('? TechBridge IT Solutions data loaded — click Generate to view statements.');
 }
 
 /* -- Export for CA -- */
@@ -959,9 +959,9 @@ function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mk
   if(intExp>0){
     html+=row('fs-item','Interest Expense on Loans',intExp,intExp*12);
     var princ=Math.max(0,emi-intExp);
-    if(princ>0) html+=row('fs-item2','  (of which principal repayment � Balance Sheet item)',princ,princ*12);
+    if(princ>0) html+=row('fs-item2','  (of which principal repayment — Balance Sheet item)',princ,princ*12);
   } else if(emi>0){
-    html+=row('fs-item','Loan EMI (interest portion unknown � enter loan rate for split)',emi,emi*12);
+    html+=row('fs-item','Loan EMI (interest portion unknown — enter loan rate for split)',emi,emi*12);
   } else {
     html+=row('fs-item','Interest Expense',0,0);
   }
@@ -976,9 +976,9 @@ function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mk
 
   /* Margin summary */
   html+='<tr class="fs-head"><td>PROFITABILITY SUMMARY</td><td class="num">Monthly</td><td class="num">Annual</td></tr>';
-  html+=row('fs-item','Net Profit Margin',totalRev>0?pct(netProfit/totalRev*100):'�',totalRev>0?pct(netProfit/totalRev*100):'�');
-  if(detailed && cogs) html+=row('fs-item','Gross Profit Margin',totalRev>0?pct(grossProfit/totalRev*100):'�',totalRev>0?pct(grossProfit/totalRev*100):'�');
-  html+=row('fs-item','EBITDA Margin',totalRev>0?pct(ebitda/totalRev*100):'�',totalRev>0?pct(ebitda/totalRev*100):'�');
+  html+=row('fs-item','Net Profit Margin',totalRev>0?pct(netProfit/totalRev*100):'—',totalRev>0?pct(netProfit/totalRev*100):'—');
+  if(detailed && cogs) html+=row('fs-item','Gross Profit Margin',totalRev>0?pct(grossProfit/totalRev*100):'—',totalRev>0?pct(grossProfit/totalRev*100):'—');
+  html+=row('fs-item','EBITDA Margin',totalRev>0?pct(ebitda/totalRev*100):'—',totalRev>0?pct(ebitda/totalRev*100):'—');
 
   document.getElementById('pl_table').innerHTML=html;
 }
@@ -1039,7 +1039,7 @@ function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,
   if(balanced){
     html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">? Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
   } else {
-    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">? Difference of '+fmtN(Math.abs(diff))+' � check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">? Difference of '+fmtN(Math.abs(diff))+' — check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
   }
   if(totalEquity<0){
     html+=blankRow();
@@ -1108,7 +1108,7 @@ function renderCF(name,period,netProfit,dep,rec,inv,payables,netCashOps,netCashI
    KEY RATIOS
 ------------------------------ */
 function renderRatios(name,period,totalRev,cogs,grossProfit,netProfit,ebitda,ebit,totalAssets,totalCurrAssets,totalLiab,totalCurrLiab,totalEquity,loanBal,cash,rec,payables,emi){
-  document.getElementById('ratios_period').textContent=name+' � '+period;
+  document.getElementById('ratios_period').textContent=name+' — '+period;
 
   var ratios=[];
 

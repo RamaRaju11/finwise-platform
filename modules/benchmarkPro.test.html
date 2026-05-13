@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Industry Benchmarks � BizSco Pro</title>
+<title>Industry Benchmarks — BizSco Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:48px}
@@ -158,7 +158,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   <div class="pw-box">
     <div style="font-size:2.2rem">??</div>
     <h2>Industry Benchmark Comparison</h2>
-    <p>See how your business stacks up against real industry averages � profit margin, expenses, cash reserves, debt coverage, and more.</p>
+    <p>See how your business stacks up against real industry averages — profit margin, expenses, cash reserves, debt coverage, and more.</p>
     <div class="pw-feats">
       <div class="pw-feat">?? 5 key metrics</div>
       <div class="pw-feat">?? 12 industries</div>
@@ -167,7 +167,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
       <div class="pw-feat">?? Smart insights</div>
       <div class="pw-feat">??? Print report</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -185,7 +185,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
     <h1>?? Industry Benchmark Comparison</h1>
     <p>Compare your business metrics against real industry averages</p>
   </div>
-  <div class="ph-badge">Pro � $29/month</div>
+  <div class="ph-badge">Pro — $29/month</div>
 </div>
 
 <div class="wrap">
@@ -239,13 +239,13 @@ function showToast(m){
 
 var CUR_SYM=(function(){
   var s=localStorage.getItem('BizSco_currency')||'USD';
-  return s==='INR'?'?':s==='EUR'?'�':s==='GBP'?'�':'$';
+  return s==='INR'?'?':s==='EUR'?'—':s==='GBP'?'—':'$';
 })();
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
 function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
 
 /* -------------------------------
-   BENCHMARK DATA � 12 Industries
+   BENCHMARK DATA — 12 Industries
    Each metric: label, unit, dir (1=higher better, -1=lower better),
                 low/avg/high (industry range), scale (track max)
 ------------------------------- */
@@ -423,7 +423,7 @@ function loadLiveData(){
   var badge=document.getElementById('liveBadge');
   if(sources.length&&badge){
     badge.classList.add('show');
-    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' � from BizSco modules';
+    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' — from BizSco modules';
   }
   return sources.length>0;
 }
@@ -597,14 +597,14 @@ function compare(){
     ovDesc='Your metrics are in line with typical '+b.label+' businesses. Use insights below to identify quick wins.';
   } else {
     ovGrade='Needs Attention'; ovEmoji='??';
-    ovDesc='Several metrics fall below '+b.label+' benchmarks. Review the insights below � early action prevents larger problems.';
+    ovDesc='Several metrics fall below '+b.label+' benchmarks. Review the insights below — early action prevents larger problems.';
   }
   var ovPctLabel=pctLabel(overallPct);
 
   /* Overall card */
   document.getElementById('overallCard').innerHTML=
     '<div class="ov-emoji">'+ovEmoji+'</div>'
-    +'<div class="ov-text"><h3>'+ovGrade+' � vs '+b.label+'</h3><p>'+ovDesc+'</p></div>'
+    +'<div class="ov-text"><h3>'+ovGrade+' — vs '+b.label+'</h3><p>'+ovDesc+'</p></div>'
     +'<div class="ov-pct"><div class="ov-pct-num">'+ovPctLabel+'</div>'
     +'<div class="ov-pct-label" style="font-size:.62rem;margin-top:2px;opacity:.7">Percentile: ~'+overallPct+'th</div>'
     +'<div class="ov-pct-label">vs '+b.label+' peers</div></div>';
@@ -675,7 +675,7 @@ function compare(){
             +uvDisp+bm.unit
             +'<span class="m-badge '+badgeCls+'">'+rt.label+'</span>'
           +'</div>'
-          +'<div class="metric-ind-val">Industry avg: '+bm.avg+bm.unit+' &nbsp;|&nbsp; Good: '+bm.low+'�'+bm.high+bm.unit+'</div>'
+          +'<div class="metric-ind-val">Industry avg: '+bm.avg+bm.unit+' &nbsp;|&nbsp; Good: '+bm.low+'—'+bm.high+bm.unit+'</div>'
           +'<div class="metric-ind-val" style="color:#4f46e5;font-weight:700;margin-top:2px">You: '+pctLabel(mpct)+' (~'+mpct+'th pct)</div>'
         +'</div>'
       +'</div>'
@@ -713,7 +713,7 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   } else {
     ins.push({t:'bad',icon:'??',
       h:'Negative net cash flow: '+fmt(Math.abs(netCF))+' deficit',
-      b:'Expenses and EMI exceed revenue by '+fmt(Math.abs(netCF))+'/month. This is unsustainable � taking on new debt in this position is high risk. Focus on revenue growth or cost reduction first.'
+      b:'Expenses and EMI exceed revenue by '+fmt(Math.abs(netCF))+'/month. This is unsustainable — taking on new debt in this position is high risk. Focus on revenue growth or cost reduction first.'
     });
   }
 
@@ -722,12 +722,12 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
     if(ratings.profitMargin.grade==='exc'){
       ins.push({t:'good',icon:'??',
         h:'Top-tier profit margin: '+um.profitMargin.toFixed(1)+'% (Industry avg: '+bm.profitMargin.avg+'%)',
-        b:'You outperform most '+b.label+' peers on profitability. Protect this margin as you scale � avoid adding fixed costs without proportional revenue growth.'
+        b:'You outperform most '+b.label+' peers on profitability. Protect this margin as you scale — avoid adding fixed costs without proportional revenue growth.'
       });
     } else if(ratings.profitMargin.grade==='poor'){
       ins.push({t:'bad',icon:'??',
         h:'Profit margin below industry floor: '+um.profitMargin.toFixed(1)+'% (Floor: '+bm.profitMargin.low+'%)',
-        b:'Review your pricing strategy � even a 5% price increase on 50% of revenue significantly boosts margin. Also audit your top 3 expense categories for cuts.',
+        b:'Review your pricing strategy — even a 5% price increase on 50% of revenue significantly boosts margin. Also audit your top 3 expense categories for cuts.',
         cta:{href:'forecastPro.test.html',label:'?? Model growth in Forecast Pro'}
       });
     }
@@ -738,13 +738,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
     if(ratings.expenseRatio.grade==='poor'){
       ins.push({t:'warn',icon:'??',
         h:'Expense ratio too high: '+um.expenseRatio.toFixed(1)+'% (Industry avg: '+bm.expenseRatio.avg+'%)',
-        b:'You spend '+um.expenseRatio.toFixed(1)+'% of revenue on expenses vs the '+b.label+' average of '+bm.expenseRatio.avg+'%. Identify fixed vs variable costs � renegotiate rent, subscriptions, and supplier contracts.',
+        b:'You spend '+um.expenseRatio.toFixed(1)+'% of revenue on expenses vs the '+b.label+' average of '+bm.expenseRatio.avg+'%. Identify fixed vs variable costs — renegotiate rent, subscriptions, and supplier contracts.',
         cta:{href:'vendorBillTracker.test.html',label:'?? Review bills in Bill Tracker'}
       });
     } else if(ratings.expenseRatio.grade==='exc'){
       ins.push({t:'good',icon:'??',
         h:'Lean cost structure: '+um.expenseRatio.toFixed(1)+'% expense ratio',
-        b:'Your operational efficiency is in the top tier for '+b.label+'. This gives you a competitive buffer � use the savings to build reserves or service debt comfortably.'
+        b:'Your operational efficiency is in the top tier for '+b.label+'. This gives you a competitive buffer — use the savings to build reserves or service debt comfortably.'
       });
     }
   }
@@ -796,7 +796,7 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* No loan */
   if(!hasLoan){
     ins.push({t:'info',icon:'??',
-      h:'No active loan � DSCR and EMI metrics not applicable',
+      h:'No active loan — DSCR and EMI metrics not applicable',
       b:'If you\'re planning to apply for a business loan, add the expected EMI above to model how it impacts your benchmark scores.',
       cta:{href:'forecastPro.test.html',label:'?? Project with Forecast Pro'}
     });

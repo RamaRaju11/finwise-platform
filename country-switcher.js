@@ -163,6 +163,23 @@
       el.textContent = data.currency || '$';
     });
 
+    // Auto-convert <span data-cn-money="number"> elements with currency formatting
+    document.querySelectorAll('[data-cn-money]').forEach(el => {
+      const num = parseFloat(el.getAttribute('data-cn-money'));
+      if (isNaN(num)) return;
+      el.textContent = formatLocal(num, country);
+    });
+
+    // Auto-update tier badges: <span data-tier-badge="starter">Starter — $9/mo</span>
+    const planMap = { starter: 'survive', pro: 'scale', advisor: 'advise', free: 'free' };
+    document.querySelectorAll('[data-tier-badge]').forEach(el => {
+      const tier = el.getAttribute('data-tier-badge');
+      const planKey = planMap[tier];
+      const price = (data.pricing && data.pricing[planKey] && data.pricing[planKey].price) || '';
+      const label = tier.charAt(0).toUpperCase() + tier.slice(1);
+      el.textContent = price ? (label + ' — ' + price + '/mo') : label;
+    });
+
     // Sync selector + chip
     const selector = document.getElementById('cn-selector');
     if (selector) selector.value = country;
