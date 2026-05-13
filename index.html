@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Analyze, Fund, Grow</title>
+<title>BizSco — Analyze, Fund, Grow</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="BizScale">
+<meta name="apple-mobile-web-app-title" content="BizSco">
 <meta name="theme-color" content="#0f172a">
 <script src="pwa.js" defer></script>
-<meta name="description" content="AI-powered Loan Decision Engine for small businesses. Get a Loan Safety Score in 60 seconds — know if a loan will help or destroy your cash flow. Free, no sign-up, runs in your browser."/>
+<meta name="description" content="AI-powered Loan Decision Engine for small businesses. Get a Loan Safety Score in 60 seconds. Free, no sign-up, runs in your browser."/>
+<!-- Country selector dropdown is auto-injected by country-switcher.js (top-right). -->
 <!-- ═══════════════════════════════════════════════════════════════
      GOOGLE ANALYTICS 4
      SETUP: Go to analytics.google.com → Create property → Get Measurement ID
@@ -23,37 +24,9 @@
   gtag('js', new Date());
   gtag('config', 'G-DC9C8M6R9T');
 </script>
-<!-- Auto-detect country and offer redirect (non-intrusive) -->
-<script>
-(function(){
-  // Only run once per session, only on root page
-  if (sessionStorage.getItem('countryChecked')) return;
-  if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
-  sessionStorage.setItem('countryChecked','1');
-
-  // Detect country from browser language as a quick heuristic
-  var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-  var countryMap = {
-    'en-in': '/in/', 'hi-in': '/in/', 'te-in': '/in/', 'ta-in': '/in/', 'mr-in': '/in/',
-    'en-gb': '/uk/',
-    'en-au': '/au/',
-    'en-ca': '/ca/', 'fr-ca': '/ca/',
-    'en-sg': '/sg/'
-  };
-  var suggested = countryMap[lang];
-  if (suggested) {
-    // Show a non-intrusive banner offering the localized version
-    window.addEventListener('DOMContentLoaded', function(){
-      var banner = document.createElement('div');
-      banner.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#0f172a;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:9999;font-family:Inter,sans-serif;font-size:.88rem;max-width:320px;border:1px solid rgba(255,255,255,.1)';
-      var country = suggested.replace(/\//g,'').toUpperCase();
-      var flag = suggested==='/in/'?'🇮🇳':suggested==='/uk/'?'🇬🇧':suggested==='/au/'?'🇦🇺':suggested==='/ca/'?'🇨🇦':'🇸🇬';
-      banner.innerHTML = '<div style="font-weight:700;margin-bottom:6px">'+flag+' Visit '+country+' version?</div><div style="font-size:.78rem;color:#94a3b8;margin-bottom:10px">Localized pricing, lenders &amp; schemes</div><a href="'+suggested+'" style="display:inline-block;background:#4f46e5;color:#fff;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:.82rem">Go to '+country+' →</a> <button onclick="this.parentNode.remove()" style="background:transparent;border:none;color:#64748b;cursor:pointer;font-size:.82rem;margin-left:8px">Stay</button>';
-      document.body.appendChild(banner);
-    });
-  }
-})();
-</script>
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 <style>
 /* ── Reset & base ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -734,7 +707,8 @@ h1,h2,h3,h4{color:var(--dark)}
   <div class="nav-inner">
     <a href="#" class="nav-logo">
       <div class="logo-icon">📈</div>
-      Biz<span>Scale</span>
+      Biz<span>Sco</span>
+      <span id="cn-chip" style="font-size:.65rem;background:#f59e0b;color:#fff;padding:.15rem .5rem;border-radius:4px;margin-left:.4rem;font-weight:700;letter-spacing:.05em">🇺🇸 USA</span>
     </a>
     <ul class="nav-links">
       <li><a href="#how-it-works">How It Works</a></li>
@@ -742,18 +716,6 @@ h1,h2,h3,h4{color:var(--dark)}
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="try.html" style="color:var(--green);font-weight:700">▶ Try Live</a></li>
       <li><a href="checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
-      <li>
-        <select onchange="if(this.value)window.location.href=this.value" style="padding:.35rem .6rem;border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-weight:600;background:#fff;cursor:pointer">
-          <option value="">🌍 Country</option>
-          <option value="/" selected>🌍 Global</option>
-          <option value="/in/">🇮🇳 India</option>
-          <option value="/us/">🇺🇸 USA</option>
-          <option value="/uk/">🇬🇧 UK</option>
-          <option value="/au/">🇦🇺 Australia</option>
-          <option value="/ca/">🇨🇦 Canada</option>
-          <option value="/sg/">🇸🇬 Singapore</option>
-        </select>
-      </li>
     </ul>
     <div class="nav-actions">
       <a href="auth.html" class="btn btn-outline btn-sm">Sign In</a>
@@ -773,20 +735,20 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="hero-content">
     <div class="hero-eyebrow">
       <span class="dot"></span>
-      Analyze · Fund · Grow — 30 tools for small business owners
+      <span data-cn="hero.eyebrow">Analyze · Fund · Grow — 30 tools for small business owners</span>
     </div>
     <h1>
-      Will your next loan<br>
-      <span class="grad">help or hurt</span> your business?
+      <span data-cn="hero.h1Line1">Will your next loan</span><br>
+      <span class="grad" data-cn="hero.h1Highlight">help or hurt</span> <span data-cn="hero.h1Line2">your business?</span>
     </h1>
-    <p class="hero-sub">
+    <p class="hero-sub" data-cn="hero.sub">
       Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds — plus 29 more tools for cash flow, health score, grants, and AI-powered financial advice. Free. No sign-up.
     </p>
     <div class="hero-ctas">
-      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg">
+      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg" data-cn="hero.cta1">
         ⚡ Find Out If Your Loan Is Safe
       </a>
-      <a href="try.html" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2)">
+      <a href="try.html" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2)" data-cn="hero.cta2">
         ▶ See All 30 Tools
       </a>
     </div>
@@ -797,19 +759,19 @@ h1,h2,h3,h4{color:var(--dark)}
     </div>
     <div class="hero-stats">
       <div>
-        <div class="hero-stat-val">60s</div>
+        <div class="hero-stat-val" data-cn="heroStats.time">60s</div>
         <div class="hero-stat-label">Verdict Time</div>
       </div>
       <div>
-        <div class="hero-stat-val">100%</div>
+        <div class="hero-stat-val" data-cn="heroStats.browser">100%</div>
         <div class="hero-stat-label">Browser-Based</div>
       </div>
       <div>
-        <div class="hero-stat-val">30</div>
+        <div class="hero-stat-val" data-cn="heroStats.tools">30</div>
         <div class="hero-stat-label">Tools Available</div>
       </div>
       <div>
-        <div class="hero-stat-val">$0</div>
+        <div class="hero-stat-val" data-cn="heroStats.cost">$0</div>
         <div class="hero-stat-label">To Get Started</div>
       </div>
     </div>
@@ -817,13 +779,13 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="hero-visual">
       <div class="hero-card">
         <div class="hc-header">
-          <span class="hc-brand">BizScale · Loan Score</span>
+          <span class="hc-brand" data-cn="heroCard.brand">BizSco · Loan Score</span>
           <span class="hc-badge">Sample Analysis</span>
         </div>
         <div class="hc-inputs">
-          <div class="hc-row"><span>Monthly Revenue</span><span>$15,000</span></div>
-          <div class="hc-row"><span>Monthly Expenses</span><span>$8,500</span></div>
-          <div class="hc-row"><span>Loan Requested</span><span>$75,000 @ 12%</span></div>
+          <div class="hc-row"><span>Monthly Revenue</span><span data-cn="heroCard.revenue">$15,000</span></div>
+          <div class="hc-row"><span>Monthly Expenses</span><span data-cn="heroCard.expenses">$8,500</span></div>
+          <div class="hc-row"><span>Loan Requested</span><span data-cn="heroCard.loan">$75,000 @ 12%</span></div>
         </div>
         <div class="hc-sep"></div>
         <div class="hc-score-wrap">
@@ -833,11 +795,11 @@ h1,h2,h3,h4{color:var(--dark)}
             <div class="hc-bar-track"><div class="hc-bar-fill"></div></div>
           </div>
         </div>
-        <div class="hc-verdict">✅ SAFE TO BORROW</div>
+        <div class="hc-verdict" data-cn="heroCard.verdict">✅ SAFE TO BORROW</div>
         <div class="hc-metrics">
-          <div class="hc-metric"><span class="hc-ml">Max Safe Loan</span><span class="hc-mv">$92,000</span></div>
-          <div class="hc-metric"><span class="hc-ml">New EMI / mo</span><span class="hc-mv">$2,490</span></div>
-          <div class="hc-metric"><span class="hc-ml">Net Cash After EMI</span><span class="hc-mv green">$4,010</span></div>
+          <div class="hc-metric"><span class="hc-ml">Max Safe Loan</span><span class="hc-mv" data-cn="heroCard.maxLoan">$92,000</span></div>
+          <div class="hc-metric"><span class="hc-ml">New EMI / mo</span><span class="hc-mv" data-cn="heroCard.emi">$2,490</span></div>
+          <div class="hc-metric"><span class="hc-ml">Net Cash After EMI</span><span class="hc-mv green" data-cn="heroCard.netCash">$4,010</span></div>
           <div class="hc-metric"><span class="hc-ml">Debt Coverage</span><span class="hc-mv">2.4x</span></div>
         </div>
       </div>
@@ -854,7 +816,7 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="trust-item"><span class="ti-icon">🔒</span> Data stays in your browser — always private</div>
     <div class="trust-item"><span class="ti-icon">👤</span> Set up profile once — auto-fills all 30 tools</div>
     <div class="trust-item"><span class="ti-icon">🆓</span> Free to start — no sign-up needed</div>
-    <div class="trust-item"><span class="ti-icon">🎯</span> Women · Minority · Veteran-owned grants included</div>
+    <div class="trust-item" data-cn="trustBar.grants"><span class="ti-icon">🎯</span> Women · Minority · Veteran-owned grants included</div>
   </div>
 </div>
 
@@ -1005,7 +967,7 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="section-title-block reveal">
       <div class="eyebrow">The Solution</div>
       <h2>Three questions. Thirty tools. One platform.</h2>
-      <p>Whatever question you have about your business finances — BizScale has a tool for it.</p>
+      <p>Whatever question you have about your business finances — BizSco has a tool for it.</p>
     </div>
     <div class="flow-grid reveal">
       <div class="flow-card flow-1">
@@ -1074,48 +1036,48 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="section-title-block reveal">
       <div class="eyebrow">Real Business Owners</div>
       <h2>They got the numbers — then got the loan</h2>
-      <p>BizScale turns confusing financials into decisions you can act on today.</p>
+      <p>BizSco turns confusing financials into decisions you can act on today.</p>
     </div>
     <div class="testi-grid reveal">
 
       <div class="testi-card featured">
-        <div class="testi-badge">Loan Approved ✓</div>
+        <div class="testi-badge" data-cn="testimonials.0.badge">Loan Approved ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">My loan score went from 58 to 82 in six weeks. I knew exactly which numbers to fix because BizScale showed me the DSCR gap. The bank approved me on the first try.</p>
-        <div class="testi-metric">Loan Score 58 → 82</div>
+        <p class="testi-quote" data-cn="testimonials.0.quote">My loan score went from 58 to 82 in six weeks. I knew exactly which numbers to fix because BizSco showed me the DSCR gap. The bank approved me on the first try.</p>
+        <div class="testi-metric" data-cn="testimonials.0.metric">Loan Score 58 → 82</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#dbeafe;color:#1e40af">SM</div>
+          <div class="testi-avatar" style="background:#dbeafe;color:#1e40af" data-cn="testimonials.0.initials">SM</div>
           <div>
-            <div class="testi-name">Sarah Mitchell</div>
-            <div class="testi-role">Boutique Owner · Survive Plan</div>
+            <div class="testi-name" data-cn="testimonials.0.name">Sarah Mitchell</div>
+            <div class="testi-role" data-cn="testimonials.0.role">Boutique Owner · Survive Plan</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card">
-        <div class="testi-badge">6.8 Mo Runway ✓</div>
+        <div class="testi-badge" data-cn="testimonials.1.badge">6.8 Mo Runway ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Cash runway was my blind spot. I thought I had plenty of buffer — BizScale calculated 2.4 months. I cut two expenses and pushed it to 6.8 months in a single afternoon.</p>
-        <div class="testi-metric">Runway 2.4 → 6.8 months</div>
+        <p class="testi-quote" data-cn="testimonials.1.quote">Cash runway was my blind spot. I thought I had plenty of buffer — BizSco calculated 2.4 months. I cut two expenses and pushed it to 6.8 months in a single afternoon.</p>
+        <div class="testi-metric" data-cn="testimonials.1.metric">Runway 2.4 → 6.8 months</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#d1fae5;color:#065f46">MJ</div>
+          <div class="testi-avatar" style="background:#d1fae5;color:#065f46" data-cn="testimonials.1.initials">MJ</div>
           <div>
-            <div class="testi-name">Marcus Johnson</div>
-            <div class="testi-role">IT Services · Scale Plan</div>
+            <div class="testi-name" data-cn="testimonials.1.name">Marcus Johnson</div>
+            <div class="testi-role" data-cn="testimonials.1.role">IT Services · Scale Plan</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card">
-        <div class="testi-badge">3 Clients Funded ✓</div>
+        <div class="testi-badge" data-cn="testimonials.2.badge">3 Clients Funded ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">I'm a bookkeeper and I now run every client through the Financial Checkup before their loan meetings. Three of my clients got approved last quarter after we fixed what BizScale flagged.</p>
-        <div class="testi-metric">3 clients funded in Q1</div>
+        <p class="testi-quote" data-cn="testimonials.2.quote">I'm a bookkeeper and I now run every client through the Financial Checkup before their loan meetings. Three of my clients got approved last quarter after we fixed what BizSco flagged.</p>
+        <div class="testi-metric" data-cn="testimonials.2.metric">3 clients funded in Q1</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#fce7f3;color:#9d174d">LC</div>
+          <div class="testi-avatar" style="background:#fce7f3;color:#9d174d" data-cn="testimonials.2.initials">LC</div>
           <div>
-            <div class="testi-name">Lisa Chen</div>
-            <div class="testi-role">SMB Advisor · Advise Plan</div>
+            <div class="testi-name" data-cn="testimonials.2.name">Lisa Chen</div>
+            <div class="testi-role" data-cn="testimonials.2.role">SMB Advisor · Advise Plan</div>
           </div>
         </div>
       </div>
@@ -1132,7 +1094,7 @@ h1,h2,h3,h4{color:var(--dark)}
 <section class="before-after">
   <div class="container">
     <div class="section-title-block reveal">
-      <div class="eyebrow">Before vs After BizScale</div>
+      <div class="eyebrow">Before vs After BizSco</div>
       <h2>Excel confusion → AI clarity</h2>
       <p>The same decision. A completely different experience.</p>
     </div>
@@ -1140,7 +1102,7 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="ba-card before">
         <div class="ba-label">❌ Before — The Old Way</div>
         <h3>Spreadsheet guesswork</h3>
-        <ul class="ba-list">
+        <ul class="ba-list" data-cn-list="before" data-cn-tpl="li">
           <li>Hours in Excel with no clear answer</li>
           <li>Banker says "you qualify" — but for how much, safely?</li>
           <li>No stress test — what if revenue drops?</li>
@@ -1151,9 +1113,9 @@ h1,h2,h3,h4{color:var(--dark)}
       </div>
       <div class="ba-arrow">→</div>
       <div class="ba-card after">
-        <div class="ba-label">✅ After — With BizScale</div>
+        <div class="ba-label">✅ After — With BizSco</div>
         <h3>AI-powered clarity</h3>
-        <ul class="ba-list">
+        <ul class="ba-list" data-cn-list="after" data-cn-tpl="li">
           <li>Fill profile once — all 30 tools auto-personalise</li>
           <li>Loan Decision Score: SAFE / RISKY / DANGEROUS in 60s</li>
           <li>Business Health Grade A–F across 6 metrics</li>
@@ -1660,17 +1622,17 @@ h1,h2,h3,h4{color:var(--dark)}
 
       <div class="price-card">
         <div class="price-tier">Free</div>
-        <div class="price-amount">$0 <span>/ month</span></div>
+        <div class="price-amount"><span data-cn="pricing.free.price">$0</span> <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:.25rem">→ "Is this loan safe for me?"</div>
         <div class="price-desc">Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds. No sign-up, no credit card, ever.</div>
         <ul class="price-features">
           <li>🏦 Loan Score Engine (SAFE / RISKY / DANGEROUS)</li>
           <li>🧮 EMI Calculator + repayment schedule</li>
-          <li>🏪 Lender Marketplace (SBA, BlueVine, OnDeck…)</li>
+          <li>🏪 Lender Marketplace (<span data-cn="lenders">SBA, BlueVine, OnDeck…</span>)</li>
           <li class="no">Save profile / scenarios</li>
-          <li class="no">Grant & Scheme Finder</li>
+          <li class="no"><span data-cn="schemeName">Grant</span> &amp; Scheme Finder</li>
           <li class="no">Cash Runway / Break-Even</li>
-          <li class="no">AI CFO advisor</li>
+          <li class="no"><span data-cn="aiAdvisor">AI CFO</span> advisor</li>
         </ul>
         <div class="price-cta">
           <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-outline" style="width:100%;margin-bottom:8px">⚡ Check Loan Risk Free</a>
@@ -1680,7 +1642,7 @@ h1,h2,h3,h4{color:var(--dark)}
 
       <div class="price-card">
         <div class="price-tier">Survive</div>
-        <div class="price-amount">$9 <span>/ month</span></div>
+        <div class="price-amount"><span data-cn="pricing.survive.price">$9</span> <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:#16a34a;margin-bottom:.25rem">→ "Am I running out of cash?"</div>
         <div class="price-desc">Know your runway before it's too late. Understand exactly when cash runs dry and what to cut.</div>
         <ul class="price-features">
@@ -1689,13 +1651,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>📉 Break-Even Analyzer</li>
           <li>📋 Loan Safety Planner — 3 scenarios + PDF</li>
           <li>✅ Loan Eligibility Pre-Checker</li>
-          <li>🎯 Grant &amp; Scheme Finder (USA)</li>
-          <li class="no">AI CFO advisor</li>
+          <li data-cn="pricing.survive.schemes">🎯 Grant &amp; Scheme Finder (USA)</li>
+          <li class="no"><span data-cn="aiAdvisor">AI CFO</span> advisor</li>
           <li class="no">Owner's Pay / Health Score</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $9/mo Survive plan -->
-          <a href="#" class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Survive')">Get Survive — $9/mo →</a>
+          <a href="#" class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Survive')" data-cn="pricing.survive.cta">Get Survive — $9/mo →</a>
           <a href="modules/starterPlan.test.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ Try tools first (no card)</a>
         </div>
       </div>
@@ -1703,12 +1664,12 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="price-card featured">
         <div class="price-badge">Most Popular</div>
         <div class="price-tier">Scale</div>
-        <div class="price-amount">$29 <span>/ month</span></div>
+        <div class="price-amount"><span data-cn="pricing.scale.price">$29</span> <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:.25rem">→ "How do I grow without blowing up?"</div>
         <div class="price-desc">AI-powered clarity for the next 12 months — before you sign a lease, hire staff, or take a loan.</div>
         <ul class="price-features">
           <li>Everything in Survive (8 tools)</li>
-          <li>🤖 AI CFO Chat advisor</li>
+          <li data-cn="pricing.scale.advisor">🤖 AI CFO Chat advisor</li>
           <li>📈 12-month Revenue Forecast</li>
           <li>📊 Industry Benchmarks — see how you compare</li>
           <li>📑 P&amp;L, Balance Sheet, Cash Flow</li>
@@ -1718,8 +1679,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <li class="no">White-label / client dashboard</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $29/mo Scale plan -->
-          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Scale')">Get Scale — $29/mo →</a>
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Scale')" data-cn="pricing.scale.cta">Get Scale — $29/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
             <a href="modules/aiCfoChat.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🤖 AI CFO</a>
             <a href="modules/businessHealthScore.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🏥 Health</a>
@@ -1734,7 +1694,7 @@ h1,h2,h3,h4{color:var(--dark)}
 
       <div class="price-card">
         <div class="price-tier">Advise</div>
-        <div class="price-amount">$79 <span>/ month</span></div>
+        <div class="price-amount"><span data-cn="pricing.advise.price">$79</span> <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:#0d9488;margin-bottom:.25rem">→ "I help other businesses with their finances"</div>
         <div class="price-desc">White-label client tools for CAs, bookkeepers & financial advisors. Manage 50+ clients, send branded reports.</div>
         <ul class="price-features">
@@ -1748,8 +1708,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>Priority support + early access</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $79/mo Advise plan -->
-          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Advise')">Get Advise — $79/mo →</a>
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Advise')" data-cn="pricing.advise.cta">Get Advise — $79/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
             <a href="modules/clientRiskEmail.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">📬 Risk Email</a>
             <a href="modules/referralTracker.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💸 Referrals</a>
@@ -1804,9 +1763,9 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="footer-brand">
         <div class="logo-text">
           <div class="fi">📈</div>
-          Biz<span style="color:#818cf8">Scale</span>
+          Biz<span style="color:#818cf8">Sco</span>
         </div>
-        <p style="margin-bottom:.3rem">Analyze, Fund, Grow — 30 financial tools for small businesses. Loan safety, grants, health scores, AI CFO, forecasting, and advisor tools. 100% browser-based, no sign-up.</p>
+        <p style="margin-bottom:.3rem" data-cn="footerBrand">Analyze, Fund, Grow — 30 financial tools for small businesses. Loan safety, grants, health scores, AI CFO, forecasting, and advisor tools. 100% browser-based, no sign-up.</p>
         <p style="font-size:.72rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Analyze · Fund · Grow</p>
         <div style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap">
           <span class="chip chip-indigo">100% Browser-Based</span>
@@ -1829,11 +1788,11 @@ h1,h2,h3,h4{color:var(--dark)}
           <li><a href="modules/debtCommandCenter.test.html">Debt Command Center (all loans, payoff strategies, debt insights)</a></li>
           <li><a href="modules/loanEligibility.test.html">Loan Eligibility Check</a></li>
           <li><a href="modules/grantFinder.test.html">Grant Finder</a></li>
-          <li><a href="modules/taxCommandCenter.test.html">Tax Command Center (Income Tax + Deductions + Sales Tax + Contractors)</a></li>
-          <li><a href="modules/taxEstimator.test.html">Tax Estimator</a></li>
-          <li><a href="modules/salesTaxTracker.test.html">Sales Tax Tracker</a></li>
-          <li><a href="modules/keyDeductions.test.html">Key Deductions Calculator</a></li>
-          <li><a href="modules/contractorPayroll.test.html">Contractor &amp; Payroll Tax (1099-NEC / FUTA / SUTA)</a></li>
+          <li><a href="modules/taxCommandCenter.test.html" data-cn="taxes.commandCenter">Tax Command Center (Income Tax + Deductions + Sales Tax + Contractors)</a></li>
+          <li><a href="modules/taxEstimator.test.html" data-cn="taxes.estimator">Tax Estimator</a></li>
+          <li><a href="modules/salesTaxTracker.test.html" data-cn="taxes.sales">Sales Tax Tracker</a></li>
+          <li><a href="modules/keyDeductions.test.html" data-cn="taxes.deductions">Key Deductions Calculator</a></li>
+          <li><a href="modules/contractorPayroll.test.html" data-cn="taxes.payroll">Contractor &amp; Payroll Tax (1099-NEC / FUTA / SUTA)</a></li>
           <li><a href="modules/invoiceTracker.test.html">Invoice Tracker</a></li>
           <li><a href="modules/payrollEstimator.test.html">Payroll Estimator</a></li>
           <li><a href="modules/bankStatementUpload.test.html">Bank Statement Upload</a></li>
@@ -1888,13 +1847,13 @@ h1,h2,h3,h4{color:var(--dark)}
           <li><a href="#modules">Start Here</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#features">Why BizScale</a></li>
+          <li><a href="#features">Why BizSco</a></li>
         </ul>
       </div>
 
     </div>
     <div class="footer-bottom">
-      <span>© 2025 BizScale · SmallBiz Financial Platform · 30 Tools · 100% Browser-Based</span>
+      <span>© 2025 BizSco · SmallBiz Financial Platform · 30 Tools · 100% Browser-Based</span>
       <div class="footer-bottom-links">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
@@ -2008,7 +1967,7 @@ document.addEventListener('click', function(e){
     <!-- Step 1 -->
     <div id="wzStep0">
       <div class="wiz-badge">Quick Setup · Step 1 of 2</div>
-      <div class="wiz-title">Welcome to BizScale 👋</div>
+      <div class="wiz-title">Welcome to BizSco 👋</div>
       <div class="wiz-sub">Set up your business profile once — all 30 tools auto-fill from it.</div>
       <div class="wiz-field">
         <label class="wiz-label">Business Name</label>
@@ -2044,19 +2003,19 @@ document.addEventListener('click', function(e){
       <div class="wiz-field">
         <label class="wiz-label">Monthly Revenue Tier</label>
         <div class="wiz-opts" id="wzRevOpts">
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','&lt;5k')">Under $5K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','5-20k')">$5K – $20K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','20-50k')">$20K – $50K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','50k+')">$50K+</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','tier1')" data-cn="revenueTiers.0">Under $5K</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','tier2')" data-cn="revenueTiers.1">$5K – $20K</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','tier3')" data-cn="revenueTiers.2">$20K – $50K</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','tier4')" data-cn="revenueTiers.3">$50K+</div>
         </div>
       </div>
       <div class="wiz-field" style="margin-top:14px">
         <label class="wiz-label">Entity Type</label>
         <div class="wiz-opts" id="wzEntOpts">
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','Sole Proprietor')">Sole Proprietor</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','LLC')">LLC</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','S-Corp')">S-Corp</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','C-Corp')">C-Corp</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','type1')" data-cn="entityTypes.0">Sole Proprietor</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','type2')" data-cn="entityTypes.1">LLC</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','type3')" data-cn="entityTypes.2">S-Corp</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','type4')" data-cn="entityTypes.3">C-Corp</div>
         </div>
       </div>
       <div class="wiz-footer">
