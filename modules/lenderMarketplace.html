@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Lender Marketplace — BizScale</title>
+<title>Lender Marketplace � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -84,6 +84,10 @@ h1{font-size:1.4rem;margin-bottom:4px}
 .back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
 .back-link:hover{text-decoration:underline}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -92,20 +96,20 @@ h1{font-size:1.4rem;margin-bottom:4px}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="loanDecisionScoreEngine.test.html" class="back-link">← Back to Loan Score</a>
+<a href="loanDecisionScoreEngine.test.html" class="back-link">? Back to Loan Score</a>
 
 <h1>Lender Marketplace</h1>
-<p class="subtitle">BizScale · Trusted lenders for US small businesses — apply directly on their websites</p>
+<p class="subtitle">BizScale � Trusted lenders for US small businesses � apply directly on their websites</p>
 
 <!-- Live Pre-Qualified Offers -->
 <div class="live-offers-section" id="liveOffersSection">
   <div class="live-header">
-    <div class="live-title">⚡ Your Pre-Qualified Offers</div>
-    <button class="btn-refresh" id="refreshOffersBtn" onclick="loadOffers(true)">↻ Refresh</button>
+    <div class="live-title">? Your Pre-Qualified Offers</div>
+    <button class="btn-refresh" id="refreshOffersBtn" onclick="loadOffers(true)">? Refresh</button>
   </div>
   <div class="live-sub" id="offersSubtitle">Personalized offers based on your BizScale profile</div>
   <div id="profileStrip" style="display:none" class="live-profile-strip"></div>
-  <div id="offersContainer" class="loading-offers">Loading your offers…</div>
+  <div id="offersContainer" class="loading-offers">Loading your offers�</div>
 </div>
 
 <!-- GOVERNMENT / SBA -->
@@ -114,7 +118,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">🏛️</div>
+      <div class="lc-icon">???</div>
       <div>
         <div class="lc-name">SBA 7(a) Loan</div>
         <div class="lc-type"><span class="lc-badge badge-gov">Government-Backed</span></div>
@@ -123,20 +127,20 @@ h1{font-size:1.4rem;margin-bottom:4px}
     <div class="lc-body">
       <div class="lc-row">
         <div><div class="lc-label">Loan Amount</div><div class="lc-value green">Up to $5,000,000</div></div>
-        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">~10–11% / yr</div></div>
+        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">~10�11% / yr</div></div>
       </div>
       <div class="lc-row">
         <div><div class="lc-label">Repayment</div><div class="lc-value">Up to 25 years</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">2–3 weeks</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">2�3 weeks</div></div>
       </div>
-      <div class="lc-best">Best for: Established businesses needing large capital at the lowest available rates. Government guarantees 75–85% of the loan.</div>
-      <a href="https://www.sba.gov/funding-programs/loans/7a-loans" target="_blank" class="btn-visit green">Visit SBA.gov →</a>
+      <div class="lc-best">Best for: Established businesses needing large capital at the lowest available rates. Government guarantees 75�85% of the loan.</div>
+      <a href="https://www.sba.gov/funding-programs/loans/7a-loans" target="_blank" class="btn-visit green">Visit SBA.gov ?</a>
     </div>
   </div>
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">🌱</div>
+      <div class="lc-icon">??</div>
       <div>
         <div class="lc-name">SBA Microloan</div>
         <div class="lc-type"><span class="lc-badge badge-micro">Microloan</span></div>
@@ -145,14 +149,14 @@ h1{font-size:1.4rem;margin-bottom:4px}
     <div class="lc-body">
       <div class="lc-row">
         <div><div class="lc-label">Loan Amount</div><div class="lc-value green">Up to $50,000</div></div>
-        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">8–13% / yr</div></div>
+        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">8�13% / yr</div></div>
       </div>
       <div class="lc-row">
         <div><div class="lc-label">Repayment</div><div class="lc-value">Up to 6 years</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">1–2 weeks</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">1�2 weeks</div></div>
       </div>
       <div class="lc-best">Best for: Startups, home-based businesses, and micro-businesses needing small working capital. Easier to qualify than 7(a).</div>
-      <a href="https://www.sba.gov/funding-programs/loans/microloans" target="_blank" class="btn-visit green">Visit SBA.gov →</a>
+      <a href="https://www.sba.gov/funding-programs/loans/microloans" target="_blank" class="btn-visit green">Visit SBA.gov ?</a>
     </div>
   </div>
 
@@ -164,7 +168,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">🔵</div>
+      <div class="lc-icon">??</div>
       <div>
         <div class="lc-name">BlueVine</div>
         <div class="lc-type"><span class="lc-badge badge-online">Line of Credit</span></div>
@@ -177,16 +181,16 @@ h1{font-size:1.4rem;margin-bottom:4px}
       </div>
       <div class="lc-row">
         <div><div class="lc-label">Repayment</div><div class="lc-value">6 or 12 months</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">24–48 hours</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">24�48 hours</div></div>
       </div>
       <div class="lc-best">Best for: Businesses needing flexible revolving credit. Draw only what you need, pay interest only on drawn amount. Minimum 24 months in business.</div>
-      <a href="https://www.bluevine.com" target="_blank" class="btn-visit purple">Visit BlueVine →</a>
+      <a href="https://www.bluevine.com" target="_blank" class="btn-visit purple">Visit BlueVine ?</a>
     </div>
   </div>
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">⚡</div>
+      <div class="lc-icon">?</div>
       <div>
         <div class="lc-name">OnDeck</div>
         <div class="lc-type"><span class="lc-badge badge-online">Term Loan + LOC</span></div>
@@ -194,21 +198,21 @@ h1{font-size:1.4rem;margin-bottom:4px}
     </div>
     <div class="lc-body">
       <div class="lc-row">
-        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$5K – $250,000</div></div>
+        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$5K � $250,000</div></div>
         <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">From 27% APR</div></div>
       </div>
       <div class="lc-row">
-        <div><div class="lc-label">Repayment</div><div class="lc-value">3–24 months</div></div>
+        <div><div class="lc-label">Repayment</div><div class="lc-value">3�24 months</div></div>
         <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">Same day</div></div>
       </div>
       <div class="lc-best">Best for: Businesses needing fast access to capital. Low credit score minimum (625+). Daily or weekly repayment schedule.</div>
-      <a href="https://www.ondeck.com" target="_blank" class="btn-visit dark">Visit OnDeck →</a>
+      <a href="https://www.ondeck.com" target="_blank" class="btn-visit dark">Visit OnDeck ?</a>
     </div>
   </div>
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">🟠</div>
+      <div class="lc-icon">??</div>
       <div>
         <div class="lc-name">Funding Circle</div>
         <div class="lc-type"><span class="lc-badge badge-online">Term Loan</span></div>
@@ -216,15 +220,15 @@ h1{font-size:1.4rem;margin-bottom:4px}
     </div>
     <div class="lc-body">
       <div class="lc-row">
-        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$25K – $500,000</div></div>
+        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$25K � $500,000</div></div>
         <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value">From 7.49% / yr</div></div>
       </div>
       <div class="lc-row">
-        <div><div class="lc-label">Repayment</div><div class="lc-value">6 months – 7 yrs</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">3–7 days</div></div>
+        <div><div class="lc-label">Repayment</div><div class="lc-value">6 months � 7 yrs</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">3�7 days</div></div>
       </div>
       <div class="lc-best">Best for: Established businesses (2+ years) needing medium-to-large capital. Fixed monthly payments, no prepayment penalty.</div>
-      <a href="https://www.fundingcircle.com/us/" target="_blank" class="btn-visit">Visit Funding Circle →</a>
+      <a href="https://www.fundingcircle.com/us/" target="_blank" class="btn-visit">Visit Funding Circle ?</a>
     </div>
   </div>
 
@@ -236,7 +240,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">🏪</div>
+      <div class="lc-icon">??</div>
       <div>
         <div class="lc-name">Lendio</div>
         <div class="lc-type"><span class="lc-badge badge-market">Marketplace</span></div>
@@ -244,21 +248,21 @@ h1{font-size:1.4rem;margin-bottom:4px}
     </div>
     <div class="lc-body">
       <div class="lc-row">
-        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$1K – $5,000,000</div></div>
+        <div><div class="lc-label">Loan Amount</div><div class="lc-value green">$1K � $5,000,000</div></div>
         <div style="text-align:right"><div class="lc-label">Lenders</div><div class="lc-value">75+ lenders</div></div>
       </div>
       <div class="lc-row">
         <div><div class="lc-label">Products</div><div class="lc-value">SBA, Term, LOC, MCA</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">24 hrs – weeks</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">24 hrs � weeks</div></div>
       </div>
-      <div class="lc-best">Best for: One application, multiple offers. Lendio matches you across 75+ lenders. Free service — lenders pay Lendio, not you.</div>
-      <a href="https://www.lendio.com" target="_blank" class="btn-visit">Visit Lendio →</a>
+      <div class="lc-best">Best for: One application, multiple offers. Lendio matches you across 75+ lenders. Free service � lenders pay Lendio, not you.</div>
+      <a href="https://www.lendio.com" target="_blank" class="btn-visit">Visit Lendio ?</a>
     </div>
   </div>
 
   <div class="lender-card">
     <div class="lc-header">
-      <div class="lc-icon">💛</div>
+      <div class="lc-icon">??</div>
       <div>
         <div class="lc-name">Kiva</div>
         <div class="lc-type"><span class="lc-badge badge-micro">0% Interest</span></div>
@@ -267,21 +271,21 @@ h1{font-size:1.4rem;margin-bottom:4px}
     <div class="lc-body">
       <div class="lc-row">
         <div><div class="lc-label">Loan Amount</div><div class="lc-value green">Up to $15,000</div></div>
-        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value green">0% — Free</div></div>
+        <div style="text-align:right"><div class="lc-label">Interest Rate</div><div class="lc-value green">0% � Free</div></div>
       </div>
       <div class="lc-row">
         <div><div class="lc-label">Repayment</div><div class="lc-value">Up to 36 months</div></div>
-        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">30–45 days</div></div>
+        <div style="text-align:right"><div class="lc-label">Time to Fund</div><div class="lc-value">30�45 days</div></div>
       </div>
       <div class="lc-best">Best for: Micro-businesses and underserved entrepreneurs. Crowdfunded by real people. No credit score requirement. Takes longer to fund.</div>
-      <a href="https://www.kiva.org/borrow" target="_blank" class="btn-visit green">Visit Kiva →</a>
+      <a href="https://www.kiva.org/borrow" target="_blank" class="btn-visit green">Visit Kiva ?</a>
     </div>
   </div>
 
 </div>
 
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> Pre-qualified offers are estimates based on your BizScale profile data and do not guarantee approval. BizScale partners with Lendio and Bluevine — we may earn a referral fee on funded loans at no cost to you. Interest rates, amounts, and terms are approximate and subject to change. BizScale is not a lender.
+  <strong>Disclaimer:</strong> Pre-qualified offers are estimates based on your BizScale profile data and do not guarantee approval. BizScale partners with Lendio and Bluevine � we may earn a referral fee on funded loans at no cost to you. Interest rates, amounts, and terms are approximate and subject to change. BizScale is not a lender.
 </div>
 
 <script>
@@ -317,17 +321,17 @@ function renderOfferCard(o, idx) {
     <div class="oc-head">
       <span class="oc-lender">${o.lender_name}</span>
       <span style="display:flex;gap:6px;align-items:center">
-        ${isTop ? '<span class="top-badge">⭐ Best Match</span>' : ''}
+        ${isTop ? '<span class="top-badge">? Best Match</span>' : ''}
         <span class="oc-type">${o.loan_type}</span>
       </span>
     </div>
     <div class="oc-body">
       <div class="oc-amount">$${Math.round(o.amount).toLocaleString()}</div>
-      <div class="oc-rate">${o.rate_min}%–${o.rate_max}% APR · ${o.term_months} months · ~$${Math.round(o.monthly_payment).toLocaleString()}/mo</div>
+      <div class="oc-rate">${o.rate_min}%�${o.rate_max}% APR � ${o.term_months} months � ~$${Math.round(o.monthly_payment).toLocaleString()}/mo</div>
       <div class="oc-meter-label"><span>Approval Probability</span><span style="color:${color};font-weight:800">${pct}%</span></div>
       <div class="oc-meter"><div class="oc-meter-fill" style="width:${pct}%;background:${color}"></div></div>
       <div class="oc-req">Requirements: ${o.requirements}</div>
-      <a href="${o.offer_url}" target="_blank" class="btn-apply" data-lender="${o.lender_name}" data-type="${o.loan_type}" data-amount="${o.amount}">Apply at ${o.lender_name.split(' ')[0]} →</a>
+      <a href="${o.offer_url}" target="_blank" class="btn-apply" data-lender="${o.lender_name}" data-type="${o.loan_type}" data-amount="${o.amount}">Apply at ${o.lender_name.split(' ')[0]} ?</a>
     </div>
   </div>`
 }
@@ -347,11 +351,11 @@ async function loadOffers(refresh) {
   const subtitle = document.getElementById('offersSubtitle')
   const token = await getAuthToken()
   if (!token) {
-    container.innerHTML = '<div class="no-offers">🔒 Sign in to see your pre-qualified offers</div>'
+    container.innerHTML = '<div class="no-offers">?? Sign in to see your pre-qualified offers</div>'
     return
   }
-  if (btn) { btn.disabled = true; btn.textContent = '…' }
-  container.innerHTML = '<div class="loading-offers">Loading your offers…</div>'
+  if (btn) { btn.disabled = true; btn.textContent = '�' }
+  container.innerHTML = '<div class="loading-offers">Loading your offers�</div>'
 
   try {
     if (refresh) {
@@ -362,18 +366,18 @@ async function loadOffers(refresh) {
         const hs = parseInt(localStorage.getItem('fw_health_score') || '0')
         if (p.rev) profileBody = { rev: p.rev, exp: p.exp, emi: p.emi, cashReserve: p.cashReserve, health_score: hs || undefined }
       } catch(e) {}
-      container.innerHTML = '<div class="loading-offers">Building your loan profile…</div>'
+      container.innerHTML = '<div class="loading-offers">Building your loan profile�</div>'
       const buildResult = await callFn('loans-build-profile', 'POST', profileBody)
       if (!buildResult || buildResult.error) {
-        container.innerHTML = '<div class="no-offers">⚠️ Profile build failed: ' + (buildResult?.error || 'unknown error') + '</div>'
-        if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh' }
+        container.innerHTML = '<div class="no-offers">?? Profile build failed: ' + (buildResult?.error || 'unknown error') + '</div>'
+        if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
         return
       }
-      container.innerHTML = '<div class="loading-offers">Running lender matching…</div>'
+      container.innerHTML = '<div class="loading-offers">Running lender matching�</div>'
       const prequalResult = await callFn('loans-prequalify', 'POST')
       if (!prequalResult || prequalResult.error) {
-        container.innerHTML = '<div class="no-offers">⚠️ Matching failed: ' + (prequalResult?.error || 'unknown error') + '</div>'
-        if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh' }
+        container.innerHTML = '<div class="no-offers">?? Matching failed: ' + (prequalResult?.error || 'unknown error') + '</div>'
+        if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
         return
       }
     }
@@ -390,12 +394,12 @@ async function loadOffers(refresh) {
         <span class="lps-item">Revenue <span class="lps-val">$${Math.round(profile.monthly_revenue||0).toLocaleString()}/mo</span></span>
         <span class="lps-item">Health Score <span class="lps-val">${profile.health_score||0}/100</span></span>
         <span class="lps-item">Years in Business <span class="lps-val">${profile.years_in_business||0}</span></span>
-        <span class="lps-item">Industry <span class="lps-val">${profile.industry||'—'}</span></span>
+        <span class="lps-item">Industry <span class="lps-val">${profile.industry||'�'}</span></span>
       `
     }
 
     if (offers.length === 0) {
-      container.innerHTML = '<div class="no-offers">No matching offers yet. <a href="#" onclick="loadOffers(true);return false" style="color:#6366f1">Build your profile →</a></div>'
+      container.innerHTML = '<div class="no-offers">No matching offers yet. <a href="#" onclick="loadOffers(true);return false" style="color:#6366f1">Build your profile ?</a></div>'
       subtitle.textContent = 'Complete your BizScale profile to unlock personalized offers'
     } else {
       subtitle.textContent = `${offers.length} personalized offer${offers.length > 1 ? 's' : ''} matched to your business profile`
@@ -404,7 +408,7 @@ async function loadOffers(refresh) {
   } catch(e) {
     container.innerHTML = '<div class="no-offers">Error loading offers. Try refreshing.</div>'
   }
-  if (btn) { btn.disabled = false; btn.textContent = '↻ Refresh' }
+  if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
 }
 
 // Auto-load on page open (read cached offers, no API rebuild)

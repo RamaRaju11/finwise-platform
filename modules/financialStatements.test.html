@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Financial Statements — BizScale Pro</title>
+<title>Financial Statements � BizScale Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -40,12 +40,12 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 .btn-green{background:#16a34a;color:#fff}
 .btn-gray{background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0}
 
-/* ── Statement tabs ── */
+/* -- Statement tabs -- */
 .stmt-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .stmt-tab{padding:7px 16px;border-radius:999px;font-size:.8rem;font-weight:700;cursor:pointer;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;transition:all .15s}
 .stmt-tab.active{background:#1e293b;color:#fff;border-color:#1e293b}
 
-/* ── Financial Statement tables ── */
+/* -- Financial Statement tables -- */
 .stmt-wrap{background:#fff;border-radius:10px;padding:0;box-shadow:0 1px 5px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden}
 .stmt-header{background:#1e293b;color:#fff;padding:20px 28px;text-align:center}
 .stmt-company{font-size:1.1rem;font-weight:900;letter-spacing:.04em;margin-bottom:3px}
@@ -100,12 +100,12 @@ table.fs .muted{color:#94a3b8}
 .toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 
-/* ── Live data badge ── */
+/* -- Live data badge -- */
 .live-badge{display:none;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;margin-bottom:12px}
 .live-src-item{display:inline-flex;align-items:center;gap:4px;margin-right:8px}
 .ldot{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block}
 
-/* ── Comparison statements ── */
+/* -- Comparison statements -- */
 .compare-section{margin-top:16px}
 .compare-hd{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:10px;border-bottom:1px solid #f1f5f9;padding-bottom:4px}
 .compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:4px}
@@ -124,7 +124,7 @@ table.fs .muted{color:#94a3b8}
 .delta-flat{background:#f1f5f9;color:#64748b}
 .no-compare{font-size:.8rem;color:#94a3b8;padding:12px 0;font-style:italic}
 
-/* ── Footnote editor ── */
+/* -- Footnote editor -- */
 .footnote-section{margin-top:14px;border-top:1px dashed #e2e8f0;padding-top:12px}
 .footnote-toggle{font-size:.73rem;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600;background:none;border:none;padding:0}
 .footnote-toggle:hover{color:#4f46e5}
@@ -134,7 +134,7 @@ table.fs .muted{color:#94a3b8}
 .footnote-save-btn{margin-top:5px;padding:5px 13px;font-size:.73rem;background:#4f46e5;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700}
 .footnote-display{font-size:.73rem;color:#475569;background:#f8fafc;border-radius:7px;padding:10px 12px;margin-top:8px;line-height:1.6;white-space:pre-wrap;border-left:3px solid #e2e8f0}
 
-/* ── Print ── */
+/* -- Print -- */
 @media print{
   body{background:#fff;font-size:11pt}
   .pw-overlay,.page-header,.card,.stmt-tabs,.btn-row,.btn,.toast{display:none!important}
@@ -146,6 +146,10 @@ table.fs .muted{color:#94a3b8}
   @page{margin:15mm;size:A4 portrait}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -157,18 +161,18 @@ table.fs .muted{color:#94a3b8}
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">📑</div>
+    <div style="font-size:2.2rem">??</div>
     <h2>Full Financial Statements</h2>
     <p>Generate bank-ready P&amp;L, Balance Sheet, and Cash Flow Statement from your business numbers in seconds.</p>
     <div class="pw-feats">
-      <div class="pw-feat">📈 Profit &amp; Loss Statement</div>
-      <div class="pw-feat">⚖️ Balance Sheet</div>
-      <div class="pw-feat">💧 Cash Flow Statement</div>
-      <div class="pw-feat">📊 12 Key Financial Ratios</div>
-      <div class="pw-feat">🖨️ Print-ready A4 format</div>
-      <div class="pw-feat">🔢 Monthly + Annual view</div>
+      <div class="pw-feat">?? Profit &amp; Loss Statement</div>
+      <div class="pw-feat">?? Balance Sheet</div>
+      <div class="pw-feat">?? Cash Flow Statement</div>
+      <div class="pw-feat">?? 12 Key Financial Ratios</div>
+      <div class="pw-feat">??? Print-ready A4 format</div>
+      <div class="pw-feat">?? Monthly + Annual view</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -182,18 +186,18 @@ table.fs .muted{color:#94a3b8}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <h1>📑 Full Financial Statements</h1>
-    <p>P&amp;L · Balance Sheet · Cash Flow · Key Ratios</p>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <h1>?? Full Financial Statements</h1>
+    <p>P&amp;L � Balance Sheet � Cash Flow � Key Ratios</p>
   </div>
-  <div class="ph-badge">Pro · $29/month</div>
+  <div class="ph-badge">Pro � $29/month</div>
 </div>
 
 <div class="wrap">
 
 <!-- INPUT FORM -->
 <div class="card" id="inputCard">
-  <h2>📋 Business Setup</h2>
+  <h2>?? Business Setup</h2>
   <p class="card-desc">Auto-loaded from your saved profile. All figures are monthly unless noted.</p>
 
   <!-- Business info -->
@@ -349,9 +353,9 @@ table.fs .muted{color:#94a3b8}
 
   <div id="liveBadge" class="live-badge"></div>
   <div class="btn-row">
-    <button class="btn btn-blue" onclick="generate()">📑 Generate Financial Statements</button>
+    <button class="btn btn-blue" onclick="generate()">?? Generate Financial Statements</button>
     <button class="btn btn-gray" onclick="clearForm()">Clear</button>
-    <button class="btn" style="background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d" onclick="fillTechBridge()">🧪 Fill TechBridge Sample Data</button>
+    <button class="btn" style="background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d" onclick="fillTechBridge()">?? Fill TechBridge Sample Data</button>
   </div>
 </div>
 
@@ -360,26 +364,26 @@ table.fs .muted{color:#94a3b8}
 
   <div class="btn-row" style="margin-bottom:12px">
     <button class="btn btn-green" onclick="window.print()">&#128424; Export PDF (All Statements)</button>
-    <button class="btn btn-blue" onclick="exportForCA()">📤 Export for CA</button>
-    <button class="btn btn-gray" onclick="document.getElementById('inputCard').scrollIntoView({behavior:'smooth'})">✏️ Edit Inputs</button>
+    <button class="btn btn-blue" onclick="exportForCA()">?? Export for CA</button>
+    <button class="btn btn-gray" onclick="document.getElementById('inputCard').scrollIntoView({behavior:'smooth'})">?? Edit Inputs</button>
   </div>
 
   <!-- Tab selector -->
   <div class="stmt-tabs">
-    <button class="stmt-tab active" onclick="switchTab('pl',this)">📈 P&amp;L Statement</button>
-    <button class="stmt-tab" onclick="switchTab('bs',this)">⚖️ Balance Sheet</button>
-    <button class="stmt-tab" onclick="switchTab('cf',this)">💧 Cash Flow</button>
-    <button class="stmt-tab" onclick="switchTab('ratios',this)">📊 Key Ratios</button>
+    <button class="stmt-tab active" onclick="switchTab('pl',this)">?? P&amp;L Statement</button>
+    <button class="stmt-tab" onclick="switchTab('bs',this)">?? Balance Sheet</button>
+    <button class="stmt-tab" onclick="switchTab('cf',this)">?? Cash Flow</button>
+    <button class="stmt-tab" onclick="switchTab('ratios',this)">?? Key Ratios</button>
   </div>
 
   <!-- P&L Panel -->
   <div class="stmt-panel" id="panel_pl">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="pl_company">—</div>
+        <div class="stmt-company" id="pl_company">�</div>
         <div class="stmt-title">Profit &amp; Loss Statement</div>
-        <div class="stmt-period" id="pl_period">—</div>
-        <div class="stmt-note">Projected based on current monthly run rate · All amounts in <span id="pl_cur">USD</span></div>
+        <div class="stmt-period" id="pl_period">�</div>
+        <div class="stmt-note">Projected based on current monthly run rate � All amounts in <span id="pl_cur">USD</span></div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="pl_table"></table>
@@ -400,10 +404,10 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_bs" style="display:none">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="bs_company">—</div>
+        <div class="stmt-company" id="bs_company">�</div>
         <div class="stmt-title">Balance Sheet</div>
-        <div class="stmt-period" id="bs_period">—</div>
-        <div class="stmt-note">As at the balance sheet date · All amounts in <span id="bs_cur">USD</span></div>
+        <div class="stmt-period" id="bs_period">�</div>
+        <div class="stmt-note">As at the balance sheet date � All amounts in <span id="bs_cur">USD</span></div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="bs_table"></table>
@@ -423,10 +427,10 @@ table.fs .muted{color:#94a3b8}
   <div class="stmt-panel" id="panel_cf" style="display:none">
     <div class="stmt-wrap">
       <div class="stmt-header">
-        <div class="stmt-company" id="cf_company">—</div>
+        <div class="stmt-company" id="cf_company">�</div>
         <div class="stmt-title">Statement of Cash Flows</div>
-        <div class="stmt-period" id="cf_period">—</div>
-        <div class="stmt-note">Indirect method · Projected from current run rate · Operating / Investing / Financing</div>
+        <div class="stmt-period" id="cf_period">�</div>
+        <div class="stmt-note">Indirect method � Projected from current run rate � Operating / Investing / Financing</div>
       </div>
       <div class="stmt-body">
         <table class="fs" id="cf_table"></table>
@@ -445,8 +449,8 @@ table.fs .muted{color:#94a3b8}
   <!-- Ratios Panel -->
   <div class="stmt-panel" id="panel_ratios" style="display:none">
     <div class="card">
-      <h2>📊 Key Financial Ratios</h2>
-      <p class="card-desc" id="ratios_period">—</p>
+      <h2>?? Key Financial Ratios</h2>
+      <p class="card-desc" id="ratios_period">�</p>
       <div class="ratios-grid" id="ratios_grid"></div>
     </div>
   </div>
@@ -456,9 +460,9 @@ table.fs .muted{color:#94a3b8}
 <div class="toast" id="toast"></div>
 
 <script>
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    LIVE DATA AUTO-POPULATE (P1)
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 function sg(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
 
 function loadLiveData(){
@@ -470,10 +474,10 @@ function loadLiveData(){
   if(invRevD&&invRevD.byMonth){
     var lRev=invRevD.byMonth[curMo]||null;
     if(!lRev){var ks=Object.keys(invRevD.byMonth).sort();if(ks.length)lRev=invRevD.byMonth[ks[ks.length-1]];}
-    if(lRev){document.getElementById('fs_rev').value=Math.round(lRev);sourced.push({icon:'🧾',src:'Invoice Tracker',field:'Revenue'});}
+    if(lRev){document.getElementById('fs_rev').value=Math.round(lRev);sourced.push({icon:'??',src:'Invoice Tracker',field:'Revenue'});}
   }
 
-  // Payroll from Payroll Estimator → fs_sal
+  // Payroll from Payroll Estimator ? fs_sal
   var prD=sg('fw_payroll_totals');
   if(prD&&prD.currentYearTotal){
     var moPayroll=Math.round(prD.currentYearTotal/12);
@@ -484,7 +488,7 @@ function loadLiveData(){
         document.getElementById('fs_detailed').checked=true;
         toggleDetailed();
       }
-      sourced.push({icon:'👥',src:'Payroll Estimator',field:'Salaries'});
+      sourced.push({icon:'??',src:'Payroll Estimator',field:'Salaries'});
     }
   }
 
@@ -513,21 +517,21 @@ function loadLiveData(){
     } else {
       document.getElementById('fs_exp').value=Math.round(expD.totalMonthly);
     }
-    sourced.push({icon:'📋',src:'Bill Tracker',field:'Expenses'});
+    sourced.push({icon:'??',src:'Bill Tracker',field:'Expenses'});
   }
 
   // Cash balance from Cash Runway
   var cashD=sg('fw_cash_runway');
   if(cashD&&cashD.currentBalance){
     document.getElementById('fs_cash').value=Math.round(cashD.currentBalance);
-    sourced.push({icon:'🏃',src:'Cash Runway',field:'Cash Balance'});
+    sourced.push({icon:'??',src:'Cash Runway',field:'Cash Balance'});
   }
 
-  // Outstanding invoices → Accounts Receivable
+  // Outstanding invoices ? Accounts Receivable
   var invs=sg('fw_invoices')||[];
   if(invs.length){
     var openAmt=invs.filter(function(i){return i.status!=='paid';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    if(openAmt>0){document.getElementById('fs_rec').value=Math.round(openAmt);sourced.push({icon:'🧾',src:'Invoice Tracker',field:'Receivables'});}
+    if(openAmt>0){document.getElementById('fs_rec').value=Math.round(openAmt);sourced.push({icon:'??',src:'Invoice Tracker',field:'Receivables'});}
   }
 
   // Show live badge
@@ -539,15 +543,15 @@ function loadLiveData(){
   }
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    COMPARATIVE STATEMENTS (P2)
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 function renderComparison(currentData){
   var snaps=sg('fw_monthly_snapshots')||{};
   var keys=Object.keys(snaps).sort().slice(-6);
   var el=document.getElementById('pl_compare');
   if(!el) return;
-  if(keys.length<2){el.innerHTML='<p class="no-compare">No prior month snapshots found — save Monthly Snapshots over time to enable comparative statements.</p>';return;}
+  if(keys.length<2){el.innerHTML='<p class="no-compare">No prior month snapshots found � save Monthly Snapshots over time to enable comparative statements.</p>';return;}
 
   var cur=currentData;
   var cols=keys.map(function(k){
@@ -566,7 +570,7 @@ function renderComparison(currentData){
     return '<span class="cmp-delta '+cls+'">'+(pct>0?'+':'')+pct+'%</span>';
   }
 
-  var html='<div class="compare-hd">📊 Comparative P&amp;L — Last '+keys.length+' Months (from Monthly Snapshots)</div>'
+  var html='<div class="compare-hd">?? Comparative P&amp;L � Last '+keys.length+' Months (from Monthly Snapshots)</div>'
     +'<div class="compare-grid">';
 
   cols.forEach(function(col,i){
@@ -587,9 +591,9 @@ function renderComparison(currentData){
   el.innerHTML=html;
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    FOOTNOTE EDITOR (P3)
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 var FN_KEY='fw_fs_footnotes';
 var _footnotes={};
 
@@ -623,7 +627,7 @@ function saveFn(id){
   showToast('Note saved.');
 }
 
-/* ── Helpers ── */
+/* -- Helpers -- */
 function showToast(m){
   var t=document.getElementById('toast');
   t.textContent=m; t.classList.add('show');
@@ -641,7 +645,7 @@ var CUR_NAME=(function(){
 
 function fmtN(n){
   /* Format number with commas, no symbol */
-  if(n===null||n===undefined||isNaN(n)) return '—';
+  if(n===null||n===undefined||isNaN(n)) return '�';
   var abs=Math.round(Math.abs(n));
   return (n<0?'('+abs.toLocaleString()+')':abs.toLocaleString());
 }
@@ -649,10 +653,10 @@ function fmtNS(n){
   /* With sign: (negative in brackets) */
   return fmtN(n);
 }
-function pct(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(1)+'%'; }
-function x(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(2)+'x'; }
+function pct(n){ return isNaN(n)||!isFinite(n)?'�':n.toFixed(1)+'%'; }
+function x(n){ return isNaN(n)||!isFinite(n)?'�':n.toFixed(2)+'x'; }
 
-/* ── FY dropdown ── */
+/* -- FY dropdown -- */
 (function(){
   var sel=document.getElementById('fs_fy');
   var yr=new Date().getFullYear();
@@ -665,14 +669,14 @@ function x(n){ return isNaN(n)||!isFinite(n)?'—':n.toFixed(2)+'x'; }
   }
 })();
 
-/* ── Toggle detailed expense ── */
+/* -- Toggle detailed expense -- */
 function toggleDetailed(){
   var on=document.getElementById('fs_detailed').checked;
   document.getElementById('simpleExp').style.display=on?'none':'block';
   document.getElementById('detailedExp').style.display=on?'block':'none';
 }
 
-/* ── Load profile ── */
+/* -- Load profile -- */
 function loadProfile(){
   try{
     var profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
@@ -690,13 +694,13 @@ function loadProfile(){
   }catch(e){}
 }
 
-/* ── EMI split helper ── */
+/* -- EMI split helper -- */
 function calcMonthlyInterest(balance, annualRate){
   if(!balance||!annualRate) return 0;
   return balance * (annualRate/100/12);
 }
 
-/* ── Tab switcher ── */
+/* -- Tab switcher -- */
 var panels=['pl','bs','cf','ratios'];
 function switchTab(tab, btn){
   for(var i=0;i<panels.length;i++){
@@ -709,9 +713,9 @@ function switchTab(tab, btn){
   if(btn) btn.classList.add('active');
 }
 
-/* ══════════════════════════════
+/* ------------------------------
    GENERATE
-══════════════════════════════ */
+------------------------------ */
 function generate(){
   var name  = document.getElementById('fs_name').value.trim()||'My Business';
   var fy    = document.getElementById('fs_fy').value;
@@ -826,7 +830,7 @@ function generate(){
   loadFootnotes();
 }
 
-/* ── TechBridge sample data fill (temp test helper) ── */
+/* -- TechBridge sample data fill (temp test helper) -- */
 function fillTechBridge(){
   /* Business info */
   document.getElementById('fs_name').value    = 'TechBridge IT Solutions';
@@ -843,7 +847,7 @@ function fillTechBridge(){
   document.getElementById('fs_detailed').checked = true;
   toggleDetailed();
 
-  /* Detailed expenses — IT services company, 4 full-time staff */
+  /* Detailed expenses � IT services company, 4 full-time staff */
   document.getElementById('fs_cogs').value    = 4400;   /* contractor fees + project software licences */
   document.getElementById('fs_sal').value     = 6800;   /* 4 employees incl. Marcus's own salary draw */
   document.getElementById('fs_rent').value    = 1200;   /* co-working + office lease */
@@ -856,7 +860,7 @@ function fillTechBridge(){
   /* Balance sheet */
   document.getElementById('fs_cash').value    = 32000;  /* current bank balance */
   document.getElementById('fs_rec').value     = 18000;  /* ~1 month outstanding client invoices */
-  document.getElementById('fs_inv').value     = 0;      /* service business — no inventory */
+  document.getElementById('fs_inv').value     = 0;      /* service business � no inventory */
   document.getElementById('fs_pay').value     = 5200;   /* pending vendor + contractor payments */
   document.getElementById('fs_fixed').value   = 48000;  /* 6 laptops + server + networking (gross) */
   document.getElementById('fs_accdep').value  = 14400;  /* 4 years of depreciation */
@@ -864,17 +868,17 @@ function fillTechBridge(){
   document.getElementById('fs_loanrate').value= 11;     /* 11% p.a. */
   document.getElementById('fs_capital').value = 50000;  /* owner's initial capital investment */
 
-  showToast('✅ TechBridge IT Solutions data loaded — click Generate to view statements.');
+  showToast('? TechBridge IT Solutions data loaded � click Generate to view statements.');
 }
 
-/* ── Export for CA ── */
+/* -- Export for CA -- */
 function exportForCA(){
   if(!window._fsData){ showToast('Generate statements first.'); return; }
   localStorage.setItem('fw_ca_export', JSON.stringify(window._fsData));
   window.open('caExport.test.html','_blank');
 }
 
-/* ── row builder helpers ── */
+/* -- row builder helpers -- */
 function row(cls, label, mo, ann, bold, colorClass){
   var bc=bold?'font-weight:900':'';
   var cc=colorClass||'';
@@ -902,9 +906,9 @@ function bsRow(cls, label, val, bold){
 function bsSub(label, val){ return bsRow('fs-sub',label,val,true); }
 function bsTotal(label, val){ return '<tr class="fs-total"><td>'+label+'</td><td></td><td class="num '+(val<0?'neg':'')+'" >'+fmtN(val)+'</td></tr>'; }
 
-/* ══════════════════════════════
+/* ------------------------------
    P&L STATEMENT
-══════════════════════════════ */
+------------------------------ */
 function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mkt,util,otherExp,dep,ebitda,ebit,intExp,emi,pbt,netProfit,detailed){
   document.getElementById('pl_company').textContent=name;
   document.getElementById('pl_period').textContent=period;
@@ -939,14 +943,14 @@ function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mk
 
   /* EBITDA / EBIT */
   if(detailed){
-    html+=row('fs-sub','Gross Profit (A − COGS)',grossProfit,grossProfit*12,'',grossProfit>=0?'pos':'neg');
+    html+=row('fs-sub','Gross Profit (A - COGS)',grossProfit,grossProfit*12,'',grossProfit>=0?'pos':'neg');
     html+=blankRow();
     html+=row('fs-sub','EBITDA',ebitda,ebitda*12,'',ebitda>=0?'pos':'neg');
     if(dep) html+=row('fs-item','Less: Depreciation',-dep,-dep*12);
     html+=row('fs-sub','EBIT (Earnings Before Interest & Tax)',ebit,ebit*12,'',ebit>=0?'pos':'neg');
   } else {
     var grossOpProfit=totalRev-otherExp;
-    html+=row('fs-sub','Operating Profit (A − B)',grossOpProfit,grossOpProfit*12,'',grossOpProfit>=0?'pos':'neg');
+    html+=row('fs-sub','Operating Profit (A - B)',grossOpProfit,grossOpProfit*12,'',grossOpProfit>=0?'pos':'neg');
   }
   html+=blankRow();
 
@@ -955,9 +959,9 @@ function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mk
   if(intExp>0){
     html+=row('fs-item','Interest Expense on Loans',intExp,intExp*12);
     var princ=Math.max(0,emi-intExp);
-    if(princ>0) html+=row('fs-item2','  (of which principal repayment — Balance Sheet item)',princ,princ*12);
+    if(princ>0) html+=row('fs-item2','  (of which principal repayment � Balance Sheet item)',princ,princ*12);
   } else if(emi>0){
-    html+=row('fs-item','Loan EMI (interest portion unknown — enter loan rate for split)',emi,emi*12);
+    html+=row('fs-item','Loan EMI (interest portion unknown � enter loan rate for split)',emi,emi*12);
   } else {
     html+=row('fs-item','Interest Expense',0,0);
   }
@@ -972,16 +976,16 @@ function renderPL(name,period,totalRev,rev,otherInc,cogs,grossProfit,sal,rent,mk
 
   /* Margin summary */
   html+='<tr class="fs-head"><td>PROFITABILITY SUMMARY</td><td class="num">Monthly</td><td class="num">Annual</td></tr>';
-  html+=row('fs-item','Net Profit Margin',totalRev>0?pct(netProfit/totalRev*100):'—',totalRev>0?pct(netProfit/totalRev*100):'—');
-  if(detailed && cogs) html+=row('fs-item','Gross Profit Margin',totalRev>0?pct(grossProfit/totalRev*100):'—',totalRev>0?pct(grossProfit/totalRev*100):'—');
-  html+=row('fs-item','EBITDA Margin',totalRev>0?pct(ebitda/totalRev*100):'—',totalRev>0?pct(ebitda/totalRev*100):'—');
+  html+=row('fs-item','Net Profit Margin',totalRev>0?pct(netProfit/totalRev*100):'�',totalRev>0?pct(netProfit/totalRev*100):'�');
+  if(detailed && cogs) html+=row('fs-item','Gross Profit Margin',totalRev>0?pct(grossProfit/totalRev*100):'�',totalRev>0?pct(grossProfit/totalRev*100):'�');
+  html+=row('fs-item','EBITDA Margin',totalRev>0?pct(ebitda/totalRev*100):'�',totalRev>0?pct(ebitda/totalRev*100):'�');
 
   document.getElementById('pl_table').innerHTML=html;
 }
 
-/* ══════════════════════════════
+/* ------------------------------
    BALANCE SHEET
-══════════════════════════════ */
+------------------------------ */
 function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,payables,loanBal,totalCurrLiab,totalLTLiab,totalLiab,capital,retained,totalEquity){
   document.getElementById('bs_company').textContent=name;
   document.getElementById('bs_period').textContent=period;
@@ -1033,9 +1037,9 @@ function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,
   var diff=totalAssets-(totalLiab+totalEquity);
   var balanced=Math.abs(diff)<1;
   if(balanced){
-    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">✓ Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">? Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
   } else {
-    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">⚠ Difference of '+fmtN(Math.abs(diff))+' — check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">? Difference of '+fmtN(Math.abs(diff))+' � check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
   }
   if(totalEquity<0){
     html+=blankRow();
@@ -1045,9 +1049,9 @@ function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,
   document.getElementById('bs_table').innerHTML=html;
 }
 
-/* ══════════════════════════════
+/* ------------------------------
    CASH FLOW STATEMENT
-══════════════════════════════ */
+------------------------------ */
 function renderCF(name,period,netProfit,dep,rec,inv,payables,netCashOps,netCashInv,principalPmt,intExp,netCashFin,netCash,openCash,closeCash){
   document.getElementById('cf_company').textContent=name;
   document.getElementById('cf_period').textContent=period;
@@ -1100,11 +1104,11 @@ function renderCF(name,period,netProfit,dep,rec,inv,payables,netCashOps,netCashI
   document.getElementById('cf_table').innerHTML=html;
 }
 
-/* ══════════════════════════════
+/* ------------------------------
    KEY RATIOS
-══════════════════════════════ */
+------------------------------ */
 function renderRatios(name,period,totalRev,cogs,grossProfit,netProfit,ebitda,ebit,totalAssets,totalCurrAssets,totalLiab,totalCurrLiab,totalEquity,loanBal,cash,rec,payables,emi){
-  document.getElementById('ratios_period').textContent=name+' · '+period;
+  document.getElementById('ratios_period').textContent=name+' � '+period;
 
   var ratios=[];
 
@@ -1164,7 +1168,7 @@ function renderRatios(name,period,totalRev,cogs,grossProfit,netProfit,ebitda,ebi
   for(var i=0;i<ratios.length;i++){
     var r=ratios[i];
     var scls=r.ok?'rs-good':r.warn?'rs-warn':'rs-bad';
-    var slabel=r.ok?'✓ Good':r.warn?'⚠ Marginal':'✗ Weak';
+    var slabel=r.ok?'? Good':r.warn?'? Marginal':'? Weak';
     html+='<div class="ratio-card">'
       +'<div class="ratio-label">'+r.label+'</div>'
       +'<div class="ratio-val">'+r.val+'</div>'
@@ -1181,7 +1185,7 @@ function clearForm(){
   document.getElementById('statementsSection').style.display='none';
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'){
@@ -1198,7 +1202,7 @@ document.getElementById('pwCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlock();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 if(localStorage.getItem('fw_pro')==='1'){
   document.getElementById('pwOverlay').style.display='none';
   loadProfile();

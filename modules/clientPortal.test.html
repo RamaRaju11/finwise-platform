@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Portal — BizScale</title>
+<title>Client Portal � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
@@ -104,7 +104,7 @@ textarea{resize:vertical;min-height:68px}
 .toggle-switch input:checked + .toggle-slider:before{transform:translateX(16px)}
 .sched-sent{font-size:.66rem;color:#94a3b8}
 
-/* ── Bulk Import ── */
+/* -- Bulk Import -- */
 .drop-zone{border:2.5px dashed #c7d2fe;border-radius:10px;padding:40px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;background:#fafbff}
 .drop-zone:hover,.drop-zone.dragover{border-color:#4f46e5;background:#f5f3ff}
 .dz-icon{font-size:2.5rem;margin-bottom:8px}
@@ -140,6 +140,10 @@ textarea{resize:vertical;min-height:68px}
 .lock-msg p{font-size:.82rem;color:#78350f;margin-bottom:12px}
 .lock-msg a{display:inline-block;padding:9px 22px;background:#d97706;color:#fff;border-radius:7px;font-size:.82rem;font-weight:800;text-decoration:none}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -148,31 +152,31 @@ textarea{resize:vertical;min-height:68px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <nav class="topnav">
-  <a href="../dashboard.html" class="tn-logo">📈 Biz<span>Scale</span></a>
-  <a href="../dashboard.html" class="tn-back">← Dashboard</a>
+  <a href="../dashboard.html" class="tn-logo">?? Biz<span>Scale</span></a>
+  <a href="../dashboard.html" class="tn-back">? Dashboard</a>
   <div class="tn-spacer"></div>
-  <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">🎨 White-Label Settings</a>
+  <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">?? White-Label Settings</a>
   <button class="tn-btn" onclick="if(window.fwAuth) window.fwAuth.signOut()">Sign Out</button>
 </nav>
 
 <div class="hero">
   <div class="hero-inner">
     <div>
-      <h1>🔗 Client Portal</h1>
-      <p>Share secure, read-only financial reports with clients — no login needed on their end.</p>
-      <div class="hero-badge">⭐ Advisor Feature</div>
+      <h1>?? Client Portal</h1>
+      <p>Share secure, read-only financial reports with clients � no login needed on their end.</p>
+      <div class="hero-badge">? Advisor Feature</div>
     </div>
     <div style="text-align:right">
-      <a href="whiteLabelSettings.test.html" class="hero-link">🎨 Customize your brand →</a>
+      <a href="whiteLabelSettings.test.html" class="hero-link">?? Customize your brand ?</a>
     </div>
   </div>
 </div>
 
 <div id="lockMsg" style="display:none;max-width:980px;margin:20px auto;padding:0 18px">
   <div class="lock-msg">
-    <h3>🔒 Advisor Plan Required</h3>
+    <h3>?? Advisor Plan Required</h3>
     <p>Client Portal is available on the Advisor plan. Upgrade to share reports with your clients securely.</p>
-    <a href="../pricing.html">Upgrade to Advisor →</a>
+    <a href="../pricing.html">Upgrade to Advisor ?</a>
   </div>
 </div>
 
@@ -180,8 +184,8 @@ textarea{resize:vertical;min-height:68px}
 
 <div class="tabs">
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('portals',this)">🔗 Manage Portals</button>
-    <button class="tab-btn" onclick="switchTab('bulk',this)">📥 Bulk Import</button>
+    <button class="tab-btn active" onclick="switchTab('portals',this)">?? Manage Portals</button>
+    <button class="tab-btn" onclick="switchTab('bulk',this)">?? Bulk Import</button>
   </div>
 </div>
 
@@ -191,7 +195,7 @@ textarea{resize:vertical;min-height:68px}
   <div class="tab-panel active" id="tab-portals">
 
     <div class="card">
-      <div class="card-title"><span>➕</span> Create Client Portal</div>
+      <div class="card-title"><span>?</span> Create Client Portal</div>
 
       <div class="g2">
         <div>
@@ -219,7 +223,7 @@ textarea{resize:vertical;min-height:68px}
         </div>
         <div class="check-item">
           <input type="checkbox" id="shareHealth"/>
-          <div><label for="shareHealth">Business Health Score <small>A–F overall grade</small></label></div>
+          <div><label for="shareHealth">Business Health Score <small>A�F overall grade</small></label></div>
         </div>
         <div class="check-item">
           <input type="checkbox" id="shareLoan"/>
@@ -228,12 +232,12 @@ textarea{resize:vertical;min-height:68px}
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-brand" onclick="createPortal()">Generate Portal Link →</button>
+        <button class="btn btn-brand" onclick="createPortal()">Generate Portal Link ?</button>
         <span id="createStatus" style="font-size:.78rem;color:#64748b"></span>
       </div>
 
       <div class="link-result" id="linkResult">
-        <div class="lr-label">✅ Portal link ready — share this with your client</div>
+        <div class="lr-label">? Portal link ready � share this with your client</div>
         <div class="lr-row">
           <input type="text" class="lr-inp" id="generatedLink" readonly/>
           <button class="lr-copy" id="copyNewBtn" onclick="copyLink('generatedLink','copyNewBtn')">Copy</button>
@@ -246,7 +250,7 @@ textarea{resize:vertical;min-height:68px}
     </div>
 
     <div class="card-plain">
-      <div class="card-title"><span>👥</span> Active Client Portals</div>
+      <div class="card-title"><span>??</span> Active Client Portals</div>
       <div id="clientList"><div class="clients-empty">No portals created yet. Add your first client above.</div></div>
     </div>
 
@@ -255,13 +259,13 @@ textarea{resize:vertical;min-height:68px}
   <!-- TAB: Bulk Import -->
   <div class="tab-panel" id="tab-bulk">
     <div class="card">
-      <div class="card-title"><span>📥</span> Bulk Import Clients</div>
+      <div class="card-title"><span>??</span> Bulk Import Clients</div>
       <p style="font-size:.82rem;color:#64748b;margin-bottom:16px">Upload a CSV or Excel file with client Name, Email, and optional Message columns. Up to 200 rows per import.</p>
 
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInp').click()" ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)">
-        <div class="dz-icon">📄</div>
+        <div class="dz-icon">??</div>
         <div class="dz-title">Drop your file here</div>
-        <div class="dz-sub">CSV or Excel (.xlsx, .xls) — max 200 clients</div>
+        <div class="dz-sub">CSV or Excel (.xlsx, .xls) � max 200 clients</div>
         <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('fileInp').click()">Browse File</button>
         <input type="file" id="fileInp" class="dz-file" accept=".csv,.xlsx,.xls" onchange="fileSelected(this)"/>
       </div>
@@ -281,7 +285,7 @@ textarea{resize:vertical;min-height:68px}
           <select id="colMessage"><option value="">(none)</option></select>
         </div>
         <div class="btn-row" style="margin-top:12px">
-          <button class="btn btn-brand btn-sm" onclick="applyMapping()">Apply &amp; Preview →</button>
+          <button class="btn btn-brand btn-sm" onclick="applyMapping()">Apply &amp; Preview ?</button>
         </div>
       </div>
 
@@ -290,7 +294,7 @@ textarea{resize:vertical;min-height:68px}
       </div>
 
       <div class="btn-row" id="importBtnRow" style="display:none">
-        <button class="btn btn-green" id="importBtn" onclick="runImport()">Import Clients →</button>
+        <button class="btn btn-green" id="importBtn" onclick="runImport()">Import Clients ?</button>
         <span id="importCount" style="font-size:.82rem;color:#64748b"></span>
       </div>
 
@@ -310,7 +314,7 @@ var SUPA_KEY = 'sb_publishable_MT6Yw204o8Ho5nY-82IvkA_Ys_00yGO';
 var advisorId = null, advisorName = '', bizName = '', profileData = {}, wlData = {};
 var parsedRows = [], parsedHeaders = [];
 
-/* ── Tab switching ── */
+/* -- Tab switching -- */
 function switchTab(id, btn){
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -318,7 +322,7 @@ function switchTab(id, btn){
   btn.classList.add('active');
 }
 
-/* ── Helpers ── */
+/* -- Helpers -- */
 function genToken(){
   var arr = new Uint8Array(16);
   crypto.getRandomValues(arr);
@@ -352,14 +356,14 @@ function copyLink(inputId, btnId){
   setTimeout(function(){ btn.textContent='Copy'; btn.classList.remove('copied'); },2000);
 }
 
-/* ── Create single portal ── */
+/* -- Create single portal -- */
 function createPortal(){
   var name  = document.getElementById('clientName').value.trim();
   var email = document.getElementById('clientEmail').value.trim();
   var msg   = document.getElementById('clientMsg').value.trim();
   if(!name||!email){ alert('Please enter client name and email.'); return; }
   if(!advisorId){ alert('Not signed in.'); return; }
-  document.getElementById('createStatus').textContent = 'Generating…';
+  document.getElementById('createStatus').textContent = 'Generating�';
   insertPortal(name, email, msg,
     document.getElementById('shareRevenue').checked,
     document.getElementById('shareCashflow').checked,
@@ -372,7 +376,7 @@ function createPortal(){
     document.getElementById('generatedLink').value = url;
     document.getElementById('linkResult').style.display = 'block';
     var waMsg = 'Hi '+name+'! Here is your financial report portal: '+url;
-    var emSubj = 'Your Financial Report — '+(bizName||advisorName);
+    var emSubj = 'Your Financial Report � '+(bizName||advisorName);
     var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by BizScale';
     document.getElementById('waShareBtn').onclick = function(){ window.open('https://wa.me/?text='+encodeURIComponent(waMsg)); };
     document.getElementById('emShareBtn').onclick = function(){ window.location.href='mailto:'+email+'?subject='+encodeURIComponent(emSubj)+'&body='+encodeURIComponent(emBody); };
@@ -418,7 +422,7 @@ function insertPortal(clientName, clientEmail, msg, incRev, incCash, incHealth, 
   }).then(function(r){ if(!r.ok) throw new Error('Insert failed'); return token; });
 }
 
-/* ── Load + render client list ── */
+/* -- Load + render client list -- */
 function loadClients(){
   if(!advisorId) return;
   fetch(SUPA_URL+'/rest/v1/client_portals?advisor_id=eq.'+advisorId+'&order=created_at.desc',{
@@ -433,16 +437,16 @@ function loadClients(){
       var url = portalURL(r.token);
       var created = new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
       var lastViewed = r.last_viewed_at ? 'Viewed '+new Date(r.last_viewed_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Not viewed yet';
-      var lastSent = r.schedule_last_sent ? ' · Sent '+new Date(r.schedule_last_sent).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      var lastSent = r.schedule_last_sent ? ' � Sent '+new Date(r.schedule_last_sent).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
       var checked = r.schedule_enabled ? 'checked' : '';
       return '<div class="client-row">' +
         '<div class="cr-avatar">'+initials+'</div>' +
         '<div class="cr-info"><div class="cr-name">'+esc(r.client_name)+'</div><div class="cr-email">'+esc(r.client_email)+'</div></div>' +
-        '<span class="cr-views">👁 '+r.view_count+' views</span>' +
+        '<span class="cr-views">?? '+r.view_count+' views</span>' +
         '<div class="cr-meta" style="min-width:90px">'+created+'<br><span style="color:#94a3b8">'+lastViewed+'</span></div>' +
         '<div class="sched-wrap">' +
           '<label class="toggle-switch"><input type="checkbox" '+checked+' onchange="toggleSchedule(\''+r.id+'\',this.checked)"/><span class="toggle-slider"></span></label>' +
-          '<div><div class="sched-label">Monthly email</div><div class="sched-sent">'+lastSent.replace(' · ','')+'</div></div>' +
+          '<div><div class="sched-label">Monthly email</div><div class="sched-sent">'+lastSent.replace(' � ','')+'</div></div>' +
         '</div>' +
         '<div class="cr-actions">' +
           '<button class="cr-copy" id="cp_'+r.id+'" onclick="copyRowLink(\''+url+'\',\'cp_'+r.id+'\')">Copy Link</button>' +
@@ -479,7 +483,7 @@ function deletePortal(id){
   }).then(function(){ loadClients(); });
 }
 
-/* ── Bulk Import ── */
+/* -- Bulk Import -- */
 function dzDragOver(e){ e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
 function dzDragLeave(){ document.getElementById('dropZone').classList.remove('dragover'); }
 function dzDrop(e){
@@ -569,7 +573,7 @@ function applyMapping(){
   var thead = '<tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Status</th></tr>';
   var tbody = mapped.map(function(r,i){
     var badge = r.valid ? '<span class="badge-ok">Valid</span>' : '<span class="badge-err">Invalid</span>';
-    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.msg||'—')+'</td><td>'+badge+'</td></tr>';
+    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.msg||'�')+'</td><td>'+badge+'</td></tr>';
   }).join('');
   document.getElementById('previewTable').innerHTML = thead+tbody;
   document.getElementById('previewWrap').style.display='block';
@@ -586,7 +590,7 @@ function runImport(){
   if(!valid.length){ alert('No valid rows to import.'); return; }
 
   var btn = document.getElementById('importBtn');
-  btn.textContent='Importing…';btn.disabled=true;
+  btn.textContent='Importing�';btn.disabled=true;
 
   var promises = valid.map(function(r){
     return insertPortal(r.name, r.email, r.msg, true, true, false, false, false).then(function(){ return {ok:true}; }).catch(function(){ return {ok:false,email:r.email}; });
@@ -595,19 +599,19 @@ function runImport(){
   Promise.all(promises).then(function(results){
     var ok = results.filter(function(r){ return r.ok; }).length;
     var fail = results.length - ok;
-    document.getElementById('importResultTitle').textContent = '✅ Import complete — '+ok+' portals created';
+    document.getElementById('importResultTitle').textContent = '? Import complete � '+ok+' portals created';
     document.getElementById('importResultDesc').textContent = (fail>0?fail+' rows failed (duplicate email or server error). ':'')+'All clients can now access their report via their unique link.';
     document.getElementById('importResult').style.display='block';
-    btn.textContent='Import Clients →';btn.disabled=false;
+    btn.textContent='Import Clients ?';btn.disabled=false;
     loadClients();
   });
 }
 
-/* ── Drag drop drop zone label update ── */
+/* -- Drag drop drop zone label update -- */
 function dzDragOver(e){ e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
 function dzDragLeave(){ document.getElementById('dropZone').classList.remove('dragover'); }
 
-/* ── Auth init ── */
+/* -- Auth init -- */
 window.addEventListener('load', function(){
   if(!window.fwAuth){ document.getElementById('lockMsg').style.display='block'; return; }
   window.fwAuth.init(function(){

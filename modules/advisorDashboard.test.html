@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Advisor Dashboard — BizScale</title>
+<title>Advisor Dashboard � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
 a{text-decoration:none;color:inherit}
 
-/* ── CSS Variables for white-label ── */
+/* -- CSS Variables for white-label -- */
 :root{
   --brand:#4f46e5;
   --brand-dk:#3730a3;
@@ -17,7 +17,7 @@ a{text-decoration:none;color:inherit}
   --brand-text:#fff;
 }
 
-/* ── Header ── */
+/* -- Header -- */
 .page-header{background:linear-gradient(135deg,#0f172a,var(--brand));padding:18px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:20px}
 .ph-brand{display:flex;align-items:center;gap:10px}
 .ph-brand-icon{font-size:1.6rem;line-height:1}
@@ -40,7 +40,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 @media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
 @media(max-width:400px){.g2,.g3,.g4{grid-template-columns:1fr}}
 
-/* ── Buttons ── */
+/* -- Buttons -- */
 .btn{padding:8px 18px;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;transition:background .15s}
 .btn-brand{background:var(--brand);color:var(--brand-text)}.btn-brand:hover{background:var(--brand-dk)}
 .btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}.btn-outline:hover{background:var(--brand-lt)}
@@ -50,7 +50,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .btn-sm{padding:5px 12px;font-size:.75rem;border-radius:6px}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
 
-/* ── White-label panel ── */
+/* -- White-label panel -- */
 .wl-panel{background:#fff;border-radius:10px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07);overflow:hidden}
 .wl-toggle{padding:14px 22px;display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;font-size:.88rem;color:#1e293b;border-bottom:1px solid transparent;transition:border-color .15s}
 .wl-toggle:hover{background:#f8fafc}
@@ -66,20 +66,20 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .wl-prev-name{font-size:.95rem;font-weight:900}
 .wl-prev-tag{font-size:.72rem;opacity:.7}
 
-/* ── Stats bar ── */
+/* -- Stats bar -- */
 .stats-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
 .stat-card{background:#fff;border-radius:9px;padding:12px 16px;box-shadow:0 1px 5px rgba(0,0,0,.07);border-top:3px solid var(--brand)}
 .stat-label{font-size:.67rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
 .stat-val{font-size:1.4rem;font-weight:900;color:#1e293b;line-height:1}
 .stat-card.green{border-top-color:#10b981}.stat-card.yellow{border-top-color:#f59e0b}.stat-card.red{border-top-color:#dc2626}
 
-/* ── Toolbar ── */
+/* -- Toolbar -- */
 .toolbar{background:#fff;border-radius:10px;padding:12px 18px;margin-bottom:14px;box-shadow:0 1px 5px rgba(0,0,0,.07);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .search-inp{flex:1;min-width:180px;padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.85rem}
 .search-inp:focus{outline:none;border-color:var(--brand)}
 .sort-sel{padding:7px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.82rem;background:#fff;width:auto}
 
-/* ── Client grid ── */
+/* -- Client grid -- */
 .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:16px}
 .client-card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 5px rgba(0,0,0,.07);border-top:4px solid #e2e8f0;transition:box-shadow .15s;position:relative}
 .client-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
@@ -107,12 +107,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .empty-state .es-icon{font-size:3rem;display:block;margin-bottom:12px}
 .empty-state p{font-size:.85rem;line-height:1.7}
 
-/* ── Modal base ── */
+/* -- Modal base -- */
 .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(3px);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.show{display:flex}
 .modal-box{background:#fff;border-radius:14px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
 
-/* ── Edit Client Modal ── */
+/* -- Edit Client Modal -- */
 #editModal .modal-box{max-width:540px}
 .modal-header{padding:18px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
 .modal-header h3{font-size:.95rem;font-weight:800;color:#1e293b}
@@ -120,7 +120,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .modal-body{padding:18px 22px}
 .modal-footer{padding:14px 22px;border-top:1px solid #f1f5f9;display:flex;gap:8px;justify-content:flex-end}
 
-/* ── Score Card Modal ── */
+/* -- Score Card Modal -- */
 #scModal .modal-box{max-width:760px}
 .sc-modal-header{background:linear-gradient(135deg,#0f172a,var(--brand));color:#fff;padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-radius:14px 14px 0 0}
 .sc-brand-block .sc-bname{font-size:1rem;font-weight:900}
@@ -152,13 +152,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .sc-foot strong{color:var(--brand)}
 @media(max-width:580px){.sc-cols-grid{grid-template-columns:1fr}.sc-col-item{border-right:none;border-bottom:1px solid #f1f5f9}}
 
-/* ── Confirm Modal ── */
+/* -- Confirm Modal -- */
 #confirmModal .modal-box{max-width:360px;padding:24px;text-align:center}
 #confirmModal h3{font-size:.95rem;font-weight:800;margin-bottom:8px}
 #confirmModal p{font-size:.82rem;color:#64748b;margin-bottom:16px;line-height:1.5}
 #confirmModal .cf-btns{display:flex;gap:8px;justify-content:center}
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 .pw-overlay{position:fixed;inset:0;background:rgba(15,23,42,.8);backdrop-filter:blur(4px);z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}
 .pw-box{background:#fff;border-radius:14px;padding:28px 24px;max-width:460px;width:100%;text-align:center}
 .pw-box h2{font-size:1.15rem;font-weight:800;margin:.5rem 0 .4rem}
@@ -178,7 +178,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 
-/* ── Import CSV Modal ── */
+/* -- Import CSV Modal -- */
 #importModal .modal-box{max-width:720px}
 .drop-zone{border:2px dashed #cbd5e1;border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:#f8fafc;margin-bottom:4px}
 .drop-zone:hover,.drop-zone.over{border-color:var(--brand);background:var(--brand-lt)}
@@ -196,7 +196,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .csv-prev-table tr:last-child td{border-bottom:none}
 .csv-prev-table tr:hover td{background:#f8fafc}
 
-/* ── KPI Tiles ── */
+/* -- KPI Tiles -- */
 .kpi-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin-bottom:16px}
 .kpi-tile{background:#fff;border-radius:9px;padding:12px 14px;box-shadow:0 1px 5px rgba(0,0,0,.07);border-left:4px solid #e2e8f0}
 .kpi-tile.live{border-left-color:var(--brand)}
@@ -210,7 +210,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .kpi-live-dot{display:inline-block;width:6px;height:6px;background:#22c55e;border-radius:50%;margin-right:3px;vertical-align:middle}
 .kpi-na{color:#cbd5e1!important}
 
-/* ── Alerts ── */
+/* -- Alerts -- */
 .alerts-section{margin-bottom:16px}
 .alerts-hd{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .alert-count-badge{background:#dc2626;color:#fff;font-size:.62rem;font-weight:900;border-radius:999px;padding:1px 6px;margin-left:2px}
@@ -226,7 +226,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .alert-link:hover{text-decoration:underline}
 .no-alerts{font-size:.82rem;color:#16a34a;font-weight:700;padding:10px 14px;background:#f0fdf4;border-radius:8px;border-left:4px solid #86efac}
 
-/* ── Pinned Widgets ── */
+/* -- Pinned Widgets -- */
 .widgets-section{margin-bottom:16px}
 .widgets-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .widgets-hd-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b}
@@ -242,7 +242,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 .btn-customize{padding:5px 11px;font-size:.72rem;background:#f1f5f9;color:#475569;border:1.5px solid #e2e8f0;border-radius:6px;cursor:pointer;font-weight:700}
 .btn-customize:hover{background:#e2e8f0}
 
-/* ── Advisor Report Modal ── */
+/* -- Advisor Report Modal -- */
 #reportModal .modal-box{max-width:820px}
 .rpt-header{background:linear-gradient(135deg,#0f172a,var(--brand));color:#fff;padding:20px 26px;border-radius:14px 14px 0 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .rpt-body{padding:22px 26px}
@@ -275,6 +275,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   body{background:#fff}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -283,21 +287,21 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<!-- ═══ PAYWALL ═══ -->
+<!-- --- PAYWALL --- -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">🏢</div>
+    <div style="font-size:2.2rem">??</div>
     <h2>Advisor Dashboard</h2>
     <p>Manage all your clients in one place. White-label the platform with your brand and generate branded score cards for every client.</p>
     <div class="pw-feats">
-      <div class="pw-feat">👥 Unlimited clients</div>
-      <div class="pw-feat">🎨 White-label branding</div>
-      <div class="pw-feat">📊 Branded score cards</div>
-      <div class="pw-feat">📈 Quick risk dashboard</div>
-      <div class="pw-feat">📤 Export CSV</div>
-      <div class="pw-feat">🔗 Open in any tool</div>
+      <div class="pw-feat">?? Unlimited clients</div>
+      <div class="pw-feat">?? White-label branding</div>
+      <div class="pw-feat">?? Branded score cards</div>
+      <div class="pw-feat">?? Quick risk dashboard</div>
+      <div class="pw-feat">?? Export CSV</div>
+      <div class="pw-feat">?? Open in any tool</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FWADVISOR to demo free.')">💳 Subscribe Advisor — $79/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FWADVISOR to demo free.')">?? Subscribe Advisor � $79/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -308,12 +312,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   </div>
 </div>
 
-<!-- ═══ EDIT CLIENT MODAL ═══ -->
+<!-- --- EDIT CLIENT MODAL --- -->
 <div class="modal-overlay" id="editModal">
   <div class="modal-box">
     <div class="modal-header">
       <h3 id="editModalTitle">Add New Client</h3>
-      <button class="modal-close" onclick="closeEdit()">✕</button>
+      <button class="modal-close" onclick="closeEdit()">?</button>
     </div>
     <div class="modal-body">
       <div class="g2">
@@ -323,7 +327,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
         </div>
         <div>
           <label>Industry</label>
-          <input type="text" id="ec_ind" placeholder="IT Services, Retail…"/>
+          <input type="text" id="ec_ind" placeholder="IT Services, Retail�"/>
         </div>
       </div>
       <div class="g4" style="margin-top:4px">
@@ -339,17 +343,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
       </div>
       <div>
         <label>Notes (optional)</label>
-        <textarea id="ec_notes" rows="2" placeholder="Meeting scheduled, follow-up items…" style="resize:vertical"></textarea>
+        <textarea id="ec_notes" rows="2" placeholder="Meeting scheduled, follow-up items�" style="resize:vertical"></textarea>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeEdit()">Cancel</button>
-      <button class="btn btn-brand" onclick="saveClient()">💾 Save Client</button>
+      <button class="btn btn-brand" onclick="saveClient()">?? Save Client</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ SCORE CARD MODAL ═══ -->
+<!-- --- SCORE CARD MODAL --- -->
 <div class="modal-overlay" id="scModal">
   <div class="modal-box">
     <div class="sc-modal-header">
@@ -358,17 +362,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
         <div class="sc-btag" id="scm_tag">AI-Powered Loan Safety Platform</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="sc-modal-close" onclick="window.print()">🖨️ Print</button>
-        <button class="sc-modal-close" onclick="closeScModal()">✕ Close</button>
+        <button class="sc-modal-close" onclick="window.print()">??? Print</button>
+        <button class="sc-modal-close" onclick="closeScModal()">? Close</button>
       </div>
     </div>
     <div class="sc-body">
       <div class="sc-hero">
-        <div class="sc-biz" id="scm_name">—</div>
-        <div class="sc-subline" id="scm_subline">—</div>
+        <div class="sc-biz" id="scm_name">�</div>
+        <div class="sc-subline" id="scm_subline">�</div>
         <div class="sc-gauge-center">
           <canvas id="scm_gauge" width="220" height="125"></canvas>
-          <div class="sc-grade-pill" id="scm_grade">—</div>
+          <div class="sc-grade-pill" id="scm_grade">�</div>
         </div>
       </div>
       <div class="sc-cols-grid" id="scm_cols"></div>
@@ -376,12 +380,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
         <tbody id="scm_tbody"></tbody>
       </table>
       <div class="sc-rec-box" id="scm_rec"></div>
-      <div class="sc-foot">Prepared by <strong id="scm_foot_brand">BizScale</strong> · <span id="scm_date">—</span> · Indicative only — not financial advice.</div>
+      <div class="sc-foot">Prepared by <strong id="scm_foot_brand">BizScale</strong> � <span id="scm_date">�</span> � Indicative only � not financial advice.</div>
     </div>
   </div>
 </div>
 
-<!-- ═══ CONFIRM DELETE ═══ -->
+<!-- --- CONFIRM DELETE --- -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box">
     <h3>Delete Client?</h3>
@@ -393,17 +397,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   </div>
 </div>
 
-<!-- ═══ IMPORT CSV MODAL ═══ -->
+<!-- --- IMPORT CSV MODAL --- -->
 <div class="modal-overlay" id="importModal">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>📥 Import Clients from CSV</h3>
-      <button class="modal-close" onclick="closeImport()">✕</button>
+      <h3>?? Import Clients from CSV</h3>
+      <button class="modal-close" onclick="closeImport()">?</button>
     </div>
     <div class="modal-body">
       <div id="dropZone" class="drop-zone" onclick="document.getElementById('csvFile').click()">
-        <div class="dz-icon">📄</div>
-        <div class="dz-text">Click to choose a CSV file — or drag &amp; drop it here</div>
+        <div class="dz-icon">??</div>
+        <div class="dz-text">Click to choose a CSV file � or drag &amp; drop it here</div>
         <div class="dz-hint">First row must be headers. Required: <strong>Name, Revenue, Expenses</strong><br>Optional: Industry, EMI, Reserve, Loan, Rate, Tenure, Notes</div>
       </div>
       <input type="file" id="csvFile" accept=".csv,text/csv" style="display:none" onchange="handleCSVFile(this)"/>
@@ -416,24 +420,24 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeImport()">Cancel</button>
-      <button class="btn btn-outline btn-sm" id="importResetBtn" onclick="resetImport()" style="display:none">← Choose Different File</button>
-      <button class="btn btn-brand" id="importBtn" onclick="doImport()" style="display:none">📥 Import</button>
+      <button class="btn btn-outline btn-sm" id="importResetBtn" onclick="resetImport()" style="display:none">? Choose Different File</button>
+      <button class="btn btn-brand" id="importBtn" onclick="doImport()" style="display:none">?? Import</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE ═══ -->
+<!-- --- PAGE --- -->
 <div class="page-header">
   <div class="ph-brand">
-    <div class="ph-brand-icon" id="hdr_icon">🏢</div>
+    <div class="ph-brand-icon" id="hdr_icon">??</div>
     <div>
       <div class="ph-brand-name" id="hdr_brand">BizScale</div>
-      <div class="ph-brand-tag" id="hdr_tag">Advisor Dashboard · Client Management</div>
+      <div class="ph-brand-tag" id="hdr_tag">Advisor Dashboard � Client Management</div>
     </div>
   </div>
   <div class="ph-right">
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <div class="ph-badge">Advisor · $79/month</div>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <div class="ph-badge">Advisor � $79/month</div>
   </div>
 </div>
 
@@ -442,8 +446,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <!-- White-label settings -->
 <div class="wl-panel">
   <div class="wl-toggle" id="wlToggle" onclick="toggleWL()">
-    <div class="wl-toggle-icon">▶</div>
-    <div style="flex:1"><strong>🎨 White-Label Settings</strong> — Customise your brand name, color &amp; tagline</div>
+    <div class="wl-toggle-icon">?</div>
+    <div style="flex:1"><strong>?? White-Label Settings</strong> � Customise your brand name, color &amp; tagline</div>
     <div style="font-size:.75rem;color:#94a3b8" id="wlBrandLabel">BizScale</div>
   </div>
   <div class="wl-body" id="wlBody">
@@ -462,7 +466,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
       </div>
       <div>
         <label>Header Icon (emoji)</label>
-        <input type="text" id="wl_icon" placeholder="🏢" maxlength="4" oninput="previewWL()"/>
+        <input type="text" id="wl_icon" placeholder="??" maxlength="4" oninput="previewWL()"/>
       </div>
     </div>
     <div>
@@ -482,12 +486,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
       </div>
     </div>
     <div class="wl-preview" id="wlPreview">
-      <span id="wl_prev_icon" style="font-size:1.3rem">🏢</span>
+      <span id="wl_prev_icon" style="font-size:1.3rem">??</span>
       <div><div id="wl_prev_name" style="font-weight:900;font-size:.95rem">BizScale</div>
-        <div id="wl_prev_tag" style="font-size:.7rem;opacity:.65">Advisor Dashboard · Client Management</div></div>
+        <div id="wl_prev_tag" style="font-size:.7rem;opacity:.65">Advisor Dashboard � Client Management</div></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-brand" onclick="applyWL()">✓ Apply Branding</button>
+      <button class="btn btn-brand" onclick="applyWL()">? Apply Branding</button>
       <button class="btn btn-gray" onclick="resetWL()">Reset to BizScale</button>
     </div>
   </div>
@@ -516,16 +520,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 
 <!-- Toolbar -->
 <div class="toolbar">
-  <input type="text" class="search-inp" id="searchInp" placeholder="🔍 Search clients by name or industry…" oninput="renderGrid()"/>
+  <input type="text" class="search-inp" id="searchInp" placeholder="?? Search clients by name or industry�" oninput="renderGrid()"/>
   <select class="sort-sel" id="sortSel" onchange="renderGrid()">
-    <option value="name">Sort: Name A–Z</option>
+    <option value="name">Sort: Name A�Z</option>
     <option value="score_desc">Sort: Highest Score</option>
     <option value="score_asc">Sort: Lowest Score (Needs Attention)</option>
     <option value="added">Sort: Recently Added</option>
   </select>
-  <button class="btn btn-brand" onclick="openAddModal()">➕ Add Client</button>
-  <button class="btn btn-gray" onclick="openImport()">📥 Import CSV</button>
-  <button class="btn btn-gray" onclick="exportCSV()">📤 Export CSV</button>
+  <button class="btn btn-brand" onclick="openAddModal()">? Add Client</button>
+  <button class="btn btn-gray" onclick="openImport()">?? Import CSV</button>
+  <button class="btn btn-gray" onclick="exportCSV()">?? Export CSV</button>
   <button class="btn btn-green" onclick="openAdvisorReport()">&#128196; Advisor Report</button>
 </div>
 
@@ -534,7 +538,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 
 </div><!-- /wrap -->
 
-<!-- ═══ ADVISOR REPORT MODAL ═══ -->
+<!-- --- ADVISOR REPORT MODAL --- -->
 <div class="modal-overlay" id="reportModal">
   <div class="modal-box">
     <div class="rpt-header">
@@ -555,16 +559,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <div class="toast" id="toast"></div>
 
 <script>
-/* ════════════════════════════════════════════════
-   LIVE DATA READER — reads all module localStorage keys
-════════════════════════════════════════════════ */
+/* ------------------------------------------------
+   LIVE DATA READER � reads all module localStorage keys
+------------------------------------------------ */
 function sg(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
 
 function readLiveKPIs(){
   var curMo=new Date().toISOString().substring(0,7);
   var d={};
 
-  // Revenue — prefer invoice tracker, fallback to snapshot
+  // Revenue � prefer invoice tracker, fallback to snapshot
   var invRev=sg('fw_invoice_revenue');
   if(invRev&&invRev.byMonth){
     d.revenue=invRev.byMonth[curMo]||null;
@@ -634,9 +638,9 @@ function readLiveKPIs(){
   return d;
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    KPI TILES
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 function renderKPITiles(){
   var k=readLiveKPIs();
   var tiles=[];
@@ -644,7 +648,7 @@ function renderKPITiles(){
   // Revenue
   tiles.push({
     lbl:'Monthly Revenue',cls:k.revenue?'live':'',
-    val:k.revenue?fmt(k.revenue):'—',
+    val:k.revenue?fmt(k.revenue):'�',
     sub:k.revenue?'as of this month':'Connect Invoice Tracker',
     src:k.revenueSource||''
   });
@@ -652,7 +656,7 @@ function renderKPITiles(){
   // Expenses
   tiles.push({
     lbl:'Monthly Expenses',cls:k.expenses?'live':'',
-    val:k.expenses?fmt(k.expenses):'—',
+    val:k.expenses?fmt(k.expenses):'�',
     sub:k.expenses?'monthly recurring':'Connect Bill Tracker',
     src:k.expensesSource||''
   });
@@ -661,7 +665,7 @@ function renderKPITiles(){
   var npCls=k.netProfit!=null?(k.netProfit>=0?'good-tile':'alert-tile'):'';
   tiles.push({
     lbl:'Net Profit',cls:npCls,
-    val:k.netProfit!=null?fmtS(k.netProfit):'—',
+    val:k.netProfit!=null?fmtS(k.netProfit):'�',
     sub:k.netProfit!=null?(k.netProfit>=0?'Positive':'Deficit this month'):'Revenue & Expenses needed',
     src:''
   });
@@ -669,7 +673,7 @@ function renderKPITiles(){
   // Cash Balance
   tiles.push({
     lbl:'Cash Balance',cls:k.cashBalance!=null?'live':'',
-    val:k.cashBalance!=null?fmt(k.cashBalance):'—',
+    val:k.cashBalance!=null?fmt(k.cashBalance):'�',
     sub:k.cashBalance!=null?'current bank balance':'Connect Cash Runway',
     src:k.cashBalance!=null?'Cash Runway':''
   });
@@ -678,8 +682,8 @@ function renderKPITiles(){
   var rCls=k.runway!=null?(k.runway<3?'alert-tile':k.runway<6?'warn-tile':'good-tile'):'';
   tiles.push({
     lbl:'Cash Runway',cls:rCls,
-    val:k.runway!=null?(k.runway>=99?'12+ mo':k.runway.toFixed(1)+' mo'):'—',
-    sub:k.runway!=null?(k.runway<3?'Critical — under 3 months':k.runway<6?'Caution':'Healthy runway'):'Connect Cash Runway',
+    val:k.runway!=null?(k.runway>=99?'12+ mo':k.runway.toFixed(1)+' mo'):'�',
+    sub:k.runway!=null?(k.runway<3?'Critical � under 3 months':k.runway<6?'Caution':'Healthy runway'):'Connect Cash Runway',
     src:k.runway!=null?'Cash Runway':''
   });
 
@@ -687,8 +691,8 @@ function renderKPITiles(){
   var hsCls=k.healthScore!=null?(k.healthScore>=70?'good-tile':k.healthScore>=50?'warn-tile':'alert-tile'):'';
   tiles.push({
     lbl:'Health Score',cls:hsCls,
-    val:k.healthScore!=null?k.healthScore+'/100'+(k.healthGrade?' ('+k.healthGrade+')':''):'—',
-    sub:k.healthScore!=null?(k.healthScore>=70?'Excellent health':k.healthScore>=50?'Fair — action needed':'Needs attention'):'Run Health Score',
+    val:k.healthScore!=null?k.healthScore+'/100'+(k.healthGrade?' ('+k.healthGrade+')':''):'�',
+    sub:k.healthScore!=null?(k.healthScore>=70?'Excellent health':k.healthScore>=50?'Fair � action needed':'Needs attention'):'Run Health Score',
     src:k.healthScore!=null?'Health Score':''
   });
 
@@ -696,7 +700,7 @@ function renderKPITiles(){
   var invCls=k.openInvoices!=null?(k.overdueCount>0?'warn-tile':'good-tile'):'';
   tiles.push({
     lbl:'Open Invoices',cls:invCls,
-    val:k.openInvoices!=null?k.openInvoices+' open'+(k.overdueCount?' ('+k.overdueCount+' OD)':''):'—',
+    val:k.openInvoices!=null?k.openInvoices+' open'+(k.overdueCount?' ('+k.overdueCount+' OD)':''):'�',
     sub:k.openInvoices!=null?(k.openAmount?fmt(k.openAmount)+' outstanding':'All clear'):'Connect Invoice Tracker',
     src:k.openInvoices!=null?'Invoice Tracker':''
   });
@@ -704,7 +708,7 @@ function renderKPITiles(){
   // Payroll
   tiles.push({
     lbl:'Payroll YTD',cls:k.payrollYear!=null?'live':'',
-    val:k.payrollYear!=null?fmt(k.payrollYear):'—',
+    val:k.payrollYear!=null?fmt(k.payrollYear):'�',
     sub:k.payrollYear!=null?(k.employeeCount?k.employeeCount+' people':'current year'):'Connect Payroll',
     src:k.payrollYear!=null?'Payroll Estimator':''
   });
@@ -713,7 +717,7 @@ function renderKPITiles(){
   tiles.forEach(function(t){
     html+='<div class="kpi-tile '+(t.cls||'')+'">'
       +'<div class="kpi-lbl">'+(t.src?'<span class="kpi-live-dot"></span>':'')+t.lbl+'</div>'
-      +'<div class="kpi-val '+(t.val==='—'?'kpi-na':'')+'">'+t.val+'</div>'
+      +'<div class="kpi-val '+(t.val==='�'?'kpi-na':'')+'">'+t.val+'</div>'
       +'<div class="kpi-sub">'+t.sub+'</div>'
       +(t.src?'<div class="kpi-src">from '+t.src+'</div>':'')
       +'</div>';
@@ -721,9 +725,9 @@ function renderKPITiles(){
   document.getElementById('kpiBar').innerHTML=html;
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    ALERTS & NUDGES
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 function renderAlerts(){
   var k=readLiveKPIs();
   var alerts=[];
@@ -731,63 +735,63 @@ function renderAlerts(){
   // Overdue invoices >30 days
   if(k.overdue30&&k.overdue30.length){
     var amt=k.overdue30.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    alerts.push({cls:'urgent',ico:'🧾',
-      text:'<strong>'+k.overdue30.length+' invoice'+(k.overdue30.length>1?'s are':' is')+' 30+ days overdue</strong> — '+fmt(amt)+' at serious collection risk. Send final payment notices immediately.',
-      link:'invoiceTracker.test.html',linkText:'→ Open Invoice Tracker'});
+    alerts.push({cls:'urgent',ico:'??',
+      text:'<strong>'+k.overdue30.length+' invoice'+(k.overdue30.length>1?'s are':' is')+' 30+ days overdue</strong> � '+fmt(amt)+' at serious collection risk. Send final payment notices immediately.',
+      link:'invoiceTracker.test.html',linkText:'? Open Invoice Tracker'});
   } else if(k.overdueCount){
-    alerts.push({cls:'warn',ico:'📬',
-      text:'<strong>'+k.overdueCount+' overdue invoice'+(k.overdueCount>1?'s':'')+' ('+fmt(k.overdueAmount)+')</strong> — follow up before they hit 30+ days.',
-      link:'invoiceTracker.test.html',linkText:'→ Open Invoice Tracker'});
+    alerts.push({cls:'warn',ico:'??',
+      text:'<strong>'+k.overdueCount+' overdue invoice'+(k.overdueCount>1?'s':'')+' ('+fmt(k.overdueAmount)+')</strong> � follow up before they hit 30+ days.',
+      link:'invoiceTracker.test.html',linkText:'? Open Invoice Tracker'});
   }
 
   // Cash runway < 3 months
   if(k.runway!=null&&k.runway<3){
-    alerts.push({cls:'urgent',ico:'🏃',
+    alerts.push({cls:'urgent',ico:'??',
       text:'<strong>Cash runway is only '+k.runway.toFixed(1)+' months.</strong> At current burn of '+fmt(k.monthlyBurn||0)+'/mo, funds run out within 90 days. Reduce costs or accelerate revenue immediately.',
-      link:'cashRunway.test.html',linkText:'→ Open Cash Runway'});
+      link:'cashRunway.test.html',linkText:'? Open Cash Runway'});
   } else if(k.runway!=null&&k.runway<6){
-    alerts.push({cls:'warn',ico:'⚠️',
-      text:'<strong>Cash runway is '+k.runway.toFixed(1)+' months</strong> — below the recommended 6-month buffer. Build reserves now.',
-      link:'cashRunway.test.html',linkText:'→ Open Cash Runway'});
+    alerts.push({cls:'warn',ico:'??',
+      text:'<strong>Cash runway is '+k.runway.toFixed(1)+' months</strong> � below the recommended 6-month buffer. Build reserves now.',
+      link:'cashRunway.test.html',linkText:'? Open Cash Runway'});
   }
 
   // Tax payment due soon
   if(k.taxDueSoon&&k.taxDueSoon.length){
     var dueStr=k.taxDueSoon[0];
     var daysLeft=Math.round((new Date(dueStr)-new Date())/864e5);
-    alerts.push({cls:daysLeft<=7?'urgent':'warn',ico:'💸',
-      text:'<strong>IRS estimated tax payment due '+new Date(dueStr).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</strong> — '+daysLeft+' day'+(daysLeft!==1?'s':'')+' away. File to avoid underpayment penalties.',
-      link:'taxPayments.test.html',linkText:'→ Open Tax Payments'});
+    alerts.push({cls:daysLeft<=7?'urgent':'warn',ico:'??',
+      text:'<strong>IRS estimated tax payment due '+new Date(dueStr).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</strong> � '+daysLeft+' day'+(daysLeft!==1?'s':'')+' away. File to avoid underpayment penalties.',
+      link:'taxPayments.test.html',linkText:'? Open Tax Payments'});
   }
 
   // Contracts expiring
   if(k.expiringContracts&&k.expiringContracts.length){
     var names=k.expiringContracts.slice(0,2).map(function(b){return b.vendor||'Vendor';}).join(', ');
-    alerts.push({cls:'warn',ico:'📅',
+    alerts.push({cls:'warn',ico:'??',
       text:'<strong>'+k.expiringContracts.length+' vendor contract'+(k.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review renewal terms before they auto-renew.',
-      link:'vendorBillTracker.test.html',linkText:'→ Open Bill Tracker'});
+      link:'vendorBillTracker.test.html',linkText:'? Open Bill Tracker'});
   }
 
   // Health score low
   if(k.healthScore!=null&&k.healthScore<50){
-    alerts.push({cls:'urgent',ico:'🏆',
-      text:'<strong>Business health score is '+k.healthScore+'/100</strong> — critical range. Review the Health Score breakdown for specific action items.',
-      link:'businessHealthScore.test.html',linkText:'→ Open Health Score'});
+    alerts.push({cls:'urgent',ico:'??',
+      text:'<strong>Business health score is '+k.healthScore+'/100</strong> � critical range. Review the Health Score breakdown for specific action items.',
+      link:'businessHealthScore.test.html',linkText:'? Open Health Score'});
   }
 
   // No snapshot this month
   var curMo=new Date().toISOString().substring(0,7);
   var snaps=sg('fw_monthly_snapshots')||{};
   if(!snaps[curMo]){
-    alerts.push({cls:'info',ico:'📅',
-      text:'<strong>No monthly snapshot saved for '+curMo+'</strong> — run Monthly Snapshot to lock in this month\'s numbers for trend tracking.',
-      link:'monthlySnapshot.test.html',linkText:'→ Open Monthly Snapshot'});
+    alerts.push({cls:'info',ico:'??',
+      text:'<strong>No monthly snapshot saved for '+curMo+'</strong> � run Monthly Snapshot to lock in this month\'s numbers for trend tracking.',
+      link:'monthlySnapshot.test.html',linkText:'? Open Monthly Snapshot'});
   }
 
   var sec=document.getElementById('alertsSection');
   var list=document.getElementById('alertsList');
   if(!alerts.length){
-    list.innerHTML='<div class="no-alerts">✅ No urgent alerts — your financials look on track.</div>';
+    list.innerHTML='<div class="no-alerts">? No urgent alerts � your financials look on track.</div>';
     document.getElementById('alertCountBadge').style.display='none';
   } else {
     document.getElementById('alertCountBadge').textContent=alerts.filter(function(a){return a.cls==='urgent';}).length||alerts.length;
@@ -803,23 +807,23 @@ function renderAlerts(){
   sec.style.display='block';
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    PINNED WIDGETS
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 var ALL_MODULES=[
-  {id:'invoiceTracker',name:'Invoice Tracker',ico:'🧾',file:'invoiceTracker.test.html'},
-  {id:'vendorBill',name:'Bill Tracker',ico:'📋',file:'vendorBillTracker.test.html'},
-  {id:'payroll',name:'Payroll',ico:'👥',file:'payrollEstimator.test.html'},
-  {id:'cashRunway',name:'Cash Runway',ico:'🏃',file:'cashRunway.test.html'},
-  {id:'forecast',name:'Forecast Pro',ico:'📈',file:'forecastPro.test.html'},
-  {id:'aiCfo',name:'AI CFO Chat',ico:'🤖',file:'aiCfoChat.test.html'},
-  {id:'healthScore',name:'Health Score',ico:'🏆',file:'businessHealthScore.test.html'},
-  {id:'taxPayments',name:'Tax Payments',ico:'💰',file:'taxPayments.test.html'},
-  {id:'goals',name:'Goal Tracker',ico:'🎯',file:'goalTracker.test.html'},
-  {id:'savings',name:'Savings Goals',ico:'🏦',file:'savingsGoals.test.html'},
-  {id:'contractors',name:'Contractors',ico:'🤝',file:'contractorPayroll.test.html'},
-  {id:'deductions',name:'Key Deductions',ico:'📑',file:'keyDeductions.test.html'},
-  {id:'snapshot',name:'Monthly Snapshot',ico:'📅',file:'monthlySnapshot.test.html'}
+  {id:'invoiceTracker',name:'Invoice Tracker',ico:'??',file:'invoiceTracker.test.html'},
+  {id:'vendorBill',name:'Bill Tracker',ico:'??',file:'vendorBillTracker.test.html'},
+  {id:'payroll',name:'Payroll',ico:'??',file:'payrollEstimator.test.html'},
+  {id:'cashRunway',name:'Cash Runway',ico:'??',file:'cashRunway.test.html'},
+  {id:'forecast',name:'Forecast Pro',ico:'??',file:'forecastPro.test.html'},
+  {id:'aiCfo',name:'AI CFO Chat',ico:'??',file:'aiCfoChat.test.html'},
+  {id:'healthScore',name:'Health Score',ico:'??',file:'businessHealthScore.test.html'},
+  {id:'taxPayments',name:'Tax Payments',ico:'??',file:'taxPayments.test.html'},
+  {id:'goals',name:'Goal Tracker',ico:'??',file:'goalTracker.test.html'},
+  {id:'savings',name:'Savings Goals',ico:'??',file:'savingsGoals.test.html'},
+  {id:'contractors',name:'Contractors',ico:'??',file:'contractorPayroll.test.html'},
+  {id:'deductions',name:'Key Deductions',ico:'??',file:'keyDeductions.test.html'},
+  {id:'snapshot',name:'Monthly Snapshot',ico:'??',file:'monthlySnapshot.test.html'}
 ];
 var DEFAULT_PINNED=['invoiceTracker','cashRunway','forecast','aiCfo','healthScore'];
 var pinnedWidgets=[];
@@ -833,7 +837,7 @@ function savePinnedWidgets(){ localStorage.setItem('fw_pinned_widgets',JSON.stri
 
 function toggleCustomize(){
   customizeMode=!customizeMode;
-  document.getElementById('customizeBtn').textContent=customizeMode?'✓ Done':'⚙ Customize';
+  document.getElementById('customizeBtn').textContent=customizeMode?'? Done':'? Customize';
   renderWidgets();
 }
 
@@ -848,13 +852,13 @@ function togglePin(id){
 function renderWidgets(){
   var mods=customizeMode?ALL_MODULES:ALL_MODULES.filter(function(m){return pinnedWidgets.indexOf(m.id)>=0;});
   if(!mods.length&&!customizeMode){
-    document.getElementById('widgetsGrid').innerHTML='<div style="font-size:.8rem;color:#94a3b8;padding:10px">No modules pinned. Click ⚙ Customize to add shortcuts.</div>';
+    document.getElementById('widgetsGrid').innerHTML='<div style="font-size:.8rem;color:#94a3b8;padding:10px">No modules pinned. Click ? Customize to add shortcuts.</div>';
     return;
   }
   var html=mods.map(function(m){
     var pinned=pinnedWidgets.indexOf(m.id)>=0;
     return '<div class="widget-tile'+(pinned?' pinned':'')+'" onclick="'+(customizeMode?'togglePin(\''+m.id+'\')':'window.open(\''+m.file+'\',\'_blank\')')+'">'
-      +(customizeMode?'<button class="widget-pin-btn'+(pinned?' active':'')+'" onclick="event.stopPropagation();togglePin(\''+m.id+'\')">'+(pinned?'★':'☆')+'</button>':'')
+      +(customizeMode?'<button class="widget-pin-btn'+(pinned?' active':'')+'" onclick="event.stopPropagation();togglePin(\''+m.id+'\')">'+(pinned?'?':'?')+'</button>':'')
       +'<div class="widget-ico">'+m.ico+'</div>'
       +'<div class="widget-name">'+m.name+'</div>'
       +'</div>';
@@ -862,9 +866,9 @@ function renderWidgets(){
   document.getElementById('widgetsGrid').innerHTML=html;
 }
 
-/* ════════════════════════════════════════════════
+/* ------------------------------------------------
    ADVISOR REPORT
-════════════════════════════════════════════════ */
+------------------------------------------------ */
 function openAdvisorReport(){
   var k=readLiveKPIs();
   var brand=WL.brand||'BizScale';
@@ -902,22 +906,22 @@ function openAdvisorReport(){
   alertItems.forEach(function(el){
     var cls=el.classList.contains('urgent')?'urgent':el.classList.contains('warn')?'warn':'good';
     var body=el.querySelector('.alert-body');
-    if(body) alertHtml+='<li class="'+cls+'"><span>'+(cls==='urgent'?'🚨':'⚠️')+'</span><span>'+body.innerText+'</span></li>';
+    if(body) alertHtml+='<li class="'+cls+'"><span>'+(cls==='urgent'?'??':'??')+'</span><span>'+body.innerText+'</span></li>';
   });
-  if(!alertHtml) alertHtml='<li class="good"><span>✅</span><span>No critical alerts — financials on track.</span></li>';
+  if(!alertHtml) alertHtml='<li class="good"><span>?</span><span>No critical alerts � financials on track.</span></li>';
 
   // Monthly snapshots trend
   var snaps=sg('fw_monthly_snapshots')||{};
   var snapKeys=Object.keys(snaps).sort().slice(-6);
   var snapRows=snapKeys.map(function(k2){
     var s=snaps[k2];
-    return '<tr><td>'+k2+'</td><td>'+(s.revenue?fmt(s.revenue):'—')+'</td><td>'+(s.expenses?fmt(s.expenses):'—')+'</td>'
-      +'<td style="font-weight:800;color:'+(s.netProfit>=0?'#10b981':'#dc2626')+'">'+(s.netProfit!=null?fmtS(s.netProfit):'—')+'</td>'
-      +'<td>'+(s.healthScore!=null?s.healthScore:'—')+'</td></tr>';
+    return '<tr><td>'+k2+'</td><td>'+(s.revenue?fmt(s.revenue):'�')+'</td><td>'+(s.expenses?fmt(s.expenses):'�')+'</td>'
+      +'<td style="font-weight:800;color:'+(s.netProfit>=0?'#10b981':'#dc2626')+'">'+(s.netProfit!=null?fmtS(s.netProfit):'�')+'</td>'
+      +'<td>'+(s.healthScore!=null?s.healthScore:'�')+'</td></tr>';
   }).join('');
 
   var body=''
-    +'<div class="rpt-section"><div class="rpt-section-title">&#128200; Business at a Glance — '+new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})+'</div>'
+    +'<div class="rpt-section"><div class="rpt-section-title">&#128200; Business at a Glance � '+new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})+'</div>'
     +'<div class="rpt-kpi-grid">'+kpiHtml+'</div></div>'
 
     +(snapRows?'<div class="rpt-section"><div class="rpt-section-title">&#128197; 6-Month Trend (Monthly Snapshots)</div>'
@@ -928,20 +932,20 @@ function openAdvisorReport(){
     +'<div class="rpt-section"><div class="rpt-section-title">&#128680; Alerts &amp; Action Items</div>'
     +'<ul class="rpt-alerts-list">'+alertHtml+'</ul></div>'
 
-    +(totalCl?'<div class="rpt-section"><div class="rpt-section-title">&#128101; Client Portfolio — '+totalCl+' clients</div>'
+    +(totalCl?'<div class="rpt-section"><div class="rpt-section-title">&#128101; Client Portfolio � '+totalCl+' clients</div>'
     +'<div class="rpt-kpi-grid">'
     +'<div class="rpt-kpi rpt-blue"><div class="rpt-kpi-lbl">Total Clients</div><div class="rpt-kpi-val">'+totalCl+'</div></div>'
     +'<div class="rpt-kpi"><div class="rpt-kpi-lbl">Avg Score</div><div class="rpt-kpi-val">'+avgSc+'</div></div>'
-    +'<div class="rpt-kpi rpt-green"><div class="rpt-kpi-lbl">Safe (≥70)</div><div class="rpt-kpi-val">'+safe+'</div></div>'
+    +'<div class="rpt-kpi rpt-green"><div class="rpt-kpi-lbl">Safe (=70)</div><div class="rpt-kpi-val">'+safe+'</div></div>'
     +'<div class="rpt-kpi rpt-red"><div class="rpt-kpi-lbl">High Risk</div><div class="rpt-kpi-val">'+danger+'</div></div>'
     +'</div></div>':'');
 
   document.getElementById('rptBody').innerHTML=body;
-  document.getElementById('rptFoot').innerHTML='Prepared by <strong>'+brand+'</strong> · '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+' · Indicative only — not financial advice.';
+  document.getElementById('rptFoot').innerHTML='Prepared by <strong>'+brand+'</strong> � '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+' � Indicative only � not financial advice.';
   document.getElementById('reportModal').classList.add('show');
 }
 
-/* ── Utils ── */
+/* -- Utils -- */
 function showToast(m){
   var t=document.getElementById('toast');
   t.textContent=m; t.classList.add('show');
@@ -955,7 +959,7 @@ function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
 function fmtS(n){ return (n<0?'-':'')+fmt(n); }
 function pct(n){ return n.toFixed(1)+'%'; }
 
-/* ── Finance ── */
+/* -- Finance -- */
 function calcEMI(p,r,m){
   if(!p||!m) return 0; if(!r) return p/m;
   var i=r/100/12; return p*i*Math.pow(1+i,m)/(Math.pow(1+i,m)-1);
@@ -978,13 +982,13 @@ function findMaxSafe(rev,exp,emi,res,rate,ten){
   return Math.round(lo/1000)*1000;
 }
 
-/* ── Client store ── */
+/* -- Client store -- */
 var clients=[];
 function loadClients(){ try{ clients=JSON.parse(localStorage.getItem('fw_clients')||'[]'); }catch(e){ clients=[]; } }
 function saveClients(){ localStorage.setItem('fw_clients',JSON.stringify(clients)); }
 
-/* ── White-label store ── */
-var WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+/* -- White-label store -- */
+var WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
 function loadWL(){
   try{
     var s=localStorage.getItem('fw_wl');
@@ -1000,8 +1004,8 @@ function applyWLToDOM(){
   document.documentElement.style.setProperty('--brand-lt',lighten(WL.color));
   document.documentElement.style.setProperty('--brand-text',lightness(WL.color)<0.5?'#fff':'#1e293b');
   document.getElementById('hdr_brand').textContent=WL.brand;
-  document.getElementById('hdr_tag').textContent=WL.tag||'Advisor Dashboard · Client Management';
-  document.getElementById('hdr_icon').textContent=WL.icon||'🏢';
+  document.getElementById('hdr_tag').textContent=WL.tag||'Advisor Dashboard � Client Management';
+  document.getElementById('hdr_icon').textContent=WL.icon||'??';
   document.getElementById('wlBrandLabel').textContent=WL.brand;
 }
 
@@ -1023,7 +1027,7 @@ function toggleWL(){
 function previewWL(){
   var name=document.getElementById('wl_brand').value||'BizScale';
   var tag=document.getElementById('wl_tag').value||'Advisor Dashboard';
-  var icon=document.getElementById('wl_icon').value||'🏢';
+  var icon=document.getElementById('wl_icon').value||'??';
   var color=document.getElementById('wl_color').value||'#4f46e5';
   document.getElementById('wl_prev_name').textContent=name;
   document.getElementById('wl_prev_tag').textContent=tag;
@@ -1045,14 +1049,14 @@ function applyWL(){
   WL.brand=document.getElementById('wl_brand').value.trim()||'BizScale';
   WL.tag=document.getElementById('wl_tag').value.trim()||'AI-Powered Loan Safety Platform';
   WL.email=document.getElementById('wl_email').value.trim();
-  WL.icon=document.getElementById('wl_icon').value.trim()||'🏢';
+  WL.icon=document.getElementById('wl_icon').value.trim()||'??';
   WL.color=document.getElementById('wl_color').value||'#4f46e5';
   saveWL(); applyWLToDOM();
-  showToast('✅ Branding applied!');
+  showToast('? Branding applied!');
   toggleWL();
 }
 function resetWL(){
-  WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'🏢',email:''};
+  WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
   saveWL(); applyWLToDOM();
   document.getElementById('wl_brand').value=WL.brand;
   document.getElementById('wl_tag').value=WL.tag;
@@ -1063,7 +1067,7 @@ function resetWL(){
   showToast('Reset to BizScale defaults.');
 }
 
-/* ── Color helpers ── */
+/* -- Color helpers -- */
 function lightness(hex){
   var r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
   return 0.299*r+0.587*g+0.114*b;
@@ -1077,7 +1081,7 @@ function lighten(hex){
   return '#'+[r,g,b].map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');
 }
 
-/* ── Stats bar ── */
+/* -- Stats bar -- */
 function renderStats(){
   var total=clients.length;
   var safe=0,risky=0,danger=0,totalScore=0;
@@ -1091,12 +1095,12 @@ function renderStats(){
   document.getElementById('statsBar').innerHTML=
     '<div class="stat-card"><div class="stat-label">Total Clients</div><div class="stat-val">'+total+'</div></div>'
     +'<div class="stat-card" style="border-top-color:var(--brand)"><div class="stat-label">Avg Score</div><div class="stat-val">'+avg+'</div></div>'
-    +'<div class="stat-card green"><div class="stat-label">Safe (≥70)</div><div class="stat-val" style="color:#10b981">'+safe+'</div></div>'
+    +'<div class="stat-card green"><div class="stat-label">Safe (=70)</div><div class="stat-val" style="color:#10b981">'+safe+'</div></div>'
     +'<div class="stat-card yellow"><div class="stat-label">Review Needed</div><div class="stat-val" style="color:#f59e0b">'+risky+'</div></div>'
     +'<div class="stat-card red"><div class="stat-label">High Risk</div><div class="stat-val" style="color:#dc2626">'+danger+'</div></div>';
 }
 
-/* ── Client grid ── */
+/* -- Client grid -- */
 function renderGrid(){
   var q=(document.getElementById('searchInp').value||'').toLowerCase();
   var sort=document.getElementById('sortSel').value;
@@ -1122,7 +1126,7 @@ function renderGrid(){
 
   if(!list.length){
     document.getElementById('clientsGrid').innerHTML='<div class="empty-state">'
-      +'<span class="es-icon">👥</span>'
+      +'<span class="es-icon">??</span>'
       +(clients.length?'<p>No clients match your search.</p>':'<p>No clients yet.<br>Click <strong>Add Client</strong> to get started.</p>')
       +'</div>';
     return;
@@ -1138,7 +1142,7 @@ function renderGrid(){
     var totEMI=emi+loanEMI;
     var net=rev-exp-totEMI;
     var dscr=totEMI>0?(rev-exp)/totEMI:99;
-    var resMo=totEMI>0?(res/totEMI).toFixed(1):(exp>0?(res/exp).toFixed(1):'—');
+    var resMo=totEMI>0?(res/totEMI).toFixed(1):(exp>0?(res/exp).toFixed(1):'�');
 
     var cardCls=sc>=70?'safe':sc>=50?'risky':'danger';
     var numCls=sc>=70?'gb-safe':sc>=50?'gb-risky':'gb-danger';
@@ -1149,7 +1153,7 @@ function renderGrid(){
     html+='<div class="client-card '+cardCls+'" id="cc_'+idx+'">'
       +'<div class="cc-top">'
         +'<div><div class="cc-name">'+esc(c.name||'Unnamed')+'</div>'
-        +'<div class="cc-ind">'+(c.industry||'—')+'</div></div>'
+        +'<div class="cc-ind">'+(c.industry||'�')+'</div></div>'
         +'<div class="score-badge">'
           +'<div class="score-num '+numCls+'">'+sc+'</div>'
           +'<div class="score-grade '+badgeCls+'">'+grade+'</div>'
@@ -1163,27 +1167,27 @@ function renderGrid(){
         +'<div class="cc-m"><div class="cc-m-lbl">Reserve</div><div class="cc-m-val">'+fmt(res)+'</div></div>'
         +'<div class="cc-m"><div class="cc-m-lbl">DSCR</div><div class="cc-m-val '+(dscr>=1.25||dscr>=99?'pos':dscr>=1?'':'neg')+'">'+(dscr>=99?'N/A':dscr.toFixed(2)+'x')+'</div></div>'
       +'</div>'
-      +(hasNotes?'<div class="cc-notes" style="display:block">📝 '+esc(c.notes)+'</div>':'')
+      +(hasNotes?'<div class="cc-notes" style="display:block">?? '+esc(c.notes)+'</div>':'')
       +'<div class="cc-actions">'
-        +'<button class="btn btn-brand btn-sm" onclick="openScCard('+idx+')">📊 Score Card</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openBrandedReport('+idx+')">📄 Report</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'forecast\')">📈 Forecast</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'bench\')">🏭 Bench</button>'
-        +'<button class="btn btn-gray btn-sm" onclick="openEdit('+idx+')">✏️</button>'
-        +'<button class="btn btn-red btn-sm" onclick="askDelete('+idx+')">🗑</button>'
+        +'<button class="btn btn-brand btn-sm" onclick="openScCard('+idx+')">?? Score Card</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openBrandedReport('+idx+')">?? Report</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'forecast\')">?? Forecast</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'bench\')">?? Bench</button>'
+        +'<button class="btn btn-gray btn-sm" onclick="openEdit('+idx+')">??</button>'
+        +'<button class="btn btn-red btn-sm" onclick="askDelete('+idx+')">??</button>'
       +'</div>'
-      +'<div class="cc-date">Added: '+(c.addedAt||'—')+'</div>'
+      +'<div class="cc-date">Added: '+(c.addedAt||'�')+'</div>'
       +'</div>';
   }
   document.getElementById('clientsGrid').innerHTML=html;
 }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ── Add / Edit ── */
+/* -- Add / Edit -- */
 var editIdx=-1;
 function openAddModal(){
   editIdx=-1;
-  document.getElementById('editModalTitle').textContent='➕ Add New Client';
+  document.getElementById('editModalTitle').textContent='? Add New Client';
   ['ec_name','ec_ind','ec_rev','ec_exp','ec_emi','ec_res','ec_loan','ec_rate','ec_ten','ec_notes'].forEach(function(id){
     document.getElementById(id).value='';
   });
@@ -1194,7 +1198,7 @@ function openAddModal(){
 function openEdit(idx){
   editIdx=idx;
   var c=clients[idx];
-  document.getElementById('editModalTitle').textContent='✏️ Edit Client';
+  document.getElementById('editModalTitle').textContent='?? Edit Client';
   document.getElementById('ec_name').value=c.name||'';
   document.getElementById('ec_ind').value=c.industry||'';
   document.getElementById('ec_rev').value=c.rev||'';
@@ -1230,10 +1234,10 @@ function saveClient(){
   if(editIdx>=0) clients[editIdx]=client;
   else clients.push(client);
   saveClients(); closeEdit(); renderGrid();
-  showToast(editIdx>=0?'✅ Client updated.':'✅ Client added.');
+  showToast(editIdx>=0?'? Client updated.':'? Client added.');
 }
 
-/* ── Delete ── */
+/* -- Delete -- */
 var delIdx=-1;
 function askDelete(idx){
   delIdx=idx;
@@ -1247,13 +1251,13 @@ function confirmDelete(){
   showToast('Client deleted.');
 }
 
-/* ── Branded Report ── */
+/* -- Branded Report -- */
 function openBrandedReport(idx){
   localStorage.setItem('fw_report_idx',String(idx));
   window.open('brandedReport.test.html','_blank');
 }
 
-/* ── Open in other tool ── */
+/* -- Open in other tool -- */
 function openInTool(idx,tool){
   var c=clients[idx];
   var profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
@@ -1266,7 +1270,7 @@ function openInTool(idx,tool){
   window.open(url,'_blank');
 }
 
-/* ── Score Card Modal ── */
+/* -- Score Card Modal -- */
 function drawGauge(score,canvasId){
   var canvas=document.getElementById(canvasId);
   var W=220,H=125;
@@ -1300,19 +1304,19 @@ function openScCard(idx){
   var totEMI=emi+loanEMI;
   var net=rev-exp-totEMI;
   var dscr=totEMI>0?(rev-exp)/totEMI:99;
-  var resMo=totEMI>0?(res/totEMI).toFixed(1):(exp>0?(res/exp).toFixed(1):'—');
+  var resMo=totEMI>0?(res/totEMI).toFixed(1):(exp>0?(res/exp).toFixed(1):'�');
   var score=computeScore(rev,exp,emi,res,loan,rate,ten);
   var maxSafe=findMaxSafe(rev,exp,emi,res,rate,ten);
   var stressNet=rev*0.8-exp-totEMI;
 
-  var grade=score>=70?'✓ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'✗ HIGH RISK — NOT ADVISED';
+  var grade=score>=70?'? SAFE � LOAN READY':score>=50?'? RISKY � REVIEW NEEDED':'? HIGH RISK � NOT ADVISED';
   var gradeCls=score>=70?'gbl-safe':score>=50?'gbl-risky':'gbl-danger';
 
   /* Fill modal */
   document.getElementById('scm_brand').textContent=WL.brand;
   document.getElementById('scm_tag').textContent=WL.tag;
   document.getElementById('scm_name').textContent=c.name||'Unnamed';
-  document.getElementById('scm_subline').textContent=(c.industry||'')+' · Score Card · '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('scm_subline').textContent=(c.industry||'')+' � Score Card � '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   var gp=document.getElementById('scm_grade');
   gp.textContent=score+'/100  '+grade; gp.className='sc-grade-pill '+gradeCls;
 
@@ -1334,7 +1338,7 @@ function openScCard(idx){
     +'<div class="sc-col-row"><span class="sc-col-lbl">Cash Reserve</span><span class="sc-col-val">'+fmt(res)+'</span></div>'
     +'<div class="sc-col-row"><span class="sc-col-lbl">Reserve Cover</span><span class="sc-col-val">'+resMo+' mo</span></div>'
     +'<div class="sc-col-row"><span class="sc-col-lbl">DSCR</span><span class="sc-col-val '+(dscr>=1.25||dscr>=99?'pos':'neg')+'">'+(dscr>=99?'N/A':dscr.toFixed(2)+'x')+'</span></div>'
-    +'<div class="sc-col-row"><span class="sc-col-lbl">Stress −20%</span><span class="sc-col-val '+(stressNet>0?'pos':'neg')+'">'+(stressNet>0?'Positive':fmtS(stressNet))+'</span></div></div>';
+    +'<div class="sc-col-row"><span class="sc-col-lbl">Stress -20%</span><span class="sc-col-val '+(stressNet>0?'pos':'neg')+'">'+(stressNet>0?'Positive':fmtS(stressNet))+'</span></div></div>';
   document.getElementById('scm_cols').innerHTML=colHtml;
 
   /* Metrics table */
@@ -1345,13 +1349,13 @@ function openScCard(idx){
     {l:'EMI-to-Revenue',v:pct(emr),t:'<40%',ok:emr<=40||totEMI===0,warn:emr<=55},
     {l:'Debt Coverage (DSCR)',v:dscr>=99?'N/A':dscr.toFixed(2)+'x',t:'>1.25x',ok:dscr>=1.25||dscr>=99,warn:dscr>=1},
     {l:'Reserve Cover',v:resMo+' mo',t:'>3 months',ok:parseFloat(resMo)>=3,warn:parseFloat(resMo)>=1},
-    {l:'Stress Test (−20%)',v:stressNet>0?'Positive':fmtS(stressNet),t:'Positive',ok:stressNet>0,warn:stressNet>-res*0.1}
+    {l:'Stress Test (-20%)',v:stressNet>0?'Positive':fmtS(stressNet),t:'Positive',ok:stressNet>0,warn:stressNet>-res*0.1}
   ];
   var tb='';
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     var sc2=r.ok?'ss-pass':r.warn?'ss-warn':'ss-fail';
-    var sl=r.ok?'✓ Pass':r.warn?'⚠ Marginal':'✗ Fail';
+    var sl=r.ok?'? Pass':r.warn?'? Marginal':'? Fail';
     tb+='<tr><td>'+r.l+'</td><td style="font-weight:800">'+r.v+'</td><td style="color:#94a3b8">'+r.t+'</td><td><span class="sc-status '+sc2+'">'+sl+'</span></td></tr>';
   }
   document.getElementById('scm_tbody').innerHTML=tb;
@@ -1365,8 +1369,8 @@ function openScCard(idx){
   } else {
     rec.className='sc-rec-box';
     rec.style.borderLeftColor='#dc2626';
-    rec.innerHTML='<div class="sc-rec-max" style="color:#dc2626">Score: '+score+'/100 — Caution Advised</div>'
-      +'<div class="sc-rec-text">Current financials present elevated risk. Maximum safe loan: '+fmt(maxSafe)+'. '+(net<0?'Net cash flow is negative — address this before applying for credit.':'Review EMI burden and reserve levels before proceeding.')+'</div>';
+    rec.innerHTML='<div class="sc-rec-max" style="color:#dc2626">Score: '+score+'/100 � Caution Advised</div>'
+      +'<div class="sc-rec-text">Current financials present elevated risk. Maximum safe loan: '+fmt(maxSafe)+'. '+(net<0?'Net cash flow is negative � address this before applying for credit.':'Review EMI burden and reserve levels before proceeding.')+'</div>';
   }
 
   document.getElementById('scm_date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -1404,7 +1408,7 @@ document.getElementById('importModal').addEventListener('click',function(e){ if(
   });
 })();
 
-/* ── Import CSV ── */
+/* -- Import CSV -- */
 var importRows=[];
 
 function openImport(){
@@ -1505,7 +1509,7 @@ function processCSVText(text){
 
   var statusEl=document.getElementById('importStatus');
   var msg='Found <strong>'+importRows.length+' client'+(importRows.length>1?'s':'')+' ready to import</strong>';
-  if(skipped) msg+=' &nbsp;·&nbsp; <span style="opacity:.75">'+skipped+' row'+(skipped>1?'s':'')+' skipped (missing name/revenue)</span>';
+  if(skipped) msg+=' &nbsp;�&nbsp; <span style="opacity:.75">'+skipped+' row'+(skipped>1?'s':'')+' skipped (missing name/revenue)</span>';
   statusEl.className='import-status '+(skipped?'warn':'ok');
   statusEl.innerHTML=msg;
 
@@ -1518,30 +1522,30 @@ function processCSVText(text){
     tbl+='<tr>'
       +'<td style="color:#94a3b8">'+(j+1)+'</td>'
       +'<td style="font-weight:700">'+esc(r.name)+'</td>'
-      +'<td>'+esc(r.industry||'—')+'</td>'
+      +'<td>'+esc(r.industry||'�')+'</td>'
       +'<td>'+fmt(r.rev)+'</td>'
       +'<td>'+fmt(r.exp)+'</td>'
-      +'<td>'+(r.emi?fmt(r.emi):'—')+'</td>'
-      +'<td>'+(r.loan?fmt(r.loan):'—')+'</td>'
+      +'<td>'+(r.emi?fmt(r.emi):'�')+'</td>'
+      +'<td>'+(r.loan?fmt(r.loan):'�')+'</td>'
       +'<td style="font-weight:800;color:'+scColor+'">'+sc+'</td>'
       +'</tr>';
   }
   if(importRows.length>prev)
-    tbl+='<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:8px;font-size:.72rem">… and '+(importRows.length-prev)+' more</td></tr>';
+    tbl+='<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:8px;font-size:.72rem">� and '+(importRows.length-prev)+' more</td></tr>';
   tbl+='</tbody>';
   document.getElementById('csvPrevTable').innerHTML=tbl;
 
   document.getElementById('dropZone').style.display='none';
   document.getElementById('importPreview').style.display='block';
   document.getElementById('importBtn').style.display='inline-flex';
-  document.getElementById('importBtn').textContent='📥 Import '+importRows.length+' Client'+(importRows.length>1?'s':'');
+  document.getElementById('importBtn').textContent='?? Import '+importRows.length+' Client'+(importRows.length>1?'s':'');
   document.getElementById('importResetBtn').style.display='inline-flex';
 }
 
 function showImportErr(msg){
   var statusEl=document.getElementById('importStatus');
   statusEl.className='import-status err';
-  statusEl.textContent='⚠ '+msg;
+  statusEl.textContent='? '+msg;
   document.getElementById('dropZone').style.display='none';
   document.getElementById('importPreview').style.display='block';
   document.getElementById('importBtn').style.display='none';
@@ -1565,11 +1569,11 @@ function doImport(){
     }
   }
   saveClients(); closeImport(); renderGrid();
-  showToast('✅ Imported '+added+(updated?' + '+updated+' updated':'')+' client'+(importRows.length>1?'s':'')+'.');
+  showToast('? Imported '+added+(updated?' + '+updated+' updated':'')+' client'+(importRows.length>1?'s':'')+'.');
   importRows=[];
 }
 
-/* ── Export CSV ── */
+/* -- Export CSV -- */
 function exportCSV(){
   if(!clients.length){ showToast('No clients to export.'); return; }
   var rows=[['Name','Industry','Revenue','Expenses','EMI','Reserve','Loan','Rate','Tenure','Score','Grade','Notes']];
@@ -1585,10 +1589,10 @@ function exportCSV(){
   var a=document.createElement('a');
   a.href=url; a.download=(WL.brand||'BizScale')+'_clients_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  showToast('✅ Exported '+clients.length+' clients as CSV.');
+  showToast('? Exported '+clients.length+' clients as CSV.');
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FWADVISOR'||code==='FINWISE29'){
@@ -1602,10 +1606,10 @@ function tryUnlock(){
 }
 document.getElementById('pwCode').addEventListener('keydown',function(e){ if(e.key==='Enter') tryUnlock(); });
 
-/* ── Close report modal on overlay click ── */
+/* -- Close report modal on overlay click -- */
 document.getElementById('reportModal').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('show'); });
 
-/* ── Boot ── */
+/* -- Boot -- */
 if(localStorage.getItem('fw_advisor')==='1'||localStorage.getItem('fw_pro')==='1'){
   document.getElementById('pwOverlay').style.display='none';
 }

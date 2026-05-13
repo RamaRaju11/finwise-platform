@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>What-If Scenarios — BizScale</title>
-<meta name="description" content="Model revenue, expense, and loan changes with BizScale's free What-If Scenario Planner — see instantly how your loan score and cash runway would change."/>
+<title>What-If Scenarios � BizScale</title>
+<meta name="description" content="Model revenue, expense, and loan changes with BizScale's free What-If Scenario Planner � see instantly how your loan score and cash runway would change."/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
@@ -102,6 +102,10 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 .fw-toast.toast-err{background:#dc2626}
 .fw-toast.toast-info{background:#2563eb}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 <div id="fwToast" class="fw-toast" role="alert" aria-live="assertive"></div>
@@ -109,11 +113,11 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 <script src="sidebar.js"></script>
 <header class="hdr">
   <a href="index.html" class="logo">Biz<span>Scale</span></a>
-  <a href="dashboard.html" class="back">← Dashboard</a>
+  <a href="dashboard.html" class="back">? Dashboard</a>
 </header>
 
 <div class="hero">
-  <h1>🔮 What-If Scenario Planner</h1>
+  <h1>?? What-If Scenario Planner</h1>
   <p>Adjust revenue, expenses, and loan details to instantly see how changes affect your loan score, runway, and health grade.</p>
 </div>
 
@@ -125,27 +129,27 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">📈 Revenue change</span>
+        <span class="sl-name">?? Revenue change</span>
         <span class="sl-val" id="revLabel">+0%</span>
       </div>
       <input type="range" id="revSlider" min="-50" max="100" step="5" value="0" oninput="recalc()">
-      <div class="sl-ticks"><span>−50%</span><span>0%</span><span>+50%</span><span>+100%</span></div>
+      <div class="sl-ticks"><span>-50%</span><span>0%</span><span>+50%</span><span>+100%</span></div>
       <div id="revImpact" class="sl-impact impact-neu">No change from baseline</div>
     </div>
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">💸 Expense change</span>
+        <span class="sl-name">?? Expense change</span>
         <span class="sl-val" id="expLabel">+0%</span>
       </div>
       <input type="range" id="expSlider" min="-50" max="50" step="5" value="0" oninput="recalc()">
-      <div class="sl-ticks"><span>−50%</span><span>−25%</span><span>0%</span><span>+25%</span><span>+50%</span></div>
+      <div class="sl-ticks"><span>-50%</span><span>-25%</span><span>0%</span><span>+25%</span><span>+50%</span></div>
       <div id="expImpact" class="sl-impact impact-neu">No change from baseline</div>
     </div>
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">🏦 Add new loan EMI</span>
+        <span class="sl-name">?? Add new loan EMI</span>
         <span class="sl-val" id="newEmiLabel">$0/mo</span>
       </div>
       <input type="range" id="newEmiSlider" min="0" max="5000" step="100" value="0" oninput="recalc()">
@@ -155,16 +159,16 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">💰 Add to cash reserves</span>
+        <span class="sl-name">?? Add to cash reserves</span>
         <span class="sl-val" id="resLabel">+$0</span>
       </div>
       <input type="range" id="resSlider" min="-20000" max="50000" step="1000" value="0" oninput="recalc()">
-      <div class="sl-ticks"><span>−$20k</span><span>$0</span><span>+$25k</span><span>+$50k</span></div>
+      <div class="sl-ticks"><span>-$20k</span><span>$0</span><span>+$25k</span><span>+$50k</span></div>
       <div id="resImpact" class="sl-impact impact-neu">No change to reserves</div>
     </div>
 
     <div class="btn-row">
-      <button class="btn-outline" onclick="resetSliders()">↺ Reset to Baseline</button>
+      <button class="btn-outline" onclick="resetSliders()">? Reset to Baseline</button>
     </div>
   </div>
 
@@ -173,34 +177,34 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <!-- CURRENT -->
     <div class="panel">
-      <div class="panel-title">Current — Baseline</div>
+      <div class="panel-title">Current � Baseline</div>
       <div class="score-big">
-        <div class="sb-num" id="curScore" style="color:#0f172a">—</div>
+        <div class="sb-num" id="curScore" style="color:#0f172a">�</div>
         <div class="sb-lbl">Loan Score / 100</div>
         <div id="curVerdict"></div>
       </div>
       <div class="metric-row">
-        <div class="m-item"><div class="m-val" id="curRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
-        <div class="m-item"><div class="m-val" id="curDSCR">—</div><div class="m-lbl">DSCR</div></div>
-        <div class="m-item"><div class="m-val" id="curNet">—</div><div class="m-lbl">Net/mo</div></div>
+        <div class="m-item"><div class="m-val" id="curRunway">�</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="curDSCR">�</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="curNet">�</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="curGrade">—</div><div style="font-size:.74rem;color:#64748b" id="curGlabel">—</div></div>
+      <div style="text-align:center"><div class="grade-circ" id="curGrade">�</div><div style="font-size:.74rem;color:#64748b" id="curGlabel">�</div></div>
     </div>
 
     <!-- PROJECTED -->
     <div class="panel" style="border-color:#2563eb;background:linear-gradient(135deg,#f8faff 0%,#f0fdf4 100%)">
-      <div class="panel-title" style="color:#2563eb">Projected — With Changes</div>
+      <div class="panel-title" style="color:#2563eb">Projected � With Changes</div>
       <div class="score-big">
-        <div class="sb-num" id="projScore" style="color:#0f172a">—</div>
+        <div class="sb-num" id="projScore" style="color:#0f172a">�</div>
         <div class="sb-lbl">Loan Score / 100</div>
         <div id="projVerdict"></div>
       </div>
       <div class="metric-row">
-        <div class="m-item"><div class="m-val" id="projRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
-        <div class="m-item"><div class="m-val" id="projDSCR">—</div><div class="m-lbl">DSCR</div></div>
-        <div class="m-item"><div class="m-val" id="projNet">—</div><div class="m-lbl">Net/mo</div></div>
+        <div class="m-item"><div class="m-val" id="projRunway">�</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="projDSCR">�</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="projNet">�</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="projGrade">—</div><div style="font-size:.74rem;color:#64748b" id="projGlabel">—</div></div>
+      <div style="text-align:center"><div class="grade-circ" id="projGrade">�</div><div style="font-size:.74rem;color:#64748b" id="projGlabel">�</div></div>
       <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
         <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px">Projected Numbers</div>
         <div id="projNumbers"></div>
@@ -225,7 +229,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
   <!-- NOTE + APPLY -->
   <div class="note-tip">
-    💡 <strong>How to use this:</strong> Drag the sliders above to model changes — cutting expenses, growing revenue, adding reserves, or taking on a new loan. The projected column updates instantly. When you find a scenario you like, click "Apply to Profile" to save those numbers for all 30 tools.
+    ?? <strong>How to use this:</strong> Drag the sliders above to model changes � cutting expenses, growing revenue, adding reserves, or taking on a new loan. The projected column updates instantly. When you find a scenario you like, click "Apply to Profile" to save those numbers for all 30 tools.
   </div>
 
   <div class="apply-row" id="applyRow" style="display:none">
@@ -233,9 +237,9 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
       <strong>Save this scenario as your profile</strong>
       <span>Updates the numbers pre-filled across all 30 BizScale tools so you can explore this scenario in full detail.</span>
     </div>
-    <button class="btn-primary" onclick="applyScenario()">Save Scenario →</button>
-    <a href="checkup.html" class="btn-outline">Run Full Checkup →</a>
-    <a href="history.html" class="btn-outline">📊 Score History →</a>
+    <button class="btn-primary" onclick="applyScenario()">Save Scenario ?</button>
+    <a href="checkup.html" class="btn-outline">Run Full Checkup ?</a>
+    <a href="history.html" class="btn-outline">?? Score History ?</a>
   </div>
 
 </div>
@@ -340,7 +344,7 @@ function recalc(){
     (revPct>0?'Revenue increases by +':  'Revenue decreases by ')+fmt(Math.abs(revDelta))+'/mo';
   document.getElementById('revImpact').className='sl-impact '+(revPct>0?'impact-pos':revPct<0?'impact-neg':'impact-neu');
   document.getElementById('expImpact').textContent=expPct===0?'No change from baseline':
-    (expPct<0?'Expenses drop by −':expPct>0?'Expenses rise by +':'')+fmt(Math.abs(expDelta))+'/mo';
+    (expPct<0?'Expenses drop by -':expPct>0?'Expenses rise by +':'')+fmt(Math.abs(expDelta))+'/mo';
   document.getElementById('expImpact').className='sl-impact '+(expPct<0?'impact-pos':expPct>0?'impact-neg':'impact-neu');
   document.getElementById('emiImpact').textContent=newEmi===0?'No additional loan':
     'Additional $'+newEmi.toLocaleString()+'/mo in loan repayments';
@@ -372,7 +376,7 @@ function recalc(){
     var improved=(r.better==='up'&&r.proj>r.cur)||(r.better==='down'&&r.proj<r.cur);
     var worsened=(r.better==='up'&&r.proj<r.cur)||(r.better==='down'&&r.proj>r.cur);
     var valStyle=changed?(improved?'color:#16a34a;font-weight:900':worsened?'color:#dc2626;font-weight:900':'color:#2563eb;font-weight:900'):'color:#94a3b8;font-weight:700';
-    var arrow=changed?(improved?'↑ ':'↓ '):'';
+    var arrow=changed?(improved?'? ':'? '):'';
     var suffix=r.lbl==='Reserves'?'':'/mo';
     return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:.78rem">'
       +'<span style="color:#64748b;font-weight:600">'+r.lbl+'</span>'
@@ -397,8 +401,8 @@ function recalc(){
   ];
   document.getElementById('deltaRows').innerHTML=deltas.map(function(d){
     var dc=d.d>0?'delta-up':d.d<0?'delta-dn':'delta-eq';
-    var sym=d.d>0?'↑ +':d.d<0?'↓ ':'→ ';
-    var dtext=d.unit==='pts'?sym+Math.abs(d.d)+' pts':d.unit==='mo'?sym+Math.abs(d.d)+' mo':d.d!==0?sym+'change':'→ same';
+    var sym=d.d>0?'? +':d.d<0?'? ':'? ';
+    var dtext=d.unit==='pts'?sym+Math.abs(d.d)+' pts':d.unit==='mo'?sym+Math.abs(d.d)+' mo':d.d!==0?sym+'change':'? same';
     return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap">'
       +'<span style="font-size:.8rem;font-weight:700;color:#1e293b;flex:1;min-width:100px">'+d.lbl+'</span>'
       +'<span style="font-size:.78rem;color:#94a3b8;min-width:80px">'+d.cur+'</span>'
@@ -430,7 +434,7 @@ function applyScenario(){
   p.emi=Math.round(s.emi);
   p.reserve=Math.round(s.res);
   localStorage.setItem('fw_profile',JSON.stringify(p));
-  showToast('✅ Scenario saved — all 30 tools will now use these numbers','ok',4000);
+  showToast('? Scenario saved � all 30 tools will now use these numbers','ok',4000);
 }
 
 window.addEventListener('load',function(){

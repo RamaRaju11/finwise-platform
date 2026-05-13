@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Debt Command Center — BizScale</title>
+<title>Debt Command Center � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -194,6 +194,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
   .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -214,7 +218,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
   <div class="dff-icon">&#127942;</div>
   <div>
     <div class="dff-label">Projected Debt-Free Date (Avalanche at Minimums)</div>
-    <div class="dff-date" id="dff-date">—</div>
+    <div class="dff-date" id="dff-date">�</div>
     <div class="dff-days" id="dff-days"></div>
   </div>
 </div>
@@ -226,16 +230,16 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
   <button class="tab" onclick="showTab('insights',this)">&#128161; Insights</button>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
+<!-- -------------------------------------------------------
      TAB 1: DASHBOARD
-═══════════════════════════════════════════════════════ -->
+------------------------------------------------------- -->
 <div id="tab-dashboard" class="panel active">
   <div id="dashboard-content"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
+<!-- -------------------------------------------------------
      TAB 2: MY LOANS
-═══════════════════════════════════════════════════════ -->
+------------------------------------------------------- -->
 <div id="tab-loans" class="panel">
 
   <div class="card" id="add-loan-card">
@@ -267,7 +271,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
       <div>
         <label>Original Balance ($)</label>
         <input type="number" id="ln-orig-balance" placeholder="e.g. 40000" min="0"/>
-        <p class="hint">What you originally borrowed — used for the payoff progress bar</p>
+        <p class="hint">What you originally borrowed � used for the payoff progress bar</p>
       </div>
       <div>
         <label>Annual Interest Rate (%)</label>
@@ -301,30 +305,30 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
 
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
+<!-- -------------------------------------------------------
      TAB 3: PAYOFF STRATEGY
-═══════════════════════════════════════════════════════ -->
+------------------------------------------------------- -->
 <div id="tab-strategy" class="panel">
   <div class="card">
-    <h2>&#127942; Snowball vs Avalanche — Which Strategy Wins for You?</h2>
+    <h2>&#127942; Snowball vs Avalanche � Which Strategy Wins for You?</h2>
     <p class="desc">
-      <strong>Debt Snowball</strong> — pay off your smallest balance first. Fast wins, great for motivation.<br>
-      <strong>Debt Avalanche</strong> — pay off your highest interest rate first. Saves the most money overall.<br>
-      This runs both strategies on your saved loans and tells you exactly which one wins — and by how much.
+      <strong>Debt Snowball</strong> � pay off your smallest balance first. Fast wins, great for motivation.<br>
+      <strong>Debt Avalanche</strong> � pay off your highest interest rate first. Saves the most money overall.<br>
+      This runs both strategies on your saved loans and tells you exactly which one wins � and by how much.
     </p>
     <div style="max-width:300px">
       <label>Extra Monthly Payment Beyond Minimums ($)</label>
       <input type="number" id="strat-extra" value="200" min="0" placeholder="e.g. 200"/>
-      <p class="hint">Even $50–$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
+      <p class="hint">Even $50�$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
     </div>
     <button class="btn-primary" onclick="runStrategy()">&#9654; Calculate Best Payoff Strategy</button>
   </div>
   <div id="strategy-results"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
+<!-- -------------------------------------------------------
      TAB 4: INSIGHTS
-═══════════════════════════════════════════════════════ -->
+------------------------------------------------------- -->
 <div id="tab-insights" class="panel">
   <div id="insights-content"></div>
 </div>
@@ -338,22 +342,22 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+  btn.innerHTML='[Why this matters] '+(open?'?':'?');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '<div class="explain-example">?? Example: '+example+'</div>'+
     '</div></div>';
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // SHARED fw_loans STORE
 // Schema: [{id, name, type, balance, originalBalance, rate, minPay, lender, notes, addedDate}]
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 var LS_KEY = 'fw_loans';
 
 function loadLoans() {
@@ -363,14 +367,14 @@ function saveLoans(loans) {
   localStorage.setItem(LS_KEY, JSON.stringify(loans));
 }
 
-// ── Loan type display labels ─────────────────────────────────────
+// -- Loan type display labels -------------------------------------
 var TYPE_LABEL = {
   business:'Business', car:'Car/Vehicle', personal:'Personal',
   equipment:'Equipment', credit_card:'Credit Card', loc:'Line of Credit',
   mortgage:'Mortgage', other:'Other'
 };
 
-// ── Tab navigation ───────────────────────────────────────────────
+// -- Tab navigation -----------------------------------------------
 function showTab(id, btn) {
   document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
@@ -394,7 +398,7 @@ function goToTab(id) {
   showTab(id, tabs[idx]);
 }
 
-// ── Formatting helpers ───────────────────────────────────────────
+// -- Formatting helpers -------------------------------------------
 function fmt(n) {
   return '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
 }
@@ -414,9 +418,9 @@ function showToast(msg) {
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // TAB 1: DASHBOARD
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function renderDashboard() {
   var loans = loadLoans();
   var el = document.getElementById('dashboard-content');
@@ -512,15 +516,15 @@ function sumCard(value, label, sub) {
   return '<div class="sum-card"><div class="sum-label">'+label+'</div><div class="sum-value">'+value+'</div><div class="sum-sub">'+sub+'</div></div>';
 }
 
-// ── Estimate payoff months (avalanche) ──────────────────────────
+// -- Estimate payoff months (avalanche) --------------------------
 function estimatePayoffMonths(loans, extra) {
   if(!loans || loans.length === 0) return 0;
   return fwSimulateFull(loans, extra, function(a,b){ return b.rate - a.rate; }).months;
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // TAB 2: MY LOANS
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function renderLoansList() {
   var loans = loadLoans();
   var el = document.getElementById('loans-list-body');
@@ -537,7 +541,7 @@ function renderLoansList() {
       '<td>'+fmt(l.balance)+'</td>' +
       '<td>'+l.rate+'%</td>' +
       '<td>'+fmt(l.minPay)+'</td>' +
-      '<td>'+escHtml(l.lender||'—')+'</td>' +
+      '<td>'+escHtml(l.lender||'�')+'</td>' +
       '<td style="white-space:nowrap">' +
         '<button class="btn-edit"   onclick="editLoan(\''+l.id+'\')">Edit</button>' +
         '<button class="btn-danger" onclick="deleteLoan(\''+l.id+'\')">Delete</button>' +
@@ -647,9 +651,9 @@ function clearLoanForm() {
   document.getElementById('ln-type').value = 'business';
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // TAB 3: PAYOFF STRATEGY
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function runStrategy() {
   var loans = loadLoans().filter(function(l){ return l.balance > 0; });
   if(loans.length === 0) {
@@ -758,7 +762,7 @@ function buildPayoffCalendar(snow, aval) {
   }
   var sorted = Object.keys(names).sort(function(a,b){ return (avalMap[a]||9999)-(avalMap[b]||9999); });
   var html = '<div class="card"><h2>Payoff Calendar</h2>' +
-    '<p class="desc" style="margin-bottom:10px">Exact month-year each loan is paid off — both strategies side by side.</p>' +
+    '<p class="desc" style="margin-bottom:10px">Exact month-year each loan is paid off � both strategies side by side.</p>' +
     '<div style="overflow-x:auto"><table class="sched-table">' +
     '<thead><tr><th>Loan</th><th>&#10052; Snowball Payoff</th><th>&#9650; Avalanche Payoff</th><th>Months Away</th></tr></thead><tbody>';
   sorted.forEach(function(name) {
@@ -775,9 +779,9 @@ function buildPayoffCalendar(snow, aval) {
   return html;
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // TAB 4: INSIGHTS
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function renderInsights() {
   var loans = loadLoans();
   var el = document.getElementById('insights-content');
@@ -798,7 +802,7 @@ function renderInsights() {
   var burdenDesc  = burden===null ?
     'Set your monthly revenue in Profile (top toolbar) to see your debt burden ratio.' :
     'Your loan payments are <strong>'+burden.toFixed(0)+'%</strong> of monthly revenue. '+
-    (burden<30?'Healthy — well within the 30% safe zone.':burden<50?'Elevated. Aim to get below 30% by accelerating payoff.':'High. Prioritize debt reduction before taking on any new debt.');
+    (burden<30?'Healthy � well within the 30% safe zone.':burden<50?'Elevated. Aim to get below 30% by accelerating payoff.':'High. Prioritize debt reduction before taking on any new debt.');
 
   // Highest rate loan
   var sortedByRate  = loans.slice().sort(function(a,b){ return b.rate - a.rate; });
@@ -850,7 +854,7 @@ function renderInsights() {
         'This is how much extra you pay the bank on top of the principal borrowed',
         'High interest loans cost more in interest than the original loan amount if tenure is long',
         'Prepayment or refinancing can dramatically reduce this number'
-      ], 'You borrowed '+fmt(l.balance)+' but will pay back '+fmt(totalBack)+' total → '+fmt(lInt)+' in interest alone. That\'s '+Math.round(lInt/l.balance*100)+'% extra cost');
+      ], 'You borrowed '+fmt(l.balance)+' but will pay back '+fmt(totalBack)+' total ? '+fmt(lInt)+' in interest alone. That\'s '+Math.round(lInt/l.balance*100)+'% extra cost');
     }
     costHtml += '<div style="margin-bottom:10px">' +
       '<div style="display:flex;align-items:center;gap:12px">' +
@@ -873,7 +877,7 @@ function renderInsights() {
     debtFreeExplain = explainHtml([
       'Being in debt for this long limits your ability to invest in growth',
       'Future loan applications will be harder with existing long-term debt',
-      'Even $100–$200 extra per month can cut years off this timeline'
+      'Even $100�$200 extra per month can cut years off this timeline'
     ], 'At current minimums, you\'ll be debt-free around '+debtFreeYear+' (in ~'+estYears+' years). Adding $200/mo extra saves '+fmt(interestSaved200)+' in interest and cuts '+monthsSaved200+' months off your payoff timeline');
   }
 
@@ -893,21 +897,21 @@ function renderInsights() {
   recs += '</div>';
 
   // Plain-English glossary
-  var glossaryHtml = '<div class="card"><h2>&#128216; Debt Terms — Plain English</h2><p class="desc">No jargon, just what these terms actually mean for your business.</p><div class="glossary">' +
+  var glossaryHtml = '<div class="card"><h2>&#128216; Debt Terms � Plain English</h2><p class="desc">No jargon, just what these terms actually mean for your business.</p><div class="glossary">' +
     '<div class="gl-item"><div class="gl-term">Debt Snowball</div><div class="gl-def">Pay off your smallest loan first, then roll that freed-up payment into the next smallest. Quick wins boost motivation. Example: Clear a $3,000 credit card, then add that $80/mo minimum to your car loan.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Debt Avalanche</div><div class="gl-def">Pay off your highest-interest loan first regardless of balance. Mathematically optimal — saves the most money. Best if you can stay disciplined even without quick wins.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Avalanche</div><div class="gl-def">Pay off your highest-interest loan first regardless of balance. Mathematically optimal � saves the most money. Best if you can stay disciplined even without quick wins.</div></div>' +
     '<div class="gl-item"><div class="gl-term">Minimum Payment</div><div class="gl-def">The smallest amount you must pay to avoid a late fee or default. Paying only the minimum means most of your payment goes to interest, not the balance.</div></div>' +
     '<div class="gl-item"><div class="gl-term">Interest Rate (APR)</div><div class="gl-def">The annual cost of borrowing expressed as a percentage. A 12% APR means a $10,000 loan costs ~$1,200 in interest per year if the balance stays the same.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Debt Burden Ratio</div><div class="gl-def">Your monthly loan payments as a percentage of monthly revenue. Below 30% = healthy. 30–50% = elevated. Above 50% = high risk. Lenders check this when you apply for new credit.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Freed Minimum Cascade</div><div class="gl-def">When you pay off a loan, its monthly payment doesn\'t disappear — it gets redirected to the next loan. This snowball effect accelerates payoff on all remaining loans.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Burden Ratio</div><div class="gl-def">Your monthly loan payments as a percentage of monthly revenue. Below 30% = healthy. 30�50% = elevated. Above 50% = high risk. Lenders check this when you apply for new credit.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Freed Minimum Cascade</div><div class="gl-def">When you pay off a loan, its monthly payment doesn\'t disappear � it gets redirected to the next loan. This snowball effect accelerates payoff on all remaining loans.</div></div>' +
   '</div></div>';
 
   el.innerHTML = '<div class="card"><h2>&#128161; Debt Insights</h2>' + insGrid + '</div>' + costHtml + recs + glossaryHtml;
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // DEBT-FREE CHIP
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function renderDebtFreeChip() {
   var loans = loadLoans().filter(function(l){ return l.balance > 0 && l.minPay > 0; });
   var chip = document.getElementById('dff-chip');
@@ -919,12 +923,12 @@ function renderDebtFreeChip() {
   var dateStr = d.toLocaleString('en-US', {month:'long', year:'numeric'});
   chip.style.display = 'flex';
   document.getElementById('dff-date').textContent = dateStr;
-  document.getElementById('dff-days').textContent = 'In approximately ' + fmtMonths(months) + ' — keep going!';
+  document.getElementById('dff-days').textContent = 'In approximately ' + fmtMonths(months) + ' � keep going!';
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // CALENDAR SYNC
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function syncToCalendar() {
   var loans = loadLoans();
   if(loans.length === 0) { showToast('No loans to sync'); return; }
@@ -934,7 +938,7 @@ function syncToCalendar() {
   loans.forEach(function(l) {
     bills.push({
       id: 'dcc_' + l.id,
-      name: l.name + ' — loan payment',
+      name: l.name + ' � loan payment',
       amount: l.minPay,
       dueDay: 1,
       recurring: true,
@@ -946,9 +950,9 @@ function syncToCalendar() {
   showToast('&#128197; ' + loans.length + ' loan payment' + (loans.length > 1 ? 's' : '') + ' synced to Cash Flow Calendar');
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // MARK LOAN PAID (with interest-saved celebration)
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function markLoanPaid(id) {
   var loans = loadLoans();
   var loan = null;
@@ -970,18 +974,18 @@ function markLoanPaid(id) {
   setTimeout(function(){ tb.classList.remove('show'); }, 4500);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // EXPORT PDF
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 function exportPDF() {
   document.getElementById('printDate').textContent =
     new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
   window.print();
 }
 
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 // INIT
-// ════════════════════════════════════════════════════════════════
+// ----------------------------------------------------------------
 (function init(){
   renderDashboard();
   renderLoansList();

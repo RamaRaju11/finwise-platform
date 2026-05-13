@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Score Card — BizScale</title>
+<title>Loan Score Card � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:48px}
 a{text-decoration:none;color:inherit}
 
-/* ── Header (screen only) ── */
+/* -- Header (screen only) -- */
 .page-header{background:linear-gradient(135deg,#0891b2,#4f46e5);padding:18px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:20px}
 .page-header h1{font-size:1.15rem;font-weight:800}
 .page-header p{font-size:.8rem;color:rgba(255,255,255,.75);margin-top:.15rem}
@@ -35,13 +35,13 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 .btn-green{background:#16a34a;color:#fff}
 .btn-gray{background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0}
 
-/* ── VIEW MODE banner ── */
+/* -- VIEW MODE banner -- */
 .view-banner{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:9px;padding:10px 16px;margin-bottom:16px;font-size:.82rem;color:#0369a1;display:none}
 .view-banner strong{font-weight:800}
 
-/* ══════════════════════════════════
+/* ----------------------------------
    SCORE CARD  (also printed)
-══════════════════════════════════ */
+---------------------------------- */
 #scoreCard{display:none}
 
 .sc-wrap{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);overflow:hidden;margin-bottom:16px}
@@ -110,7 +110,7 @@ canvas#gauge{display:block}
 .sc-footer-brand{font-size:.72rem;font-weight:800;color:#4f46e5}
 .sc-footer-disc{font-size:.66rem;color:#94a3b8;line-height:1.4;text-align:right}
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 .pw-overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);backdrop-filter:blur(4px);z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}
 .pw-box{background:#fff;border-radius:14px;padding:28px 24px;max-width:440px;width:100%;text-align:center}
 .pw-box h2{font-size:1.15rem;font-weight:800;margin:.5rem 0 .4rem}
@@ -131,7 +131,7 @@ canvas#gauge{display:block}
 .toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:9px 16px;border-radius:8px;font-size:.82rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 
-/* ── Print styles ── */
+/* -- Print styles -- */
 @media print{
   body{background:#fff;padding:0}
   .pw-overlay,.page-header,.card,.actions-bar,.view-banner{display:none!important}
@@ -144,24 +144,28 @@ canvas#gauge{display:block}
   .sc-col+.sc-col{border-left:none;border-top:1px solid #f1f5f9}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">📊</div>
+    <div style="font-size:2.2rem">??</div>
     <h2>Shareable Score Card</h2>
     <p>Generate a professional, branded loan score card you can share with your bank, CA, or investors via a single link.</p>
     <div class="pw-feats">
-      <div class="pw-feat">📊 Full loan score breakdown</div>
-      <div class="pw-feat">🔗 Shareable branded link</div>
-      <div class="pw-feat">📱 Copy as text (WhatsApp)</div>
-      <div class="pw-feat">🖨️ Print-ready PDF</div>
-      <div class="pw-feat">🎯 Max safe loan calc</div>
-      <div class="pw-feat">👁️ View without login</div>
+      <div class="pw-feat">?? Full loan score breakdown</div>
+      <div class="pw-feat">?? Shareable branded link</div>
+      <div class="pw-feat">?? Copy as text (WhatsApp)</div>
+      <div class="pw-feat">??? Print-ready PDF</div>
+      <div class="pw-feat">?? Max safe loan calc</div>
+      <div class="pw-feat">??? View without login</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -175,23 +179,23 @@ canvas#gauge{display:block}
 <!-- Screen header -->
 <div class="page-header" id="screenHeader">
   <div>
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <h1>📊 Shareable Score Card</h1>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <h1>?? Shareable Score Card</h1>
     <p>Generate a branded score card and share it as a link or PDF</p>
   </div>
-  <div class="ph-badge">Pro · $29/month</div>
+  <div class="ph-badge">Pro � $29/month</div>
 </div>
 
 <div class="wrap">
 
 <!-- View mode banner -->
 <div class="view-banner" id="viewBanner">
-  👁️ <strong>View mode</strong> — This score card was shared with you via a BizScale link. Numbers are pre-loaded from the link.
+  ??? <strong>View mode</strong> � This score card was shared with you via a BizScale link. Numbers are pre-loaded from the link.
 </div>
 
 <!-- Input form (hidden in view mode) -->
 <div class="card" id="inputCard">
-  <h2>📋 Business Details</h2>
+  <h2>?? Business Details</h2>
   <p class="card-desc">Auto-loaded from your saved profile. Adjust as needed then generate the score card.</p>
   <div class="g2">
     <div>
@@ -237,7 +241,7 @@ canvas#gauge{display:block}
     </div>
   </div>
   <div class="btn-row">
-    <button class="btn btn-blue" onclick="generateCard()">📊 Generate Score Card</button>
+    <button class="btn btn-blue" onclick="generateCard()">?? Generate Score Card</button>
     <button class="btn btn-gray" onclick="clearInputs()">Clear</button>
   </div>
 </div>
@@ -249,7 +253,7 @@ canvas#gauge{display:block}
     <!-- Branded header -->
     <div class="sc-header">
       <div class="sc-brand">
-        <div class="sc-brand-icon">💼</div>
+        <div class="sc-brand-icon">??</div>
         <div>
           <div class="sc-brand-name">BizScale</div>
           <div class="sc-brand-tag">AI-Powered Loan Safety Platform</div>
@@ -264,11 +268,11 @@ canvas#gauge{display:block}
 
     <!-- Business name + Gauge -->
     <div class="sc-hero">
-      <div class="sc-biz-name" id="disp_name">—</div>
+      <div class="sc-biz-name" id="disp_name">�</div>
       <div class="sc-gen-date" id="disp_ind"></div>
       <div class="sc-gauge-wrap">
         <canvas id="gauge" width="220" height="125"></canvas>
-        <div class="sc-score-label" id="sc_grade_badge">—</div>
+        <div class="sc-score-label" id="sc_grade_badge">�</div>
       </div>
     </div>
 
@@ -276,24 +280,24 @@ canvas#gauge{display:block}
     <div class="sc-cols">
       <div class="sc-col">
         <div class="sc-col-title">Cash Flow</div>
-        <div class="sc-row"><span class="sc-row-label">Monthly Revenue</span><span class="sc-row-val" id="d_rev">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Monthly Expenses</span><span class="sc-row-val" id="d_exp">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Existing EMI</span><span class="sc-row-val" id="d_emi">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Net Cash Flow</span><span class="sc-row-val" id="d_net">—</span></div>
+        <div class="sc-row"><span class="sc-row-label">Monthly Revenue</span><span class="sc-row-val" id="d_rev">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Monthly Expenses</span><span class="sc-row-val" id="d_exp">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Existing EMI</span><span class="sc-row-val" id="d_emi">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Net Cash Flow</span><span class="sc-row-val" id="d_net">�</span></div>
       </div>
       <div class="sc-col">
         <div class="sc-col-title">Loan Details</div>
-        <div class="sc-row"><span class="sc-row-label">Loan Amount</span><span class="sc-row-val" id="d_loan">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Interest Rate</span><span class="sc-row-val" id="d_rate">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Tenure</span><span class="sc-row-val" id="d_ten">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">New Loan EMI</span><span class="sc-row-val" id="d_loanemi">—</span></div>
+        <div class="sc-row"><span class="sc-row-label">Loan Amount</span><span class="sc-row-val" id="d_loan">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Interest Rate</span><span class="sc-row-val" id="d_rate">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Tenure</span><span class="sc-row-val" id="d_ten">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">New Loan EMI</span><span class="sc-row-val" id="d_loanemi">�</span></div>
       </div>
       <div class="sc-col">
         <div class="sc-col-title">Coverage</div>
-        <div class="sc-row"><span class="sc-row-label">Cash Reserve</span><span class="sc-row-val" id="d_res">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Reserve Cover</span><span class="sc-row-val" id="d_resmo">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">DSCR</span><span class="sc-row-val" id="d_dscr">—</span></div>
-        <div class="sc-row"><span class="sc-row-label">Stress (−20%)</span><span class="sc-row-val" id="d_stress">—</span></div>
+        <div class="sc-row"><span class="sc-row-label">Cash Reserve</span><span class="sc-row-val" id="d_res">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Reserve Cover</span><span class="sc-row-val" id="d_resmo">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">DSCR</span><span class="sc-row-val" id="d_dscr">�</span></div>
+        <div class="sc-row"><span class="sc-row-label">Stress (-20%)</span><span class="sc-row-val" id="d_stress">�</span></div>
       </div>
     </div>
 
@@ -317,14 +321,14 @@ canvas#gauge{display:block}
     <div class="sc-rec">
       <h3>Recommendation</h3>
       <div class="rec-box" id="recBox">
-        <div class="rec-max-loan" id="recMaxLoan">—</div>
-        <div class="rec-text" id="recText">—</div>
+        <div class="rec-max-loan" id="recMaxLoan">�</div>
+        <div class="rec-text" id="recText">�</div>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="sc-footer">
-      <div class="sc-footer-brand">BizScale · Loan Safety Platform</div>
+      <div class="sc-footer-brand">BizScale � Loan Safety Platform</div>
       <div class="sc-footer-disc">This score card is indicative only and does not constitute financial advice.<br>Figures are based on information provided by the business owner.</div>
     </div>
 
@@ -333,10 +337,10 @@ canvas#gauge{display:block}
   <!-- Actions bar (screen only) -->
   <div class="actions-bar" id="actionsBar">
     <span>Share:</span>
-    <button class="btn btn-blue" onclick="copyLink()">🔗 Copy Shareable Link</button>
-    <button class="btn btn-outline" onclick="copyAsText()">📱 Copy as Text</button>
-    <button class="btn btn-green" onclick="window.print()">🖨️ Print / Save PDF</button>
-    <button class="btn btn-gray" onclick="scrollToForm()">✏️ Edit</button>
+    <button class="btn btn-blue" onclick="copyLink()">?? Copy Shareable Link</button>
+    <button class="btn btn-outline" onclick="copyAsText()">?? Copy as Text</button>
+    <button class="btn btn-green" onclick="window.print()">??? Print / Save PDF</button>
+    <button class="btn btn-gray" onclick="scrollToForm()">?? Edit</button>
   </div>
 </div><!-- /scoreCard -->
 
@@ -344,7 +348,7 @@ canvas#gauge{display:block}
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── Utilities ── */
+/* -- Utilities -- */
 function showToast(m){
   var t=document.getElementById('toast');
   t.textContent=m; t.classList.add('show');
@@ -358,7 +362,7 @@ var CUR_SYM=(function(){
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
 function fmtS(n){ return (n<0?'-':'')+fmt(n); }
 
-/* ── Finance functions ── */
+/* -- Finance functions -- */
 function calcEMI(p,r,m){
   if(!p||!m) return 0;
   if(!r) return p/m;
@@ -372,7 +376,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
   var netCF=rev-exp-totalEMI;
   var score=0;
 
-  /* Cash flow (0–30) */
+  /* Cash flow (0�30) */
   if(rev>0){
     var cfRatio=netCF/rev;
     if(cfRatio>=0.20) score+=30;
@@ -380,7 +384,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     else if(cfRatio>0)  score+=14;
   }
 
-  /* Affordability — total EMI/revenue (0–30) */
+  /* Affordability � total EMI/revenue (0�30) */
   if(rev>0&&totalEMI>0){
     var er=totalEMI/rev;
     if(er<=0.20)      score+=30;
@@ -391,7 +395,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     score+=30; /* no debt = full affordability */
   }
 
-  /* DSCR (0–25) */
+  /* DSCR (0�25) */
   var grossCF=rev-exp;
   if(totalEMI>0){
     var dscr=grossCF/totalEMI;
@@ -403,7 +407,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     score+=25; /* no debt = full DSCR */
   }
 
-  /* Stress −20% revenue (0–15) */
+  /* Stress -20% revenue (0�15) */
   var stressNet=rev*0.8-exp-totalEMI;
   if(stressNet>0)               score+=15;
   else if(stressNet>-reserve*0.1) score+=8;
@@ -421,7 +425,7 @@ function findMaxSafeLoan(rev,exp,emi,reserve,rate,tenure){
   return Math.round(lo/1000)*1000;
 }
 
-/* ── Gauge drawing ── */
+/* -- Gauge drawing -- */
 function drawGauge(score){
   var canvas=document.getElementById('gauge');
   var W=220,H=125;
@@ -465,12 +469,12 @@ function drawGauge(score){
   ctx.textAlign='center'; ctx.fillText('50',cx,cy-R-6);
 }
 
-/* ── Set/Display helpers ── */
+/* -- Set/Display helpers -- */
 function setEl(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; }
 function setElHtml(id,val){ var el=document.getElementById(id); if(el) el.innerHTML=val; }
 function setCls(id,cls){ var el=document.getElementById(id); if(el){ el.className=el.className.replace(/pos|neg|warn/g,'').trim(); el.classList.add(cls); } }
 
-/* ── Generate score card ── */
+/* -- Generate score card -- */
 var lastData={};
 
 function generateCard(){
@@ -515,9 +519,9 @@ function renderCard(d){
 
   /* Grade */
   var grade,gradeCls;
-  if(score>=70){ grade='SAFE — LOAN READY'; gradeCls='grade-safe'; }
-  else if(score>=50){ grade='RISKY — REVIEW NEEDED'; gradeCls='grade-risky'; }
-  else{ grade='HIGH RISK — NOT ADVISED'; gradeCls='grade-danger'; }
+  if(score>=70){ grade='SAFE � LOAN READY'; gradeCls='grade-safe'; }
+  else if(score>=50){ grade='RISKY � REVIEW NEEDED'; gradeCls='grade-risky'; }
+  else{ grade='HIGH RISK � NOT ADVISED'; gradeCls='grade-danger'; }
 
   /* Date */
   var now=new Date();
@@ -526,7 +530,7 @@ function renderCard(d){
 
   /* Hero */
   setEl('disp_name',name);
-  setEl('disp_ind',ind?ind+' · Generated '+dateStr:'Generated '+dateStr);
+  setEl('disp_ind',ind?ind+' � Generated '+dateStr:'Generated '+dateStr);
   var badge=document.getElementById('sc_grade_badge');
   badge.textContent=score+'/100  '+grade;
   badge.className='sc-score-label '+gradeCls;
@@ -548,7 +552,7 @@ function renderCard(d){
     setEl('d_ten',ten+' months');
     setEl('d_loanemi',fmt(loanEMI));
   } else {
-    setEl('d_loan','Not assessed'); setEl('d_rate','—'); setEl('d_ten','—'); setEl('d_loanemi','—');
+    setEl('d_loan','Not assessed'); setEl('d_rate','�'); setEl('d_ten','�'); setEl('d_loanemi','�');
   }
 
   setEl('d_res',fmt(res));
@@ -566,13 +570,13 @@ function renderCard(d){
     {label:'EMI-to-Revenue Ratio', val:emiRatio.toFixed(1)+'%',      thresh:'<40%', pass:emiRatio<=40,    warn:emiRatio<=50},
     {label:'Debt Coverage (DSCR)', val:dscr>=99?'N/A':dscr.toFixed(2)+'x', thresh:'>1.25x', pass:dscr>=1.25, warn:dscr>=1.0},
     {label:'Cash Reserve Cover',   val:resMo.toFixed(1)+' months',  thresh:'>3 months', pass:resMo>=3, warn:resMo>=1},
-    {label:'Stress Test (−20% Rev)',val:stressNet>0?'Positive':fmtS(stressNet), thresh:'Positive', pass:stressNet>0, warn:stressNet>-res*0.1}
+    {label:'Stress Test (-20% Rev)',val:stressNet>0?'Positive':fmtS(stressNet), thresh:'Positive', pass:stressNet>0, warn:stressNet>-res*0.1}
   ];
   var tHtml='';
   for(var i=0;i<rows.length;i++){
     var row=rows[i];
     var stCls=row.pass?'st-pass':row.warn?'st-warn':'st-fail';
-    var stLabel=row.pass?'✓ Pass':row.warn?'⚠ Marginal':'✗ Fail';
+    var stLabel=row.pass?'? Pass':row.warn?'? Marginal':'? Fail';
     tHtml+='<tr>'
       +'<td>'+row.label+'</td>'
       +'<td style="font-weight:800">'+row.val+'</td>'
@@ -597,9 +601,9 @@ function renderCard(d){
       recText+='At this level, your debt service coverage remains comfortable and cash flow stays positive under stress conditions.';
   } else {
     recBox.className='rec-box rec-warning';
-    setElHtml('recMaxLoan','Score: '+score+'/100 — Review Needed');
+    setElHtml('recMaxLoan','Score: '+score+'/100 � Review Needed');
     recText='Current financials present elevated risk for lenders. ';
-    if(netCF<0) recText+='Net cash flow is negative — address this before applying for new credit. ';
+    if(netCF<0) recText+='Net cash flow is negative � address this before applying for new credit. ';
     if(dscr<1.25&&totalEMI>0) recText+='DSCR of '+dscr.toFixed(2)+'x is below the 1.25x safe threshold. ';
     recText+='Maximum loan that achieves a safe score (70+): <strong>'+fmt(maxSafe)+'</strong>.';
   }
@@ -610,7 +614,7 @@ function renderCard(d){
   document.getElementById('scoreCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ── Share functions ── */
+/* -- Share functions -- */
 function buildPayload(){
   return {n:lastData.n,ind:lastData.ind,r:lastData.r,e:lastData.e,em:lastData.em,rs:lastData.rs,l:lastData.l,rt:lastData.rt,t:lastData.t};
 }
@@ -621,7 +625,7 @@ function copyLink(){
   var url=window.location.href.split('#')[0]+'#d='+encoded;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(function(){
-      showToast('✅ Shareable link copied! Anyone with this link can view the score card.');
+      showToast('? Shareable link copied! Anyone with this link can view the score card.');
     }).catch(function(){ fallbackCopy(url); });
   } else { fallbackCopy(url); }
 }
@@ -630,8 +634,8 @@ function fallbackCopy(text){
   var ta=document.createElement('textarea');
   ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
   document.body.appendChild(ta); ta.select();
-  try{ document.execCommand('copy'); showToast('✅ Link copied!'); }
-  catch(e){ showToast('Copy failed — select and copy manually.'); }
+  try{ document.execCommand('copy'); showToast('? Link copied!'); }
+  catch(e){ showToast('Copy failed � select and copy manually.'); }
   document.body.removeChild(ta);
 }
 
@@ -649,39 +653,39 @@ function copyAsText(){
   var now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
   var lines=[
-    '╔═════════════════════════════════╗',
-    '║  FINWISE — LOAN SCORE CARD      ║',
-    '╚═════════════════════════════════╝',
+    '+---------------------------------+',
+    '�  FINWISE � LOAN SCORE CARD      �',
+    '+---------------------------------+',
     '',
-    'Business : '+(d.n||'—'),
+    'Business : '+(d.n||'�'),
     'Date     : '+now,
     '',
-    '── SCORE ────────────────────────',
+    '-- SCORE ------------------------',
     'Score    : '+score+'/100',
     'Grade    : '+grade,
     '',
-    '── CASH FLOW ────────────────────',
+    '-- CASH FLOW --------------------',
     'Revenue  : '+fmt(d.r)+' /month',
     'Expenses : '+fmt(d.e)+' /month',
     'EMI      : '+(totalEMI>0?fmt(totalEMI)+' /month':'None'),
     'Net CF   : '+fmtS(netCF)+' /month',
     '',
-    '── COVERAGE ─────────────────────',
+    '-- COVERAGE ---------------------',
     'Reserve  : '+fmt(d.rs),
     'Res Cover: '+resMo.toFixed(1)+' months',
     'DSCR     : '+(dscr>=99?'N/A':dscr.toFixed(2)+'x'),
     '',
-    '── RECOMMENDATION ───────────────',
+    '-- RECOMMENDATION ---------------',
     'Max Safe Loan: '+fmt(maxSafe),
     '',
     'Generated by BizScale Loan Safety Platform',
-    'Note: Indicative only — not financial advice.'
+    'Note: Indicative only � not financial advice.'
   ];
 
   var text=lines.join('\n');
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){
-      showToast('✅ Score card text copied — paste into WhatsApp or email.');
+      showToast('? Score card text copied � paste into WhatsApp or email.');
     }).catch(function(){ fallbackCopy(text); });
   } else { fallbackCopy(text); }
 }
@@ -697,7 +701,7 @@ function clearInputs(){
   document.getElementById('scoreCard').style.display='none';
 }
 
-/* ── Load from saved profile ── */
+/* -- Load from saved profile -- */
 function loadProfile(){
   try{
     var profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
@@ -719,7 +723,7 @@ function loadProfile(){
   if(!document.getElementById('sc_ten').value)  document.getElementById('sc_ten').value='36';
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'){
@@ -735,11 +739,11 @@ document.getElementById('pwCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlock();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 (function(){
   var hash=window.location.hash;
   if(hash.indexOf('#d=')===0){
-    /* View mode — no login required */
+    /* View mode � no login required */
     try{
       var data=JSON.parse(atob(decodeURIComponent(hash.substring(3))));
       lastData=data;
@@ -775,7 +779,7 @@ document.getElementById('pwCode').addEventListener('keydown',function(e){
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
 function fmtS(n){ return (n<0?'-':'')+fmt(n); }
 
-/* ── Finance functions ── */
+/* -- Finance functions -- */
 function calcEMI(p,r,m){
   if(!p||!m) return 0;
   if(!r) return p/m;
@@ -789,7 +793,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
   var netCF=rev-exp-totalEMI;
   var score=0;
 
-  /* Cash flow (0–30) */
+  /* Cash flow (0�30) */
   if(rev>0){
     var cfRatio=netCF/rev;
     if(cfRatio>=0.20) score+=30;
@@ -797,7 +801,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     else if(cfRatio>0)  score+=14;
   }
 
-  /* Affordability — total EMI/revenue (0–30) */
+  /* Affordability � total EMI/revenue (0�30) */
   if(rev>0&&totalEMI>0){
     var er=totalEMI/rev;
     if(er<=0.20)      score+=30;
@@ -808,7 +812,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     score+=30; /* no debt = full affordability */
   }
 
-  /* DSCR (0–25) */
+  /* DSCR (0�25) */
   var grossCF=rev-exp;
   if(totalEMI>0){
     var dscr=grossCF/totalEMI;
@@ -820,7 +824,7 @@ function computeScore(rev,exp,emi,reserve,newLoan,rate,tenure){
     score+=25; /* no debt = full DSCR */
   }
 
-  /* Stress −20% revenue (0–15) */
+  /* Stress -20% revenue (0�15) */
   var stressNet=rev*0.8-exp-totalEMI;
   if(stressNet>0)               score+=15;
   else if(stressNet>-reserve*0.1) score+=8;
@@ -838,7 +842,7 @@ function findMaxSafeLoan(rev,exp,emi,reserve,rate,tenure){
   return Math.round(lo/1000)*1000;
 }
 
-/* ── Gauge drawing ── */
+/* -- Gauge drawing -- */
 function drawGauge(score){
   var canvas=document.getElementById('gauge');
   var W=220,H=125;
@@ -882,12 +886,12 @@ function drawGauge(score){
   ctx.textAlign='center'; ctx.fillText('50',cx,cy-R-6);
 }
 
-/* ── Set/Display helpers ── */
+/* -- Set/Display helpers -- */
 function setEl(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; }
 function setElHtml(id,val){ var el=document.getElementById(id); if(el) el.innerHTML=val; }
 function setCls(id,cls){ var el=document.getElementById(id); if(el){ el.className=el.className.replace(/pos|neg|warn/g,'').trim(); el.classList.add(cls); } }
 
-/* ── Generate score card ── */
+/* -- Generate score card -- */
 var lastData={};
 
 function generateCard(){
@@ -932,9 +936,9 @@ function renderCard(d){
 
   /* Grade */
   var grade,gradeCls;
-  if(score>=70){ grade='SAFE — LOAN READY'; gradeCls='grade-safe'; }
-  else if(score>=50){ grade='RISKY — REVIEW NEEDED'; gradeCls='grade-risky'; }
-  else{ grade='HIGH RISK — NOT ADVISED'; gradeCls='grade-danger'; }
+  if(score>=70){ grade='SAFE � LOAN READY'; gradeCls='grade-safe'; }
+  else if(score>=50){ grade='RISKY � REVIEW NEEDED'; gradeCls='grade-risky'; }
+  else{ grade='HIGH RISK � NOT ADVISED'; gradeCls='grade-danger'; }
 
   /* Date */
   var now=new Date();
@@ -943,7 +947,7 @@ function renderCard(d){
 
   /* Hero */
   setEl('disp_name',name);
-  setEl('disp_ind',ind?ind+' · Generated '+dateStr:'Generated '+dateStr);
+  setEl('disp_ind',ind?ind+' � Generated '+dateStr:'Generated '+dateStr);
   var badge=document.getElementById('sc_grade_badge');
   badge.textContent=score+'/100  '+grade;
   badge.className='sc-score-label '+gradeCls;
@@ -965,7 +969,7 @@ function renderCard(d){
     setEl('d_ten',ten+' months');
     setEl('d_loanemi',fmt(loanEMI));
   } else {
-    setEl('d_loan','Not assessed'); setEl('d_rate','—'); setEl('d_ten','—'); setEl('d_loanemi','—');
+    setEl('d_loan','Not assessed'); setEl('d_rate','�'); setEl('d_ten','�'); setEl('d_loanemi','�');
   }
 
   setEl('d_res',fmt(res));
@@ -983,13 +987,13 @@ function renderCard(d){
     {label:'EMI-to-Revenue Ratio', val:emiRatio.toFixed(1)+'%',      thresh:'<40%', pass:emiRatio<=40,    warn:emiRatio<=50},
     {label:'Debt Coverage (DSCR)', val:dscr>=99?'N/A':dscr.toFixed(2)+'x', thresh:'>1.25x', pass:dscr>=1.25, warn:dscr>=1.0},
     {label:'Cash Reserve Cover',   val:resMo.toFixed(1)+' months',  thresh:'>3 months', pass:resMo>=3, warn:resMo>=1},
-    {label:'Stress Test (−20% Rev)',val:stressNet>0?'Positive':fmtS(stressNet), thresh:'Positive', pass:stressNet>0, warn:stressNet>-res*0.1}
+    {label:'Stress Test (-20% Rev)',val:stressNet>0?'Positive':fmtS(stressNet), thresh:'Positive', pass:stressNet>0, warn:stressNet>-res*0.1}
   ];
   var tHtml='';
   for(var i=0;i<rows.length;i++){
     var row=rows[i];
     var stCls=row.pass?'st-pass':row.warn?'st-warn':'st-fail';
-    var stLabel=row.pass?'✓ Pass':row.warn?'⚠ Marginal':'✗ Fail';
+    var stLabel=row.pass?'? Pass':row.warn?'? Marginal':'? Fail';
     tHtml+='<tr>'
       +'<td>'+row.label+'</td>'
       +'<td style="font-weight:800">'+row.val+'</td>'
@@ -1014,9 +1018,9 @@ function renderCard(d){
       recText+='At this level, your debt service coverage remains comfortable and cash flow stays positive under stress conditions.';
   } else {
     recBox.className='rec-box rec-warning';
-    setElHtml('recMaxLoan','Score: '+score+'/100 — Review Needed');
+    setElHtml('recMaxLoan','Score: '+score+'/100 � Review Needed');
     recText='Current financials present elevated risk for lenders. ';
-    if(netCF<0) recText+='Net cash flow is negative — address this before applying for new credit. ';
+    if(netCF<0) recText+='Net cash flow is negative � address this before applying for new credit. ';
     if(dscr<1.25&&totalEMI>0) recText+='DSCR of '+dscr.toFixed(2)+'x is below the 1.25x safe threshold. ';
     recText+='Maximum loan that achieves a safe score (70+): <strong>'+fmt(maxSafe)+'</strong>.';
   }
@@ -1027,7 +1031,7 @@ function renderCard(d){
   document.getElementById('scoreCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ── Share functions ── */
+/* -- Share functions -- */
 function buildPayload(){
   return {n:lastData.n,ind:lastData.ind,r:lastData.r,e:lastData.e,em:lastData.em,rs:lastData.rs,l:lastData.l,rt:lastData.rt,t:lastData.t};
 }
@@ -1038,7 +1042,7 @@ function copyLink(){
   var url=window.location.href.split('#')[0]+'#d='+encoded;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(function(){
-      showToast('✅ Shareable link copied! Anyone with this link can view the score card.');
+      showToast('? Shareable link copied! Anyone with this link can view the score card.');
     }).catch(function(){ fallbackCopy(url); });
   } else { fallbackCopy(url); }
 }
@@ -1047,8 +1051,8 @@ function fallbackCopy(text){
   var ta=document.createElement('textarea');
   ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
   document.body.appendChild(ta); ta.select();
-  try{ document.execCommand('copy'); showToast('✅ Link copied!'); }
-  catch(e){ showToast('Copy failed — select and copy manually.'); }
+  try{ document.execCommand('copy'); showToast('? Link copied!'); }
+  catch(e){ showToast('Copy failed � select and copy manually.'); }
   document.body.removeChild(ta);
 }
 
@@ -1066,39 +1070,39 @@ function copyAsText(){
   var now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
   var lines=[
-    '╔═════════════════════════════════╗',
-    '║  FINWISE — LOAN SCORE CARD      ║',
-    '╚═════════════════════════════════╝',
+    '+---------------------------------+',
+    '�  FINWISE � LOAN SCORE CARD      �',
+    '+---------------------------------+',
     '',
-    'Business : '+(d.n||'—'),
+    'Business : '+(d.n||'�'),
     'Date     : '+now,
     '',
-    '── SCORE ────────────────────────',
+    '-- SCORE ------------------------',
     'Score    : '+score+'/100',
     'Grade    : '+grade,
     '',
-    '── CASH FLOW ────────────────────',
+    '-- CASH FLOW --------------------',
     'Revenue  : '+fmt(d.r)+' /month',
     'Expenses : '+fmt(d.e)+' /month',
     'EMI      : '+(totalEMI>0?fmt(totalEMI)+' /month':'None'),
     'Net CF   : '+fmtS(netCF)+' /month',
     '',
-    '── COVERAGE ─────────────────────',
+    '-- COVERAGE ---------------------',
     'Reserve  : '+fmt(d.rs),
     'Res Cover: '+resMo.toFixed(1)+' months',
     'DSCR     : '+(dscr>=99?'N/A':dscr.toFixed(2)+'x'),
     '',
-    '── RECOMMENDATION ───────────────',
+    '-- RECOMMENDATION ---------------',
     'Max Safe Loan: '+fmt(maxSafe),
     '',
     'Generated by BizScale Loan Safety Platform',
-    'Note: Indicative only — not financial advice.'
+    'Note: Indicative only � not financial advice.'
   ];
 
   var text=lines.join('\n');
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){
-      showToast('✅ Score card text copied — paste into WhatsApp or email.');
+      showToast('? Score card text copied � paste into WhatsApp or email.');
     }).catch(function(){ fallbackCopy(text); });
   } else { fallbackCopy(text); }
 }
@@ -1114,7 +1118,7 @@ function clearInputs(){
   document.getElementById('scoreCard').style.display='none';
 }
 
-/* ── Load from saved profile ── */
+/* -- Load from saved profile -- */
 function loadProfile(){
   try{
     var profiles=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
@@ -1136,7 +1140,7 @@ function loadProfile(){
   if(!document.getElementById('sc_ten').value)  document.getElementById('sc_ten').value='36';
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'){
@@ -1152,11 +1156,11 @@ document.getElementById('pwCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlock();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 (function(){
   var hash=window.location.hash;
   if(hash.indexOf('#d=')===0){
-    /* View mode — no login required */
+    /* View mode � no login required */
     try{
       var data=JSON.parse(atob(decodeURIComponent(hash.substring(3))));
       lastData=data;

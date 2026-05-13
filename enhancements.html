@@ -1,9 +1,9 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BizScale SmallBiz ‚Äî Platform Enhancement Review</title>
+<title>BizScale SmallBiz ó Platform Enhancement Review</title>
 <style>
   :root {
     --primary: #1a56db;
@@ -127,17 +127,21 @@
     .section-header { background: #1241a8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
 <nav class="top-nav">
-  <span class="logo">üè¶ BizScale SmallBiz</span>
-  <span class="subtitle">Platform Enhancement Review ¬∑ April 2026 ¬∑ Internal Use Only</span>
+  <span class="logo">?? BizScale SmallBiz</span>
+  <span class="subtitle">Platform Enhancement Review ∑ April 2026 ∑ Internal Use Only</span>
 </nav>
 
 <div class="hero">
   <h1>Platform Enhancement Review</h1>
-  <div class="meta">BizScale SmallBiz ¬∑ 30+ Modules Reviewed ¬∑ April 2026</div>
+  <div class="meta">BizScale SmallBiz ∑ 30+ Modules Reviewed ∑ April 2026</div>
   <div class="kpi-row">
     <div class="kpi"><div class="num">310</div><div class="lbl">Total Items</div></div>
     <div class="kpi"><div class="num">68</div><div class="lbl">Priority 1 (Critical)</div></div>
@@ -151,13 +155,13 @@
 
   <!-- TOC -->
   <div class="toc-card">
-    <h2>üìã Table of Contents</h2>
+    <h2>?? Table of Contents</h2>
     <div class="toc-cols">
       <a href="#exec">Executive Summary &amp; Top 10 Critical Items</a>
-      <a href="#groupA">Group A ‚Äî Loan, Debt &amp; Cash Flow</a>
-      <a href="#groupB">Group B ‚Äî Tax, Payroll &amp; Deductions</a>
-      <a href="#groupC">Group C ‚Äî Invoices, Bills, Goals &amp; Grants</a>
-      <a href="#groupD">Group D ‚Äî AI, Analytics, Reports &amp; Dashboard</a>
+      <a href="#groupA">Group A ó Loan, Debt &amp; Cash Flow</a>
+      <a href="#groupB">Group B ó Tax, Payroll &amp; Deductions</a>
+      <a href="#groupC">Group C ó Invoices, Bills, Goals &amp; Grants</a>
+      <a href="#groupD">Group D ó AI, Analytics, Reports &amp; Dashboard</a>
       <a href="#cross">Cross-Cutting Themes</a>
       <a href="#quickwins">Quick Wins Table</a>
     </div>
@@ -166,7 +170,7 @@
   <!-- EXECUTIVE SUMMARY -->
   <div id="exec" class="section">
     <div class="section-header">
-      <span class="icon">üìä</span>
+      <span class="icon">??</span>
       <h2>Executive Summary</h2>
     </div>
     <div class="module-card" style="border-radius:0 0 10px 10px; padding: 20px 24px;">
@@ -181,18 +185,18 @@
         <div class="exec-tile"><div class="nt" style="color:#991b1b">8</div><div class="nl">Hard Bugs</div></div>
       </div>
       <div class="top10">
-        <h3>üî¥ Top 10 Critical Items (must-fix before launch)</h3>
+        <h3>?? Top 10 Critical Items (must-fix before launch)</h3>
         <ol>
-          <li><strong>localStorage not persisted in 22+ modules</strong> ‚Äî inputs reset on every page reload, making the tool feel broken. <span>(Affects all groups)</span></li>
-          <li><strong>Division by zero in cashRunway</strong> ‚Äî if monthly burn = 0 the runway calc returns Infinity/NaN and crashes the display. <span>(cashRunway)</span></li>
-          <li><strong>loanRepaymentOptimizer dead simulate() function</strong> ‚Äî old function still in code, confuses calculation path; remove and consolidate to simulateFull(). <span>(loanRepaymentOptimizer)</span></li>
-          <li><strong>Payroll data not shared to ownersPay</strong> ‚Äî owner pay module doesn't read employee/contractor payroll totals; users must double-enter. <span>(ownersPay ‚Üî contractorPayroll)</span></li>
-          <li><strong>Invoice revenue not fed to budgetActualTracker</strong> ‚Äî revenue figures must be re-entered manually; real data sits in invoiceTracker unused. <span>(invoiceTracker ‚Üî budgetActualTracker)</span></li>
-          <li><strong>Tax estimate not wired to cashFlowCalendar</strong> ‚Äî tax payment dates (Q1‚ÄìQ4) should auto-populate cashFlowCalendar; currently manual. <span>(taxEstimator ‚Üî cashFlowCalendar)</span></li>
-          <li><strong>grantFinder has no live data source</strong> ‚Äî grant list is fully hardcoded; results will become stale without a refresh mechanism or API. <span>(grantFinder)</span></li>
-          <li><strong>aiCfoChat has no conversation history</strong> ‚Äî each message is independent; AI loses all prior context, giving incoherent multi-turn responses. <span>(aiCfoChat)</span></li>
-          <li><strong>bankStatementUpload parses CSV only</strong> ‚Äî OFX/QFX/QBO formats (QuickBooks, Mint exports) are unsupported; major adoption blocker. <span>(bankStatementUpload)</span></li>
-          <li><strong>No global business profile data shared across modules</strong> ‚Äî business name, industry, revenue tier entered repeatedly in every module. <span>(All modules)</span></li>
+          <li><strong>localStorage not persisted in 22+ modules</strong> ó inputs reset on every page reload, making the tool feel broken. <span>(Affects all groups)</span></li>
+          <li><strong>Division by zero in cashRunway</strong> ó if monthly burn = 0 the runway calc returns Infinity/NaN and crashes the display. <span>(cashRunway)</span></li>
+          <li><strong>loanRepaymentOptimizer dead simulate() function</strong> ó old function still in code, confuses calculation path; remove and consolidate to simulateFull(). <span>(loanRepaymentOptimizer)</span></li>
+          <li><strong>Payroll data not shared to ownersPay</strong> ó owner pay module doesn't read employee/contractor payroll totals; users must double-enter. <span>(ownersPay ? contractorPayroll)</span></li>
+          <li><strong>Invoice revenue not fed to budgetActualTracker</strong> ó revenue figures must be re-entered manually; real data sits in invoiceTracker unused. <span>(invoiceTracker ? budgetActualTracker)</span></li>
+          <li><strong>Tax estimate not wired to cashFlowCalendar</strong> ó tax payment dates (Q1ñQ4) should auto-populate cashFlowCalendar; currently manual. <span>(taxEstimator ? cashFlowCalendar)</span></li>
+          <li><strong>grantFinder has no live data source</strong> ó grant list is fully hardcoded; results will become stale without a refresh mechanism or API. <span>(grantFinder)</span></li>
+          <li><strong>aiCfoChat has no conversation history</strong> ó each message is independent; AI loses all prior context, giving incoherent multi-turn responses. <span>(aiCfoChat)</span></li>
+          <li><strong>bankStatementUpload parses CSV only</strong> ó OFX/QFX/QBO formats (QuickBooks, Mint exports) are unsupported; major adoption blocker. <span>(bankStatementUpload)</span></li>
+          <li><strong>No global business profile data shared across modules</strong> ó business name, industry, revenue tier entered repeatedly in every module. <span>(All modules)</span></li>
         </ol>
       </div>
     </div>
@@ -201,8 +205,8 @@
   <!-- GROUP A -->
   <div id="groupA" class="section">
     <div class="section-header">
-      <span class="icon">üí≥</span>
-      <h2>Group A ‚Äî Loan, Debt &amp; Cash Flow (9 Modules)</h2>
+      <span class="icon">??</span>
+      <h2>Group A ó Loan, Debt &amp; Cash Flow (9 Modules)</h2>
       <span class="count">~80 items</span>
     </div>
 
@@ -214,11 +218,11 @@
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save all input fields to localStorage; restore on reload so user doesn't re-enter business details every visit.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull credit score from businessHealthScore module if already calculated; avoid duplicate entry.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Add validation: if annual revenue = 0, debt-service coverage ratio throws divide-by-zero. Show inline error instead.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Download Score Report (PDF)" button ‚Äî lenders often ask for a score printout.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Show "What-if" slider ‚Äî "if you raise your credit score by 20 points, your loan score improves to X."</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add tooltip explanations for each scoring factor (DSCR, LTV, TIB) ‚Äî most small business owners don't know these terms.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Download Score Report (PDF)" button ó lenders often ask for a score printout.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Show "What-if" slider ó "if you raise your credit score by 20 points, your loan score improves to X."</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add tooltip explanations for each scoring factor (DSCR, LTV, TIB) ó most small business owners don't know these terms.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Share with lender" link that pre-fills loanMarketplaceEngine with user's current score inputs.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Color-code the score dial: red (&lt;500), amber (500‚Äì650), green (&gt;650) for instant readability.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Color-code the score dial: red (&lt;500), amber (500ñ650), green (&gt;650) for instant readability.</td></tr>
       </table>
     </div>
 
@@ -227,12 +231,12 @@
       <div class="module-title">Loan Repayment Optimizer <span class="file">modules/loanRepaymentOptimizer.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-bug">Bug</span></td><td>Remove unused legacy <code>simulate()</code> function ‚Äî it conflicts with <code>simulateFull()</code> and is never called. Dead code risk.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-bug">Bug</span></td><td>Remove unused legacy <code>simulate()</code> function ó it conflicts with <code>simulateFull()</code> and is never called. Dead code risk.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save loan inputs and optimization strategy to localStorage; restore on reload.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Guard against zero or negative balance input ‚Äî currently returns NaN in amortization table rows.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Import loan list from loanMarketplaceEngine when user has selected a lender ‚Äî avoid re-entering rate and term.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Guard against zero or negative balance input ó currently returns NaN in amortization table rows.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Import loan list from loanMarketplaceEngine when user has selected a lender ó avoid re-entering rate and term.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export full amortization schedule to CSV for spreadsheet analysis.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "extra payment" field ‚Äî show how many months early the loan is paid off and total interest saved.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "extra payment" field ó show how many months early the loan is paid off and total interest saved.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a chart showing principal vs. interest portion over time (area chart).</td></tr>
       </table>
     </div>
@@ -247,7 +251,7 @@
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add closing-cost input field (origination fee, appraisal) to make break-even calculation accurate.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Print/PDF comparison of old vs. new loan summary for lender meetings.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull current loan data from loanRepaymentOptimizer if already entered there.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Show a side-by-side monthly payment card: "You pay $X now ‚Üí $Y after refi, saving $Z/mo."</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Show a side-by-side monthly payment card: "You pay $X now ? $Y after refi, saving $Z/mo."</td></tr>
       </table>
     </div>
 
@@ -259,10 +263,10 @@
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save search filters (amount, term, type, credit score) to localStorage so user can return to their search.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pre-fill credit score from loanDecisionScoreEngine; pre-fill loan amount from workingCapitalCalc need calculation.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Apply Now" deep-link button per lender (opens lender's actual application URL in new tab).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Compare" checkboxes ‚Äî select up to 3 lenders and show a side-by-side comparison table.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Compare" checkboxes ó select up to 3 lenders and show a side-by-side comparison table.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add sort options: by rate, by amount, by turnaround time, by min credit score.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export matched lenders list as PDF for advisor/accountant sharing.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Lender Eligibility Score" ‚Äî show why each lender is a strong/weak match (e.g., "Credit score 10 pts below minimum").</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Lender Eligibility Score" ó show why each lender is a strong/weak match (e.g., "Credit score 10 pts below minimum").</td></tr>
       </table>
     </div>
 
@@ -271,9 +275,9 @@
       <div class="module-title">Debt Command Center <span class="file">modules/debtCommandCenter.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>All debt entries must persist in localStorage ‚Äî currently all debts are lost on reload.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-dead">Dead Code</span></td><td>Consolidate <code>simulateFull()</code> with loanRepaymentOptimizer ‚Äî both modules independently implement nearly identical amortization logic; extract to shared utility.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add Snowball vs. Avalanche strategy toggle ‚Äî show projected payoff date and total interest for each strategy.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>All debt entries must persist in localStorage ó currently all debts are lost on reload.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-dead">Dead Code</span></td><td>Consolidate <code>simulateFull()</code> with loanRepaymentOptimizer ó both modules independently implement nearly identical amortization logic; extract to shared utility.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add Snowball vs. Avalanche strategy toggle ó show projected payoff date and total interest for each strategy.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Feed debt payments to cashFlowCalendar as recurring outflow events.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export debt summary and payoff timeline to PDF.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Debt-free date" countdown chip shown prominently at top of the page.</td></tr>
@@ -286,11 +290,11 @@
       <div class="module-title">Cash Runway <span class="file">modules/cashRunway.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-bug">Bug</span></td><td>Guard division by zero: if monthly burn = 0, runway = Infinity which renders as "Infinity months" in the UI. Show "N/A ‚Äî no burn" instead.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-bug">Bug</span></td><td>Guard division by zero: if monthly burn = 0, runway = Infinity which renders as "Infinity months" in the UI. Show "N/A ó no burn" instead.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save cash balance and burn rate inputs to localStorage.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull cash balance from monthlySnapshot or bankStatementUpload instead of requiring manual entry.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add scenario modeling: "If revenue drops 20%, runway becomes X months."</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Show a color-coded alert if runway &lt; 3 months (red), 3‚Äì6 months (amber), &gt;6 months (green).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Show a color-coded alert if runway &lt; 3 months (red), 3ñ6 months (amber), &gt;6 months (green).</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "fundraising needed" calculator: if target runway is 12 months, show how much additional capital is required.</td></tr>
       </table>
     </div>
@@ -301,11 +305,11 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Persist all calendar events in localStorage using key <code>fw_cf_events</code> (already defined in schema, just not saved).</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-import Q1‚ÄìQ4 estimated tax payment dates from taxEstimator module.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-import Q1ñQ4 estimated tax payment dates from taxEstimator module.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-import recurring invoice due dates from invoiceTracker.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Import debt payment due dates from debtCommandCenter.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add a "Weekly Cash Position" bar chart below the calendar showing projected balance each week.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Fix timezone handling ‚Äî dates entered as "2026-04-15" should not shift by timezone offset on display.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Fix timezone handling ó dates entered as "2026-04-15" should not shift by timezone offset on display.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export monthly view as PDF or iCal (.ics) for Google Calendar / Outlook sync.</td></tr>
       </table>
     </div>
@@ -319,7 +323,7 @@
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save owner salary history and draw amounts to localStorage.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add self-employment tax estimate (SE tax at 15.3% up to $168,600 for 2026) when entity type is Sole Prop or LLC.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add S-Corp reasonable salary vs. distribution split calculator for tax savings.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Show industry benchmark for owner pay (e.g., "Retail owners typically pay themselves 8‚Äì12% of revenue").</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Show industry benchmark for owner pay (e.g., "Retail owners typically pay themselves 8ñ12% of revenue").</td></tr>
       </table>
     </div>
 
@@ -330,8 +334,8 @@
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save all asset and liability inputs to localStorage.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pre-fill accounts receivable from invoiceTracker outstanding balance; accounts payable from vendorBillTracker outstanding balance.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Cash Conversion Cycle" calculation (DIO + DSO ‚àí DPO) as a key operational metric.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Color-code current ratio: &lt;1.0 red (insolvent risk), 1.0‚Äì1.5 amber, &gt;1.5 green.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Cash Conversion Cycle" calculation (DIO + DSO - DPO) as a key operational metric.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Color-code current ratio: &lt;1.0 red (insolvent risk), 1.0ñ1.5 amber, &gt;1.5 green.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export working capital summary for bank loan applications (bankers always ask for this).</td></tr>
       </table>
     </div>
@@ -340,8 +344,8 @@
   <!-- GROUP B -->
   <div id="groupB" class="section">
     <div class="section-header">
-      <span class="icon">üßæ</span>
-      <h2>Group B ‚Äî Tax, Payroll &amp; Deductions (8 Modules)</h2>
+      <span class="icon">??</span>
+      <h2>Group B ó Tax, Payroll &amp; Deductions (8 Modules)</h2>
       <span class="count">~56 items</span>
     </div>
 
@@ -350,9 +354,9 @@
       <div class="module-title">Tax Estimator <span class="file">modules/taxEstimator.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push Q1‚ÄìQ4 estimated tax due dates and amounts to cashFlowCalendar automatically.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push Q1ñQ4 estimated tax due dates and amounts to cashFlowCalendar automatically.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save income, deductions, and entity type to localStorage using key <code>fw_tax_payments_[yr]</code>.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Hardcoded 2024 tax brackets ‚Äî update to 2026 IRS brackets ($11,925/22% threshold changes). Make year-selectable.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Hardcoded 2024 tax brackets ó update to 2026 IRS brackets ($11,925/22% threshold changes). Make year-selectable.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull total revenue from invoiceTracker and total expenses from vendorBillTracker to auto-populate income fields.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add QBI (Qualified Business Income) deduction calculator for pass-through entities.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export estimated tax summary as PDF for CPA sharing.</td></tr>
@@ -368,9 +372,9 @@
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save all tax filing status, entity type, and year-to-date figures to localStorage.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Aggregate data from taxEstimator, keyDeductions, and salesTaxTracker into a single "Tax Health" dashboard view.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Tax Deadline Tracker" ‚Äî a checklist of key IRS deadlines (1099 filing, S-Corp election, W-2 distribution) with dates.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Tax Deadline Tracker" ó a checklist of key IRS deadlines (1099 filing, S-Corp election, W-2 distribution) with dates.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>One-click "Tax Package" export: combine all tax module outputs into a single PDF for CPA hand-off.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add "Tax Savings Opportunity" summary card ‚Äî top 3 deductions the user hasn't yet claimed.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add "Tax Savings Opportunity" summary card ó top 3 deductions the user hasn't yet claimed.</td></tr>
       </table>
     </div>
 
@@ -380,11 +384,11 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save selected deductions and entered amounts to localStorage.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Section 179 deduction cap is hardcoded at $1,050,000 ‚Äî should be configurable as IRS adjusts it annually. Flag as a constant to update.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Section 179 deduction cap is hardcoded at $1,050,000 ó should be configurable as IRS adjusts it annually. Flag as a constant to update.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push deduction totals to taxEstimator so they reduce taxable income automatically.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add home office deduction calculator (simplified method: $5/sq ft up to 300 sq ft vs. actual expense method).</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add vehicle business use calculator (standard mileage rate vs. actual cost method comparison).</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export deductions checklist as PDF ‚Äî very useful for CPA meetings.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export deductions checklist as PDF ó very useful for CPA meetings.</td></tr>
       </table>
     </div>
 
@@ -394,8 +398,8 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save state selections, nexus states, and tax collected figures to localStorage.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Sales tax rates are hardcoded ‚Äî some states update rates quarterly. Add a "rates last updated" date and flag when stale (&gt;90 days).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Economic Nexus" threshold tracker ‚Äî show which states the business is approaching ($100K/200 transaction thresholds per South Dakota v. Wayfair).</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Sales tax rates are hardcoded ó some states update rates quarterly. Add a "rates last updated" date and flag when stale (&gt;90 days).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Economic Nexus" threshold tracker ó show which states the business is approaching ($100K/200 transaction thresholds per South Dakota v. Wayfair).</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull taxable sales from invoiceTracker by state if state is tagged on invoices.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export state-by-state sales tax liability report as CSV for filing prep.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add filing frequency reminder (monthly vs. quarterly vs. annual based on volume).</td></tr>
@@ -409,8 +413,8 @@
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Persist contractor list and payment history to localStorage using key <code>fw_contractors</code>.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Share total contractor expense with ownersPay and taxEstimator (deductible business expense).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add 1099-NEC threshold alert: flag contractors who have been paid ‚â•$600 YTD and need a 1099.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add W-9 collection status field per contractor ‚Äî track which contractors have submitted W-9.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add 1099-NEC threshold alert: flag contractors who have been paid =$600 YTD and need a 1099.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add W-9 collection status field per contractor ó track which contractors have submitted W-9.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export contractor payment summary as CSV for 1099 filing or CPA use.</td></tr>
       </table>
     </div>
@@ -422,7 +426,7 @@
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save employee list and salary data to localStorage using key <code>fw_employees</code>.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Feed total payroll cost to ownersPay and taxEstimator as a deductible expense.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-calc">Calculation</span></td><td>FICA employer match rates and federal unemployment (FUTA) thresholds are hardcoded ‚Äî make year-configurable.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-calc">Calculation</span></td><td>FICA employer match rates and federal unemployment (FUTA) thresholds are hardcoded ó make year-configurable.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add benefits cost estimator (health insurance, 401k match) as part of total compensation package.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export payroll summary by employee for payroll processor hand-off.</td></tr>
       </table>
@@ -445,11 +449,11 @@
       <div class="module-title">CPA Financial Report Export <span class="file">modules/caExport.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-populate report from live module data (revenue from invoiceTracker, expenses from vendorBillTracker, payroll from payrollEstimator) ‚Äî currently all manual input.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add actual PDF generation (html2canvas or browser print) instead of just showing a preview ‚Äî the "Export" button currently does nothing.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-populate report from live module data (revenue from invoiceTracker, expenses from vendorBillTracker, payroll from payrollEstimator) ó currently all manual input.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add actual PDF generation (html2canvas or browser print) instead of just showing a preview ó the "Export" button currently does nothing.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add email-to-CPA option: open mailto: with the CPA's email pre-filled and report body summarized.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Review Before Export" checklist ‚Äî prompt user to verify key figures before sending to CPA.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Support multiple report periods: monthly, quarterly, annual ‚Äî currently only one period supported.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Review Before Export" checklist ó prompt user to verify key figures before sending to CPA.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Support multiple report periods: monthly, quarterly, annual ó currently only one period supported.</td></tr>
       </table>
     </div>
   </div>
@@ -457,8 +461,8 @@
   <!-- GROUP C -->
   <div id="groupC" class="section">
     <div class="section-header">
-      <span class="icon">üìÇ</span>
-      <h2>Group C ‚Äî Invoices, Bills, Goals &amp; Grants (8 Modules)</h2>
+      <span class="icon">??</span>
+      <h2>Group C ó Invoices, Bills, Goals &amp; Grants (8 Modules)</h2>
       <span class="count">~88 items</span>
     </div>
 
@@ -469,12 +473,12 @@
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push paid invoice totals as revenue to budgetActualTracker, taxEstimator, and monthlySnapshot automatically.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push outstanding invoice due dates to cashFlowCalendar as expected inflows.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Days Outstanding calculation uses JS <code>new Date()</code> which is timezone-sensitive ‚Äî dates can shift by ¬±1 day depending on browser locale. Use UTC consistently.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Send Reminder" button per overdue invoice ‚Äî opens an email draft with the invoice details pre-filled.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add invoice templates ‚Äî user selects a template (consulting, product sale, retainer) to pre-fill line items.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Days Outstanding calculation uses JS <code>new Date()</code> which is timezone-sensitive ó dates can shift by ±1 day depending on browser locale. Use UTC consistently.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Send Reminder" button per overdue invoice ó opens an email draft with the invoice details pre-filled.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add invoice templates ó user selects a template (consulting, product sale, retainer) to pre-fill line items.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export individual invoice as printable PDF (many US freelancers need this for client records).</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add recurring invoice support ‚Äî set an invoice to auto-generate monthly/quarterly with same line items.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add aging buckets summary: Current / 1‚Äì30 days / 31‚Äì60 days / 60+ days overdue with totals.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add recurring invoice support ó set an invoice to auto-generate monthly/quarterly with same line items.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add aging buckets summary: Current / 1ñ30 days / 31ñ60 days / 60+ days overdue with totals.</td></tr>
       </table>
     </div>
 
@@ -486,7 +490,7 @@
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Push unpaid bill due dates to cashFlowCalendar as outflow events.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Feed total AP balance to workingCapitalCalc accounts payable field.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add vendor categorization (utilities, rent, software, supplies) for expense reporting by category.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Schedule Payment" flag per bill ‚Äî mark which bills are scheduled for ACH/check and on which date.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Schedule Payment" flag per bill ó mark which bills are scheduled for ACH/check and on which date.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export bills list as CSV for accounting software import (QuickBooks, Wave).</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add "Bill Due This Week" alert banner at top of page showing total amount due in next 7 days.</td></tr>
       </table>
@@ -497,12 +501,12 @@
       <div class="module-title">Budget vs. Actual Tracker <span class="file">modules/budgetActualTracker.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull actual revenue from invoiceTracker (paid invoices) and actual expenses from vendorBillTracker (paid bills) ‚Äî currently all actuals are entered manually.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save budget rows and actual entries to localStorage ‚Äî all data is lost on reload.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull actual revenue from invoiceTracker (paid invoices) and actual expenses from vendorBillTracker (paid bills) ó currently all actuals are entered manually.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save budget rows and actual entries to localStorage ó all data is lost on reload.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add variance highlighting: rows where actual exceeds budget by &gt;10% shown in red; under budget by &gt;10% shown in green.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add category-level rollup ‚Äî group line items by category (Revenue, Payroll, Marketing, etc.) with subtotals.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add category-level rollup ó group line items by category (Revenue, Payroll, Marketing, etc.) with subtotals.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export budget vs. actual table as Excel-compatible CSV with variance column.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add multi-month view ‚Äî show Jan‚ÄìDec columns side by side for full-year budget tracking.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add multi-month view ó show JanñDec columns side by side for full-year budget tracking.</td></tr>
       </table>
     </div>
 
@@ -511,10 +515,10 @@
       <div class="module-title">Bank Statement Upload &amp; Analyzer <span class="file">modules/bankStatementUpload.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Support OFX/QFX/QBO file formats (QuickBooks, Mint, bank downloads) ‚Äî currently CSV-only, blocking 70% of users who download from their bank portal.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Support OFX/QFX/QBO file formats (QuickBooks, Mint, bank downloads) ó currently CSV-only, blocking 70% of users who download from their bank portal.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>After parsing, push categorized transactions to budgetActualTracker actuals and cashRunway balance.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add transaction categorization ‚Äî auto-detect "payroll", "rent", "utilities", "subscriptions" by keyword matching on description. Allow user override.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add reconciliation view ‚Äî match bank transactions against invoiceTracker payments and vendorBillTracker bills.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add transaction categorization ó auto-detect "payroll", "rent", "utilities", "subscriptions" by keyword matching on description. Allow user override.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add reconciliation view ó match bank transactions against invoiceTracker payments and vendorBillTracker bills.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Show upload progress indicator and parse error messages with line numbers for malformed CSVs.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add spending trend chart: top 5 expense categories by month for the uploaded period.</td></tr>
       </table>
@@ -525,12 +529,12 @@
       <div class="module-title">Grant Finder <span class="file">modules/grantFinder.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Grant list is fully hardcoded ‚Äî add a "Last updated" date and a "Refresh" mechanism (even if manual). Stale grant data is worse than no data.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add SBIR/STTR grant programs (federal R&amp;D grants up to $1.5M) ‚Äî highly relevant for tech/manufacturing SMBs and currently missing.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add state-level grant filter ‚Äî many grants are state-specific (CA, TX, NY have large SMB grant programs).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Application Checklist" per grant ‚Äî show required documents (business license, tax returns, bank statements) so user knows what to prepare.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add "Deadline" field and sort by deadline (soonest first) ‚Äî most users want to know what they can apply for right now.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Save Grant" bookmark feature ‚Äî let users save grants they plan to apply for, with a reminder date.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Grant list is fully hardcoded ó add a "Last updated" date and a "Refresh" mechanism (even if manual). Stale grant data is worse than no data.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add SBIR/STTR grant programs (federal R&amp;D grants up to $1.5M) ó highly relevant for tech/manufacturing SMBs and currently missing.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add state-level grant filter ó many grants are state-specific (CA, TX, NY have large SMB grant programs).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Application Checklist" per grant ó show required documents (business license, tax returns, bank statements) so user knows what to prepare.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add "Deadline" field and sort by deadline (soonest first) ó most users want to know what they can apply for right now.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Save Grant" bookmark feature ó let users save grants they plan to apply for, with a reminder date.</td></tr>
       </table>
     </div>
 
@@ -539,9 +543,9 @@
       <div class="module-title">Business Savings Planner <span class="file">modules/businessSavingsPlanner.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save savings goals to localStorage using key <code>fw_savings_goals</code> ‚Äî data is lost on every reload.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save savings goals to localStorage using key <code>fw_savings_goals</code> ó data is lost on every reload.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull current cash balance from bankStatementUpload or cashRunway to show starting point for savings goals.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add HYSA (High-Yield Savings Account) comparison ‚Äî show how much more the business earns keeping savings in a HYSA at 4.5% vs. checking.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add HYSA (High-Yield Savings Account) comparison ó show how much more the business earns keeping savings in a HYSA at 4.5% vs. checking.</td></tr>
         <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a progress bar per goal with percentage complete and "on track / behind" status based on monthly save rate.</td></tr>
       </table>
     </div>
@@ -552,9 +556,9 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save goals and milestone progress to localStorage using key <code>goalTracker_goals</code>.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Connect financial goals (revenue target, savings target) to live module data ‚Äî show actual vs. target automatically.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add goal types: Revenue Goal, Savings Goal, Debt Payoff Goal, Customer Count Goal ‚Äî each with relevant tracking metric.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a visual progress timeline ‚Äî show milestones as markers on a horizontal bar with today's position marked.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Connect financial goals (revenue target, savings target) to live module data ó show actual vs. target automatically.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add goal types: Revenue Goal, Savings Goal, Debt Payoff Goal, Customer Count Goal ó each with relevant tracking metric.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a visual progress timeline ó show milestones as markers on a horizontal bar with today's position marked.</td></tr>
       </table>
     </div>
 
@@ -564,10 +568,10 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-populate all snapshot fields from live module data: revenue from invoiceTracker, expenses from vendorBillTracker, payroll from payrollEstimator, taxes paid from taxCommandCenter.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save each month's snapshot to localStorage ‚Äî enable historical comparison (last 12 months).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export monthly snapshot as shareable PDF ‚Äî business owners often share this with investors or advisors.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save each month's snapshot to localStorage ó enable historical comparison (last 12 months).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export monthly snapshot as shareable PDF ó business owners often share this with investors or advisors.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add MoM (month-over-month) comparison: show % change vs. prior month for revenue, expenses, and net profit.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Health Score" chip in the snapshot ‚Äî a single number (0‚Äì100) summarizing the month's financial health.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Health Score" chip in the snapshot ó a single number (0ñ100) summarizing the month's financial health.</td></tr>
       </table>
     </div>
   </div>
@@ -575,8 +579,8 @@
   <!-- GROUP D -->
   <div id="groupD" class="section">
     <div class="section-header">
-      <span class="icon">ü§ñ</span>
-      <h2>Group D ‚Äî AI, Analytics, Reports &amp; Dashboard (10 Files)</h2>
+      <span class="icon">??</span>
+      <h2>Group D ó AI, Analytics, Reports &amp; Dashboard (10 Files)</h2>
       <span class="count">~66 items</span>
     </div>
 
@@ -585,12 +589,12 @@
       <div class="module-title">AI CFO Chat <span class="file">modules/aiCfoChat.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add conversation history ‚Äî each message is currently independent. Pass prior messages as context so the AI can give coherent multi-turn financial advice.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add conversation history ó each message is currently independent. Pass prior messages as context so the AI can give coherent multi-turn financial advice.</td></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Inject current business financial data (revenue, expenses, cash runway) into the AI system prompt so responses are grounded in the user's actual numbers.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add suggested prompts panel ("What's my biggest expense risk?", "Am I on track for tax payments?", "Should I hire now?") ‚Äî reduces blank-page friction for first-time users.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add suggested prompts panel ("What's my biggest expense risk?", "Am I on track for tax payments?", "Should I hire now?") ó reduces blank-page friction for first-time users.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save last 10 conversations to localStorage so users can review prior advice.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Copy response" button per AI message ‚Äî users often want to paste AI recommendations into emails or documents.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Generate action items" ‚Äî at end of conversation, produce a numbered list of specific next steps the user should take.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Copy response" button per AI message ó users often want to paste AI recommendations into emails or documents.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Generate action items" ó at end of conversation, produce a numbered list of specific next steps the user should take.</td></tr>
       </table>
     </div>
 
@@ -599,12 +603,12 @@
       <div class="module-title">Forecast Pro <span class="file">modules/forecastPro.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save forecast scenarios and actuals to localStorage ‚Äî all data lost on reload.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Seed forecast baseline from monthlySnapshot historical data (last 3‚Äì6 months actuals as starting point).</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-persist">Persistence</span></td><td>Save forecast scenarios and actuals to localStorage ó all data lost on reload.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Seed forecast baseline from monthlySnapshot historical data (last 3ñ6 months actuals as starting point).</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add 3-scenario view: Base Case / Bull Case / Bear Case side by side with key assumption differences labeled.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Forecast growth rates are applied as simple linear extrapolation ‚Äî add option for compounding month-over-month growth.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-calc">Calculation</span></td><td>Forecast growth rates are applied as simple linear extrapolation ó add option for compounding month-over-month growth.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-export">Export</span></td><td>Export 12-month forecast as Excel-compatible CSV for investor pitch decks.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Confidence band" to the forecast chart ‚Äî show ¬±15% range as a shaded area to represent uncertainty.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Confidence band" to the forecast chart ó show ±15% range as a shaded area to represent uncertainty.</td></tr>
       </table>
     </div>
 
@@ -613,11 +617,11 @@
       <div class="module-title">Business Health Score <span class="file">modules/businessHealthScore.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull live data from all modules to compute the score automatically ‚Äî currently requires full manual re-entry of data already in other modules.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add historical score tracking ‚Äî show score trend over last 6 months as a sparkline.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Score Breakdown" drill-down ‚Äî tap any sub-score (liquidity, profitability, debt) to see which inputs drove it and what to improve.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull live data from all modules to compute the score automatically ó currently requires full manual re-entry of data already in other modules.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add historical score tracking ó show score trend over last 6 months as a sparkline.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Score Breakdown" drill-down ó tap any sub-score (liquidity, profitability, debt) to see which inputs drove it and what to improve.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Share score with loanDecisionScoreEngine and aiCfoChat as context for advice.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export health score report as a one-pager PDF ‚Äî useful for investor or lender meetings.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Export health score report as a one-pager PDF ó useful for investor or lender meetings.</td></tr>
       </table>
     </div>
 
@@ -627,9 +631,9 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Dashboard KPI tiles should read live data from all modules via localStorage, not display placeholder zeros.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Alerts &amp; Nudges" panel ‚Äî surface time-sensitive items (invoice overdue &gt;30 days, tax payment due in 14 days, cash runway &lt; 3 months).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add customizable widget layout ‚Äî let users pin their most-used modules as shortcuts to the dashboard.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Generate Advisor Report" ‚Äî one-click PDF of all key metrics for accountant or financial advisor review.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Alerts &amp; Nudges" panel ó surface time-sensitive items (invoice overdue &gt;30 days, tax payment due in 14 days, cash runway &lt; 3 months).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add customizable widget layout ó let users pin their most-used modules as shortcuts to the dashboard.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Generate Advisor Report" ó one-click PDF of all key metrics for accountant or financial advisor review.</td></tr>
       </table>
     </div>
 
@@ -638,11 +642,11 @@
       <div class="module-title">Financial Statements <span class="file">modules/financialStatements.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-populate P&amp;L from invoiceTracker (revenue), vendorBillTracker (COGS/OpEx), and payrollEstimator (payroll) ‚Äî no manual re-entry.</td></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-export">Export</span></td><td>PDF export of P&amp;L, Balance Sheet, and Cash Flow statement ‚Äî essential for bank loans and investor decks.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add Statement of Cash Flows (operating, investing, financing sections) ‚Äî currently only P&amp;L and Balance Sheet.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add comparative statements ‚Äî show current period vs. prior period side by side.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add footnote editor ‚Äî let user add notes to specific line items (e.g., "includes one-time equipment purchase").</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Auto-populate P&amp;L from invoiceTracker (revenue), vendorBillTracker (COGS/OpEx), and payrollEstimator (payroll) ó no manual re-entry.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-export">Export</span></td><td>PDF export of P&amp;L, Balance Sheet, and Cash Flow statement ó essential for bank loans and investor decks.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add Statement of Cash Flows (operating, investing, financing sections) ó currently only P&amp;L and Balance Sheet.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add comparative statements ó show current period vs. prior period side by side.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add footnote editor ó let user add notes to specific line items (e.g., "includes one-time equipment purchase").</td></tr>
       </table>
     </div>
 
@@ -651,10 +655,10 @@
       <div class="module-title">Branded Report Engine <span class="file">modules/brandedReport.test.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add logo upload ‚Äî business owners can upload their logo PNG to appear on all branded reports.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add color theme picker ‚Äî 5 professional palettes so the report matches the business brand colors.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add logo upload ó business owners can upload their logo PNG to appear on all branded reports.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add color theme picker ó 5 professional palettes so the report matches the business brand colors.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull business name, address, and EIN from businessProfiles module instead of requiring re-entry on each report.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Shareable Link" option ‚Äî generate a read-only URL (base64 encoded state) that can be shared with stakeholders.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Shareable Link" option ó generate a read-only URL (base64 encoded state) that can be shared with stakeholders.</td></tr>
       </table>
     </div>
 
@@ -664,9 +668,9 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>Pull user's actual financial data from live modules so the benchmark comparison reflects real numbers, not manual estimates.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add industry selector with benchmarks per sector (Retail, Restaurant, SaaS, Construction, Healthcare) ‚Äî current benchmarks appear to be generic averages.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add industry selector with benchmarks per sector (Retail, Restaurant, SaaS, Construction, Healthcare) ó current benchmarks appear to be generic averages.</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Show percentile rank ("You are in the top 35% for profit margin in your industry") rather than just a raw score.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Improve this metric" CTA ‚Äî link each weak benchmark metric to the relevant BizScale module (low margin ‚Üí forecastPro, high debt ‚Üí debtCommandCenter).</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Improve this metric" CTA ó link each weak benchmark metric to the relevant BizScale module (low margin ? forecastPro, high debt ? debtCommandCenter).</td></tr>
       </table>
     </div>
 
@@ -675,10 +679,10 @@
       <div class="module-title">Main Index / Landing Page <span class="file">index.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Quick Setup" onboarding wizard on first load ‚Äî capture business name, industry, revenue tier, entity type once and pre-fill all modules.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Recently Used" section on the homepage ‚Äî show last 3 modules the user visited with their last-used data summary.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add a "Platform Health" indicator ‚Äî a small dot on each module tile showing whether that module has saved data (green) or is empty (gray).</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add keyboard shortcut to search modules (Ctrl+K) ‚Äî power users want to navigate fast.</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Quick Setup" onboarding wizard on first load ó capture business name, industry, revenue tier, entity type once and pre-fill all modules.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add a "Recently Used" section on the homepage ó show last 3 modules the user visited with their last-used data summary.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add a "Platform Health" indicator ó a small dot on each module tile showing whether that module has saved data (green) or is empty (gray).</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-ux">UX</span></td><td>Add keyboard shortcut to search modules (Ctrl+K) ó power users want to navigate fast.</td></tr>
       </table>
     </div>
 
@@ -687,10 +691,10 @@
       <div class="module-title">Main Dashboard <span class="file">dashboard.html</span></div>
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
-        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>All KPI widgets must read from localStorage keys set by individual modules ‚Äî currently showing static placeholder data.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Action Items" widget ‚Äî surface the 3 most urgent financial tasks (overdue invoices, upcoming tax payments, low cash runway alert).</td></tr>
+        <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-integrate">Integration</span></td><td>All KPI widgets must read from localStorage keys set by individual modules ó currently showing static placeholder data.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Action Items" widget ó surface the 3 most urgent financial tasks (overdue invoices, upcoming tax payments, low cash runway alert).</td></tr>
         <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add date range selector for dashboard metrics (This Month / Last 30 Days / YTD / Last Year).</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Export Dashboard PDF" button ‚Äî snapshot of all widgets as a one-page report.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-export">Export</span></td><td>Add "Export Dashboard PDF" button ó snapshot of all widgets as a one-page report.</td></tr>
       </table>
     </div>
 
@@ -700,9 +704,9 @@
       <table class="item-table">
         <tr><th>Priority</th><th>Category</th><th>Enhancement</th></tr>
         <tr><td><span class="tag p1">P1</span></td><td><span class="tag cat-feature">Feature</span></td><td>Save all onboarding answers (business name, industry, revenue, entity type, employees) to <code>fw_profile</code> localStorage key and share across all modules.</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Recommended Modules" step at end of onboarding ‚Äî based on answers, suggest the 3 most relevant modules to start with (e.g., restaurant owner ‚Üí cashFlowCalendar, payrollEstimator, taxEstimator).</td></tr>
-        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add progress indicator (Step 1 of 5) with back navigation ‚Äî currently no way to go back and change an earlier answer.</td></tr>
-        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Skip for now" option on each step ‚Äî some users want to explore before entering data.</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Recommended Modules" step at end of onboarding ó based on answers, suggest the 3 most relevant modules to start with (e.g., restaurant owner ? cashFlowCalendar, payrollEstimator, taxEstimator).</td></tr>
+        <tr><td><span class="tag p2">P2</span></td><td><span class="tag cat-ux">UX</span></td><td>Add progress indicator (Step 1 of 5) with back navigation ó currently no way to go back and change an earlier answer.</td></tr>
+        <tr><td><span class="tag p3">P3</span></td><td><span class="tag cat-feature">Feature</span></td><td>Add "Skip for now" option on each step ó some users want to explore before entering data.</td></tr>
       </table>
     </div>
   </div>
@@ -710,7 +714,7 @@
   <!-- CROSS-CUTTING THEMES -->
   <div id="cross" class="section">
     <div class="section-header">
-      <span class="icon">üîó</span>
+      <span class="icon">??</span>
       <h2>Cross-Cutting Themes</h2>
       <span class="count">8 platform-wide issues</span>
     </div>
@@ -718,51 +722,51 @@
       <div class="cross-grid">
 
         <div class="cross-card">
-          <h3>üíæ Data Persistence Gap</h3>
+          <h3>?? Data Persistence Gap</h3>
           <p>22+ modules do not save inputs to localStorage. Every reload requires full re-entry, making the platform feel unreliable and discouraging regular use.</p>
           <p class="affected"><strong>Affects:</strong> All 30+ modules. Fix by adopting a consistent save/restore pattern using the existing <code>fw_*</code> key schema.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üîå Missing Cross-Module Integration</h3>
+          <h3>?? Missing Cross-Module Integration</h3>
           <p>Modules do not share data. Revenue entered in invoiceTracker, payroll in payrollEstimator, and taxes in taxEstimator are all siloed. Users re-enter the same numbers in every module.</p>
           <p class="affected"><strong>Affects:</strong> budgetActualTracker, taxEstimator, ownersPay, cashRunway, monthlySnapshot, advisorDashboard, businessHealthScore, forecastPro.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üìÑ No Export / Print / PDF</h3>
+          <h3>?? No Export / Print / PDF</h3>
           <p>Nearly all modules lack a way to get data out. Small business owners need to share financial data with CPAs, lenders, and investors. The gap blocks real-world use.</p>
           <p class="affected"><strong>Affects:</strong> 20+ modules. Minimum viable: browser <code>window.print()</code> with print-optimized CSS. Full solution: html2canvas or jsPDF.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üìå Hardcoded IRS / Rate Constants</h3>
+          <h3>?? Hardcoded IRS / Rate Constants</h3>
           <p>Tax brackets, SE tax rates, FICA rates, Section 179 limits, and mileage rates are embedded in logic with no annotation. They will become wrong in 2027 without visible flags.</p>
           <p class="affected"><strong>Affects:</strong> taxEstimator, keyDeductions, payrollEstimator, contractorPayroll, ownersPay. Extract to a <code>TAX_CONSTANTS_2026</code> config object.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üîÅ Duplicate Amortization Logic</h3>
+          <h3>?? Duplicate Amortization Logic</h3>
           <p>debtCommandCenter and loanRepaymentOptimizer both implement independent <code>simulateFull()</code> amortization functions. They will diverge over time and produce inconsistent results.</p>
           <p class="affected"><strong>Affects:</strong> loanRepaymentOptimizer, debtCommandCenter. Extract to a shared <code>amortize(principal, rate, term)</code> utility function.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üìÖ Timezone Date Handling</h3>
+          <h3>?? Timezone Date Handling</h3>
           <p>Date calculations using <code>new Date('YYYY-MM-DD')</code> shift by timezone offset in non-UTC browsers. This causes invoice due dates, tax deadlines, and calendar events to show the wrong day.</p>
           <p class="affected"><strong>Affects:</strong> invoiceTracker, cashFlowCalendar, vendorBillTracker, taxEstimator. Fix: parse dates as <code>new Date(yr, mo-1, day)</code> or use UTC consistently.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üè∑Ô∏è No Global Business Profile</h3>
+          <h3>??? No Global Business Profile</h3>
           <p>Business name, industry, entity type, and EIN are entered independently in every module. A global <code>fw_profile</code> localStorage object should be set once during onboarding and read everywhere.</p>
           <p class="affected"><strong>Affects:</strong> All modules. Onboarding.html should be the single source of truth; modules read from <code>fw_profile</code> on load.</p>
         </div>
 
         <div class="cross-card">
-          <h3>üé® UI State Not Saved</h3>
+          <h3>?? UI State Not Saved</h3>
           <p>Filter selections, active tabs, sort order, and toggled views reset on every page reload. Users must re-configure each module every visit, creating friction that erodes daily use habits.</p>
-          <p class="affected"><strong>Affects:</strong> loanMarketplaceEngine filters, budgetActualTracker category filter, bankStatementUpload view, grantFinder filter ‚Äî and ~12 more modules.</p>
+          <p class="affected"><strong>Affects:</strong> loanMarketplaceEngine filters, budgetActualTracker category filter, bankStatementUpload view, grantFinder filter ó and ~12 more modules.</p>
         </div>
 
       </div>
@@ -772,8 +776,8 @@
   <!-- QUICK WINS -->
   <div id="quickwins" class="section">
     <div class="section-header">
-      <span class="icon">‚ö°</span>
-      <h2>Quick Wins ‚Äî Implementable in &lt; 1 Day Each</h2>
+      <span class="icon">?</span>
+      <h2>Quick Wins ó Implementable in &lt; 1 Day Each</h2>
       <span class="count">20 items</span>
     </div>
     <div class="module-card" style="border-radius:0 0 10px 10px; padding: 16px;">
@@ -781,24 +785,24 @@
         <tr><th>#</th><th>Module</th><th>Enhancement</th><th>Effort</th><th>Impact</th></tr>
         <tr><td>1</td><td>cashRunway</td><td>Guard division-by-zero when monthly burn = 0</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p1">P1 Bug Fix</span></td></tr>
         <tr><td>2</td><td>loanRepaymentOptimizer</td><td>Remove dead <code>simulate()</code> function (never called, shadows simulateFull)</td><td><span class="effort e-xs">15 min</span></td><td><span class="tag p1">P1 Dead Code</span></td></tr>
-        <tr><td>3</td><td>All 22+ modules</td><td>Add <code>localStorage.setItem</code> save on input change + <code>getItem</code> restore on load</td><td><span class="effort e-s">2‚Äì4 hrs</span></td><td><span class="tag p1">P1 Persistence</span></td></tr>
+        <tr><td>3</td><td>All 22+ modules</td><td>Add <code>localStorage.setItem</code> save on input change + <code>getItem</code> restore on load</td><td><span class="effort e-s">2ñ4 hrs</span></td><td><span class="tag p1">P1 Persistence</span></td></tr>
         <tr><td>4</td><td>All modules</td><td>Add <code>window.print()</code> button with <code>@media print</code> CSS to hide nav/buttons</td><td><span class="effort e-s">3 hrs</span></td><td><span class="tag p1">P1 Export</span></td></tr>
-        <tr><td>5</td><td>taxEstimator</td><td>Update 2024 tax brackets ‚Üí 2026 IRS brackets; extract to named constants with year label</td><td><span class="effort e-s">1 hr</span></td><td><span class="tag p1">P1 Calc</span></td></tr>
+        <tr><td>5</td><td>taxEstimator</td><td>Update 2024 tax brackets ? 2026 IRS brackets; extract to named constants with year label</td><td><span class="effort e-s">1 hr</span></td><td><span class="tag p1">P1 Calc</span></td></tr>
         <tr><td>6</td><td>cashFlowCalendar</td><td>Fix date parsing from string to <code>new Date(yr, mo-1, day)</code> to prevent timezone shift</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p1">P1 Bug Fix</span></td></tr>
         <tr><td>7</td><td>invoiceTracker</td><td>Same UTC date fix for "Days Outstanding" calculation</td><td><span class="effort e-xs">20 min</span></td><td><span class="tag p1">P1 Bug Fix</span></td></tr>
         <tr><td>8</td><td>loanMarketplaceEngine</td><td>Save search filter state (amount, creditScore, loanType) to sessionStorage on search</td><td><span class="effort e-xs">45 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
         <tr><td>9</td><td>taxEstimator + cashFlowCalendar</td><td>Add JSON.stringify bridge: taxEstimator writes Q payment dates to <code>fw_tax_dates</code>, cashFlowCalendar reads on load</td><td><span class="effort e-s">2 hrs</span></td><td><span class="tag p1">P1 Integration</span></td></tr>
         <tr><td>10</td><td>aiCfoChat</td><td>Accumulate message history array and pass last 6 messages as context on each API call</td><td><span class="effort e-s">1 hr</span></td><td><span class="tag p1">P1 Feature</span></td></tr>
-        <tr><td>11</td><td>cashRunway</td><td>Add color-coded runway alert: &lt;3mo red, 3‚Äì6mo amber, &gt;6mo green</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
+        <tr><td>11</td><td>cashRunway</td><td>Add color-coded runway alert: &lt;3mo red, 3ñ6mo amber, &gt;6mo green</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
         <tr><td>12</td><td>loanDecisionScoreEngine</td><td>Color-code the score dial output: red/amber/green threshold markers</td><td><span class="effort e-xs">45 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
-        <tr><td>13</td><td>contractorPayroll</td><td>Add 1099-NEC threshold alert when contractor total ‚â• $600</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 Feature</span></td></tr>
-        <tr><td>14</td><td>grantFinder</td><td>Add "Last Updated: Jan 2026" label and "Rates/deadlines may change ‚Äî verify before applying" disclaimer</td><td><span class="effort e-xs">10 min</span></td><td><span class="tag p1">P1 UX</span></td></tr>
-        <tr><td>15</td><td>debtCommandCenter + loanRepaymentOptimizer</td><td>Extract shared <code>amortize(principal, rate, term)</code> function into inline shared utility; call from both modules</td><td><span class="effort e-m">4‚Äì6 hrs</span></td><td><span class="tag p2">P2 Dead Code</span></td></tr>
+        <tr><td>13</td><td>contractorPayroll</td><td>Add 1099-NEC threshold alert when contractor total = $600</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 Feature</span></td></tr>
+        <tr><td>14</td><td>grantFinder</td><td>Add "Last Updated: Jan 2026" label and "Rates/deadlines may change ó verify before applying" disclaimer</td><td><span class="effort e-xs">10 min</span></td><td><span class="tag p1">P1 UX</span></td></tr>
+        <tr><td>15</td><td>debtCommandCenter + loanRepaymentOptimizer</td><td>Extract shared <code>amortize(principal, rate, term)</code> function into inline shared utility; call from both modules</td><td><span class="effort e-m">4ñ6 hrs</span></td><td><span class="tag p2">P2 Dead Code</span></td></tr>
         <tr><td>16</td><td>onboarding.html</td><td>Save answers to <code>fw_profile</code> localStorage on final step; add "Edit Profile" link in nav</td><td><span class="effort e-s">2 hrs</span></td><td><span class="tag p1">P1 Integration</span></td></tr>
         <tr><td>17</td><td>brandedReport</td><td>Read business name from <code>fw_profile.businessName</code> localStorage instead of requiring re-entry</td><td><span class="effort e-xs">20 min</span></td><td><span class="tag p2">P2 Integration</span></td></tr>
         <tr><td>18</td><td>aiCfoChat</td><td>Add 5 suggested prompt chips below the input box for common questions</td><td><span class="effort e-xs">45 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
-        <tr><td>19</td><td>budgetActualTracker</td><td>Add variance column: <code>Actual ‚àí Budget</code> with red/green color coding for rows over ¬±10%</td><td><span class="effort e-s">1 hr</span></td><td><span class="tag p2">P2 UX</span></td></tr>
-        <tr><td>20</td><td>workingCapitalCalc</td><td>Add current ratio color-coding: &lt;1.0 red, 1.0‚Äì1.5 amber, &gt;1.5 green</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
+        <tr><td>19</td><td>budgetActualTracker</td><td>Add variance column: <code>Actual - Budget</code> with red/green color coding for rows over ±10%</td><td><span class="effort e-s">1 hr</span></td><td><span class="tag p2">P2 UX</span></td></tr>
+        <tr><td>20</td><td>workingCapitalCalc</td><td>Add current ratio color-coding: &lt;1.0 red, 1.0ñ1.5 amber, &gt;1.5 green</td><td><span class="effort e-xs">30 min</span></td><td><span class="tag p2">P2 UX</span></td></tr>
       </table>
     </div>
   </div>
@@ -806,8 +810,8 @@
 </div>
 
 <footer>
-  BizScale SmallBiz Platform ¬∑ Enhancement Review Document ¬∑ April 2026 ¬∑ Internal Use Only<br>
-  310 items across 30+ modules ¬∑ Priority 1: 68 ¬∑ Priority 2: 142 ¬∑ Priority 3: 100
+  BizScale SmallBiz Platform ∑ Enhancement Review Document ∑ April 2026 ∑ Internal Use Only<br>
+  310 items across 30+ modules ∑ Priority 1: 68 ∑ Priority 2: 142 ∑ Priority 3: 100
 </footer>
 
 </body>

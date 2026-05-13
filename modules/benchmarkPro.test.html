@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Industry Benchmarks — BizScale Pro</title>
+<title>Industry Benchmarks � BizScale Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:48px}
@@ -141,6 +141,10 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   .card,.metric-card,.overall-card{box-shadow:none;border:1px solid #e2e8f0}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -152,18 +156,18 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">🏭</div>
+    <div style="font-size:2.2rem">??</div>
     <h2>Industry Benchmark Comparison</h2>
-    <p>See how your business stacks up against real industry averages — profit margin, expenses, cash reserves, debt coverage, and more.</p>
+    <p>See how your business stacks up against real industry averages � profit margin, expenses, cash reserves, debt coverage, and more.</p>
     <div class="pw-feats">
-      <div class="pw-feat">📊 5 key metrics</div>
-      <div class="pw-feat">🏭 12 industries</div>
-      <div class="pw-feat">📈 Visual bar comparison</div>
-      <div class="pw-feat">🎯 Peer percentile rank</div>
-      <div class="pw-feat">💡 Smart insights</div>
-      <div class="pw-feat">🖨️ Print report</div>
+      <div class="pw-feat">?? 5 key metrics</div>
+      <div class="pw-feat">?? 12 industries</div>
+      <div class="pw-feat">?? Visual bar comparison</div>
+      <div class="pw-feat">?? Peer percentile rank</div>
+      <div class="pw-feat">?? Smart insights</div>
+      <div class="pw-feat">??? Print report</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -177,25 +181,25 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <h1>🏭 Industry Benchmark Comparison</h1>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <h1>?? Industry Benchmark Comparison</h1>
     <p>Compare your business metrics against real industry averages</p>
   </div>
-  <div class="ph-badge">Pro · $29/month</div>
+  <div class="ph-badge">Pro � $29/month</div>
 </div>
 
 <div class="wrap">
 
 <!-- Industry Selector -->
 <div class="card">
-  <h2>🏭 Select Your Industry</h2>
+  <h2>?? Select Your Industry</h2>
   <p class="card-desc">Click your industry to load its benchmark data. Benchmarks are based on SMB averages.</p>
   <div class="ind-grid" id="indGrid"></div>
 </div>
 
 <!-- Business Inputs -->
 <div class="card">
-  <h2>📊 Your Business Numbers</h2>
+  <h2>?? Your Business Numbers</h2>
   <p class="card-desc">Auto-loaded from live module data. Edit as needed.</p>
   <div class="live-badge" id="liveBadge"><span class="ldot"></span><span id="liveBadgeText">Live data loaded</span></div>
   <div class="g4">
@@ -206,9 +210,9 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   </div>
   <div class="no-ind" id="noIndMsg">Please select an industry above first.</div>
   <div class="btn-row">
-    <button class="btn btn-blue" onclick="compare()">🏭 Compare vs Industry</button>
+    <button class="btn btn-blue" onclick="compare()">?? Compare vs Industry</button>
     <button class="btn btn-outline" onclick="clearResults()">Clear</button>
-    <button class="btn btn-green" onclick="window.print()">🖨️ Print Report</button>
+    <button class="btn btn-green" onclick="window.print()">??? Print Report</button>
   </div>
 </div>
 
@@ -218,7 +222,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   <div class="score-strip" id="scoreStrip"></div>
   <div id="metricsPanel"></div>
   <div class="card">
-    <h2>💡 Insights &amp; Recommendations</h2>
+    <h2>?? Insights &amp; Recommendations</h2>
     <div class="ins-list" id="insList"></div>
   </div>
 </div>
@@ -235,19 +239,19 @@ function showToast(m){
 
 var CUR_SYM=(function(){
   var s=localStorage.getItem('bizscale_currency')||'USD';
-  return s==='INR'?'₹':s==='EUR'?'€':s==='GBP'?'£':'$';
+  return s==='INR'?'?':s==='EUR'?'�':s==='GBP'?'�':'$';
 })();
 function fmt(n){ return CUR_SYM+Math.round(Math.abs(n)).toLocaleString(); }
 function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
 
-/* ═══════════════════════════════
-   BENCHMARK DATA — 12 Industries
+/* -------------------------------
+   BENCHMARK DATA � 12 Industries
    Each metric: label, unit, dir (1=higher better, -1=lower better),
                 low/avg/high (industry range), scale (track max)
-═══════════════════════════════ */
+------------------------------- */
 var BENCH={
   retail:{
-    label:'Retail', icon:'🛍️', desc:'Stores & multi-channel',
+    label:'Retail', icon:'???', desc:'Stores & multi-channel',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:2,   avg:4,   high:8,   scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:75,  avg:85,  high:93,  scale:100 },
@@ -257,7 +261,7 @@ var BENCH={
     }
   },
   restaurant:{
-    label:'Restaurant / F&B', icon:'🍽️', desc:'Food service & cafes',
+    label:'Restaurant / F&B', icon:'???', desc:'Food service & cafes',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:3,   avg:6,   high:12,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:70,  avg:82,  high:92,  scale:100 },
@@ -267,7 +271,7 @@ var BENCH={
     }
   },
   itservices:{
-    label:'IT / Software', icon:'💻', desc:'Tech services & SaaS',
+    label:'IT / Software', icon:'??', desc:'Tech services & SaaS',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:12,  avg:22,  high:35,  scale:50 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:55,  avg:65,  high:80,  scale:100 },
@@ -277,7 +281,7 @@ var BENCH={
     }
   },
   consulting:{
-    label:'Consulting', icon:'🤝', desc:'Professional advisory services',
+    label:'Consulting', icon:'??', desc:'Professional advisory services',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:18,  avg:30,  high:45,  scale:60 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:48,  avg:58,  high:72,  scale:100 },
@@ -287,7 +291,7 @@ var BENCH={
     }
   },
   manufacturing:{
-    label:'Manufacturing', icon:'🏗️', desc:'Production & industrial',
+    label:'Manufacturing', icon:'???', desc:'Production & industrial',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:5,   avg:10,  high:18,  scale:30 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:70,  avg:78,  high:88,  scale:100 },
@@ -297,7 +301,7 @@ var BENCH={
     }
   },
   healthcare:{
-    label:'Healthcare', icon:'🏥', desc:'Clinics & diagnostic centres',
+    label:'Healthcare', icon:'??', desc:'Clinics & diagnostic centres',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:8,   avg:15,  high:25,  scale:40 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:62,  avg:72,  high:84,  scale:100 },
@@ -307,7 +311,7 @@ var BENCH={
     }
   },
   construction:{
-    label:'Construction', icon:'🏛️', desc:'Contractors & civil works',
+    label:'Construction', icon:'???', desc:'Contractors & civil works',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:3,   avg:6,   high:12,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:72,  avg:82,  high:92,  scale:100 },
@@ -317,7 +321,7 @@ var BENCH={
     }
   },
   ecommerce:{
-    label:'E-Commerce', icon:'📦', desc:'Online retail & D2C brands',
+    label:'E-Commerce', icon:'??', desc:'Online retail & D2C brands',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:4,   avg:8,   high:18,  scale:30 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:68,  avg:78,  high:90,  scale:100 },
@@ -327,7 +331,7 @@ var BENCH={
     }
   },
   realestate:{
-    label:'Real Estate', icon:'🏘️', desc:'Agents, brokers & rentals',
+    label:'Real Estate', icon:'???', desc:'Agents, brokers & rentals',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:10,  avg:20,  high:35,  scale:50 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:55,  avg:68,  high:82,  scale:100 },
@@ -337,7 +341,7 @@ var BENCH={
     }
   },
   transport:{
-    label:'Transport / Logistics', icon:'🚚', desc:'Fleet, freight & courier',
+    label:'Transport / Logistics', icon:'??', desc:'Fleet, freight & courier',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:4,   avg:8,   high:14,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:72,  avg:80,  high:90,  scale:100 },
@@ -347,7 +351,7 @@ var BENCH={
     }
   },
   education:{
-    label:'Education / Training', icon:'🎓', desc:'Coaching & training institutes',
+    label:'Education / Training', icon:'??', desc:'Coaching & training institutes',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:10,  avg:18,  high:30,  scale:45 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:58,  avg:70,  high:82,  scale:100 },
@@ -357,7 +361,7 @@ var BENCH={
     }
   },
   salon:{
-    label:'Salon / Beauty', icon:'💇', desc:'Salons, spas & wellness',
+    label:'Salon / Beauty', icon:'??', desc:'Salons, spas & wellness',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:6,   avg:12,  high:22,  scale:35 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:65,  avg:75,  high:86,  scale:100 },
@@ -397,7 +401,7 @@ function selectInd(k){
   document.getElementById('noIndMsg').style.display='none';
 }
 
-/* ── Live data pull from other modules ── */
+/* -- Live data pull from other modules -- */
 function loadLiveData(){
   var sources=[];
   var curMo=new Date().toISOString().slice(0,7);
@@ -419,12 +423,12 @@ function loadLiveData(){
   var badge=document.getElementById('liveBadge');
   if(sources.length&&badge){
     badge.classList.add('show');
-    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' — from BizScale modules';
+    document.getElementById('liveBadgeText').textContent='Live: '+sources.join(', ')+' � from BizScale modules';
   }
   return sources.length>0;
 }
 
-/* ── Percentile rank for a single metric ── */
+/* -- Percentile rank for a single metric -- */
 function computePercentile(val,m){
   var lo=m.low,mid=m.avg,hi=m.high,sc=m.scale||hi*2;
   var p;
@@ -492,7 +496,7 @@ function loadProfile(){
   return loaded;
 }
 
-/* Rate a metric → { grade, label, color } */
+/* Rate a metric ? { grade, label, color } */
 function rateMetric(userVal, m){
   var d=m.dir;
   if(d===1){
@@ -516,7 +520,7 @@ function tpct(val, scale){
   return p.toFixed(1)+'%';
 }
 
-/* ── Main compare function ── */
+/* -- Main compare function -- */
 function compare(){
   if(!selInd){
     document.getElementById('noIndMsg').style.display='block';
@@ -580,27 +584,27 @@ function compare(){
   /* Overall grade */
   var ovGrade,ovEmoji,ovDesc;
   if(avgScore>=2.5){
-    ovGrade='Excellent'; ovEmoji='🏆';
+    ovGrade='Excellent'; ovEmoji='??';
     ovDesc='Your business significantly outperforms '+b.label+' industry averages. Strong across all key metrics.';
   } else if(avgScore>=2.0){
-    ovGrade='Very Good'; ovEmoji='⭐';
+    ovGrade='Very Good'; ovEmoji='?';
     ovDesc='You are performing above the '+b.label+' industry average. A few areas can be optimised further.';
   } else if(avgScore>=1.5){
-    ovGrade='Good'; ovEmoji='👍';
+    ovGrade='Good'; ovEmoji='??';
     ovDesc='Tracking close to '+b.label+' benchmarks. Improving 1-2 weak metrics could move you into the top 25%.';
   } else if(avgScore>=1.0){
-    ovGrade='Average'; ovEmoji='📊';
+    ovGrade='Average'; ovEmoji='??';
     ovDesc='Your metrics are in line with typical '+b.label+' businesses. Use insights below to identify quick wins.';
   } else {
-    ovGrade='Needs Attention'; ovEmoji='⚠️';
-    ovDesc='Several metrics fall below '+b.label+' benchmarks. Review the insights below — early action prevents larger problems.';
+    ovGrade='Needs Attention'; ovEmoji='??';
+    ovDesc='Several metrics fall below '+b.label+' benchmarks. Review the insights below � early action prevents larger problems.';
   }
   var ovPctLabel=pctLabel(overallPct);
 
   /* Overall card */
   document.getElementById('overallCard').innerHTML=
     '<div class="ov-emoji">'+ovEmoji+'</div>'
-    +'<div class="ov-text"><h3>'+ovGrade+' — vs '+b.label+'</h3><p>'+ovDesc+'</p></div>'
+    +'<div class="ov-text"><h3>'+ovGrade+' � vs '+b.label+'</h3><p>'+ovDesc+'</p></div>'
     +'<div class="ov-pct"><div class="ov-pct-num">'+ovPctLabel+'</div>'
     +'<div class="ov-pct-label" style="font-size:.62rem;margin-top:2px;opacity:.7">Percentile: ~'+overallPct+'th</div>'
     +'<div class="ov-pct-label">vs '+b.label+' peers</div></div>';
@@ -628,11 +632,11 @@ function compare(){
 
   /* CTA links for poor metrics */
   var CTA_LINKS={
-    profitMargin: {href:'forecastPro.test.html',     label:'📈 Improve with Forecast Pro'},
-    expenseRatio: {href:'vendorBillTracker.test.html',label:'💸 Review in Bill Tracker'},
-    reserveMo:    {href:'cashFlowTracker.test.html',  label:'🏦 Track in Cash Flow'},
-    dscr:         {href:'debtCommandCenter.test.html',label:'📋 Manage in Debt Center'},
-    emiRatio:     {href:'debtCommandCenter.test.html',label:'📋 Manage in Debt Center'},
+    profitMargin: {href:'forecastPro.test.html',     label:'?? Improve with Forecast Pro'},
+    expenseRatio: {href:'vendorBillTracker.test.html',label:'?? Review in Bill Tracker'},
+    reserveMo:    {href:'cashFlowTracker.test.html',  label:'?? Track in Cash Flow'},
+    dscr:         {href:'debtCommandCenter.test.html',label:'?? Manage in Debt Center'},
+    emiRatio:     {href:'debtCommandCenter.test.html',label:'?? Manage in Debt Center'},
   };
 
   /* Metric bar cards */
@@ -657,21 +661,21 @@ function compare(){
 
     var ctaHtml='';
     if(rt.grade==='poor'&&CTA_LINKS[mk]){
-      ctaHtml='<a class="metric-cta" href="'+CTA_LINKS[mk].href+'">'+CTA_LINKS[mk].label+' →</a>';
+      ctaHtml='<a class="metric-cta" href="'+CTA_LINKS[mk].href+'">'+CTA_LINKS[mk].label+' ?</a>';
     }
 
     mHtml+='<div class="metric-card">'
       +'<div class="metric-header">'
         +'<div>'
           +'<div class="metric-label">'+bm.label+'</div>'
-          +'<div class="metric-dir">'+(bm.dir===1?'↑ Higher is better':'↓ Lower is better')+'</div>'
+          +'<div class="metric-dir">'+(bm.dir===1?'? Higher is better':'? Lower is better')+'</div>'
         +'</div>'
         +'<div class="metric-vals">'
           +'<div class="metric-user-val" style="color:'+rt.color+'">'
             +uvDisp+bm.unit
             +'<span class="m-badge '+badgeCls+'">'+rt.label+'</span>'
           +'</div>'
-          +'<div class="metric-ind-val">Industry avg: '+bm.avg+bm.unit+' &nbsp;|&nbsp; Good: '+bm.low+'–'+bm.high+bm.unit+'</div>'
+          +'<div class="metric-ind-val">Industry avg: '+bm.avg+bm.unit+' &nbsp;|&nbsp; Good: '+bm.low+'�'+bm.high+bm.unit+'</div>'
           +'<div class="metric-ind-val" style="color:#4f46e5;font-weight:700;margin-top:2px">You: '+pctLabel(mpct)+' (~'+mpct+'th pct)</div>'
         +'</div>'
       +'</div>'
@@ -702,29 +706,29 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
 
   /* Net cash flow */
   if(netCF>0){
-    ins.push({t:'good',icon:'✅',
+    ins.push({t:'good',icon:'?',
       h:'Positive monthly net cash flow: '+fmt(netCF),
       b:'After all expenses and EMI, your business retains '+fmt(netCF)+'/month. Lenders view consistent positive cash flow as the strongest indicator of loan repayment ability.'
     });
   } else {
-    ins.push({t:'bad',icon:'📉',
+    ins.push({t:'bad',icon:'??',
       h:'Negative net cash flow: '+fmt(Math.abs(netCF))+' deficit',
-      b:'Expenses and EMI exceed revenue by '+fmt(Math.abs(netCF))+'/month. This is unsustainable — taking on new debt in this position is high risk. Focus on revenue growth or cost reduction first.'
+      b:'Expenses and EMI exceed revenue by '+fmt(Math.abs(netCF))+'/month. This is unsustainable � taking on new debt in this position is high risk. Focus on revenue growth or cost reduction first.'
     });
   }
 
   /* Profit margin */
   if(ratings.profitMargin){
     if(ratings.profitMargin.grade==='exc'){
-      ins.push({t:'good',icon:'💰',
+      ins.push({t:'good',icon:'??',
         h:'Top-tier profit margin: '+um.profitMargin.toFixed(1)+'% (Industry avg: '+bm.profitMargin.avg+'%)',
-        b:'You outperform most '+b.label+' peers on profitability. Protect this margin as you scale — avoid adding fixed costs without proportional revenue growth.'
+        b:'You outperform most '+b.label+' peers on profitability. Protect this margin as you scale � avoid adding fixed costs without proportional revenue growth.'
       });
     } else if(ratings.profitMargin.grade==='poor'){
-      ins.push({t:'bad',icon:'🚨',
+      ins.push({t:'bad',icon:'??',
         h:'Profit margin below industry floor: '+um.profitMargin.toFixed(1)+'% (Floor: '+bm.profitMargin.low+'%)',
-        b:'Review your pricing strategy — even a 5% price increase on 50% of revenue significantly boosts margin. Also audit your top 3 expense categories for cuts.',
-        cta:{href:'forecastPro.test.html',label:'📈 Model growth in Forecast Pro'}
+        b:'Review your pricing strategy � even a 5% price increase on 50% of revenue significantly boosts margin. Also audit your top 3 expense categories for cuts.',
+        cta:{href:'forecastPro.test.html',label:'?? Model growth in Forecast Pro'}
       });
     }
   }
@@ -732,15 +736,15 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* Expense ratio */
   if(ratings.expenseRatio){
     if(ratings.expenseRatio.grade==='poor'){
-      ins.push({t:'warn',icon:'💸',
+      ins.push({t:'warn',icon:'??',
         h:'Expense ratio too high: '+um.expenseRatio.toFixed(1)+'% (Industry avg: '+bm.expenseRatio.avg+'%)',
-        b:'You spend '+um.expenseRatio.toFixed(1)+'% of revenue on expenses vs the '+b.label+' average of '+bm.expenseRatio.avg+'%. Identify fixed vs variable costs — renegotiate rent, subscriptions, and supplier contracts.',
-        cta:{href:'vendorBillTracker.test.html',label:'💸 Review bills in Bill Tracker'}
+        b:'You spend '+um.expenseRatio.toFixed(1)+'% of revenue on expenses vs the '+b.label+' average of '+bm.expenseRatio.avg+'%. Identify fixed vs variable costs � renegotiate rent, subscriptions, and supplier contracts.',
+        cta:{href:'vendorBillTracker.test.html',label:'?? Review bills in Bill Tracker'}
       });
     } else if(ratings.expenseRatio.grade==='exc'){
-      ins.push({t:'good',icon:'💪',
+      ins.push({t:'good',icon:'??',
         h:'Lean cost structure: '+um.expenseRatio.toFixed(1)+'% expense ratio',
-        b:'Your operational efficiency is in the top tier for '+b.label+'. This gives you a competitive buffer — use the savings to build reserves or service debt comfortably.'
+        b:'Your operational efficiency is in the top tier for '+b.label+'. This gives you a competitive buffer � use the savings to build reserves or service debt comfortably.'
       });
     }
   }
@@ -749,13 +753,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   if(ratings.reserveMo){
     var resLabel=hasLoan ? 'EMI payments' : 'monthly expenses';
     if(ratings.reserveMo.grade==='poor'){
-      ins.push({t:'warn',icon:'⚠️',
+      ins.push({t:'warn',icon:'??',
         h:'Low cash reserve: '+um.reserveMo.toFixed(1)+' months cover (Target: '+bm.reserveMo.high+' mo)',
         b:b.label+' businesses typically maintain '+bm.reserveMo.avg+' months of '+resLabel+' as a cash buffer. At your current level, one bad month could cause a default. Build reserves before taking on more debt.',
-        cta:{href:'cashFlowTracker.test.html',label:'🏦 Track in Cash Flow Tracker'}
+        cta:{href:'cashFlowTracker.test.html',label:'?? Track in Cash Flow Tracker'}
       });
     } else if(ratings.reserveMo.grade==='exc'){
-      ins.push({t:'good',icon:'🛡️',
+      ins.push({t:'good',icon:'???',
         h:'Strong cash cushion: '+um.reserveMo.toFixed(1)+' months cover',
         b:'You hold more than the '+b.label+' benchmark of '+bm.reserveMo.high+' months reserve. This resilience significantly reduces your lender\'s perceived risk and supports better loan terms.'
       });
@@ -765,13 +769,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* DSCR */
   if(ratings.dscr && hasLoan){
     if(ratings.dscr.grade==='poor'){
-      ins.push({t:'bad',icon:'🏦',
-        h:'DSCR below safe threshold: '+um.dscr.toFixed(2)+'x (Safe: ≥'+bm.dscr.low+'x)',
+      ins.push({t:'bad',icon:'??',
+        h:'DSCR below safe threshold: '+um.dscr.toFixed(2)+'x (Safe: ='+bm.dscr.low+'x)',
         b:'A DSCR below 1.0x means operating income cannot cover debt payments from within the business. Most lenders require minimum 1.25x. Extend loan tenure to reduce EMI, or increase revenue before applying for new loans.',
-        cta:{href:'debtCommandCenter.test.html',label:'📋 Restructure in Debt Command Center'}
+        cta:{href:'debtCommandCenter.test.html',label:'?? Restructure in Debt Command Center'}
       });
     } else if(ratings.dscr.grade==='exc'){
-      ins.push({t:'good',icon:'🏦',
+      ins.push({t:'good',icon:'??',
         h:'Excellent debt coverage ratio: '+um.dscr.toFixed(2)+'x',
         b:'A DSCR of '+um.dscr.toFixed(2)+'x is well above the '+b.label+' average of '+bm.dscr.avg+'x. You are in a strong position to qualify for additional credit at competitive rates.'
       });
@@ -781,27 +785,27 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* EMI burden */
   if(ratings.emiRatio && hasLoan){
     if(ratings.emiRatio.grade==='poor'){
-      ins.push({t:'warn',icon:'📊',
+      ins.push({t:'warn',icon:'??',
         h:'High EMI burden: '+um.emiRatio.toFixed(1)+'% of revenue goes to debt',
         b:b.label+' peers average '+bm.emiRatio.avg+'% EMI-to-revenue. At '+um.emiRatio.toFixed(1)+'%, a 10% revenue drop would create serious cash flow pressure. Consider prepaying some principal or renegotiating tenure.',
-        cta:{href:'debtCommandCenter.test.html',label:'📋 Manage in Debt Command Center'}
+        cta:{href:'debtCommandCenter.test.html',label:'?? Manage in Debt Command Center'}
       });
     }
   }
 
   /* No loan */
   if(!hasLoan){
-    ins.push({t:'info',icon:'💡',
-      h:'No active loan — DSCR and EMI metrics not applicable',
+    ins.push({t:'info',icon:'??',
+      h:'No active loan � DSCR and EMI metrics not applicable',
       b:'If you\'re planning to apply for a business loan, add the expected EMI above to model how it impacts your benchmark scores.',
-      cta:{href:'forecastPro.test.html',label:'📈 Project with Forecast Pro'}
+      cta:{href:'forecastPro.test.html',label:'?? Project with Forecast Pro'}
     });
   }
 
   var html='';
   for(var i=0;i<ins.length;i++){
     var it=ins[i];
-    var ctaTag=it.cta?'<a class="metric-cta" href="'+it.cta.href+'" style="margin-top:8px;display:inline-flex">'+it.cta.label+' →</a>':'';
+    var ctaTag=it.cta?'<a class="metric-cta" href="'+it.cta.href+'" style="margin-top:8px;display:inline-flex">'+it.cta.label+' ?</a>':'';
     html+='<div class="ins '+it.t+'"><div class="ins-icon">'+it.icon+'</div>'
       +'<div><h4>'+it.h+'</h4><p>'+it.b+'</p>'+ctaTag+'</div></div>';
   }
@@ -815,7 +819,7 @@ function clearResults(){
   });
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'){
@@ -831,7 +835,7 @@ document.getElementById('pwCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlock();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 buildIndGrid();
 if(localStorage.getItem('fw_pro')==='1'){
   document.getElementById('pwOverlay').style.display='none';

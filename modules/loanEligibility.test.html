@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Eligibility Pre-Checker — BizScale</title>
+<title>Loan Eligibility Pre-Checker � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -56,6 +56,10 @@ button.primary:hover{background:#1d4ed8}
 .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
 .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -64,9 +68,9 @@ button.primary:hover{background:#1d4ed8}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="lenderMarketplace.html" class="back-link">← Lender Marketplace</a>
+<a href="lenderMarketplace.html" class="back-link">? Lender Marketplace</a>
 <h1>Loan Eligibility Pre-Checker</h1>
-<p class="subtitle">BizScale · See which lenders you'd likely qualify for — before you apply</p>
+<p class="subtitle">BizScale � See which lenders you'd likely qualify for � before you apply</p>
 
 <div class="card">
   <h2>Your Business Profile</h2>
@@ -83,9 +87,9 @@ button.primary:hover{background:#1d4ed8}
       <label>Personal Credit Score (estimate)</label>
       <select id="creditScore">
         <option value="750">750+ (Excellent)</option>
-        <option value="700">700–749 (Good)</option>
-        <option value="650">650–699 (Fair)</option>
-        <option value="600">600–649 (Poor)</option>
+        <option value="700">700�749 (Good)</option>
+        <option value="650">650�699 (Fair)</option>
+        <option value="600">600�649 (Poor)</option>
         <option value="550">Below 600 (Very Poor)</option>
       </select>
     </div>
@@ -102,32 +106,32 @@ button.primary:hover{background:#1d4ed8}
       <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
     </div>
   </div>
-  <button class="primary" onclick="checkEligibility()">Check My Eligibility →</button>
+  <button class="primary" onclick="checkEligibility()">Check My Eligibility ?</button>
 </div>
 
 <div id="resultsSection" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <span style="font-size:.78rem;font-weight:700;color:#475569">Eligibility Results</span>
-    <button onclick="window.print()" class="secondary" style="padding:5px 12px;font-size:.75rem">🖨️ Print / Save PDF</button>
+    <button onclick="window.print()" class="secondary" style="padding:5px 12px;font-size:.75rem">??? Print / Save PDF</button>
   </div>
   <div class="summary-bar" id="summaryBar"></div>
   <div id="lenderResults"></div>
 </div>
 
 <script>
-// ── Plain-English Explain Helpers ────────────────────────────────
+// -- Plain-English Explain Helpers --------------------------------
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+  btn.innerHTML='[Why this matters] '+(open?'?':'?');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '<div class="explain-example">?? Example: '+example+'</div>'+
     '</div></div>';
 }
 function failExplain(missText, profile){
@@ -139,7 +143,7 @@ function failExplain(missText, profile){
     return explainHtml(
       ['Credit score below 650 signals past missed payments or high debt to most lenders',
        'SBA loans typically require 680+, online lenders accept 550+',
-       'Each rejected application further lowers your score — don\'t apply until score improves'],
+       'Each rejected application further lowers your score � don\'t apply until score improves'],
       'A credit score of '+scoreVal+' puts you in the '+category+' range. Lenders see scores below 650 as high-risk'
     );
   }
@@ -149,7 +153,7 @@ function failExplain(missText, profile){
     var threshMatch = missText.match(/\$?([\d,]+[KkMm]?)/);
     var thresh = threshMatch ? threshMatch[0] : '$100K';
     return explainHtml(
-      ['Most lenders require minimum $100K–$250K annual revenue to qualify',
+      ['Most lenders require minimum $100K�$250K annual revenue to qualify',
        'Revenue shows your ability to generate consistent cash to repay the loan',
        'Below-threshold revenue means the loan size you need may exceed what your income can support'],
       'Your annual revenue is '+fmtD(profile.annualRev)+' but this lender requires '+thresh+' minimum'
@@ -158,8 +162,8 @@ function failExplain(missText, profile){
   // Time in business failures
   if(/months|years|business/i.test(missText) && /need|less than/i.test(missText)){
     return explainHtml(
-      ['Most lenders require 1–2 years in business before approving loans',
-       'New businesses have no track record — lenders cannot predict repayment ability',
+      ['Most lenders require 1�2 years in business before approving loans',
+       'New businesses have no track record � lenders cannot predict repayment ability',
        'Consider SBA microloans or CDFI lenders who specialize in early-stage businesses'],
       'You\'ve been in business '+profile.bizAge+' months. Most conventional lenders require at least 24 months'
     );
@@ -168,53 +172,53 @@ function failExplain(missText, profile){
 }
 
 var LENDERS = [
-  {icon:'🏛️', name:'SBA 7(a) Loan', range:'Up to $5,000,000', url:'https://www.sba.gov/funding-programs/loans/7a-loans',
+  {icon:'???', name:'SBA 7(a) Loan', range:'Up to $5,000,000', url:'https://www.sba.gov/funding-programs/loans/7a-loans',
    criteria:[
      {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K minimum'},
      {label:'Credit score 680+', check:function(p){ return p.credit>=680; }, miss:'Credit score below 680'},
      {label:'US for-profit business', check:function(p){ return true; }, miss:''},
-     {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 — cash flow too tight'}
+     {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 � cash flow too tight'}
    ]},
-  {icon:'🌱', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
+  {icon:'??', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
    criteria:[
      {label:'Any stage business (startups OK)', check:function(p){ return true; }, miss:''},
      {label:'Credit score 575+', check:function(p){ return p.credit>=575; }, miss:'Credit score too low'},
-     {label:'Loan need ≤ $50,000', check:function(p){ return p.loanNeed<=50000; }, miss:'Loan needed exceeds $50K limit'},
+     {label:'Loan need = $50,000', check:function(p){ return p.loanNeed<=50000; }, miss:'Loan needed exceeds $50K limit'},
      {label:'Business plan or collateral', check:function(p){ return true; }, miss:''}
    ]},
-  {icon:'🔵', name:'BlueVine (Line of Credit)', range:'Up to $250,000', url:'https://www.bluevine.com',
+  {icon:'??', name:'BlueVine (Line of Credit)', range:'Up to $250,000', url:'https://www.bluevine.com',
    criteria:[
      {label:'Min 24 months in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 24+ months in business'},
      {label:'Annual revenue $120K+', check:function(p){ return p.annualRev>=120000; }, miss:'Revenue below $120K minimum'},
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
-     {label:'Loan need ≤ $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
+     {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'⚡', name:'OnDeck', range:'$5K – $250,000', url:'https://www.ondeck.com',
+  {icon:'?', name:'OnDeck', range:'$5K � $250,000', url:'https://www.ondeck.com',
    criteria:[
      {label:'Min 12 months in business', check:function(p){ return p.bizAge>=12; }, miss:'Need 12+ months in business'},
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K'},
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
-     {label:'Loan need ≤ $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
+     {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'🟠', name:'Funding Circle', range:'$25K – $500,000', url:'https://www.fundingcircle.com/us/',
+  {icon:'??', name:'Funding Circle', range:'$25K � $500,000', url:'https://www.fundingcircle.com/us/',
    criteria:[
      {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
      {label:'Annual revenue $150K+', check:function(p){ return p.annualRev>=150000; }, miss:'Revenue below $150K'},
      {label:'Credit score 660+', check:function(p){ return p.credit>=660; }, miss:'Credit score below 660'},
-     {label:'Loan $25K–$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K–$500K range'}
+     {label:'Loan $25K�$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K�$500K range'}
    ]},
-  {icon:'🏪', name:'Lendio (Marketplace)', range:'$1K – $5,000,000', url:'https://www.lendio.com',
+  {icon:'??', name:'Lendio (Marketplace)', range:'$1K � $5,000,000', url:'https://www.lendio.com',
    criteria:[
      {label:'Any stage (matches 75+ lenders)', check:function(p){ return true; }, miss:''},
      {label:'Credit score 550+', check:function(p){ return p.credit>=550; }, miss:'Credit score below 550'},
-     {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months — fewer options available'}
+     {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months � fewer options available'}
    ]},
-  {icon:'💛', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
+  {icon:'??', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
    criteria:[
-     {label:'Open to all — no minimum revenue', check:function(p){ return true; }, miss:''},
+     {label:'Open to all � no minimum revenue', check:function(p){ return true; }, miss:''},
      {label:'No credit score requirement', check:function(p){ return true; }, miss:''},
-     {label:'Loan need ≤ $15,000', check:function(p){ return p.loanNeed<=15000; }, miss:'Loan needed exceeds $15K limit'},
+     {label:'Loan need = $15,000', check:function(p){ return p.loanNeed<=15000; }, miss:'Loan needed exceeds $15K limit'},
      {label:'US-based business', check:function(p){ return true; }, miss:''}
    ]}
 ];
@@ -245,20 +249,20 @@ function checkEligibility(){
       else if(c.miss) fails.push(c.miss);
     });
     var verdict, vcls;
-    if(fails.length===0){ verdict='✅ Likely'; vcls='verdict-likely'; likely++; }
-    else if(fails.length===1){ verdict='⚠️ Maybe'; vcls='verdict-maybe'; maybe++; }
-    else { verdict='✗ Unlikely'; vcls='verdict-unlikely'; unlikely++; }
+    if(fails.length===0){ verdict='? Likely'; vcls='verdict-likely'; likely++; }
+    else if(fails.length===1){ verdict='?? Maybe'; vcls='verdict-maybe'; maybe++; }
+    else { verdict='? Unlikely'; vcls='verdict-unlikely'; unlikely++; }
 
     html += '<div class="lender-card">';
     html += '<div class="lc-head"><div class="lc-icon">'+l.icon+'</div>';
     html += '<div><div class="lc-name">'+l.name+'</div><div class="lc-range">'+l.range+'</div></div>';
     html += '<span class="lc-verdict '+vcls+'">'+verdict+'</span></div>';
     html += '<div class="lc-body">';
-    passes.forEach(function(p){ html += '<div class="criteria-row"><span class="cr-icon">✅</span>'+p+'</div>'; });
-    fails.forEach(function(f){ html += '<div class="criteria-row"><span class="cr-icon">❌</span><span class="cr-miss">'+f+'</span>'+failExplain(f, profile)+'</div>'; });
+    passes.forEach(function(p){ html += '<div class="criteria-row"><span class="cr-icon">?</span>'+p+'</div>'; });
+    fails.forEach(function(f){ html += '<div class="criteria-row"><span class="cr-icon">?</span><span class="cr-miss">'+f+'</span>'+failExplain(f, profile)+'</div>'; });
     html += '</div>';
     html += '<div class="lc-foot"><span style="font-size:.74rem;color:#94a3b8">Visit lender website to apply</span>';
-    html += '<a href="'+l.url+'" target="_blank" class="btn-visit">Apply →</a></div>';
+    html += '<a href="'+l.url+'" target="_blank" class="btn-visit">Apply ?</a></div>';
     html += '</div>';
   });
 

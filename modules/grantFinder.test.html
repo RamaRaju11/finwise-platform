@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Grant &amp; Scheme Finder — BizScale</title>
+  <title>Grant &amp; Scheme Finder � BizScale</title>
   <script src="grants-data.js"></script>
   <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -73,8 +73,8 @@ button.secondary:hover{background:#e2e8f0}
 .why-list,.docs-list{list-style:none;padding:0;margin:0}
 .why-list li,.docs-list li{padding:4px 0;font-size:.82rem;color:#374151;display:flex;gap:8px;line-height:1.4;border-bottom:1px solid #f8fafc}
 .why-list li:last-child,.docs-list li:last-child{border-bottom:none}
-.why-list li::before{content:'✅';flex-shrink:0}
-.docs-list li::before{content:'📄';flex-shrink:0}
+.why-list li::before{content:'?';flex-shrink:0}
+.docs-list li::before{content:'??';flex-shrink:0}
 .ca-box{background:#fafafa;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-top:12px}
 .ca-box.recommended{background:#fffbeb;border-color:#f59e0b}
 .ca-title{font-size:.8rem;font-weight:800;margin-bottom:6px}
@@ -82,7 +82,7 @@ button.secondary:hover{background:#e2e8f0}
 .ca-cost{font-size:.82rem;font-weight:700;color:#15803d;margin-bottom:8px}
 .ca-help-list{list-style:none;padding:0;margin:0}
 .ca-help-list li{padding:3px 0;font-size:.78rem;color:#64748b;display:flex;gap:6px}
-.ca-help-list li::before{content:'→';color:#f59e0b}
+.ca-help-list li::before{content:'?';color:#f59e0b}
 .gc-footer{padding:10px 16px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fafafa}
 .gc-meta{font-size:.73rem;color:#94a3b8;display:flex;gap:16px}
 .gc-meta span{display:flex;align-items:center;gap:4px}
@@ -99,7 +99,7 @@ button.secondary:hover{background:#e2e8f0}
 .nm-name{font-size:.88rem;font-weight:700;color:#1e293b;margin-bottom:4px}
 .nm-fail{font-size:.8rem;color:#dc2626;background:#fee2e2;border-radius:4px;padding:4px 10px;display:inline-block}
 .no-results{background:#fff;border-radius:8px;padding:32px;text-align:center;color:#64748b}
-/* ── Application Tracker ── */
+/* -- Application Tracker -- */
 .tracker-bar{background:#1e293b;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .tb-title{font-weight:800;color:#e2e8f0;font-size:.88rem}
 .tb-stat{font-size:.78rem;padding:3px 10px;border-radius:999px;font-weight:700}
@@ -146,6 +146,10 @@ button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#
 button.print-btn:hover{background:#e2e8f0}
 @media print{.back-link,button,.fpill,#profilePanel{display:none!important}body{background:#fff;padding:8px}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -157,8 +161,8 @@ button.print-btn:hover{background:#e2e8f0}
 <!-- PROFILE PANEL -->
 <div id="profilePanel">
 <h1>Grant &amp; Scheme Finder</h1>
-<p class="subtitle">BizScale · Find government and private funding you qualify for — USA</p>
-<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">📅 <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently — always verify on the official program website before applying.</p>
+<p class="subtitle">BizScale � Find government and private funding you qualify for � USA</p>
+<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">?? <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently � always verify on the official program website before applying.</p>
 <div class="card">
   <h2>Your Business Profile</h2>
   <p class="desc">Fill this once. We match you to every grant and scheme you qualify for.</p>
@@ -174,9 +178,9 @@ button.print-btn:hover{background:#e2e8f0}
     <div>
       <label>Country</label>
       <select id="p_country">
-        <option value="USA">🇺🇸 USA</option>
-        <option value="UK">🇬🇧 UK (coming soon)</option>
-        <option value="India">🇮🇳 India (coming soon)</option>
+        <option value="USA">???? USA</option>
+        <option value="UK">???? UK (coming soon)</option>
+        <option value="India">???? India (coming soon)</option>
       </select>
     </div>
     <div>
@@ -209,15 +213,15 @@ button.print-btn:hover{background:#e2e8f0}
     <label class="check-item"><input type="checkbox" id="c_rd" value="rd"/> R&amp;D / Innovation</label>
     <label class="check-item"><input type="checkbox" id="c_export" value="export"/> Exporting</label>
   </div>
-  <button class="primary" onclick="saveProfile()">Find My Grants →</button>
-  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button class="primary" onclick="saveProfile()">Find My Grants ?</button>
+  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
 </div>
 </div>
 
 <!-- RESULTS PANEL -->
 <div id="resultsPanel" style="display:none">
   <h1>Grant &amp; Scheme Finder</h1>
-  <p class="subtitle">BizScale · USA Funding Matches</p>
+  <p class="subtitle">BizScale � USA Funding Matches</p>
   <div id="profileBar"></div>
   <div id="trackerBar"></div>
   <div id="deadlineCalendar"></div>
@@ -245,7 +249,7 @@ var INDUSTRIES = [
   {v:'other',       l:'Other'}
 ];
 
-/* ── Boot: populate selects ── */
+/* -- Boot: populate selects -- */
 (function(){
   var ss = document.getElementById('p_state');
   US_STATES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; ss.appendChild(o); });
@@ -253,7 +257,7 @@ var INDUSTRIES = [
   INDUSTRIES.forEach(function(i){ var o=document.createElement('option'); o.value=i.v; o.textContent=i.l; si.appendChild(o); });
 })();
 
-/* ── Profile storage ── */
+/* -- Profile storage -- */
 function getProfile(){ return JSON.parse(localStorage.getItem('fw_biz_profile')||'null'); }
 function getPlan(){
   if(localStorage.getItem('fw_advisor')) return 'advisor';
@@ -262,7 +266,7 @@ function getPlan(){
   return 'free';
 }
 
-/* ── Normalize corrupted / partially-imported profile data ── */
+/* -- Normalize corrupted / partially-imported profile data -- */
 function normalizeIndustry(raw){
   if(!raw) return 'other';
   var valid=['technology','retail','restaurant','services','healthcare','construction','manufacturing','agriculture','education','biotech','engineering','energy','defense','finance','other'];
@@ -372,10 +376,10 @@ function editProfile(){
   });
 }
 
-/* ── Format helpers ── */
+/* -- Format helpers -- */
 function fmt(n){ return '$'+Number(n).toLocaleString(); }
 
-/* ── Grant → Savings Goal helpers ── */
+/* -- Grant ? Savings Goal helpers -- */
 function parseGrantAmt(amtStr){
   if(!amtStr) return 0;
   var s = amtStr.replace(/[,$]/g,'');
@@ -400,7 +404,7 @@ function createMatchGoal(grantName, amtStr, btn){
   var surplus = 0, annualRate = 0;
   if(Array.isArray(stored)){ goals = stored; }
   else if(stored && stored.goals){ goals = stored.goals; surplus = stored.surplus||0; annualRate = stored.annualRate||0; }
-  var goalName = grantName.slice(0,42)+' — Match Fund';
+  var goalName = grantName.slice(0,42)+' � Match Fund';
   var exists = goals.some(function(g){ return g.name === goalName; });
   if(exists){
     alert('A savings goal for this grant already exists in Business Savings Planner.');
@@ -408,19 +412,19 @@ function createMatchGoal(grantName, amtStr, btn){
   }
   goals.push({id:'sg_'+Date.now(),name:goalName,target:matchAmt,saved:0,priority:'High',note:'50% match fund required for '+grantName});
   localStorage.setItem('fw_savings_goals',JSON.stringify({surplus:surplus,annualRate:annualRate,goals:goals,calculatedAt:new Date().toISOString()}));
-  if(btn){ btn.textContent='✅ Goal Created!'; btn.classList.add('created'); btn.disabled=true; }
-  var openNow = confirm('✅ Savings goal created!\n\nName: '+goalName+'\nTarget: $'+matchAmt.toLocaleString()+'\n\nOpen Business Savings Planner to track progress?');
+  if(btn){ btn.textContent='? Goal Created!'; btn.classList.add('created'); btn.disabled=true; }
+  var openNow = confirm('? Savings goal created!\n\nName: '+goalName+'\nTarget: $'+matchAmt.toLocaleString()+'\n\nOpen Business Savings Planner to track progress?');
   if(openNow) window.open('businessSavingsPlanner.test.html','_blank');
 }
 
-/* ── Boot: if profile exists, jump to results ── */
+/* -- Boot: if profile exists, jump to results -- */
 (function(){
   var profile = getProfile();
   if(profile){
     var norm = normalizeProfile(profile);
     localStorage.setItem('fw_biz_profile', JSON.stringify(norm)); // save cleaned data
     if(!norm.businessName){
-      /* Critical field still missing — show form pre-filled from main profile */
+      /* Critical field still missing � show form pre-filled from main profile */
       preFillFromMainProfile();
       editProfile();
       return;
@@ -432,7 +436,7 @@ function createMatchGoal(grantName, amtStr, btn){
   }
 })();
 
-/* ── Application Tracker ── */
+/* -- Application Tracker -- */
 function grantKey(name){ return 'gt_'+name.replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,40); }
 function loadTracker(){ try{return JSON.parse(localStorage.getItem('fw_grant_tracker')||'{}')}catch(e){return{};} }
 function saveTracker(t){ localStorage.setItem('fw_grant_tracker',JSON.stringify(t)); }
@@ -493,7 +497,7 @@ function renderTrackerBar(){
   var el = document.getElementById('trackerBar');
   if(!el) return;
   if(!keys.length){
-    el.innerHTML = '<div class="tracker-bar"><span class="tb-title">Application Tracker</span><span class="tb-empty">No grants tracked yet — use the status selector on any grant below</span></div>';
+    el.innerHTML = '<div class="tracker-bar"><span class="tb-title">Application Tracker</span><span class="tb-empty">No grants tracked yet � use the status selector on any grant below</span></div>';
     renderDeadlineCalendar();
     return;
   }
@@ -509,29 +513,29 @@ function renderTrackerBar(){
   renderDeadlineCalendar();
 }
 
-/* ── Globals ── */
+/* -- Globals -- */
 var _allMatched = [];
 var _allNearMiss = [];
 var _activeFilter = 'All';
 
-/* ── Show Results Panel ── */
+/* -- Show Results Panel -- */
 function showResults(profile) {
   profile = normalizeProfile(profile); // always normalize before display/match
   document.getElementById('profilePanel').style.display = 'none';
   document.getElementById('resultsPanel').style.display = 'block';
   var catMap = {women:'Women',veteran:'Veteran',minority:'Minority',rural:'Rural',rd:'R&D',export:'Export'};
-  var cats = (profile.specialCategories||[]).map(function(c){ return catMap[c]; }).filter(Boolean).join(' · ');
+  var cats = (profile.specialCategories||[]).map(function(c){ return catMap[c]; }).filter(Boolean).join(' � ');
   var indLabel = (function(){
     var found = INDUSTRIES.filter(function(i){return i.v===profile.industry;})[0];
-    return found ? found.l : (profile.industry||'—');
+    return found ? found.l : (profile.industry||'�');
   })();
   document.getElementById('profileBar').innerHTML =
     '<div class="profile-bar">'+
     '<div><div class="pb-name">'+(profile.businessName||'Your Business')+'</div>'+
-    '<div class="pb-detail">'+indLabel+' · '+(profile.state||'—')+' · '+(profile.businessAge||0)+' yrs · '+(profile.employees||1)+' emp'+(cats?' · '+cats:'')+' · '+(profile.country||'USA')+'</div></div>'+
+    '<div class="pb-detail">'+indLabel+' � '+(profile.state||'�')+' � '+(profile.businessAge||0)+' yrs � '+(profile.employees||1)+' emp'+(cats?' � '+cats:'')+' � '+(profile.country||'USA')+'</div></div>'+
     '<div style="margin-left:auto;display:flex;gap:6px">'+
-    '<button class="pb-edit" onclick="var p=getProfile();if(p){STATE_ONLY=false;SORT_MODE=\'match\';showResults(p);}">🔄 Refresh Match</button>'+
-    '<button class="pb-edit" onclick="editProfile()">✏️ Edit Profile</button>'+
+    '<button class="pb-edit" onclick="var p=getProfile();if(p){STATE_ONLY=false;SORT_MODE=\'match\';showResults(p);}">?? Refresh Match</button>'+
+    '<button class="pb-edit" onclick="editProfile()">?? Edit Profile</button>'+
     '</div>'+
     '</div>';
   renderTrackerBar();
@@ -548,7 +552,7 @@ function showResults(profile) {
   }
 }
 
-/* ── Grant Card ── */
+/* -- Grant Card -- */
 function renderGrantCard(result) {
   var g = result.grant;
   var pct = result.matchPct;
@@ -585,7 +589,7 @@ function renderGrantCard(result) {
     html += '</ul>';
   }
   if(g.ca){
-    html += '<div class="ca-box'+(g.ca.need?' recommended':'')+'"><div class="ca-title">'+(g.ca.need?'⭐ Consultant Recommended':'Consultant Optional')+'</div>';
+    html += '<div class="ca-box'+(g.ca.need?' recommended':'')+'"><div class="ca-title">'+(g.ca.need?'? Consultant Recommended':'Consultant Optional')+'</div>';
     html += '<div class="ca-role">'+g.ca.role+'</div><div class="ca-cost">'+g.ca.cost+'</div>';
     if(g.ca.help&&g.ca.help.length){
       html += '<ul class="ca-help-list">';
@@ -594,14 +598,14 @@ function renderGrantCard(result) {
     }
     html += '</div>';
   }
-  if(g.tip) html += '<div class="tip-box">💡 '+g.tip+'</div>';
+  if(g.tip) html += '<div class="tip-box">?? '+g.tip+'</div>';
   html += '</div>';
   var gKey = grantKey(g.name);
   var tracker = loadTracker();
   var curStatus = tracker[gKey] ? tracker[gKey].status : '';
   var selCls = 'track-sel' + (curStatus ? ' ts-'+curStatus : '');
   var trackSel = '<select class="'+selCls+'" data-key="'+gKey+'" onchange="setGrantStatus(\''+gKey+'\',this.value)">'+
-    '<option value="">Track →</option>'+
+    '<option value="">Track ?</option>'+
     '<option value="saved"'+(curStatus==='saved'?' selected':'')+'>Saved</option>'+
     '<option value="applied"'+(curStatus==='applied'?' selected':'')+'>Applied</option>'+
     '<option value="waiting"'+(curStatus==='waiting'?' selected':'')+'>Waiting</option>'+
@@ -611,15 +615,15 @@ function renderGrantCard(result) {
   var deadlineDate = tracker[gKey] && tracker[gKey].deadline ? tracker[gKey].deadline : '';
   var matchAmt = parseGrantAmt(g.amount);
   var matchBtn = matchAmt > 0
-    ? '<button class="btn-match-goal" onclick="createMatchGoal('+JSON.stringify(g.name)+','+JSON.stringify(g.amount)+',this)" title="Create a 50% match savings goal in Business Savings Planner">💰 Create Match Goal</button>'
+    ? '<button class="btn-match-goal" onclick="createMatchGoal('+JSON.stringify(g.name)+','+JSON.stringify(g.amount)+',this)" title="Create a 50% match savings goal in Business Savings Planner">?? Create Match Goal</button>'
     : '';
   html += '<div class="gc-footer"><div class="gc-meta"><span>&#9201; '+g.time+'</span><span>&#128202; '+g.diff+'</span><span>&#128197; <input type="date" class="dl-date-input" value="'+deadlineDate+'" title="Application deadline" onchange="setGrantDeadline(\''+gKey+'\',this.value)"/></span></div>';
-  html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+trackSel+matchBtn+'<a href="'+g.url+'" target="_blank" class="btn-apply">Apply Now →</a></div></div>';
+  html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+trackSel+matchBtn+'<a href="'+g.url+'" target="_blank" class="btn-apply">Apply Now ?</a></div></div>';
   html += '</div>';
   return html;
 }
 
-/* ── Paid: render full results ── */
+/* -- Paid: render full results -- */
 function renderPaidResults() {
   var matched = _allMatched;
   var nearMiss = _allNearMiss;
@@ -648,8 +652,8 @@ function renderPaidResults() {
     var catDate = new Date(catalogDateStr);
     var monthsOld = (new Date().getFullYear() - catDate.getFullYear())*12 + (new Date().getMonth() - catDate.getMonth());
     var staleColor = monthsOld >= 6 ? '#dc2626' : '#64748b';
-    var staleIcon  = monthsOld >= 6 ? '⚠️' : '📅';
-    var staleMsg   = monthsOld >= 6 ? ' — verify details before applying' : '';
+    var staleIcon  = monthsOld >= 6 ? '??' : '??';
+    var staleMsg   = monthsOld >= 6 ? ' � verify details before applying' : '';
     staleWarning = '<span style="font-size:.72rem;color:'+staleColor+';background:'+(monthsOld>=6?'#fee2e2':'#f1f5f9')+';border-radius:999px;padding:3px 10px;font-weight:700">'+staleIcon+' Updated: '+catalogDateStr+staleMsg+'</span>';
   }
 
@@ -657,11 +661,11 @@ function renderPaidResults() {
   cats.forEach(function(c){
     pillsHtml += '<span class="fpill'+(c===_activeFilter?' active':'')+'" onclick="filterGrants(\''+c+'\')">'+c+'</span>';
   });
-  pillsHtml += '<span class="fpill fpill-state'+(STATE_ONLY?' active':'')+'" onclick="toggleStateOnly()">🗺️ State-Specific</span>';
+  pillsHtml += '<span class="fpill fpill-state'+(STATE_ONLY?' active':'')+'" onclick="toggleStateOnly()">??? State-Specific</span>';
   pillsHtml += '<span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.78rem;color:#64748b;font-weight:600">Sort:'+
     '<div class="sort-toggle">'+
     '<button onclick="setSort(\'match\')" class="'+(SORT_MODE==='match'?'active':'')+'">Best Match</button>'+
-    '<button onclick="setSort(\'deadline\')" class="'+(SORT_MODE==='deadline'?'active':'')+'">Deadline ↑</button>'+
+    '<button onclick="setSort(\'deadline\')" class="'+(SORT_MODE==='deadline'?'active':'')+'">Deadline ?</button>'+
     '</div></span>';
   pillsHtml += '</div>';
 
@@ -675,10 +679,10 @@ function renderPaidResults() {
     filtered.forEach(function(r){ html += renderGrantCard(r); });
   }
   if(nearMiss.length>0){
-    html += '<div class="near-miss-section"><div class="nm-header">⚠️ Close Matches — Almost Eligible ('+nearMiss.length+')</div>';
+    html += '<div class="near-miss-section"><div class="nm-header">?? Close Matches � Almost Eligible ('+nearMiss.length+')</div>';
     nearMiss.forEach(function(r){
-      html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' — '+r.grant.amount+'</div>';
-      r.fails.forEach(function(f){ html += '<span class="nm-fail">✗ '+f+'</span> '; });
+      html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' � '+r.grant.amount+'</div>';
+      r.fails.forEach(function(f){ html += '<span class="nm-fail">? '+f+'</span> '; });
       html += '</div>';
     });
     html += '</div>';
@@ -691,7 +695,7 @@ function filterGrants(cat){
   renderPaidResults();
 }
 
-/* ── Sort + State filter globals ── */
+/* -- Sort + State filter globals -- */
 var SORT_MODE = 'match';
 var STATE_ONLY = false;
 
@@ -705,7 +709,7 @@ function toggleStateOnly(){
   renderPaidResults();
 }
 
-/* ── Application Checklist ── */
+/* -- Application Checklist -- */
 function loadChecklist(){ try{return JSON.parse(localStorage.getItem('fw_grant_checklist')||'{}');}catch(e){return{};} }
 function saveChecklist(c){ localStorage.setItem('fw_grant_checklist',JSON.stringify(c)); }
 
@@ -729,7 +733,7 @@ function toggleDoc(gKey, idx){
   }
 }
 
-/* ── Free Plan Teaser ── */
+/* -- Free Plan Teaser -- */
 function renderFreeTeaser(matched) {
   var count = matched.length;
   var html = '<div class="free-teaser">';
@@ -737,12 +741,12 @@ function renderFreeTeaser(matched) {
   html += '<div class="ft-sub">Unlock all '+count+' grants + full details + documents required</div>';
   html += '<ul class="ft-names">';
   matched.slice(0,3).forEach(function(r){
-    html += '<li><span class="lock">🔒</span><span class="ft-locked">'+r.grant.name+' — '+r.grant.amount+'</span></li>';
+    html += '<li><span class="lock">??</span><span class="ft-locked">'+r.grant.name+' � '+r.grant.amount+'</span></li>';
   });
-  if(count>3) html += '<li><span class="lock">🔒</span><span class="ft-locked">+ '+(count-3)+' more grants hidden</span></li>';
+  if(count>3) html += '<li><span class="lock">??</span><span class="ft-locked">+ '+(count-3)+' more grants hidden</span></li>';
   html += '</ul>';
-  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants — $9 / month →</a>';
-  html += '<p style="font-size:.75rem;color:#94a3b8;margin-top:10px">30-day money-back guarantee · Cancel anytime</p>';
+  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants � $9 / month ?</a>';
+  html += '<p style="font-size:.75rem;color:#94a3b8;margin-top:10px">30-day money-back guarantee � Cancel anytime</p>';
   html += '</div>';
   return html;
 }

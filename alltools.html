@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All Tools — BizScale SmallBiz Platform</title>
+<title>All Tools � BizScale SmallBiz Platform</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -63,17 +63,21 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 @media(max-width:640px){.tool-grid{grid-template-columns:1fr 1fr}}
 @media print{.topbar,.filter-bar{display:none}.main{padding:0}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
 <div class="topbar">
   <a href="index.html" class="brand">Biz<span>Scale</span></a>
   <div class="search-wrap">
-    <input type="text" id="q" placeholder="Search 63 tools…" oninput="doSearch(this.value)">
+    <input type="text" id="q" placeholder="Search 63 tools�" oninput="doSearch(this.value)">
   </div>
   <div class="topbar-right">
     <span class="count-lbl" id="visLbl">63 tools</span>
-    <a href="dashboard.html" class="home-btn">← Dashboard</a>
+    <a href="dashboard.html" class="home-btn">? Dashboard</a>
   </div>
 </div>
 
@@ -93,151 +97,151 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   <!-- CORE ENGINES -->
   <div class="cat-block" data-cat="core" id="blk-core">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#eef2ff;color:#4f46e5">🏦</div>
+      <div class="cat-badge" style="background:#eef2ff;color:#4f46e5">??</div>
       <div><div class="cat-name" style="color:#4f46e5">Core Engines</div><div class="cat-desc">Loan safety, EMI, debt risk, stress testing</div></div>
       <span class="cat-cnt">16</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanDecisionScoreEngine.test.html" data-tags="loan score safe risky dangerous verdict 60 seconds"><div class="tc-name">Loan Safety Score</div><div class="tc-desc">SAFE / RISKY / DANGEROUS verdict based on your revenue and loan parameters.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanEngine.test.html" data-tags="loan engine emi amortization prepayment schedule interest"><div class="tc-name">Loan Engine</div><div class="tc-desc">Full EMI calculation, amortization schedule, and prepayment simulation.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanAffordabilityEngine.test.html" data-tags="affordability safe emi max loan verdict cash flow"><div class="tc-name">Loan Affordability Engine</div><div class="tc-desc">Calculates safe EMI from cash flow and reverse-engineers maximum loan amount.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/riskDebtEngine.test.html" data-tags="risk debt dscr dti ratio score alerts critical"><div class="tc-name">Risk &amp; Debt Engine</div><div class="tc-desc">DSCR and DTI ratios with Low / Moderate / High / Critical risk classification.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/stressTestEngine.test.html" data-tags="stress test revenue drop expense spike rate hike scenario pass fail"><div class="tc-name">Stress Testing Engine</div><div class="tc-desc">Simulates revenue drops, expense spikes, and rate hikes — Pass/Warning/Fail verdict.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/multiLoanManager.test.html" data-tags="multi loan manager portfolio combined emi exposure simulation"><div class="tc-name">Multi-Loan Manager</div><div class="tc-desc">Portfolio of multiple loans — combined EMI, total exposure, and new-loan simulation.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/recommendationEngine.test.html" data-tags="recommendation prepayment tenure loan decision proceed caution delay"><div class="tc-name">Recommendation Engine</div><div class="tc-desc">Prioritised recommendations — avalanche strategy, tenure change, proceed/caution/delay.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/emiCalculator.test.html" data-tags="emi calculator monthly payment rate tenure simple"><div class="tc-name">EMI Calculator</div><div class="tc-desc">Simple EMI with amortization table. Principal, rate, tenure → monthly payment.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanEligibility.test.html" data-tags="loan eligibility check criteria qualify lender approve"><div class="tc-name">Loan Eligibility Check</div><div class="tc-desc">Check eligibility against common lender requirements before applying.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanRepaymentOptimizer.test.html" data-tags="repayment optimizer strategy extra payment lump sum interest savings payoff"><div class="tc-name">Loan Repayment Optimizer</div><div class="tc-desc">Compare repayment strategies and see interest savings for each approach.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanRefinanceAnalyzer.test.html" data-tags="refinance analyzer break even new rate savings compare monthly"><div class="tc-name">Loan Refinance Analyzer</div><div class="tc-desc">Should you refinance? Break-even months, monthly savings, and net benefit.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/debtCommandCenter.test.html" data-tags="debt command center all loans payoff avalanche snowball strategies free date"><div class="tc-name">Debt Command Center</div><div class="tc-desc">All your loans in one view. Payoff strategies, total interest, and debt-free date.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/debtConsolidation.test.html" data-tags="debt consolidation combine single emi lower rate savings"><div class="tc-name">Debt Consolidation</div><div class="tc-desc">Consolidate multiple loans. Compare original vs consolidated EMI and total interest.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/lenderMarketplace.html" data-tags="lender marketplace sba bluevine ondeck compare browse filter"><div class="tc-name">Lender Marketplace</div><div class="tc-desc">Browse SBA, BlueVine, OnDeck and more. Filter by loan amount and business type.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/loanMarketplaceEngine.test.html" data-tags="loan marketplace referral tracked compare offers side by side savings"><div class="tc-name">Loan Marketplace Engine</div><div class="tc-desc">Search eligible lenders, compare offers, and generate referral-tracked application links.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#4f46e5" href="modules/grantFinder.test.html" data-tags="grant finder government scheme funding eligibility match deadline"><div class="tc-name">Grant Finder</div><div class="tc-desc">Find matching grants and government schemes based on your business profile.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanDecisionScoreEngine.test.html" data-tags="loan score safe risky dangerous verdict 60 seconds"><div class="tc-name">Loan Safety Score</div><div class="tc-desc">SAFE / RISKY / DANGEROUS verdict based on your revenue and loan parameters.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanEngine.test.html" data-tags="loan engine emi amortization prepayment schedule interest"><div class="tc-name">Loan Engine</div><div class="tc-desc">Full EMI calculation, amortization schedule, and prepayment simulation.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanAffordabilityEngine.test.html" data-tags="affordability safe emi max loan verdict cash flow"><div class="tc-name">Loan Affordability Engine</div><div class="tc-desc">Calculates safe EMI from cash flow and reverse-engineers maximum loan amount.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/riskDebtEngine.test.html" data-tags="risk debt dscr dti ratio score alerts critical"><div class="tc-name">Risk &amp; Debt Engine</div><div class="tc-desc">DSCR and DTI ratios with Low / Moderate / High / Critical risk classification.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/stressTestEngine.test.html" data-tags="stress test revenue drop expense spike rate hike scenario pass fail"><div class="tc-name">Stress Testing Engine</div><div class="tc-desc">Simulates revenue drops, expense spikes, and rate hikes � Pass/Warning/Fail verdict.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/multiLoanManager.test.html" data-tags="multi loan manager portfolio combined emi exposure simulation"><div class="tc-name">Multi-Loan Manager</div><div class="tc-desc">Portfolio of multiple loans � combined EMI, total exposure, and new-loan simulation.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/recommendationEngine.test.html" data-tags="recommendation prepayment tenure loan decision proceed caution delay"><div class="tc-name">Recommendation Engine</div><div class="tc-desc">Prioritised recommendations � avalanche strategy, tenure change, proceed/caution/delay.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/emiCalculator.test.html" data-tags="emi calculator monthly payment rate tenure simple"><div class="tc-name">EMI Calculator</div><div class="tc-desc">Simple EMI with amortization table. Principal, rate, tenure ? monthly payment.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanEligibility.test.html" data-tags="loan eligibility check criteria qualify lender approve"><div class="tc-name">Loan Eligibility Check</div><div class="tc-desc">Check eligibility against common lender requirements before applying.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanRepaymentOptimizer.test.html" data-tags="repayment optimizer strategy extra payment lump sum interest savings payoff"><div class="tc-name">Loan Repayment Optimizer</div><div class="tc-desc">Compare repayment strategies and see interest savings for each approach.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanRefinanceAnalyzer.test.html" data-tags="refinance analyzer break even new rate savings compare monthly"><div class="tc-name">Loan Refinance Analyzer</div><div class="tc-desc">Should you refinance? Break-even months, monthly savings, and net benefit.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/debtCommandCenter.test.html" data-tags="debt command center all loans payoff avalanche snowball strategies free date"><div class="tc-name">Debt Command Center</div><div class="tc-desc">All your loans in one view. Payoff strategies, total interest, and debt-free date.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/debtConsolidation.test.html" data-tags="debt consolidation combine single emi lower rate savings"><div class="tc-name">Debt Consolidation</div><div class="tc-desc">Consolidate multiple loans. Compare original vs consolidated EMI and total interest.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/lenderMarketplace.html" data-tags="lender marketplace sba bluevine ondeck compare browse filter"><div class="tc-name">Lender Marketplace</div><div class="tc-desc">Browse SBA, BlueVine, OnDeck and more. Filter by loan amount and business type.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/loanMarketplaceEngine.test.html" data-tags="loan marketplace referral tracked compare offers side by side savings"><div class="tc-name">Loan Marketplace Engine</div><div class="tc-desc">Search eligible lenders, compare offers, and generate referral-tracked application links.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#4f46e5" href="modules/grantFinder.test.html" data-tags="grant finder government scheme funding eligibility match deadline"><div class="tc-name">Grant Finder</div><div class="tc-desc">Find matching grants and government schemes based on your business profile.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- FINANCIAL STATEMENTS -->
   <div class="cat-block" data-cat="fin" id="blk-fin">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#f0f9ff;color:#0369a1">📈</div>
+      <div class="cat-badge" style="background:#f0f9ff;color:#0369a1">??</div>
       <div><div class="cat-name" style="color:#0369a1">Financial Statements</div><div class="cat-desc">P&amp;L, balance sheet, cash flow, forecasting</div></div>
       <span class="cat-cnt">9</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#0369a1" href="modules/profitLossEngine.test.html" data-tags="profit loss p&l gross ebit net margin revenue cogs statement"><div class="tc-name">Profit &amp; Loss Engine</div><div class="tc-desc">Revenue − COGS → Gross Profit → EBIT → Net Profit. Multi-period with margin ratios.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/balanceSheetEngine.test.html" data-tags="balance sheet assets liabilities equity ratios period comparison"><div class="tc-name">Balance Sheet Engine</div><div class="tc-desc">Assets = Liabilities + Equity. Key ratios and period-over-period comparison.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/cashFlowStatementEngine.test.html" data-tags="cash flow statement operating investing financing indirect reconcile"><div class="tc-name">Cash Flow Statement</div><div class="tc-desc">Operating + Investing + Financing flows (indirect method) with reconciliation.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/accountingMappingEngine.test.html" data-tags="accounting mapping emi split journal entries depreciation double entry"><div class="tc-name">Accounting Mapping Engine</div><div class="tc-desc">EMI → Interest + Principal split. Double-entry journal entries with reconciliation.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/forecastingEngine.test.html" data-tags="forecasting engine revenue cf p&l projection growth scenarios months"><div class="tc-name">Forecasting Engine</div><div class="tc-desc">Project cash flow and P&amp;L over 6–36 months with three-scenario analysis.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/financialStatements.test.html" data-tags="financial statements hub consolidated all three p&l balance cash"><div class="tc-name">Financial Statements Hub</div><div class="tc-desc">Consolidated view linking P&amp;L, balance sheet, and cash flow statements.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/forecastPro.test.html" data-tags="forecast pro advanced multi scenario projection detailed revenue"><div class="tc-name">Forecast Pro</div><div class="tc-desc">Advanced forecasting with detailed scenario modeling and revenue driver inputs.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/profitMarginAnalyzer.test.html" data-tags="profit margin analyzer gross net operating compression period compare"><div class="tc-name">Profit Margin Analyzer</div><div class="tc-desc">Deep-dive gross, operating, and net margins. Compare periods and spot compression.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0369a1" href="modules/cashFlowEngine.test.html" data-tags="cash flow engine monthly net surplus deficit multi period average"><div class="tc-name">Cash Flow Engine</div><div class="tc-desc">Monthly net cash flow with surplus/deficit detection and multi-period analysis.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/profitLossEngine.test.html" data-tags="profit loss p&l gross ebit net margin revenue cogs statement"><div class="tc-name">Profit &amp; Loss Engine</div><div class="tc-desc">Revenue - COGS ? Gross Profit ? EBIT ? Net Profit. Multi-period with margin ratios.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/balanceSheetEngine.test.html" data-tags="balance sheet assets liabilities equity ratios period comparison"><div class="tc-name">Balance Sheet Engine</div><div class="tc-desc">Assets = Liabilities + Equity. Key ratios and period-over-period comparison.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/cashFlowStatementEngine.test.html" data-tags="cash flow statement operating investing financing indirect reconcile"><div class="tc-name">Cash Flow Statement</div><div class="tc-desc">Operating + Investing + Financing flows (indirect method) with reconciliation.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/accountingMappingEngine.test.html" data-tags="accounting mapping emi split journal entries depreciation double entry"><div class="tc-name">Accounting Mapping Engine</div><div class="tc-desc">EMI ? Interest + Principal split. Double-entry journal entries with reconciliation.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/forecastingEngine.test.html" data-tags="forecasting engine revenue cf p&l projection growth scenarios months"><div class="tc-name">Forecasting Engine</div><div class="tc-desc">Project cash flow and P&amp;L over 6�36 months with three-scenario analysis.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/financialStatements.test.html" data-tags="financial statements hub consolidated all three p&l balance cash"><div class="tc-name">Financial Statements Hub</div><div class="tc-desc">Consolidated view linking P&amp;L, balance sheet, and cash flow statements.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/forecastPro.test.html" data-tags="forecast pro advanced multi scenario projection detailed revenue"><div class="tc-name">Forecast Pro</div><div class="tc-desc">Advanced forecasting with detailed scenario modeling and revenue driver inputs.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/profitMarginAnalyzer.test.html" data-tags="profit margin analyzer gross net operating compression period compare"><div class="tc-name">Profit Margin Analyzer</div><div class="tc-desc">Deep-dive gross, operating, and net margins. Compare periods and spot compression.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0369a1" href="modules/cashFlowEngine.test.html" data-tags="cash flow engine monthly net surplus deficit multi period average"><div class="tc-name">Cash Flow Engine</div><div class="tc-desc">Monthly net cash flow with surplus/deficit detection and multi-period analysis.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- TAX & PAYROLL -->
   <div class="cat-block" data-cat="tax" id="blk-tax">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#fff1f2;color:#dc2626">🧾</div>
+      <div class="cat-badge" style="background:#fff1f2;color:#dc2626">??</div>
       <div><div class="cat-name" style="color:#dc2626">Tax &amp; Payroll</div><div class="cat-desc">Income tax, sales tax, payroll, deductions</div></div>
       <span class="cat-cnt">8</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#dc2626" href="modules/taxCommandCenter.test.html" data-tags="tax command center hub income sales contractor all"><div class="tc-name">Tax Command Center</div><div class="tc-desc">All-in-one tax hub: income, deductions, sales tax, and contractor payroll.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/taxEstimator.test.html" data-tags="tax estimator income federal state self employed quarterly"><div class="tc-name">Tax Estimator</div><div class="tc-desc">Estimate annual income tax liability for self-employed and small business owners.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/salesTaxTracker.test.html" data-tags="sales tax tracker rates state collect remit nexus 50 states"><div class="tc-name">Sales Tax Tracker</div><div class="tc-desc">Track collected and remitted sales tax by state. Nexus checker and rate lookup.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/keyDeductions.test.html" data-tags="key deductions business home office vehicle equipment health retirement"><div class="tc-name">Key Deductions Calculator</div><div class="tc-desc">Identify home office, vehicle, equipment, and retirement deductions.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/contractorPayroll.test.html" data-tags="contractor payroll 1099 nec futa suta self employment tax export"><div class="tc-name">Contractor &amp; Payroll Tax</div><div class="tc-desc">1099-NEC / FUTA / SUTA calculations for contractors and employees.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/payrollEstimator.test.html" data-tags="payroll estimator employee salary wages net take home deductions fica"><div class="tc-name">Payroll Estimator</div><div class="tc-desc">Calculate employee net pay after all deductions. Gross to net with FICA.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/payrollImpactSim.test.html" data-tags="payroll impact simulator headcount hire fire salary change cash flow cost"><div class="tc-name">Payroll Impact Simulator</div><div class="tc-desc">Model hiring, firing, or salary changes on monthly cash flow and annual cost.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#dc2626" href="modules/caExport.test.html" data-tags="ca export pack chartered accountant report package financial"><div class="tc-name">CA Export Pack</div><div class="tc-desc">Structured export for chartered accountants — P&amp;L, balance sheet in CA-ready format.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/taxCommandCenter.test.html" data-tags="tax command center hub income sales contractor all"><div class="tc-name">Tax Command Center</div><div class="tc-desc">All-in-one tax hub: income, deductions, sales tax, and contractor payroll.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/taxEstimator.test.html" data-tags="tax estimator income federal state self employed quarterly"><div class="tc-name">Tax Estimator</div><div class="tc-desc">Estimate annual income tax liability for self-employed and small business owners.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/salesTaxTracker.test.html" data-tags="sales tax tracker rates state collect remit nexus 50 states"><div class="tc-name">Sales Tax Tracker</div><div class="tc-desc">Track collected and remitted sales tax by state. Nexus checker and rate lookup.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/keyDeductions.test.html" data-tags="key deductions business home office vehicle equipment health retirement"><div class="tc-name">Key Deductions Calculator</div><div class="tc-desc">Identify home office, vehicle, equipment, and retirement deductions.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/contractorPayroll.test.html" data-tags="contractor payroll 1099 nec futa suta self employment tax export"><div class="tc-name">Contractor &amp; Payroll Tax</div><div class="tc-desc">1099-NEC / FUTA / SUTA calculations for contractors and employees.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/payrollEstimator.test.html" data-tags="payroll estimator employee salary wages net take home deductions fica"><div class="tc-name">Payroll Estimator</div><div class="tc-desc">Calculate employee net pay after all deductions. Gross to net with FICA.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/payrollImpactSim.test.html" data-tags="payroll impact simulator headcount hire fire salary change cash flow cost"><div class="tc-name">Payroll Impact Simulator</div><div class="tc-desc">Model hiring, firing, or salary changes on monthly cash flow and annual cost.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#dc2626" href="modules/caExport.test.html" data-tags="ca export pack chartered accountant report package financial"><div class="tc-name">CA Export Pack</div><div class="tc-desc">Structured export for chartered accountants � P&amp;L, balance sheet in CA-ready format.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- BUSINESS PLANNING -->
   <div class="cat-block" data-cat="biz" id="blk-biz">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#f0fdf4;color:#16a34a">🎯</div>
+      <div class="cat-badge" style="background:#f0fdf4;color:#16a34a">??</div>
       <div><div class="cat-name" style="color:#16a34a">Business Planning</div><div class="cat-desc">Runway, break-even, savings, goals, health scoring</div></div>
       <span class="cat-cnt">11</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#16a34a" href="modules/cashRunway.test.html" data-tags="cash runway months burn rate zero survival reserve"><div class="tc-name">Cash Runway Calculator</div><div class="tc-desc">How many months until cash runs out? Runway with cut-scenario analysis.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/breakEven.test.html" data-tags="break even fixed variable revenue units contribution margin safety payback"><div class="tc-name">Break-Even Analyzer</div><div class="tc-desc">Units and revenue needed to break even. Contribution margin and safety margin.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/workingCapitalCalc.test.html" data-tags="working capital current ratio liquidity cash conversion cycle ccc"><div class="tc-name">Working Capital Calculator</div><div class="tc-desc">Current ratio, liquidity assessment, and cash conversion cycle analysis.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/ownersPay.test.html" data-tags="owners pay safe salary draw profit distribution self"><div class="tc-name">Owner's Pay Optimizer</div><div class="tc-desc">How much can you safely pay yourself based on cash flow and reserves?</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/businessSavingsPlanner.test.html" data-tags="business savings planner goal target monthly timeline fund equipment expansion"><div class="tc-name">Business Savings Planner</div><div class="tc-desc">Plan savings toward business goals — emergency fund, equipment, expansion.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/goalTracker.test.html" data-tags="goal tracker financial targets debt payoff milestones progress"><div class="tc-name">Goal Tracker</div><div class="tc-desc">Set and track financial goals with progress visualization and milestone alerts.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/budgetActualTracker.test.html" data-tags="budget actual tracker variance planned vs over under alert"><div class="tc-name">Budget &amp; Actual Tracker</div><div class="tc-desc">Compare planned budget vs actual by category. Variance analysis with alerts.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/monthlySnapshot.test.html" data-tags="monthly snapshot summary report revenue expense profit one page"><div class="tc-name">Monthly Snapshot</div><div class="tc-desc">One-page monthly financial snapshot — revenue, expenses, net profit, and ratios.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/scoreCard.test.html" data-tags="score card kpi metrics performance business dashboard"><div class="tc-name">Business Score Card</div><div class="tc-desc">KPI scorecard tracking growth, margins, efficiency, and financial health indicators.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/businessHealthScore.test.html" data-tags="business health score overall grade assessment cash profit debt growth"><div class="tc-name">Business Health Score</div><div class="tc-desc">Composite health score across cash flow, profitability, debt, and growth with grade.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#16a34a" href="modules/starterPlan.test.html" data-tags="starter plan dashboard beginner overview setup onboard guided"><div class="tc-name">Starter Plan Dashboard</div><div class="tc-desc">Guided onboarding — step-by-step setup, key tool recommendations, financial baseline.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/cashRunway.test.html" data-tags="cash runway months burn rate zero survival reserve"><div class="tc-name">Cash Runway Calculator</div><div class="tc-desc">How many months until cash runs out? Runway with cut-scenario analysis.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/breakEven.test.html" data-tags="break even fixed variable revenue units contribution margin safety payback"><div class="tc-name">Break-Even Analyzer</div><div class="tc-desc">Units and revenue needed to break even. Contribution margin and safety margin.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/workingCapitalCalc.test.html" data-tags="working capital current ratio liquidity cash conversion cycle ccc"><div class="tc-name">Working Capital Calculator</div><div class="tc-desc">Current ratio, liquidity assessment, and cash conversion cycle analysis.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/ownersPay.test.html" data-tags="owners pay safe salary draw profit distribution self"><div class="tc-name">Owner's Pay Optimizer</div><div class="tc-desc">How much can you safely pay yourself based on cash flow and reserves?</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/businessSavingsPlanner.test.html" data-tags="business savings planner goal target monthly timeline fund equipment expansion"><div class="tc-name">Business Savings Planner</div><div class="tc-desc">Plan savings toward business goals � emergency fund, equipment, expansion.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/goalTracker.test.html" data-tags="goal tracker financial targets debt payoff milestones progress"><div class="tc-name">Goal Tracker</div><div class="tc-desc">Set and track financial goals with progress visualization and milestone alerts.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/budgetActualTracker.test.html" data-tags="budget actual tracker variance planned vs over under alert"><div class="tc-name">Budget &amp; Actual Tracker</div><div class="tc-desc">Compare planned budget vs actual by category. Variance analysis with alerts.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/monthlySnapshot.test.html" data-tags="monthly snapshot summary report revenue expense profit one page"><div class="tc-name">Monthly Snapshot</div><div class="tc-desc">One-page monthly financial snapshot � revenue, expenses, net profit, and ratios.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/scoreCard.test.html" data-tags="score card kpi metrics performance business dashboard"><div class="tc-name">Business Score Card</div><div class="tc-desc">KPI scorecard tracking growth, margins, efficiency, and financial health indicators.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/businessHealthScore.test.html" data-tags="business health score overall grade assessment cash profit debt growth"><div class="tc-name">Business Health Score</div><div class="tc-desc">Composite health score across cash flow, profitability, debt, and growth with grade.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#16a34a" href="modules/starterPlan.test.html" data-tags="starter plan dashboard beginner overview setup onboard guided"><div class="tc-name">Starter Plan Dashboard</div><div class="tc-desc">Guided onboarding � step-by-step setup, key tool recommendations, financial baseline.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- BANKING & TRACKING -->
   <div class="cat-block" data-cat="bank" id="blk-bank">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#ecfeff;color:#0891b2">🏛️</div>
+      <div class="cat-badge" style="background:#ecfeff;color:#0891b2">???</div>
       <div><div class="cat-name" style="color:#0891b2">Banking &amp; Tracking</div><div class="cat-desc">Statements, invoices, bills, calendar, profiles</div></div>
       <span class="cat-cnt">5</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#0891b2" href="modules/bankStatementUpload.test.html" data-tags="bank statement upload analyze parse transactions categorize csv"><div class="tc-name">Bank Statement Upload</div><div class="tc-desc">Upload and analyze bank statements. Auto-categorize transactions and flag anomalies.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0891b2" href="modules/cashFlowCalendar.test.html" data-tags="cash flow calendar monthly view due dates payments visual pinch points"><div class="tc-name">Cash Flow Calendar</div><div class="tc-desc">Calendar view of income and expense dates. See cash flow timing and pinch points.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0891b2" href="modules/invoiceTracker.test.html" data-tags="invoice tracker outstanding overdue aging receivables follow up email"><div class="tc-name">Invoice Tracker</div><div class="tc-desc">Track outstanding invoices, overdue amounts, and aging receivables.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0891b2" href="modules/vendorBillTracker.test.html" data-tags="vendor bill tracker payables due dates supplier bills autopay contract expiry"><div class="tc-name">Vendor Bill Tracker</div><div class="tc-desc">Track vendor bills and payables. Due date alerts, payment status, and cash needed.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#0891b2" href="modules/businessProfiles.test.html" data-tags="business profiles setup company financial data profile save multiple"><div class="tc-name">Business Profiles</div><div class="tc-desc">Create and manage multiple business profiles that pre-populate all calculators.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#0891b2" href="modules/bankStatementUpload.test.html" data-tags="bank statement upload analyze parse transactions categorize csv"><div class="tc-name">Bank Statement Upload</div><div class="tc-desc">Upload and analyze bank statements. Auto-categorize transactions and flag anomalies.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0891b2" href="modules/cashFlowCalendar.test.html" data-tags="cash flow calendar monthly view due dates payments visual pinch points"><div class="tc-name">Cash Flow Calendar</div><div class="tc-desc">Calendar view of income and expense dates. See cash flow timing and pinch points.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0891b2" href="modules/invoiceTracker.test.html" data-tags="invoice tracker outstanding overdue aging receivables follow up email"><div class="tc-name">Invoice Tracker</div><div class="tc-desc">Track outstanding invoices, overdue amounts, and aging receivables.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0891b2" href="modules/vendorBillTracker.test.html" data-tags="vendor bill tracker payables due dates supplier bills autopay contract expiry"><div class="tc-name">Vendor Bill Tracker</div><div class="tc-desc">Track vendor bills and payables. Due date alerts, payment status, and cash needed.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#0891b2" href="modules/businessProfiles.test.html" data-tags="business profiles setup company financial data profile save multiple"><div class="tc-name">Business Profiles</div><div class="tc-desc">Create and manage multiple business profiles that pre-populate all calculators.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- INTELLIGENCE & AI -->
   <div class="cat-block" data-cat="ai" id="blk-ai">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#faf5ff;color:#7c3aed">🤖</div>
+      <div class="cat-badge" style="background:#faf5ff;color:#7c3aed">??</div>
       <div><div class="cat-name" style="color:#7c3aed">Intelligence &amp; AI</div><div class="cat-desc">AI advisor, benchmarks, reports, shareable outputs</div></div>
       <span class="cat-cnt">7</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#7c3aed" href="modules/aiCfoChat.test.html" data-tags="ai cfo chat advisor conversation financial questions scenarios personalized"><div class="tc-name">AI CFO Chat</div><div class="tc-desc">Conversational AI CFO — ask financial questions and get scenario analysis.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/aiAdvisorEngine.test.html" data-tags="ai advisor engine health score grade loan readiness blockers action plan ratio"><div class="tc-name">AI Advisor Engine</div><div class="tc-desc">Rule-based health scoring (A–F), loan readiness verdict, and prioritised action plan.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/benchmarkPro.test.html" data-tags="benchmark pro advanced industry comparison peer trend kpi targets"><div class="tc-name">Benchmark Pro</div><div class="tc-desc">Advanced benchmarking with detailed peer comparison and sector-specific KPI targets.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/industryBenchmarksEngine.test.html" data-tags="industry benchmarks engine 10 sectors 7 ratios percentile rank improvement"><div class="tc-name">Industry Benchmarks Engine</div><div class="tc-desc">Compare 7 ratios against 10 SMB industries. Percentile ranking and improvement tips.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/paidReportsEngine.test.html" data-tags="paid reports engine loan risk business plan financial summary viability generate"><div class="tc-name">Paid Reports Engine</div><div class="tc-desc">4 report types: Loan Risk, Business Plan, Financial Summary, Loan Viability.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/shareableResultsEngine.test.html" data-tags="shareable results url share export csv json download client side"><div class="tc-name">Shareable Results Engine</div><div class="tc-desc">URL-safe state encoding, printable reports, CSV and JSON exports — all client-side.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#7c3aed" href="modules/seoToolsEngine.test.html" data-tags="seo tools engine meta tags schema utm embed widget keyword calculator"><div class="tc-name">SEO Tools Engine</div><div class="tc-desc">Meta tags, Schema.org JSON-LD, UTM tracking links, and embeddable widget snippets.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/aiCfoChat.test.html" data-tags="ai cfo chat advisor conversation financial questions scenarios personalized"><div class="tc-name">AI CFO Chat</div><div class="tc-desc">Conversational AI CFO � ask financial questions and get scenario analysis.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/aiAdvisorEngine.test.html" data-tags="ai advisor engine health score grade loan readiness blockers action plan ratio"><div class="tc-name">AI Advisor Engine</div><div class="tc-desc">Rule-based health scoring (A�F), loan readiness verdict, and prioritised action plan.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/benchmarkPro.test.html" data-tags="benchmark pro advanced industry comparison peer trend kpi targets"><div class="tc-name">Benchmark Pro</div><div class="tc-desc">Advanced benchmarking with detailed peer comparison and sector-specific KPI targets.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/industryBenchmarksEngine.test.html" data-tags="industry benchmarks engine 10 sectors 7 ratios percentile rank improvement"><div class="tc-name">Industry Benchmarks Engine</div><div class="tc-desc">Compare 7 ratios against 10 SMB industries. Percentile ranking and improvement tips.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/paidReportsEngine.test.html" data-tags="paid reports engine loan risk business plan financial summary viability generate"><div class="tc-name">Paid Reports Engine</div><div class="tc-desc">4 report types: Loan Risk, Business Plan, Financial Summary, Loan Viability.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/shareableResultsEngine.test.html" data-tags="shareable results url share export csv json download client side"><div class="tc-name">Shareable Results Engine</div><div class="tc-desc">URL-safe state encoding, printable reports, CSV and JSON exports � all client-side.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#7c3aed" href="modules/seoToolsEngine.test.html" data-tags="seo tools engine meta tags schema utm embed widget keyword calculator"><div class="tc-name">SEO Tools Engine</div><div class="tc-desc">Meta tags, Schema.org JSON-LD, UTM tracking links, and embeddable widget snippets.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <!-- ADVISOR PLATFORM -->
   <div class="cat-block" data-cat="adv" id="blk-adv">
     <div class="cat-hdr">
-      <div class="cat-badge" style="background:#fffbeb;color:#d97706">🏢</div>
+      <div class="cat-badge" style="background:#fffbeb;color:#d97706">??</div>
       <div><div class="cat-name" style="color:#d97706">Advisor Platform</div><div class="cat-desc">Client management, branded reports, white-label</div></div>
       <span class="cat-cnt">7</span>
     </div>
     <div class="tool-grid">
-      <a class="tc" style="--acc:#d97706" href="modules/advisorDashboard.test.html" data-tags="advisor dashboard client hub manage portfolio overview action items"><div class="tc-name">Advisor Dashboard</div><div class="tc-desc">Central hub for advisors — manage clients, health scores, and action items.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/clientPortal.test.html" data-tags="client portal share secure reports access view"><div class="tc-name">Client Portal</div><div class="tc-desc">Shareable client portal — clients view their analysis and recommendations securely.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/brandedReport.test.html" data-tags="branded report client pdf white label firm logo color"><div class="tc-name">Branded Client Report</div><div class="tc-desc">Generate client-ready reports with your firm's branding — logo, colors, details.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/clientRiskEmail.test.html" data-tags="client risk email alert notification warning health drop threshold"><div class="tc-name">Client Risk Email</div><div class="tc-desc">Auto-generate risk alert emails for clients whose health score drops below thresholds.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/referralTracker.test.html" data-tags="referral tracker link commission affiliate conversions earnings"><div class="tc-name">Referral Tracker</div><div class="tc-desc">Track referral links, monitor conversions, and calculate commission earnings.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/whiteLabelSettings.test.html" data-tags="white label settings brand logo color customize platform domain reports"><div class="tc-name">White-Label Settings</div><div class="tc-desc">Customize platform branding — logo, primary color, firm name, and footer text.</div><div class="tc-open">Open →</div></a>
-      <a class="tc" style="--acc:#d97706" href="modules/subscriptionEngine.test.html" data-tags="subscription system billing tiers free pro enterprise feature gates usage limits"><div class="tc-name">Subscription System</div><div class="tc-desc">Free / Basic / Pro / Enterprise tiers with feature gates and billing calculator.</div><div class="tc-open">Open →</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/advisorDashboard.test.html" data-tags="advisor dashboard client hub manage portfolio overview action items"><div class="tc-name">Advisor Dashboard</div><div class="tc-desc">Central hub for advisors � manage clients, health scores, and action items.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/clientPortal.test.html" data-tags="client portal share secure reports access view"><div class="tc-name">Client Portal</div><div class="tc-desc">Shareable client portal � clients view their analysis and recommendations securely.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/brandedReport.test.html" data-tags="branded report client pdf white label firm logo color"><div class="tc-name">Branded Client Report</div><div class="tc-desc">Generate client-ready reports with your firm's branding � logo, colors, details.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/clientRiskEmail.test.html" data-tags="client risk email alert notification warning health drop threshold"><div class="tc-name">Client Risk Email</div><div class="tc-desc">Auto-generate risk alert emails for clients whose health score drops below thresholds.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/referralTracker.test.html" data-tags="referral tracker link commission affiliate conversions earnings"><div class="tc-name">Referral Tracker</div><div class="tc-desc">Track referral links, monitor conversions, and calculate commission earnings.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/whiteLabelSettings.test.html" data-tags="white label settings brand logo color customize platform domain reports"><div class="tc-name">White-Label Settings</div><div class="tc-desc">Customize platform branding � logo, primary color, firm name, and footer text.</div><div class="tc-open">Open ?</div></a>
+      <a class="tc" style="--acc:#d97706" href="modules/subscriptionEngine.test.html" data-tags="subscription system billing tiers free pro enterprise feature gates usage limits"><div class="tc-name">Subscription System</div><div class="tc-desc">Free / Basic / Pro / Enterprise tiers with feature gates and billing calculator.</div><div class="tc-open">Open ?</div></a>
     </div>
   </div>
 
   <div id="empty-msg" class="empty" style="display:none">
     <h3>No tools match your search</h3>
-    <p>Try a different keyword — e.g. "EMI", "tax", "loan", "forecast"</p>
+    <p>Try a different keyword � e.g. "EMI", "tax", "loan", "forecast"</p>
   </div>
 
 </div><!-- /main -->
 
-<div class="page-footer">BizScale SmallBiz Platform · 63 Tools · 100% Browser-Based · <a href="dashboard.html" style="color:#6366f1">← Dashboard</a></div>
+<div class="page-footer">BizScale SmallBiz Platform � 63 Tools � 100% Browser-Based � <a href="dashboard.html" style="color:#6366f1">? Dashboard</a></div>
 
 <script>
 var allCards = document.querySelectorAll('.tc');

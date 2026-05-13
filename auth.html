@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Sign In</title>
+<title>BizScale � Sign In</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:Arial,sans-serif;background:linear-gradient(160deg,#0f172a,#1e3a5f);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -31,11 +31,15 @@ input:focus{outline:none;border-color:#2563eb}
 .plan-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#1e40af;font-weight:700;margin-top:16px;text-align:center}
 .plan-note span{color:#2563eb}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 <div class="card">
-  <div class="logo">📈 Biz<em>Scale</em></div>
-  <div class="tagline">Analyze · Fund · Grow — 30 tools · Your data stays private</div>
+  <div class="logo">?? Biz<em>Scale</em></div>
+  <div class="tagline">Analyze � Fund � Grow � 30 tools � Your data stays private</div>
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('login')">Sign In</button>
@@ -50,7 +54,7 @@ input:focus{outline:none;border-color:#2563eb}
     <input type="password" id="li_pass" placeholder="Your password" autocomplete="current-password"/>
     <div class="forgot"><a href="#" onclick="showReset();return false;">Forgot password?</a></div>
     <div class="err" id="li_err"></div>
-    <button class="btn" id="li_btn" onclick="doLogin()">Sign In →</button>
+    <button class="btn" id="li_btn" onclick="doLogin()">Sign In ?</button>
   </div>
 
   <!-- SIGNUP -->
@@ -63,8 +67,8 @@ input:focus{outline:none;border-color:#2563eb}
     <input type="password" id="su_pass" placeholder="Min 6 characters" autocomplete="new-password"/>
     <div class="err" id="su_err"></div>
     <div class="ok" id="su_ok"></div>
-    <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account →</button>
-    <div class="plan-note">✓ Free plan — no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
+    <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account ?</button>
+    <div class="plan-note">? Free plan � no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
   </div>
 
   <!-- RESET -->
@@ -75,7 +79,7 @@ input:focus{outline:none;border-color:#2563eb}
     <div class="err" id="rs_err"></div>
     <div class="ok" id="rs_ok"></div>
     <button class="btn" id="rs_btn" onclick="doReset()">Send Reset Link</button>
-    <div style="margin-top:12px;text-align:center"><a href="#" onclick="switchTab('login');return false;" style="font-size:.82rem;color:#2563eb;font-weight:700">← Back to Sign In</a></div>
+    <div style="margin-top:12px;text-align:center"><a href="#" onclick="switchTab('login');return false;" style="font-size:.82rem;color:#2563eb;font-weight:700">? Back to Sign In</a></div>
   </div>
 </div>
 
@@ -101,7 +105,7 @@ if(hash && hash.includes('type=recovery')){
   document.getElementById('loginForm').style.display='none';
   document.getElementById('signupForm').style.display='none';
   document.getElementById('resetForm').style.display='block';
-  document.getElementById('resetForm').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:2rem;margin-bottom:12px">✅</div><div style="font-weight:900;color:#1e293b;font-size:1.1rem">Email confirmed!</div><div style="color:#64748b;font-size:.88rem;margin-top:8px">You can now sign in with your new password.</div><div style="margin-top:20px"><a href="auth.html" style="background:#2563eb;color:#fff;padding:10px 28px;border-radius:8px;font-weight:900;text-decoration:none;font-size:.9rem">Sign In →</a></div></div>';
+  document.getElementById('resetForm').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:2rem;margin-bottom:12px">?</div><div style="font-weight:900;color:#1e293b;font-size:1.1rem">Email confirmed!</div><div style="color:#64748b;font-size:.88rem;margin-top:8px">You can now sign in with your new password.</div><div style="margin-top:20px"><a href="auth.html" style="background:#2563eb;color:#fff;padding:10px 28px;border-radius:8px;font-weight:900;text-decoration:none;font-size:.9rem">Sign In ?</a></div></div>';
 }
 
 function switchTab(t){
@@ -130,7 +134,7 @@ function doLogin(){
   var btn=document.getElementById('li_btn');
   btn.disabled=true; btn.textContent='Signing in...';
   fwAuth.signIn(email, pass, function(err, data){
-    btn.disabled=false; btn.textContent='Sign In →';
+    btn.disabled=false; btn.textContent='Sign In ?';
     if(err){ showErr('li_err', err.message || 'Sign in failed. Check your credentials.'); return; }
     /* New users go to onboarding, returning users go to try.html */
     if(!localStorage.getItem('fw_onboarded')){
@@ -153,12 +157,12 @@ function doSignup(){
   btn.disabled=true; btn.textContent='Creating account...';
   var refCode = localStorage.getItem('fw_ref') || '';
   fwAuth.signUp(email, pass, name, function(err, data){
-    btn.disabled=false; btn.textContent='Create Free Account →';
+    btn.disabled=false; btn.textContent='Create Free Account ?';
     if(err){ showErr('su_err', err.message || 'Signup failed. Please try again.'); return; }
     if(data && data.user && data.user.identities && data.user.identities.length===0){
       showErr('su_err','An account with this email already exists. Please sign in.'); return;
     }
-    /* Clear all stale data — list must stay in sync with USER_KEYS in fw-auth.js */
+    /* Clear all stale data � list must stay in sync with USER_KEYS in fw-auth.js */
     ['fw_ref','fw_onboarded','fw_profile','fw_profiles','fw_active_idx',
      'fw_recent','fw_biz_profile','fw_starter','fw_pro','fw_advisor',
      'fw_checkup','fw_score_history','fw_grant_tracker','fw_bills',
@@ -176,7 +180,7 @@ function doReset(){
   fwAuth.resetPassword(email, function(err){
     btn.disabled=false; btn.textContent='Send Reset Link';
     if(err){ showErr('rs_err', err.message || 'Failed to send reset link.'); return; }
-    showOk('rs_ok','✅ Reset link sent! Check your email inbox.');
+    showOk('rs_ok','? Reset link sent! Check your email inbox.');
   });
 }
 

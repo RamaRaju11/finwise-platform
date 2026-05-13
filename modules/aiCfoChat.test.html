@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>AI CFO Advisor — BizScale Pro</title>
+  <title>AI CFO Advisor � BizScale Pro</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,system-ui,sans-serif;background:#f4f6f9;color:#222;min-height:100vh}
     a{text-decoration:none;color:inherit}
 
-    /* ── Page header ── */
+    /* -- Page header -- */
     .page-header{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:20px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
     .ph-left h1{font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:.5rem}
     .ph-left p{font-size:.82rem;color:rgba(255,255,255,.7);margin-top:.2rem}
@@ -17,11 +17,11 @@
     .ph-back{font-size:.8rem;color:rgba(255,255,255,.7);margin-bottom:.25rem;display:inline-block}
     .ph-back:hover{color:#fff}
 
-    /* ── Layout ── */
+    /* -- Layout -- */
     .layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 72px)}
     @media(max-width:768px){.layout{grid-template-columns:1fr;height:auto}}
 
-    /* ── Left sidebar ── */
+    /* -- Left sidebar -- */
     .sidebar{background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow-y:auto}
     .sidebar-section{padding:1rem 1.1rem;border-bottom:1px solid #f1f5f9}
     .sidebar-section h3{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:.75rem}
@@ -57,7 +57,7 @@
     .history-item:hover{background:#f1f5f9;border-color:#e2e8f0;color:#334155}
     .no-history{font-size:.78rem;color:#94a3b8;padding:.25rem 0}
 
-    /* ── Chat area ── */
+    /* -- Chat area -- */
     .chat-area{display:flex;flex-direction:column;height:calc(100vh - 72px);background:#f8fafc}
     @media(max-width:768px){.chat-area{height:600px}}
 
@@ -163,6 +163,10 @@
     .mod-chip.no-data{background:#f8fafc;border-color:#e2e8f0;color:#cbd5e1}
     .ctx-data-count{font-size:.72rem;color:#64748b;margin-top:.35rem;line-height:1.5}
   </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -174,17 +178,17 @@
 <!-- Paywall overlay -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-box">
-    <div style="font-size:2.5rem">🤖</div>
+    <div style="font-size:2.5rem">??</div>
     <h2>AI CFO Advisor</h2>
-    <p>Ask any financial question about your business in plain English. Get expert answers powered by Claude AI — your personal CFO, available 24/7.</p>
+    <p>Ask any financial question about your business in plain English. Get expert answers powered by Claude AI � your personal CFO, available 24/7.</p>
     <div class="pw-features">
-      <div class="pw-feat"><span class="fi">💬</span>Ask anything — loans, cash flow, growth</div>
-      <div class="pw-feat"><span class="fi">📊</span>Answers based on your actual numbers</div>
-      <div class="pw-feat"><span class="fi">🧠</span>Powered by Claude AI (Anthropic)</div>
-      <div class="pw-feat"><span class="fi">🔒</span>Private — data stays in your browser</div>
+      <div class="pw-feat"><span class="fi">??</span>Ask anything � loans, cash flow, growth</div>
+      <div class="pw-feat"><span class="fi">??</span>Answers based on your actual numbers</div>
+      <div class="pw-feat"><span class="fi">??</span>Powered by Claude AI (Anthropic)</div>
+      <div class="pw-feat"><span class="fi">??</span>Private � data stays in your browser</div>
     </div>
-    <button class="btn-stripe-pro" onclick="showToast('💳 Stripe coming soon! Use FINWISE29 to demo free.');return false;">
-      💳 Subscribe Pro — $29/month
+    <button class="btn-stripe-pro" onclick="showToast('?? Stripe coming soon! Use FINWISE29 to demo free.');return false;">
+      ?? Subscribe Pro � $29/month
     </button>
     <div class="pw-divider">or enter promo code</div>
     <div class="unlock-row">
@@ -199,24 +203,24 @@
 <!-- Page header -->
 <div class="page-header">
   <div class="ph-left">
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <h1>🤖 AI CFO Advisor</h1>
-    <p>Ask anything about your business finances — powered by Claude AI</p>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <h1>?? AI CFO Advisor</h1>
+    <p>Ask anything about your business finances � powered by Claude AI</p>
   </div>
   <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-    <div class="ph-badge">Pro · $29/month</div>
-    <span id="contextBadge" style="display:none">💬 0 turns</span>
+    <div class="ph-badge">Pro � $29/month</div>
+    <span id="contextBadge" style="display:none">?? 0 turns</span>
   </div>
 </div>
 
 <div class="layout">
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- -- SIDEBAR -- -->
   <div class="sidebar">
 
     <!-- Auth status (logged-in users) -->
     <div class="sidebar-section" id="authStatusSection" style="display:none">
-      <h3>✅ Signed In</h3>
+      <h3>? Signed In</h3>
       <div style="font-size:.75rem;color:#16a34a;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:8px 10px;line-height:1.6">
         AI CFO is using a secure server-side connection. No API key needed.
       </div>
@@ -224,12 +228,12 @@
 
     <!-- API Key (guest users only) -->
     <div class="sidebar-section" id="apiKeySection">
-      <h3>🔑 Your Anthropic API Key</h3>
+      <h3>?? Your Anthropic API Key</h3>
       <div class="api-key-wrap">
         <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-..."/>
-        <button class="api-key-toggle" onclick="toggleKeyVisibility()" title="Show/hide">👁</button>
+        <button class="api-key-toggle" onclick="toggleKeyVisibility()" title="Show/hide">??</button>
       </div>
-      <div class="api-status unset" id="apiStatus">⚪ No key set</div>
+      <div class="api-status unset" id="apiStatus">? No key set</div>
       <button class="btn-save-key" onclick="saveApiKey()">Save Key</button>
       <div style="font-size:.7rem;color:#94a3b8;margin-top:.4rem;line-height:1.5">
         Key stored locally in your browser only. Get yours at
@@ -239,7 +243,7 @@
 
     <!-- Business context -->
     <div class="sidebar-section">
-      <h3>🏢 Business Context</h3>
+      <h3>?? Business Context</h3>
       <div class="ctx-grid">
         <div class="ctx-field full">
           <label>Business Name</label>
@@ -267,19 +271,19 @@
         </div>
       </div>
       <div style="margin-top:.5rem" id="ctxScoreWrap"></div>
-      <button class="btn-update-ctx" onclick="updateContext()">↻ Update Context</button>
+      <button class="btn-update-ctx" onclick="updateContext()">? Update Context</button>
     </div>
 
     <!-- Module data loaded -->
     <div class="sidebar-section">
-      <h3>📦 Module Data Loaded</h3>
-      <div class="mod-chips" id="modChips"><span class="mod-chip no-data">Loading…</span></div>
+      <h3>?? Module Data Loaded</h3>
+      <div class="mod-chips" id="modChips"><span class="mod-chip no-data">Loading�</span></div>
       <div class="ctx-data-count" id="ctxDataCount"></div>
     </div>
 
     <!-- Quick questions -->
     <div class="sidebar-section">
-      <h3>⚡ Quick Questions</h3>
+      <h3>? Quick Questions</h3>
       <div class="quick-list">
         <button class="quick-btn" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</button>
         <button class="quick-btn" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">What is my maximum safe loan?</button>
@@ -295,45 +299,45 @@
         <button class="quick-btn" onclick="sendQuick('Am I on track for my quarterly estimated tax payments? When is my next payment due?')">Am I on track for tax payments?</button>
         <button class="quick-btn" onclick="sendQuick('Based on my current cash flow and growth rate, should I hire a new employee now or wait?')">Should I hire now?</button>
         <button class="quick-btn" onclick="sendQuick('What is my effective burn rate and how long can I sustain operations at this pace?')">What\'s my burn rate and runway?</button>
-        <button class="quick-btn" onclick="sendQuick('Give me a vendor/bill review — which recurring costs should I cut or renegotiate?')">Which bills should I renegotiate?</button>
+        <button class="quick-btn" onclick="sendQuick('Give me a vendor/bill review � which recurring costs should I cut or renegotiate?')">Which bills should I renegotiate?</button>
       </div>
     </div>
 
     <!-- Saved conversations -->
     <div class="sidebar-section" style="flex:1">
-      <h3>🕐 Saved Conversations</h3>
+      <h3>?? Saved Conversations</h3>
       <div class="history-list" id="historyList">
         <div class="no-history">No saved conversations yet.</div>
       </div>
-      <button style="width:100%;margin-top:.5rem;padding:.45rem;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:6px;font-size:.78rem;font-weight:700;color:#4f46e5;cursor:pointer" onclick="newChat()">✚ New Chat</button>
-      <button style="width:100%;margin-top:.4rem;padding:.45rem;background:#fff;border:1.5px solid #fecaca;border-radius:6px;font-size:.78rem;font-weight:700;color:#dc2626;cursor:pointer" onclick="clearChat()">🗑 Clear &amp; Reset</button>
+      <button style="width:100%;margin-top:.5rem;padding:.45rem;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:6px;font-size:.78rem;font-weight:700;color:#4f46e5;cursor:pointer" onclick="newChat()">? New Chat</button>
+      <button style="width:100%;margin-top:.4rem;padding:.45rem;background:#fff;border:1.5px solid #fecaca;border-radius:6px;font-size:.78rem;font-weight:700;color:#dc2626;cursor:pointer" onclick="clearChat()">?? Clear &amp; Reset</button>
     </div>
 
   </div><!-- /sidebar -->
 
-  <!-- ══ CHAT AREA ══ -->
+  <!-- -- CHAT AREA -- -->
   <div class="chat-area">
 
     <div class="messages" id="messages">
       <!-- Welcome card shown when no messages -->
       <div class="welcome-card" id="welcomeCard">
-        <div class="wc-icon">🤖</div>
+        <div class="wc-icon">??</div>
         <h2>Hi! I'm your AI CFO</h2>
-        <p>I know your business numbers. Just ask me a question in plain English — no financial jargon needed.</p>
+        <p>I know your business numbers. Just ask me a question in plain English � no financial jargon needed.</p>
 
         <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:.9rem 1rem;margin-bottom:1rem;text-align:left">
-          <div style="font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">✅ You can ask things like:</div>
+          <div style="font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">? You can ask things like:</div>
           <div style="font-size:.82rem;color:#166534;display:flex;flex-direction:column;gap:.3rem">
-            <span>• "Can I take a $50,000 loan safely?"</span>
-            <span>• "What's the maximum I should borrow?"</span>
-            <span>• "What if my revenue drops next month?"</span>
-            <span>• "How do I improve my loan score?"</span>
-            <span>• "What EMI can my business afford?"</span>
+            <span>� "Can I take a $50,000 loan safely?"</span>
+            <span>� "What's the maximum I should borrow?"</span>
+            <span>� "What if my revenue drops next month?"</span>
+            <span>� "How do I improve my loan score?"</span>
+            <span>� "What EMI can my business afford?"</span>
           </div>
         </div>
 
         <div style="background:#fefce8;border:1.5px solid #fde047;border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem;text-align:left">
-          <div style="font-size:.75rem;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">⚡ Before you start:</div>
+          <div style="font-size:.75rem;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">? Before you start:</div>
           <div style="font-size:.8rem;color:#78350f;line-height:1.6">
             1. Add your <strong>Anthropic API key</strong> in the sidebar (free to get)<br/>
             2. Your <strong>business numbers</strong> are auto-loaded from your saved profile<br/>
@@ -342,16 +346,16 @@
         </div>
 
         <div class="wc-suggestions">
-          <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
-          <div class="wc-suggestion" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">💬 What is my maximum safe loan amount?</div>
-          <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+          <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
+          <div class="wc-suggestion" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">?? What is my maximum safe loan amount?</div>
+          <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
         </div>
       </div>
     </div>
 
     <!-- Typing indicator -->
     <div class="msg typing" id="typingIndicator">
-      <div class="msg-avatar">🤖</div>
+      <div class="msg-avatar">??</div>
       <div class="typing-dots">
         <div class="typing-dot"></div>
         <div class="typing-dot"></div>
@@ -364,8 +368,8 @@
       <textarea class="chat-input" id="chatInput" rows="1"
         placeholder="Ask your CFO anything... e.g. 'Can I take a $50,000 loan safely?'"
         onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="btn-action-items" id="actionItemsBtn" onclick="generateActionItems()" title="Generate action items from this conversation" style="display:none">📋 Action Items</button>
-      <button class="btn-send" id="sendBtn" onclick="sendMessage()">Send →</button>
+      <button class="btn-action-items" id="actionItemsBtn" onclick="generateActionItems()" title="Generate action items from this conversation" style="display:none">?? Action Items</button>
+      <button class="btn-send" id="sendBtn" onclick="sendMessage()">Send ?</button>
     </div>
 
   </div><!-- /chat-area -->
@@ -376,9 +380,9 @@
 
 <script src="../config.js"></script>
 <script>
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    UTILITIES
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
@@ -386,7 +390,7 @@ function showToast(msg){
 }
 
 function fmt(n){
-  if(!n&&n!==0) return '—';
+  if(!n&&n!==0) return '�';
   const sym = '$';
   return sym+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
 }
@@ -409,9 +413,9 @@ function computeScore(rev,exp,emi,loan,rate,months){
   return{score,cls:score>=70?'safe':score>=40?'risky':'danger',label:score>=70?'SAFE':score>=40?'RISKY':'DANGEROUS',newEMI,totalEMI,postEMI,dscr,netCF};
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    PAYWALL
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 function tryUnlock(){
   const code=document.getElementById('pwCode').value.trim().toUpperCase();
   const err=document.getElementById('pwError');
@@ -424,11 +428,11 @@ function tryUnlock(){
 }
 document.getElementById('pwCode').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();});
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    API KEY
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 function getApiKey(){
-  // Priority: config.js → localStorage → empty
+  // Priority: config.js ? localStorage ? empty
   const cfgKey = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX')
     ? FINWISE_CONFIG.ANTHROPIC_API_KEY : '';
   return cfgKey || localStorage.getItem('fw_api_key') || '';
@@ -439,7 +443,7 @@ function saveApiKey(){
   if(!key.startsWith('sk-ant')){showToast('API key should start with sk-ant...');return;}
   localStorage.setItem('fw_api_key',key);
   updateKeyStatus();
-  showToast('✅ API key saved.');
+  showToast('? API key saved.');
 }
 
 function updateKeyStatus(){
@@ -456,11 +460,11 @@ function updateKeyStatus(){
   const fromConfig = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX');
   if(key){
     el.className='api-status set';
-    el.textContent='✅ Key set'+(fromConfig?' (from config.js)':' ('+key.slice(0,12)+'...)');
+    el.textContent='? Key set'+(fromConfig?' (from config.js)':' ('+key.slice(0,12)+'...)');
     document.getElementById('apiKeyInput').value=key;
   } else {
     el.className='api-status unset';
-    el.textContent='⚪ No key — update config.js or enter below';
+    el.textContent='? No key � update config.js or enter below';
   }
 }
 
@@ -469,9 +473,9 @@ function toggleKeyVisibility(){
   inp.type=inp.type==='password'?'text':'password';
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    BUSINESS CONTEXT
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 let businessCtx = {};
 
 function loadContextFromProfile(){
@@ -507,7 +511,7 @@ function loadContextFromProfile(){
   if(cashD&&cashD.currentBalance){ document.getElementById('ctx_reserve').value=Math.round(cashD.currentBalance); liveSourced.push('Cash Balance'); }
   if(liveSourced.length){
     var sWrap=document.getElementById('ctxScoreWrap');
-    if(sWrap){ var badge=document.createElement('div'); badge.style.marginTop='.3rem'; badge.innerHTML='<span class="ctx-live-badge">🟢 Live: '+liveSourced.join(', ')+'</span>'; sWrap.parentNode.insertBefore(badge,sWrap.nextSibling); }
+    if(sWrap){ var badge=document.createElement('div'); badge.style.marginTop='.3rem'; badge.innerHTML='<span class="ctx-live-badge">?? Live: '+liveSourced.join(', ')+'</span>'; sWrap.parentNode.insertBefore(badge,sWrap.nextSibling); }
   }
   updateContext();
 }
@@ -530,7 +534,7 @@ function updateContext(){
     const margin=((businessCtx.netCF/businessCtx.rev)*100).toFixed(0);
     const cls=margin>=20?'safe':margin>=10?'risky':'danger';
     const label=margin>=20?'Healthy':margin>=10?'Moderate':'Tight';
-    wrap.innerHTML=`<span class="score-badge ${cls}">Cash Margin: ${margin}% · ${label}</span>`;
+    wrap.innerHTML=`<span class="score-badge ${cls}">Cash Margin: ${margin}% � ${label}</span>`;
   } else {
     wrap.innerHTML='';
   }
@@ -538,9 +542,9 @@ function updateContext(){
   showToast('Context updated.');
 }
 
-/* ══════════════════════════════════════════════════════
-   MODULE DATA AGGREGATION — reads all fw_* keys
-══════════════════════════════════════════════════════ */
+/* ------------------------------------------------------
+   MODULE DATA AGGREGATION � reads all fw_* keys
+------------------------------------------------------ */
 function gatherModuleData() {
   function safeGet(key) {
     try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) { return null; }
@@ -586,7 +590,7 @@ function buildModuleDataText(d) {
     lines.push('\nLOANS & DEBT:');
     lines.push('- ' + d.loans.length + ' loan(s), total balance: ' + fmt(totalDebt) + ', total monthly minimums: ' + fmt(totalMin));
     d.loans.forEach(function(l){
-      lines.push('  • ' + l.name + ' [' + (l.type||'loan') + ']: ' + fmt(l.balance) + ' @ ' + (l.rate||0) + '% APR, min pay ' + fmt(l.minPay) + (l.lender?' lender: '+l.lender:''));
+      lines.push('  � ' + l.name + ' [' + (l.type||'loan') + ']: ' + fmt(l.balance) + ' @ ' + (l.rate||0) + '% APR, min pay ' + fmt(l.minPay) + (l.lender?' lender: '+l.lender:''));
     });
     lines.push('- Highest-rate: ' + highRate.name + ' @ ' + highRate.rate + '% APR');
   }
@@ -597,9 +601,9 @@ function buildModuleDataText(d) {
     lines.push('\nRECURRING BILLS:');
     lines.push('- ' + d.bills.length + ' bill(s), ' + fmt(totalBills) + '/month (' + autoPay + ' on auto-pay)');
     d.bills.slice(0,6).forEach(function(b){
-      lines.push('  • ' + b.vendor + ': ' + fmt(b.amount) + '/mo, due day ' + (b.dueDay||'?') + (b.category?', '+b.category:'') + (b.autoPay?' [autopay]':''));
+      lines.push('  � ' + b.vendor + ': ' + fmt(b.amount) + '/mo, due day ' + (b.dueDay||'?') + (b.category?', '+b.category:'') + (b.autoPay?' [autopay]':''));
     });
-    if(d.bills.length>6) lines.push('  … and '+(d.bills.length-6)+' more');
+    if(d.bills.length>6) lines.push('  � and '+(d.bills.length-6)+' more');
     var todayDate = new Date();
     var upcomingBills = d.bills.filter(function(b){
       var day=parseInt(b.dueDay)||0;
@@ -622,15 +626,15 @@ function buildModuleDataText(d) {
       lines.push('- OVERDUE invoices (immediate collection priority):');
       overdue.slice(0,5).forEach(function(i){
         var daysOD = i.dueDate ? Math.round((Date.now()-new Date(i.dueDate))/86400000) : '?';
-        lines.push('  • ' + (i.client||i.invNo||'Client') + ': ' + fmt(i.amount) + ' — ' + daysOD + ' days overdue');
+        lines.push('  � ' + (i.client||i.invNo||'Client') + ': ' + fmt(i.amount) + ' � ' + daysOD + ' days overdue');
       });
-      if(overdue.length>5) lines.push('  … and '+(overdue.length-5)+' more overdue');
+      if(overdue.length>5) lines.push('  � and '+(overdue.length-5)+' more overdue');
     }
     var notOverdue = pending.filter(function(i){ return !i.dueDate||i.dueDate>=today; });
     if(notOverdue.length > 0){
       lines.push('- Upcoming/current (not yet overdue):');
       notOverdue.slice(0,3).forEach(function(i){
-        lines.push('  • ' + (i.client||i.invNo||'Invoice') + ': ' + fmt(i.amount) + ', due ' + (i.dueDate||'?'));
+        lines.push('  � ' + (i.client||i.invNo||'Invoice') + ': ' + fmt(i.amount) + ', due ' + (i.dueDate||'?'));
       });
     }
   }
@@ -669,11 +673,11 @@ function buildModuleDataText(d) {
       lines.push('- ' + d.contractors.length + ' contractor(s)' + (noW9c.length?' ('+noW9c.length+' missing W-9)':''));
       if(nec1099.length>0){
         lines.push('- Contractors requiring 1099-NEC (paid $600+):');
-        nec1099.forEach(function(c){ lines.push('  • '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD'); });
+        nec1099.forEach(function(c){ lines.push('  � '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD'); });
       }
       if(approaching600.length>0){
         lines.push('- Contractors approaching $600 1099 threshold:');
-        approaching600.forEach(function(c){ lines.push('  • '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD ('+fmt(600-(totByC[c.id]||0))+' away from 1099 trigger)'); });
+        approaching600.forEach(function(c){ lines.push('  � '+c.name+': '+fmt(totByC[c.id]||0)+' paid YTD ('+fmt(600-(totByC[c.id]||0))+' away from 1099 trigger)'); });
       }
     }
   }
@@ -712,7 +716,7 @@ function buildModuleDataText(d) {
     lines.push('\nESTIMATED TAX PAYMENTS (' + now2.getFullYear() + '):');
     lines.push('- ' + d.taxPayments.length + ' payment(s), total paid: ' + fmt(txTotal));
     lines.push('- Last payment: ' + lastTx.date + ' (' + moSince + ' month' + (moSince!==1?'s':'')+' ago)');
-    if(moSince>3) lines.push('- ⚠️ OVERDUE: Quarterly estimated taxes due Apr 15 / Jun 16 / Sep 15 / Jan 15 — last payment was '+moSince+' months ago');
+    if(moSince>3) lines.push('- ?? OVERDUE: Quarterly estimated taxes due Apr 15 / Jun 16 / Sep 15 / Jan 15 � last payment was '+moSince+' months ago');
   }
 
   if(d.savingsGoals.length>0){
@@ -728,7 +732,7 @@ function buildModuleDataText(d) {
       var def = Math.max(0,target-saved);
       lines.push('- ' + (g.name||g.label||'Goal') + ': ' + fmt(saved) + ' / ' + fmt(target) + ' (' + pct + '% funded' + (def>0?', '+fmt(def)+' short':'') + ')');
     });
-    if(d.savingsGoals.length>4) lines.push('  … and '+(d.savingsGoals.length-4)+' more goals');
+    if(d.savingsGoals.length>4) lines.push('  � and '+(d.savingsGoals.length-4)+' more goals');
   }
 
   if(d.goals.length>0){
@@ -736,7 +740,7 @@ function buildModuleDataText(d) {
     lines.push('\nBUSINESS GOALS:');
     lines.push('- ' + d.goals.length + ' goal(s), ' + done.length + ' completed');
     d.goals.filter(function(g){ return !(g.done||g.completed); }).slice(0,3).forEach(function(g){
-      lines.push('  • ' + (g.title||g.name||'Goal') + (g.target?' — target: '+g.target:'') + (g.deadline?', deadline: '+g.deadline:''));
+      lines.push('  � ' + (g.title||g.name||'Goal') + (g.target?' � target: '+g.target:'') + (g.deadline?', deadline: '+g.deadline:''));
     });
   }
 
@@ -748,7 +752,7 @@ function buildModuleDataText(d) {
 
   if(d.budgetData && typeof d.budgetData==='object'){
     var bdKeys = Object.keys(d.budgetData).sort().slice(-3);
-    if(bdKeys.length) lines.push('\nBUDGET VS ACTUAL (' + bdKeys.join(', ') + '): data available — ask for variance analysis');
+    if(bdKeys.length) lines.push('\nBUDGET VS ACTUAL (' + bdKeys.join(', ') + '): data available � ask for variance analysis');
   }
 
   // Live module data (Invoice Tracker, Vendor Tracker, Payroll, Cash Runway, Snapshots)
@@ -767,7 +771,7 @@ function buildModuleDataText(d) {
     lines.push('- Total monthly: ' + fmt(d.expData.totalMonthly));
     if(d.expData.byCat) {
       var cats = Object.entries(d.expData.byCat).sort(function(a,b){ return (b[1]||0)-(a[1]||0); }).slice(0,5);
-      if(cats.length) { lines.push('- Top categories:'); cats.forEach(function(c){ lines.push('  • '+c[0]+': '+fmt(c[1])); }); }
+      if(cats.length) { lines.push('- Top categories:'); cats.forEach(function(c){ lines.push('  � '+c[0]+': '+fmt(c[1])); }); }
     }
   }
   if(d.cashRunData) {
@@ -791,10 +795,10 @@ function buildModuleDataText(d) {
     var latest = d.scoreHistory[d.scoreHistory.length-1];
     var trend  = d.scoreHistory.length>1 ? (latest.score>d.scoreHistory[0].score?'improving':latest.score<d.scoreHistory[0].score?'declining':'stable') : '';
     lines.push('\nHEALTH SCORE HISTORY:');
-    lines.push('- Latest: ' + (latest.score||latest.total||'?') + (latest.label?' ('+latest.label+')':'') + (latest.date?' on '+latest.date:'') + (trend?' — '+trend:''));
+    lines.push('- Latest: ' + (latest.score||latest.total||'?') + (latest.label?' ('+latest.label+')':'') + (latest.date?' on '+latest.date:'') + (trend?' � '+trend:''));
     if(d.scoreHistory.length>1){
       var recent3 = d.scoreHistory.slice(-3).map(function(h){ return h.score||h.total||'?'; });
-      lines.push('- Recent: ' + recent3.join(' → '));
+      lines.push('- Recent: ' + recent3.join(' ? '));
     }
   }
 
@@ -824,9 +828,9 @@ function updateModuleDataUI() {
   ];
   var loaded = modules.filter(function(m){ return m.n>0; });
   chips.innerHTML = modules.map(function(m){
-    return '<span class="mod-chip ' + (m.n>0?'has-data':'no-data') + '">' + m.label + (m.n>0?' · '+m.n:'') + '</span>';
+    return '<span class="mod-chip ' + (m.n>0?'has-data':'no-data') + '">' + m.label + (m.n>0?' � '+m.n:'') + '</span>';
   }).join('');
-  if(countEl) countEl.textContent = loaded.length + ' of ' + modules.length + ' modules have data — all fed to AI';
+  if(countEl) countEl.textContent = loaded.length + ' of ' + modules.length + ' modules have data � all fed to AI';
 }
 
 function buildSystemPrompt(){
@@ -837,7 +841,7 @@ function buildSystemPrompt(){
   const margin    = c.rev  ? ((netCF/c.rev)*100).toFixed(0) : 'N/A';
   const moduleData = buildModuleDataText(gatherModuleData());
 
-  return `You are an expert AI CFO advisor for small businesses, built into BizScale — a financial management platform.
+  return `You are an expert AI CFO advisor for small businesses, built into BizScale � a financial management platform.
 
 Your role: Give clear, direct, personalised financial advice based on the user's actual business numbers below. Be concise, use plain English, and always connect advice back to specific numbers. Never give generic advice.
 
@@ -852,28 +856,28 @@ ${moduleData}
 
 ANALYSIS RULES:
 - Safe new EMI: max 40% of net cash flow (${fmt(Math.round(netCF*0.4))}/month headroom)
-- DSCR ≥ 1.25 safe, ≥ 2.0 excellent
+- DSCR = 1.25 safe, = 2.0 excellent
 - 3 months EMI reserve minimum before borrowing
-- Stress test: 20–30% revenue drop survivability
+- Stress test: 20�30% revenue drop survivability
 - When bills + loan minimums are known, use them as the true expense baseline
-- Overdue invoices are a hidden cash flow risk — flag them prominently if asked about cash
+- Overdue invoices are a hidden cash flow risk � flag them prominently if asked about cash
 - Contractors approaching $600 must be monitored to avoid surprise 1099 obligations
-- Estimated tax payments: quarterly deadlines Apr 15, Jun 16, Sep 15, Jan 15 — flag if overdue
+- Estimated tax payments: quarterly deadlines Apr 15, Jun 16, Sep 15, Jan 15 � flag if overdue
 - Savings goal deficit reduces real-world financial resilience even if cash flow looks OK
-- Low goal hit rate (<50%) signals execution risk — factor into growth advice
+- Low goal hit rate (<50%) signals execution risk � factor into growth advice
 
 RESPONSE FORMAT:
 - Short paragraphs + bullet points; specific numbers always
 - End with 1-2 clear action steps
 - Max 300 words unless asked for more
-- Use ✅ ⚠️ 🚨 💡 📊 for readability
+- Use ? ?? ?? ?? ?? for readability
 
 Do not invent data. If a number is missing or inconsistent, flag it. No legal or tax advice.`;
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    CONVERSATION PERSISTENCE
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 const CONV_KEY = 'fw_cfo_conversations';
 let currentConvId = null;
 
@@ -916,7 +920,7 @@ function loadConversation(id){
       Object.keys(map).forEach(function(elId){var el=document.getElementById(elId);if(el)el.value=conv.context[map[elId]]||'';});
     }
     renderSavedHistory();
-    showToast('✅ Conversation loaded');
+    showToast('? Conversation loaded');
   }catch(e){showToast('Could not load conversation.');}
 }
 
@@ -930,8 +934,8 @@ function renderSavedHistory(){
       var isActive=c.id===currentConvId;
       var turns=c.messages?Math.floor(c.messages.length/2):0;
       return '<div class="conv-item'+(isActive?' active':'')+'" onclick="loadConversation('+c.id+')">'+
-        '<div class="conv-item-date">'+c.date+' · '+turns+' turn'+(turns!==1?'s':'')+'</div>'+
-        '<div class="conv-item-title">💬 '+c.title+'</div></div>';
+        '<div class="conv-item-date">'+c.date+' � '+turns+' turn'+(turns!==1?'s':'')+'</div>'+
+        '<div class="conv-item-title">?? '+c.title+'</div></div>';
     }).join('');
   }catch(e){list.innerHTML='<div class="no-history">No saved conversations yet.</div>';}
 }
@@ -941,13 +945,13 @@ function newChat(){
   currentConvId=null;conversation=[];
   document.getElementById('messages').innerHTML=`
     <div class="welcome-card" id="welcomeCard">
-      <div class="wc-icon">🤖</div>
+      <div class="wc-icon">??</div>
       <h2>Hi! I'm your AI CFO</h2>
-      <p>Ask me anything in plain English — no financial jargon needed.</p>
+      <p>Ask me anything in plain English � no financial jargon needed.</p>
       <div class="wc-suggestions">
-        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
-        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">💬 What\'s my biggest expense risk?</div>
-        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">?? What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
       </div>
     </div>`;
   const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';
@@ -955,9 +959,9 @@ function newChat(){
   renderSavedHistory();
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    CHAT ENGINE
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 let conversation = []; // {role, content}
 let isLoading = false;
 
@@ -969,10 +973,10 @@ function addMessage(role, content){
   const time=now();
   const div=document.createElement('div');
   div.className=`msg ${role}`;
-  const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">📋 Copy</button></div>`:'';
+  const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">?? Copy</button></div>`:'';
   const safeContent=content.replace(/"/g,'&quot;');
   div.innerHTML=`
-    <div class="msg-avatar">${role==='ai'?'🤖':'👤'}</div>
+    <div class="msg-avatar">${role==='ai'?'??':'??'}</div>
     <div>
       <div class="msg-bubble" data-raw="${safeContent}">${formatMarkdown(content)}</div>
       ${copyBtn}
@@ -987,7 +991,7 @@ function addMessage(role, content){
     if(aib) aib.style.display='';
     const turnCount=Math.floor(conversation.length/2);
     const badge=document.getElementById('contextBadge');
-    if(badge&&turnCount>0){badge.style.display='';badge.textContent='💬 '+turnCount+' turn'+(turnCount!==1?'s':'')+' in context';}
+    if(badge&&turnCount>0){badge.style.display='';badge.textContent='?? '+turnCount+' turn'+(turnCount!==1?'s':'')+' in context';}
   }
 
   updateHistory(content, role);
@@ -997,11 +1001,11 @@ window.copyMsgText=function(btn){
   const bubble=btn.closest('.msg-actions').previousElementSibling;
   const text=bubble?(bubble.getAttribute('data-raw')||bubble.innerText):'';
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(function(){showToast('✅ Response copied!');});
+    navigator.clipboard.writeText(text).then(function(){showToast('? Response copied!');});
   } else {
     const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    showToast('✅ Response copied!');
+    showToast('? Response copied!');
   }
 };
 
@@ -1026,7 +1030,7 @@ function updateHistory(content, role){
   if(noH) noH.remove();
   const item=document.createElement('div');
   item.className='history-item';
-  item.textContent='💬 '+content.substring(0,45)+(content.length>45?'...':'');
+  item.textContent='?? '+content.substring(0,45)+(content.length>45?'...':'');
   item.title=content;
   list.insertBefore(item,list.firstChild);
 }
@@ -1050,7 +1054,7 @@ async function sendMessage(){
 
     const loggedIn = window.fwAuth && fwAuth.user && fwAuth.client;
     if(loggedIn){
-      // Use Edge Function — API key stays server-side
+      // Use Edge Function � API key stays server-side
       const session = await fwAuth.client.auth.getSession();
       const token = session.data?.session?.access_token;
       const resp = await fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/ai-cfo-chat',{
@@ -1071,10 +1075,10 @@ async function sendMessage(){
       const data=await resp.json();
       reply=data.reply||'Sorry, I could not generate a response.';
     } else {
-      // Guest fallback — requires local API key
+      // Guest fallback � requires local API key
       const apiKey=getApiKey();
       if(!apiKey){
-        addMessage('ai','⚠️ Sign in for AI CFO, or add your Anthropic API key in the sidebar.');
+        addMessage('ai','?? Sign in for AI CFO, or add your Anthropic API key in the sidebar.');
         setLoading(false);
         return;
       }
@@ -1110,7 +1114,7 @@ async function sendMessage(){
     if(msg.includes('401')) msg='Invalid API key or session expired. Try signing in again.';
     else if(msg.includes('429')) msg='Rate limit hit. Wait a moment and try again.';
     else if(msg.includes('Failed to fetch')) msg='Network error. Check your internet connection.';
-    addMessage('ai','⚠️ Error: '+msg);
+    addMessage('ai','?? Error: '+msg);
   } finally {
     setLoading(false);
   }
@@ -1135,13 +1139,13 @@ function clearChat(){
   const msgs=document.getElementById('messages');
   msgs.innerHTML=`
     <div class="welcome-card" id="welcomeCard">
-      <div class="wc-icon">🤖</div>
+      <div class="wc-icon">??</div>
       <h2>Hi! I'm your AI CFO</h2>
-      <p>Ask me anything in plain English — no financial jargon needed.</p>
+      <p>Ask me anything in plain English � no financial jargon needed.</p>
       <div class="wc-suggestions">
-        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">💬 Can I safely take a loan right now?</div>
-        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">💬 What\'s my biggest expense risk?</div>
-        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">💬 Give me a 3-step financial action plan</div>
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">?? What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
       </div>
     </div>`;
   const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';
@@ -1158,15 +1162,15 @@ function autoResize(el){
   el.style.height=Math.min(el.scrollHeight,120)+'px';
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    GENERATE ACTION ITEMS (P3)
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 async function generateActionItems(){
   if(isLoading) return;
   const aiExchanges=conversation.filter(function(m){return m.role==='assistant';}).length;
   if(aiExchanges<1){showToast('Have a conversation first, then generate action items.');return;}
-  const actionPrompt='Based on our entire conversation, generate a numbered list of 5–7 specific, concrete action items I should take THIS WEEK to improve my business finances. Format each as: [PRIORITY: High/Med/Low] Action — specific detail or dollar amount where applicable. Be concrete, not generic.';
-  addMessage('user','📋 Generate Action Items from this conversation');
+  const actionPrompt='Based on our entire conversation, generate a numbered list of 5�7 specific, concrete action items I should take THIS WEEK to improve my business finances. Format each as: [PRIORITY: High/Med/Low] Action � specific detail or dollar amount where applicable. Be concrete, not generic.';
+  addMessage('user','?? Generate Action Items from this conversation');
   const msgs=conversation.concat([{role:'user',content:actionPrompt}]);
   conversation.push({role:'user',content:'Generate action items'});
   setLoading(true);
@@ -1188,7 +1192,7 @@ async function generateActionItems(){
       reply=data.reply||'Could not generate action items.';
     } else {
       const apiKey=getApiKey();
-      if(!apiKey){showToast('⚠️ Sign in or add your API key first.');setLoading(false);if(aib)aib.disabled=false;return;}
+      if(!apiKey){showToast('?? Sign in or add your API key first.');setLoading(false);if(aib)aib.disabled=false;return;}
       const resp=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
@@ -1208,16 +1212,16 @@ async function generateActionItems(){
     saveConversation();
   }catch(e){
     conversation.pop();
-    addMessage('ai','⚠️ Error: '+e.message);
+    addMessage('ai','?? Error: '+e.message);
   }finally{
     setLoading(false);
     if(aib){aib.disabled=false;}
   }
 }
 
-/* ══════════════════════════════════════════════════════
+/* ------------------------------------------------------
    INIT
-══════════════════════════════════════════════════════ */
+------------------------------------------------------ */
 function initApp(){
   updateKeyStatus();
   loadContextFromProfile();

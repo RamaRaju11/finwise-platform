@@ -1,9 +1,9 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>EMI Calculator ‚Äî BizScale</title>
+<title>EMI Calculator ó BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -48,6 +48,10 @@ button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#
 button.print-btn:hover{background:#e2e8f0}
 @media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -57,9 +61,9 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="loanDecisionScoreEngine.test.html" class="back-link">‚Üê Back to Loan Score</a>
+<a href="loanDecisionScoreEngine.test.html" class="back-link">? Back to Loan Score</a>
 <h1>EMI Calculator</h1>
-<p class="subtitle">BizScale ¬∑ Calculate your monthly EMI, total interest and full repayment schedule</p>
+<p class="subtitle">BizScale ∑ Calculate your monthly EMI, total interest and full repayment schedule</p>
 
 <div class="card">
   <div class="input-grid">
@@ -76,8 +80,8 @@ button.print-btn:hover{background:#e2e8f0}
       <input type="number" id="tenure" placeholder="e.g. 36" min="1" max="360"/>
     </div>
   </div>
-  <button class="primary" onclick="calculate()">Calculate EMI ‚Üí</button>
-  <button class="print-btn" onclick="window.print()">üñ®Ô∏è Print / Save PDF</button>
+  <button class="primary" onclick="calculate()">Calculate EMI ?</button>
+  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
 </div>
 
 <div id="resultsSection" style="display:none">
@@ -87,15 +91,15 @@ button.print-btn:hover{background:#e2e8f0}
     <div class="result-grid">
       <div class="result-box">
         <div class="rb-label">Monthly EMI</div>
-        <div class="rb-value blue" id="r_emi">‚Äî</div>
+        <div class="rb-value blue" id="r_emi">ó</div>
       </div>
       <div class="result-box">
         <div class="rb-label">Total Interest</div>
-        <div class="rb-value red" id="r_interest">‚Äî</div>
+        <div class="rb-value red" id="r_interest">ó</div>
       </div>
       <div class="result-box">
         <div class="rb-label">Total Payment</div>
-        <div class="rb-value" id="r_total">‚Äî</div>
+        <div class="rb-value" id="r_total">ó</div>
       </div>
     </div>
     <div class="bar-wrap">
@@ -128,8 +132,8 @@ button.print-btn:hover{background:#e2e8f0}
   </div>
 
   <div class="card" style="text-align:right">
-    <button class="save-btn" onclick="saveEmiToProfile()">üíæ Save Loan Details to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves loan amount, rate &amp; tenure ‚Äî auto-fills all 40 tools</p>
+    <button class="save-btn" onclick="saveEmiToProfile()">?? Save Loan Details to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves loan amount, rate &amp; tenure ó auto-fills all 40 tools</p>
   </div>
 
 </div>
@@ -146,7 +150,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='‚úÖ Saved ‚Äî all 40 tools updated';
+    t.textContent='? Saved ó all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -176,7 +180,7 @@ function calculate(){
   var iPct = 100 - pPct;
   document.getElementById('barPrincipal').style.width = pPct+'%';
   document.getElementById('barInterest').style.width = iPct+'%';
-  document.getElementById('bar_pct').textContent = pPct+'% principal ¬∑ '+iPct+'% interest';
+  document.getElementById('bar_pct').textContent = pPct+'% principal ∑ '+iPct+'% interest';
 
   /* Year-by-year */
   var balance = P;

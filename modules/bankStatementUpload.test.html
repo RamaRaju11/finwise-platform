@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Bank Statement Upload — BizScale</title>
+<title>Bank Statement Upload � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
@@ -100,21 +100,25 @@ select:focus{outline:none;border-color:#2563eb}
 .btn-budget-save:hover{background:#6d28d9}
 @media print{.back-link,button,.bank-pill,.upload-zone{display:none!important}body{background:#fff;padding:8px}.step{display:block!important}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="../sidebar.js"></script>
 <script src="../modules/fw-auth.js"></script>
 <nav class="topnav">
-  <a href="../dashboard.html" class="tn-logo">📈 Biz<span>Scale</span></a>
+  <a href="../dashboard.html" class="tn-logo">?? Biz<span>Scale</span></a>
   <span class="tn-badge" id="planBadge">Free</span>
   <div class="tn-spacer"></div>
-  <a href="../dashboard.html" class="tn-back">← Dashboard</a>
+  <a href="../dashboard.html" class="tn-back">? Dashboard</a>
 </nav>
 
 <div class="page">
-  <h1>🏦 Bank Statement Upload</h1>
-  <p class="subtitle">BizScale · Upload your bank CSV → auto-calculate monthly revenue & expenses</p>
+  <h1>?? Bank Statement Upload</h1>
+  <p class="subtitle">BizScale � Upload your bank CSV ? auto-calculate monthly revenue & expenses</p>
 
   <!-- Steps -->
   <div class="steps">
@@ -139,13 +143,13 @@ select:focus{outline:none;border-color:#2563eb}
     <div class="card">
       <div class="card-title">Upload CSV File</div>
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-        <div class="upload-icon">📂</div>
+        <div class="upload-icon">??</div>
         <div class="upload-title">Drop your bank statement here</div>
-        <div class="upload-sub">or click to browse · CSV, OFX, QFX, QBO supported · Your data stays in your browser</div>
+        <div class="upload-sub">or click to browse � CSV, OFX, QFX, QBO supported � Your data stays in your browser</div>
         <button class="btn-browse" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Browse File</button>
       </div>
       <input type="file" id="fileInput" accept=".csv,.txt,.ofx,.qfx,.qbo" onchange="handleFile(event)"/>
-      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">🔒 Your file is processed locally — never uploaded to any server</div>
+      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">?? Your file is processed locally � never uploaded to any server</div>
     </div>
   </div>
 
@@ -153,13 +157,13 @@ select:focus{outline:none;border-color:#2563eb}
   <div id="step2" style="display:none">
     <div class="card">
       <div class="card-title">Map Your CSV Columns</div>
-      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Tell us which column means what. We auto-detected a suggestion — adjust if needed.</p>
+      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Tell us which column means what. We auto-detected a suggestion � adjust if needed.</p>
       <div class="col-map">
         <div><label>Date Column</label><select id="mapDate"></select></div>
         <div><label>Description Column</label><select id="mapDesc"></select></div>
-        <div><label>Amount Column <span style="color:#64748b;font-weight:400">(or use Debit/Credit below)</span></label><select id="mapAmt"><option value="">— Not used —</option></select></div>
-        <div><label>Debit Column (expenses out)</label><select id="mapDebit"><option value="">— Not used —</option></select></div>
-        <div><label>Credit Column (income in)</label><select id="mapCredit"><option value="">— Not used —</option></select></div>
+        <div><label>Amount Column <span style="color:#64748b;font-weight:400">(or use Debit/Credit below)</span></label><select id="mapAmt"><option value="">� Not used �</option></select></div>
+        <div><label>Debit Column (expenses out)</label><select id="mapDebit"><option value="">� Not used �</option></select></div>
+        <div><label>Credit Column (income in)</label><select id="mapCredit"><option value="">� Not used �</option></select></div>
         <div>
           <label>Amount Sign Convention</label>
           <select id="mapSign">
@@ -173,8 +177,8 @@ select:focus{outline:none;border-color:#2563eb}
         <div class="preview-wrap"><table id="previewTable"></table></div>
       </div>
       <div class="btn-row" style="margin-top:16px">
-        <button class="btn-secondary" onclick="goStep(1)">← Back</button>
-        <button class="btn-primary" onclick="processData()">Analyze Statement →</button>
+        <button class="btn-secondary" onclick="goStep(1)">? Back</button>
+        <button class="btn-primary" onclick="processData()">Analyze Statement ?</button>
       </div>
     </div>
   </div>
@@ -205,7 +209,7 @@ select:focus{outline:none;border-color:#2563eb}
     </div>
 
     <div class="card" id="smartSuggestCard" style="display:none">
-      <div class="card-title">💡 Smart Suggestions from Your Statement</div>
+      <div class="card-title">?? Smart Suggestions from Your Statement</div>
       <div id="smartSuggestContent"></div>
     </div>
 
@@ -213,17 +217,17 @@ select:focus{outline:none;border-color:#2563eb}
       <div class="card-title">Save to Your Business Profile</div>
       <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Update your BizScale profile with these numbers so all 30 tools auto-fill with real data.</p>
       <div style="background:#f8fafc;border-radius:8px;padding:14px 16px;font-size:.84rem;margin-bottom:16px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#64748b">Monthly Revenue will be set to:</span><strong id="saveRevLabel">—</strong></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Monthly Expenses will be set to:</span><strong id="saveExpLabel">—</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#64748b">Monthly Revenue will be set to:</span><strong id="saveRevLabel">�</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Monthly Expenses will be set to:</span><strong id="saveExpLabel">�</strong></div>
       </div>
       <div class="btn-row">
-        <button class="btn-secondary" onclick="goStep(2)">← Back</button>
-        <button class="btn-save-profile" onclick="saveToProfile()">✅ Save to My Profile</button>
-        <button class="btn-budget-save" onclick="saveCategoryDataToBudget()" title="Export expense categories to Budget Tracker">📊 Save Categories to Budget</button>
-        <button style="padding:8px 18px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:8px;font-size:.84rem;cursor:pointer" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-secondary" onclick="goStep(2)">? Back</button>
+        <button class="btn-save-profile" onclick="saveToProfile()">? Save to My Profile</button>
+        <button class="btn-budget-save" onclick="saveCategoryDataToBudget()" title="Export expense categories to Budget Tracker">?? Save Categories to Budget</button>
+        <button style="padding:8px 18px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:8px;font-size:.84rem;cursor:pointer" onclick="window.print()">??? Print</button>
         <button class="btn-secondary" onclick="goStep(1)">Upload Another</button>
       </div>
-      <div class="success-msg" id="successMsg">✅ Profile updated! All your tools now use your real bank data.</div>
+      <div class="success-msg" id="successMsg">? Profile updated! All your tools now use your real bank data.</div>
     </div>
   </div>
 </div>
@@ -272,7 +276,7 @@ function readFile(file){
 
 function parseOFX(text){
   var transactions = [];
-  /* OFX 2.x / QFX / QBO — try XML first */
+  /* OFX 2.x / QFX / QBO � try XML first */
   var xmlStart = text.indexOf('<OFX>');
   if(xmlStart === -1) xmlStart = text.indexOf('<ofx>');
   var xmlBody = xmlStart >= 0 ? text.slice(xmlStart) : text;
@@ -342,7 +346,7 @@ function buildColumnMapUI(){
   var defs = BANK_DEFAULTS[bankFormat];
   selIds.forEach(function(id, idx){
     var sel = document.getElementById(id);
-    var cur = sel.innerHTML.match(/Not used/) ? '<option value="">— Not used —</option>' : '';
+    var cur = sel.innerHTML.match(/Not used/) ? '<option value="">� Not used �</option>' : '';
     csvHeaders.forEach(function(h,i){ cur += '<option value="'+i+'">'+h+'</option>'; });
     if(sel.innerHTML.indexOf('Not used')===-1) sel.innerHTML = cur;
     else sel.innerHTML = cur;
@@ -458,7 +462,7 @@ function processData(){
   document.getElementById('r3Expense').textContent  = fmt(avgExpense);
   document.getElementById('r3Net').textContent      = fmt(avgIncome-avgExpense);
   document.getElementById('r3Net').className        = 'rc-value '+(avgIncome>=avgExpense?'blue':'red');
-  document.getElementById('r3IncomeSub').textContent = fmt(totalIncome)+' total · '+numMonths+' months';
+  document.getElementById('r3IncomeSub').textContent = fmt(totalIncome)+' total � '+numMonths+' months';
   document.getElementById('r3ExpenseSub').textContent= fmt(totalExpense)+' total';
   document.getElementById('r3Months').textContent   = 'Avg over '+numMonths+' month'+(numMonths!==1?'s':'');
   document.getElementById('saveRevLabel').textContent = fmt(avgIncome)+'/mo';
@@ -502,7 +506,7 @@ function renderSmartSuggestions(recurring){
       '<span class="suggest-amt">~'+fmt2(r.avgAmt)+'/mo</span>'+
       '<button class="btn-add-bill'+(alreadyAdded?' added':'')
         +'" id="addBillBtn'+i+'" onclick="addRecurringToBills('+i+',this)" '+(alreadyAdded?'disabled':'')+'>'+
-        (alreadyAdded?'✓ In Bills':'+ Add to Bills')+
+        (alreadyAdded?'? In Bills':'+ Add to Bills')+
       '</button>'+
     '</div>';
   });
@@ -526,7 +530,7 @@ function addRecurringToBills(idx, btn){
     note:'Auto-detected from bank statement ('+r.months+' months)'
   });
   localStorage.setItem('fw_bills',JSON.stringify(bills));
-  btn.textContent='✓ Added!'; btn.classList.add('added'); btn.disabled=true;
+  btn.textContent='? Added!'; btn.classList.add('added'); btn.disabled=true;
 }
 
 function saveCategoryDataToBudget(){
@@ -536,7 +540,7 @@ function saveCategoryDataToBudget(){
   Object.keys(cats).forEach(function(cat){ budgetCats[cat]=Math.round(cats[cat]/numMo); });
   localStorage.setItem('fw_budget_categories',JSON.stringify(budgetCats));
   var msg=document.getElementById('successMsg');
-  msg.textContent='✅ Category data saved to Budget Tracker! Open Budget vs Actual Tracker to see it.';
+  msg.textContent='? Category data saved to Budget Tracker! Open Budget vs Actual Tracker to see it.';
   msg.style.display='block';
   setTimeout(function(){ msg.style.display='none'; },4000);
 }
@@ -547,7 +551,7 @@ function saveToProfile(){
   p.rev = Math.round(analysisResult.avgIncome);
   p.exp = Math.round(analysisResult.avgExpense);
   localStorage.setItem('fw_profile', JSON.stringify(p));
-  document.getElementById('successMsg').textContent='✅ Profile updated! All your tools now use your real bank data.';
+  document.getElementById('successMsg').textContent='? Profile updated! All your tools now use your real bank data.';
   document.getElementById('successMsg').style.display = 'block';
 }
 

@@ -1,36 +1,36 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Try a Live Demo</title>
-<meta name="description" content="Try BizScale free — explore 30 financial tools built for small business owners including loan scores, cash runway, EMI calculator, grant finder, and more."/>
+<title>BizScale � Try a Live Demo</title>
+<meta name="description" content="Try BizScale free � explore 30 financial tools built for small business owners including loan scores, cash runway, EMI calculator, grant finder, and more."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#f1f5f9;color:#1e293b;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 
-/* ── Header ── */
+/* -- Header -- */
 .site-header{background:#0f172a;padding:14px 32px;display:flex;align-items:center;justify-content:space-between}
 .sh-logo{font-size:1.05rem;font-weight:900;color:#fff;letter-spacing:-.01em}
 .sh-logo span{color:#818cf8}
 .sh-back{font-size:.78rem;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:.35rem}
 .sh-back:hover{color:#fff}
 
-/* ── Hero ── */
+/* -- Hero -- */
 .hero{background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%);color:#fff;text-align:center;padding:52px 24px 44px}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(99,102,241,.18);border:1px solid rgba(99,102,241,.35);border-radius:999px;padding:.32rem .9rem;font-size:.75rem;font-weight:700;color:#a5b4fc;margin-bottom:1.1rem}
 .hero h1{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:900;line-height:1.12;letter-spacing:-.04em;margin-bottom:.75rem}
 .hero h1 .g{background:linear-gradient(90deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:.92rem;color:rgba(255,255,255,.6);line-height:1.65;max-width:520px;margin:0 auto 0}
 
-/* ── Personas grid ── */
+/* -- Personas grid -- */
 .personas-section{max-width:1120px;margin:0 auto;padding:36px 20px 56px}
 .personas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 @media(max-width:900px){.personas-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:540px){.personas-grid{grid-template-columns:1fr}}
 
-/* ── Persona card ── */
+/* -- Persona card -- */
 .p-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.07);border:2px solid transparent;transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;display:flex;flex-direction:column}
 .p-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.12)}
 .p-card.featured{border-color:#4f46e5;box-shadow:0 0 0 4px rgba(79,70,229,.12)}
@@ -70,7 +70,7 @@ a{text-decoration:none;color:inherit}
 /* Features list */
 .feat-list{list-style:none;display:flex;flex-direction:column;gap:4px}
 .feat-list li{font-size:.74rem;color:#475569;display:flex;align-items:flex-start;gap:.4rem;line-height:1.45}
-.feat-list li::before{content:"✓";color:#10b981;font-weight:700;flex-shrink:0;margin-top:.05rem}
+.feat-list li::before{content:"?";color:#10b981;font-weight:700;flex-shrink:0;margin-top:.05rem}
 
 /* Access code */
 .access-row{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border-radius:7px;padding:7px 10px;margin-top:auto}
@@ -90,7 +90,7 @@ a{text-decoration:none;color:inherit}
 .try-advisor{background:#0891b2;color:#fff}
 .try-advisor:hover{background:#0e7490}
 
-/* ── Tools panel overlay ── */
+/* -- Tools panel overlay -- */
 .tools-overlay{position:fixed;inset:0;background:rgba(15,23,42,.88);backdrop-filter:blur(8px);z-index:99;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 16px}
 .tools-overlay.show{display:flex}
 .tools-panel{background:#fff;border-radius:16px;max-width:820px;width:100%;margin:auto;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.4);animation:slideUp .22s ease}
@@ -122,7 +122,7 @@ a{text-decoration:none;color:inherit}
 .tp-back:hover{color:#1e293b}
 .tp-note{font-size:.7rem;color:#94a3b8}
 
-/* ── Credentials table ── */
+/* -- Credentials table -- */
 .creds-section{max-width:860px;margin:0 auto;padding:0 20px 56px}
 .creds-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:12px}
 .creds-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 8px rgba(0,0,0,.06)}
@@ -132,54 +132,58 @@ a{text-decoration:none;color:inherit}
 .code-chip{font-family:monospace;font-size:.78rem;font-weight:800;background:#eef2ff;color:#4f46e5;padding:.18rem .6rem;border-radius:5px;letter-spacing:.06em}
 .score-chip{font-size:.7rem;font-weight:700;padding:.18rem .6rem;border-radius:999px;white-space:nowrap}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
-<!-- ── TOOLS PANEL OVERLAY ── -->
+<!-- -- TOOLS PANEL OVERLAY -- -->
 <div class="tools-overlay" id="toolsOverlay" onclick="overlayClick(event)">
   <div class="tools-panel" id="toolsPanel">
     <div class="tools-panel-head">
-      <div class="tp-check">✅</div>
+      <div class="tp-check">?</div>
       <div class="tp-head-text">
         <div class="tp-title" id="tpTitle">Demo loaded!</div>
         <div class="tp-subtitle" id="tpSubtitle">Choose a tool to explore:</div>
       </div>
-      <button class="tp-close" onclick="closeToolsPanel()">✕</button>
+      <button class="tp-close" onclick="closeToolsPanel()">?</button>
     </div>
     <div class="tools-grid" id="toolsGrid"></div>
     <div class="tools-panel-foot">
-      <button class="tp-back" onclick="closeToolsPanel()">← Choose a different persona</button>
-      <span class="tp-note">Data stays in your browser — switch tools freely</span>
+      <button class="tp-back" onclick="closeToolsPanel()">? Choose a different persona</button>
+      <span class="tp-note">Data stays in your browser � switch tools freely</span>
     </div>
   </div>
 </div>
 
-<!-- ── HEADER ── -->
+<!-- -- HEADER -- -->
 <header class="site-header hdr">
-  <div class="sh-logo">📈 Biz<span>Scale</span></div>
+  <div class="sh-logo">?? Biz<span>Scale</span></div>
   <div style="display:flex;align-items:center;gap:16px">
-    <a href="pricing.html" class="sh-back" style="color:#818cf8;font-weight:700">💳 Pricing</a>
+    <a href="pricing.html" class="sh-back" style="color:#818cf8;font-weight:700">?? Pricing</a>
     <a href="auth.html" class="sh-back" style="background:#2563eb;color:#fff;padding:6px 14px;border-radius:6px;font-weight:700">Sign In</a>
-    <a href="index.html" class="sh-back">← Home</a>
+    <a href="index.html" class="sh-back">? Home</a>
   </div>
 </header>
 
-<!-- ── HERO ── -->
+<!-- -- HERO -- -->
 <div class="hero">
-  <div class="hero-eyebrow"><span style="width:6px;height:6px;border-radius:50%;background:#6ee7b7;flex-shrink:0;display:inline-block"></span> Live Demo — No Sign-Up</div>
+  <div class="hero-eyebrow"><span style="width:6px;height:6px;border-radius:50%;background:#6ee7b7;flex-shrink:0;display:inline-block"></span> Live Demo � No Sign-Up</div>
   <h1>Pick a <span class="g">demo profile.</span><br>Data loads instantly.</h1>
   <p>Each profile auto-fills real business numbers and unlocks the right tier. Then choose any accessible tool to explore.</p>
 </div>
 
-<!-- ── PERSONAS ── -->
+<!-- -- PERSONAS -- -->
 <div class="personas-section">
   <div class="personas-grid">
 
-    <!-- ░░ FREE ░░ -->
+    <!-- �� FREE �� -->
     <div class="p-card">
       <div class="card-band" style="background:linear-gradient(135deg,#f8fafc,#f1f5f9)">
         <span class="tier-badge tb-free">Free</span>
-        <span class="persona-avatar">🛒</span>
+        <span class="persona-avatar">??</span>
         <div class="persona-name">James Carter</div>
         <div class="persona-biz">Carter's Market</div>
         <span class="persona-ind">Retail</span>
@@ -189,7 +193,7 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Loan Safety Score</div>
           <div class="score-row">
             <div class="score-big" style="color:#f59e0b">59</div>
-            <span class="score-lbl sl-risky">⚠ RISKY</span>
+            <span class="score-lbl sl-risky">? RISKY</span>
           </div>
         </div>
         <div class="metrics-mini">
@@ -201,9 +205,9 @@ a{text-decoration:none;color:inherit}
         <div>
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">What James can access (6 tools)</div>
           <ul class="feat-list">
-            <li>🏦 Loan Score Engine — SAFE / RISKY / DANGEROUS</li>
-            <li>🧮 EMI Calculator — monthly payment & schedule</li>
-            <li>🏪 Lender Marketplace — SBA, BlueVine, OnDeck & more</li>
+            <li>?? Loan Score Engine � SAFE / RISKY / DANGEROUS</li>
+            <li>?? EMI Calculator � monthly payment & schedule</li>
+            <li>?? Lender Marketplace � SBA, BlueVine, OnDeck & more</li>
           </ul>
         </div>
         <div class="access-row">
@@ -212,15 +216,15 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="card-cta">
-        <button class="try-btn try-free" onclick="startDemo('free')">Try James's Demo →</button>
+        <button class="try-btn try-free" onclick="startDemo('free')">Try James's Demo ?</button>
       </div>
     </div>
 
-    <!-- ░░ STARTER ░░ -->
+    <!-- �� STARTER �� -->
     <div class="p-card">
       <div class="card-band" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
-        <span class="tier-badge tb-starter">Starter · $9/mo</span>
-        <span class="persona-avatar">👗</span>
+        <span class="tier-badge tb-starter">Starter � $9/mo</span>
+        <span class="persona-avatar">??</span>
         <div class="persona-name">Sarah Mitchell</div>
         <div class="persona-biz">Sarah's Boutique</div>
         <span class="persona-ind">Fashion Retail</span>
@@ -230,7 +234,7 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Loan Safety Score</div>
           <div class="score-row">
             <div class="score-big" style="color:#10b981">85</div>
-            <span class="score-lbl sl-safe">✓ SAFE</span>
+            <span class="score-lbl sl-safe">? SAFE</span>
           </div>
         </div>
         <div class="metrics-mini">
@@ -243,11 +247,11 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">What Sarah can access (11 tools)</div>
           <ul class="feat-list">
             <li>All Free tools (Loan Score, EMI, Lenders)</li>
-            <li>📋 Starter Plan — 3 scenarios + PDF report</li>
-            <li>⛽ Cash Runway — survival months calculator</li>
-            <li>📉 Break-Even Analyzer</li>
-            <li>✅ Loan Eligibility Checker</li>
-            <li>🎯 Grant & Scheme Finder (USA)</li>
+            <li>?? Starter Plan � 3 scenarios + PDF report</li>
+            <li>? Cash Runway � survival months calculator</li>
+            <li>?? Break-Even Analyzer</li>
+            <li>? Loan Eligibility Checker</li>
+            <li>?? Grant & Scheme Finder (USA)</li>
           </ul>
         </div>
         <div class="access-row">
@@ -256,16 +260,16 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="card-cta">
-        <button class="try-btn try-starter" onclick="startDemo('starter')">Try Sarah's Demo →</button>
+        <button class="try-btn try-starter" onclick="startDemo('starter')">Try Sarah's Demo ?</button>
       </div>
     </div>
 
-    <!-- ░░ PRO ░░ -->
+    <!-- �� PRO �� -->
     <div class="p-card featured">
-      <div class="featured-badge">⭐ Most Popular</div>
+      <div class="featured-badge">? Most Popular</div>
       <div class="card-band" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff)">
-        <span class="tier-badge tb-pro">Pro · $29/mo</span>
-        <span class="persona-avatar">💻</span>
+        <span class="tier-badge tb-pro">Pro � $29/mo</span>
+        <span class="persona-avatar">??</span>
         <div class="persona-name">Marcus Johnson</div>
         <div class="persona-biz">TechBridge IT Solutions</div>
         <span class="persona-ind">IT Services</span>
@@ -275,7 +279,7 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Loan Safety Score</div>
           <div class="score-row">
             <div class="score-big" style="color:#10b981">85</div>
-            <span class="score-lbl sl-safe">✓ SAFE</span>
+            <span class="score-lbl sl-safe">? SAFE</span>
           </div>
         </div>
         <div class="metrics-mini">
@@ -288,12 +292,12 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">What Marcus can access (19 tools)</div>
           <ul class="feat-list">
             <li>All Free + Starter tools</li>
-            <li>📈 Forecast Pro — 12-month cash flow</li>
-            <li>🤖 AI CFO Chat advisor</li>
-            <li>📊 Industry Benchmarks</li>
-            <li>💰 Owner's Pay Optimizer</li>
-            <li>🔀 Debt Consolidation Analyzer</li>
-            <li>🏥 Business Health Score Card (A–F)</li>
+            <li>?? Forecast Pro � 12-month cash flow</li>
+            <li>?? AI CFO Chat advisor</li>
+            <li>?? Industry Benchmarks</li>
+            <li>?? Owner's Pay Optimizer</li>
+            <li>?? Debt Consolidation Analyzer</li>
+            <li>?? Business Health Score Card (A�F)</li>
           </ul>
         </div>
         <div class="access-row">
@@ -302,15 +306,15 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="card-cta">
-        <button class="try-btn try-pro" onclick="startDemo('pro')">Try Marcus's Demo →</button>
+        <button class="try-btn try-pro" onclick="startDemo('pro')">Try Marcus's Demo ?</button>
       </div>
     </div>
 
-    <!-- ░░ ADVISOR ░░ -->
+    <!-- �� ADVISOR �� -->
     <div class="p-card">
       <div class="card-band" style="background:linear-gradient(135deg,#fefce8,#fef3c7)">
-        <span class="tier-badge tb-advisor">Advisor · $79/mo</span>
-        <span class="persona-avatar">📊</span>
+        <span class="tier-badge tb-advisor">Advisor � $79/mo</span>
+        <span class="persona-avatar">??</span>
         <div class="persona-name">CPA Lisa Chen</div>
         <div class="persona-biz">Chen &amp; Associates</div>
         <span class="persona-ind">Financial Advisory</span>
@@ -334,10 +338,10 @@ a{text-decoration:none;color:inherit}
           <div style="font-size:.64rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">What Lisa can access (30 tools)</div>
           <ul class="feat-list">
             <li>All Free + Starter + Pro tools</li>
-            <li>👥 Advisor Dashboard — client portfolio</li>
-            <li>📄 White-label branded reports</li>
-            <li>📬 Client Risk Summary Email generator</li>
-            <li>💸 Referral Tracker + commission pipeline</li>
+            <li>?? Advisor Dashboard � client portfolio</li>
+            <li>?? White-label branded reports</li>
+            <li>?? Client Risk Summary Email generator</li>
+            <li>?? Referral Tracker + commission pipeline</li>
           </ul>
         </div>
         <div class="access-row">
@@ -346,102 +350,102 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="card-cta">
-        <button class="try-btn try-advisor" onclick="startDemo('advisor')">Try Lisa's Demo →</button>
+        <button class="try-btn try-advisor" onclick="startDemo('advisor')">Try Lisa's Demo ?</button>
       </div>
     </div>
 
   </div><!-- /personas-grid -->
 </div><!-- /personas-section -->
 
-<!-- ── ALL TOOLS DIRECTORY ── -->
+<!-- -- ALL TOOLS DIRECTORY -- -->
 <div style="max-width:1120px;margin:0 auto;padding:0 20px 56px">
 
   <div style="text-align:center;margin-bottom:28px">
     <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin-bottom:8px">Complete Tools Directory</div>
-    <h2 style="font-size:1.3rem;font-weight:900;color:#0f172a">All 40 Tools — Open Any Directly</h2>
+    <h2 style="font-size:1.3rem;font-weight:900;color:#0f172a">All 40 Tools � Open Any Directly</h2>
     <p style="font-size:.85rem;color:#64748b;margin-top:4px">Load a demo persona above first, then open any tool below</p>
   </div>
 
   <!-- FREE -->
   <div style="margin-bottom:24px">
-    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#64748b;background:#f1f5f9;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">🆓 Free — No sign-up needed</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#64748b;background:#f1f5f9;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">?? Free � No sign-up needed</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-      <a href="modules/loanDecisionScoreEngine.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🏦</span>Loan Score Engine</a>
-      <a href="modules/emiCalculator.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🧮</span>EMI Calculator</a>
-      <a href="modules/lenderMarketplace.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🏪</span>Lender Marketplace</a>
-      <a href="checkup.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🩺</span>Financial Checkup</a>
-      <a href="history.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📊</span>Score History</a>
-      <a href="whatif.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🔮</span>What-If Scenarios</a>
-      <a href="modules/monthlySnapshot.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📸</span>Monthly Snapshot</a>
+      <a href="modules/loanDecisionScoreEngine.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Loan Score Engine</a>
+      <a href="modules/emiCalculator.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>EMI Calculator</a>
+      <a href="modules/lenderMarketplace.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Lender Marketplace</a>
+      <a href="checkup.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Financial Checkup</a>
+      <a href="history.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Score History</a>
+      <a href="whatif.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>What-If Scenarios</a>
+      <a href="modules/monthlySnapshot.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700;transition:border-color .15s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Monthly Snapshot</a>
     </div>
   </div>
 
   <!-- STARTER -->
   <div style="margin-bottom:24px">
-    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#166534;background:#dcfce7;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">⭐ Starter — $9/mo · Code: FINWISE9</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#166534;background:#dcfce7;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">? Starter � $9/mo � Code: FINWISE9</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-      <a href="modules/starterPlan.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📋</span>Starter Plan</a>
-      <a href="modules/cashRunway.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">⛽</span>Cash Runway</a>
-      <a href="modules/breakEven.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📉</span>Break-Even Analyzer</a>
-      <a href="modules/loanEligibility.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">✅</span>Loan Eligibility Checker</a>
-      <a href="modules/grantFinder.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🎯</span>Grant & Scheme Finder</a>
-      <a href="modules/debtCommandCenter.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💰</span>Debt Command Center</a>
-      <a href="modules/loanRepaymentOptimizer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💳</span>Loan Repayment Optimizer</a>
-      <a href="modules/cashFlowCalendar.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📅</span>Cash Flow Calendar</a>
-      <a href="modules/businessSavingsPlanner.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🏗️</span>Business Savings Planner</a>
-      <a href="modules/vendorBillTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🔁</span>Vendor & Bill Tracker</a>
-      <a href="modules/invoiceTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📋</span>Invoice Tracker + Aging Report</a>
-      <a href="modules/workingCapitalCalc.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💧</span>Working Capital Calculator</a>
-      <a href="modules/budgetActualTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📊</span>Budget vs. Actual Tracker</a>
-      <a href="modules/payrollImpactSim.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">👥</span>Payroll Impact Simulator</a>
-      <a href="modules/loanRefinanceAnalyzer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🔄</span>Loan Refinance Analyzer</a>
+      <a href="modules/starterPlan.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Starter Plan</a>
+      <a href="modules/cashRunway.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">?</span>Cash Runway</a>
+      <a href="modules/breakEven.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Break-Even Analyzer</a>
+      <a href="modules/loanEligibility.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">?</span>Loan Eligibility Checker</a>
+      <a href="modules/grantFinder.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Grant & Scheme Finder</a>
+      <a href="modules/debtCommandCenter.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Debt Command Center</a>
+      <a href="modules/loanRepaymentOptimizer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Loan Repayment Optimizer</a>
+      <a href="modules/cashFlowCalendar.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Cash Flow Calendar</a>
+      <a href="modules/businessSavingsPlanner.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">???</span>Business Savings Planner</a>
+      <a href="modules/vendorBillTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Vendor & Bill Tracker</a>
+      <a href="modules/invoiceTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Invoice Tracker + Aging Report</a>
+      <a href="modules/workingCapitalCalc.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Working Capital Calculator</a>
+      <a href="modules/budgetActualTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Budget vs. Actual Tracker</a>
+      <a href="modules/payrollImpactSim.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Payroll Impact Simulator</a>
+      <a href="modules/loanRefinanceAnalyzer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Loan Refinance Analyzer</a>
     </div>
   </div>
 
   <!-- PRO -->
   <div style="margin-bottom:24px">
-    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#4338ca;background:#eef2ff;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">🚀 Pro — $29/mo · Code: FINWISE29</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#4338ca;background:#eef2ff;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">?? Pro � $29/mo � Code: FINWISE29</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-      <a href="modules/forecastPro.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📈</span>Forecast Pro</a>
-      <a href="modules/aiCfoChat.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🤖</span>AI CFO Chat</a>
-      <a href="modules/benchmarkPro.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📊</span>Industry Benchmarks</a>
-      <a href="modules/financialStatements.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📑</span>Financial Statements</a>
-      <a href="modules/ownersPay.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💰</span>Owner's Pay Optimizer</a>
-      <a href="modules/debtConsolidation.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🔀</span>Debt Consolidation</a>
-      <a href="modules/businessHealthScore.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🏥</span>Business Health Score</a>
-      <a href="modules/caExport.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📤</span>Export for CA</a>
-      <a href="modules/profitMarginAnalyzer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📐</span>Profit Margin Analyzer</a>
-      <a href="modules/stressTestEngine.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💪</span>Stress Test Engine</a>
-      <a href="modules/multiLoanManager.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💳</span>Multi-Loan Manager</a>
+      <a href="modules/forecastPro.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Forecast Pro</a>
+      <a href="modules/aiCfoChat.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>AI CFO Chat</a>
+      <a href="modules/benchmarkPro.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Industry Benchmarks</a>
+      <a href="modules/financialStatements.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Financial Statements</a>
+      <a href="modules/ownersPay.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Owner's Pay Optimizer</a>
+      <a href="modules/debtConsolidation.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Debt Consolidation</a>
+      <a href="modules/businessHealthScore.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Business Health Score</a>
+      <a href="modules/caExport.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Export for CA</a>
+      <a href="modules/profitMarginAnalyzer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Profit Margin Analyzer</a>
+      <a href="modules/stressTestEngine.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Stress Test Engine</a>
+      <a href="modules/multiLoanManager.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#4f46e5'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Multi-Loan Manager</a>
     </div>
   </div>
 
   <!-- ADVISOR -->
   <div style="margin-bottom:24px">
-    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#92400e;background:#fef3c7;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">🏆 Advisor — $79/mo · Code: FWADVISOR</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#92400e;background:#fef3c7;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">?? Advisor � $79/mo � Code: FWADVISOR</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-      <a href="modules/advisorDashboard.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">👥</span>Advisor Dashboard</a>
-      <a href="modules/brandedReport.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📄</span>Branded Report</a>
-      <a href="modules/clientRiskEmail.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📬</span>Client Risk Email</a>
-      <a href="modules/referralTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">💸</span>Referral Tracker</a>
-      <a href="modules/clientPortal.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🔗</span>Client Portal</a>
-      <a href="modules/whiteLabelSettings.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">🎨</span>White-Label Settings</a>
+      <a href="modules/advisorDashboard.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Advisor Dashboard</a>
+      <a href="modules/brandedReport.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Branded Report</a>
+      <a href="modules/clientRiskEmail.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Client Risk Email</a>
+      <a href="modules/referralTracker.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Referral Tracker</a>
+      <a href="modules/clientPortal.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>Client Portal</a>
+      <a href="modules/whiteLabelSettings.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#d97706'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>White-Label Settings</a>
     </div>
   </div>
 
   <!-- Reference -->
   <div>
-    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569;background:#f1f5f9;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">📚 Reference Documents</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569;background:#f1f5f9;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">?? Reference Documents</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-      <a href="grants-usa-reference.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#64748b'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">📋</span>USA Grants Reference</a>
+      <a href="grants-usa-reference.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#64748b'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">??</span>USA Grants Reference</a>
     </div>
   </div>
 
 </div>
 
-<!-- ── CREDENTIALS TABLE ── -->
+<!-- -- CREDENTIALS TABLE -- -->
 <div class="creds-section">
-  <div class="creds-title">Quick Reference — Access Credentials</div>
+  <div class="creds-title">Quick Reference � Access Credentials</div>
   <table class="creds-table">
     <thead>
       <tr>
@@ -457,34 +461,34 @@ a{text-decoration:none;color:inherit}
       <tr>
         <td><strong>James Carter</strong></td>
         <td>Free</td>
-        <td>Carter's Market · Retail</td>
-        <td><span class="score-chip" style="background:#fef9c3;color:#854d0e">59 ⚠ Risky</span></td>
+        <td>Carter's Market � Retail</td>
+        <td><span class="score-chip" style="background:#fef9c3;color:#854d0e">59 ? Risky</span></td>
         <td><span style="color:#94a3b8;font-size:.78rem;font-style:italic">None needed</span></td>
-        <td style="font-size:.78rem">3 tools — Loan Score + EMI Calculator + Lender Marketplace</td>
+        <td style="font-size:.78rem">3 tools � Loan Score + EMI Calculator + Lender Marketplace</td>
       </tr>
       <tr>
         <td><strong>Sarah Mitchell</strong></td>
-        <td>Starter · $9</td>
-        <td>Sarah's Boutique · Fashion Retail</td>
-        <td><span class="score-chip" style="background:#dcfce7;color:#166534">85 ✓ Safe</span></td>
+        <td>Starter � $9</td>
+        <td>Sarah's Boutique � Fashion Retail</td>
+        <td><span class="score-chip" style="background:#dcfce7;color:#166534">85 ? Safe</span></td>
         <td><span class="code-chip">FINWISE9</span></td>
-        <td style="font-size:.78rem">8 tools — + Starter Plan, Cash Runway, Break-Even, Eligibility, Grant Finder</td>
+        <td style="font-size:.78rem">8 tools � + Starter Plan, Cash Runway, Break-Even, Eligibility, Grant Finder</td>
       </tr>
       <tr>
         <td><strong>Marcus Johnson</strong></td>
-        <td>Pro · $29 ⭐</td>
-        <td>TechBridge IT Solutions · IT Services</td>
-        <td><span class="score-chip" style="background:#dcfce7;color:#166534">85 ✓ Safe</span></td>
+        <td>Pro � $29 ?</td>
+        <td>TechBridge IT Solutions � IT Services</td>
+        <td><span class="score-chip" style="background:#dcfce7;color:#166534">85 ? Safe</span></td>
         <td><span class="code-chip">FINWISE29</span></td>
-        <td style="font-size:.78rem">16 tools — + Forecast, AI CFO, Benchmarks, Owner Pay, Debt Consolidation, Health Score</td>
+        <td style="font-size:.78rem">16 tools � + Forecast, AI CFO, Benchmarks, Owner Pay, Debt Consolidation, Health Score</td>
       </tr>
       <tr>
         <td><strong>CPA Lisa Chen</strong></td>
-        <td>Advisor · $79</td>
-        <td>Chen &amp; Associates · Financial Advisory</td>
-        <td><span class="score-chip" style="background:#f1f5f9;color:#475569">5 clients · avg 56</span></td>
+        <td>Advisor � $79</td>
+        <td>Chen &amp; Associates � Financial Advisory</td>
+        <td><span class="score-chip" style="background:#f1f5f9;color:#475569">5 clients � avg 56</span></td>
         <td><span class="code-chip">FWADVISOR</span></td>
-        <td style="font-size:.78rem">30 tools — all above + Advisor Dashboard, Risk Email, Referral Tracker</td>
+        <td style="font-size:.78rem">30 tools � all above + Advisor Dashboard, Risk Email, Referral Tracker</td>
       </tr>
     </tbody>
   </table>
@@ -492,39 +496,39 @@ a{text-decoration:none;color:inherit}
 </div>
 
 <script>
-/* ════════════════════════════════════════════
+/* --------------------------------------------
    SAMPLE DATA
-════════════════════════════════════════════ */
+-------------------------------------------- */
 
-/* ── James Carter — Free ── */
+/* -- James Carter � Free -- */
 var RAJ_PROFILE={
   id:'demo_james',name:"Carter's Market",industry:'Retail',
   rev:5000,exp:3800,emi:200,reserve:1000,loan:18000,rate:14,tenure:36,
   savedAt:'Apr 2026'
 };
 
-/* ── Sarah Mitchell — Starter ── */
+/* -- Sarah Mitchell � Starter -- */
 var PRIYA_PROFILE={
   id:'demo_sarah',name:"Sarah's Boutique",industry:'Fashion Retail',
   rev:8500,exp:5800,emi:600,reserve:8000,loan:30000,rate:12,tenure:48,
   savedAt:'Apr 2026'
 };
 
-/* ── Marcus Johnson — Pro ── */
+/* -- Marcus Johnson � Pro -- */
 var VIKRAM_PROFILE={
   id:'demo_marcus',name:'TechBridge IT Solutions',industry:'IT Services',
   rev:22000,exp:14500,emi:1500,reserve:32000,loan:85000,rate:11,tenure:60,
   savedAt:'Apr 2026'
 };
 
-/* ── CPA Lisa Chen — Advisor (5 clients) ── */
+/* -- CPA Lisa Chen � Advisor (5 clients) -- */
 var SUNITA_CLIENTS=[
   {id:'fw_cl_demo_1',name:"Tony's Diner",industry:'Restaurant',
    rev:8000,exp:4800,emi:0,reserve:5000,loan:60000,rate:12,tenure:36,
    notes:'Expansion loan for second outlet. Cash flow healthy.',addedAt:'Apr 2026'},
   {id:'fw_cl_demo_2',name:'Metro Electronics',industry:'Electronics Retail',
    rev:6000,exp:4500,emi:600,reserve:2000,loan:25000,rate:14,tenure:36,
-   notes:'High risk — review EMI burden before proceeding.',addedAt:'Apr 2026'},
+   notes:'High risk � review EMI burden before proceeding.',addedAt:'Apr 2026'},
   {id:'fw_cl_demo_3',name:'GreenLeaf Organics',industry:'Food & Agriculture',
    rev:12000,exp:8500,emi:1000,reserve:15000,loan:45000,rate:11,tenure:48,
    notes:'Strong reserve coverage. DSCR comfortable.',addedAt:'Apr 2026'},
@@ -535,142 +539,142 @@ var SUNITA_CLIENTS=[
    rev:10000,exp:8200,emi:800,reserve:2000,loan:30000,rate:15,tenure:36,
    notes:'Cash flow near-zero. Reduce costs before new loan.',addedAt:'Apr 2026'}
 ];
-var SUNITA_WL={brand:'Chen & Associates',tag:'Certified Public Accountants & Financial Advisors',color:'#0891b2',icon:'📊',email:'lisa@chenassoc.com'};
+var SUNITA_WL={brand:'Chen & Associates',tag:'Certified Public Accountants & Financial Advisors',color:'#0891b2',icon:'??',email:'lisa@chenassoc.com'};
 
-/* ════════════════════════════════════════════
+/* --------------------------------------------
    TOOLS CATALOGUE (per tier)
-════════════════════════════════════════════ */
+-------------------------------------------- */
 var TOOLS_BY_TIER={
   free:[
-    {icon:'🏦',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html',primary:true},
-    {icon:'🧮',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
-    {icon:'🏪',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders — SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
-    {icon:'🎯',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
-    {icon:'📸',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics — download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'}
+    {icon:'??',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html',primary:true},
+    {icon:'??',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
+    {icon:'??',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders � SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
+    {icon:'??',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
+    {icon:'??',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics � download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'}
   ],
   starter:[
-    {icon:'🏦',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
-    {icon:'🧮',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
-    {icon:'🏪',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders — SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
-    {icon:'📋',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html',primary:true},
-    {icon:'⛽',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
-    {icon:'📉',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
-    {icon:'✅',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
-    {icon:'🎯',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
-    {icon:'🎯',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
-    {icon:'🧾',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard — income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
-    {icon:'🧾',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
-    {icon:'🏷️',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
-    {icon:'💼',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
-    {icon:'📋',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
-    {icon:'📋',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
-    {icon:'👥',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
-    {icon:'🏦',name:'Bank Statement Upload',desc:'Upload CSV → auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
-    {icon:'📸',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics — download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
-    {icon:'💰',name:'Debt Command Center',desc:'All loans in one view — track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
-    {icon:'💳',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison — find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
-    {icon:'📅',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
-    {icon:'🏗️',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
-    {icon:'🔁',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'}
+    {icon:'??',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
+    {icon:'??',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
+    {icon:'??',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders � SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
+    {icon:'??',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html',primary:true},
+    {icon:'?',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
+    {icon:'??',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
+    {icon:'?',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
+    {icon:'??',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
+    {icon:'??',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
+    {icon:'??',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard � income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
+    {icon:'??',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
+    {icon:'???',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
+    {icon:'??',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
+    {icon:'??',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
+    {icon:'??',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
+    {icon:'??',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
+    {icon:'??',name:'Bank Statement Upload',desc:'Upload CSV ? auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
+    {icon:'??',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics � download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
+    {icon:'??',name:'Debt Command Center',desc:'All loans in one view � track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
+    {icon:'??',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison � find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
+    {icon:'??',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
+    {icon:'???',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
+    {icon:'??',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'}
   ],
   pro:[
-    {icon:'🏦',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
-    {icon:'🧮',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
-    {icon:'🏪',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders — SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
-    {icon:'📋',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html'},
-    {icon:'⛽',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
-    {icon:'📉',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
-    {icon:'✅',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
-    {icon:'🎯',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
-    {icon:'🎯',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
-    {icon:'🧾',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard — income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
-    {icon:'🧾',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
-    {icon:'🏷️',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
-    {icon:'💼',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
-    {icon:'📋',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
-    {icon:'📋',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
-    {icon:'👥',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
-    {icon:'🏦',name:'Bank Statement Upload',desc:'Upload CSV → auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
-    {icon:'📈',name:'Forecast Pro',desc:'12-month cash flow forecast with seasonal adjustments',tier:'Pro',tierClass:'tb-pro',url:'modules/forecastPro.test.html',primary:true},
-    {icon:'🤖',name:'AI CFO Chat',desc:'Ask your numbers anything — instant plain-English answers',tier:'Pro',tierClass:'tb-pro',url:'modules/aiCfoChat.test.html'},
-    {icon:'📊',name:'Industry Benchmarks',desc:'See how your margins and ratios compare with industry peers',tier:'Pro',tierClass:'tb-pro',url:'modules/benchmarkPro.test.html'},
-    {icon:'📑',name:'Financial Statements',desc:'Annual P&L, Balance Sheet and Cash Flow Statement',tier:'Pro',tierClass:'tb-pro',url:'modules/financialStatements.test.html'},
-    {icon:'📤',name:'Export for CA',desc:'Professional A4 PDF with ratios, notes & signature block for your Chartered Accountant',tier:'Pro',tierClass:'tb-pro',url:'modules/caExport.test.html'},
-    {icon:'💰',name:"Owner's Pay Optimizer",desc:'How much can you safely pay yourself without hurting your business?',tier:'Pro',tierClass:'tb-pro',url:'modules/ownersPay.test.html'},
-    {icon:'🔀',name:'Debt Consolidation',desc:'Should you consolidate loans? See monthly savings and total interest impact',tier:'Pro',tierClass:'tb-pro',url:'modules/debtConsolidation.test.html'},
-    {icon:'🏥',name:'Business Health Score',desc:'6-metric health score card with grade A–F and traffic light indicators',tier:'Pro',tierClass:'tb-pro',url:'modules/businessHealthScore.test.html'},
-    {icon:'📸',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics — download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
-    {icon:'💰',name:'Debt Command Center',desc:'All loans in one view — track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
-    {icon:'💳',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison — find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
-    {icon:'📅',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
-    {icon:'🏗️',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
-    {icon:'🔁',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'},
-    {icon:'📐',name:'Profit Margin Analyzer',desc:'Gross, operating and net margins vs industry benchmarks with what-if sliders',tier:'Pro',tierClass:'tb-pro',url:'modules/profitMarginAnalyzer.test.html'}
+    {icon:'??',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
+    {icon:'??',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
+    {icon:'??',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders � SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
+    {icon:'??',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html'},
+    {icon:'?',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
+    {icon:'??',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
+    {icon:'?',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
+    {icon:'??',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
+    {icon:'??',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
+    {icon:'??',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard � income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
+    {icon:'??',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
+    {icon:'???',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
+    {icon:'??',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
+    {icon:'??',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
+    {icon:'??',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
+    {icon:'??',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
+    {icon:'??',name:'Bank Statement Upload',desc:'Upload CSV ? auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
+    {icon:'??',name:'Forecast Pro',desc:'12-month cash flow forecast with seasonal adjustments',tier:'Pro',tierClass:'tb-pro',url:'modules/forecastPro.test.html',primary:true},
+    {icon:'??',name:'AI CFO Chat',desc:'Ask your numbers anything � instant plain-English answers',tier:'Pro',tierClass:'tb-pro',url:'modules/aiCfoChat.test.html'},
+    {icon:'??',name:'Industry Benchmarks',desc:'See how your margins and ratios compare with industry peers',tier:'Pro',tierClass:'tb-pro',url:'modules/benchmarkPro.test.html'},
+    {icon:'??',name:'Financial Statements',desc:'Annual P&L, Balance Sheet and Cash Flow Statement',tier:'Pro',tierClass:'tb-pro',url:'modules/financialStatements.test.html'},
+    {icon:'??',name:'Export for CA',desc:'Professional A4 PDF with ratios, notes & signature block for your Chartered Accountant',tier:'Pro',tierClass:'tb-pro',url:'modules/caExport.test.html'},
+    {icon:'??',name:"Owner's Pay Optimizer",desc:'How much can you safely pay yourself without hurting your business?',tier:'Pro',tierClass:'tb-pro',url:'modules/ownersPay.test.html'},
+    {icon:'??',name:'Debt Consolidation',desc:'Should you consolidate loans? See monthly savings and total interest impact',tier:'Pro',tierClass:'tb-pro',url:'modules/debtConsolidation.test.html'},
+    {icon:'??',name:'Business Health Score',desc:'6-metric health score card with grade A�F and traffic light indicators',tier:'Pro',tierClass:'tb-pro',url:'modules/businessHealthScore.test.html'},
+    {icon:'??',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics � download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
+    {icon:'??',name:'Debt Command Center',desc:'All loans in one view � track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
+    {icon:'??',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison � find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
+    {icon:'??',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
+    {icon:'???',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
+    {icon:'??',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'},
+    {icon:'??',name:'Profit Margin Analyzer',desc:'Gross, operating and net margins vs industry benchmarks with what-if sliders',tier:'Pro',tierClass:'tb-pro',url:'modules/profitMarginAnalyzer.test.html'}
   ],
   advisor:[
-    {icon:'🏦',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
-    {icon:'🧮',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
-    {icon:'🏪',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders — SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
-    {icon:'📋',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html'},
-    {icon:'⛽',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
-    {icon:'📉',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
-    {icon:'✅',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
-    {icon:'🎯',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
-    {icon:'📈',name:'Forecast Pro',desc:'12-month cash flow forecast with seasonal adjustments',tier:'Pro',tierClass:'tb-pro',url:'modules/forecastPro.test.html'},
-    {icon:'🤖',name:'AI CFO Chat',desc:'Ask your numbers anything — instant plain-English answers',tier:'Pro',tierClass:'tb-pro',url:'modules/aiCfoChat.test.html'},
-    {icon:'📊',name:'Industry Benchmarks',desc:'See how your margins and ratios compare with industry peers',tier:'Pro',tierClass:'tb-pro',url:'modules/benchmarkPro.test.html'},
-    {icon:'📑',name:'Financial Statements',desc:'Annual P&L, Balance Sheet and Cash Flow Statement',tier:'Pro',tierClass:'tb-pro',url:'modules/financialStatements.test.html'},
-    {icon:'📤',name:'Export for CA',desc:'Professional A4 PDF with ratios, notes & signature block for your Chartered Accountant',tier:'Pro',tierClass:'tb-pro',url:'modules/caExport.test.html'},
-    {icon:'💰',name:"Owner's Pay Optimizer",desc:'How much can you safely pay yourself without hurting your business?',tier:'Pro',tierClass:'tb-pro',url:'modules/ownersPay.test.html'},
-    {icon:'🔀',name:'Debt Consolidation',desc:'Should you consolidate loans? See monthly savings and total interest impact',tier:'Pro',tierClass:'tb-pro',url:'modules/debtConsolidation.test.html'},
-    {icon:'🏥',name:'Business Health Score',desc:'6-metric health score card with grade A–F and traffic light indicators',tier:'Pro',tierClass:'tb-pro',url:'modules/businessHealthScore.test.html'},
-    {icon:'👥',name:'Advisor Dashboard',desc:'Manage all clients with white-label branding and portfolio view',tier:'Advisor',tierClass:'tb-advisor',url:'modules/advisorDashboard.test.html',primary:true},
-    {icon:'📄',name:'Branded Report',desc:"Print-optimised PDF report for Ravi's Restaurant (client #1)",tier:'Advisor',tierClass:'tb-advisor',url:'modules/brandedReport.test.html'},
-    {icon:'📬',name:'Client Risk Email',desc:'Generate white-labelled risk summary email for any client — one click',tier:'Advisor',tierClass:'tb-advisor',url:'modules/clientRiskEmail.test.html'},
-    {icon:'💸',name:'Referral Tracker',desc:'Track client lender referrals and estimated commission pipeline',tier:'Advisor',tierClass:'tb-advisor',url:'modules/referralTracker.test.html'},
-    {icon:'🎯',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
-    {icon:'🧾',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard — income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
-    {icon:'🧾',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
-    {icon:'🏷️',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
-    {icon:'💼',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
-    {icon:'📋',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
-    {icon:'📋',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
-    {icon:'👥',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
-    {icon:'🏦',name:'Bank Statement Upload',desc:'Upload CSV → auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
-    {icon:'🔗',name:'Client Portal',desc:'Share secure read-only financial reports with clients — no login needed',tier:'Advisor',tierClass:'tb-advisor',url:'modules/clientPortal.test.html'},
-    {icon:'🎨',name:'White-Label Settings',desc:'Put your brand, colors and logo on every client report',tier:'Advisor',tierClass:'tb-advisor',url:'modules/whiteLabelSettings.test.html'},
-    {icon:'📸',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics — download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
-    {icon:'💰',name:'Debt Command Center',desc:'All loans in one view — track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
-    {icon:'💳',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison — find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
-    {icon:'📅',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
-    {icon:'🏗️',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
-    {icon:'🔁',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'},
-    {icon:'📐',name:'Profit Margin Analyzer',desc:'Gross, operating and net margins vs industry benchmarks with what-if sliders',tier:'Pro',tierClass:'tb-pro',url:'modules/profitMarginAnalyzer.test.html'}
+    {icon:'??',name:'Loan Score Engine',desc:'Instant SAFE / RISKY / DANGEROUS verdict with cash flow breakdown',tier:'Free',tierClass:'tb-free',url:'modules/loanDecisionScoreEngine.test.html'},
+    {icon:'??',name:'EMI Calculator',desc:'Monthly EMI, total interest and year-by-year repayment schedule',tier:'Free',tierClass:'tb-free',url:'modules/emiCalculator.test.html'},
+    {icon:'??',name:'Lender Marketplace',desc:'Browse 6 trusted US lenders � SBA, BlueVine, OnDeck, Lendio, Kiva and more',tier:'Free',tierClass:'tb-free',url:'modules/lenderMarketplace.html'},
+    {icon:'??',name:'Starter Plan',desc:'Compare 3 loan scenarios, stress test, and download PDF report',tier:'Starter',tierClass:'tb-starter',url:'modules/starterPlan.test.html'},
+    {icon:'?',name:'Cash Runway',desc:'How many months can your business survive if revenue drops?',tier:'Starter',tierClass:'tb-starter',url:'modules/cashRunway.test.html'},
+    {icon:'??',name:'Break-Even Analyzer',desc:'How much extra revenue does your new loan require to stay profitable?',tier:'Starter',tierClass:'tb-starter',url:'modules/breakEven.test.html'},
+    {icon:'?',name:'Loan Eligibility Checker',desc:'See which lenders you qualify for before you apply',tier:'Starter',tierClass:'tb-starter',url:'modules/loanEligibility.test.html'},
+    {icon:'??',name:'Grant & Scheme Finder',desc:'Find government grants, SBA loans & schemes matched to your business profile',tier:'Starter',tierClass:'tb-starter',url:'modules/grantFinder.test.html'},
+    {icon:'??',name:'Forecast Pro',desc:'12-month cash flow forecast with seasonal adjustments',tier:'Pro',tierClass:'tb-pro',url:'modules/forecastPro.test.html'},
+    {icon:'??',name:'AI CFO Chat',desc:'Ask your numbers anything � instant plain-English answers',tier:'Pro',tierClass:'tb-pro',url:'modules/aiCfoChat.test.html'},
+    {icon:'??',name:'Industry Benchmarks',desc:'See how your margins and ratios compare with industry peers',tier:'Pro',tierClass:'tb-pro',url:'modules/benchmarkPro.test.html'},
+    {icon:'??',name:'Financial Statements',desc:'Annual P&L, Balance Sheet and Cash Flow Statement',tier:'Pro',tierClass:'tb-pro',url:'modules/financialStatements.test.html'},
+    {icon:'??',name:'Export for CA',desc:'Professional A4 PDF with ratios, notes & signature block for your Chartered Accountant',tier:'Pro',tierClass:'tb-pro',url:'modules/caExport.test.html'},
+    {icon:'??',name:"Owner's Pay Optimizer",desc:'How much can you safely pay yourself without hurting your business?',tier:'Pro',tierClass:'tb-pro',url:'modules/ownersPay.test.html'},
+    {icon:'??',name:'Debt Consolidation',desc:'Should you consolidate loans? See monthly savings and total interest impact',tier:'Pro',tierClass:'tb-pro',url:'modules/debtConsolidation.test.html'},
+    {icon:'??',name:'Business Health Score',desc:'6-metric health score card with grade A�F and traffic light indicators',tier:'Pro',tierClass:'tb-pro',url:'modules/businessHealthScore.test.html'},
+    {icon:'??',name:'Advisor Dashboard',desc:'Manage all clients with white-label branding and portfolio view',tier:'Advisor',tierClass:'tb-advisor',url:'modules/advisorDashboard.test.html',primary:true},
+    {icon:'??',name:'Branded Report',desc:"Print-optimised PDF report for Ravi's Restaurant (client #1)",tier:'Advisor',tierClass:'tb-advisor',url:'modules/brandedReport.test.html'},
+    {icon:'??',name:'Client Risk Email',desc:'Generate white-labelled risk summary email for any client � one click',tier:'Advisor',tierClass:'tb-advisor',url:'modules/clientRiskEmail.test.html'},
+    {icon:'??',name:'Referral Tracker',desc:'Track client lender referrals and estimated commission pipeline',tier:'Advisor',tierClass:'tb-advisor',url:'modules/referralTracker.test.html'},
+    {icon:'??',name:'Goal Tracker',desc:'Set revenue/profit targets and track monthly progress toward your goals',tier:'Free',tierClass:'tb-free',url:'modules/goalTracker.test.html'},
+    {icon:'??',name:'Tax Command Center',desc:'All 4 tax modules in one dashboard � income tax, deductions, sales tax, and contractor reporting',tier:'Starter',tierClass:'tb-starter',url:'modules/taxCommandCenter.test.html'},
+    {icon:'??',name:'Tax Estimator',desc:'Quarterly IRS payment estimates based on your profit, structure and state',tier:'Starter',tierClass:'tb-starter',url:'modules/taxEstimator.test.html'},
+    {icon:'???',name:'Sales Tax Tracker',desc:'Track collected sales tax, filing periods and economic nexus for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/salesTaxTracker.test.html'},
+    {icon:'??',name:'Key Deductions Calculator',desc:'Home office deduction, IRS mileage log and Section 179 equipment write-offs',tier:'Starter',tierClass:'tb-starter',url:'modules/keyDeductions.test.html'},
+    {icon:'??',name:'Contractor & Payroll Tax',desc:'1099-NEC contractor tracking + FUTA/SUTA payroll tax estimates for all 50 states',tier:'Starter',tierClass:'tb-starter',url:'modules/contractorPayroll.test.html'},
+    {icon:'??',name:'Invoice Tracker',desc:'Track outstanding invoices, overdue amounts and payment status',tier:'Starter',tierClass:'tb-starter',url:'modules/invoiceTracker.test.html'},
+    {icon:'??',name:'Payroll Estimator',desc:'Calculate how much you can safely afford to pay staff',tier:'Starter',tierClass:'tb-starter',url:'modules/payrollEstimator.test.html'},
+    {icon:'??',name:'Bank Statement Upload',desc:'Upload CSV ? auto-fill your cash flow numbers in one step',tier:'Starter',tierClass:'tb-starter',url:'modules/bankStatementUpload.test.html'},
+    {icon:'??',name:'Client Portal',desc:'Share secure read-only financial reports with clients � no login needed',tier:'Advisor',tierClass:'tb-advisor',url:'modules/clientPortal.test.html'},
+    {icon:'??',name:'White-Label Settings',desc:'Put your brand, colors and logo on every client report',tier:'Advisor',tierClass:'tb-advisor',url:'modules/whiteLabelSettings.test.html'},
+    {icon:'??',name:'Monthly Snapshot',desc:'One-page visual summary of your key metrics � download as PNG or share via WhatsApp',tier:'Free',tierClass:'tb-free',url:'modules/monthlySnapshot.test.html'},
+    {icon:'??',name:'Debt Command Center',desc:'All loans in one view � track balances, payoff strategies, debt burden insights',tier:'Starter',tierClass:'tb-starter',url:'modules/debtCommandCenter.test.html'},
+    {icon:'??',name:'Loan Repayment Optimizer',desc:'Snowball vs Avalanche comparison � find the fastest path to debt freedom',tier:'Starter',tierClass:'tb-starter',url:'modules/loanRepaymentOptimizer.test.html'},
+    {icon:'??',name:'Cash Flow Calendar',desc:'Visual monthly calendar with income and expense events and running balance chart',tier:'Starter',tierClass:'tb-starter',url:'modules/cashFlowCalendar.test.html'},
+    {icon:'???',name:'Business Savings Planner',desc:'Set up to 4 savings goals with priority-weighted monthly allocation',tier:'Starter',tierClass:'tb-starter',url:'modules/businessSavingsPlanner.test.html'},
+    {icon:'??',name:'Vendor & Bill Tracker',desc:'Track recurring bills with due-date status, auto-pay badges and category breakdown',tier:'Starter',tierClass:'tb-starter',url:'modules/vendorBillTracker.test.html'},
+    {icon:'??',name:'Profit Margin Analyzer',desc:'Gross, operating and net margins vs industry benchmarks with what-if sliders',tier:'Pro',tierClass:'tb-pro',url:'modules/profitMarginAnalyzer.test.html'}
   ]
 };
 
 var PERSONA_LABELS={
   free:{
     title:"James's demo loaded!",
-    sub:'Free tier · 5 tools available — click to open:'
+    sub:'Free tier � 5 tools available � click to open:'
   },
   starter:{
     title:"Sarah's demo loaded!",
-    sub:'Starter tier unlocked · 18 tools available — Sarah can access everything James can, plus Starter features:'
+    sub:'Starter tier unlocked � 18 tools available � Sarah can access everything James can, plus Starter features:'
   },
   pro:{
     title:"Marcus's demo loaded!",
-    sub:'Pro tier unlocked · 27 tools available — includes all Free + Starter tools:'
+    sub:'Pro tier unlocked � 27 tools available � includes all Free + Starter tools:'
   },
   advisor:{
     title:"Lisa's demo loaded!",
-    sub:'Advisor tier unlocked · 40 tools available — full access across all tiers:'
+    sub:'Advisor tier unlocked � 40 tools available � full access across all tiers:'
   }
 };
 
-/* ════════════════════════════════════════════
+/* --------------------------------------------
    SEED + SHOW TOOLS
-════════════════════════════════════════════ */
+-------------------------------------------- */
 function clearDemoData(){
   ['fw_pro','fw_starter','fw_advisor','fw_unlimited','fw_active_idx',
    'fw_profiles','fw_clients','fw_wl','bizscale_currency','fw_biz_profile','fw_profile'].forEach(function(k){
@@ -683,7 +687,7 @@ function startDemo(persona){
 
   if(persona==='free'){
     localStorage.setItem('fw_demo_free',JSON.stringify(RAJ_PROFILE));
-    localStorage.setItem('fw_profile',JSON.stringify({bizName:"Carter Consulting",ownerName:'James Carter',industry:'Professional Services',employees:'Just me (Solo)',yearsInBusiness:'2–5 years',structure:'Sole Proprietor',ownerCategory:[],state:'Texas',rev:RAJ_PROFILE.rev,exp:RAJ_PROFILE.exp,emi:RAJ_PROFILE.emi,reserve:RAJ_PROFILE.reserve}));
+    localStorage.setItem('fw_profile',JSON.stringify({bizName:"Carter Consulting",ownerName:'James Carter',industry:'Professional Services',employees:'Just me (Solo)',yearsInBusiness:'2�5 years',structure:'Sole Proprietor',ownerCategory:[],state:'Texas',rev:RAJ_PROFILE.rev,exp:RAJ_PROFILE.exp,emi:RAJ_PROFILE.emi,reserve:RAJ_PROFILE.reserve}));
   }
 
   else if(persona==='starter'){
@@ -691,7 +695,7 @@ function startDemo(persona){
     var profiles=[PRIYA_PROFILE];
     localStorage.setItem('fw_profiles',JSON.stringify(profiles));
     localStorage.setItem('fw_active_idx','0');
-    localStorage.setItem('fw_profile',JSON.stringify({bizName:"Sarah's Boutique",ownerName:'Sarah Mitchell',industry:'Retail / E-commerce',employees:'2–5',yearsInBusiness:'2–5 years',structure:'LLC',ownerCategory:['women'],state:'New York',rev:PRIYA_PROFILE.rev,exp:PRIYA_PROFILE.exp,emi:PRIYA_PROFILE.emi,reserve:PRIYA_PROFILE.reserve}));
+    localStorage.setItem('fw_profile',JSON.stringify({bizName:"Sarah's Boutique",ownerName:'Sarah Mitchell',industry:'Retail / E-commerce',employees:'2�5',yearsInBusiness:'2�5 years',structure:'LLC',ownerCategory:['women'],state:'New York',rev:PRIYA_PROFILE.rev,exp:PRIYA_PROFILE.exp,emi:PRIYA_PROFILE.emi,reserve:PRIYA_PROFILE.reserve}));
     localStorage.setItem('fw_biz_profile',JSON.stringify({
       businessName:"Sarah's Boutique",ein:'',country:'USA',state:'NY',
       industry:'retail',businessAge:2,employees:3,annualRevenue:102000,
@@ -702,12 +706,12 @@ function startDemo(persona){
   else if(persona==='pro'){
     localStorage.setItem('fw_pro','1');
     localStorage.setItem('fw_starter','1');
-    var vikram2=Object.assign({},VIKRAM_PROFILE,{id:'demo_vikram_b',name:'TechBridge IT Solutions — Branch Office',rev:11000,exp:7200,emi:800,reserve:15000,loan:40000,rate:11.5,tenure:48,savedAt:'Apr 2026'});
-    var vikram3=Object.assign({},VIKRAM_PROFILE,{id:'demo_vikram_c',name:'TechBridge IT Solutions — Startup Phase',rev:6500,exp:5500,emi:400,reserve:8000,loan:20000,rate:13,tenure:36,savedAt:'Apr 2026'});
+    var vikram2=Object.assign({},VIKRAM_PROFILE,{id:'demo_vikram_b',name:'TechBridge IT Solutions � Branch Office',rev:11000,exp:7200,emi:800,reserve:15000,loan:40000,rate:11.5,tenure:48,savedAt:'Apr 2026'});
+    var vikram3=Object.assign({},VIKRAM_PROFILE,{id:'demo_vikram_c',name:'TechBridge IT Solutions � Startup Phase',rev:6500,exp:5500,emi:400,reserve:8000,loan:20000,rate:13,tenure:36,savedAt:'Apr 2026'});
     var profiles=[VIKRAM_PROFILE,vikram2,vikram3];
     localStorage.setItem('fw_profiles',JSON.stringify(profiles));
     localStorage.setItem('fw_active_idx','0');
-    localStorage.setItem('fw_profile',JSON.stringify({bizName:'TechBridge IT Solutions',ownerName:'Marcus Johnson',industry:'Technology / Software',employees:'6–20',yearsInBusiness:'2–5 years',structure:'LLC',ownerCategory:[],state:'California',rev:VIKRAM_PROFILE.rev,exp:VIKRAM_PROFILE.exp,emi:VIKRAM_PROFILE.emi,reserve:VIKRAM_PROFILE.reserve}));
+    localStorage.setItem('fw_profile',JSON.stringify({bizName:'TechBridge IT Solutions',ownerName:'Marcus Johnson',industry:'Technology / Software',employees:'6�20',yearsInBusiness:'2�5 years',structure:'LLC',ownerCategory:[],state:'California',rev:VIKRAM_PROFILE.rev,exp:VIKRAM_PROFILE.exp,emi:VIKRAM_PROFILE.emi,reserve:VIKRAM_PROFILE.reserve}));
     localStorage.setItem('fw_biz_profile',JSON.stringify({
       businessName:'TechBridge IT Solutions',ein:'',country:'USA',state:'CA',
       industry:'technology',businessAge:4,employees:8,annualRevenue:264000,
@@ -725,7 +729,7 @@ function startDemo(persona){
     localStorage.setItem('fw_profiles',JSON.stringify([VIKRAM_PROFILE]));
     localStorage.setItem('fw_active_idx','0');
     localStorage.setItem('fw_report_idx','0');
-    localStorage.setItem('fw_profile',JSON.stringify({bizName:'Chen & Associates',ownerName:'Lisa Chen',industry:'Financial Services',employees:'6–20',yearsInBusiness:'5–10 years',structure:'LLC',ownerCategory:['women'],state:'Texas',rev:VIKRAM_PROFILE.rev,exp:VIKRAM_PROFILE.exp,emi:VIKRAM_PROFILE.emi,reserve:VIKRAM_PROFILE.reserve}));
+    localStorage.setItem('fw_profile',JSON.stringify({bizName:'Chen & Associates',ownerName:'Lisa Chen',industry:'Financial Services',employees:'6�20',yearsInBusiness:'5�10 years',structure:'LLC',ownerCategory:['women'],state:'Texas',rev:VIKRAM_PROFILE.rev,exp:VIKRAM_PROFILE.exp,emi:VIKRAM_PROFILE.emi,reserve:VIKRAM_PROFILE.reserve}));
     localStorage.setItem('fw_biz_profile',JSON.stringify({
       businessName:'Chen & Associates',ein:'',country:'USA',state:'TX',
       industry:'finance',businessAge:8,employees:15,annualRevenue:480000,
@@ -753,7 +757,7 @@ function showToolsPanel(persona){
     html+='<div class="tc-desc">'+t.desc+'</div>';
     html+='<div class="tc-footer">';
     html+='<span class="tc-tier '+t.tierClass+'">'+t.tier+'</span>';
-    html+='<span class="tc-open">Open →</span>';
+    html+='<span class="tc-open">Open ?</span>';
     html+='</div>';
     html+='</a>';
   });

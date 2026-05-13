@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Welcome to BizScale — Quick Setup</title>
-<meta name="description" content="Set up your BizScale profile in 2 minutes — enter your business details and financials to instantly unlock your loan score, cash runway, and 30 free tools."/>
+<title>Welcome to BizScale � Quick Setup</title>
+<meta name="description" content="Set up your BizScale profile in 2 minutes � enter your business details and financials to instantly unlock your loan score, cash runway, and 30 free tools."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -94,6 +94,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .go-btn{display:inline-block;padding:13px 36px;background:#2563eb;color:#fff;border-radius:8px;font-size:.95rem;font-weight:800;text-decoration:none;border:none;cursor:pointer;font-family:Arial,sans-serif}
 .go-btn:hover{background:#1d4ed8}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 <script src="modules/fw-auth.js"></script>
@@ -102,8 +106,8 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
   <!-- Brand header -->
   <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em">📈 Biz<span style="color:#818cf8">Scale</span></div>
-    <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze · Fund · Grow</div>
+    <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em">?? Biz<span style="color:#818cf8">Scale</span></div>
+    <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze � Fund � Grow</div>
   </div>
 
   <!-- Progress -->
@@ -117,11 +121,11 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <div class="step-dot" id="sd4"><div class="dot">4</div><div class="dot-label">Picks</div></div>
   </div>
 
-  <!-- ── STEP 1: Business info ── -->
+  <!-- -- STEP 1: Business info -- -->
   <div class="panel active" id="step1">
-    <div class="panel-icon">👋</div>
+    <div class="panel-icon">??</div>
     <h2>Welcome! Let's set up your business</h2>
-    <p>This takes 2 minutes. Your details pre-fill all 40 tools — you never enter them again.</p>
+    <p>This takes 2 minutes. Your details pre-fill all 40 tools � you never enter them again.</p>
 
     <label>Business Name <span style="color:#ef4444">*</span></label>
     <input type="text" id="bizName" placeholder="e.g. Sarah's Boutique"/>
@@ -156,9 +160,9 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <select id="yearsInBiz">
           <option value="">-- Select --</option>
           <option>Less than 1 year</option>
-          <option>1–2 years</option>
-          <option>2–5 years</option>
-          <option>5–10 years</option>
+          <option>1�2 years</option>
+          <option>2�5 years</option>
+          <option>5�10 years</option>
           <option>10+ years</option>
         </select>
       </div>
@@ -189,17 +193,17 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <select id="employees">
           <option value="">-- Select --</option>
           <option>Just me (Solo)</option>
-          <option>2–5</option>
-          <option>6–20</option>
-          <option>21–50</option>
-          <option>51–100</option>
+          <option>2�5</option>
+          <option>6�20</option>
+          <option>21�50</option>
+          <option>51�100</option>
           <option>100+</option>
         </select>
       </div>
     </div>
 
     <div style="margin-top:18px">
-      <label style="font-size:.82rem;font-weight:700;color:#374151;margin-bottom:8px;display:block">Business Owner Category <span class="oc-optional" style="display:inline">(optional — helps match targeted funding)</span></label>
+      <label style="font-size:.82rem;font-weight:700;color:#374151;margin-bottom:8px;display:block">Business Owner Category <span class="oc-optional" style="display:inline">(optional � helps match targeted funding)</span></label>
       <div class="owner-cats">
         <label class="oc-item" id="oc-women">
           <input type="checkbox" id="cat-women" value="women-owned" onchange="toggleOC(this)">
@@ -221,14 +225,14 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     </div>
 
     <div class="btn-row">
-      <button class="btn-next" onclick="goStep2()">Next: Financial Numbers →</button>
+      <button class="btn-next" onclick="goStep2()">Next: Financial Numbers ?</button>
     </div>
-    <button class="btn-skip" onclick="skipOnboarding()">Skip for now — I'll set this up later</button>
+    <button class="btn-skip" onclick="skipOnboarding()">Skip for now � I'll set this up later</button>
   </div>
 
-  <!-- ── STEP 2: Financials ── -->
+  <!-- -- STEP 2: Financials -- -->
   <div class="panel" id="step2">
-    <div class="panel-icon">💰</div>
+    <div class="panel-icon">??</div>
     <h2>Your monthly numbers</h2>
     <p>Rough estimates are fine. These power your Loan Score, Cash Flow, and Pay Optimizer instantly.</p>
 
@@ -257,70 +261,70 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
 
     <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 14px;margin-top:16px;font-size:.78rem;color:#166534;line-height:1.5">
-      💡 <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
+      ?? <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(1)">← Back</button>
-      <button class="btn-next" onclick="goStep3()">Next: Pick Your First Tool →</button>
+      <button class="btn-back" onclick="goStep(1)">? Back</button>
+      <button class="btn-next" onclick="goStep3()">Next: Pick Your First Tool ?</button>
     </div>
     <button class="btn-skip" onclick="saveAndSkip()">Save &amp; skip tool selection</button>
   </div>
 
-  <!-- ── STEP 3: First tool ── -->
+  <!-- -- STEP 3: First tool -- -->
   <div class="panel" id="step3">
-    <div class="panel-icon">🚀</div>
+    <div class="panel-icon">??</div>
     <h2>Pick your first tool</h2>
     <p>Where do you want to start? We'll take you straight there after setup.</p>
 
     <div class="tool-grid" id="toolGrid">
       <div class="tool-card" data-href="modules/loanDecisionScoreEngine.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">🏦</div>
+        <div class="tc-icon">??</div>
         <div class="tc-name">Loan Safety Score</div>
         <div class="tc-desc">Is my loan safe? Get a verdict in 60 seconds</div>
       </div>
       <div class="tool-card" data-href="modules/cashRunway.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">⏱</div>
+        <div class="tc-icon">?</div>
         <div class="tc-name">Cash Runway</div>
         <div class="tc-desc">How long can my business survive a slow month?</div>
       </div>
       <div class="tool-card" data-href="modules/ownersPay.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">💸</div>
+        <div class="tc-icon">??</div>
         <div class="tc-name">Owner's Pay</div>
         <div class="tc-desc">How much can I safely pay myself?</div>
       </div>
       <div class="tool-card" data-href="modules/loanEligibility.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">✅</div>
+        <div class="tc-icon">?</div>
         <div class="tc-name">Loan Eligibility</div>
         <div class="tc-desc">Which lenders will approve me?</div>
       </div>
       <div class="tool-card" data-href="modules/breakEven.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">⚖</div>
+        <div class="tc-icon">?</div>
         <div class="tc-name">Break-Even</div>
         <div class="tc-desc">Extra revenue needed to afford a new loan</div>
       </div>
       <div class="tool-card" data-href="modules/forecastPro.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">📈</div>
+        <div class="tc-icon">??</div>
         <div class="tc-name">Revenue Forecast</div>
         <div class="tc-desc">Predict my next 12 months of revenue</div>
       </div>
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(2)">← Back</button>
-      <button class="btn-next" onclick="goStep4()">See Recommended Tools →</button>
+      <button class="btn-back" onclick="goStep(2)">? Back</button>
+      <button class="btn-next" onclick="goStep4()">See Recommended Tools ?</button>
     </div>
   </div>
 
-  <!-- ── STEP 4: Recommended modules ── -->
+  <!-- -- STEP 4: Recommended modules -- -->
   <div class="panel" id="step4">
-    <div class="panel-icon">⭐</div>
+    <div class="panel-icon">?</div>
     <h2>Your recommended starting tools</h2>
     <p>Based on your industry and answers, here are the 3 best tools to start with.</p>
     <div id="recGrid" style="margin-bottom:8px"></div>
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(3)">← Back</button>
-      <button class="btn-next green" id="finishBtn" onclick="finish()">Finish &amp; Open First Tool →</button>
+      <button class="btn-back" onclick="goStep(3)">? Back</button>
+      <button class="btn-next green" id="finishBtn" onclick="finish()">Finish &amp; Open First Tool ?</button>
     </div>
   </div>
 
@@ -336,7 +340,7 @@ function goStep(n){
     var sd = document.getElementById('sd'+i);
     if(sd){
       sd.className = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
-      sd.querySelector('.dot').textContent = i < n ? '✓' : i;
+      sd.querySelector('.dot').textContent = i < n ? '?' : i;
     }
   });
   var panel = document.getElementById('step'+n);
@@ -368,29 +372,29 @@ function goStep4(){
 }
 
 var INDUSTRY_RECS = {
-  'Food & Restaurant':      [{icon:'⛽',name:'Cash Flow Tracker',   desc:'Track daily cash and monthly runway',                href:'modules/cashFlowTracker.test.html'},
-                              {icon:'📋',name:'Payroll Estimator',     desc:'Know exactly what staff you can afford',             href:'modules/payrollEstimator.test.html'},
-                              {icon:'🧾',name:'Tax Command Center',    desc:'Sales tax, income tax & deductions in one place',    href:'modules/taxCommandCenter.test.html'}],
-  'Retail / E-commerce':    [{icon:'🧾',name:'Invoice Tracker',        desc:'Track unpaid invoices & follow-up reminders',        href:'modules/invoiceTracker.test.html'},
-                              {icon:'📉',name:'Break-Even Analyzer',   desc:'Find the revenue needed to cover all costs',         href:'modules/breakEven.test.html'},
-                              {icon:'🏆',name:'Benchmark Pro',          desc:'Compare margins to other retailers',                 href:'modules/benchmarkPro.test.html'}],
-  'Health & Wellness':       [{icon:'🏦',name:'Loan Safety Score',      desc:'Know if a loan is safe before applying',             href:'modules/loanDecisionScoreEngine.test.html'},
-                              {icon:'💰',name:"Owner's Pay Optimizer",  desc:'How much can you safely pay yourself?',              href:'modules/ownersPay.test.html'},
-                              {icon:'🎯',name:'Grant Finder',            desc:'Health & wellness specific grants & SBA funds',      href:'modules/grantFinder.test.html'}],
-  'Professional Services':   [{icon:'📈',name:'Forecast Pro',           desc:'Project your next 12 months of revenue',             href:'modules/forecastPro.test.html'},
-                              {icon:'💸',name:'Vendor Bill Tracker',    desc:'Track recurring vendor payments & contracts',        href:'modules/vendorBillTracker.test.html'},
-                              {icon:'🧾',name:'Tax Command Center',    desc:'Quarterly estimates & key deductions',               href:'modules/taxCommandCenter.test.html'}],
-  'Construction & Trades':  [{icon:'📋',name:'Debt Command Center',    desc:'Manage all loans & equipment financing',             href:'modules/debtCommandCenter.test.html'},
-                              {icon:'💰',name:"Owner's Pay Optimizer",  desc:'Set safe owner salary based on cash flow',           href:'modules/ownersPay.test.html'},
-                              {icon:'⛽',name:'Cash Flow Tracker',      desc:'Track project-to-project cash in & out',             href:'modules/cashFlowTracker.test.html'}],
-  'Technology / Software':  [{icon:'📈',name:'Forecast Pro',           desc:'Model growth scenarios & burn rate',                 href:'modules/forecastPro.test.html'},
-                              {icon:'🤖',name:'AI CFO Advisor',          desc:'Ask a CFO AI about funding & strategy',             href:'modules/aiCfoChat.test.html'},
-                              {icon:'🏆',name:'Benchmark Pro',           desc:'Compare SaaS metrics to industry peers',            href:'modules/benchmarkPro.test.html'}],
+  'Food & Restaurant':      [{icon:'?',name:'Cash Flow Tracker',   desc:'Track daily cash and monthly runway',                href:'modules/cashFlowTracker.test.html'},
+                              {icon:'??',name:'Payroll Estimator',     desc:'Know exactly what staff you can afford',             href:'modules/payrollEstimator.test.html'},
+                              {icon:'??',name:'Tax Command Center',    desc:'Sales tax, income tax & deductions in one place',    href:'modules/taxCommandCenter.test.html'}],
+  'Retail / E-commerce':    [{icon:'??',name:'Invoice Tracker',        desc:'Track unpaid invoices & follow-up reminders',        href:'modules/invoiceTracker.test.html'},
+                              {icon:'??',name:'Break-Even Analyzer',   desc:'Find the revenue needed to cover all costs',         href:'modules/breakEven.test.html'},
+                              {icon:'??',name:'Benchmark Pro',          desc:'Compare margins to other retailers',                 href:'modules/benchmarkPro.test.html'}],
+  'Health & Wellness':       [{icon:'??',name:'Loan Safety Score',      desc:'Know if a loan is safe before applying',             href:'modules/loanDecisionScoreEngine.test.html'},
+                              {icon:'??',name:"Owner's Pay Optimizer",  desc:'How much can you safely pay yourself?',              href:'modules/ownersPay.test.html'},
+                              {icon:'??',name:'Grant Finder',            desc:'Health & wellness specific grants & SBA funds',      href:'modules/grantFinder.test.html'}],
+  'Professional Services':   [{icon:'??',name:'Forecast Pro',           desc:'Project your next 12 months of revenue',             href:'modules/forecastPro.test.html'},
+                              {icon:'??',name:'Vendor Bill Tracker',    desc:'Track recurring vendor payments & contracts',        href:'modules/vendorBillTracker.test.html'},
+                              {icon:'??',name:'Tax Command Center',    desc:'Quarterly estimates & key deductions',               href:'modules/taxCommandCenter.test.html'}],
+  'Construction & Trades':  [{icon:'??',name:'Debt Command Center',    desc:'Manage all loans & equipment financing',             href:'modules/debtCommandCenter.test.html'},
+                              {icon:'??',name:"Owner's Pay Optimizer",  desc:'Set safe owner salary based on cash flow',           href:'modules/ownersPay.test.html'},
+                              {icon:'?',name:'Cash Flow Tracker',      desc:'Track project-to-project cash in & out',             href:'modules/cashFlowTracker.test.html'}],
+  'Technology / Software':  [{icon:'??',name:'Forecast Pro',           desc:'Model growth scenarios & burn rate',                 href:'modules/forecastPro.test.html'},
+                              {icon:'??',name:'AI CFO Advisor',          desc:'Ask a CFO AI about funding & strategy',             href:'modules/aiCfoChat.test.html'},
+                              {icon:'??',name:'Benchmark Pro',           desc:'Compare SaaS metrics to industry peers',            href:'modules/benchmarkPro.test.html'}],
 };
 
-var DEFAULT_RECS = [{icon:'🏦',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
-                    {icon:'⛽',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
-                    {icon:'🏆',name:'Business Health Score', desc:'Overall A–F grade for your finances', href:'modules/businessHealthScore.test.html'}];
+var DEFAULT_RECS = [{icon:'??',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
+                    {icon:'?',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
+                    {icon:'??',name:'Business Health Score', desc:'Overall A�F grade for your finances', href:'modules/businessHealthScore.test.html'}];
 
 function buildRecommendations(){
   var industry = document.getElementById('industry').value;
@@ -503,9 +507,9 @@ window.addEventListener('load', function(){
       var h2 = document.querySelector('.panel h2');
       var ph = document.querySelector('.panel p');
       if(h2) h2.textContent = 'Edit your business profile';
-      if(ph) ph.textContent = 'Update any details below — all tools will re-fill automatically.';
+      if(ph) ph.textContent = 'Update any details below � all tools will re-fill automatically.';
 
-      /* Step 1 — Business fields */
+      /* Step 1 � Business fields */
       var set = function(id, val){ var el=document.getElementById(id); if(el && val) el.value = val; };
       set('bizName',   p.bizName);
       set('ownerName', p.ownerName);
@@ -514,7 +518,7 @@ window.addEventListener('load', function(){
       set('bizState',  p.state);
       set('employees', p.employees);
 
-      /* Step 2 — Financials */
+      /* Step 2 � Financials */
       set('revenue',  p.rev  || '');
       set('expenses', p.exp  || '');
       set('emi',      p.emi  || '');
@@ -529,7 +533,7 @@ window.addEventListener('load', function(){
         });
       }
     } else if(auth.user){
-      /* New user — just pre-fill name */
+      /* New user � just pre-fill name */
       var name = auth.displayName();
       if(name) { var el=document.getElementById('ownerName'); if(el) el.value=name; }
     }

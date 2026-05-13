@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Dashboard — BizScale</title>
+<title>Dashboard � BizScale</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,14 +12,14 @@
 <meta name="theme-color" content="#0f172a">
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="pwa.js" defer></script>
-<meta name="description" content="Your BizScale financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
+<meta name="description" content="Your BizScale financial dashboard � track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;min-height:100vh;display:flex}
 
-/* ═══════════════════════════════
+/* -------------------------------
    SIDEBAR
-═══════════════════════════════ */
+------------------------------- */
 .sidebar{
   width:220px;min-width:220px;
   background:#0f172a;
@@ -59,7 +59,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .sb-signout{width:100%;background:transparent;border:1px solid #334155;color:#64748b;padding:7px;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;transition:all .15s}
 .sb-signout:hover{border-color:#475569;color:#94a3b8}
 
-/* ── Accordion menu groups ── */
+/* -- Accordion menu groups -- */
 .sb-group{margin-bottom:2px}
 .sb-gtoggle{display:flex;align-items:center;gap:9px;padding:7px 16px;font-size:.72rem;font-weight:800;color:#64748b;cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:.07em;transition:color .12s;width:100%}
 .sb-gtoggle:hover{color:#94a3b8}
@@ -68,20 +68,20 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .sb-group-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
 .sb-group.open .sb-group-body{max-height:800px}
 
-/* ═══════════════════════════════
+/* -------------------------------
    MOBILE OVERLAY
-═══════════════════════════════ */
+------------------------------- */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}
 .sb-overlay.open{display:block}
 
-/* ═══════════════════════════════
+/* -------------------------------
    MAIN WRAP
-═══════════════════════════════ */
+------------------------------- */
 .main-wrap{flex:1;margin-left:220px;min-height:100vh;display:flex;flex-direction:column;min-width:0}
 
-/* ═══════════════════════════════
+/* -------------------------------
    TOP BAR
-═══════════════════════════════ */
+------------------------------- */
 .topbar{height:52px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100;display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
 .tb-hamburger{display:none;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#475569;padding:4px 6px;border-radius:6px}
 .tb-hamburger:hover{background:#f1f5f9}
@@ -92,9 +92,9 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .tb-upgrade:hover{background:#1d4ed8}
 .tb-upgrade.hidden{display:none}
 
-/* ═══════════════════════════════
+/* -------------------------------
    PAGE CONTENT
-═══════════════════════════════ */
+------------------------------- */
 .page-content{flex:1;padding:24px;max-width:1020px;width:100%}
 
 /* Page header */
@@ -103,7 +103,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .ph-text p{font-size:.78rem;color:#64748b;margin-top:2px}
 .ph-spacer{flex:1}
 
-/* ── Metric cards ── */
+/* -- Metric cards -- */
 .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 @media(max-width:700px){.metrics-row{grid-template-columns:1fr 1fr}}
 .metric-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
@@ -115,7 +115,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .mc-value.red{color:#dc2626}
 .mc-sub{font-size:.68rem;color:#94a3b8}
 
-/* ── Score gauges ── */
+/* -- Score gauges -- */
 .gauges-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 @media(max-width:600px){.gauges-row{grid-template-columns:1fr}}
 .gauge-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);padding:20px 16px 14px;text-align:center}
@@ -131,10 +131,10 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .gc-cta:hover{text-decoration:underline}
 .gc-no-data{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:154px;color:#94a3b8;font-size:.8rem;gap:8px;line-height:1.5;text-align:center}
 
-/* ── Section title ── */
+/* -- Section title -- */
 .sec-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:12px;margin-top:4px}
 
-/* ── Tools grid ── */
+/* -- Tools grid -- */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:24px}
 .tool-card{background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;padding:14px;text-decoration:none;color:#1e293b;transition:all .15s;display:block;position:relative}
 .tool-card:hover{border-color:#2563eb;box-shadow:0 4px 14px rgba(37,99,235,.12);transform:translateY(-2px)}
@@ -144,7 +144,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .tc-desc{font-size:.68rem;color:#64748b;line-height:1.4}
 .tc-lock{position:absolute;top:10px;right:10px;font-size:.6rem;background:#f1f5f9;color:#94a3b8;padding:2px 6px;border-radius:4px;font-weight:700}
 
-/* ── Plan status card ── */
+/* -- Plan status card -- */
 .plan-card{background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;padding:20px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .pc-left h3{font-size:1rem;font-weight:900;margin-bottom:4px}
 .pc-left p{font-size:.78rem;color:#64748b;line-height:1.5;max-width:420px}
@@ -155,11 +155,11 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .upgrade-btn:hover{background:#1d4ed8}
 .upgrade-btn.hidden{display:none}
 
-/* ── Two col ── */
+/* -- Two col -- */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 @media(max-width:640px){.two-col{grid-template-columns:1fr}}
 
-/* ── Recent activity ── */
+/* -- Recent activity -- */
 .activity-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:16px}
 .activity-card h3{font-size:.85rem;font-weight:800;margin-bottom:12px;color:#1e293b}
 .act-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc;font-size:.8rem}
@@ -169,7 +169,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .act-time{font-size:.7rem;color:#94a3b8;white-space:nowrap}
 .act-empty{font-size:.8rem;color:#94a3b8;text-align:center;padding:16px 0}
 
-/* ── Profile summary ── */
+/* -- Profile summary -- */
 .profile-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:16px}
 .profile-card h3{font-size:.85rem;font-weight:800;margin-bottom:12px;color:#1e293b}
 .prof-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f8fafc;font-size:.8rem}
@@ -179,7 +179,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .edit-profile{display:block;margin-top:12px;text-align:center;font-size:.75rem;color:#2563eb;text-decoration:none;font-weight:700}
 .edit-profile:hover{text-decoration:underline}
 
-/* ── Trial banner ── */
+/* -- Trial banner -- */
 .trial-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .tb-icon{font-size:1.5rem;flex-shrink:0}
 .tb-text{flex:1;font-size:.84rem;color:#92400e;line-height:1.5}
@@ -188,12 +188,12 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .tb-btn{padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:7px;font-size:.8rem;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
 .tb-btn:hover{background:#b45309}
 
-/* ── No profile banner ── */
+/* -- No profile banner -- */
 .setup-banner{background:#fef9c3;border:1px solid #fde68a;border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
 .sb-text{flex:1;font-size:.82rem;color:#92400e;line-height:1.5}
 .sb-btn{padding:8px 18px;background:#d97706;color:#fff;border:none;border-radius:7px;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
 
-/* ── Start Here card (empty state) ── */
+/* -- Start Here card (empty state) -- */
 .start-here{background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:24px 28px;margin-bottom:20px}
 .sh-title{font-size:1rem;font-weight:800;color:#0f172a;margin-bottom:6px}
 .sh-sub{font-size:.8rem;color:#64748b;margin-bottom:20px}
@@ -205,7 +205,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .sh-sname{font-size:.8rem;font-weight:800;color:#0f172a}
 .sh-sdesc{font-size:.72rem;color:#64748b;margin-top:3px}
 
-/* ── Smart Alerts ── */
+/* -- Smart Alerts -- */
 .alerts-widget{margin-bottom:20px}
 .alert-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-radius:9px;margin-bottom:8px;font-size:.82rem;line-height:1.5}
 .alert-item:last-child{margin-bottom:0}
@@ -219,7 +219,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .al-lnk{font-size:.76rem;font-weight:700;color:#2563eb;text-decoration:none;display:inline-block;margin-top:4px}
 .al-lnk:hover{text-decoration:underline}
 
-/* ── Priority cards ── */
+/* -- Priority cards -- */
 .pri-card{border-radius:11px;padding:14px 16px;border-left:4px solid}
 .pri-urgent{background:#fff1f2;border-color:#dc2626}
 .pri-high{background:#fff7ed;border-color:#f97316}
@@ -235,7 +235,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .dim-fill{height:100%;border-radius:999px;transition:width 1s ease}
 .dim-score{font-size:.7rem;color:#e2e8f0;width:32px;text-align:right;flex-shrink:0}
 
-/* ── Referral card ── */
+/* -- Referral card -- */
 .referral-card{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
 .ref-left{flex:1;min-width:260px}
 .ref-title{font-size:.95rem;font-weight:900;color:#fff;margin-bottom:6px}
@@ -257,9 +257,9 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .rs-label{font-size:.65rem;font-weight:700;color:#c7d2fe;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .ref-credit-msg{background:#fbbf24;color:#1e293b;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;margin-top:10px;display:inline-block}
 
-/* ═══════════════════════════════
-   RESPONSIVE — collapse sidebar
-═══════════════════════════════ */
+/* -------------------------------
+   RESPONSIVE � collapse sidebar
+------------------------------- */
 @media(max-width:900px){
   .sidebar{transform:translateX(-220px)}
   .sidebar.open{transform:translateX(0);box-shadow:4px 0 30px rgba(0,0,0,.35)}
@@ -271,7 +271,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   .metrics-row{grid-template-columns:1fr 1fr}
 }
 
-/* ── Invoice Widget ── */
+/* -- Invoice Widget -- */
 .inv-widget{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:20px}
 .inv-widget-header{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f1f5f9}
 .inv-widget-title{font-size:.82rem;font-weight:800;color:#0f172a}
@@ -287,7 +287,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .inv-stat-val.blue{color:#2563eb}
 .inv-stat-lbl{font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
 
-/* ── Action Items ── */
+/* -- Action Items -- */
 .ai-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:0}
 .ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f1f5f9}
 .ai-title{font-size:.82rem;font-weight:800;color:#0f172a}
@@ -307,185 +307,189 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .ai-lnk{font-size:.72rem;font-weight:700;color:#2563eb;text-decoration:none;flex-shrink:0}
 .ai-empty{padding:18px 16px;text-align:center;color:#94a3b8;font-size:.8rem}
 
-/* ── Date range ── */
+/* -- Date range -- */
 .dr-row{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .dr-btn{padding:4px 11px;border-radius:999px;font-size:.7rem;font-weight:700;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;transition:all .12s;font-family:Arial,sans-serif}
 .dr-btn:hover{border-color:#2563eb;color:#2563eb}
 .dr-btn.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
 .dr-source{font-size:.66rem;color:#94a3b8;margin-left:auto;font-style:italic}
 
-/* ── Export ── */
+/* -- Export -- */
 .export-btn{padding:6px 13px;background:#f8fafc;color:#475569;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;font-family:Arial,sans-serif;text-decoration:none}
 .export-btn:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
 
-/* ── Live data badge ── */
+/* -- Live data badge -- */
 .live-src{font-size:.65rem;font-weight:700;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;margin-left:6px}
 .live-src .ldot{width:5px;height:5px;border-radius:50%;background:#10b981;flex-shrink:0}
 
-/* ── Print ── */
+/* -- Print -- */
 @media print{
   .sidebar,.topbar,.trial-banner,.setup-banner,.start-here,.alerts-widget,.action-items,.plan-card,.referral-card,.tools-grid,#histWidget,.two-col,.export-btn,.sb-overlay,.tb-upgrade,.dr-row{display:none!important}
   .main-wrap{margin-left:0!important}
   .page-content{padding:0!important;max-width:100%!important}
   .metrics-row,.gauges-row{grid-template-columns:repeat(2,1fr)!important}
   body{background:#fff}
-  .page-header p::after{content:" · Printed " attr(data-date)}
+  .page-header p::after{content:" � Printed " attr(data-date)}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 <script src="modules/fw-auth.js"></script>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      SIDEBAR
-════════════════════════════════════════ -->
+---------------------------------------- -->
 <aside class="sidebar" id="sidebar">
   <a href="dashboard.html" class="sb-logo">
-    <div class="sb-logo-text">📈 Biz<span>Scale</span></div>
+    <div class="sb-logo-text">?? Biz<span>Scale</span></div>
   </a>
-  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>
+  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze � Fund � Grow</div>
   <div class="sb-biz" id="heroBiz">Your dashboard</div>
   <span class="sb-plan-chip badge-free" id="planBadge">Free Plan</span>
 
   <nav class="sb-nav">
 
     <div class="sb-section">Overview</div>
-    <a href="dashboard.html" class="sb-link active"><span class="sb-ic">🏠</span>Dashboard</a>
-    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')" style="color:#f59e0b;font-weight:700"><span class="sb-ic">⚙️</span>Edit My Profile</a>
-    <a href="checkup.html" class="sb-link"><span class="sb-ic">🩺</span>Financial Checkup</a>
-    <a href="history.html" class="sb-link"><span class="sb-ic">📊</span>Score History</a>
-    <a href="whatif.html" class="sb-link"><span class="sb-ic">🔮</span>What-If Scenarios</a>
-    <a href="alltools.html" class="sb-link"><span class="sb-ic">🗺️</span>All Tools Directory</a>
-    <a href="free-demo.html" class="sb-link"><span class="sb-ic">▶</span>Free Interactive Demo</a>
-    <a href="starter-demo.html" class="sb-link"><span class="sb-ic">▶</span>Starter Interactive Demo</a>
-    <a href="pro-demo.html" class="sb-link"><span class="sb-ic">▶</span>Pro Interactive Demo</a>
-    <a href="advisor-demo.html" class="sb-link"><span class="sb-ic">▶</span>Advisor Interactive Demo</a>
+    <a href="dashboard.html" class="sb-link active"><span class="sb-ic">??</span>Dashboard</a>
+    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')" style="color:#f59e0b;font-weight:700"><span class="sb-ic">??</span>Edit My Profile</a>
+    <a href="checkup.html" class="sb-link"><span class="sb-ic">??</span>Financial Checkup</a>
+    <a href="history.html" class="sb-link"><span class="sb-ic">??</span>Score History</a>
+    <a href="whatif.html" class="sb-link"><span class="sb-ic">??</span>What-If Scenarios</a>
+    <a href="alltools.html" class="sb-link"><span class="sb-ic">???</span>All Tools Directory</a>
+    <a href="free-demo.html" class="sb-link"><span class="sb-ic">?</span>Free Interactive Demo</a>
+    <a href="starter-demo.html" class="sb-link"><span class="sb-ic">?</span>Starter Interactive Demo</a>
+    <a href="pro-demo.html" class="sb-link"><span class="sb-ic">?</span>Pro Interactive Demo</a>
+    <a href="advisor-demo.html" class="sb-link"><span class="sb-ic">?</span>Advisor Interactive Demo</a>
 
     <hr class="sb-divider"/>
 
     <!-- CORE ENGINES -->
     <div class="sb-group open" id="grp-core">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-core')">🏦 Core Engines<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-core')">?? Core Engines<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/loanDecisionScoreEngine.test.html" class="sb-link"><span class="sb-ic">🎯</span>Loan Safety Score</a>
-        <a href="modules/loanEngine.test.html" class="sb-link"><span class="sb-ic">🏦</span>Loan Engine</a>
-        <a href="modules/loanAffordabilityEngine.test.html" class="sb-link"><span class="sb-ic">📊</span>Loan Affordability</a>
-        <a href="modules/riskDebtEngine.test.html" class="sb-link"><span class="sb-ic">⚠️</span>Risk &amp; Debt</a>
-        <a href="modules/stressTestEngine.test.html" class="sb-link"><span class="sb-ic">🔥</span>Stress Test</a>
-        <a href="modules/multiLoanManager.test.html" class="sb-link"><span class="sb-ic">🗂️</span>Multi-Loan Manager</a>
-        <a href="modules/recommendationEngine.test.html" class="sb-link"><span class="sb-ic">💡</span>Recommendations</a>
-        <a href="modules/emiCalculator.test.html" class="sb-link"><span class="sb-ic">🧮</span>EMI Calculator</a>
-        <a href="modules/loanEligibility.test.html" class="sb-link" id="nav-eligibility"><span class="sb-ic">✅</span>Loan Eligibility</a>
-        <a href="modules/loanRepaymentOptimizer.test.html" class="sb-link"><span class="sb-ic">🏆</span>Repayment Optimizer</a>
-        <a href="modules/loanRefinanceAnalyzer.test.html" class="sb-link"><span class="sb-ic">🔄</span>Refinance Analyzer</a>
-        <a href="modules/debtCommandCenter.test.html" class="sb-link"><span class="sb-ic">💰</span>Debt Command Center</a>
-        <a href="modules/debtConsolidation.test.html" class="sb-link"><span class="sb-ic">🔗</span>Debt Consolidation</a>
-        <a href="modules/lenderMarketplace.html" class="sb-link"><span class="sb-ic">🏛</span>Lender Marketplace</a>
-        <a href="modules/loanMarketplaceEngine.test.html" class="sb-link"><span class="sb-ic">🏪</span>Loan Marketplace</a>
-        <a href="modules/grantFinder.test.html" class="sb-link" id="nav-grants"><span class="sb-ic">🎁</span>Grant Finder</a>
+        <a href="modules/loanDecisionScoreEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Loan Safety Score</a>
+        <a href="modules/loanEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Loan Engine</a>
+        <a href="modules/loanAffordabilityEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Loan Affordability</a>
+        <a href="modules/riskDebtEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Risk &amp; Debt</a>
+        <a href="modules/stressTestEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Stress Test</a>
+        <a href="modules/multiLoanManager.test.html" class="sb-link"><span class="sb-ic">???</span>Multi-Loan Manager</a>
+        <a href="modules/recommendationEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Recommendations</a>
+        <a href="modules/emiCalculator.test.html" class="sb-link"><span class="sb-ic">??</span>EMI Calculator</a>
+        <a href="modules/loanEligibility.test.html" class="sb-link" id="nav-eligibility"><span class="sb-ic">?</span>Loan Eligibility</a>
+        <a href="modules/loanRepaymentOptimizer.test.html" class="sb-link"><span class="sb-ic">??</span>Repayment Optimizer</a>
+        <a href="modules/loanRefinanceAnalyzer.test.html" class="sb-link"><span class="sb-ic">??</span>Refinance Analyzer</a>
+        <a href="modules/debtCommandCenter.test.html" class="sb-link"><span class="sb-ic">??</span>Debt Command Center</a>
+        <a href="modules/debtConsolidation.test.html" class="sb-link"><span class="sb-ic">??</span>Debt Consolidation</a>
+        <a href="modules/lenderMarketplace.html" class="sb-link"><span class="sb-ic">??</span>Lender Marketplace</a>
+        <a href="modules/loanMarketplaceEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Loan Marketplace</a>
+        <a href="modules/grantFinder.test.html" class="sb-link" id="nav-grants"><span class="sb-ic">??</span>Grant Finder</a>
       </div>
     </div>
 
     <!-- FINANCIAL STATEMENTS -->
     <div class="sb-group" id="grp-fin">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-fin')">📈 Financial Statements<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-fin')">?? Financial Statements<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/profitLossEngine.test.html" class="sb-link"><span class="sb-ic">📈</span>P&amp;L Engine</a>
-        <a href="modules/balanceSheetEngine.test.html" class="sb-link"><span class="sb-ic">⚖️</span>Balance Sheet</a>
-        <a href="modules/cashFlowStatementEngine.test.html" class="sb-link"><span class="sb-ic">💧</span>Cash Flow Statement</a>
-        <a href="modules/accountingMappingEngine.test.html" class="sb-link"><span class="sb-ic">🔑</span>Accounting Mapping</a>
-        <a href="modules/forecastingEngine.test.html" class="sb-link"><span class="sb-ic">🔮</span>Forecasting Engine</a>
-        <a href="modules/financialStatements.test.html" class="sb-link"><span class="sb-ic">📄</span>Financial Statements</a>
-        <a href="modules/forecastPro.test.html" class="sb-link" id="nav-forecast"><span class="sb-ic">📊</span>Forecast Pro</a>
-        <a href="modules/profitMarginAnalyzer.test.html" class="sb-link"><span class="sb-ic">📉</span>Profit Margin Analyzer</a>
-        <a href="modules/cashFlowEngine.test.html" class="sb-link"><span class="sb-ic">💵</span>Cash Flow Engine</a>
+        <a href="modules/profitLossEngine.test.html" class="sb-link"><span class="sb-ic">??</span>P&amp;L Engine</a>
+        <a href="modules/balanceSheetEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Balance Sheet</a>
+        <a href="modules/cashFlowStatementEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Cash Flow Statement</a>
+        <a href="modules/accountingMappingEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Accounting Mapping</a>
+        <a href="modules/forecastingEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Forecasting Engine</a>
+        <a href="modules/financialStatements.test.html" class="sb-link"><span class="sb-ic">??</span>Financial Statements</a>
+        <a href="modules/forecastPro.test.html" class="sb-link" id="nav-forecast"><span class="sb-ic">??</span>Forecast Pro</a>
+        <a href="modules/profitMarginAnalyzer.test.html" class="sb-link"><span class="sb-ic">??</span>Profit Margin Analyzer</a>
+        <a href="modules/cashFlowEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Cash Flow Engine</a>
       </div>
     </div>
 
     <!-- TAX & PAYROLL -->
     <div class="sb-group" id="grp-tax">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-tax')">🧾 Tax &amp; Payroll<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-tax')">?? Tax &amp; Payroll<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/taxCommandCenter.test.html" class="sb-link"><span class="sb-ic">🧾</span>Tax Command Center</a>
-        <a href="modules/taxEstimator.test.html" class="sb-link" id="nav-tax"><span class="sb-ic">💲</span>Tax Estimator</a>
-        <a href="modules/salesTaxTracker.test.html" class="sb-link"><span class="sb-ic">🏷️</span>Sales Tax Tracker</a>
-        <a href="modules/keyDeductions.test.html" class="sb-link"><span class="sb-ic">💼</span>Key Deductions</a>
-        <a href="modules/contractorPayroll.test.html" class="sb-link"><span class="sb-ic">📋</span>Contractor/Payroll</a>
-        <a href="modules/payrollEstimator.test.html" class="sb-link"><span class="sb-ic">👥</span>Payroll Estimator</a>
-        <a href="modules/payrollImpactSim.test.html" class="sb-link"><span class="sb-ic">⚡</span>Payroll Impact Sim</a>
-        <a href="modules/caExport.test.html" class="sb-link"><span class="sb-ic">📦</span>CA Export Pack</a>
+        <a href="modules/taxCommandCenter.test.html" class="sb-link"><span class="sb-ic">??</span>Tax Command Center</a>
+        <a href="modules/taxEstimator.test.html" class="sb-link" id="nav-tax"><span class="sb-ic">??</span>Tax Estimator</a>
+        <a href="modules/salesTaxTracker.test.html" class="sb-link"><span class="sb-ic">???</span>Sales Tax Tracker</a>
+        <a href="modules/keyDeductions.test.html" class="sb-link"><span class="sb-ic">??</span>Key Deductions</a>
+        <a href="modules/contractorPayroll.test.html" class="sb-link"><span class="sb-ic">??</span>Contractor/Payroll</a>
+        <a href="modules/payrollEstimator.test.html" class="sb-link"><span class="sb-ic">??</span>Payroll Estimator</a>
+        <a href="modules/payrollImpactSim.test.html" class="sb-link"><span class="sb-ic">?</span>Payroll Impact Sim</a>
+        <a href="modules/caExport.test.html" class="sb-link"><span class="sb-ic">??</span>CA Export Pack</a>
       </div>
     </div>
 
     <!-- BUSINESS PLANNING -->
     <div class="sb-group" id="grp-biz">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-biz')">🎯 Business Planning<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-biz')">?? Business Planning<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/cashRunway.test.html" class="sb-link"><span class="sb-ic">⏱</span>Cash Runway</a>
-        <a href="modules/cashFlowTracker.test.html" class="sb-link"><span class="sb-ic">⛽</span>Cash Flow Tracker</a>
-        <a href="modules/breakEven.test.html" class="sb-link"><span class="sb-ic">⚖</span>Break-Even</a>
-        <a href="modules/workingCapitalCalc.test.html" class="sb-link"><span class="sb-ic">💧</span>Working Capital</a>
-        <a href="modules/ownersPay.test.html" class="sb-link" id="nav-owners"><span class="sb-ic">💸</span>Owner's Pay</a>
-        <a href="modules/businessSavingsPlanner.test.html" class="sb-link"><span class="sb-ic">💰</span>Savings Planner</a>
-        <a href="modules/goalTracker.test.html" class="sb-link"><span class="sb-ic">🎯</span>Goal Tracker</a>
-        <a href="modules/budgetActualTracker.test.html" class="sb-link"><span class="sb-ic">📊</span>Budget vs Actual</a>
-        <a href="modules/monthlySnapshot.test.html" class="sb-link"><span class="sb-ic">📸</span>Monthly Snapshot</a>
-        <a href="modules/scoreCard.test.html" class="sb-link"><span class="sb-ic">🃏</span>Score Card</a>
-        <a href="modules/businessHealthScore.test.html" class="sb-link" id="nav-health"><span class="sb-ic">🏆</span>Health Score</a>
-        <a href="modules/starterPlan.test.html" class="sb-link"><span class="sb-ic">🚀</span>Starter Plan</a>
+        <a href="modules/cashRunway.test.html" class="sb-link"><span class="sb-ic">?</span>Cash Runway</a>
+        <a href="modules/cashFlowTracker.test.html" class="sb-link"><span class="sb-ic">?</span>Cash Flow Tracker</a>
+        <a href="modules/breakEven.test.html" class="sb-link"><span class="sb-ic">?</span>Break-Even</a>
+        <a href="modules/workingCapitalCalc.test.html" class="sb-link"><span class="sb-ic">??</span>Working Capital</a>
+        <a href="modules/ownersPay.test.html" class="sb-link" id="nav-owners"><span class="sb-ic">??</span>Owner's Pay</a>
+        <a href="modules/businessSavingsPlanner.test.html" class="sb-link"><span class="sb-ic">??</span>Savings Planner</a>
+        <a href="modules/goalTracker.test.html" class="sb-link"><span class="sb-ic">??</span>Goal Tracker</a>
+        <a href="modules/budgetActualTracker.test.html" class="sb-link"><span class="sb-ic">??</span>Budget vs Actual</a>
+        <a href="modules/monthlySnapshot.test.html" class="sb-link"><span class="sb-ic">??</span>Monthly Snapshot</a>
+        <a href="modules/scoreCard.test.html" class="sb-link"><span class="sb-ic">??</span>Score Card</a>
+        <a href="modules/businessHealthScore.test.html" class="sb-link" id="nav-health"><span class="sb-ic">??</span>Health Score</a>
+        <a href="modules/starterPlan.test.html" class="sb-link"><span class="sb-ic">??</span>Starter Plan</a>
       </div>
     </div>
 
     <!-- BANKING & TRACKING -->
     <div class="sb-group" id="grp-bank">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-bank')">🏛️ Banking &amp; Tracking<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-bank')">??? Banking &amp; Tracking<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/bankStatementUpload.test.html" class="sb-link"><span class="sb-ic">🏦</span>Bank Statement Upload</a>
-        <a href="modules/cashFlowCalendar.test.html" class="sb-link"><span class="sb-ic">📅</span>Cash Flow Calendar</a>
-        <a href="modules/invoiceTracker.test.html" class="sb-link"><span class="sb-ic">🧾</span>Invoice Tracker</a>
-        <a href="modules/vendorBillTracker.test.html" class="sb-link"><span class="sb-ic">🗂️</span>Vendor Bill Tracker</a>
-        <a href="modules/businessProfiles.test.html" class="sb-link"><span class="sb-ic">🏢</span>Business Profiles</a>
+        <a href="modules/bankStatementUpload.test.html" class="sb-link"><span class="sb-ic">??</span>Bank Statement Upload</a>
+        <a href="modules/cashFlowCalendar.test.html" class="sb-link"><span class="sb-ic">??</span>Cash Flow Calendar</a>
+        <a href="modules/invoiceTracker.test.html" class="sb-link"><span class="sb-ic">??</span>Invoice Tracker</a>
+        <a href="modules/vendorBillTracker.test.html" class="sb-link"><span class="sb-ic">???</span>Vendor Bill Tracker</a>
+        <a href="modules/businessProfiles.test.html" class="sb-link"><span class="sb-ic">??</span>Business Profiles</a>
       </div>
     </div>
 
     <!-- INTELLIGENCE & AI -->
     <div class="sb-group" id="grp-ai">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-ai')">🤖 Intelligence &amp; AI<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-ai')">?? Intelligence &amp; AI<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/aiCfoChat.test.html" class="sb-link" id="nav-ai"><span class="sb-ic">🤖</span>AI CFO Advisor</a>
-        <a href="modules/aiAdvisorEngine.test.html" class="sb-link"><span class="sb-ic">🧠</span>AI Advisor Engine</a>
-        <a href="modules/benchmarkPro.test.html" class="sb-link" id="nav-bench"><span class="sb-ic">📊</span>Benchmark Pro</a>
-        <a href="modules/industryBenchmarksEngine.test.html" class="sb-link"><span class="sb-ic">🏭</span>Industry Benchmarks</a>
-        <a href="modules/paidReportsEngine.test.html" class="sb-link"><span class="sb-ic">📄</span>Paid Reports</a>
-        <a href="modules/shareableResultsEngine.test.html" class="sb-link"><span class="sb-ic">📤</span>Shareable Results</a>
-        <a href="modules/seoToolsEngine.test.html" class="sb-link"><span class="sb-ic">🔍</span>SEO Tools</a>
+        <a href="modules/aiCfoChat.test.html" class="sb-link" id="nav-ai"><span class="sb-ic">??</span>AI CFO Advisor</a>
+        <a href="modules/aiAdvisorEngine.test.html" class="sb-link"><span class="sb-ic">??</span>AI Advisor Engine</a>
+        <a href="modules/benchmarkPro.test.html" class="sb-link" id="nav-bench"><span class="sb-ic">??</span>Benchmark Pro</a>
+        <a href="modules/industryBenchmarksEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Industry Benchmarks</a>
+        <a href="modules/paidReportsEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Paid Reports</a>
+        <a href="modules/shareableResultsEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Shareable Results</a>
+        <a href="modules/seoToolsEngine.test.html" class="sb-link"><span class="sb-ic">??</span>SEO Tools</a>
       </div>
     </div>
 
     <!-- ADVISOR -->
     <div class="sb-group" id="grp-adv">
-      <div class="sb-gtoggle" onclick="toggleGrp('grp-adv')">👥 Advisor Platform<span class="sb-arrow">▶</span></div>
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-adv')">?? Advisor Platform<span class="sb-arrow">?</span></div>
       <div class="sb-group-body">
-        <a href="modules/advisorDashboard.test.html" class="sb-link" id="nav-adv"><span class="sb-ic">👥</span>Advisor Dashboard</a>
-        <a href="modules/clientPortal.test.html" class="sb-link" id="nav-cp"><span class="sb-ic">🔗</span>Client Portal</a>
-        <a href="modules/brandedReport.test.html" class="sb-link" id="nav-br"><span class="sb-ic">📝</span>Branded Reports</a>
-        <a href="modules/clientRiskEmail.test.html" class="sb-link"><span class="sb-ic">📧</span>Client Risk Email</a>
-        <a href="modules/referralTracker.test.html" class="sb-link"><span class="sb-ic">🎯</span>Referral Tracker</a>
-        <a href="modules/whiteLabelSettings.test.html" class="sb-link"><span class="sb-ic">🎨</span>White-Label Settings</a>
-        <a href="modules/subscriptionEngine.test.html" class="sb-link"><span class="sb-ic">💳</span>Subscription System</a>
+        <a href="modules/advisorDashboard.test.html" class="sb-link" id="nav-adv"><span class="sb-ic">??</span>Advisor Dashboard</a>
+        <a href="modules/clientPortal.test.html" class="sb-link" id="nav-cp"><span class="sb-ic">??</span>Client Portal</a>
+        <a href="modules/brandedReport.test.html" class="sb-link" id="nav-br"><span class="sb-ic">??</span>Branded Reports</a>
+        <a href="modules/clientRiskEmail.test.html" class="sb-link"><span class="sb-ic">??</span>Client Risk Email</a>
+        <a href="modules/referralTracker.test.html" class="sb-link"><span class="sb-ic">??</span>Referral Tracker</a>
+        <a href="modules/whiteLabelSettings.test.html" class="sb-link"><span class="sb-ic">??</span>White-Label Settings</a>
+        <a href="modules/subscriptionEngine.test.html" class="sb-link"><span class="sb-ic">??</span>Subscription System</a>
       </div>
     </div>
 
     <hr class="sb-divider"/>
 
-    <a href="alltools.html" class="sb-link"><span class="sb-ic">🗺️</span>All 63 Tools →</a>
-    <a href="pricing.html" class="sb-link"><span class="sb-ic">💳</span>Plans &amp; Pricing</a>
-    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')"><span class="sb-ic">⚙️</span>Edit Profile</a>
+    <a href="alltools.html" class="sb-link"><span class="sb-ic">???</span>All 63 Tools ?</a>
+    <a href="pricing.html" class="sb-link"><span class="sb-ic">??</span>Plans &amp; Pricing</a>
+    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')"><span class="sb-ic">??</span>Edit Profile</a>
 
   </nav>
 
   <div class="sb-footer">
-    <a href="pricing.html" class="sb-upgrade" id="sbUpgrade">⚡ Upgrade Plan</a>
+    <a href="pricing.html" class="sb-upgrade" id="sbUpgrade">? Upgrade Plan</a>
     <button class="sb-signout" id="signOutBtn" onclick="doSignOut()">Sign Out</button>
   </div>
 </aside>
@@ -493,18 +497,18 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 <!-- mobile overlay -->
 <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      MAIN WRAP
-════════════════════════════════════════ -->
+---------------------------------------- -->
 <div class="main-wrap">
 
   <!-- TOP BAR -->
   <header class="topbar">
-    <button class="tb-hamburger" id="sbHamburger" onclick="toggleSidebar()">☰</button>
+    <button class="tb-hamburger" id="sbHamburger" onclick="toggleSidebar()">?</button>
     <div class="tb-title">Dashboard</div>
     <div class="tb-spacer"></div>
     <a href="onboarding.html" onclick="localStorage.removeItem('fw_onboarded')" style="font-size:.82rem;font-weight:700;color:#374151;text-decoration:none;" title="Edit your profile" id="userName"></a>
-    <a href="pricing.html" class="tb-upgrade" id="heroUpgrade">⚡ Upgrade</a>
+    <a href="pricing.html" class="tb-upgrade" id="heroUpgrade">? Upgrade</a>
     <button onclick="doSignOut()" style="padding:5px 12px;background:transparent;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;font-weight:700;color:#64748b;cursor:pointer;" title="Sign Out">Sign Out</button>
   </header>
 
@@ -515,31 +519,31 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="page-header">
       <div class="ph-text">
         <h1 id="heroGreeting">Welcome back!</h1>
-        <p id="dashSubtitle">Your financial snapshot — updated in real time</p>
+        <p id="dashSubtitle">Your financial snapshot � updated in real time</p>
       </div>
       <div class="ph-spacer"></div>
-      <button class="export-btn" onclick="exportDashboard()">📄 Export PDF</button>
+      <button class="export-btn" onclick="exportDashboard()">?? Export PDF</button>
     </div>
 
     <!-- TRIAL BANNER -->
     <div class="trial-banner" id="trialBanner" style="display:none">
-      <div class="tb-icon">⏰</div>
+      <div class="tb-icon">?</div>
       <div class="tb-text">
         <strong>You're on a 7-day free trial of Starter Plan</strong>
         Enjoy Loan Eligibility, Owner's Pay, Business Health Score and more. Upgrade before your trial ends to keep access.
       </div>
       <span class="tb-days" id="trialDaysLeft"></span>
-      <a href="pricing.html" class="tb-btn">Upgrade Now →</a>
+      <a href="pricing.html" class="tb-btn">Upgrade Now ?</a>
     </div>
 
     <!-- SETUP BANNER (shown if no profile) -->
     <div class="setup-banner" id="setupBanner" style="display:none">
-      <div>⚠️</div>
-      <div class="sb-text"><strong>Complete your business profile</strong> — takes 2 minutes. Pre-fills all 40 tools automatically.</div>
-      <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now →</a>
+      <div>??</div>
+      <div class="sb-text"><strong>Complete your business profile</strong> � takes 2 minutes. Pre-fills all 40 tools automatically.</div>
+      <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now ?</a>
     </div>
 
-    <!-- ── DAILY BRIEFING ── -->
+    <!-- -- DAILY BRIEFING -- -->
     <div id="dailyBriefing" style="display:none;margin-bottom:24px">
 
       <!-- Score ring + dimensions -->
@@ -554,7 +558,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
             <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="22" font-weight="900" font-family="Arial" id="scoreNum">--</text>
             <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">/100</text>
           </svg>
-          <div id="scoreLabel" style="font-size:.72rem;font-weight:800;padding:3px 14px;border-radius:999px;display:inline-block;margin-top:4px;background:#1e293b;color:#94a3b8">Loading…</div>
+          <div id="scoreLabel" style="font-size:.72rem;font-weight:800;padding:3px 14px;border-radius:999px;display:inline-block;margin-top:4px;background:#1e293b;color:#94a3b8">Loading�</div>
         </div>
 
         <!-- Dimensions -->
@@ -577,24 +581,24 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- START HERE CARD (new users) -->
     <div class="start-here" id="startHereCard" style="display:none">
-      <div class="sh-title">👋 Welcome to BizScale — here's how to get started</div>
+      <div class="sh-title">?? Welcome to BizScale � here's how to get started</div>
       <div class="sh-sub">Three quick steps to unlock your personalized financial picture</div>
       <div class="sh-steps">
         <a href="onboarding.html" class="sh-step" onclick="localStorage.removeItem('fw_onboarded')">
           <div class="sh-num">1</div>
-          <div class="sh-icon">📋</div>
+          <div class="sh-icon">??</div>
           <div class="sh-sname">Set Up Profile</div>
-          <div class="sh-sdesc">Business details &amp; financials — 2 min</div>
+          <div class="sh-sdesc">Business details &amp; financials � 2 min</div>
         </a>
         <a href="checkup.html" class="sh-step">
           <div class="sh-num">2</div>
-          <div class="sh-icon">🩺</div>
+          <div class="sh-icon">??</div>
           <div class="sh-sname">Run Checkup</div>
           <div class="sh-sdesc">Get your loan score &amp; health grade</div>
         </a>
         <a href="try.html" class="sh-step">
           <div class="sh-num">3</div>
-          <div class="sh-icon">🛠️</div>
+          <div class="sh-icon">???</div>
           <div class="sh-sname">Explore 40 Tools</div>
           <div class="sh-sdesc">EMI, grants, forecasting &amp; more</div>
         </a>
@@ -603,15 +607,15 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- SMART ALERTS -->
     <div class="alerts-widget" id="alertsWidget" style="display:none">
-      <div class="sec-title">⚡ Smart Alerts</div>
+      <div class="sec-title">? Smart Alerts</div>
       <div id="alertsList"></div>
     </div>
 
     <!-- VENDOR BILLS WIDGET -->
     <div class="inv-widget" id="billsWidget" style="display:none">
       <div class="inv-widget-header">
-        <span class="inv-widget-title">📋 Monthly Bills</span>
-        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All →</a>
+        <span class="inv-widget-title">?? Monthly Bills</span>
+        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All ?</a>
       </div>
       <div class="inv-stat-row" id="billsStatRow"></div>
     </div>
@@ -619,21 +623,21 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <!-- INVOICE WIDGET -->
     <div class="inv-widget" id="invoiceWidget" style="display:none">
       <div class="inv-widget-header">
-        <span class="inv-widget-title">🧾 Invoice Summary</span>
-        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All →</a>
+        <span class="inv-widget-title">?? Invoice Summary</span>
+        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All ?</a>
       </div>
       <div class="inv-stat-row" id="invStatRow"></div>
     </div>
 
     <!-- ACTION ITEMS -->
     <div class="action-items" id="actionItemsWidget" style="display:none;margin-bottom:20px">
-      <div class="sec-title">🎯 Action Items</div>
+      <div class="sec-title">?? Action Items</div>
       <div class="ai-card">
         <div class="ai-header">
           <span class="ai-title">Tasks requiring attention</span>
           <span class="ai-count" id="aiCount"></span>
         </div>
-        <div id="aiList"><div class="ai-empty">Calculating…</div></div>
+        <div id="aiList"><div class="ai-empty">Calculating�</div></div>
       </div>
     </div>
 
@@ -652,22 +656,22 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="metrics-row">
       <div class="metric-card">
         <div class="mc-label">Monthly Revenue</div>
-        <div class="mc-value green" id="m_rev">—</div>
+        <div class="mc-value green" id="m_rev">�</div>
         <div class="mc-sub">from your profile</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Monthly Expenses</div>
-        <div class="mc-value red" id="m_exp">—</div>
+        <div class="mc-value red" id="m_exp">�</div>
         <div class="mc-sub">incl. loan EMI</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Net Profit</div>
-        <div class="mc-value blue" id="m_net">—</div>
+        <div class="mc-value blue" id="m_net">�</div>
         <div class="mc-sub">rev minus expenses</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Cash Runway</div>
-        <div class="mc-value amber" id="m_runway">—</div>
+        <div class="mc-value amber" id="m_runway">�</div>
         <div class="mc-sub">months at current burn</div>
       </div>
     </div>
@@ -678,13 +682,13 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <div class="gauge-card">
         <div class="gc-title">Loan Safety Score</div>
         <div id="loanGaugeWrap">
-          <div class="gc-no-data">📊<span>Run your Financial Checkup<br>to see your loan score</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup →</a></div>
+          <div class="gc-no-data">??<span>Run your Financial Checkup<br>to see your loan score</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup ?</a></div>
         </div>
       </div>
       <div class="gauge-card">
         <div class="gc-title">Business Health Grade</div>
         <div id="healthGaugeWrap">
-          <div class="gc-no-data">🏆<span>Run your Financial Checkup<br>to see your health grade</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup →</a></div>
+          <div class="gc-no-data">??<span>Run your Financial Checkup<br>to see your health grade</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup ?</a></div>
         </div>
       </div>
     </div>
@@ -694,11 +698,11 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="plan-card" id="planCard">
       <div class="pc-left">
         <h3 id="planTitle">Free Plan</h3>
-        <p id="planDesc">Access to 9 free tools — no sign-up needed. Upgrade to unlock all 40 tools.</p>
+        <p id="planDesc">Access to 9 free tools � no sign-up needed. Upgrade to unlock all 40 tools.</p>
         <div class="plan-features" id="planFeatures"></div>
       </div>
       <div class="pc-right">
-        <a href="pricing.html" class="upgrade-btn" id="upgradeBtn">Upgrade →</a>
+        <a href="pricing.html" class="upgrade-btn" id="upgradeBtn">Upgrade ?</a>
       </div>
     </div>
 
@@ -706,16 +710,16 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="sec-title">Refer a Friend</div>
     <div class="referral-card" id="referralCard" style="display:none">
       <div class="ref-left">
-        <div class="ref-title">🎁 Invite a Friend → Get 1 Month Free</div>
+        <div class="ref-title">?? Invite a Friend ? Get 1 Month Free</div>
         <div class="ref-desc">Share your personal link. When a friend signs up and pays for any plan, you automatically get 1 month free added to your account.</div>
         <div class="ref-link-row">
           <input type="text" id="refLink" class="ref-link-input" readonly/>
-          <button class="ref-copy-btn" onclick="copyRefLink()">📋 Copy</button>
+          <button class="ref-copy-btn" onclick="copyRefLink()">?? Copy</button>
         </div>
         <div class="ref-share-row">
-          <a id="refWhatsapp" class="ref-share-btn wa" href="#" target="_blank">💬 WhatsApp</a>
-          <a id="refEmail" class="ref-share-btn em" href="#">📧 Email</a>
-          <a id="refTwitter" class="ref-share-btn tw" href="#" target="_blank">🐦 Twitter</a>
+          <a id="refWhatsapp" class="ref-share-btn wa" href="#" target="_blank">?? WhatsApp</a>
+          <a id="refEmail" class="ref-share-btn em" href="#">?? Email</a>
+          <a id="refTwitter" class="ref-share-btn tw" href="#" target="_blank">?? Twitter</a>
         </div>
         <div id="refCreditMsg"></div>
       </div>
@@ -739,7 +743,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div id="histWidget" style="display:none;margin-bottom:24px">
       <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <span>Score History</span>
-        <a href="history.html" style="font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none">View Full History →</a>
+        <a href="history.html" style="font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none">View Full History ?</a>
       </div>
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px">
         <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:14px">
@@ -758,13 +762,13 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <!-- TWO COL: Recent + Profile -->
     <div class="two-col">
       <div class="activity-card">
-        <h3>⏱ Recent Activity</h3>
-        <div id="activityList"><div class="act-empty">No activity yet — open a tool to get started</div></div>
+        <h3>? Recent Activity</h3>
+        <div id="activityList"><div class="act-empty">No activity yet � open a tool to get started</div></div>
       </div>
       <div class="profile-card">
-        <h3>🏪 Business Profile</h3>
+        <h3>?? Business Profile</h3>
         <div id="profileSummary"></div>
-        <a href="onboarding.html" class="edit-profile" onclick="localStorage.removeItem('fw_onboarded')">✏️ Edit Profile</a>
+        <a href="onboarding.html" class="edit-profile" onclick="localStorage.removeItem('fw_onboarded')">?? Edit Profile</a>
       </div>
     </div>
 
@@ -775,7 +779,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
 function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
 
-/* ── Live data from modules ── */
+/* -- Live data from modules -- */
 var _DR = 'month'; // current date range selection
 
 function getLiveMetrics(){
@@ -829,7 +833,7 @@ function getLiveMetrics(){
   return {rev:rev, exp:exp, emi:emi, res:res, sources:sources};
 }
 
-/* ── Action Items ── */
+/* -- Action Items -- */
 function renderBillsWidget(){
   var bills = sg('fw_bills') || [];
   if(!bills.length){ document.getElementById('billsWidget').style.display='none'; return; }
@@ -881,8 +885,8 @@ function renderActionItems(){
   var cashD = sg('fw_cash_runway');
   if(cashD && cashD.runway !== undefined){
     var rw = parseFloat(cashD.runway)||0;
-    if(rw < 2) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw*10)/10+' months remaining — immediate action needed', href:'modules/cashFlowTracker.test.html'});
-    else if(rw < 4) items.push({prio:'med', text:'Cash runway below safe threshold', sub:Math.round(rw*10)/10+' months — goal is 6 months', href:'modules/cashFlowTracker.test.html'});
+    if(rw < 2) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw*10)/10+' months remaining � immediate action needed', href:'modules/cashFlowTracker.test.html'});
+    else if(rw < 4) items.push({prio:'med', text:'Cash runway below safe threshold', sub:Math.round(rw*10)/10+' months � goal is 6 months', href:'modules/cashFlowTracker.test.html'});
   } else {
     var lm = getLiveMetrics();
     var burn = lm.exp + lm.emi;
@@ -939,19 +943,19 @@ function renderActionItems(){
   countEl.className = 'ai-count '+(urgent ? 'has-urgent' : 'all-clear');
 
   if(!items.length){
-    listEl.innerHTML = '<div class="ai-empty">✅ No urgent action items — finances look on track.</div>';
+    listEl.innerHTML = '<div class="ai-empty">? No urgent action items � finances look on track.</div>';
     return;
   }
   listEl.innerHTML = items.slice(0,4).map(function(it){
     return '<div class="ai-item" onclick="location.href=\''+it.href+'\'">'
       +'<div class="ai-prio '+it.prio+'"></div>'
       +'<div class="ai-text"><strong>'+it.text+'</strong><span>'+it.sub+'</span></div>'
-      +'<a class="ai-lnk" href="'+it.href+'">Fix →</a>'
+      +'<a class="ai-lnk" href="'+it.href+'">Fix ?</a>'
       +'</div>';
   }).join('');
 }
 
-/* ── Date range selector ── */
+/* -- Date range selector -- */
 function setDateRange(range, btn){
   _DR = range;
   document.querySelectorAll('.dr-btn').forEach(function(b){b.classList.remove('active');});
@@ -975,7 +979,7 @@ function refreshMetrics(){
     var netEl = document.getElementById('m_net');
     netEl.textContent = fmt(net);
     netEl.className = 'mc-value '+(net>=0?'blue':'red');
-    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '—';
+    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '�';
   }
   if(m.sources.length){
     var badge = document.getElementById('liveDataBadge');
@@ -983,14 +987,14 @@ function refreshMetrics(){
   }
 }
 
-/* ── Export PDF ── */
+/* -- Export PDF -- */
 function exportDashboard(){
   var sub = document.getElementById('dashSubtitle');
   if(sub) sub.setAttribute('data-date', new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
   window.print();
 }
 
-/* ── Sidebar toggle (mobile) ── */
+/* -- Sidebar toggle (mobile) -- */
 function toggleSidebar(){
   var sb = document.getElementById('sidebar');
   var ov = document.getElementById('sbOverlay');
@@ -1021,58 +1025,58 @@ document.querySelectorAll('.sb-link').forEach(function(a){
 });
 
 var PLAN_CONFIG = {
-  free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools — no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
-  starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools — grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
-  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access — AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizScale at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
-  advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite — manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
+  free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools � no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
+  starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools � grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
+  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access � AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizScale at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
+  advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite � manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
 };
 
 var ALL_TOOLS = [
-  {icon:'🩺', name:'Financial Checkup',   desc:'4-point health check in 2 min',        href:'checkup.html',                               tier:'free'},
-  {icon:'📊', name:'Score History',       desc:'Track your health score over time',     href:'history.html',                               tier:'free'},
-  {icon:'🔮', name:'What-If Scenarios',  desc:'Model revenue & expense changes',       href:'whatif.html',                                tier:'free'},
-  {icon:'🏦', name:'Loan Safety Score',   desc:'SAFE/RISKY verdict in 60 sec',        href:'modules/loanDecisionScoreEngine.test.html', tier:'free'},
-  {icon:'🧮', name:'EMI Calculator',       desc:'Monthly payment & total cost',         href:'modules/emiCalculator.test.html',            tier:'free'},
-  {icon:'⏱',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
-  {icon:'⚖',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
-  {icon:'🏛',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
-  {icon:'📸', name:'Monthly Snapshot',    desc:'One-page visual — download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
-  {icon:'✅', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
-  {icon:'💸', name:"Owner's Pay",           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
-  {icon:'🏆', name:'Business Health Score', desc:'Overall A–F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
-  {icon:'🎯', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
-  {icon:'📈', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
-  {icon:'🤖', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
-  {icon:'📊', name:'Industry Benchmarks',   desc:'Compare to your industry',             href:'modules/benchmarkPro.test.html',             tier:'pro'},
-  {icon:'📄', name:'Financial Statements',  desc:'P&L, Balance Sheet, Cash Flow',        href:'modules/financialStatements.test.html',      tier:'pro'},
-  {icon:'🔄', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
-  {icon:'💪', name:'Stress Test Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
-  {icon:'💳', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
-  {icon:'🧾', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors — one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
-  {icon:'🧾', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
-  {icon:'🏷️', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
-  {icon:'💼', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
-  {icon:'📋', name:'Contractor & Payroll',  desc:'1099-NEC tracking + FUTA/SUTA estimates',   href:'modules/contractorPayroll.test.html',         tier:'starter'},
-  {icon:'📋', name:'Invoice Tracker',        desc:'Overdue invoices + follow-up emails',   href:'modules/invoiceTracker.test.html',            tier:'starter'},
-  {icon:'👥', name:'Payroll Estimator',      desc:'What can you afford to pay staff?',    href:'modules/payrollEstimator.test.html',          tier:'starter'},
-  {icon:'🏦', name:'Bank Statement Upload',  desc:'Upload CSV → auto-fill cash flow',     href:'modules/bankStatementUpload.test.html',       tier:'starter'},
-  {icon:'🗂️', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
-  {icon:'📊', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
-  {icon:'💰', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
-  {icon:'💰', name:'Debt Command Center',      desc:'All loans in one view — track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
-  {icon:'🏆', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
-  {icon:'💧', name:'Working Capital Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
-  {icon:'📊', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
-  {icon:'👥', name:'Payroll Impact Sim',     desc:'Model new hires: runway & break-even', href:'modules/payrollImpactSim.test.html',          tier:'starter'},
-  {icon:'🔄', name:'Loan Refinance Analyzer',desc:'Monthly savings, break-even & net benefit', href:'modules/loanRefinanceAnalyzer.test.html', tier:'starter'},
-  {icon:'📅', name:'Cash Flow Calendar',  desc:'Visual monthly bill & income calendar',  href:'modules/cashFlowCalendar.test.html',         tier:'starter'},
-  {icon:'🎯', name:'Goal Tracker',           desc:'Set targets, track monthly progress',  href:'modules/goalTracker.test.html',               tier:'free'},
-  {icon:'👥', name:'Advisor Dashboard',     desc:'Manage all clients in one view',       href:'modules/advisorDashboard.test.html',         tier:'advisor'},
-  {icon:'📝', name:'Branded Reports',       desc:'White-label PDF for clients',          href:'modules/brandedReport.test.html',            tier:'advisor'},
-  {icon:'📧', name:'Client Risk Email',     desc:'One-click risk summary to clients',    href:'modules/clientRiskEmail.test.html',          tier:'advisor'},
-  {icon:'🔗', name:'Referral Tracker',      desc:'Track referrals & commissions',        href:'modules/referralTracker.test.html',          tier:'advisor'},
-  {icon:'🔗', name:'Client Portal',         desc:'Share secure reports with clients',     href:'modules/clientPortal.test.html',              tier:'advisor'},
-  {icon:'🎨', name:'White-Label Settings', desc:'Your brand, colors & domain on reports', href:'modules/whiteLabelSettings.test.html',        tier:'advisor'}
+  {icon:'??', name:'Financial Checkup',   desc:'4-point health check in 2 min',        href:'checkup.html',                               tier:'free'},
+  {icon:'??', name:'Score History',       desc:'Track your health score over time',     href:'history.html',                               tier:'free'},
+  {icon:'??', name:'What-If Scenarios',  desc:'Model revenue & expense changes',       href:'whatif.html',                                tier:'free'},
+  {icon:'??', name:'Loan Safety Score',   desc:'SAFE/RISKY verdict in 60 sec',        href:'modules/loanDecisionScoreEngine.test.html', tier:'free'},
+  {icon:'??', name:'EMI Calculator',       desc:'Monthly payment & total cost',         href:'modules/emiCalculator.test.html',            tier:'free'},
+  {icon:'?',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
+  {icon:'?',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
+  {icon:'??',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
+  {icon:'??', name:'Monthly Snapshot',    desc:'One-page visual � download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
+  {icon:'?', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
+  {icon:'??', name:"Owner's Pay",           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
+  {icon:'??', name:'Business Health Score', desc:'Overall A�F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
+  {icon:'??', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
+  {icon:'??', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
+  {icon:'??', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
+  {icon:'??', name:'Industry Benchmarks',   desc:'Compare to your industry',             href:'modules/benchmarkPro.test.html',             tier:'pro'},
+  {icon:'??', name:'Financial Statements',  desc:'P&L, Balance Sheet, Cash Flow',        href:'modules/financialStatements.test.html',      tier:'pro'},
+  {icon:'??', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
+  {icon:'??', name:'Stress Test Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
+  {icon:'??', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
+  {icon:'??', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors � one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
+  {icon:'??', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
+  {icon:'???', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
+  {icon:'??', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
+  {icon:'??', name:'Contractor & Payroll',  desc:'1099-NEC tracking + FUTA/SUTA estimates',   href:'modules/contractorPayroll.test.html',         tier:'starter'},
+  {icon:'??', name:'Invoice Tracker',        desc:'Overdue invoices + follow-up emails',   href:'modules/invoiceTracker.test.html',            tier:'starter'},
+  {icon:'??', name:'Payroll Estimator',      desc:'What can you afford to pay staff?',    href:'modules/payrollEstimator.test.html',          tier:'starter'},
+  {icon:'??', name:'Bank Statement Upload',  desc:'Upload CSV ? auto-fill cash flow',     href:'modules/bankStatementUpload.test.html',       tier:'starter'},
+  {icon:'???', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
+  {icon:'??', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
+  {icon:'??', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
+  {icon:'??', name:'Debt Command Center',      desc:'All loans in one view � track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
+  {icon:'??', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
+  {icon:'??', name:'Working Capital Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
+  {icon:'??', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
+  {icon:'??', name:'Payroll Impact Sim',     desc:'Model new hires: runway & break-even', href:'modules/payrollImpactSim.test.html',          tier:'starter'},
+  {icon:'??', name:'Loan Refinance Analyzer',desc:'Monthly savings, break-even & net benefit', href:'modules/loanRefinanceAnalyzer.test.html', tier:'starter'},
+  {icon:'??', name:'Cash Flow Calendar',  desc:'Visual monthly bill & income calendar',  href:'modules/cashFlowCalendar.test.html',         tier:'starter'},
+  {icon:'??', name:'Goal Tracker',           desc:'Set targets, track monthly progress',  href:'modules/goalTracker.test.html',               tier:'free'},
+  {icon:'??', name:'Advisor Dashboard',     desc:'Manage all clients in one view',       href:'modules/advisorDashboard.test.html',         tier:'advisor'},
+  {icon:'??', name:'Branded Reports',       desc:'White-label PDF for clients',          href:'modules/brandedReport.test.html',            tier:'advisor'},
+  {icon:'??', name:'Client Risk Email',     desc:'One-click risk summary to clients',    href:'modules/clientRiskEmail.test.html',          tier:'advisor'},
+  {icon:'??', name:'Referral Tracker',      desc:'Track referrals & commissions',        href:'modules/referralTracker.test.html',          tier:'advisor'},
+  {icon:'??', name:'Client Portal',         desc:'Share secure reports with clients',     href:'modules/clientPortal.test.html',              tier:'advisor'},
+  {icon:'??', name:'White-Label Settings', desc:'Your brand, colors & domain on reports', href:'modules/whiteLabelSettings.test.html',        tier:'advisor'}
 ];
 
 var TIER_ORDER = ['free','starter','pro','advisor'];
@@ -1116,7 +1120,7 @@ function updateSidebarLocks(plan){
       if(!lk){
         lk = document.createElement('span');
         lk.className = 'sb-lock';
-        lk.textContent = '🔒';
+        lk.textContent = '??';
         el.appendChild(lk);
       }
       el.style.opacity = '.45';
@@ -1141,14 +1145,14 @@ function renderDashboard(plan){
   /* Plan card */
   document.getElementById('planTitle').textContent = pc.label;
   document.getElementById('planDesc').textContent = pc.desc;
-  var feats = pc.features.map(function(f){ return '<span class="pf-chip">✅ '+f+'</span>'; }).join('');
+  var feats = pc.features.map(function(f){ return '<span class="pf-chip">? '+f+'</span>'; }).join('');
   document.getElementById('planFeatures').innerHTML = feats;
   if(!pc.upgrade) document.getElementById('upgradeBtn').classList.add('hidden');
 
   /* Sidebar locks */
   updateSidebarLocks(plan);
 
-  /* Tools grid — show plan's tools + 2 locked previews */
+  /* Tools grid � show plan's tools + 2 locked previews */
   var html = '';
   var shown = 0;
   ALL_TOOLS.forEach(function(t){
@@ -1161,7 +1165,7 @@ function renderDashboard(plan){
       shown++;
     } else if(!unlocked && shown < 11){
       html += '<div class="tool-card locked">' +
-        '<div class="tc-lock">🔒 Upgrade</div>' +
+        '<div class="tc-lock">?? Upgrade</div>' +
         '<div class="tc-icon">'+t.icon+'</div>' +
         '<div class="tc-name">'+t.name+'</div>' +
         '<div class="tc-desc">'+t.desc+'</div></div>';
@@ -1170,7 +1174,7 @@ function renderDashboard(plan){
   });
   document.getElementById('toolsGrid').innerHTML = html;
 
-  /* Metrics — live module data with profile fallback */
+  /* Metrics � live module data with profile fallback */
   var p = sg('fw_profile')||{};
   var m = getLiveMetrics();
   var rev = m.rev, exp = m.exp, emi = m.emi, res = m.res;
@@ -1183,7 +1187,7 @@ function renderDashboard(plan){
     document.getElementById('m_exp').textContent = fmt(exp+emi);
     document.getElementById('m_net').textContent = fmt(net);
     document.getElementById('m_net').className = 'mc-value '+(net>=0?'blue':'red');
-    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '—';
+    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '�';
     if(m.sources.length){
       var ldb = document.getElementById('liveDataBadge');
       if(ldb){ ldb.style.display='inline-flex'; ldb.title='Live from: '+m.sources.join(', '); }
@@ -1200,14 +1204,14 @@ function renderDashboard(plan){
   /* Profile summary */
   var profHtml = '';
   if(p.bizName||p.name){
-    var bizName = p.bizName||p.name||'—';
+    var bizName = p.bizName||p.name||'�';
     var rows = [
       ['Business', bizName],
-      ['Industry', p.industry||'—'],
-      ['Entity', p.entityType||p.entity||'—'],
-      ['Revenue', m.rev ? fmt(m.rev)+'/mo' : '—'],
-      ['Expenses', m.exp ? fmt(m.exp)+'/mo' : '—'],
-      ['EMI', m.emi ? fmt(m.emi)+'/mo' : '—']
+      ['Industry', p.industry||'�'],
+      ['Entity', p.entityType||p.entity||'�'],
+      ['Revenue', m.rev ? fmt(m.rev)+'/mo' : '�'],
+      ['Expenses', m.exp ? fmt(m.exp)+'/mo' : '�'],
+      ['EMI', m.emi ? fmt(m.emi)+'/mo' : '�']
     ];
     rows.forEach(function(r){
       profHtml += '<div class="prof-row"><span class="prof-label">'+r[0]+'</span><span class="prof-value">'+r[1]+'</span></div>';
@@ -1237,7 +1241,7 @@ function renderDashboard(plan){
   renderGauges();
 }
 
-/* ── SMART ALERTS ── */
+/* -- SMART ALERTS -- */
 function renderAlerts(plan, p, runway){
   var checkup=null;
   try{
@@ -1251,35 +1255,35 @@ function renderAlerts(plan, p, runway){
   var hasProfile=rev>0||exp>0;
 
   if(!hasProfile){
-    alerts.push({cls:'alert-info',i:'💡',title:'Set up your business profile',msg:'Pre-fills all 40 tools automatically and unlocks personalised alerts.',href:'onboarding.html',htext:'Set Up Profile →'});
+    alerts.push({cls:'alert-info',i:'??',title:'Set up your business profile',msg:'Pre-fills all 40 tools automatically and unlocks personalised alerts.',href:'onboarding.html',htext:'Set Up Profile ?'});
   } else {
     var net=rev-exp-emi;
     var burn=exp+emi;
     var er=rev>0?(exp+emi)/rev:1;
     if(net<0)
-      alerts.push({cls:'alert-crit',i:'🔴',title:'Operating at a loss — −$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer →'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Operating at a loss � -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
     else if(er>0.85)
-      alerts.push({cls:'alert-warn',i:'⚠️',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
+      alerts.push({cls:'alert-warn',i:'??',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue � thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
 
     if(runway<=2&&burn>0)
-      alerts.push({cls:'alert-crit',i:'🚨',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Cash runway critically low � '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
     else if(runway<=4&&burn>0)
-      alerts.push({cls:'alert-warn',i:'⚠️',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway →'});
+      alerts.push({cls:'alert-warn',i:'??',title:'Low cash runway � '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
   }
 
   if(checkup){
     if(checkup.loanVerdict==='DANGEROUS')
-      alerts.push({cls:'alert-crit',i:'🔴',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score →'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Loan score DANGEROUS � '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
     else if(checkup.loanVerdict==='RISKY')
-      alerts.push({cls:'alert-warn',i:'⚠️',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios →'});
+      alerts.push({cls:'alert-warn',i:'??',title:'Loan score RISKY � '+checkup.loanScore+'/100',msg:'Borderline � any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
     if(checkup.runwayStatus==='CRITICAL'&&runway>2)
-      alerts.push({cls:'alert-crit',i:'🚨',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup →'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup ?'});
   } else if(hasProfile){
-    alerts.push({cls:'alert-info',i:'🩺',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes — free.',href:'checkup.html',htext:'Start Free Checkup →'});
+    alerts.push({cls:'alert-info',i:'??',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes � free.',href:'checkup.html',htext:'Start Free Checkup ?'});
   }
 
   if(alerts.length===0)
-    alerts.push({cls:'alert-good',i:'✅',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup →'});
+    alerts.push({cls:'alert-good',i:'?',title:'All clear � finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
 
   document.getElementById('alertsList').innerHTML=alerts.slice(0,3).map(function(a){
     var onclick = a.href==='onboarding.html' ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
@@ -1291,7 +1295,7 @@ function renderAlerts(plan, p, runway){
   document.getElementById('alertsWidget').style.display='block';
 }
 
-/* ── SCORE HISTORY WIDGET ── */
+/* -- SCORE HISTORY WIDGET -- */
 function renderHistWidget(){
   var hist=[]; try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){}
   var w=document.getElementById('histWidget');
@@ -1305,9 +1309,9 @@ function renderHistWidget(){
   var countEl=document.getElementById('histCount');
   if(hist.length>=2){
     var td=GO[hist[0].grade]-GO[hist[hist.length-1].grade];
-    if(td>0){trendEl.textContent='↑ Improving';trendEl.style.color='#15803d';}
-    else if(td<0){trendEl.textContent='↓ Declining';trendEl.style.color='#991b1b';}
-    else{trendEl.textContent='→ Stable';trendEl.style.color='#854d0e';}
+    if(td>0){trendEl.textContent='? Improving';trendEl.style.color='#15803d';}
+    else if(td<0){trendEl.textContent='? Declining';trendEl.style.color='#991b1b';}
+    else{trendEl.textContent='? Stable';trendEl.style.color='#854d0e';}
   }
   countEl.textContent=hist.length+' checkup'+(hist.length===1?'':'s')+' tracked';
 
@@ -1321,14 +1325,14 @@ function renderHistWidget(){
     var delta='';
     if(i===0&&hist[1]){
       var d=GO[h.grade]-GO[hist[1].grade];
-      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">↑ Grade '+hist[1].grade+'→'+h.grade+'</span>';
-      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">↓ Grade '+hist[1].grade+'→'+h.grade+'</span>';
-      else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'↑ +':sd<0?'↓ ':'→ ')+sd+' pts</span>';}
+      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">? Grade '+hist[1].grade+'?'+h.grade+'</span>';
+      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">? Grade '+hist[1].grade+'?'+h.grade+'</span>';
+      else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'? +':sd<0?'? ':'? ')+sd+' pts</span>';}
     }
     return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap">'
       +'<span style="font-size:.76rem;color:#64748b;width:50px;flex-shrink:0">'+date+'</span>'
       +'<span style="background:'+GB[h.grade]+';color:'+GC[h.grade]+';font-size:.74rem;font-weight:900;padding:2px 9px;border-radius:20px;flex-shrink:0">Grade '+h.grade+'</span>'
-      +'<span style="font-size:.76rem;color:#475569;flex:1">'+h.loanScore+'/100 · '+rw+' mo runway</span>'
+      +'<span style="font-size:.76rem;color:#475569;flex:1">'+h.loanScore+'/100 � '+rw+' mo runway</span>'
       +delta+'</div>';
   }).join('');
 }
@@ -1364,7 +1368,7 @@ function drawSparkline(hist){
   }
 }
 
-/* ── Auth init ── */
+/* -- Auth init -- */
 window.addEventListener('load', function(){
   if(!window.fwAuth){ renderDashboard('free'); return; }
   window.fwAuth.init(function(){
@@ -1376,9 +1380,9 @@ window.addEventListener('load', function(){
     /* Greeting */
     var name = auth.displayName();
     document.getElementById('userName').textContent = name;
-    document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' 👋';
+    document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' ??';
 
-    /* Plan — always use authoritative value from auth server */
+    /* Plan � always use authoritative value from auth server */
     var plan = auth.plan || 'free';
 
     /* Business name in sidebar */
@@ -1399,7 +1403,7 @@ window.addEventListener('load', function(){
   });
 });
 
-/* ── Daily Briefing ── */
+/* -- Daily Briefing -- */
 var _authRef = null;
 
 function loadHealthBriefing(auth){
@@ -1423,7 +1427,7 @@ function loadHealthBriefing(auth){
 function calcHealth(){
   if(!_authRef) return;
   var btn = document.querySelector('[onclick="calcHealth()"]');
-  if(btn) btn.textContent = 'Calculating…';
+  if(btn) btn.textContent = 'Calculating�';
   _authRef.client.auth.getSession().then(function(res){
     var token = res&&res.data&&res.data.session&&res.data.session.access_token;
     if(!token) return;
@@ -1482,17 +1486,17 @@ function renderBriefing(data){
 
   // Priority cards
   var urgencyMap = { urgent:'pri-urgent', high:'pri-high', medium:'pri-medium', low:'pri-low' };
-  var urgencyEmoji = { urgent:'🔴', high:'🟠', medium:'🟡', low:'🟢' };
+  var urgencyEmoji = { urgent:'??', high:'??', medium:'??', low:'??' };
   var pHtml = (data.priorities||[]).map(function(p){
     var cls = urgencyMap[p.urgency]||'pri-medium';
-    var em  = urgencyEmoji[p.urgency]||'🟡';
+    var em  = urgencyEmoji[p.urgency]||'??';
     return '<div class="pri-card '+cls+'">'+
       '<div class="pri-title">'+em+' '+p.title+'</div>'+
       '<div class="pri-desc">'+p.description+'</div>'+
-      (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action →</a>' : '')+
+      (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action ?</a>' : '')+
     '</div>';
   }).join('');
-  document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet — click Recalculate.</div>';
+  document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet � click Recalculate.</div>';
 }
 
 function doSignOut(){
@@ -1508,10 +1512,10 @@ function loadReferral(userId){
   document.getElementById('refLink').value = link;
   document.getElementById('referralCard').style.display = 'flex';
 
-  var msg = 'Join me on BizScale — 20 free financial tools for your small business! Use my link: ' + link;
+  var msg = 'Join me on BizScale � 20 free financial tools for your small business! Use my link: ' + link;
   document.getElementById('refWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  document.getElementById('refEmail').href = 'mailto:?subject=Try BizScale — free financial tools for small business&body=' + encodeURIComponent(msg);
-  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizScale — 20 free financial tools for small businesses! ' + link);
+  document.getElementById('refEmail').href = 'mailto:?subject=Try BizScale � free financial tools for small business&body=' + encodeURIComponent(msg);
+  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizScale � 20 free financial tools for small businesses! ' + link);
 
   if(!window.fwAuth || !window.fwAuth.client) return;
 
@@ -1525,11 +1529,11 @@ function loadReferral(userId){
   document.getElementById('refCredits').textContent = credits;
   if(credits > 0){
     document.getElementById('refCreditMsg').innerHTML =
-      '<div class="ref-credit-msg">🎉 ' + credits + ' month' + (credits > 1 ? 's' : '') + ' free applied to your account!</div>';
+      '<div class="ref-credit-msg">?? ' + credits + ' month' + (credits > 1 ? 's' : '') + ' free applied to your account!</div>';
   }
 }
 
-/* ── SCORE GAUGES ── */
+/* -- SCORE GAUGES -- */
 function drawSemiGauge(ctx, W, H, value, max, zones){
   ctx.clearRect(0,0,W,H);
   var cx=W/2, cy=H-8;
@@ -1544,7 +1548,7 @@ function drawSemiGauge(ctx, W, H, value, max, zones){
   ctx.fillStyle='#f1f5f9';
   ctx.fill();
 
-  /* color zones: value 0=left(π), max=right(2π); angle=π+(v/max)*π */
+  /* color zones: value 0=left(p), max=right(2p); angle=p+(v/max)*p */
   zones.forEach(function(z){
     var a1=Math.PI+(z.from/max)*Math.PI;
     var a2=Math.PI+(z.to/max)*Math.PI;
@@ -1612,7 +1616,7 @@ function renderGauges(){
       '<canvas id="lGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
       '<div class="gc-num" style="color:'+lColor+'">'+ls+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8">/100</span></div>'+
       '<div class="gc-verdict '+vCls+'">'+vLabel+'</div>'+
-      '<a href="modules/loanDecisionScoreEngine.test.html" class="gc-cta">Full Loan Analysis →</a>';
+      '<a href="modules/loanDecisionScoreEngine.test.html" class="gc-cta">Full Loan Analysis ?</a>';
     var lcv=document.getElementById('lGc');
     drawSemiGauge(lcv.getContext('2d'),220,124,ls,100,[
       {from:0, to:40, color:'#fca5a5'},
@@ -1626,7 +1630,7 @@ function renderGauges(){
   var hWrap=document.getElementById('healthGaugeWrap');
   if(hWrap){
     var hs=checkup.healthScore||50;
-    var hg=checkup.grade||'—';
+    var hg=checkup.grade||'�';
     var gradeVal={A:90,B:72,C:55,D:35,F:15}[hg]||hs||50;
     var hColor={A:'#16a34a',B:'#22c55e',C:'#d97706',D:'#ea580c',F:'#dc2626'}[hg]||'#64748b';
     var hBg={A:'#dcfce7',B:'#dcfce7',C:'#fef9c3',D:'#fed7aa',F:'#fee2e2'}[hg]||'#f1f5f9';
@@ -1635,7 +1639,7 @@ function renderGauges(){
       '<canvas id="hGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
       '<div class="gc-num" style="color:'+hColor+'">'+hg+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8"> grade</span></div>'+
       '<div class="gc-verdict" style="background:'+hBg+';color:'+hColor+'">'+hLabel+'</div>'+
-      '<a href="checkup.html" class="gc-cta">Run New Checkup →</a>';
+      '<a href="checkup.html" class="gc-cta">Run New Checkup ?</a>';
     var hcv=document.getElementById('hGc');
     drawSemiGauge(hcv.getContext('2d'),220,124,gradeVal,100,[
       {from:0, to:30, color:'#fca5a5'},
@@ -1652,13 +1656,13 @@ function copyRefLink(){
   var btn = document.querySelector('.ref-copy-btn');
   if(navigator.clipboard){
     navigator.clipboard.writeText(input.value).then(function(){
-      btn.textContent = '✅ Copied!'; btn.classList.add('copied');
-      setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+      btn.textContent = '? Copied!'; btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
     });
   } else {
     document.execCommand('copy');
-    btn.textContent = '✅ Copied!'; btn.classList.add('copied');
-    setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+    btn.textContent = '? Copied!'; btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
   }
 }
 </script>

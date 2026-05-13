@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BizScale Advisor — Interactive Demo</title>
+<title>BizScale Advisor � Interactive Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -19,7 +19,7 @@
 }
 body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ── Header ── */
+/* -- Header -- */
 .demo-header{height:var(--header-h);background:#134e4a;display:flex;align-items:center;padding:0 1.25rem;gap:1rem;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
 .demo-brand{font-size:1rem;font-weight:900;color:#fff}.demo-brand span{color:#5eead4}
 .adv-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:3px 10px;font-size:.75rem;color:#99f6e4;font-weight:600}
@@ -30,10 +30,10 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .btn-home{font-size:.75rem;color:#99f6e4;text-decoration:none;padding:.3rem .8rem;border:1px solid rgba(255,255,255,.2);border-radius:6px}
 .btn-home:hover{background:rgba(255,255,255,.08)}
 
-/* ── Layout ── */
+/* -- Layout -- */
 .demo-body{flex:1;display:flex;overflow:hidden}
 
-/* ── Sidebar ── */
+/* -- Sidebar -- */
 .demo-sidebar{width:var(--sidebar-w);background:#1e293b;overflow-y:auto;flex-shrink:0;padding:.75rem 0}
 .demo-sidebar::-webkit-scrollbar{width:3px}.demo-sidebar::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
 .sb-section-label{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#475569;padding:.5rem 1rem .25rem}
@@ -46,23 +46,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .sb-step.active .step-num{background:#0d9488;border-color:#0d9488;color:#fff}
 .sb-step.done .step-num{background:#16a34a;border-color:#16a34a;color:#fff}
 
-/* ── Main ── */
+/* -- Main -- */
 .demo-main{flex:1;overflow-y:auto;padding:1.5rem;padding-bottom:70px;background:var(--bg)}
 .demo-main::-webkit-scrollbar{width:5px}.demo-main::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 
-/* ── Slide ── */
+/* -- Slide -- */
 .slide{display:none;animation:fadeIn .3s ease}
 .slide.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Slide header ── */
+/* -- Slide header -- */
 .slide-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem}
 .slide-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
 .slide-title{font-size:1.2rem;font-weight:900;color:#0f172a;line-height:1.2}
 .slide-subtitle{font-size:.82rem;color:var(--sub);margin-top:3px;line-height:1.5}
 .adv-badge-inline{display:inline-block;background:#0f766e;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;margin-left:6px;vertical-align:middle}
 
-/* ── Result card ── */
+/* -- Result card -- */
 .result-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:0 1px 6px rgba(0,0,0,.06)}
 .result-card.good{border-left:4px solid var(--green)}
 .result-card.bad{border-left:4px solid var(--red)}
@@ -82,7 +82,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .verdict-warn{background:#fef9c3;color:#854d0e}
 .verdict-ready{background:#dbeafe;color:#1e40af}
 
-/* ── Situation panels ── */
+/* -- Situation panels -- */
 .situation-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
 @media(max-width:700px){.situation-grid{grid-template-columns:1fr}}
 .situation-panel{border-radius:10px;padding:.9rem;border:1.5px solid}
@@ -94,7 +94,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .situation-panel ul{padding-left:14px}
 .situation-panel li{font-size:.75rem;color:#374151;margin-bottom:3px;line-height:1.4}
 
-/* ── Explain accordion ── */
+/* -- Explain accordion -- */
 .explain-accordion{margin-bottom:.75rem}
 .acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:700;color:var(--text);text-align:left}
 .acc-btn:hover{background:#f8fafc}
@@ -108,13 +108,13 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .improve-box ul{padding-left:14px;margin-top:4px}
 .improve-box li{margin-bottom:3px}
 
-/* ── Advisor callout ── */
+/* -- Advisor callout -- */
 .adv-callout{background:linear-gradient(135deg,#134e4a,#065f46);border-radius:10px;padding:.85rem 1.1rem;display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem}
 .adv-callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
 .adv-callout-text{font-size:.78rem;color:#99f6e4;line-height:1.5}
 .adv-callout-text strong{color:#fff;display:block;margin-bottom:2px;font-size:.82rem}
 
-/* ── Client table ── */
+/* -- Client table -- */
 .client-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:1rem}
 .client-table th{background:#f1f5f9;padding:.5rem .75rem;text-align:left;font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--sub);border-bottom:1px solid var(--border)}
 .client-table td{padding:.55rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
@@ -124,14 +124,14 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .alert-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
 .dot-red{background:#dc2626}.dot-amber{background:#d97706}.dot-green{background:#16a34a}
 
-/* ── Chat bubble ── */
+/* -- Chat bubble -- */
 .chat-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1rem}
 .chat-q{background:#f1f5f9;border-radius:8px 8px 2px 8px;padding:.65rem .85rem;font-size:.8rem;font-weight:600;color:#1e293b;margin-bottom:.75rem;display:flex;gap:.5rem}
 .chat-q span{font-size:1rem}
 .chat-a{background:var(--teal-bg);border:1px solid var(--teal-border);border-radius:2px 8px 8px 8px;padding:.65rem .85rem;font-size:.78rem;color:#134e4a;line-height:1.6}
 .chat-a strong{display:block;margin-bottom:.3rem;font-size:.82rem;color:#0f172a}
 
-/* ── Report preview ── */
+/* -- Report preview -- */
 .report-preview{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
 .report-header{background:linear-gradient(135deg,#0f766e,#0369a1);padding:.85rem 1rem;display:flex;align-items:center;gap:.85rem}
 .report-header-text{color:#fff}
@@ -140,7 +140,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .report-logo{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 .report-body{padding:.85rem 1rem;font-size:.78rem;color:#374151;line-height:1.6}
 
-/* ── Welcome ── */
+/* -- Welcome -- */
 .welcome-hero{text-align:center;padding:2rem 1rem 1.5rem}
 .welcome-hero h1{font-size:1.8rem;font-weight:900;color:#0f172a;margin-bottom:.5rem}
 .welcome-hero p{font-size:.9rem;color:var(--sub);max-width:520px;margin:0 auto 1.5rem;line-height:1.6}
@@ -153,7 +153,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .start-btn{display:inline-block;background:#0f766e;color:#fff;padding:.7rem 2rem;border-radius:8px;font-size:.9rem;font-weight:800;cursor:pointer;border:none;transition:background .15s}
 .start-btn:hover{background:#0d6b63}
 
-/* ── Summary slide ── */
+/* -- Summary slide -- */
 .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-bottom:1.25rem}
 .summary-item{background:#fff;border-radius:10px;border:1px solid var(--border);padding:.85rem;display:flex;gap:.6rem;align-items:flex-start}
 .sum-icon{font-size:1.3rem;flex-shrink:0}
@@ -164,24 +164,28 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 .sum-teal{background:#ccfbf1;color:#115e59}
 .sum-amber{background:#fef9c3;color:#854d0e}
 
-/* ── Nav ── */
+/* -- Nav -- */
 .slide-nav{position:fixed;bottom:0;left:var(--sidebar-w);right:0;height:52px;background:#fff;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:50}
 .nav-btn{padding:.45rem 1.2rem;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .14s}
 .nav-prev{border-color:var(--border);background:#fff;color:var(--text)}.nav-prev:hover{background:var(--bg)}
 .nav-next{border-color:var(--teal-dark);background:var(--teal-dark);color:#fff}.nav-next:hover{background:#0a5c57}
 .nav-center{font-size:.75rem;color:var(--sub);font-weight:600}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
 <!-- Header -->
 <div class="demo-header">
   <div class="demo-brand">Biz<span>Scale</span></div>
-  <div class="adv-badge">👩‍💼 Sarah Chen, CPA &amp; Financial Advisor · Chicago, IL</div>
+  <div class="adv-badge">????? Sarah Chen, CPA &amp; Financial Advisor � Chicago, IL</div>
   <div class="demo-header-right">
     <div class="slide-counter" id="slideCounter">Slide 1 of 14</div>
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:7%"></div></div>
-    <a href="index.html" class="btn-home">← Exit Demo</a>
+    <a href="index.html" class="btn-home">? Exit Demo</a>
   </div>
 </div>
 
@@ -190,44 +194,44 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 <!-- Sidebar -->
 <aside class="demo-sidebar" id="demosidebar">
   <div class="sb-section-label">Demo Navigation</div>
-  <div class="sb-step active" data-slide="0" onclick="goSlide(0)"><span class="step-icon">🏠</span>Welcome<span class="step-num">1</span></div>
+  <div class="sb-step active" data-slide="0" onclick="goSlide(0)"><span class="step-icon">??</span>Welcome<span class="step-num">1</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Client Management</div>
-  <div class="sb-step" data-slide="1" onclick="goSlide(1)"><span class="step-icon">📋</span>Advisor Dashboard<span class="step-num">2</span></div>
-  <div class="sb-step" data-slide="2" onclick="goSlide(2)"><span class="step-icon">👥</span>Client Portal<span class="step-num">3</span></div>
-  <div class="sb-step" data-slide="3" onclick="goSlide(3)"><span class="step-icon">🏦</span>Bank Statement Upload<span class="step-num">4</span></div>
+  <div class="sb-step" data-slide="1" onclick="goSlide(1)"><span class="step-icon">??</span>Advisor Dashboard<span class="step-num">2</span></div>
+  <div class="sb-step" data-slide="2" onclick="goSlide(2)"><span class="step-icon">??</span>Client Portal<span class="step-num">3</span></div>
+  <div class="sb-step" data-slide="3" onclick="goSlide(3)"><span class="step-icon">??</span>Bank Statement Upload<span class="step-num">4</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Analysis Tools</div>
-  <div class="sb-step" data-slide="4" onclick="goSlide(4)"><span class="step-icon">📊</span>Financial Statements<span class="step-num">5</span></div>
-  <div class="sb-step" data-slide="5" onclick="goSlide(5)"><span class="step-icon">📉</span>Industry Benchmarks<span class="step-num">6</span></div>
-  <div class="sb-step" data-slide="6" onclick="goSlide(6)"><span class="step-icon">🤖</span>AI CFO Chat<span class="step-num">7</span></div>
-  <div class="sb-step" data-slide="7" onclick="goSlide(7)"><span class="step-icon">🏆</span>Business Health Score<span class="step-num">8</span></div>
+  <div class="sb-step" data-slide="4" onclick="goSlide(4)"><span class="step-icon">??</span>Financial Statements<span class="step-num">5</span></div>
+  <div class="sb-step" data-slide="5" onclick="goSlide(5)"><span class="step-icon">??</span>Industry Benchmarks<span class="step-num">6</span></div>
+  <div class="sb-step" data-slide="6" onclick="goSlide(6)"><span class="step-icon">??</span>AI CFO Chat<span class="step-num">7</span></div>
+  <div class="sb-step" data-slide="7" onclick="goSlide(7)"><span class="step-icon">??</span>Business Health Score<span class="step-num">8</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Risk &amp; Alerts</div>
-  <div class="sb-step" data-slide="8" onclick="goSlide(8)"><span class="step-icon">⚠️</span>Risk Alert Engine<span class="step-num">9</span></div>
-  <div class="sb-step" data-slide="9" onclick="goSlide(9)"><span class="step-icon">📧</span>Client Risk Email<span class="step-num">10</span></div>
+  <div class="sb-step" data-slide="8" onclick="goSlide(8)"><span class="step-icon">??</span>Risk Alert Engine<span class="step-num">9</span></div>
+  <div class="sb-step" data-slide="9" onclick="goSlide(9)"><span class="step-icon">??</span>Client Risk Email<span class="step-num">10</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Reports &amp; Revenue</div>
-  <div class="sb-step" data-slide="10" onclick="goSlide(10)"><span class="step-icon">📄</span>Branded Reports<span class="step-num">11</span></div>
-  <div class="sb-step" data-slide="11" onclick="goSlide(11)"><span class="step-icon">💰</span>Paid Reports<span class="step-num">12</span></div>
+  <div class="sb-step" data-slide="10" onclick="goSlide(10)"><span class="step-icon">??</span>Branded Reports<span class="step-num">11</span></div>
+  <div class="sb-step" data-slide="11" onclick="goSlide(11)"><span class="step-icon">??</span>Paid Reports<span class="step-num">12</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Results</div>
-  <div class="sb-step" data-slide="12" onclick="goSlide(12)"><span class="step-icon">⏱</span>Efficiency Gains<span class="step-num">13</span></div>
-  <div class="sb-step" data-slide="13" onclick="goSlide(13)"><span class="step-icon">🏁</span>Summary &amp; ROI<span class="step-num">14</span></div>
+  <div class="sb-step" data-slide="12" onclick="goSlide(12)"><span class="step-icon">?</span>Efficiency Gains<span class="step-num">13</span></div>
+  <div class="sb-step" data-slide="13" onclick="goSlide(13)"><span class="step-icon">??</span>Summary &amp; ROI<span class="step-num">14</span></div>
 </aside>
 
 <!-- Main -->
 <div class="demo-main" id="demoMain">
 
-<!-- ═══ SLIDE 0: WELCOME ═══ -->
+<!-- --- SLIDE 0: WELCOME --- -->
 <div class="slide active" id="slide-0">
   <div class="welcome-hero">
-    <div style="font-size:2.5rem;margin-bottom:.5rem">👩‍💼</div>
+    <div style="font-size:2.5rem;margin-bottom:.5rem">?????</div>
     <h1>Welcome to Your Advisor Demo</h1>
-    <p>We've pre-loaded a real-world advisor scenario — <strong>Sarah Chen, CPA in Chicago</strong> — managing 8 small business clients using BizScale Advisor. Each slide shows you exactly what advisors can do, what the results mean for clients, and how it saves you hours every week.</p>
+    <p>We've pre-loaded a real-world advisor scenario � <strong>Sarah Chen, CPA in Chicago</strong> � managing 8 small business clients using BizScale Advisor. Each slide shows you exactly what advisors can do, what the results mean for clients, and how it saves you hours every week.</p>
   </div>
   <div class="advisor-profile">
-    <h3>💼 Your Demo Advisor Profile</h3>
+    <h3>?? Your Demo Advisor Profile</h3>
     <div class="adv-stats">
       <div class="adv-stat"><div class="adv-stat-val">Sarah Chen</div><div class="adv-stat-lbl">CPA &amp; Financial Advisor</div></div>
       <div class="adv-stat"><div class="adv-stat-val">8 Clients</div><div class="adv-stat-lbl">Active Client Portfolio</div></div>
@@ -237,34 +241,34 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       <div class="adv-stat"><div class="adv-stat-val">32 hrs</div><div class="adv-stat-lbl">Saved Per Week vs Manual Work</div></div>
     </div>
     <div style="margin-top:.85rem;padding:.65rem;background:#f0fdfa;border-radius:7px;font-size:.78rem;color:#115e59;font-weight:600">
-      🎯 Goal: Deliver fast, professional financial analysis to all 8 clients — without spending 4 hours per client per week
+      ?? Goal: Deliver fast, professional financial analysis to all 8 clients � without spending 4 hours per client per week
     </div>
   </div>
   <div style="text-align:center">
-    <button class="start-btn" onclick="goSlide(1)">Start the Demo →</button>
-    <div style="font-size:.72rem;color:var(--sub);margin-top:.75rem">14 slides · ~7 minutes · Click any step in the sidebar to jump ahead</div>
+    <button class="start-btn" onclick="goSlide(1)">Start the Demo ?</button>
+    <div style="font-size:.72rem;color:var(--sub);margin-top:.75rem">14 slides � ~7 minutes � Click any step in the sidebar to jump ahead</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 1: ADVISOR DASHBOARD ═══ -->
+<!-- --- SLIDE 1: ADVISOR DASHBOARD --- -->
 <div class="slide" id="slide-1">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">📋</div>
+    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">??</div>
     <div>
       <div class="slide-title">Advisor Dashboard <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">One screen to see every client's health, alerts, and status — without opening a single spreadsheet.</div>
+      <div class="slide-subtitle">One screen to see every client's health, alerts, and status � without opening a single spreadsheet.</div>
     </div>
   </div>
 
   <div class="result-card teal">
-    <div class="result-label">Sarah's Client Portfolio — Live Overview</div>
+    <div class="result-label">Sarah's Client Portfolio � Live Overview</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val teal">8</div><div class="metric-lbl">Active Clients</div></div>
       <div class="metric-box"><div class="metric-val green">5</div><div class="metric-lbl">Healthy (Grade A/B)</div></div>
       <div class="metric-box"><div class="metric-val amber">2</div><div class="metric-lbl">Needs Attention (Grade C)</div></div>
       <div class="metric-box"><div class="metric-val red">1</div><div class="metric-lbl">Critical (Grade D)</div></div>
     </div>
-    <div class="verdict-badge verdict-teal">✅ Dashboard loaded in 3 seconds — all 8 clients analyzed automatically</div>
+    <div class="verdict-badge verdict-teal">? Dashboard loaded in 3 seconds � all 8 clients analyzed automatically</div>
   </div>
 
   <table class="client-table">
@@ -272,33 +276,33 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       <tr><th>Client Name</th><th>Industry</th><th>Monthly Revenue</th><th>Health Grade</th><th>Alerts</th><th>Last Updated</th></tr>
     </thead>
     <tbody>
-      <tr><td><strong>Main Street Bakery</strong></td><td>Food &amp; Beverage</td><td>$40,000</td><td><span class="grade-pill grade-b">B · 72/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Today</td></tr>
-      <tr><td><strong>Lake View Salon</strong></td><td>Personal Services</td><td>$28,000</td><td><span class="grade-pill grade-a">A · 88/100</span></td><td><span class="alert-dot dot-green"></span>All clear</td><td>Today</td></tr>
-      <tr><td><strong>Chicago Auto Parts</strong></td><td>Auto Retail</td><td>$55,000</td><td><span class="grade-pill grade-b">B · 76/100</span></td><td><span class="alert-dot dot-amber"></span>2 warnings</td><td>Yesterday</td></tr>
-      <tr><td><strong>Green Leaf Yoga</strong></td><td>Fitness &amp; Wellness</td><td>$18,000</td><td><span class="grade-pill grade-d">D · 41/100</span></td><td><span class="alert-dot dot-red"></span>3 critical</td><td>Today</td></tr>
-      <tr><td><strong>Oak Park Plumbing</strong></td><td>Home Services</td><td>$38,000</td><td><span class="grade-pill grade-a">A · 84/100</span></td><td><span class="alert-dot dot-green"></span>All clear</td><td>Today</td></tr>
-      <tr><td><strong>Wicker Bookstore</strong></td><td>Retail</td><td>$22,000</td><td><span class="grade-pill grade-c">C · 58/100</span></td><td><span class="alert-dot dot-amber"></span>2 warnings</td><td>2 days ago</td></tr>
-      <tr><td><strong>River North Catering</strong></td><td>Food &amp; Beverage</td><td>$35,000</td><td><span class="grade-pill grade-b">B · 79/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Today</td></tr>
-      <tr><td><strong>Pilsen Pet Grooming</strong></td><td>Pet Services</td><td>$15,000</td><td><span class="grade-pill grade-c">C · 62/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Yesterday</td></tr>
+      <tr><td><strong>Main Street Bakery</strong></td><td>Food &amp; Beverage</td><td>$40,000</td><td><span class="grade-pill grade-b">B � 72/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Today</td></tr>
+      <tr><td><strong>Lake View Salon</strong></td><td>Personal Services</td><td>$28,000</td><td><span class="grade-pill grade-a">A � 88/100</span></td><td><span class="alert-dot dot-green"></span>All clear</td><td>Today</td></tr>
+      <tr><td><strong>Chicago Auto Parts</strong></td><td>Auto Retail</td><td>$55,000</td><td><span class="grade-pill grade-b">B � 76/100</span></td><td><span class="alert-dot dot-amber"></span>2 warnings</td><td>Yesterday</td></tr>
+      <tr><td><strong>Green Leaf Yoga</strong></td><td>Fitness &amp; Wellness</td><td>$18,000</td><td><span class="grade-pill grade-d">D � 41/100</span></td><td><span class="alert-dot dot-red"></span>3 critical</td><td>Today</td></tr>
+      <tr><td><strong>Oak Park Plumbing</strong></td><td>Home Services</td><td>$38,000</td><td><span class="grade-pill grade-a">A � 84/100</span></td><td><span class="alert-dot dot-green"></span>All clear</td><td>Today</td></tr>
+      <tr><td><strong>Wicker Bookstore</strong></td><td>Retail</td><td>$22,000</td><td><span class="grade-pill grade-c">C � 58/100</span></td><td><span class="alert-dot dot-amber"></span>2 warnings</td><td>2 days ago</td></tr>
+      <tr><td><strong>River North Catering</strong></td><td>Food &amp; Beverage</td><td>$35,000</td><td><span class="grade-pill grade-b">B � 79/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Today</td></tr>
+      <tr><td><strong>Pilsen Pet Grooming</strong></td><td>Pet Services</td><td>$15,000</td><td><span class="grade-pill grade-c">C � 62/100</span></td><td><span class="alert-dot dot-amber"></span>1 warning</td><td>Yesterday</td></tr>
     </tbody>
   </table>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why does a dashboard matter? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why does a dashboard matter? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Without a dashboard:</strong> You'd open 8 separate spreadsheets, manually check each one, and hope you didn't miss something. That takes 4+ hours per week — and you might still miss a client heading toward a cash crisis.<br><br><strong>With BizScale Advisor:</strong> All 8 clients load in one screen. Red flags surface automatically. You spend time fixing problems, not finding them.</div>
+      <div class="teal-box"><strong>Without a dashboard:</strong> You'd open 8 separate spreadsheets, manually check each one, and hope you didn't miss something. That takes 4+ hours per week � and you might still miss a client heading toward a cash crisis.<br><br><strong>With BizScale Advisor:</strong> All 8 clients load in one screen. Red flags surface automatically. You spend time fixing problems, not finding them.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">⚡</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Instant Portfolio View</strong>See all client grades, alerts, and last-updated timestamps in one place. Free and Pro users only have access to their own business — advisors manage an entire client roster.</div>
+    <div class="adv-callout-icon">?</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Instant Portfolio View</strong>See all client grades, alerts, and last-updated timestamps in one place. Free and Pro users only have access to their own business � advisors manage an entire client roster.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 2: CLIENT PORTAL ═══ -->
+<!-- --- SLIDE 2: CLIENT PORTAL --- -->
 <div class="slide" id="slide-2">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fef3c7;color:#d97706">👥</div>
+    <div class="slide-icon-wrap" style="background:#fef3c7;color:#d97706">??</div>
     <div>
       <div class="slide-title">Client Portal <span class="adv-badge-inline">Advisor</span></div>
       <div class="slide-subtitle">Add, organize, and switch between clients instantly. Each client has their own saved data, reports, and history.</div>
@@ -306,22 +310,22 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="result-card teal">
-    <div class="result-label">Client: Green Leaf Yoga — Just Added Today</div>
+    <div class="result-label">Client: Green Leaf Yoga � Just Added Today</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val amber">$18,000</div><div class="metric-lbl">Monthly Revenue</div></div>
       <div class="metric-box"><div class="metric-val red">$16,800</div><div class="metric-lbl">Monthly Expenses</div></div>
       <div class="metric-box"><div class="metric-val red">$1,200</div><div class="metric-lbl">Net Cash Flow</div></div>
       <div class="metric-box"><div class="metric-val red">$9,000</div><div class="metric-lbl">Cash in Bank</div></div>
     </div>
-    <div class="verdict-badge verdict-warn">⚠️ FRAGILE — Thin margins, low cash reserve, 3 critical alerts detected</div>
-    <div style="font-size:.78rem;color:var(--sub)">Industry: Yoga Studio &amp; Wellness · Staff: 5 · In Business: 2.5 years · Outstanding Loan: $42,000</div>
+    <div class="verdict-badge verdict-warn">?? FRAGILE � Thin margins, low cash reserve, 3 critical alerts detected</div>
+    <div style="font-size:.78rem;color:var(--sub)">Industry: Yoga Studio &amp; Wellness � Staff: 5 � In Business: 2.5 years � Outstanding Loan: $42,000</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="teal" style="color:#0f766e">🟢 What the Portal Does</h4>
+      <h4 class="teal" style="color:#0f766e">?? What the Portal Does</h4>
       <ul>
-        <li>One click to switch between clients — no re-entering data</li>
+        <li>One click to switch between clients � no re-entering data</li>
         <li>All client data stored separately and securely</li>
         <li>See all past analyses and reports for each client</li>
         <li>Color-coded health status at a glance</li>
@@ -329,32 +333,32 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Without the Portal</h4>
+      <h4 class="red">?? Without the Portal</h4>
       <ul>
-        <li>Re-entering client data every session — 20+ minutes wasted</li>
+        <li>Re-entering client data every session � 20+ minutes wasted</li>
         <li>Risk of confusing one client's numbers with another's</li>
-        <li>No history — can't show a client their progress over time</li>
+        <li>No history � can't show a client their progress over time</li>
         <li>Hard to justify your fees without documented analysis</li>
       </ul>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 How client data is protected <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How client data is protected <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Each client is isolated:</strong> Client A cannot see Client B's data. All data is stored locally in your browser using encrypted localStorage — nothing is sent to a third party server. When you need to share with a client, you generate a report — the raw data stays with you.</div>
+      <div class="teal-box"><strong>Each client is isolated:</strong> Client A cannot see Client B's data. All data is stored locally in your browser using encrypted localStorage � nothing is sent to a third party server. When you need to share with a client, you generate a report � the raw data stays with you.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">👥</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Unlimited Client Accounts</strong>Pro users manage one business. Advisors manage unlimited clients — each with full data isolation, history, and report tracking.</div>
+    <div class="adv-callout-icon">??</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Unlimited Client Accounts</strong>Pro users manage one business. Advisors manage unlimited clients � each with full data isolation, history, and report tracking.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 3: BANK STATEMENT UPLOAD ═══ -->
+<!-- --- SLIDE 3: BANK STATEMENT UPLOAD --- -->
 <div class="slide" id="slide-3">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#ede9fe;color:#7c3aed">🏦</div>
+    <div class="slide-icon-wrap" style="background:#ede9fe;color:#7c3aed">??</div>
     <div>
       <div class="slide-title">Bank Statement Upload <span class="adv-badge-inline">Advisor</span></div>
       <div class="slide-subtitle">Upload a client's 3-month bank statement and BizScale automatically categorizes transactions, totals revenue and expenses, and fills every tool.</div>
@@ -362,18 +366,18 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="result-card good">
-    <div class="result-label">Green Leaf Yoga — 90-Day Bank Statement Analyzed</div>
+    <div class="result-label">Green Leaf Yoga � 90-Day Bank Statement Analyzed</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val green">247</div><div class="metric-lbl">Transactions Parsed</div></div>
       <div class="metric-box"><div class="metric-val green">94%</div><div class="metric-lbl">Auto-Categorized</div></div>
       <div class="metric-box"><div class="metric-val teal">6 min</div><div class="metric-lbl">Total Setup Time</div></div>
       <div class="metric-box"><div class="metric-val amber">14</div><div class="metric-lbl">Uncategorized (review)</div></div>
     </div>
-    <div class="verdict-badge verdict-teal">✅ All financial tools pre-filled — ready to analyze in one click</div>
+    <div class="verdict-badge verdict-teal">? All financial tools pre-filled � ready to analyze in one click</div>
   </div>
 
   <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;font-size:.78rem">
-    <div style="font-weight:800;margin-bottom:.6rem;color:#0f172a">📂 Auto-detected expense categories:</div>
+    <div style="font-weight:800;margin-bottom:.6rem;color:#0f172a">?? Auto-detected expense categories:</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem">
       <div style="background:#f8fafc;border-radius:6px;padding:.45rem .6rem"><div style="font-weight:700;color:#1e293b">Rent</div><div style="color:var(--sub)">$4,500/mo</div></div>
       <div style="background:#f8fafc;border-radius:6px;padding:.45rem .6rem"><div style="font-weight:700;color:#1e293b">Staff Payroll</div><div style="color:var(--sub)">$8,200/mo</div></div>
@@ -385,30 +389,30 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why upload bank statements instead of entering data manually? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why upload bank statements instead of entering data manually? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Manual entry problems:</strong> Clients give you rough estimates ("about $8,000 in expenses") which are often wrong by 15–30%. Bank statements show the real numbers — every transaction, every month.<br><br><strong>Upload benefit:</strong> 247 real transactions are more accurate than 6 guesses. This means your analysis is based on facts, not approximations — and your recommendations carry more weight.</div>
+      <div class="teal-box"><strong>Manual entry problems:</strong> Clients give you rough estimates ("about $8,000 in expenses") which are often wrong by 15�30%. Bank statements show the real numbers � every transaction, every month.<br><br><strong>Upload benefit:</strong> 247 real transactions are more accurate than 6 guesses. This means your analysis is based on facts, not approximations � and your recommendations carry more weight.</div>
       <strong>What gets filled automatically:</strong> Revenue, total expenses by category, average monthly figures, peak and low months, recurring vs one-time costs. Every BizScale tool then uses these real numbers.
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">🏦</div>
+    <div class="adv-callout-icon">??</div>
     <div class="adv-callout-text"><strong>Advisor Feature: Bulk Statement Processing</strong>Upload statements for multiple clients in one session. The categorization engine learns your client's recurring vendors over time, reducing uncategorized items to near zero after 2 months.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 4: FINANCIAL STATEMENTS ═══ -->
+<!-- --- SLIDE 4: FINANCIAL STATEMENTS --- -->
 <div class="slide" id="slide-4">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#ecfeff;color:#0891b2">📊</div>
+    <div class="slide-icon-wrap" style="background:#ecfeff;color:#0891b2">??</div>
     <div>
       <div class="slide-title">Financial Statements <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">Generate a full 3-statement suite — Income Statement, Balance Sheet, and Cash Flow Statement — for any client in seconds.</div>
+      <div class="slide-subtitle">Generate a full 3-statement suite � Income Statement, Balance Sheet, and Cash Flow Statement � for any client in seconds.</div>
     </div>
   </div>
 
   <div class="result-card teal">
-    <div class="result-label">Green Leaf Yoga — Income Statement (Last 3 Months Avg)</div>
+    <div class="result-label">Green Leaf Yoga � Income Statement (Last 3 Months Avg)</div>
     <div style="font-size:.8rem;line-height:1.9;font-family:monospace;background:#f8fafc;padding:.85rem;border-radius:8px;margin-bottom:.75rem">
       <div style="display:flex;justify-content:space-between"><span>Revenue</span><span style="color:#16a34a;font-weight:700">$18,000</span></div>
       <div style="display:flex;justify-content:space-between;padding-left:16px;color:#64748b"><span>Class fees &amp; memberships</span><span>$14,200</span></div>
@@ -421,50 +425,50 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       <div style="display:flex;justify-content:space-between;font-weight:700"><span>EBIT (Operating Profit)</span><span style="color:#d97706">$1,200</span></div>
       <div style="display:flex;justify-content:space-between"><span>Interest &amp; Loan Payments</span><span style="color:#dc2626">($1,800)</span></div>
       <div style="border-top:1px solid #1e293b;margin:.3rem 0"></div>
-      <div style="display:flex;justify-content:space-between;font-weight:900"><span>Net Profit</span><span style="color:#dc2626">($600) ⚠️</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:900"><span>Net Profit</span><span style="color:#dc2626">($600) ??</span></div>
     </div>
-    <div class="verdict-badge verdict-danger">🔴 NET LOSS — Business is spending more than it earns after loan payments</div>
+    <div class="verdict-badge verdict-danger">?? NET LOSS � Business is spending more than it earns after loan payments</div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What are the 3 financial statements? (Plain English) <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What are the 3 financial statements? (Plain English) <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="term-box">
-        <strong>1. Income Statement (P&amp;L)</strong> — Did the business make money this period? Revenue minus all costs = net profit or loss. Think of it as a scorecard for how well the business performed.<br><br>
-        <strong>2. Balance Sheet</strong> — What does the business own vs owe? Assets (cash, equipment, inventory) vs Liabilities (loans, bills). The difference is equity — what the owner actually "has."<br><br>
-        <strong>3. Cash Flow Statement</strong> — Where did the money actually go? A business can show profit but still run out of cash if it spends on equipment or clients don't pay on time.
+        <strong>1. Income Statement (P&amp;L)</strong> � Did the business make money this period? Revenue minus all costs = net profit or loss. Think of it as a scorecard for how well the business performed.<br><br>
+        <strong>2. Balance Sheet</strong> � What does the business own vs owe? Assets (cash, equipment, inventory) vs Liabilities (loans, bills). The difference is equity � what the owner actually "has."<br><br>
+        <strong>3. Cash Flow Statement</strong> � Where did the money actually go? A business can show profit but still run out of cash if it spends on equipment or clients don't pay on time.
       </div>
       <strong>Why advisors need all three:</strong> Looking at just one statement is like diagnosing a patient with one test. Banks require all three for loan applications. Advisors use all three to catch problems early.
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 Green Leaf Yoga is losing $600/month — what should Sarah advise? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Green Leaf Yoga is losing $600/month � what should Sarah advise? <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box">
         <strong>Immediate fixes Sarah should recommend:</strong>
         <ul>
-          <li>Review the $10,000 operating expenses — likely $2,000–3,000 can be cut (unused subscriptions, over-staffing)</li>
-          <li>Loan of $42K at current rate costs $1,800/mo — refinance to lower payment or pause non-essential debt</li>
+          <li>Review the $10,000 operating expenses � likely $2,000�3,000 can be cut (unused subscriptions, over-staffing)</li>
+          <li>Loan of $42K at current rate costs $1,800/mo � refinance to lower payment or pause non-essential debt</li>
           <li>At $600/mo loss, the $9,000 cash reserve lasts only 15 months before insolvency</li>
-          <li>Raise class prices by 10% ($14,200 → $15,620) — most yoga students accept small increases</li>
+          <li>Raise class prices by 10% ($14,200 ? $15,620) � most yoga students accept small increases</li>
           <li>Add a membership tier with annual prepayment to boost cash now</li>
         </ul>
       </div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">📊</div>
+    <div class="adv-callout-icon">??</div>
     <div class="adv-callout-text"><strong>Advisor Feature: Print-Ready Statements</strong>Export clean, formatted financial statements with your firm's branding. Share directly with clients, banks, or investors. Generates in seconds vs hours in Excel.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 5: INDUSTRY BENCHMARKS ═══ -->
+<!-- --- SLIDE 5: INDUSTRY BENCHMARKS --- -->
 <div class="slide" id="slide-5">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fef3c7;color:#d97706">📉</div>
+    <div class="slide-icon-wrap" style="background:#fef3c7;color:#d97706">??</div>
     <div>
       <div class="slide-title">Industry Benchmarks <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">Compare any client against 850+ industry benchmarks. Instantly see where they're above or below average — and by how much.</div>
+      <div class="slide-subtitle">Compare any client against 850+ industry benchmarks. Instantly see where they're above or below average � and by how much.</div>
     </div>
   </div>
 
@@ -474,34 +478,34 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       <table style="width:100%;border-collapse:collapse">
         <thead><tr style="background:#f8fafc"><th style="padding:.45rem .6rem;text-align:left;font-size:.68rem;color:var(--sub);border-bottom:1px solid var(--border)">Metric</th><th style="padding:.45rem .6rem;text-align:right;font-size:.68rem;color:var(--sub);border-bottom:1px solid var(--border)">Client</th><th style="padding:.45rem .6rem;text-align:right;font-size:.68rem;color:var(--sub);border-bottom:1px solid var(--border)">Industry Avg</th><th style="padding:.45rem .6rem;text-align:right;font-size:.68rem;color:var(--sub);border-bottom:1px solid var(--border)">Status</th></tr></thead>
         <tbody>
-          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Gross Profit Margin</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#16a34a">62%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">55%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#16a34a;font-weight:700">✅ Above avg</span></td></tr>
-          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Net Profit Margin</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">-3.3%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">+8%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">🔴 Below avg</span></td></tr>
-          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Operating Expense Ratio</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">56%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">43%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">🔴 Too high</span></td></tr>
-          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Cash Reserve (months)</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#d97706">0.5 mo</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">2.5 mo</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">🔴 Dangerously low</span></td></tr>
-          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Revenue per Employee</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#d97706">$3,600</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">$4,800</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#d97706;font-weight:700">⚠️ Below avg</span></td></tr>
-          <tr><td style="padding:.45rem .6rem">Debt-to-Revenue Ratio</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">10%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">6%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">🔴 Too indebted</span></td></tr>
+          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Gross Profit Margin</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#16a34a">62%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">55%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#16a34a;font-weight:700">? Above avg</span></td></tr>
+          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Net Profit Margin</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">-3.3%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">+8%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">?? Below avg</span></td></tr>
+          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Operating Expense Ratio</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">56%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">43%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">?? Too high</span></td></tr>
+          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Cash Reserve (months)</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#d97706">0.5 mo</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">2.5 mo</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">?? Dangerously low</span></td></tr>
+          <tr style="border-bottom:1px solid #f1f5f9"><td style="padding:.45rem .6rem">Revenue per Employee</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#d97706">$3,600</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">$4,800</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#d97706;font-weight:700">?? Below avg</span></td></tr>
+          <tr><td style="padding:.45rem .6rem">Debt-to-Revenue Ratio</td><td style="padding:.45rem .6rem;text-align:right;font-weight:700;color:#dc2626">10%</td><td style="padding:.45rem .6rem;text-align:right;color:var(--sub)">6%</td><td style="padding:.45rem .6rem;text-align:right"><span style="color:#dc2626;font-weight:700">?? Too indebted</span></td></tr>
         </tbody>
       </table>
     </div>
-    <div class="verdict-badge verdict-risky">⚠️ 4 of 6 key metrics are below industry average</div>
+    <div class="verdict-badge verdict-risky">?? 4 of 6 key metrics are below industry average</div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why benchmarks are powerful for advisors <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why benchmarks are powerful for advisors <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Without benchmarks:</strong> You can tell a client "your expenses seem high" — but they can push back and say "how do you know?"<br><br><strong>With benchmarks:</strong> "Your operating expense ratio is 56% — the industry average for yoga studios is 43%. You are spending 13% more than comparable businesses your size. Here are the 3 categories where you're over-indexed."<br><br>This data-backed approach makes your recommendations impossible to argue with.</div>
+      <div class="teal-box"><strong>Without benchmarks:</strong> You can tell a client "your expenses seem high" � but they can push back and say "how do you know?"<br><br><strong>With benchmarks:</strong> "Your operating expense ratio is 56% � the industry average for yoga studios is 43%. You are spending 13% more than comparable businesses your size. Here are the 3 categories where you're over-indexed."<br><br>This data-backed approach makes your recommendations impossible to argue with.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">📉</div>
+    <div class="adv-callout-icon">??</div>
     <div class="adv-callout-text"><strong>Advisor Feature: 850+ Industry Benchmarks</strong>Covers food service, retail, professional services, fitness, auto, healthcare, and more. Benchmarks update quarterly. Advisors can include benchmark comparisons directly in client reports.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 6: AI CFO CHAT ═══ -->
+<!-- --- SLIDE 6: AI CFO CHAT --- -->
 <div class="slide" id="slide-6">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0fdf4;color:#16a34a">🤖</div>
+    <div class="slide-icon-wrap" style="background:#f0fdf4;color:#16a34a">??</div>
     <div>
       <div class="slide-title">AI CFO Chat <span class="adv-badge-inline">Advisor</span></div>
       <div class="slide-subtitle">Ask plain-English questions about any client and get CFO-level answers backed by their actual data.</div>
@@ -509,57 +513,57 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="chat-wrap">
-    <div class="chat-q"><span>👩‍💼</span> <strong>Sarah asks:</strong> "Is Green Leaf Yoga ready for a $50,000 SBA loan?"</div>
+    <div class="chat-q"><span>?????</span> <strong>Sarah asks:</strong> "Is Green Leaf Yoga ready for a $50,000 SBA loan?"</div>
     <div class="chat-a">
-      <strong>🤖 AI CFO Answer — Based on Green Leaf Yoga's actual data:</strong>
-      <strong style="color:#dc2626">Not yet — here's why:</strong><br>
-      📊 <strong>DSCR is 0.67</strong> — lenders require ≥1.25. This means the business only earns 67 cents for every $1 of debt payments. A $50K loan adds ~$950/mo in payments, making the ratio worse (0.51).<br><br>
-      💰 <strong>Cash reserve: $9,000 (0.5 months)</strong> — SBA lenders want to see 2+ months. This signals the business has no buffer for slow months.<br><br>
-      📉 <strong>Currently running a net loss of $600/month</strong> — no lender will approve a loan to a business losing money.<br><br>
-      ✅ <strong>What Sarah should advise:</strong>
+      <strong>?? AI CFO Answer � Based on Green Leaf Yoga's actual data:</strong>
+      <strong style="color:#dc2626">Not yet � here's why:</strong><br>
+      ?? <strong>DSCR is 0.67</strong> � lenders require =1.25. This means the business only earns 67 cents for every $1 of debt payments. A $50K loan adds ~$950/mo in payments, making the ratio worse (0.51).<br><br>
+      ?? <strong>Cash reserve: $9,000 (0.5 months)</strong> � SBA lenders want to see 2+ months. This signals the business has no buffer for slow months.<br><br>
+      ?? <strong>Currently running a net loss of $600/month</strong> � no lender will approve a loan to a business losing money.<br><br>
+      ? <strong>What Sarah should advise:</strong>
       <ul style="padding-left:14px;margin-top:.4rem">
         <li>Reduce operating expenses by $2,000/mo first (target: break even)</li>
         <li>Build 2 months cash reserve (~$36,000) before applying</li>
-        <li>Re-apply in 6 months — timeline is achievable with these changes</li>
+        <li>Re-apply in 6 months � timeline is achievable with these changes</li>
         <li>Consider a smaller $20K working capital line instead now</li>
       </ul>
     </div>
   </div>
 
   <div class="chat-wrap">
-    <div class="chat-q"><span>👩‍💼</span> <strong>Sarah asks:</strong> "Which of my 8 clients is most likely to face a cash crisis in the next 90 days?"</div>
+    <div class="chat-q"><span>?????</span> <strong>Sarah asks:</strong> "Which of my 8 clients is most likely to face a cash crisis in the next 90 days?"</div>
     <div class="chat-a">
-      <strong>🤖 AI CFO Answer — Portfolio Analysis:</strong>
-      🔴 <strong>Green Leaf Yoga</strong> — Highest risk. Net loss $600/mo, only $9K cash. At this burn rate, cash runs out in ~15 months. If revenue dips 10%, it's 9 months.<br>
-      ⚠️ <strong>Wicker Bookstore</strong> — Moderate risk. Seasonal revenue swing of 40% (holiday vs summer). Summer months show negative cash flow historically. Needs $15K line of credit as buffer.<br>
-      ✅ All other 6 clients — Stable with positive cash flow and adequate reserves.
+      <strong>?? AI CFO Answer � Portfolio Analysis:</strong>
+      ?? <strong>Green Leaf Yoga</strong> � Highest risk. Net loss $600/mo, only $9K cash. At this burn rate, cash runs out in ~15 months. If revenue dips 10%, it's 9 months.<br>
+      ?? <strong>Wicker Bookstore</strong> � Moderate risk. Seasonal revenue swing of 40% (holiday vs summer). Summer months show negative cash flow historically. Needs $15K line of credit as buffer.<br>
+      ? All other 6 clients � Stable with positive cash flow and adequate reserves.
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 How AI CFO Chat works for advisors <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How AI CFO Chat works for advisors <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>The AI knows your client's actual numbers.</strong> It doesn't give generic advice — it calculates DSCR, DTI, cash runway, and profit trends using the real data you uploaded. When it says "not ready for a loan," it's showing the math.<br><br><strong>Cross-client intelligence:</strong> On the Advisor plan, the AI can compare across your entire portfolio to identify patterns — like which clients have similar risk profiles or which industries are showing stress.</div>
+      <div class="teal-box"><strong>The AI knows your client's actual numbers.</strong> It doesn't give generic advice � it calculates DSCR, DTI, cash runway, and profit trends using the real data you uploaded. When it says "not ready for a loan," it's showing the math.<br><br><strong>Cross-client intelligence:</strong> On the Advisor plan, the AI can compare across your entire portfolio to identify patterns � like which clients have similar risk profiles or which industries are showing stress.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">🤖</div>
+    <div class="adv-callout-icon">??</div>
     <div class="adv-callout-text"><strong>Advisor Feature: Multi-Client AI Context</strong>Ask questions across your entire client portfolio, not just one business. "Which clients need attention this month?" returns a prioritized action list across all 8 clients.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 7: BUSINESS HEALTH SCORE ═══ -->
+<!-- --- SLIDE 7: BUSINESS HEALTH SCORE --- -->
 <div class="slide" id="slide-7">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fce7f3;color:#be185d">🏆</div>
+    <div class="slide-icon-wrap" style="background:#fce7f3;color:#be185d">??</div>
     <div>
       <div class="slide-title">Business Health Score <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">A single grade (A–F) that summarizes a client's financial health across 6 dimensions. Makes complex analysis instantly understandable.</div>
+      <div class="slide-subtitle">A single grade (A�F) that summarizes a client's financial health across 6 dimensions. Makes complex analysis instantly understandable.</div>
     </div>
   </div>
 
   <div class="result-card bad">
-    <div class="result-label">Green Leaf Yoga — Business Health Report Card</div>
+    <div class="result-label">Green Leaf Yoga � Business Health Report Card</div>
     <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:.85rem;flex-wrap:wrap">
       <div style="text-align:center">
         <div style="font-size:3.5rem;font-weight:900;color:#dc2626;line-height:1">D</div>
@@ -567,38 +571,38 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       </div>
       <div style="flex:1;min-width:200px">
         <div style="font-size:1.5rem;font-weight:900;color:#dc2626">41 / 100</div>
-        <div style="font-size:.75rem;color:var(--sub);margin-bottom:.5rem">Score — Needs Significant Improvement</div>
+        <div style="font-size:.75rem;color:var(--sub);margin-bottom:.5rem">Score � Needs Significant Improvement</div>
         <div style="background:#f1f5f9;border-radius:8px;height:10px;overflow:hidden"><div style="background:#dc2626;height:100%;width:41%;border-radius:8px"></div></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;font-size:.72rem">
-      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Cash Flow</div><div style="color:#dc2626">D — Barely positive</div></div>
-      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Debt Load</div><div style="color:#dc2626">D — DSCR 0.67</div></div>
-      <div style="background:#fef9c3;border-radius:7px;padding:.5rem .6rem;border:1px solid #fde68a"><div style="font-weight:800;color:#854d0e">Profit Margin</div><div style="color:#d97706">C — Net loss</div></div>
-      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Cash Reserve</div><div style="color:#dc2626">F — 0.5 months</div></div>
-      <div style="background:#f0fdf4;border-radius:7px;padding:.5rem .6rem;border:1px solid #86efac"><div style="font-weight:800;color:#15803d">Gross Margin</div><div style="color:#16a34a">B — 62% (good)</div></div>
-      <div style="background:#fef9c3;border-radius:7px;padding:.5rem .6rem;border:1px solid #fde68a"><div style="font-weight:800;color:#854d0e">Revenue Trend</div><div style="color:#d97706">C — Flat 3 months</div></div>
+      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Cash Flow</div><div style="color:#dc2626">D � Barely positive</div></div>
+      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Debt Load</div><div style="color:#dc2626">D � DSCR 0.67</div></div>
+      <div style="background:#fef9c3;border-radius:7px;padding:.5rem .6rem;border:1px solid #fde68a"><div style="font-weight:800;color:#854d0e">Profit Margin</div><div style="color:#d97706">C � Net loss</div></div>
+      <div style="background:#fef2f2;border-radius:7px;padding:.5rem .6rem;border:1px solid #fca5a5"><div style="font-weight:800;color:#991b1b">Cash Reserve</div><div style="color:#dc2626">F � 0.5 months</div></div>
+      <div style="background:#f0fdf4;border-radius:7px;padding:.5rem .6rem;border:1px solid #86efac"><div style="font-weight:800;color:#15803d">Gross Margin</div><div style="color:#16a34a">B � 62% (good)</div></div>
+      <div style="background:#fef9c3;border-radius:7px;padding:.5rem .6rem;border:1px solid #fde68a"><div style="font-weight:800;color:#854d0e">Revenue Trend</div><div style="color:#d97706">C � Flat 3 months</div></div>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 How to use the Health Score with clients <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How to use the Health Score with clients <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Start with the grade, not the numbers.</strong> When you show a client a grade D, they immediately understand the urgency — no explanation needed. Then use the 6 sub-scores to show exactly which areas to fix.<br><br><strong>Progress tracking:</strong> Run the health score monthly. When a client goes from D to C to B over 6 months, that's your proof of value as their advisor. One report pays for itself.</div>
+      <div class="teal-box"><strong>Start with the grade, not the numbers.</strong> When you show a client a grade D, they immediately understand the urgency � no explanation needed. Then use the 6 sub-scores to show exactly which areas to fix.<br><br><strong>Progress tracking:</strong> Run the health score monthly. When a client goes from D to C to B over 6 months, that's your proof of value as their advisor. One report pays for itself.</div>
       <strong>Good situation (Grade A/B):</strong> Use it to show the client they're doing well and to justify a loan application or expansion plan.<br>
       <strong>Bad situation (Grade D/F):</strong> Use it as the starting point for a 90-day recovery plan. Each sub-score becomes a specific action item.
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">🏆</div>
+    <div class="adv-callout-icon">??</div>
     <div class="adv-callout-text"><strong>Advisor Feature: Grade Tracking Over Time</strong>See a client's score history month by month. Showing a grade improvement from D to B is powerful evidence of the value your advisory services deliver.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 8: RISK ALERT ENGINE ═══ -->
+<!-- --- SLIDE 8: RISK ALERT ENGINE --- -->
 <div class="slide" id="slide-8">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fef2f2;color:#dc2626">⚠️</div>
+    <div class="slide-icon-wrap" style="background:#fef2f2;color:#dc2626">??</div>
     <div>
       <div class="slide-title">Risk Alert Engine <span class="adv-badge-inline">Advisor</span></div>
       <div class="slide-subtitle">Automatically scans every client's data and flags critical financial risks before they become emergencies.</div>
@@ -606,90 +610,90 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="result-card bad">
-    <div class="result-label">Green Leaf Yoga — Auto-Detected Risk Alerts</div>
+    <div class="result-label">Green Leaf Yoga � Auto-Detected Risk Alerts</div>
 
     <div style="border:1.5px solid #fca5a5;background:#fef2f2;border-radius:10px;padding:.85rem;margin-bottom:.65rem">
-      <div style="font-weight:800;color:#991b1b;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">🔴 CRITICAL: Cash Runway is 0.5 months</div>
+      <div style="font-weight:800;color:#991b1b;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">?? CRITICAL: Cash Runway is 0.5 months</div>
       <div style="font-size:.76rem;color:#374151">At the current burn rate, the business has only 15 days of cash left if revenue stops. Most lenders require 3+ months. <strong>Action needed: Immediately reduce expenses or inject $15K emergency capital.</strong></div>
-      <button class="acc-btn" style="margin-top:.5rem;background:#fef2f2;border-color:#fca5a5" onclick="toggleAcc(this)">Why this matters ▼ <span class="arrow" style="display:none"></span></button>
-      <div class="acc-body" style="background:#fef2f2;border-color:#fca5a5">A cash runway under 1 month means: if one big client cancels, one month has a bad week, or an unexpected expense comes up — the business cannot pay rent or staff. This is the most common reason small businesses close.<br><em>Example: Green Leaf loses their biggest corporate client ($4,000/mo) in July. With $9K cash, they run out in 2 months.</em></div>
+      <button class="acc-btn" style="margin-top:.5rem;background:#fef2f2;border-color:#fca5a5" onclick="toggleAcc(this)">Why this matters ? <span class="arrow" style="display:none"></span></button>
+      <div class="acc-body" style="background:#fef2f2;border-color:#fca5a5">A cash runway under 1 month means: if one big client cancels, one month has a bad week, or an unexpected expense comes up � the business cannot pay rent or staff. This is the most common reason small businesses close.<br><em>Example: Green Leaf loses their biggest corporate client ($4,000/mo) in July. With $9K cash, they run out in 2 months.</em></div>
     </div>
 
     <div style="border:1.5px solid #fca5a5;background:#fef2f2;border-radius:10px;padding:.85rem;margin-bottom:.65rem">
-      <div style="font-weight:800;color:#991b1b;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">🔴 CRITICAL: DSCR below 1.0 (currently 0.67)</div>
+      <div style="font-weight:800;color:#991b1b;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">?? CRITICAL: DSCR below 1.0 (currently 0.67)</div>
       <div style="font-size:.76rem;color:#374151">The business earns $0.67 for every $1 of debt payments owed. This means it technically cannot service its current debt from operating income alone. <strong>Action: Refinance the $42K loan to lower monthly payment, or increase revenue by $2,800/mo.</strong></div>
     </div>
 
     <div style="border:1.5px solid #fde68a;background:#fffbeb;border-radius:10px;padding:.85rem">
-      <div style="font-weight:800;color:#92400e;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">⚠️ WARNING: Operating expenses 30% above industry average</div>
-      <div style="font-size:.76rem;color:#374151">Operating expenses are 56% of revenue vs 43% industry average. Over-spending by ~$2,340/mo. <strong>Top targets: review staffing schedule and marketing spend — these are typically 60% of excess costs.</strong></div>
+      <div style="font-weight:800;color:#92400e;font-size:.82rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem">?? WARNING: Operating expenses 30% above industry average</div>
+      <div style="font-size:.76rem;color:#374151">Operating expenses are 56% of revenue vs 43% industry average. Over-spending by ~$2,340/mo. <strong>Top targets: review staffing schedule and marketing spend � these are typically 60% of excess costs.</strong></div>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why auto-detection beats manual review <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why auto-detection beats manual review <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Manual review fatigue:</strong> When reviewing 8 clients weekly, it's easy to miss a metric that crossed a threshold. The risk engine checks 14 financial ratios on every client, every time data is updated. You'd need to check 112 numbers manually to match what the engine does in 3 seconds.<br><br><strong>Threshold-based alerts:</strong> DSCR drops below 1.0 → alert fires. Cash runway drops under 1 month → alert fires. Expense ratio exceeds industry average by 25% → alert fires. These are the same triggers a CFO would use.</div>
+      <div class="teal-box"><strong>Manual review fatigue:</strong> When reviewing 8 clients weekly, it's easy to miss a metric that crossed a threshold. The risk engine checks 14 financial ratios on every client, every time data is updated. You'd need to check 112 numbers manually to match what the engine does in 3 seconds.<br><br><strong>Threshold-based alerts:</strong> DSCR drops below 1.0 ? alert fires. Cash runway drops under 1 month ? alert fires. Expense ratio exceeds industry average by 25% ? alert fires. These are the same triggers a CFO would use.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">⚠️</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Portfolio-Wide Alerts</strong>Every morning, the dashboard shows new alerts across all clients. You know immediately which clients need your attention today — without reviewing anyone manually.</div>
+    <div class="adv-callout-icon">??</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Portfolio-Wide Alerts</strong>Every morning, the dashboard shows new alerts across all clients. You know immediately which clients need your attention today � without reviewing anyone manually.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 9: CLIENT RISK EMAIL ═══ -->
+<!-- --- SLIDE 9: CLIENT RISK EMAIL --- -->
 <div class="slide" id="slide-9">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0fdf4;color:#16a34a">📧</div>
+    <div class="slide-icon-wrap" style="background:#f0fdf4;color:#16a34a">??</div>
     <div>
       <div class="slide-title">Client Risk Email <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">One click generates a professional, personalized risk alert email — pre-filled with the client's actual numbers and your recommendations.</div>
+      <div class="slide-subtitle">One click generates a professional, personalized risk alert email � pre-filled with the client's actual numbers and your recommendations.</div>
     </div>
   </div>
 
   <div class="report-preview">
     <div class="report-header">
-      <div class="report-logo">📧</div>
+      <div class="report-logo">??</div>
       <div class="report-header-text">
-        <h3>Client Risk Alert — Generated in 8 seconds</h3>
+        <h3>Client Risk Alert � Generated in 8 seconds</h3>
         <p>From: Sarah Chen, CPA | To: Green Leaf Yoga | Sent: Today</p>
       </div>
     </div>
     <div class="report-body">
-      <div style="font-weight:800;font-size:.85rem;color:#0f172a;margin-bottom:.5rem">Subject: ⚠️ Action Required — Green Leaf Yoga Financial Alert</div>
+      <div style="font-weight:800;font-size:.85rem;color:#0f172a;margin-bottom:.5rem">Subject: ?? Action Required � Green Leaf Yoga Financial Alert</div>
       <p style="margin-bottom:.6rem">Hi [Client Name],</p>
       <p style="margin-bottom:.6rem">I've completed your monthly financial review and identified <strong>3 items that need your attention</strong>. Here's what I found:</p>
       <div style="background:#fef2f2;border-left:3px solid #dc2626;padding:.55rem .75rem;border-radius:0 6px 6px 0;margin:.5rem 0;font-size:.77rem">
-        <strong>🔴 CRITICAL: Cash Reserve</strong> — Your current cash ($9,000) covers only 15 days of expenses. I strongly recommend building a $30,000 emergency reserve before taking on new commitments.
+        <strong>?? CRITICAL: Cash Reserve</strong> � Your current cash ($9,000) covers only 15 days of expenses. I strongly recommend building a $30,000 emergency reserve before taking on new commitments.
       </div>
       <div style="background:#fef2f2;border-left:3px solid #dc2626;padding:.55rem .75rem;border-radius:0 6px 6px 0;margin:.5rem 0;font-size:.77rem">
-        <strong>🔴 CRITICAL: Debt Coverage</strong> — Your DSCR is 0.67 (needs to be ≥1.25 for loan approval). Your current loan payment of $1,800/mo exceeds what your net income can support.
+        <strong>?? CRITICAL: Debt Coverage</strong> � Your DSCR is 0.67 (needs to be =1.25 for loan approval). Your current loan payment of $1,800/mo exceeds what your net income can support.
       </div>
       <div style="background:#fffbeb;border-left:3px solid #d97706;padding:.55rem .75rem;border-radius:0 6px 6px 0;margin:.5rem 0;font-size:.77rem">
-        <strong>⚠️ Expenses 30% over industry average</strong> — Comparable yoga studios spend 43% of revenue on operations; yours is 56%. I've identified $2,000–2,500 in potential monthly savings.
+        <strong>?? Expenses 30% over industry average</strong> � Comparable yoga studios spend 43% of revenue on operations; yours is 56%. I've identified $2,000�2,500 in potential monthly savings.
       </div>
       <p style="margin-top:.6rem;font-size:.77rem"><strong>Recommended next steps:</strong> Let's schedule a 30-minute call this week to review the expense reduction plan I've prepared. I believe we can get you to cash-flow positive within 60 days.</p>
-      <p style="margin-top:.5rem;font-size:.77rem;color:var(--sub)">— Sarah Chen, CPA | Chen Financial Advisory | (312) 555-0192</p>
+      <p style="margin-top:.5rem;font-size:.77rem;color:var(--sub)">� Sarah Chen, CPA | Chen Financial Advisory | (312) 555-0192</p>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why this feature saves 2+ hours per week <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why this feature saves 2+ hours per week <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Manual email writing:</strong> Reviewing a client file, identifying issues, writing a professional email with specific numbers, proofreading — easily 25–30 minutes per client. For 8 clients sending monthly alerts, that's 3–4 hours per month just on emails.<br><br><strong>With BizScale:</strong> The engine reads the risk alerts already detected, pulls the client's real numbers, and writes a professional email in 8 seconds. You review, personalize if needed, and send. Total time: 2–3 minutes per client.</div>
+      <div class="teal-box"><strong>Manual email writing:</strong> Reviewing a client file, identifying issues, writing a professional email with specific numbers, proofreading � easily 25�30 minutes per client. For 8 clients sending monthly alerts, that's 3�4 hours per month just on emails.<br><br><strong>With BizScale:</strong> The engine reads the risk alerts already detected, pulls the client's real numbers, and writes a professional email in 8 seconds. You review, personalize if needed, and send. Total time: 2�3 minutes per client.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">📧</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Branded Risk Emails</strong>Emails include your firm name, phone number, and signature. Clients receive professional, personalized communications — not generic templates. This builds trust and justifies your retainer.</div>
+    <div class="adv-callout-icon">??</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Branded Risk Emails</strong>Emails include your firm name, phone number, and signature. Clients receive professional, personalized communications � not generic templates. This builds trust and justifies your retainer.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 10: BRANDED REPORTS ═══ -->
+<!-- --- SLIDE 10: BRANDED REPORTS --- -->
 <div class="slide" id="slide-10">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#ede9fe;color:#7c3aed">📄</div>
+    <div class="slide-icon-wrap" style="background:#ede9fe;color:#7c3aed">??</div>
     <div>
       <div class="slide-title">Branded Reports <span class="adv-badge-inline">Advisor</span></div>
       <div class="slide-subtitle">Generate professional financial reports with your firm's name, logo, and branding. Deliver something your clients can share with their bank or investors.</div>
@@ -698,10 +702,10 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 
   <div class="report-preview">
     <div class="report-header" style="background:linear-gradient(135deg,#1e1b4b,#4f46e5)">
-      <div class="report-logo" style="background:rgba(255,255,255,.2);font-size:1.3rem">💼</div>
+      <div class="report-logo" style="background:rgba(255,255,255,.2);font-size:1.3rem">??</div>
       <div class="report-header-text">
-        <h3>Chen Financial Advisory — Client Report</h3>
-        <p>Main Street Bakery &amp; Café · Monthly Financial Analysis · April 2026</p>
+        <h3>Chen Financial Advisory � Client Report</h3>
+        <p>Main Street Bakery &amp; Caf� � Monthly Financial Analysis � April 2026</p>
       </div>
     </div>
     <div class="report-body">
@@ -713,50 +717,50 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
         <div>
           <div style="font-size:.68rem;font-weight:800;color:var(--sub);text-transform:uppercase;margin-bottom:.4rem">Key Metrics</div>
           <div style="font-size:.76rem;color:#374151;line-height:1.8">
-            Net Cash Flow: <strong style="color:#16a34a">$9,800 ✅</strong><br>
-            Health Grade: <strong style="color:#2563eb">B · 72/100</strong><br>
-            Loan Readiness: <strong style="color:#16a34a">Ready ✅</strong><br>
+            Net Cash Flow: <strong style="color:#16a34a">$9,800 ?</strong><br>
+            Health Grade: <strong style="color:#2563eb">B � 72/100</strong><br>
+            Loan Readiness: <strong style="color:#16a34a">Ready ?</strong><br>
             Max Loan Capacity: <strong style="color:#16a34a">$247,000</strong>
           </div>
         </div>
       </div>
       <div style="font-size:.68rem;font-weight:800;color:var(--sub);text-transform:uppercase;margin-bottom:.4rem">Recommendations</div>
-      <div style="font-size:.77rem;color:#374151;line-height:1.6">1. Apply for SBA 7(a) loan of $150K — DSCR of 3.0 exceeds requirements. 2. Continue current expense discipline — grocery/supplies cost at industry average. 3. Consider Section 179 equipment deduction for the new kitchen purchase (up to $28K savings).</div>
-      <div style="margin-top:.65rem;padding-top:.65rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--sub)">Prepared by Sarah Chen, CPA · Chen Financial Advisory · Chicago, IL · This report is confidential and prepared exclusively for Main Street Bakery &amp; Café.</div>
+      <div style="font-size:.77rem;color:#374151;line-height:1.6">1. Apply for SBA 7(a) loan of $150K � DSCR of 3.0 exceeds requirements. 2. Continue current expense discipline � grocery/supplies cost at industry average. 3. Consider Section 179 equipment deduction for the new kitchen purchase (up to $28K savings).</div>
+      <div style="margin-top:.65rem;padding-top:.65rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--sub)">Prepared by Sarah Chen, CPA � Chen Financial Advisory � Chicago, IL � This report is confidential and prepared exclusively for Main Street Bakery &amp; Caf�.</div>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why branded reports change how clients see you <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why branded reports change how clients see you <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Without branded reports:</strong> You email a client Excel spreadsheets or raw numbers. It looks like homework, not professional advisory work. Clients question whether they're getting value for their monthly fee.<br><br><strong>With branded reports:</strong> Your client receives a polished, professional document with your firm's identity on it. They can share it with their bank for a loan application, show it to partners, or just feel confident that someone professional is watching their finances. This perception shift is worth 2–3x your fee in client retention.</div>
+      <div class="teal-box"><strong>Without branded reports:</strong> You email a client Excel spreadsheets or raw numbers. It looks like homework, not professional advisory work. Clients question whether they're getting value for their monthly fee.<br><br><strong>With branded reports:</strong> Your client receives a polished, professional document with your firm's identity on it. They can share it with their bank for a loan application, show it to partners, or just feel confident that someone professional is watching their finances. This perception shift is worth 2�3x your fee in client retention.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">📄</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Custom Firm Branding</strong>Add your firm name, tagline, and color scheme. Every report looks like it came from a $500/hr advisory firm — not a template. Clients who receive these reports have 3x higher retention rates.</div>
+    <div class="adv-callout-icon">??</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Custom Firm Branding</strong>Add your firm name, tagline, and color scheme. Every report looks like it came from a $500/hr advisory firm � not a template. Clients who receive these reports have 3x higher retention rates.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 11: PAID REPORTS ═══ -->
+<!-- --- SLIDE 11: PAID REPORTS --- -->
 <div class="slide" id="slide-11">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fef9c3;color:#ca8a04">💰</div>
+    <div class="slide-icon-wrap" style="background:#fef9c3;color:#ca8a04">??</div>
     <div>
       <div class="slide-title">Paid Reports <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">Charge clients for detailed financial reports. BizScale generates them in minutes — you earn $99–$499 per report.</div>
+      <div class="slide-subtitle">Charge clients for detailed financial reports. BizScale generates them in minutes � you earn $99�$499 per report.</div>
     </div>
   </div>
 
   <div class="result-card good">
-    <div class="result-label">Sarah's Report Revenue — Last 30 Days</div>
+    <div class="result-label">Sarah's Report Revenue � Last 30 Days</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val green">$4,800</div><div class="metric-lbl">Report Revenue</div></div>
       <div class="metric-box"><div class="metric-val green">16</div><div class="metric-lbl">Reports Generated</div></div>
       <div class="metric-box"><div class="metric-val teal">$300</div><div class="metric-lbl">Avg per Report</div></div>
       <div class="metric-box"><div class="metric-val teal">4.2 hrs</div><div class="metric-lbl">Total Time Spent</div></div>
     </div>
-    <div class="verdict-badge verdict-safe">✅ $4,800 earned in 4.2 hours of report work — $1,143/hr effective rate</div>
+    <div class="verdict-badge verdict-safe">? $4,800 earned in 4.2 hours of report work � $1,143/hr effective rate</div>
   </div>
 
   <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:.85rem;margin-bottom:1rem">
@@ -786,32 +790,32 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 How this creates a new revenue stream for advisors <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How this creates a new revenue stream for advisors <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="teal-box"><strong>Traditional advisory model:</strong> Monthly retainer for advice. Clients sometimes feel they're paying for "just a call." Hard to justify price increases.<br><br><strong>With Paid Reports:</strong> Each report is a tangible deliverable with clear value. Clients see a $399 loan readiness package as a product they're buying — not just your time. This decouples your earnings from hours worked.<br><br><strong>Math example:</strong> 8 clients × $149/mo monthly report = $1,192/mo additional revenue. Plus 1–2 premium reports per month = $600–800 more. On top of your base retainer.</div>
+      <div class="teal-box"><strong>Traditional advisory model:</strong> Monthly retainer for advice. Clients sometimes feel they're paying for "just a call." Hard to justify price increases.<br><br><strong>With Paid Reports:</strong> Each report is a tangible deliverable with clear value. Clients see a $399 loan readiness package as a product they're buying � not just your time. This decouples your earnings from hours worked.<br><br><strong>Math example:</strong> 8 clients � $149/mo monthly report = $1,192/mo additional revenue. Plus 1�2 premium reports per month = $600�800 more. On top of your base retainer.</div>
     </div>
   </div>
   <div class="adv-callout">
-    <div class="adv-callout-icon">💰</div>
-    <div class="adv-callout-text"><strong>Advisor Feature: Paid Report Engine</strong>Set your prices, generate with one click, deliver as a download link. BizScale handles the report generation — you handle the billing. Most advisors recover the entire Advisor plan cost from one report sale per month.</div>
+    <div class="adv-callout-icon">??</div>
+    <div class="adv-callout-text"><strong>Advisor Feature: Paid Report Engine</strong>Set your prices, generate with one click, deliver as a download link. BizScale handles the report generation � you handle the billing. Most advisors recover the entire Advisor plan cost from one report sale per month.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 12: EFFICIENCY GAINS ═══ -->
+<!-- --- SLIDE 12: EFFICIENCY GAINS --- -->
 <div class="slide" id="slide-12">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">⏱</div>
+    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">?</div>
     <div>
       <div class="slide-title">Efficiency Gains <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">How BizScale Advisor changes the economics of running an advisory practice — the time savings alone pay for the plan in the first week.</div>
+      <div class="slide-subtitle">How BizScale Advisor changes the economics of running an advisory practice � the time savings alone pay for the plan in the first week.</div>
     </div>
   </div>
 
   <div class="result-card teal">
-    <div class="result-label">Sarah's Weekly Time — Before vs After BizScale Advisor</div>
+    <div class="result-label">Sarah's Weekly Time � Before vs After BizScale Advisor</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.85rem">
       <div style="background:#fef2f2;border-radius:10px;padding:.85rem;border:1.5px solid #fca5a5">
-        <div style="font-weight:800;color:#991b1b;margin-bottom:.5rem;font-size:.82rem">🔴 Without BizScale (Manual)</div>
+        <div style="font-weight:800;color:#991b1b;margin-bottom:.5rem;font-size:.82rem">?? Without BizScale (Manual)</div>
         <div style="font-size:.76rem;color:#374151;line-height:1.8">
           Data entry per client: <strong>35 min</strong><br>
           Financial analysis: <strong>50 min</strong><br>
@@ -823,7 +827,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
         </div>
       </div>
       <div style="background:#f0fdfa;border-radius:10px;padding:.85rem;border:1.5px solid #99f6e4">
-        <div style="font-weight:800;color:#0f766e;margin-bottom:.5rem;font-size:.82rem">✅ With BizScale Advisor</div>
+        <div style="font-weight:800;color:#0f766e;margin-bottom:.5rem;font-size:.82rem">? With BizScale Advisor</div>
         <div style="font-size:.76rem;color:#374151;line-height:1.8">
           Bank statement upload: <strong>6 min</strong><br>
           Auto-analysis review: <strong>8 min</strong><br>
@@ -835,12 +839,12 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
         </div>
       </div>
     </div>
-    <div class="verdict-badge verdict-teal">✅ 19+ hours saved per week — time Sarah reinvests in adding 4 new clients</div>
+    <div class="verdict-badge verdict-teal">? 19+ hours saved per week � time Sarah reinvests in adding 4 new clients</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel teal">
-      <h4 class="teal" style="color:#0f766e">🟢 What Sarah does with 19 saved hours</h4>
+      <h4 class="teal" style="color:#0f766e">?? What Sarah does with 19 saved hours</h4>
       <ul>
         <li>Takes on 4 additional clients (+$2,400/mo revenue)</li>
         <li>Spends more time on high-value advisory calls</li>
@@ -849,9 +853,9 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Without BizScale — the advisor trap</h4>
+      <h4 class="red">?? Without BizScale � the advisor trap</h4>
       <ul>
-        <li>Capped at 6–8 clients before running out of time</li>
+        <li>Capped at 6�8 clients before running out of time</li>
         <li>Burnout from repetitive manual data entry</li>
         <li>Can't scale revenue without hiring staff</li>
         <li>Miss client alerts because review takes too long</li>
@@ -860,52 +864,52 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
   </div>
 
   <div class="adv-callout">
-    <div class="adv-callout-icon">⏱</div>
-    <div class="adv-callout-text"><strong>The 7-minute client review:</strong> On average, BizScale Advisor users complete a full client review in 7 minutes: upload statement (2 min) → review auto-analysis (3 min) → send risk email if needed (2 min). Then move to the next client.</div>
+    <div class="adv-callout-icon">?</div>
+    <div class="adv-callout-text"><strong>The 7-minute client review:</strong> On average, BizScale Advisor users complete a full client review in 7 minutes: upload statement (2 min) ? review auto-analysis (3 min) ? send risk email if needed (2 min). Then move to the next client.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 13: SUMMARY & ROI ═══ -->
+<!-- --- SLIDE 13: SUMMARY & ROI --- -->
 <div class="slide" id="slide-13">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">🏁</div>
+    <div class="slide-icon-wrap" style="background:#f0fdfa;color:#0d9488">??</div>
     <div>
       <div class="slide-title">Summary &amp; ROI <span class="adv-badge-inline">Advisor</span></div>
-      <div class="slide-subtitle">What BizScale Advisor delivered for Sarah this month — in time, revenue, and client outcomes.</div>
+      <div class="slide-subtitle">What BizScale Advisor delivered for Sarah this month � in time, revenue, and client outcomes.</div>
     </div>
   </div>
 
   <div class="summary-grid">
     <div class="summary-item">
-      <div class="sum-icon">👥</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Clients Managed</div><div class="sum-val">8 active clients, all reviewed monthly</div><div class="sum-badge sum-teal">Fully served</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">⏱</div>
-      <div><div class="sum-title">Hours Saved</div><div class="sum-val">19.3 hrs/week vs manual process</div><div class="sum-badge sum-green">≈ 77 hrs/month</div></div>
+      <div class="sum-icon">?</div>
+      <div><div class="sum-title">Hours Saved</div><div class="sum-val">19.3 hrs/week vs manual process</div><div class="sum-badge sum-green">� 77 hrs/month</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">💰</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Report Revenue</div><div class="sum-val">16 reports generated and sold</div><div class="sum-badge sum-green">$4,800 earned</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">⚠️</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Risks Detected</div><div class="sum-val">8 critical + 12 warning alerts auto-flagged</div><div class="sum-badge sum-amber">Proactively caught</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">📧</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Client Emails Sent</div><div class="sum-val">6 risk alert emails, generated in seconds</div><div class="sum-badge sum-teal">Professional quality</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">📊</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Benchmarks Run</div><div class="sum-val">Compared all 8 clients to 850+ peers</div><div class="sum-badge sum-teal">Data-backed advice</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🏆</div>
-      <div><div class="sum-title">Health Scores</div><div class="sum-val">All 8 clients graded + action plans created</div><div class="sum-badge sum-teal">1 improved D → C</div></div>
+      <div class="sum-icon">??</div>
+      <div><div class="sum-title">Health Scores</div><div class="sum-val">All 8 clients graded + action plans created</div><div class="sum-badge sum-teal">1 improved D ? C</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🤖</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">AI CFO Queries</div><div class="sum-val">24 loan &amp; financial questions answered</div><div class="sum-badge sum-green">Instant answers</div></div>
     </div>
   </div>
@@ -918,15 +922,15 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
       <div class="metric-box"><div class="metric-val green">$6,545</div><div class="metric-lbl">Time Value Saved</div></div>
       <div class="metric-box"><div class="metric-val teal">$11,345</div><div class="metric-lbl">Total Value Delivered</div></div>
     </div>
-    <div class="verdict-badge verdict-safe">✅ $11,345 in combined value — versus the Advisor plan cost</div>
-    <div style="font-size:.78rem;color:var(--sub);margin-top:.5rem">Report revenue alone ($4,800) is 96× the cost of the Advisor plan. The time savings ($6,545) makes it 227× ROI in total monthly value.</div>
+    <div class="verdict-badge verdict-safe">? $11,345 in combined value � versus the Advisor plan cost</div>
+    <div style="font-size:.78rem;color:var(--sub);margin-top:.5rem">Report revenue alone ($4,800) is 96� the cost of the Advisor plan. The time savings ($6,545) makes it 227� ROI in total monthly value.</div>
   </div>
 
   <div style="background:linear-gradient(135deg,#134e4a,#065f46);border-radius:12px;padding:1.25rem;text-align:center;margin-bottom:1rem">
     <div style="font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:.4rem">Ready to run your practice like this?</div>
     <div style="font-size:.85rem;color:#99f6e4;margin-bottom:1rem;line-height:1.6">Join 1,200+ financial advisors, CPAs, and bookkeepers who use BizScale Advisor to serve more clients, earn more from reports, and deliver professional-grade analysis at scale.</div>
     <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap">
-      <a href="pricing.html" style="display:inline-block;background:#5eead4;color:#134e4a;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:900;text-decoration:none">View Advisor Pricing →</a>
+      <a href="pricing.html" style="display:inline-block;background:#5eead4;color:#134e4a;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:900;text-decoration:none">View Advisor Pricing ?</a>
       <a href="dashboard.html" style="display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#ccfbf1;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none">Explore All Tools</a>
     </div>
   </div>
@@ -937,9 +941,9 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f2a2a;color:va
 
 <!-- Nav -->
 <div class="slide-nav">
-  <button class="nav-btn nav-prev" id="prevBtn" onclick="prevSlide()" disabled>← Prev</button>
-  <div class="nav-center" id="navCenter">Slide 1 of 14 — Welcome</div>
-  <button class="nav-btn nav-next" id="nextBtn" onclick="nextSlide()">Next →</button>
+  <button class="nav-btn nav-prev" id="prevBtn" onclick="prevSlide()" disabled>? Prev</button>
+  <div class="nav-center" id="navCenter">Slide 1 of 14 � Welcome</div>
+  <button class="nav-btn nav-next" id="nextBtn" onclick="nextSlide()">Next ?</button>
 </div>
 
 <script>
@@ -966,9 +970,9 @@ function goSlide(n){
   var pct = Math.round(((current+1)/total)*100);
   document.getElementById('progressFill').style.width = pct+'%';
   document.getElementById('slideCounter').textContent = 'Slide '+(current+1)+' of '+total;
-  document.getElementById('navCenter').textContent = 'Slide '+(current+1)+' of '+total+' — '+titles[current];
+  document.getElementById('navCenter').textContent = 'Slide '+(current+1)+' of '+total+' � '+titles[current];
   document.getElementById('prevBtn').disabled = current === 0;
-  document.getElementById('nextBtn').textContent = current === total-1 ? '🏁 Done' : 'Next →';
+  document.getElementById('nextBtn').textContent = current === total-1 ? '?? Done' : 'Next ?';
   document.getElementById('nextBtn').disabled = false;
 
   document.querySelectorAll('.sb-step')[current].scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -983,7 +987,7 @@ function toggleAcc(btn){
   if(!body || !body.classList) return;
   var open = body.classList.toggle('open');
   var arrow = btn.querySelector('.arrow');
-  if(arrow) arrow.textContent = open ? '▲' : '▼';
+  if(arrow) arrow.textContent = open ? '?' : '?';
 }
 
 document.addEventListener('keydown', function(e){

@@ -1,14 +1,14 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Meet Your Business's New Best Friend</title>
+<title>BizScale � Meet Your Business's New Best Friend</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;font-family:'Arial Black',Arial,sans-serif;overflow:hidden}
 
-/* ── REEL SHELL ── */
+/* -- REEL SHELL -- */
 .reel{
   position:relative;width:390px;height:100vh;max-height:780px;
   overflow:hidden;border-radius:0;background:#000;
@@ -16,7 +16,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 }
 @media(min-width:500px){.reel{border-radius:24px;height:780px}}
 
-/* ── PROGRESS DOTS ── */
+/* -- PROGRESS DOTS -- */
 .prog-dots{
   position:absolute;top:14px;left:0;right:0;
   display:flex;gap:4px;padding:0 16px;z-index:200;
@@ -24,7 +24,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .dot{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
 .dot-fill{height:100%;background:#fff;width:0%;border-radius:99px}
 
-/* ── SLIDES ── */
+/* -- SLIDES -- */
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -45,14 +45,14 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .s6{background:radial-gradient(ellipse at center,#0b1120 0%,#030609 100%)}
 .s7{background:linear-gradient(160deg,#1d0b6b 0%,#2563eb 60%,#0ea5e9 100%)}
 
-/* ── EMOJI ── */
+/* -- EMOJI -- */
 .big-emoji{
   font-size:5rem;line-height:1;margin-bottom:20px;display:block;
   animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;
   filter:drop-shadow(0 6px 18px rgba(0,0,0,.5));
 }
 
-/* ── TEXT ── */
+/* -- TEXT -- */
 .headline{
   font-size:1.85rem;font-weight:900;color:#fff;line-height:1.15;
   margin-bottom:14px;letter-spacing:-.5px;
@@ -67,19 +67,19 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .green{color:#4ade80 !important}
 .red{color:#f87171 !important}
 
-/* ── SLIDE 4 special ── */
+/* -- SLIDE 4 special -- */
 .smarter-wrap{animation:zoomBounce .55s cubic-bezier(.34,1.7,.64,1) both}
 .smarter{font-size:3.2rem;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-2px}
 .smarter-note{font-size:1rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:12px;animation:riseUp .4s ease both;animation-delay:.4s}
 
-/* ── SLIDE 5 brand ── */
+/* -- SLIDE 5 brand -- */
 .brand{font-size:3.8rem;font-weight:900;letter-spacing:-3px;color:#fff;animation:zoomBounce .55s cubic-bezier(.34,1.7,.64,1) both}
 .brand em{color:#38bdf8;font-style:normal}
 .brand-sub{font-size:.9rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:4px;animation:riseUp .4s ease both;animation-delay:.25s}
 .pill-row{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;justify-content:center;animation:riseUp .4s ease both;animation-delay:.45s}
 .pill{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2);border-radius:99px;padding:8px 16px;font-size:.82rem;font-weight:800}
 
-/* ── SLIDE 6 features ── */
+/* -- SLIDE 6 features -- */
 .feat-label{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:16px;animation:riseUp .4s ease both;animation-delay:.1s}
 .feat-list{width:100%;list-style:none;text-align:left}
 .feat-list li{
@@ -94,7 +94,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .feat-list li.show{opacity:1;transform:translateX(0)}
 .feat-icon{font-size:1.3rem}
 
-/* ── SLIDE 7 CTA ── */
+/* -- SLIDE 7 CTA -- */
 .cta-head{font-size:2.3rem;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.5px;animation:zoomBounce .5s cubic-bezier(.34,1.7,.64,1) both}
 .strikeouts{margin-top:14px;font-size:.88rem;color:rgba(255,255,255,.55);font-weight:700;line-height:2;animation:riseUp .4s ease both;animation-delay:.3s}
 .strikeouts s{color:rgba(255,255,255,.28)}
@@ -119,7 +119,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 }
 .replay:hover{background:rgba(255,255,255,.18)}
 
-/* ── LOGO WATERMARK ── */
+/* -- LOGO WATERMARK -- */
 .watermark{
   position:absolute;top:22px;left:50%;transform:translateX(-50%);
   font-size:.78rem;font-weight:900;color:rgba(255,255,255,.35);
@@ -127,7 +127,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
   pointer-events:none;
 }
 
-/* ── KEYFRAMES ── */
+/* -- KEYFRAMES -- */
 @keyframes popIn{
   0%{transform:scale(0) rotate(-15deg);opacity:0}
   80%{transform:scale(1.12) rotate(3deg)}
@@ -144,6 +144,10 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 }
 @keyframes fillDot{from{width:0%}to{width:100%}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
@@ -155,70 +159,70 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
   <!-- watermark -->
   <div class="watermark">BizScale</div>
 
-  <!-- ── SLIDE 1 ── -->
+  <!-- -- SLIDE 1 -- -->
   <div class="slide s1" id="s1">
-    <span class="big-emoji">💀</span>
+    <span class="big-emoji">??</span>
     <div class="headline">Your accountant just<br>charged you $400</div>
     <div class="sub accent">...to tell you you're broke.</div>
   </div>
 
-  <!-- ── SLIDE 2 ── -->
+  <!-- -- SLIDE 2 -- -->
   <div class="slide s2" id="s2">
-    <span class="big-emoji">🔍</span>
+    <span class="big-emoji">??</span>
     <div class="headline">"Can I afford<br>this loan?"</div>
     <div class="sub">You Googled it <span class="accent">47 times</span> this week.<br>The answer is still just as confusing.</div>
   </div>
 
-  <!-- ── SLIDE 3 ── -->
+  <!-- -- SLIDE 3 -- -->
   <div class="slide s3" id="s3">
-    <span class="big-emoji">📊</span>
+    <span class="big-emoji">??</span>
     <div class="headline">Your "business plan"</div>
     <div class="sub">is a spreadsheet your cousin made in 2019.<br><span class="accent" style="font-size:.9em">Nobody knows what Column F means.</span></div>
   </div>
 
-  <!-- ── SLIDE 4 ── -->
+  <!-- -- SLIDE 4 -- -->
   <div class="slide s4" id="s4">
     <div class="smarter-wrap">
-      <div class="smarter">✨ There's a<br>smarter way.</div>
+      <div class="smarter">? There's a<br>smarter way.</div>
     </div>
     <div class="smarter-note">And it doesn't cost $400.</div>
   </div>
 
-  <!-- ── SLIDE 5 ── -->
+  <!-- -- SLIDE 5 -- -->
   <div class="slide s5" id="s5">
     <div class="brand">Fin<em>Wise</em></div>
     <div class="brand-sub">Your AI-powered financial co-pilot</div>
     <div class="pill-row">
-      <div class="pill">🆓 Free to start</div>
-      <div class="pill">🌐 Browser-only</div>
-      <div class="pill">🔒 Your data stays yours</div>
+      <div class="pill">?? Free to start</div>
+      <div class="pill">?? Browser-only</div>
+      <div class="pill">?? Your data stays yours</div>
     </div>
     <div style="margin-top:16px;font-size:1.6rem;font-weight:900;color:#facc15;animation:riseUp .4s ease both;animation-delay:.65s">30 Tools. One Setup.</div>
   </div>
 
-  <!-- ── SLIDE 6 ── -->
+  <!-- -- SLIDE 6 -- -->
   <div class="slide s6" id="s6">
-    <div class="feat-label">What it actually does 👇</div>
+    <div class="feat-label">What it actually does ??</div>
     <ul class="feat-list" id="featList">
-      <li><span class="feat-icon">🏦</span><span><strong>Loan Safety Score</strong> — should you even take it?</span></li>
-      <li><span class="feat-icon">⏳</span><span><strong>Cash Runway</strong> — months till lights go out</span></li>
-      <li><span class="feat-icon">🎯</span><span><strong>Grant Finder</strong> — free money you didn't know existed</span></li>
-      <li><span class="feat-icon">🤖</span><span><strong>AI CFO Chat</strong> — ask anything, plain English back</span></li>
-      <li><span class="feat-icon">📈</span><span><strong>Business Health Score</strong> — your financial report card</span></li>
+      <li><span class="feat-icon">??</span><span><strong>Loan Safety Score</strong> � should you even take it?</span></li>
+      <li><span class="feat-icon">?</span><span><strong>Cash Runway</strong> � months till lights go out</span></li>
+      <li><span class="feat-icon">??</span><span><strong>Grant Finder</strong> � free money you didn't know existed</span></li>
+      <li><span class="feat-icon">??</span><span><strong>AI CFO Chat</strong> � ask anything, plain English back</span></li>
+      <li><span class="feat-icon">??</span><span><strong>Business Health Score</strong> � your financial report card</span></li>
     </ul>
   </div>
 
-  <!-- ── SLIDE 7 ── -->
+  <!-- -- SLIDE 7 -- -->
   <div class="slide s7" id="s7">
-    <div class="cta-head">Set up once.<br>Use forever. 🚀</div>
+    <div class="cta-head">Set up once.<br>Use forever. ??</div>
     <div class="strikeouts">
-      ✗ <s>$400 accountant bills</s><br>
-      ✗ <s>Confusing spreadsheets</s><br>
-      ✗ <s>47 Google searches</s>
+      ? <s>$400 accountant bills</s><br>
+      ? <s>Confusing spreadsheets</s><br>
+      ? <s>47 Google searches</s>
     </div>
-    <a href="try.html" class="cta-btn">Try BizScale Free →</a>
+    <a href="try.html" class="cta-btn">Try BizScale Free ?</a>
     <br>
-    <button class="replay" onclick="startReel()">↺ Watch Again</button>
+    <button class="replay" onclick="startReel()">? Watch Again</button>
   </div>
 
 </div>

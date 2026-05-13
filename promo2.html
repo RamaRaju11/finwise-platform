@@ -1,14 +1,14 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — The Honest Reel</title>
+<title>BizScale � The Honest Reel</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;font-family:'Arial Black',Arial,sans-serif;overflow:hidden}
 
-/* ── START OVERLAY ── */
+/* -- START OVERLAY -- */
 #startOv{position:fixed;inset:0;z-index:999;background:#070714;display:flex;align-items:center;justify-content:center}
 .start-card{text-align:center;padding:44px 36px;max-width:360px;background:linear-gradient(145deg,#1a0545 0%,#0c2a6b 100%);border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,.9)}
 .start-emoji{font-size:3.8rem;margin-bottom:14px;display:block;animation:popIn .6s cubic-bezier(.34,1.7,.64,1) both}
@@ -18,24 +18,24 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .start-btn:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(250,204,21,.55)}
 .start-note{margin-top:16px;font-size:.75rem;color:rgba(255,255,255,.3);font-weight:700;letter-spacing:.5px}
 
-/* ── REEL SHELL ── */
+/* -- REEL SHELL -- */
 .reel{position:relative;width:390px;height:100vh;max-height:780px;overflow:hidden;border-radius:0;box-shadow:0 0 100px rgba(37,99,235,.3)}
 @media(min-width:500px){.reel{border-radius:24px;height:780px}}
 
 /* top shadow so dots always readable */
 .reel::before{content:'';position:absolute;top:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,rgba(0,0,0,.45),transparent);z-index:150;pointer-events:none}
 
-/* ── PROGRESS DOTS ── */
+/* -- PROGRESS DOTS -- */
 .prog-dots{position:absolute;top:14px;left:0;right:0;display:flex;gap:4px;padding:0 16px;z-index:200}
 .dot{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden}
 .dot-fill{height:100%;background:#fff;border-radius:99px;width:0%}
 
-/* ── CONTROLS ── */
+/* -- CONTROLS -- */
 .ctrl-bar{position:absolute;top:10px;right:14px;z-index:300;display:flex;gap:6px}
 .ctrl-btn{background:rgba(0,0,0,.4);border:none;color:#fff;border-radius:50%;width:34px;height:34px;font-size:.88rem;cursor:pointer;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;transition:background .2s}
 .ctrl-btn:hover{background:rgba(0,0,0,.65)}
 
-/* ── SLIDES ── */
+/* -- SLIDES -- */
 .slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 28px 110px;text-align:center;opacity:0;pointer-events:none;transition:opacity .38s ease,transform .38s ease;transform:scale(1.06)}
 .slide.active{opacity:1;pointer-events:auto;transform:scale(1)}
 .slide.out{opacity:0;transform:scale(.93)}
@@ -48,28 +48,28 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .s6{background:linear-gradient(160deg,#06060f 0%,#101827 100%)}
 .s7{background:linear-gradient(160deg,#78350f 0%,#fbbf24 100%)}
 
-/* ── SUBTITLE BAR ── */
+/* -- SUBTITLE BAR -- */
 .sub-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);padding:11px 18px 22px;font-size:.85rem;font-weight:700;color:rgba(255,255,255,.82);line-height:1.55;min-height:66px;z-index:200;text-align:center}
 .sub-bar mark{background:none;color:#facc15;font-weight:900;font-style:normal}
 
-/* ── SHARED TEXT ── */
+/* -- SHARED TEXT -- */
 .big-emoji{font-size:4.2rem;line-height:1;margin-bottom:16px;display:block;animation:popIn .52s cubic-bezier(.34,1.7,.64,1) both}
 .hl-dark{font-size:1.9rem;font-weight:900;color:#1a1a1a;line-height:1.15;letter-spacing:-.5px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.14s}
 .su-dark{font-size:1rem;font-weight:700;color:#374151;line-height:1.45;animation:riseUp .44s ease both;animation-delay:.3s}
 .hl-light{font-size:1.9rem;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-.5px;margin-bottom:10px;animation:riseUp .44s ease both;animation-delay:.14s}
 .su-light{font-size:1rem;font-weight:700;color:rgba(255,255,255,.65);line-height:1.45;animation:riseUp .44s ease both;animation-delay:.3s}
 
-/* ── SLIDE 1 — Receipt ── */
+/* -- SLIDE 1 � Receipt -- */
 .receipt{background:#fff;border-radius:14px;padding:16px 20px;font-family:'Courier New',monospace;font-size:.84rem;color:#374151;text-align:left;width:100%;max-width:290px;box-shadow:0 6px 22px rgba(0,0,0,.14);animation:riseUp .44s ease both;animation-delay:.38s;margin-top:14px}
 .r-row{display:flex;justify-content:space-between;margin-bottom:5px}
 .r-total{display:flex;justify-content:space-between;font-weight:900;font-size:1rem;border-top:2px dashed #e5e7eb;padding-top:9px;margin-top:9px;color:#dc2626}
 
-/* ── SLIDE 2 — Steps ── */
+/* -- SLIDE 2 � Steps -- */
 .steps{margin-top:14px;width:100%;max-width:300px;animation:riseUp .44s ease both;animation-delay:.32s}
 .step-row{display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:7px;background:rgba(255,255,255,.7);border-radius:12px;font-size:.88rem;font-weight:800;color:#1e3a5f}
 .s-no{font-size:.72rem;background:#2563eb;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Arial,sans-serif}
 
-/* ── SLIDE 3 — You vs Reality ── */
+/* -- SLIDE 3 � You vs Reality -- */
 .compare{display:flex;gap:10px;margin-top:14px;width:100%;max-width:310px;animation:riseUp .44s ease both;animation-delay:.32s}
 .cmp-card{flex:1;border-radius:14px;padding:14px 10px;text-align:center}
 .cmp-you{background:#d1fae5}
@@ -78,11 +78,11 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .cmp-big{font-size:1.6rem;font-weight:900;line-height:1.2}
 .cmp-note{font-size:.7rem;font-weight:700;margin-top:5px;font-family:Arial,sans-serif}
 
-/* ── SLIDE 4 — Pivot ── */
+/* -- SLIDE 4 � Pivot -- */
 .pivot-txt{font-size:2.8rem;font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.05;animation:zoomBounce .6s cubic-bezier(.34,1.7,.64,1) both}
 .pivot-sub{font-size:.95rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:14px;line-height:1.5;animation:riseUp .44s ease both;animation-delay:.45s}
 
-/* ── SLIDE 5 — Brand ── */
+/* -- SLIDE 5 � Brand -- */
 .brand{font-size:3.8rem;font-weight:900;letter-spacing:-3px;color:#fff;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both}
 .brand em{color:#38bdf8;font-style:normal}
 .brand-tag{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:700;margin-top:4px;animation:riseUp .44s ease both;animation-delay:.28s}
@@ -90,7 +90,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .pill{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2);border-radius:99px;padding:7px 14px;font-size:.78rem;font-weight:800;font-family:Arial,sans-serif}
 .big-stat{font-size:1.75rem;font-weight:900;color:#facc15;margin-top:16px;animation:riseUp .44s ease both;animation-delay:.68s}
 
-/* ── SLIDE 6 — Features ── */
+/* -- SLIDE 6 � Features -- */
 .feat-lbl{font-size:1.05rem;font-weight:900;color:#38bdf8;margin-bottom:14px;animation:riseUp .4s ease both;animation-delay:.1s}
 .feat-ul{width:100%;list-style:none;text-align:left}
 .feat-ul li{padding:10px 14px;margin-bottom:7px;background:rgba(255,255,255,.05);border-radius:11px;border-left:3px solid #4ade80;font-size:.9rem;font-weight:700;color:#fff;font-family:Arial,sans-serif;opacity:0;transform:translateX(-18px);transition:opacity .38s ease,transform .38s ease}
@@ -98,7 +98,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .feat-ul li strong{color:#e2e8f0}
 .feat-ul li .fi{margin-right:7px}
 
-/* ── SLIDE 7 — CTA ── */
+/* -- SLIDE 7 � CTA -- */
 .cta-head{font-size:1.8rem;font-weight:900;color:#1a1a1a;line-height:1.15;animation:zoomBounce .52s cubic-bezier(.34,1.7,.64,1) both}
 .vs-row{display:flex;gap:10px;margin-top:16px;width:100%;animation:riseUp .44s ease both;animation-delay:.38s}
 .vs-c{flex:1;border-radius:12px;padding:13px 10px;text-align:center}
@@ -111,72 +111,76 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 .cta-btn:hover{transform:translateY(-3px) scale(1.04)}
 .replay-lnk{display:inline-block;margin-top:10px;background:rgba(0,0,0,.1);color:#374151;border:1.5px solid rgba(0,0,0,.18);border-radius:50px;padding:8px 24px;font-size:.8rem;font-weight:800;cursor:pointer;animation:riseUp .44s ease both;animation-delay:.8s;font-family:Arial,sans-serif}
 
-/* ── KEYFRAMES ── */
+/* -- KEYFRAMES -- */
 @keyframes popIn{0%{transform:scale(0) rotate(-14deg);opacity:0}75%{transform:scale(1.18) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes riseUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes zoomBounce{0%{opacity:0;transform:scale(.45)}72%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
-<!-- ── START OVERLAY ── -->
+<!-- -- START OVERLAY -- -->
 <div id="startOv">
   <div class="start-card">
-    <span class="start-emoji">🎙️</span>
-    <div class="start-title">BizScale — The Honest Reel</div>
+    <span class="start-emoji">???</span>
+    <div class="start-title">BizScale � The Honest Reel</div>
     <div class="start-sub">7 uncomfortable financial truths<br>every small business owner knows.<br><br>With an actual voiceover. No jargon.</div>
-    <button class="start-btn" onclick="beginReel()">▶&nbsp;&nbsp;Play with Voice</button>
-    <div class="start-note">🔊 UNMUTE YOUR PHONE FIRST &nbsp;·&nbsp; TAP ANYWHERE TO SKIP</div>
+    <button class="start-btn" onclick="beginReel()">?&nbsp;&nbsp;Play with Voice</button>
+    <div class="start-note">?? UNMUTE YOUR PHONE FIRST &nbsp;�&nbsp; TAP ANYWHERE TO SKIP</div>
   </div>
 </div>
 
-<!-- ── REEL ── -->
+<!-- -- REEL -- -->
 <div class="reel" id="reel">
 
   <div class="prog-dots" id="progDots"></div>
   <div class="ctrl-bar">
-    <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">🔊</button>
-    <button class="ctrl-btn" onclick="restartReel()" title="Restart">↺</button>
+    <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">??</button>
+    <button class="ctrl-btn" onclick="restartReel()" title="Restart">?</button>
   </div>
 
   <!-- SLIDE 1 -->
   <div class="slide s1" id="s1">
-    <span class="big-emoji">😬</span>
+    <span class="big-emoji">??</span>
     <div class="hl-dark">Your Accountant.</div>
     <div class="su-dark">More expensive than your rent.</div>
     <div class="receipt">
       <div class="r-row"><span>Review your books</span><span>$200</span></div>
       <div class="r-row"><span>Tell you to "spend less"</span><span>$200</span></div>
       <div class="r-row"><span>Explain what that means</span><span>$0</span></div>
-      <div class="r-total"><span>TOTAL WISDOM</span><span>$400 💀</span></div>
+      <div class="r-total"><span>TOTAL WISDOM</span><span>$400 ??</span></div>
     </div>
   </div>
 
   <!-- SLIDE 2 -->
   <div class="slide s2" id="s2">
-    <span class="big-emoji">🪦</span>
-    <div class="hl-dark">The Excel Spiral™</div>
+    <span class="big-emoji">??</span>
+    <div class="hl-dark">The Excel Spiral�</div>
     <div class="steps">
-      <div class="step-row"><div class="s-no">1</div>Open Excel. Feel motivated. 💪</div>
-      <div class="step-row"><div class="s-no">2</div>Stare at it for 20 minutes. 😶</div>
-      <div class="step-row"><div class="s-no">3</div>Close it. Open Instagram. 📱</div>
-      <div class="step-row"><div class="s-no">4</div>Google "am I going broke" 😭</div>
+      <div class="step-row"><div class="s-no">1</div>Open Excel. Feel motivated. ??</div>
+      <div class="step-row"><div class="s-no">2</div>Stare at it for 20 minutes. ??</div>
+      <div class="step-row"><div class="s-no">3</div>Close it. Open Instagram. ??</div>
+      <div class="step-row"><div class="s-no">4</div>Google "am I going broke" ??</div>
     </div>
   </div>
 
   <!-- SLIDE 3 -->
   <div class="slide s3" id="s3">
-    <span class="big-emoji">🤷</span>
+    <span class="big-emoji">??</span>
     <div class="hl-dark">"What are your profit margins?"</div>
     <div class="compare">
       <div class="cmp-card cmp-you">
         <div class="cmp-lbl" style="color:#166534">You Said</div>
-        <div class="cmp-big">😎<br>"Good."</div>
+        <div class="cmp-big">??<br>"Good."</div>
         <div class="cmp-note" style="color:#166534">Very. Confidently.</div>
       </div>
       <div class="cmp-card cmp-real">
         <div class="cmp-lbl" style="color:#991b1b">Reality</div>
-        <div class="cmp-big">😶<br>???%</div>
+        <div class="cmp-big">??<br>???%</div>
         <div class="cmp-note" style="color:#991b1b">Absolutely no idea.</div>
       </div>
     </div>
@@ -184,7 +188,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 
   <!-- SLIDE 4 -->
   <div class="slide s4" id="s4">
-    <div style="font-size:3.5rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">✨</div>
+    <div style="font-size:3.5rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">?</div>
     <div class="pivot-txt">Your business<br>deserves better.</div>
     <div class="pivot-sub">Better than vibes. Better than guesswork.<br>Better than Column F in a mystery spreadsheet.</div>
   </div>
@@ -194,43 +198,43 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
     <div class="brand">Fin<em>Wise</em></div>
     <div class="brand-tag">Your AI-powered financial co-pilot</div>
     <div class="pills">
-      <div class="pill">🆓 Free to start</div>
-      <div class="pill">🌐 Browser-only</div>
-      <div class="pill">🔒 Your data stays local</div>
-      <div class="pill">💬 Plain English</div>
+      <div class="pill">?? Free to start</div>
+      <div class="pill">?? Browser-only</div>
+      <div class="pill">?? Your data stays local</div>
+      <div class="pill">?? Plain English</div>
     </div>
-    <div class="big-stat">30 Tools. Zero Invoices. 🎉</div>
+    <div class="big-stat">30 Tools. Zero Invoices. ??</div>
   </div>
 
   <!-- SLIDE 6 -->
   <div class="slide s6" id="s6">
-    <div class="feat-lbl">What it actually does 👇</div>
+    <div class="feat-lbl">What it actually does ??</div>
     <ul class="feat-ul" id="featList">
-      <li><span class="fi">🏦</span><strong>Loan Safety Score</strong> — will it help or bury you?</li>
-      <li><span class="fi">⏳</span><strong>Cash Runway</strong> — months left before lights go out</li>
-      <li><span class="fi">🎯</span><strong>Grant Finder</strong> — free money you didn't know existed</li>
-      <li><span class="fi">🤖</span><strong>AI CFO Chat</strong> — never judges. Never bills by the hour.</li>
-      <li><span class="fi">📈</span><strong>Business Health Score</strong> — your financial report card</li>
+      <li><span class="fi">??</span><strong>Loan Safety Score</strong> � will it help or bury you?</li>
+      <li><span class="fi">?</span><strong>Cash Runway</strong> � months left before lights go out</li>
+      <li><span class="fi">??</span><strong>Grant Finder</strong> � free money you didn't know existed</li>
+      <li><span class="fi">??</span><strong>AI CFO Chat</strong> � never judges. Never bills by the hour.</li>
+      <li><span class="fi">??</span><strong>Business Health Score</strong> � your financial report card</li>
     </ul>
   </div>
 
   <!-- SLIDE 7 -->
   <div class="slide s7" id="s7">
-    <div class="cta-head">Setup: 2 minutes. 🤌<br>Accountant invoice: 2 weeks.</div>
+    <div class="cta-head">Setup: 2 minutes. ??<br>Accountant invoice: 2 weeks.</div>
     <div class="vs-row">
       <div class="vs-c vs-old">
         <div class="vs-lbl">Before BizScale</div>
-        <div class="vs-val">😩 $400</div>
+        <div class="vs-val">?? $400</div>
         <div class="vs-desc">Accountant says "spend less"</div>
       </div>
       <div class="vs-c vs-new">
         <div class="vs-lbl">With BizScale</div>
-        <div class="vs-val">🎉 Free</div>
-        <div class="vs-desc">30 tools · plain English answers</div>
+        <div class="vs-val">?? Free</div>
+        <div class="vs-desc">30 tools � plain English answers</div>
       </div>
     </div>
-    <a href="try.html" class="cta-btn">Try BizScale Free →</a><br>
-    <button class="replay-lnk" onclick="restartReel()">↺ Watch Again</button>
+    <a href="try.html" class="cta-btn">Try BizScale Free ?</a><br>
+    <button class="replay-lnk" onclick="restartReel()">? Watch Again</button>
   </div>
 
   <!-- subtitle / karaoke bar -->
@@ -242,12 +246,12 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 var SLIDES   = ['s1','s2','s3','s4','s5','s6','s7'];
 var LINES    = [
   "Okay. Real talk. Your accountant... charged you more than your rent. Just to tell you... you are spending too much. Four hundred dollars. Mind blown.",
-  "So you opened Excel. Felt motivated. Stared at it for twenty whole minutes. Closed it. Opened Instagram. Then Googled... am I going broke. Spoiler — you were.",
+  "So you opened Excel. Felt motivated. Stared at it for twenty whole minutes. Closed it. Opened Instagram. Then Googled... am I going broke. Spoiler � you were.",
   "Someone asked about your profit margins. You said... good. Very confidently. You had absolutely. No idea. None. Zero. Nada.",
   "Friend. Your business deserves way better. Better than vibes. Better than guesswork. Better than Column F in a mystery spreadsheet nobody understands.",
   "Introducing BizScale. Twenty free financial tools. All in your browser. No app. No login. No six hundred dollar surprise invoice. Just answers. In plain English.",
   "Check if a loan will help or bury you. Find grants you actually qualify for. See exactly how many months until you run out of cash. And chat with an AI CFO that never judges you... and never bills by the hour.",
-  "Setup takes two minutes. Your accountant's invoice takes two weeks. Just saying. Try BizScale free — right now. Your wallet will genuinely thank you."
+  "Setup takes two minutes. Your accountant's invoice takes two weeks. Just saying. Try BizScale free � right now. Your wallet will genuinely thank you."
 ];
 var FEAT_DELAYS = [150, 420, 690, 960, 1230];
 
@@ -342,7 +346,7 @@ function speakLine(text,onDone){
 
   speechSynthesis.speak(curUtter);
 
-  /* Chrome bug: speech can stall on long pauses — keep alive */
+  /* Chrome bug: speech can stall on long pauses � keep alive */
   ka=setInterval(function(){
     if(!speechSynthesis.speaking){clearInterval(ka);return;}
     speechSynthesis.pause(); speechSynthesis.resume();
@@ -372,7 +376,7 @@ function restartReel(){
 }
 function toggleMute(){
   muted=!muted;
-  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  document.getElementById('muteBtn').textContent=muted?'??':'??';
   /* restart current slide with updated volume */
   try{speechSynthesis.cancel();}catch(e){}
   if(safetyTimer){clearTimeout(safetyTimer);safetyTimer=null;}

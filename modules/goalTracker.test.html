@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Goal Tracker — BizScale</title>
+<title>Goal Tracker � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
@@ -109,6 +109,10 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 .back-link:hover{text-decoration:underline}
 @media print{.back-link,.btn-add,.btn-cancel,.btn-save,.btn-del,.btn-log,.sync-btn,.log-btn,.overlay{display:none!important}body{background:#fff;padding:8px}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -119,23 +123,23 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 
 <div id="mainWrap">
 
-<a href="../try.html" class="back-link">← Back to Demo</a>
-<h1>🎯 Goal Tracker</h1>
-<p class="subtitle">BizScale · Set revenue, profit, savings, debt, and customer targets — sync live data automatically</p>
+<a href="../try.html" class="back-link">? Back to Demo</a>
+<h1>?? Goal Tracker</h1>
+<p class="subtitle">BizScale � Set revenue, profit, savings, debt, and customer targets � sync live data automatically</p>
 
 <div class="int-strip" id="intStrip"></div>
 
 <div class="toolbar">
   <div style="flex:1"></div>
-  <button class="btn-add" onclick="openModal()">＋ Add Goal</button>
-  <button style="margin-left:8px;padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.82rem;cursor:pointer" onclick="window.print()">🖨️ Print</button>
+  <button class="btn-add" onclick="openModal()">+ Add Goal</button>
+  <button style="margin-left:8px;padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.82rem;cursor:pointer" onclick="window.print()">??? Print</button>
 </div>
 
 <div class="goals-grid" id="goalsGrid"></div>
 <div class="empty-state" id="emptyState" style="display:none">
-  <div class="empty-icon">🎯</div>
-  <div class="empty-text">No goals yet — set your first financial target</div>
-  <button class="empty-btn" onclick="openModal()">＋ Add My First Goal</button>
+  <div class="empty-icon">??</div>
+  <div class="empty-text">No goals yet � set your first financial target</div>
+  <button class="empty-btn" onclick="openModal()">+ Add My First Goal</button>
 </div>
 
 </div>
@@ -146,11 +150,11 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
     <div class="modal-title">Set a New Goal</div>
     <label>Goal Type</label>
     <select id="fType" onchange="updateTypeHint()">
-      <option value="revenue">📈 Monthly Revenue Target</option>
-      <option value="profit">💰 Monthly Net Profit Target</option>
-      <option value="savings">🏦 Savings / Cash Reserve Goal</option>
-      <option value="debt">💳 Debt Payoff Goal</option>
-      <option value="customers">👥 Customer Count Goal</option>
+      <option value="revenue">?? Monthly Revenue Target</option>
+      <option value="profit">?? Monthly Net Profit Target</option>
+      <option value="savings">?? Savings / Cash Reserve Goal</option>
+      <option value="debt">?? Debt Payoff Goal</option>
+      <option value="customers">?? Customer Count Goal</option>
     </select>
     <div class="type-hint" id="typeHint"></div>
     <label>Goal Name</label>
@@ -169,7 +173,7 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
     <input type="month" id="fDeadline"/>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveGoal()">Save Goal →</button>
+      <button class="btn-save" onclick="saveGoal()">Save Goal ?</button>
     </div>
   </div>
 </div>
@@ -187,15 +191,15 @@ function fmtVal(n, unit){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
 
 var GOAL_DEFS = {
-  revenue:   {label:'Revenue Target',  cls:'type-revenue',   color:'#2563eb', icon:'📈', unit:'$',
+  revenue:   {label:'Revenue Target',  cls:'type-revenue',   color:'#2563eb', icon:'??', unit:'$',
                liveDesc:'Syncs from Invoice Tracker (paid invoices this month)'},
-  profit:    {label:'Profit Target',   cls:'type-profit',    color:'#16a34a', icon:'💰', unit:'$',
+  profit:    {label:'Profit Target',   cls:'type-profit',    color:'#16a34a', icon:'??', unit:'$',
                liveDesc:'Syncs from Budget vs. Actual (actual net profit this month)'},
-  savings:   {label:'Savings Goal',    cls:'type-savings',   color:'#d97706', icon:'🏦', unit:'$',
+  savings:   {label:'Savings Goal',    cls:'type-savings',   color:'#d97706', icon:'??', unit:'$',
                liveDesc:'Syncs total already-saved from Business Savings Planner'},
-  debt:      {label:'Debt Payoff',     cls:'type-debt',      color:'#7c3aed', icon:'💳', unit:'$',
+  debt:      {label:'Debt Payoff',     cls:'type-debt',      color:'#7c3aed', icon:'??', unit:'$',
                liveDesc:'Syncs current loan balance from Business Profile (progress = balance going down)'},
-  customers: {label:'Customer Count',  cls:'type-customers', color:'#0891b2', icon:'👥', unit:'#',
+  customers: {label:'Customer Count',  cls:'type-customers', color:'#0891b2', icon:'??', unit:'#',
                liveDesc:'Syncs unique paying clients this year from Invoice Tracker'}
 };
 
@@ -231,17 +235,17 @@ function getElapsedMonths(createdAt, deadline){
 
 function getStatus(g){
   var pct = getProgressPct(g)/100;
-  if(pct>=1) return {label:'🎉 Goal Reached!', cls:'chip-done'};
+  if(pct>=1) return {label:'?? Goal Reached!', cls:'chip-done'};
   var mo = getElapsedMonths(g.createdAt, g.deadline);
   var expectedPct = mo.total>0 ? mo.elapsed/mo.total : 0;
   var diff = pct - expectedPct;
-  if(diff>0.1)  return {label:'🚀 Ahead of pace', cls:'chip-ahead'};
-  if(diff>-0.05) return {label:'✅ On track',      cls:'chip-ontrack'};
-  if(diff>-0.2)  return {label:'⚠️ Slightly behind',cls:'chip-behind'};
-  return {label:'🚨 Behind pace', cls:'chip-danger'};
+  if(diff>0.1)  return {label:'?? Ahead of pace', cls:'chip-ahead'};
+  if(diff>-0.05) return {label:'? On track',      cls:'chip-ontrack'};
+  if(diff>-0.2)  return {label:'?? Slightly behind',cls:'chip-behind'};
+  return {label:'?? Behind pace', cls:'chip-danger'};
 }
 
-/* ── Live data sync ── */
+/* -- Live data sync -- */
 function getLiveValue(g){
   try{
     var now = new Date();
@@ -310,7 +314,7 @@ function syncGoal(id){
   renderGoals();
 }
 
-/* ── Timeline (P3) ── */
+/* -- Timeline (P3) -- */
 function renderTimeline(g){
   var start = new Date(g.createdAt);
   var end = new Date(g.deadline+'-28');
@@ -347,7 +351,7 @@ function renderTimeline(g){
   return html;
 }
 
-/* ── Render all goals ── */
+/* -- Render all goals -- */
 function renderGoals(){
   var goals = load();
   var grid = document.getElementById('goalsGrid');
@@ -384,10 +388,10 @@ function renderGoals(){
     }).join('');
 
     html += '<div class="goal-card">'+
-      '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">✕</button></div>'+
+      '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">?</button></div>'+
       '<span class="gc-type '+def.cls+'">'+def.icon+' '+def.label+'</span>'+
       '<div class="gc-name">'+esc(g.name)+'</div>'+
-      '<div class="gc-deadline">📅 '+g.deadline+' · '+moLeft+' mo left</div>'+
+      '<div class="gc-deadline">?? '+g.deadline+' � '+moLeft+' mo left</div>'+
       '<div class="gc-amounts">'+
         '<span style="color:#64748b">Current: <strong style="color:#1e293b">'+fmtVal(g.current||0,unit)+'</strong></span>'+
         '<span style="color:#1e293b;font-weight:700">Target: '+fmtVal(g.target||0,unit)+'</span>'+
@@ -399,14 +403,14 @@ function renderGoals(){
       '</div>'+
       '<span class="status-chip '+status.cls+'">'+status.label+'</span>'+
       '<div class="gc-monthly">Need <strong>'+fmtVal(monthlyNeeded,unit)+'/mo</strong>'+
-        (gainPerMo>0?' · Avg gain <strong>'+fmtVal(gainPerMo,unit)+'/mo</strong>':'')+
+        (gainPerMo>0?' � Avg gain <strong>'+fmtVal(gainPerMo,unit)+'/mo</strong>':'')+
       '</div>'+
       renderTimeline(g)+
       (barHtml?'<div class="months-row">'+barHtml+'</div>':'')+
       '<div class="log-row">'+
         '<input type="number" class="log-input" id="log_'+g.id+'" placeholder="Log '+(unit==='#'?'customer count':'this month\'s amount')+'"/>'+
-        '<button class="sync-btn" onclick="syncGoal(\''+g.id+'\')" title="'+esc(def.liveDesc)+'">⚡ Sync</button>'+
-        '<button class="log-btn" onclick="logProgress(\''+g.id+'\')">Log →</button>'+
+        '<button class="sync-btn" onclick="syncGoal(\''+g.id+'\')" title="'+esc(def.liveDesc)+'">? Sync</button>'+
+        '<button class="log-btn" onclick="logProgress(\''+g.id+'\')">Log ?</button>'+
       '</div>'+
     '</div>';
   });
@@ -438,7 +442,7 @@ function deleteGoal(id){
   renderGoals();
 }
 
-/* ── Integration strip ── */
+/* -- Integration strip -- */
 function checkIntegration(){
   if(!load().length) return;
   var sources = [];
@@ -448,10 +452,10 @@ function checkIntegration(){
   if(!sources.length) return;
   var strip = document.getElementById('intStrip');
   strip.style.display='';
-  strip.innerHTML='⚡ Live data available from: '+sources.join(', ')+'. Hit <strong>Sync</strong> on any goal card to import current values.';
+  strip.innerHTML='? Live data available from: '+sources.join(', ')+'. Hit <strong>Sync</strong> on any goal card to import current values.';
 }
 
-/* ── Modal ── */
+/* -- Modal -- */
 function updateTypeHint(){
   var type = document.getElementById('fType').value;
   document.getElementById('typeHint').textContent = TYPE_HINTS[type]||'';

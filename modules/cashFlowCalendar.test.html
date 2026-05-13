@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cash Flow Calendar — BizScale SmallBiz</title>
+  <title>Cash Flow Calendar � BizScale SmallBiz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f4f6f9; color: #222; padding: 24px; }
@@ -108,7 +108,7 @@
       .cal-cell { min-height: 60px; }
     }
 
-    /* ── Auto-sync styles ── */
+    /* -- Auto-sync styles -- */
     .sync-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
     .sync-toggle-wrap { display: flex; align-items: center; gap: 8px; }
     .sync-toggle { width: 40px; height: 22px; background: #cbd5e1; border-radius: 999px; cursor: pointer; position: relative; transition: background .2s; flex-shrink: 0; }
@@ -164,6 +164,10 @@
       nav, [class*="sidebar"] { display: none !important; }
     }
   </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 
@@ -178,7 +182,7 @@
 <h1>Cash Flow Calendar</h1>
 <p class="subtitle">Visualise income and expense events day-by-day across any month.</p>
 
-<!-- ── Add Event Panel ── -->
+<!-- -- Add Event Panel -- -->
 <div class="card no-print">
   <h2>Add Event</h2>
   <div class="form-row">
@@ -198,7 +202,7 @@
       <input type="number" id="evt-amount" min="0" step="1" placeholder="0" />
     </div>
     <div class="field">
-      <label for="evt-day">Day (1–31)</label>
+      <label for="evt-day">Day (1�31)</label>
       <input type="number" id="evt-day" min="1" max="31" placeholder="1" />
     </div>
     <div class="field">
@@ -215,17 +219,17 @@
   </div>
 </div>
 
-<!-- ── Auto-Sync Card ── -->
+<!-- -- Auto-Sync Card -- -->
 <div class="card" id="sync-card">
   <div class="sync-header">
-    <h2 style="margin:0">&#128257; Live Sync — Bills &amp; Invoices</h2>
+    <h2 style="margin:0">&#128257; Live Sync � Bills &amp; Invoices</h2>
     <div class="sync-toggle-wrap">
       <div class="sync-toggle" id="sync-toggle" onclick="toggleSync()" title="Toggle auto-sync"></div>
       <span class="sync-label" id="sync-label">Sync Off</span>
     </div>
   </div>
   <p style="font-size:.83rem;color:#555;margin-bottom:10px">
-    When on, bills from <strong>Bill Tracker</strong> appear as monthly expenses and pending invoices from <strong>Invoice Tracker</strong> appear as one-time income — automatically, no manual entry needed.
+    When on, bills from <strong>Bill Tracker</strong> appear as monthly expenses and pending invoices from <strong>Invoice Tracker</strong> appear as one-time income � automatically, no manual entry needed.
   </p>
   <div class="conn-strip" id="conn-strip">
     <a href="vendorBillTracker.test.html" class="conn-pill conn-off" id="pill-bills">&#128203; Bill Tracker (no data)</a>
@@ -236,7 +240,7 @@
   <div class="sync-info" id="sync-info">Enable sync to see your bills and unpaid invoices on the calendar automatically.</div>
 </div>
 
-<!-- ── Calendar Card ── -->
+<!-- -- Calendar Card -- -->
 <div class="card">
   <div class="month-nav">
     <button class="nav-btn" onclick="changeMonth(-1)">&#8592; Prev</button>
@@ -250,17 +254,17 @@
   </div>
 </div>
 
-<!-- ── Weekly Cash Position ── -->
+<!-- -- Weekly Cash Position -- -->
 <div class="card">
   <h2>&#128200; Weekly Cash Position</h2>
-  <p style="font-size:.82rem;color:#64748b;margin-bottom:14px">Projected cash balance at end of each week — based on opening balance and all events this month.</p>
+  <p style="font-size:.82rem;color:#64748b;margin-bottom:14px">Projected cash balance at end of each week � based on opening balance and all events this month.</p>
   <div class="weekly-chart-wrap">
     <canvas id="weekly-chart" height="160" class="weekly-chart-canvas"></canvas>
   </div>
   <div id="weekly-legend" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:.75rem;color:#64748b"></div>
 </div>
 
-<!-- ── Month Summary ── -->
+<!-- -- Month Summary -- -->
 <div class="card">
   <h2>Month Summary</h2>
   <div class="summary-row" id="summary-row">
@@ -270,7 +274,7 @@
   </div>
 </div>
 
-<!-- ── Running Balance ── -->
+<!-- -- Running Balance -- -->
 <div class="card">
   <div class="balance-header">
     <h2 style="margin:0;">Running Balance</h2>
@@ -284,7 +288,7 @@
   </div>
 </div>
 
-<!-- ── Events List ── -->
+<!-- -- Events List -- -->
 <div class="card">
   <h2>All Events</h2>
   <table>
@@ -303,7 +307,7 @@
 </div>
 
 <script>
-  // ── Constants & defaults ──────────────────────────────────────────────────
+  // -- Constants & defaults --------------------------------------------------
   const STORAGE_KEY = 'fw_cf_events';
   let syncEnabled = localStorage.getItem('fw_cf_sync') === '1';
   const DEFAULTS = [
@@ -313,13 +317,13 @@
     { name: 'Invoice Payment', type: 'income',  amount: 4500, day: 20, recur: 'monthly' },
   ];
 
-  // ── State ─────────────────────────────────────────────────────────────────
+  // -- State -----------------------------------------------------------------
   let events = [];
   const now = new Date();
   let viewYear  = now.getFullYear();
   let viewMonth = now.getMonth(); // 0-based
 
-  // ── Persistence ───────────────────────────────────────────────────────────
+  // -- Persistence -----------------------------------------------------------
   function loadEvents() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -341,7 +345,7 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); } catch(e) {}
   }
 
-  // ── Which days in the viewed month does an event fall on? ─────────────────
+  // -- Which days in the viewed month does an event fall on? -----------------
   function eventDaysInMonth(evt, year, month) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
@@ -358,7 +362,7 @@
     return days;
   }
 
-  // ── Build day-keyed map of events for current view ────────────────────────
+  // -- Build day-keyed map of events for current view ------------------------
   function buildDayMap(year, month) {
     const map = {}; // day (1-based) -> [{evt, day}]
     getAllEvents(year, month).forEach(evt => {
@@ -370,19 +374,19 @@
     return map;
   }
 
-  // ── Format currency ───────────────────────────────────────────────────────
+  // -- Format currency -------------------------------------------------------
   function fmt(n) {
     return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
 
-  // ── Month names ───────────────────────────────────────────────────────────
+  // -- Month names -----------------------------------------------------------
   const MONTH_NAMES = ['January','February','March','April','May','June',
                        'July','August','September','October','November','December'];
   const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-  // ════════════════════════════════════════════════════════════════
+  // ----------------------------------------------------------------
   // AUTO-SYNC: read fw_bills + fw_invoices
-  // ════════════════════════════════════════════════════════════════
+  // ----------------------------------------------------------------
 
   function getBillEvents() {
     var bills = [];
@@ -419,7 +423,7 @@
     }).filter(function(e){ return e.amount > 0 && e.day >= 1 && e.day <= 31; });
   }
 
-  // P2 UX: Parse "YYYY-MM-DD" strings using local time — prevents UTC midnight → prev-day shift
+  // P2 UX: Parse "YYYY-MM-DD" strings using local time � prevents UTC midnight ? prev-day shift
   function parseLocalDate(str) {
     var p = String(str).split('-');
     return { year: parseInt(p[0],10), month: parseInt(p[1],10)-1, day: parseInt(p[2],10) };
@@ -436,7 +440,7 @@
       if(isNaN(d.year) || isNaN(d.month) || isNaN(d.day)) return;
       if(d.year === year && d.month === month) {
         evts.push({
-          name:    (inv.client || 'Invoice') + (inv.invNo ? ' • ' + inv.invNo : ''),
+          name:    (inv.client || 'Invoice') + (inv.invNo ? ' � ' + inv.invNo : ''),
           type:    'income',
           amount:  Number(inv.amount) || 0,
           day:     d.day,
@@ -477,7 +481,7 @@
 
   function getAllEvents(year, month) {
     var all = events.slice();
-    // Tax + invoices: always auto-imported (P1 integration — no toggle needed)
+    // Tax + invoices: always auto-imported (P1 integration � no toggle needed)
     all = all.concat(getInvoiceEvents(year, month));
     all = all.concat(getTaxEvents(year, month));
     // Bills + debt payments: controlled by sync toggle (higher noise, user opt-in)
@@ -520,38 +524,38 @@
     if(pillB) {
       if(regularBills.length > 0) {
         pillB.className   = 'conn-pill conn-bills';
-        pillB.textContent = '📋 Bill Tracker — ' + regularBills.length + ' bill' + (regularBills.length !== 1 ? 's' : '');
+        pillB.textContent = '?? Bill Tracker � ' + regularBills.length + ' bill' + (regularBills.length !== 1 ? 's' : '');
       } else {
         pillB.className   = 'conn-pill conn-off';
-        pillB.textContent = '📋 Bill Tracker (no data)';
+        pillB.textContent = '?? Bill Tracker (no data)';
       }
     }
     if(pillI) {
       var pending = invoices.filter(function(i){ return i.status !== 'paid'; });
       if(invoices.length > 0) {
         pillI.className   = 'conn-pill conn-invoices';
-        pillI.textContent = '📄 Invoice Tracker — ' + pending.length + ' pending (always shown)';
+        pillI.textContent = '?? Invoice Tracker � ' + pending.length + ' pending (always shown)';
       } else {
         pillI.className   = 'conn-pill conn-off';
-        pillI.textContent = '📄 Invoice Tracker (no data)';
+        pillI.textContent = '?? Invoice Tracker (no data)';
       }
     }
     if(pillT) {
       if(qtrs.length > 0) {
         pillT.className   = 'conn-pill conn-tax';
-        pillT.textContent = '📅 Tax Estimator — ' + qtrs.length + ' payment' + (qtrs.length !== 1 ? 's' : '') + ' (always shown)';
+        pillT.textContent = '?? Tax Estimator � ' + qtrs.length + ' payment' + (qtrs.length !== 1 ? 's' : '') + ' (always shown)';
       } else {
         pillT.className   = 'conn-pill conn-off';
-        pillT.textContent = '📅 Tax Estimator (no data)';
+        pillT.textContent = '?? Tax Estimator (no data)';
       }
     }
     if(pillD) {
       if(dccBills.length > 0) {
         pillD.className   = 'conn-pill conn-debt';
-        pillD.textContent = '💸 Debt Center — ' + dccBills.length + ' loan payment' + (dccBills.length !== 1 ? 's' : '');
+        pillD.textContent = '?? Debt Center � ' + dccBills.length + ' loan payment' + (dccBills.length !== 1 ? 's' : '');
       } else {
         pillD.className   = 'conn-pill conn-off';
-        pillD.textContent = '💸 Debt Center (no data)';
+        pillD.textContent = '?? Debt Center (no data)';
       }
     }
     if(info) {
@@ -567,13 +571,13 @@
         if(parts2.length) syncLine = ' + ' + parts2.join(' and ') + ' via sync';
       }
       info.innerHTML =
-        (alwaysOn.length ? '✅ Auto-imported: ' + alwaysOn.join(' and ') + syncLine : '') +
+        (alwaysOn.length ? '? Auto-imported: ' + alwaysOn.join(' and ') + syncLine : '') +
         (alwaysOn.length === 0 && !syncEnabled ? 'Invoices and tax payments auto-import when available. Enable sync to also show recurring bills and debt payments.' : '') +
-        '<br/><span style="color:#94a3b8">● Orange = bills &nbsp;● Blue = invoices &nbsp;● Purple = tax &nbsp;● Pink = debt &nbsp;● Green = income &nbsp;● Red = expense</span>';
+        '<br/><span style="color:#94a3b8">? Orange�=�bills &nbsp;? Blue�=�invoices &nbsp;? Purple�=�tax &nbsp;? Pink�=�debt &nbsp;? Green�=�income &nbsp;? Red�=�expense</span>';
     }
   }
 
-  // ── Weekly Cash Position chart ────────────────────────────────────────────
+  // -- Weekly Cash Position chart --------------------------------------------
   function fmtK(n) {
     var abs = Math.abs(Math.round(n));
     var s = abs >= 1000 ? '$' + (abs/1000).toFixed(1) + 'k' : '$' + abs.toLocaleString('en-US');
@@ -609,7 +613,7 @@
         });
       }
       running += wkInc - wkExp;
-      weeks.push({ label: 'Wk ' + (w + 1), range: start + '–' + end, balance: running, inc: wkInc, exp: wkExp });
+      weeks.push({ label: 'Wk ' + (w + 1), range: start + '�' + end, balance: running, inc: wkInc, exp: wkExp });
     }
 
     if(weeks.length === 0) return;
@@ -669,7 +673,7 @@
     }
   }
 
-  // ── Export iCal (.ics) ────────────────────────────────────────────────────
+  // -- Export iCal (.ics) ----------------------------------------------------
   function escIcs(str) {
     return String(str || '').replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;').replace(/\n/g, '\\n');
   }
@@ -682,7 +686,7 @@
       'BEGIN:VCALENDAR', 'VERSION:2.0',
       'PRODID:-//BizScale SmallBiz//Cash Flow Calendar//EN',
       'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
-      'X-WR-CALNAME:BizScale Cash Flow — ' + MONTH_NAMES[month] + ' ' + year
+      'X-WR-CALNAME:BizScale Cash Flow � ' + MONTH_NAMES[month] + ' ' + year
     ];
     var uid = 0;
     Object.keys(dayMap).sort(function(a,b){ return a-b; }).forEach(function(dStr) {
@@ -717,7 +721,7 @@
     window.print();
   }
 
-  // ── Render everything ─────────────────────────────────────────────────────
+  // -- Render everything -----------------------------------------------------
   function renderAll() {
     renderCalendar();
     renderSummary();
@@ -726,7 +730,7 @@
     renderEventsList();
   }
 
-  // ── Calendar ──────────────────────────────────────────────────────────────
+  // -- Calendar --------------------------------------------------------------
   function renderCalendar() {
     const year  = viewYear;
     const month = viewMonth;
@@ -818,7 +822,7 @@
     }
   }
 
-  // ── Summary ───────────────────────────────────────────────────────────────
+  // -- Summary ---------------------------------------------------------------
   function renderSummary() {
     const dayMap = buildDayMap(viewYear, viewMonth);
     let totalIncome = 0, totalExpense = 0;
@@ -838,7 +842,7 @@
     netBox.className = 'summary-box ' + (net >= 0 ? 'net-box-pos' : 'net-box-neg');
   }
 
-  // ── Running Balance bar chart ─────────────────────────────────────────────
+  // -- Running Balance bar chart ---------------------------------------------
   function renderBalance() {
     const opening   = parseFloat(document.getElementById('opening-bal').value) || 0;
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -881,7 +885,7 @@
     });
   }
 
-  // ── Events list table ─────────────────────────────────────────────────────
+  // -- Events list table -----------------------------------------------------
   function renderEventsList() {
     const tbody = document.getElementById('events-tbody');
     tbody.innerHTML = '';
@@ -929,24 +933,24 @@
       events.forEach((evt, idx) => addRow(evt, idx, true));
     }
     if(invoiceEvts.length > 0) {
-      addSectionHeader('📄 Pending Invoices (from Invoice Tracker — always on)', 'inv-hd');
+      addSectionHeader('?? Pending Invoices (from Invoice Tracker � always on)', 'inv-hd');
       invoiceEvts.forEach(evt => addRow(evt, -1, false));
     }
     if(taxEvts.length > 0) {
-      addSectionHeader('📅 Estimated Tax Payments (from Tax Estimator — always on)', 'tax-hd');
+      addSectionHeader('?? Estimated Tax Payments (from Tax Estimator � always on)', 'tax-hd');
       taxEvts.forEach(evt => addRow(evt, -1, false));
     }
     if(billEvts.length > 0) {
-      addSectionHeader('📋 Bills (from Bill Tracker)', 'bill-hd');
+      addSectionHeader('?? Bills (from Bill Tracker)', 'bill-hd');
       billEvts.forEach(evt => addRow(evt, -1, false));
     }
     if(debtEvts.length > 0) {
-      addSectionHeader('💸 Debt Payments (from Debt Command Center)', 'debt-hd');
+      addSectionHeader('?? Debt Payments (from Debt Command Center)', 'debt-hd');
       debtEvts.forEach(evt => addRow(evt, -1, false));
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  // -- Helpers ---------------------------------------------------------------
   function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -958,7 +962,7 @@
     return r;
   }
 
-  // ── Actions ───────────────────────────────────────────────────────────────
+  // -- Actions ---------------------------------------------------------------
   function addEvent() {
     const name   = document.getElementById('evt-name').value.trim();
     const type   = document.getElementById('evt-type').value;
@@ -994,9 +998,9 @@
     renderAll();
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────────
+  // -- Init ------------------------------------------------------------------
   loadEvents();
-  // Restore opening balance (persisted separately — events key only stores events array)
+  // Restore opening balance (persisted separately � events key only stores events array)
   try {
     var savedOB = localStorage.getItem(OB_KEY);
     if(savedOB !== null) document.getElementById('opening-bal').value = savedOB;

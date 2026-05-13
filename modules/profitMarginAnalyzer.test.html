@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Profit Margin Analyzer — BizScale</title>
+<title>Profit Margin Analyzer � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -69,6 +69,10 @@ input[type=range]{width:100%;accent-color:#2563eb}
 .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
 @media print{.back-link,button,.slider-grid{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -77,9 +81,9 @@ input[type=range]{width:100%;accent-color:#2563eb}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="../try.html" class="back-link">← Back to Demo</a>
+<a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Profit Margin Analyzer</h1>
-<p class="subtitle">BizScale · Compare your margins against industry benchmarks and model what-if scenarios.</p>
+<p class="subtitle">BizScale � Compare your margins against industry benchmarks and model what-if scenarios.</p>
 
 <!-- Input Card -->
 <div class="card">
@@ -116,13 +120,13 @@ input[type=range]{width:100%;accent-color:#2563eb}
       </select>
     </div>
   </div>
-  <button class="primary" onclick="analyze()">Analyze Margins →</button>
+  <button class="primary" onclick="analyze()">Analyze Margins ?</button>
 </div>
 
 <!-- Results -->
 <div id="resultsSection" style="display:none">
   <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
-    <button class="secondary" onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button class="secondary" onclick="window.print()">??? Print / Save PDF</button>
   </div>
 
   <div class="card">
@@ -182,15 +186,15 @@ input[type=range]{width:100%;accent-color:#2563eb}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+  btn.innerHTML='[Why this matters] '+(open?'?':'?');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '<div class="explain-example">?? Example: '+example+'</div>'+
     '</div></div>';
 }
 
@@ -304,7 +308,7 @@ function buildInsights(margins, bm, industry){
   var gDiff = margins.gross - bm.gross;
   if(gDiff < -5){
     var grossExplain = explainHtml([
-      'Your cost of goods is rising faster than your prices — margin compression',
+      'Your cost of goods is rising faster than your prices � margin compression',
       'This trend, if unchecked, leads to operating losses within a few months',
       'Options: raise prices, find cheaper suppliers, or reduce product complexity'
     ], 'Your gross margin is '+pct(margins.gross)+', vs the '+industry+' benchmark of '+pct(bm.gross)+'. The gap of '+Math.abs(gDiff).toFixed(1)+'% means your cost of goods is eating '+Math.abs(gDiff).toFixed(1)+'% more of each revenue dollar than peers');
@@ -318,7 +322,7 @@ function buildInsights(margins, bm, industry){
   // Operating margin insight
   var oDiff = margins.operating - bm.operating;
   if(oDiff < -5){
-    items.push({cls:'warn', text:'Operating margin of '+pct(margins.operating)+' lags the '+industry+' benchmark of '+pct(bm.operating)+' by '+Math.abs(oDiff).toFixed(1)+'%. Review overhead — rent, salaries, and utilities may be oversized relative to revenue.'});
+    items.push({cls:'warn', text:'Operating margin of '+pct(margins.operating)+' lags the '+industry+' benchmark of '+pct(bm.operating)+' by '+Math.abs(oDiff).toFixed(1)+'%. Review overhead � rent, salaries, and utilities may be oversized relative to revenue.'});
   } else if(oDiff >= 0){
     items.push({cls:'good', text:'Operating margin of '+pct(margins.operating)+' is at or above the '+industry+' industry norm of '+pct(bm.operating)+'. Operating efficiency is a strength.'});
   }
@@ -326,18 +330,18 @@ function buildInsights(margins, bm, industry){
   // Net margin insight
   if(margins.net < 0){
     var netNegExplain = explainHtml([
-      'Less than 5 cents of profit for every $1 of sales — very thin cushion',
+      'Less than 5 cents of profit for every $1 of sales � very thin cushion',
       'One unexpected cost or price drop eliminates all profit',
-      'Industry benchmark: healthy SMB net margin is 7–15%'
+      'Industry benchmark: healthy SMB net margin is 7�15%'
     ], 'Net margin of '+pct(margins.net)+' means you are losing money on each sale. At the US SMB average of 10%, you would keep $10 per $100. You currently keep $0 and lose '+pct(Math.abs(margins.net))+' per $100');
-    items.push({cls:'warn', text:'Net margin is negative ('+pct(margins.net)+'). Total expenses exceed revenue — cutting costs or raising prices is urgent to avoid cash burn.'+netNegExplain});
+    items.push({cls:'warn', text:'Net margin is negative ('+pct(margins.net)+'). Total expenses exceed revenue � cutting costs or raising prices is urgent to avoid cash burn.'+netNegExplain});
   } else if(margins.net < 5){
     var netLowExplain = explainHtml([
-      'Less than 5 cents of profit for every $1 of sales — very thin cushion',
+      'Less than 5 cents of profit for every $1 of sales � very thin cushion',
       'One unexpected cost or price drop eliminates all profit',
-      'Industry benchmark: healthy SMB net margin is 7–15%'
+      'Industry benchmark: healthy SMB net margin is 7�15%'
     ], 'Net margin of '+pct(margins.net)+' means: you keep $'+margins.net.toFixed(2)+' of every $100 in sales as profit. At the US SMB average of 10%, you\'d keep $10 per $100');
-    items.push({cls:'warn', text:'Net margin of '+pct(margins.net)+' is below the 5% warning threshold — dangerously thin for a small business.'+netLowExplain});
+    items.push({cls:'warn', text:'Net margin of '+pct(margins.net)+' is below the 5% warning threshold � dangerously thin for a small business.'+netLowExplain});
   } else if(margins.net < bm.net){
     items.push({cls:'', text:'Net margin of '+pct(margins.net)+' is below the '+industry+' benchmark of '+pct(bm.net)+'. Consider tax planning or refinancing higher-interest obligations to improve the bottom line.'});
   }
@@ -423,7 +427,7 @@ function savePMA(){
   }));}catch(e){}
 }
 
-// Auto-populate: saved state → fw_profile fallback
+// Auto-populate: saved state ? fw_profile fallback
 (function(){
   try{
     var s=JSON.parse(localStorage.getItem(PMA_KEY)||'null');

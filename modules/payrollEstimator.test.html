@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payroll Estimator (W-2) — BizScale</title>
+<title>Payroll Estimator (W-2) � BizScale</title>
 <script src="../sidebar.js" defer></script>
 <link rel="manifest" href="../manifest.json">
 <style>
@@ -111,6 +111,10 @@ input[type=range]{flex:1;accent-color:#2563eb}
   .btn,.btn-red,.btn-csv,.btn-blue{display:none!important}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <div class="print-hdr" id="printHdr">
@@ -133,7 +137,7 @@ input[type=range]{flex:1;accent-color:#2563eb}
       <h2>Monthly Financials</h2>
       <div class="grid2">
         <div><label>Monthly Revenue ($)</label><input type="number" id="revenue" placeholder="e.g. 20000" min="0" onchange="saveSetup()"/></div>
-        <div><label>Monthly Fixed Expenses ($)</label><input type="number" id="expenses" placeholder="Rent, utilities, supplies" min="0" onchange="saveSetup()"/><div class="hint">Exclude payroll — we calculate that</div></div>
+        <div><label>Monthly Fixed Expenses ($)</label><input type="number" id="expenses" placeholder="Rent, utilities, supplies" min="0" onchange="saveSetup()"/><div class="hint">Exclude payroll � we calculate that</div></div>
       </div>
       <div class="grid2" style="margin-top:12px">
         <div><label>Monthly Loan EMI ($)</label><input type="number" id="emi" placeholder="e.g. 1500" min="0" onchange="saveSetup()"/></div>
@@ -162,16 +166,16 @@ input[type=range]{flex:1;accent-color:#2563eb}
       </div>
 
       <div style="margin-top:14px">
-        <label>Profit Safety Buffer — keep this % of revenue as cushion</label>
+        <label>Profit Safety Buffer � keep this % of revenue as cushion</label>
         <div class="range-row">
           <input type="range" id="buffer" min="5" max="40" value="20" oninput="document.getElementById('bufferVal').textContent=this.value+'%';saveSetup()"/>
           <span class="range-val" id="bufferVal">20%</span>
         </div>
-        <div class="hint">Recommended: 20–30% to cover slow months and taxes</div>
+        <div class="hint">Recommended: 20�30% to cover slow months and taxes</div>
       </div>
       <div style="margin-top:16px">
         <button class="btn btn-blue" onclick="calculate()">Calculate Payroll Budget &rarr;</button>
-        <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">🖨️ Print</button>
+        <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">??? Print</button>
       </div>
     </div>
 
@@ -194,22 +198,22 @@ input[type=range]{flex:1;accent-color:#2563eb}
 
       <div class="card">
         <h2>Payroll as % of Revenue</h2>
-        <div class="gauge-label"><span>0%</span><span id="gaugeLabel">—</span><span>100%</span></div>
+        <div class="gauge-label"><span>0%</span><span id="gaugeLabel">�</span><span>100%</span></div>
         <div class="gauge-track"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
-        <div style="font-size:.78rem;color:#64748b;margin-top:8px">&#10003; <strong>Healthy:</strong> under 30% &nbsp;|&nbsp; &#9888; <strong>Tight:</strong> 30–40% &nbsp;|&nbsp; &#128680; <strong>High risk:</strong> over 40%</div>
+        <div style="font-size:.78rem;color:#64748b;margin-top:8px">&#10003; <strong>Healthy:</strong> under 30% &nbsp;|&nbsp; &#9888; <strong>Tight:</strong> 30�40% &nbsp;|&nbsp; &#128680; <strong>High risk:</strong> over 40%</div>
       </div>
 
       <div class="card">
         <h2>Monthly Cash Flow Breakdown</h2>
         <table class="breakdown">
-          <tr><td style="color:#64748b">Monthly Revenue</td><td id="bRev">—</td></tr>
-          <tr><td style="color:#64748b">Fixed Expenses</td><td style="color:#dc2626" id="bExp">—</td></tr>
-          <tr><td style="color:#64748b">Loan EMI</td><td style="color:#dc2626" id="bEmi">—</td></tr>
-          <tr><td style="color:#64748b">Owner's Draw</td><td style="color:#dc2626" id="bOwner">—</td></tr>
-          <tr><td style="color:#64748b">Safety Buffer (<span id="bBufPct"></span>)</td><td style="color:#d97706" id="bBuffer">—</td></tr>
-          <tr class="tot green"><td><strong>Available for Payroll</strong></td><td id="bAvail">—</td></tr>
-          <tr class="tot red"><td><strong>Total Employer Payroll Cost</strong></td><td id="bPayrollCost">—</td></tr>
-          <tr class="tot"><td><strong>Remaining Cash</strong></td><td id="bCash">—</td></tr>
+          <tr><td style="color:#64748b">Monthly Revenue</td><td id="bRev">�</td></tr>
+          <tr><td style="color:#64748b">Fixed Expenses</td><td style="color:#dc2626" id="bExp">�</td></tr>
+          <tr><td style="color:#64748b">Loan EMI</td><td style="color:#dc2626" id="bEmi">�</td></tr>
+          <tr><td style="color:#64748b">Owner's Draw</td><td style="color:#dc2626" id="bOwner">�</td></tr>
+          <tr><td style="color:#64748b">Safety Buffer (<span id="bBufPct"></span>)</td><td style="color:#d97706" id="bBuffer">�</td></tr>
+          <tr class="tot green"><td><strong>Available for Payroll</strong></td><td id="bAvail">�</td></tr>
+          <tr class="tot red"><td><strong>Total Employer Payroll Cost</strong></td><td id="bPayrollCost">�</td></tr>
+          <tr class="tot"><td><strong>Remaining Cash</strong></td><td id="bCash">�</td></tr>
         </table>
       </div>
 
@@ -273,7 +277,7 @@ var PAYROLL_RATES = {
 
 var SETUP_KEY = 'fw_payroll_setup';
 
-// ── STORAGE ──────────────────────────────────────────────────────────────────
+// -- STORAGE ------------------------------------------------------------------
 function getEmployees(){ return JSON.parse(localStorage.getItem('fw_employees')||'[]'); }
 function setEmployees(a){ localStorage.setItem('fw_employees',JSON.stringify(a)); }
 function getSetup(){ return JSON.parse(localStorage.getItem(SETUP_KEY)||'{}'); }
@@ -312,13 +316,13 @@ function restoreSetup(){
   }
 }
 
-// ── TOAST ────────────────────────────────────────────────────────────────────
+// -- TOAST --------------------------------------------------------------------
 function toast(msg){
   var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); },3500);
 }
 
-// ── TABS ─────────────────────────────────────────────────────────────────────
+// -- TABS ---------------------------------------------------------------------
 function switchTab(id){
   document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -327,7 +331,7 @@ function switchTab(id){
   if(id==='roster') renderRoster();
 }
 
-// ── FICA NOTE ────────────────────────────────────────────────────────────────
+// -- FICA NOTE ----------------------------------------------------------------
 function updateFicaNote(){
   var yr = parseInt(document.getElementById('taxYear').value)||new Date().getFullYear();
   var r = PAYROLL_RATES[yr]||PAYROLL_RATES[2024];
@@ -339,14 +343,14 @@ function updateFicaNote(){
   saveSetup();
 }
 
-// ── UTILS ────────────────────────────────────────────────────────────────────
+// -- UTILS --------------------------------------------------------------------
 function fmt(n){ return '$'+Math.max(0,Math.round(n)).toLocaleString('en-US'); }
 function fmtD(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function fmtPct(n){ return (n*100).toFixed(1)+'%'; }
 function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function stat(val,lbl){ return '<div class="stat-box"><div class="val">'+val+'</div><div class="lbl">'+lbl+'</div></div>'; }
 
-// ── BUDGET CALCULATOR ────────────────────────────────────────────────────────
+// -- BUDGET CALCULATOR --------------------------------------------------------
 function calcFica(annSal, rates){
   var ss = Math.min(annSal,rates.ficaWB)*0.062;
   var mc = annSal*0.0145;
@@ -418,13 +422,13 @@ function calculate(){
 
   // Breakdown
   document.getElementById('bRev').textContent       = fmt(rev);
-  document.getElementById('bExp').textContent       = '−'+fmt(exp);
-  document.getElementById('bEmi').textContent       = '−'+fmt(emi);
-  document.getElementById('bOwner').textContent     = '−'+fmt(owner);
+  document.getElementById('bExp').textContent       = '-'+fmt(exp);
+  document.getElementById('bEmi').textContent       = '-'+fmt(emi);
+  document.getElementById('bOwner').textContent     = '-'+fmt(owner);
   document.getElementById('bBufPct').textContent    = Math.round(bufPct*100)+'%';
-  document.getElementById('bBuffer').textContent    = '−'+fmt(buffer);
+  document.getElementById('bBuffer').textContent    = '-'+fmt(buffer);
   document.getElementById('bAvail').textContent     = fmt(available);
-  document.getElementById('bPayrollCost').textContent='−'+fmt(totalEmpCost);
+  document.getElementById('bPayrollCost').textContent='-'+fmt(totalEmpCost);
   document.getElementById('bCash').textContent      = fmt(remaining);
 
   // Benefits detail
@@ -472,7 +476,7 @@ function calculate(){
   pushPayrollTotals(totalEmpCost*12, numEmp, yr);
 }
 
-// ── INTEGRATION ──────────────────────────────────────────────────────────────
+// -- INTEGRATION --------------------------------------------------------------
 function pushPayrollTotals(annualCost, count, yr){
   var byYear = {};
   byYear[yr] = annualCost;
@@ -485,7 +489,7 @@ function pushPayrollTotals(annualCost, count, yr){
   strip.innerHTML='&#128101; Payroll synced &mdash; <strong>'+yr+' est. annual payroll: $'+fmtD(annualCost)+'</strong> shared with Tax Estimator &amp; Owner\'s Pay';
 }
 
-// ── EMPLOYEE ROSTER ──────────────────────────────────────────────────────────
+// -- EMPLOYEE ROSTER ----------------------------------------------------------
 function addEmployee(){
   var name   = document.getElementById('eName').value.trim();
   var salary = parseFloat(document.getElementById('eSalary').value);
@@ -524,7 +528,7 @@ function renderRoster(){
   var tSal=0,tCost=0;
   var rows='';
   if(!emps.length){
-    rows='<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:20px">No employees yet — add one above</td></tr>';
+    rows='<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:20px">No employees yet � add one above</td></tr>';
   } else {
     emps.forEach(function(e){
       var annSal = e.salary;
@@ -535,11 +539,11 @@ function renderRoster(){
       tSal+=annSal; tCost+=total;
       rows+='<tr>'+
         '<td><strong>'+esc(e.name)+'</strong>'+(e.start?'<br><span style="font-size:.72rem;color:#94a3b8">Since '+e.start+'</span>':'')+' </td>'+
-        '<td>'+(e.role||'—')+'</td>'+
+        '<td>'+(e.role||'�')+'</td>'+
         '<td>$'+fmtD(annSal)+'/yr</td>'+
         '<td>$'+fmtD(fica)+'/yr</td>'+
         '<td>$'+fmtD(futa)+'/yr</td>'+
-        '<td>'+(bHealth||b401kPct||bOther?'$'+fmtD(benAnn)+'/yr':'—')+'</td>'+
+        '<td>'+(bHealth||b401kPct||bOther?'$'+fmtD(benAnn)+'/yr':'�')+'</td>'+
         '<td><strong>$'+fmtD(total)+'/yr</strong></td>'+
         '<td><button class="btn btn-sm btn-red" onclick="deleteEmployee('+e.id+')">&#128465;</button></td>'+
         '</tr>';
@@ -568,7 +572,7 @@ function pushRosterTotals(emps){
   }
 }
 
-// ── EXPORT CSV ───────────────────────────────────────────────────────────────
+// -- EXPORT CSV ---------------------------------------------------------------
 function exportCSV(){
   var emps  = getEmployees();
   var yr    = parseInt(document.getElementById('rosterYear').value)||new Date().getFullYear();
@@ -578,7 +582,7 @@ function exportCSV(){
   var b401kPct = parseFloat(s.b401k)||0;
   var bOther   = parseFloat(s.bOther)||0;
 
-  var rows=[['Payroll Summary — '+yr],[]];
+  var rows=[['Payroll Summary � '+yr],[]];
   rows.push(['Name','Role','Start Date','Annual Salary','Employer FICA','FUTA','Benefits/yr','Total Employer Cost/yr']);
   var tSal=0,tCost=0;
   emps.forEach(function(e){
@@ -602,7 +606,7 @@ function exportCSV(){
   toast('CSV downloaded');
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// -- INIT ---------------------------------------------------------------------
 (function init(){
   var yr=new Date().getFullYear();
   ['taxYear','rosterYear'].forEach(function(id){

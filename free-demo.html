@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BizScale Free — Interactive Demo</title>
+<title>BizScale Free � Interactive Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -19,7 +19,7 @@
 }
 body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ── Header ── */
+/* -- Header -- */
 .demo-header{height:var(--header-h);background:#0c4a6e;display:flex;align-items:center;padding:0 1.25rem;gap:1rem;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
 .demo-brand{font-size:1rem;font-weight:900;color:#fff}.demo-brand span{color:#7dd3fc}
 .free-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:3px 10px;font-size:.75rem;color:#bae6fd;font-weight:600}
@@ -30,10 +30,10 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .btn-home{font-size:.75rem;color:#bae6fd;text-decoration:none;padding:.3rem .8rem;border:1px solid rgba(255,255,255,.2);border-radius:6px}
 .btn-home:hover{background:rgba(255,255,255,.08)}
 
-/* ── Layout ── */
+/* -- Layout -- */
 .demo-body{flex:1;display:flex;overflow:hidden}
 
-/* ── Sidebar ── */
+/* -- Sidebar -- */
 .demo-sidebar{width:var(--sidebar-w);background:#1e293b;overflow-y:auto;flex-shrink:0;padding:.75rem 0}
 .demo-sidebar::-webkit-scrollbar{width:3px}.demo-sidebar::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
 .sb-section-label{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#475569;padding:.5rem 1rem .25rem}
@@ -46,23 +46,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .sb-step.active .step-num{background:#0ea5e9;border-color:#0ea5e9;color:#fff}
 .sb-step.done .step-num{background:#16a34a;border-color:#16a34a;color:#fff}
 
-/* ── Main ── */
+/* -- Main -- */
 .demo-main{flex:1;overflow-y:auto;padding:1.5rem;padding-bottom:70px;background:var(--bg)}
 .demo-main::-webkit-scrollbar{width:5px}.demo-main::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 
-/* ── Slide ── */
+/* -- Slide -- */
 .slide{display:none;animation:fadeIn .3s ease}
 .slide.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Slide header ── */
+/* -- Slide header -- */
 .slide-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem}
 .slide-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
 .slide-title{font-size:1.2rem;font-weight:900;color:#0f172a;line-height:1.2}
 .slide-subtitle{font-size:.82rem;color:var(--sub);margin-top:3px;line-height:1.5}
 .free-badge-inline{display:inline-block;background:#334155;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;margin-left:6px;vertical-align:middle}
 
-/* ── Result card ── */
+/* -- Result card -- */
 .result-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:0 1px 6px rgba(0,0,0,.06)}
 .result-card.good{border-left:4px solid var(--green)}
 .result-card.bad{border-left:4px solid var(--red)}
@@ -82,7 +82,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .verdict-warn{background:#fef9c3;color:#854d0e}
 .verdict-ready{background:#dbeafe;color:#1e40af}
 
-/* ── Situation panels ── */
+/* -- Situation panels -- */
 .situation-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
 @media(max-width:700px){.situation-grid{grid-template-columns:1fr}}
 .situation-panel{border-radius:10px;padding:.9rem;border:1.5px solid}
@@ -94,7 +94,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .situation-panel ul{padding-left:14px}
 .situation-panel li{font-size:.75rem;color:#374151;margin-bottom:3px;line-height:1.4}
 
-/* ── Explain accordion ── */
+/* -- Explain accordion -- */
 .explain-accordion{margin-bottom:.75rem}
 .acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:#fff;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:700;color:var(--text);text-align:left}
 .acc-btn:hover{background:#f8fafc}
@@ -108,20 +108,20 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .improve-box ul{padding-left:14px;margin-top:4px}
 .improve-box li{margin-bottom:3px}
 
-/* ── Free callout ── */
+/* -- Free callout -- */
 .free-callout{background:linear-gradient(135deg,#0c4a6e,#075985);border-radius:10px;padding:.85rem 1.1rem;display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem}
 .free-callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
 .free-callout-text{font-size:.78rem;color:#bae6fd;line-height:1.5}
 .free-callout-text strong{color:#fff;display:block;margin-bottom:2px;font-size:.82rem}
 
-/* ── Lender table ── */
+/* -- Lender table -- */
 .lender-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:1rem}
 .lender-table th{background:#f1f5f9;padding:.5rem .75rem;text-align:left;font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--sub);border-bottom:1px solid var(--border)}
 .lender-table td{padding:.55rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 .lender-table tr:hover td{background:#f0f9ff}
 .match-pill{display:inline-block;padding:2px 8px;border-radius:999px;font-weight:800;font-size:.7rem;background:#dcfce7;color:#15803d}
 
-/* ── Welcome ── */
+/* -- Welcome -- */
 .welcome-hero{text-align:center;padding:2rem 1rem 1.5rem}
 .welcome-hero h1{font-size:1.8rem;font-weight:900;color:#0f172a;margin-bottom:.5rem}
 .welcome-hero p{font-size:.9rem;color:var(--sub);max-width:520px;margin:0 auto 1.5rem;line-height:1.6}
@@ -134,7 +134,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .start-btn{display:inline-block;background:#0284c7;color:#fff;padding:.7rem 2rem;border-radius:8px;font-size:.9rem;font-weight:800;cursor:pointer;border:none;transition:background .15s}
 .start-btn:hover{background:#0369a1}
 
-/* ── Summary slide ── */
+/* -- Summary slide -- */
 .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-bottom:1.25rem}
 .summary-item{background:#fff;border-radius:10px;border:1px solid var(--border);padding:.85rem;display:flex;gap:.6rem;align-items:flex-start}
 .sum-icon{font-size:1.3rem;flex-shrink:0}
@@ -146,30 +146,34 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 .sum-amber{background:#fef9c3;color:#854d0e}
 .sum-red{background:#fee2e2;color:#991b1b}
 
-/* ── Scenario table ── */
+/* -- Scenario table -- */
 .scenario-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:1rem}
 .scenario-table th{background:#f1f5f9;padding:.5rem .75rem;text-align:left;font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--sub);border-bottom:1px solid var(--border)}
 .scenario-table td{padding:.55rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 .scenario-table tr:hover td{background:#f0f9ff}
 
-/* ── Nav ── */
+/* -- Nav -- */
 .slide-nav{position:fixed;bottom:0;left:var(--sidebar-w);right:0;height:52px;background:#fff;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:50}
 .nav-btn{padding:.45rem 1.2rem;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .14s}
 .nav-prev{border-color:var(--border);background:#fff;color:var(--text)}.nav-prev:hover{background:var(--bg)}
 .nav-next{border-color:var(--sky-dark);background:var(--sky-dark);color:#fff}.nav-next:hover{background:#075985}
 .nav-center{font-size:.75rem;color:var(--sub);font-weight:600}
 </style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
 </head>
 <body>
 
 <!-- Header -->
 <div class="demo-header">
   <div class="demo-brand">Biz<span>Scale</span></div>
-  <div class="free-badge">🌮 Maria's Taco Shop &amp; Catering · Austin, TX</div>
+  <div class="free-badge">?? Maria's Taco Shop &amp; Catering � Austin, TX</div>
   <div class="demo-header-right">
     <div class="slide-counter" id="slideCounter">Slide 1 of 10</div>
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:10%"></div></div>
-    <a href="index.html" class="btn-home">← Exit Demo</a>
+    <a href="index.html" class="btn-home">? Exit Demo</a>
   </div>
 </div>
 
@@ -178,34 +182,34 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 <!-- Sidebar -->
 <aside class="demo-sidebar" id="demosidebar">
   <div class="sb-section-label">Demo Navigation</div>
-  <div class="sb-step active" data-slide="0" onclick="goSlide(0)"><span class="step-icon">🏠</span>Welcome<span class="step-num">1</span></div>
+  <div class="sb-step active" data-slide="0" onclick="goSlide(0)"><span class="step-icon">??</span>Welcome<span class="step-num">1</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Free Tools</div>
-  <div class="sb-step" data-slide="1" onclick="goSlide(1)"><span class="step-icon">🩺</span>Financial Checkup<span class="step-num">2</span></div>
-  <div class="sb-step" data-slide="2" onclick="goSlide(2)"><span class="step-icon">🛡️</span>Loan Safety Score<span class="step-num">3</span></div>
-  <div class="sb-step" data-slide="3" onclick="goSlide(3)"><span class="step-icon">🧮</span>EMI Calculator<span class="step-num">4</span></div>
-  <div class="sb-step" data-slide="4" onclick="goSlide(4)"><span class="step-icon">⛽</span>Cash Runway<span class="step-num">5</span></div>
-  <div class="sb-step" data-slide="5" onclick="goSlide(5)"><span class="step-icon">📉</span>Break-Even Analysis<span class="step-num">6</span></div>
-  <div class="sb-step" data-slide="6" onclick="goSlide(6)"><span class="step-icon">🏦</span>Lender Marketplace<span class="step-num">7</span></div>
-  <div class="sb-step" data-slide="7" onclick="goSlide(7)"><span class="step-icon">📅</span>Monthly Snapshot<span class="step-num">8</span></div>
-  <div class="sb-step" data-slide="8" onclick="goSlide(8)"><span class="step-icon">🔮</span>What-If Scenarios<span class="step-num">9</span></div>
+  <div class="sb-step" data-slide="1" onclick="goSlide(1)"><span class="step-icon">??</span>Financial Checkup<span class="step-num">2</span></div>
+  <div class="sb-step" data-slide="2" onclick="goSlide(2)"><span class="step-icon">???</span>Loan Safety Score<span class="step-num">3</span></div>
+  <div class="sb-step" data-slide="3" onclick="goSlide(3)"><span class="step-icon">??</span>EMI Calculator<span class="step-num">4</span></div>
+  <div class="sb-step" data-slide="4" onclick="goSlide(4)"><span class="step-icon">?</span>Cash Runway<span class="step-num">5</span></div>
+  <div class="sb-step" data-slide="5" onclick="goSlide(5)"><span class="step-icon">??</span>Break-Even Analysis<span class="step-num">6</span></div>
+  <div class="sb-step" data-slide="6" onclick="goSlide(6)"><span class="step-icon">??</span>Lender Marketplace<span class="step-num">7</span></div>
+  <div class="sb-step" data-slide="7" onclick="goSlide(7)"><span class="step-icon">??</span>Monthly Snapshot<span class="step-num">8</span></div>
+  <div class="sb-step" data-slide="8" onclick="goSlide(8)"><span class="step-icon">??</span>What-If Scenarios<span class="step-num">9</span></div>
 
   <div class="sb-section-label" style="margin-top:.5rem">Results</div>
-  <div class="sb-step" data-slide="9" onclick="goSlide(9)"><span class="step-icon">🏁</span>Summary &amp; Next Steps<span class="step-num">10</span></div>
+  <div class="sb-step" data-slide="9" onclick="goSlide(9)"><span class="step-icon">??</span>Summary &amp; Next Steps<span class="step-num">10</span></div>
 </aside>
 
 <!-- Main -->
 <div class="demo-main" id="demoMain">
 
-<!-- ═══ SLIDE 0: WELCOME ═══ -->
+<!-- --- SLIDE 0: WELCOME --- -->
 <div class="slide active" id="slide-0">
   <div class="welcome-hero">
-    <div style="font-size:2.5rem;margin-bottom:.5rem">🌮</div>
+    <div style="font-size:2.5rem;margin-bottom:.5rem">??</div>
     <h1>Welcome to BizScale Free Demo</h1>
-    <p>We've pre-loaded a real-world scenario — <strong>Maria Rodriguez, Taco Shop &amp; Catering in Austin, TX</strong> — to show you exactly what 10 free tools can do for your business. No sign-up needed.</p>
+    <p>We've pre-loaded a real-world scenario � <strong>Maria Rodriguez, Taco Shop &amp; Catering in Austin, TX</strong> � to show you exactly what 10 free tools can do for your business. No sign-up needed.</p>
   </div>
   <div class="business-profile">
-    <h3>🌮 Your Demo Business Profile — Maria Rodriguez</h3>
+    <h3>?? Your Demo Business Profile � Maria Rodriguez</h3>
     <div class="biz-stats">
       <div class="biz-stat"><div class="biz-stat-val">$22,000</div><div class="biz-stat-lbl">Monthly Revenue</div></div>
       <div class="biz-stat"><div class="biz-stat-val">$17,500</div><div class="biz-stat-lbl">Monthly Expenses</div></div>
@@ -215,58 +219,58 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       <div class="biz-stat"><div class="biz-stat-val">$25,000</div><div class="biz-stat-lbl">Loan Goal (oven upgrade)</div></div>
     </div>
     <div style="margin-top:.85rem;padding:.65rem;background:#f0f9ff;border-radius:7px;font-size:.78rem;color:#0369a1;font-weight:600">
-      🎯 Goal: Understand Maria's financial health and whether she can safely take a $25,000 loan for a commercial oven upgrade
+      ?? Goal: Understand Maria's financial health and whether she can safely take a $25,000 loan for a commercial oven upgrade
     </div>
   </div>
   <div style="text-align:center">
     <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:.85rem 1.25rem;max-width:400px;margin:0 auto 1.25rem;font-size:.82rem;color:#0369a1;font-weight:700">
-      ✅ No sign-up needed — 10 free tools, forever
+      ? No sign-up needed � 10 free tools, forever
     </div>
-    <button class="start-btn" onclick="goSlide(1)">Start Demo →</button>
-    <div style="font-size:.72rem;color:var(--sub);margin-top:.75rem">10 slides · ~5 minutes · Click any step in the sidebar to jump ahead</div>
+    <button class="start-btn" onclick="goSlide(1)">Start Demo ?</button>
+    <div style="font-size:.72rem;color:var(--sub);margin-top:.75rem">10 slides � ~5 minutes � Click any step in the sidebar to jump ahead</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 1: FINANCIAL CHECKUP ═══ -->
+<!-- --- SLIDE 1: FINANCIAL CHECKUP --- -->
 <div class="slide" id="slide-1">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🩺</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">Financial Checkup <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">4-point health check of Maria's Taco Shop — like an annual physical for your business, completed in 2 minutes.</div>
+      <div class="slide-subtitle">4-point health check of Maria's Taco Shop � like an annual physical for your business, completed in 2 minutes.</div>
     </div>
   </div>
 
   <div class="result-card warn">
-    <div class="result-label">Maria's Taco Shop — Health Check Results</div>
+    <div class="result-label">Maria's Taco Shop � Health Check Results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:.85rem">
       <div style="background:#f0fdf4;border-radius:8px;padding:.7rem .9rem;border:1px solid #86efac">
-        <div style="font-size:.72rem;font-weight:800;color:#15803d;margin-bottom:.3rem">✅ PASS — Cash Flow</div>
+        <div style="font-size:.72rem;font-weight:800;color:#15803d;margin-bottom:.3rem">? PASS � Cash Flow</div>
         <div style="font-size:.82rem;font-weight:900;color:#16a34a">$4,500 positive</div>
         <div style="font-size:.7rem;color:#374151;margin-top:2px">Revenue exceeds expenses each month</div>
       </div>
       <div style="background:#f0fdf4;border-radius:8px;padding:.7rem .9rem;border:1px solid #86efac">
-        <div style="font-size:.72rem;font-weight:800;color:#15803d;margin-bottom:.3rem">✅ PASS — Debt Load</div>
+        <div style="font-size:.72rem;font-weight:800;color:#15803d;margin-bottom:.3rem">? PASS � Debt Load</div>
         <div style="font-size:.82rem;font-weight:900;color:#16a34a">No existing loans</div>
-        <div style="font-size:.7rem;color:#374151;margin-top:2px">Clean slate — no current debt obligations</div>
+        <div style="font-size:.7rem;color:#374151;margin-top:2px">Clean slate � no current debt obligations</div>
       </div>
       <div style="background:#fffbeb;border-radius:8px;padding:.7rem .9rem;border:1px solid #fde68a">
-        <div style="font-size:.72rem;font-weight:800;color:#854d0e;margin-bottom:.3rem">⚠️ WARN — Break-Even</div>
+        <div style="font-size:.72rem;font-weight:800;color:#854d0e;margin-bottom:.3rem">?? WARN � Break-Even</div>
         <div style="font-size:.82rem;font-weight:900;color:#d97706">Barely covers fixed costs</div>
         <div style="font-size:.7rem;color:#374151;margin-top:2px">Safety margin is thin at 34%</div>
       </div>
       <div style="background:#fef2f2;border-radius:8px;padding:.7rem .9rem;border:1px solid #fca5a5">
-        <div style="font-size:.72rem;font-weight:800;color:#991b1b;margin-bottom:.3rem">🔴 FAIL — Savings Buffer</div>
+        <div style="font-size:.72rem;font-weight:800;color:#991b1b;margin-bottom:.3rem">?? FAIL � Savings Buffer</div>
         <div style="font-size:.82rem;font-weight:900;color:#dc2626">$8,000 = 0.45 months</div>
-        <div style="font-size:.7rem;color:#374151;margin-top:2px">Far below the recommended 2–3 month minimum</div>
+        <div style="font-size:.7rem;color:#374151;margin-top:2px">Far below the recommended 2�3 month minimum</div>
       </div>
     </div>
-    <div class="verdict-badge verdict-warn">⚠️ Grade C · 3 of 4 checks passed — savings buffer needs urgent attention</div>
+    <div class="verdict-badge verdict-warn">?? Grade C � 3 of 4 checks passed � savings buffer needs urgent attention</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Healthy Business (passes 3 of 4)</h4>
+      <h4 class="green">?? Healthy Business (passes 3 of 4)</h4>
       <ul>
         <li>Positive cash flow every month</li>
         <li>No debt dragging down finances</li>
@@ -275,9 +279,9 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Danger Zone (fails all 4)</h4>
+      <h4 class="red">?? Danger Zone (fails all 4)</h4>
       <ul>
-        <li>Negative cash flow — losing money monthly</li>
+        <li>Negative cash flow � losing money monthly</li>
         <li>High debt load relative to income</li>
         <li>Revenue below break-even point</li>
         <li>Zero emergency savings buffer</li>
@@ -286,21 +290,21 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What is a Financial Checkup? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What is a Financial Checkup? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="sky-box"><strong>Think of it like an annual physical for your business.</strong> A doctor checks 4 key vital signs — blood pressure, heart rate, temperature, oxygen. BizScale checks 4 key financial signs: cash flow, debt load, break-even, and savings buffer.<br><br>Each check takes 30 seconds. Together they tell you instantly whether your business is healthy, at risk, or in crisis — without reading a 20-page report.</div>
-      <strong>Why it matters:</strong> Most small business owners feel "fine" right up until they can't make payroll. The checkup catches warning signs 3–6 months early, when you still have time to fix them.
+      <div class="sky-box"><strong>Think of it like an annual physical for your business.</strong> A doctor checks 4 key vital signs � blood pressure, heart rate, temperature, oxygen. BizScale checks 4 key financial signs: cash flow, debt load, break-even, and savings buffer.<br><br>Each check takes 30 seconds. Together they tell you instantly whether your business is healthy, at risk, or in crisis � without reading a 20-page report.</div>
+      <strong>Why it matters:</strong> Most small business owners feel "fine" right up until they can't make payroll. The checkup catches warning signs 3�6 months early, when you still have time to fix them.
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 Fix: Savings buffer failing — what to do <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Fix: Savings buffer failing � what to do <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Goal:</strong> Build 2 months of expenses = $35,000 emergency fund<br><br>
         <ul>
           <li>Open a separate business savings account (not your main checking)</li>
-          <li>Set an auto-transfer of $500–$1,000/month on the 1st</li>
-          <li>At $700/mo, you reach $35K in under 4 years — or faster if you add catering event windfalls</li>
-          <li>Even $8K → $15K doubles your runway from 14 days to 26 days</li>
+          <li>Set an auto-transfer of $500�$1,000/month on the 1st</li>
+          <li>At $700/mo, you reach $35K in under 4 years � or faster if you add catering event windfalls</li>
+          <li>Even $8K ? $15K doubles your runway from 14 days to 26 days</li>
         </ul>
         <strong>Timeline:</strong> Reach $35K emergency fund in ~50 months at $700/mo auto-transfer, or 25 months at $1,400/mo.
       </div>
@@ -308,48 +312,48 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Business Health Score (full A–F grade)</strong>The free checkup gives you 4 pass/fail checks. Starter adds a full A–F grade with 6 sub-scores, month-over-month tracking, and a 90-day improvement roadmap.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Business Health Score (full A�F grade)</strong>The free checkup gives you 4 pass/fail checks. Starter adds a full A�F grade with 6 sub-scores, month-over-month tracking, and a 90-day improvement roadmap.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 2: LOAN SAFETY SCORE ═══ -->
+<!-- --- SLIDE 2: LOAN SAFETY SCORE --- -->
 <div class="slide" id="slide-2">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🛡️</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">???</div>
     <div>
       <div class="slide-title">Loan Safety Score <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">Like a credit score for your business — lenders check these exact metrics before approving any loan.</div>
+      <div class="slide-subtitle">Like a credit score for your business � lenders check these exact metrics before approving any loan.</div>
     </div>
   </div>
 
   <div class="result-card warn">
-    <div class="result-label">Maria's Taco Shop — Loan Safety Score</div>
+    <div class="result-label">Maria's Taco Shop � Loan Safety Score</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val sky">71</div><div class="metric-lbl">Score / 100</div></div>
-      <div class="metric-box"><div class="metric-val green">2.8×</div><div class="metric-lbl">DSCR (good — no debt)</div></div>
+      <div class="metric-box"><div class="metric-val green">2.8�</div><div class="metric-lbl">DSCR (good � no debt)</div></div>
       <div class="metric-box"><div class="metric-val green">0%</div><div class="metric-lbl">Debt-to-Income</div></div>
       <div class="metric-box"><div class="metric-val green">+8%</div><div class="metric-lbl">Revenue Trend</div></div>
       <div class="metric-box"><div class="metric-val red">0.45</div><div class="metric-lbl">Cash Reserve (months)</div></div>
     </div>
-    <div class="verdict-badge verdict-warn">⚠️ MODERATE RISK — Strong income but cash reserve is thin</div>
-    <div style="font-size:.78rem;color:#374151;line-height:1.6">Maria earns <strong>$2.80 for every $1 of potential debt payment</strong> — well above the lender minimum of $1.25. Revenue is growing at +8%. The main weakness pulling the score below 80 is her <strong>0.45-month cash reserve</strong>. Lenders want to see 2+ months.</div>
+    <div class="verdict-badge verdict-warn">?? MODERATE RISK � Strong income but cash reserve is thin</div>
+    <div style="font-size:.78rem;color:#374151;line-height:1.6">Maria earns <strong>$2.80 for every $1 of potential debt payment</strong> � well above the lender minimum of $1.25. Revenue is growing at +8%. The main weakness pulling the score below 80 is her <strong>0.45-month cash reserve</strong>. Lenders want to see 2+ months.</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Healthy (score &gt; 80)</h4>
+      <h4 class="green">?? Healthy (score &gt; 80)</h4>
       <ul>
-        <li>DSCR above 1.5 — income covers debt comfortably</li>
-        <li>Cash reserve 2+ months — buffer for slow periods</li>
+        <li>DSCR above 1.5 � income covers debt comfortably</li>
+        <li>Cash reserve 2+ months � buffer for slow periods</li>
         <li>Revenue growing or stable for 6+ months</li>
         <li>Lenders compete to offer lower rates</li>
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Danger (score &lt; 50 — RISKY verdict)</h4>
+      <h4 class="red">?? Danger (score &lt; 50 � RISKY verdict)</h4>
       <ul>
-        <li>DSCR below 1.0 — income can't cover debt payments</li>
+        <li>DSCR below 1.0 � income can't cover debt payments</li>
         <li>Cash reserve under 0.5 months</li>
         <li>Revenue declining 3+ months in a row</li>
         <li>Lenders reject application or charge 30%+ interest</li>
@@ -358,53 +362,53 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What is a Loan Safety Score? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What is a Loan Safety Score? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="sky-box"><strong>Think of it like a credit score — but for your business, not you personally.</strong> Just like a personal credit score predicts whether you'll repay a car loan, the Loan Safety Score predicts whether your business can handle new debt.<br><br>
-      <strong>DSCR plain English:</strong> Debt Service Coverage Ratio. Maria earns $22,000/month and spends $17,500. That leaves $4,500. If she takes a $25K loan at $513/mo, her DSCR = $4,500 ÷ $513 = 8.77. That's excellent — but lenders also look at reserves and trends, not just DSCR.</div>
-      <strong>Minimum lenders require:</strong> DSCR ≥ 1.25 (you earn $1.25 for every $1 owed). Maria is well above this with no current debt, which is why income-based metrics are strong.
+      <div class="sky-box"><strong>Think of it like a credit score � but for your business, not you personally.</strong> Just like a personal credit score predicts whether you'll repay a car loan, the Loan Safety Score predicts whether your business can handle new debt.<br><br>
+      <strong>DSCR plain English:</strong> Debt Service Coverage Ratio. Maria earns $22,000/month and spends $17,500. That leaves $4,500. If she takes a $25K loan at $513/mo, her DSCR = $4,500 � $513 = 8.77. That's excellent � but lenders also look at reserves and trends, not just DSCR.</div>
+      <strong>Minimum lenders require:</strong> DSCR = 1.25 (you earn $1.25 for every $1 owed). Maria is well above this with no current debt, which is why income-based metrics are strong.
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 Fix: How to push the score above 85 <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Fix: How to push the score above 85 <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Single biggest fix:</strong> Build cash reserve to 2+ months before applying for the loan.<br><br>
         <ul>
           <li>Current reserve: $8,000 (0.45 months)</li>
           <li>Target reserve: $35,000 (2 months of $17,500 expenses)</li>
-          <li>At that reserve level, score jumps from 71 → 85+</li>
-          <li>Timeline: Save $2,200/month for 12 months to reach $26,400 — much closer</li>
-          <li>Meanwhile, apply for SBA Microloan now — they have softer reserve requirements</li>
+          <li>At that reserve level, score jumps from 71 ? 85+</li>
+          <li>Timeline: Save $2,200/month for 12 months to reach $26,400 � much closer</li>
+          <li>Meanwhile, apply for SBA Microloan now � they have softer reserve requirements</li>
         </ul>
       </div>
     </div>
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
+    <div class="free-callout-icon">?</div>
     <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Monthly Score Tracking</strong>See your Loan Safety Score change month over month. Get a specific action plan to hit your target score before your loan application date.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 3: EMI CALCULATOR ═══ -->
+<!-- --- SLIDE 3: EMI CALCULATOR --- -->
 <div class="slide" id="slide-3">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🧮</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">EMI Calculator <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">Before you apply, know exactly what you'll pay every month — and whether it's affordable.</div>
+      <div class="slide-subtitle">Before you apply, know exactly what you'll pay every month � and whether it's affordable.</div>
     </div>
   </div>
 
   <div class="result-card good">
-    <div class="result-label">$25,000 Loan · 5 Years · 8.5% Interest</div>
+    <div class="result-label">$25,000 Loan � 5 Years � 8.5% Interest</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val sky">$513</div><div class="metric-lbl">Monthly EMI</div></div>
       <div class="metric-box"><div class="metric-val green">$30,800</div><div class="metric-lbl">Total Repaid</div></div>
       <div class="metric-box"><div class="metric-val amber">$5,800</div><div class="metric-lbl">Interest Cost</div></div>
       <div class="metric-box"><div class="metric-val green">2.3%</div><div class="metric-lbl">% of Monthly Revenue</div></div>
     </div>
-    <div class="verdict-badge verdict-safe">✅ Affordable — $513 is only 2.3% of Maria's $22,000 monthly revenue</div>
+    <div class="verdict-badge verdict-safe">? Affordable � $513 is only 2.3% of Maria's $22,000 monthly revenue</div>
   </div>
 
   <div class="result-card sky" style="margin-bottom:1.25rem">
@@ -414,9 +418,9 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
         <tr><th>Loan Amount</th><th>Monthly EMI</th><th>Total Repaid</th><th>% of Revenue</th><th>Verdict</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>$15,000</strong></td><td>$307/mo</td><td>$18,480</td><td>1.4%</td><td><span style="color:#16a34a;font-weight:800">✅ Very affordable</span></td></tr>
-        <tr style="background:#f0f9ff"><td><strong>$25,000</strong></td><td>$513/mo</td><td>$30,800</td><td>2.3%</td><td><span style="color:#16a34a;font-weight:800">✅ Affordable</span></td></tr>
-        <tr><td><strong>$40,000</strong></td><td>$821/mo</td><td>$49,260</td><td>3.7%</td><td><span style="color:#d97706;font-weight:800">⚠️ Manageable</span></td></tr>
+        <tr><td><strong>$15,000</strong></td><td>$307/mo</td><td>$18,480</td><td>1.4%</td><td><span style="color:#16a34a;font-weight:800">? Very affordable</span></td></tr>
+        <tr style="background:#f0f9ff"><td><strong>$25,000</strong></td><td>$513/mo</td><td>$30,800</td><td>2.3%</td><td><span style="color:#16a34a;font-weight:800">? Affordable</span></td></tr>
+        <tr><td><strong>$40,000</strong></td><td>$821/mo</td><td>$49,260</td><td>3.7%</td><td><span style="color:#d97706;font-weight:800">?? Manageable</span></td></tr>
       </tbody>
     </table>
     <div style="font-size:.73rem;color:var(--sub)">All scenarios: 5-year term at 8.5% interest rate (SBA Microloan typical rate)</div>
@@ -424,7 +428,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Good EMI (under 5% of revenue)</h4>
+      <h4 class="green">?? Good EMI (under 5% of revenue)</h4>
       <ul>
         <li>Easy to absorb even in a slow month</li>
         <li>Leaves room for unexpected expenses</li>
@@ -433,7 +437,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Risky EMI (over 15% of revenue)</h4>
+      <h4 class="red">?? Risky EMI (over 15% of revenue)</h4>
       <ul>
         <li>One bad month wipes out cash flow entirely</li>
         <li>No room for growth expenses</li>
@@ -444,15 +448,15 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What is EMI? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What is EMI? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="sky-box"><strong>EMI = Equated Monthly Installment</strong> — the fixed payment you make every month on a loan. Like a car loan payment.<br><br>
+      <div class="sky-box"><strong>EMI = Equated Monthly Installment</strong> � the fixed payment you make every month on a loan. Like a car loan payment.<br><br>
       It combines principal repayment + interest into one flat number. The formula uses your loan amount, interest rate, and term to calculate a payment that pays off the loan completely by the end date.<br><br>
-      <strong>Example:</strong> Maria borrows $25,000 at 8.5% over 60 months. Each month she pays $513 — about $300 goes to principal, $213 to interest at first. As principal shrinks, more goes to principal over time.</div>
+      <strong>Example:</strong> Maria borrows $25,000 at 8.5% over 60 months. Each month she pays $513 � about $300 goes to principal, $213 to interest at first. As principal shrinks, more goes to principal over time.</div>
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 Fix: If the EMI seems too high <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Fix: If the EMI seems too high <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Extend the term to lower monthly payments:</strong><br>
         <ul>
@@ -460,21 +464,21 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
           <li>5-year term: $25K at 8.5% = $513/mo (total paid: $30,800)</li>
           <li>7-year term: $25K at 8.5% = $391/mo (total paid: $32,844)</li>
         </ul>
-        Extending from 3yr to 5yr lowers payment by 35% ($789 → $513) at a cost of only $2,396 extra interest over the life of the loan. That trade-off is usually worth it for cash flow.
+        Extending from 3yr to 5yr lowers payment by 35% ($789 ? $513) at a cost of only $2,396 extra interest over the life of the loan. That trade-off is usually worth it for cash flow.
       </div>
     </div>
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
+    <div class="free-callout-icon">?</div>
     <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Owner's Pay Calculator</strong>After the loan payment, how much can Maria actually pay herself? Starter's Owner's Pay tool calculates the safe salary Maria can take home without hurting the business.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 4: CASH RUNWAY ═══ -->
+<!-- --- SLIDE 4: CASH RUNWAY --- -->
 <div class="slide" id="slide-4">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#fef2f2;color:#dc2626">⛽</div>
+    <div class="slide-icon-wrap" style="background:#fef2f2;color:#dc2626">?</div>
     <div>
       <div class="slide-title">Cash Runway <span class="free-badge-inline">Free</span></div>
       <div class="slide-subtitle">If revenue stopped tomorrow, how long could Maria keep paying bills? This is the gas tank gauge of your business.</div>
@@ -482,14 +486,14 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="result-card bad">
-    <div class="result-label">Maria's Taco Shop — Cash Runway Analysis</div>
+    <div class="result-label">Maria's Taco Shop � Cash Runway Analysis</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val sky">$8,000</div><div class="metric-lbl">Cash in Bank</div></div>
       <div class="metric-box"><div class="metric-val amber">$17,500</div><div class="metric-lbl">Monthly Expenses</div></div>
       <div class="metric-box"><div class="metric-val red">0.46 months</div><div class="metric-lbl">Current Runway</div></div>
       <div class="metric-box"><div class="metric-val red">14 days</div><div class="metric-lbl">In Calendar Days</div></div>
     </div>
-    <div class="verdict-badge verdict-danger">🔴 DANGER — Less than 1 month of runway. One bad week = can't pay rent.</div>
+    <div class="verdict-badge verdict-danger">?? DANGER � Less than 1 month of runway. One bad week = can't pay rent.</div>
   </div>
 
   <div class="result-card sky">
@@ -499,18 +503,18 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
         <tr><th>Scenario</th><th>Monthly Expenses</th><th>Runway</th><th>Days</th><th>Status</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Current</strong></td><td>$17,500</td><td>0.46 months</td><td>14 days</td><td><span style="color:#dc2626;font-weight:800">🔴 Critical</span></td></tr>
-        <tr><td><strong>10% expense cut</strong></td><td>$15,750</td><td>0.51 months</td><td>15 days</td><td><span style="color:#dc2626;font-weight:800">🔴 Still critical</span></td></tr>
-        <tr><td><strong>20% expense cut</strong></td><td>$14,000</td><td>0.57 months</td><td>17 days</td><td><span style="color:#dc2626;font-weight:800">🔴 Still critical</span></td></tr>
-        <tr style="background:#f0fdf4"><td><strong>Build $35K reserve</strong></td><td>$17,500</td><td>2.0 months</td><td>60 days</td><td><span style="color:#16a34a;font-weight:800">✅ Safe</span></td></tr>
+        <tr><td><strong>Current</strong></td><td>$17,500</td><td>0.46 months</td><td>14 days</td><td><span style="color:#dc2626;font-weight:800">?? Critical</span></td></tr>
+        <tr><td><strong>10% expense cut</strong></td><td>$15,750</td><td>0.51 months</td><td>15 days</td><td><span style="color:#dc2626;font-weight:800">?? Still critical</span></td></tr>
+        <tr><td><strong>20% expense cut</strong></td><td>$14,000</td><td>0.57 months</td><td>17 days</td><td><span style="color:#dc2626;font-weight:800">?? Still critical</span></td></tr>
+        <tr style="background:#f0fdf4"><td><strong>Build $35K reserve</strong></td><td>$17,500</td><td>2.0 months</td><td>60 days</td><td><span style="color:#16a34a;font-weight:800">? Safe</span></td></tr>
       </tbody>
     </table>
-    <div style="font-size:.73rem;color:var(--sub)">Cutting expenses alone won't solve a cash reserve problem — the real fix is building the reserve.</div>
+    <div style="font-size:.73rem;color:var(--sub)">Cutting expenses alone won't solve a cash reserve problem � the real fix is building the reserve.</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Healthy (3+ months runway)</h4>
+      <h4 class="green">?? Healthy (3+ months runway)</h4>
       <ul>
         <li>Can survive a slow season without panic</li>
         <li>Buffer to handle unexpected equipment repairs</li>
@@ -519,7 +523,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Danger (under 1 month)</h4>
+      <h4 class="red">?? Danger (under 1 month)</h4>
       <ul>
         <li>One bad catering cancellation = can't pay rent</li>
         <li>Can't negotiate with suppliers (no leverage)</li>
@@ -530,23 +534,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What is Cash Runway? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What is Cash Runway? <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="sky-box"><strong>Cash Runway = Cash in Bank ÷ Monthly Expenses</strong><br><br>
+      <div class="sky-box"><strong>Cash Runway = Cash in Bank � Monthly Expenses</strong><br><br>
       It answers one question: "If all my revenue stopped right now, how many months could I keep paying bills before going broke?"<br><br>
       Like a gas tank gauge for your business. If you have $8K cash and spend $17.5K/month, your tank has 0.46 months of fuel. Even a brief revenue interruption (bad weather week, key supplier delay, equipment breakdown) can strand you.<br><br>
       <strong>The 3-month rule:</strong> Most financial experts say small businesses need 3 months of cash reserve minimum. This is especially critical for food businesses where a health inspection, equipment failure, or slow season can cut revenue 50% overnight.</div>
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 Fix: How Maria builds her emergency fund <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Fix: How Maria builds her emergency fund <span class="arrow">?</span></button>
     <div class="acc-body">
-      <div class="improve-box"><strong>Target: $35,000–$52,500 (2–3 months of $17,500 expenses)</strong><br><br>
+      <div class="improve-box"><strong>Target: $35,000�$52,500 (2�3 months of $17,500 expenses)</strong><br><br>
         <ul>
           <li><strong>Step 1:</strong> Open a separate business savings account at a different bank</li>
           <li><strong>Step 2:</strong> Set up auto-transfer of $500/month on the 1st of every month</li>
           <li><strong>Step 3:</strong> Every catering event, deposit 20% of the event profit directly to savings</li>
-          <li><strong>Step 4:</strong> At $500/mo + $800/mo from catering = $15,600/year → $35K in ~2.2 years</li>
+          <li><strong>Step 4:</strong> At $500/mo + $800/mo from catering = $15,600/year ? $35K in ~2.2 years</li>
           <li><strong>Do NOT touch this account</strong> except for genuine business emergencies</li>
         </ul>
         Even reaching $17,500 (1 month runway) transforms the situation from CRITICAL to manageable.
@@ -555,34 +559,34 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Invoice Tracker</strong>Unpaid invoices are hidden cash. Starter's Invoice Tracker shows which catering clients owe Maria money and automatically follows up — recovering cash that sits in limbo for weeks.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Invoice Tracker</strong>Unpaid invoices are hidden cash. Starter's Invoice Tracker shows which catering clients owe Maria money and automatically follows up � recovering cash that sits in limbo for weeks.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 5: BREAK-EVEN ANALYSIS ═══ -->
+<!-- --- SLIDE 5: BREAK-EVEN ANALYSIS --- -->
 <div class="slide" id="slide-5">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">📉</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">Break-Even Analysis <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">The minimum revenue Maria needs to cover all costs — below this point, every sale loses money by definition.</div>
+      <div class="slide-subtitle">The minimum revenue Maria needs to cover all costs � below this point, every sale loses money by definition.</div>
     </div>
   </div>
 
   <div class="result-card good">
-    <div class="result-label">Maria's Taco Shop — Break-Even Results</div>
+    <div class="result-label">Maria's Taco Shop � Break-Even Results</div>
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val sky">$14,545</div><div class="metric-lbl">Break-Even Revenue/mo</div></div>
       <div class="metric-box"><div class="metric-val green">$22,000</div><div class="metric-lbl">Maria's Actual Revenue</div></div>
       <div class="metric-box"><div class="metric-val green">$7,455</div><div class="metric-lbl">Safety Margin/mo</div></div>
-      <div class="metric-box"><div class="metric-val green">34%</div><div class="metric-lbl">Margin % — Healthy</div></div>
+      <div class="metric-box"><div class="metric-val green">34%</div><div class="metric-lbl">Margin % � Healthy</div></div>
     </div>
-    <div class="verdict-badge verdict-safe">✅ Maria earns $7,455 above break-even — a 34% safety cushion</div>
+    <div class="verdict-badge verdict-safe">? Maria earns $7,455 above break-even � a 34% safety cushion</div>
     <div style="font-size:.78rem;color:#374151;line-height:1.6;margin-top:.5rem">
       <strong>Fixed costs:</strong> $8,000/mo (Rent $3,500 + Utilities $800 + Insurance $400 + Other $3,300)<br>
       <strong>Variable cost ratio:</strong> 45% (ingredients, packaging, delivery platform fees)<br>
-      <strong>Break-even formula:</strong> $8,000 ÷ (1 − 0.45) = $8,000 ÷ 0.55 = <strong>$14,545</strong>
+      <strong>Break-even formula:</strong> $8,000 � (1 - 0.45) = $8,000 � 0.55 = <strong>$14,545</strong>
     </div>
   </div>
 
@@ -598,23 +602,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
         <div style="font-size:.8rem;color:#374151">Fixed costs: $8,513/mo<br>Break-even: <strong>$15,478</strong><br>Safety margin: $6,522 (30%)</div>
       </div>
     </div>
-    <div style="font-size:.73rem;color:var(--sub);margin-top:.65rem">Adding the loan raises break-even by $933/mo — still comfortably below Maria's $22K revenue.</div>
+    <div style="font-size:.73rem;color:var(--sub);margin-top:.65rem">Adding the loan raises break-even by $933/mo � still comfortably below Maria's $22K revenue.</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Healthy (above break-even with wide margin)</h4>
+      <h4 class="green">?? Healthy (above break-even with wide margin)</h4>
       <ul>
-        <li>Revenue well above the floor — room for slow months</li>
+        <li>Revenue well above the floor � room for slow months</li>
         <li>Can absorb price increases from suppliers</li>
         <li>Loan adds to fixed costs but still covered</li>
         <li>Profits after break-even fund the emergency reserve</li>
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Danger (below break-even)</h4>
+      <h4 class="red">?? Danger (below break-even)</h4>
       <ul>
-        <li>Losing money by definition — no margin to cut</li>
+        <li>Losing money by definition � no margin to cut</li>
         <li>Every month digs the hole deeper</li>
         <li>No bank will lend to a business below break-even</li>
         <li>Closure inevitable without restructuring</li>
@@ -623,22 +627,22 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 What is Break-Even? <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What is Break-Even? <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="sky-box"><strong>Break-even is the minimum revenue you need to cover all costs.</strong> Below this = guaranteed losses. Above this = potential profit.<br><br>
       <strong>Simple example:</strong> If Maria's rent + utilities + insurance = $8,000/month, she must earn at least $8,000 before she makes a single dollar of profit. But because ingredients and packaging cost 45 cents per dollar of sales, she actually needs to sell $14,545 worth of food just to cover costs.<br><br>
-      <strong>The safety margin</strong> is how far above break-even you are. A 34% margin means Maria's revenue could drop 34% before she starts losing money. In the food business, 20–35% margin is considered healthy.</div>
+      <strong>The safety margin</strong> is how far above break-even you are. A 34% margin means Maria's revenue could drop 34% before she starts losing money. In the food business, 20�35% margin is considered healthy.</div>
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 How to improve the safety margin <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How to improve the safety margin <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Two levers:</strong> lower fixed costs OR reduce variable cost ratio<br><br>
         <ul>
-          <li><strong>Reduce variable costs:</strong> Negotiate bulk ingredient pricing (saves 2–5% COGS)</li>
-          <li><strong>Cut fixed costs:</strong> Review "Other $3,300" — often has 10–15% waste</li>
+          <li><strong>Reduce variable costs:</strong> Negotiate bulk ingredient pricing (saves 2�5% COGS)</li>
+          <li><strong>Cut fixed costs:</strong> Review "Other $3,300" � often has 10�15% waste</li>
           <li><strong>Raise revenue:</strong> 1 extra catering gig/month at $1,500 improves margin from 34% to 40%</li>
-          <li><strong>Drop low-margin items:</strong> Some menu items cost 60–65% to make — removing them raises overall variable margin</li>
+          <li><strong>Drop low-margin items:</strong> Some menu items cost 60�65% to make � removing them raises overall variable margin</li>
         </ul>
         Goal: Push safety margin to 40%+ before taking the loan.
       </div>
@@ -646,23 +650,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Tax Estimator</strong>Knowing your profit is one thing — knowing what you owe the IRS is another. Starter's Tax Estimator shows Maria's quarterly tax obligation so she's never surprised by a $4,000 tax bill.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Tax Estimator</strong>Knowing your profit is one thing � knowing what you owe the IRS is another. Starter's Tax Estimator shows Maria's quarterly tax obligation so she's never surprised by a $4,000 tax bill.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 6: LENDER MARKETPLACE ═══ -->
+<!-- --- SLIDE 6: LENDER MARKETPLACE --- -->
 <div class="slide" id="slide-6">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🏦</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">Lender Marketplace <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">5 lenders matched to Maria's profile — with rates, terms, and eligibility explained in plain English.</div>
+      <div class="slide-subtitle">5 lenders matched to Maria's profile � with rates, terms, and eligibility explained in plain English.</div>
     </div>
   </div>
 
   <div class="result-card sky">
-    <div class="result-label">Lenders Matched to Maria's Profile ($25K · 18 months in business · Food sector · Austin TX)</div>
+    <div class="result-label">Lenders Matched to Maria's Profile ($25K � 18 months in business � Food sector � Austin TX)</div>
     <table class="lender-table">
       <thead>
         <tr><th>Lender</th><th>Amount Range</th><th>Rate</th><th>Term</th><th>Match</th></tr>
@@ -670,77 +674,77 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       <tbody>
         <tr>
           <td><strong>SBA Microloan</strong><div style="font-size:.7rem;color:var(--sub)">U.S. Small Business Admin</div></td>
-          <td>$5K – $50K</td>
+          <td>$5K � $50K</td>
           <td style="color:#16a34a;font-weight:800">6.5%</td>
           <td>72 months</td>
-          <td><span class="match-pill">✅ Maria qualifies</span></td>
+          <td><span class="match-pill">? Maria qualifies</span></td>
         </tr>
         <tr>
           <td><strong>Accion Opportunity Fund</strong><div style="font-size:.7rem;color:var(--sub)">Mission-driven lender</div></td>
-          <td>$5K – $250K</td>
-          <td>8–16%</td>
-          <td>36–60 months</td>
-          <td><span class="match-pill">✅ Good for food biz</span></td>
+          <td>$5K � $250K</td>
+          <td>8�16%</td>
+          <td>36�60 months</td>
+          <td><span class="match-pill">? Good for food biz</span></td>
         </tr>
         <tr>
-          <td><strong>BlueVine Line of Credit</strong><div style="font-size:.7rem;color:var(--sub)">Fintech — fast approval</div></td>
-          <td>$6K – $250K</td>
+          <td><strong>BlueVine Line of Credit</strong><div style="font-size:.7rem;color:var(--sub)">Fintech � fast approval</div></td>
+          <td>$6K � $250K</td>
           <td>starts 6.2%</td>
           <td>Revolving</td>
-          <td><span class="match-pill">✅ Approved in 24hrs</span></td>
+          <td><span class="match-pill">? Approved in 24hrs</span></td>
         </tr>
         <tr>
           <td><strong>OnDeck Term Loan</strong><div style="font-size:.7rem;color:var(--sub)">Online small biz lender</div></td>
-          <td>$5K – $250K</td>
-          <td>12–65%</td>
+          <td>$5K � $250K</td>
+          <td>12�65%</td>
           <td>Up to 24 months</td>
-          <td><span class="match-pill">✅ 18+ month biz OK</span></td>
+          <td><span class="match-pill">? 18+ month biz OK</span></td>
         </tr>
         <tr>
           <td><strong>CDFI Community Loan</strong><div style="font-size:.7rem;color:var(--sub)">Community dev. lender</div></td>
-          <td>$2K – $50K</td>
-          <td style="color:#16a34a;font-weight:800">5–8%</td>
+          <td>$2K � $50K</td>
+          <td style="color:#16a34a;font-weight:800">5�8%</td>
           <td>60 months</td>
-          <td><span class="match-pill">✅ Minority-owned pref.</span></td>
+          <td><span class="match-pill">? Minority-owned pref.</span></td>
         </tr>
       </tbody>
     </table>
-    <div class="verdict-badge verdict-sky">✅ 5 lenders matched — best fit: SBA Microloan (lowest rate) or BlueVine (fastest approval)</div>
+    <div class="verdict-badge verdict-sky">? 5 lenders matched � best fit: SBA Microloan (lowest rate) or BlueVine (fastest approval)</div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Best-fit lenders for Maria</h4>
+      <h4 class="green">?? Best-fit lenders for Maria</h4>
       <ul>
-        <li><strong>SBA Microloan:</strong> Lowest rate at 6.5%, longest term — total cost least</li>
-        <li><strong>CDFI:</strong> 5–8%, prefers minority-owned businesses like Maria's</li>
+        <li><strong>SBA Microloan:</strong> Lowest rate at 6.5%, longest term � total cost least</li>
+        <li><strong>CDFI:</strong> 5�8%, prefers minority-owned businesses like Maria's</li>
         <li><strong>BlueVine:</strong> If Maria needs cash fast (equipment breaks down), 24hr approval</li>
-        <li>All 5 require 12+ months in business — Maria at 18 months qualifies</li>
+        <li>All 5 require 12+ months in business � Maria at 18 months qualifies</li>
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 What to avoid</h4>
+      <h4 class="red">?? What to avoid</h4>
       <ul>
-        <li>OnDeck at 65% rate = $25K becomes $42K repaid — avoid if SBA is available</li>
-        <li>Merchant Cash Advances (not shown) — 80–200% effective APR</li>
-        <li>Personal credit cards for business — mixes liability, hurts personal score</li>
+        <li>OnDeck at 65% rate = $25K becomes $42K repaid � avoid if SBA is available</li>
+        <li>Merchant Cash Advances (not shown) � 80�200% effective APR</li>
+        <li>Personal credit cards for business � mixes liability, hurts personal score</li>
         <li>Any lender asking for prepayment fees over 2%</li>
       </ul>
     </div>
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 How to choose the right lender <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How to choose the right lender <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="sky-box"><strong>Compare total cost, not just monthly payment.</strong> Low rate + long term isn't always better than high rate + short term if the total repaid amount is similar.<br><br>
       <strong>Example:</strong> $25K at 6.5% for 72 months = $424/mo, total repaid $30,528<br>
       $25K at 8.5% for 60 months = $513/mo, total repaid $30,800<br><br>
-      The SBA loan saves Maria only $272 in total interest — but the lower monthly payment gives more cash flow flexibility. Choose based on which matters more: monthly cash flow or total cost.</div>
-      <strong>Maria's recommendation:</strong> Apply to SBA Microloan first (lowest rate, longest term). While waiting (SBA takes 2–4 weeks), have BlueVine as backup if she needs the oven urgently.
+      The SBA loan saves Maria only $272 in total interest � but the lower monthly payment gives more cash flow flexibility. Choose based on which matters more: monthly cash flow or total cost.</div>
+      <strong>Maria's recommendation:</strong> Apply to SBA Microloan first (lowest rate, longest term). While waiting (SBA takes 2�4 weeks), have BlueVine as backup if she needs the oven urgently.
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 What documents Maria needs to apply <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? What documents Maria needs to apply <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Standard documents for most lenders:</strong>
         <ul>
@@ -756,69 +760,69 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Grant Finder</strong>Maria qualifies for $85,000+ in small business grants — SBA programs, USDA rural food grants, Texas-specific food industry grants, and minority entrepreneur funds. Grants don't need to be repaid. Starter shows Maria every grant she's eligible for.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Grant Finder</strong>Maria qualifies for $85,000+ in small business grants � SBA programs, USDA rural food grants, Texas-specific food industry grants, and minority entrepreneur funds. Grants don't need to be repaid. Starter shows Maria every grant she's eligible for.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 7: MONTHLY SNAPSHOT ═══ -->
+<!-- --- SLIDE 7: MONTHLY SNAPSHOT --- -->
 <div class="slide" id="slide-7">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">📅</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">Monthly Snapshot <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">One-page visual summary for April 2026 — shareable with a bank, business partner, or investor in seconds.</div>
+      <div class="slide-subtitle">One-page visual summary for April 2026 � shareable with a bank, business partner, or investor in seconds.</div>
     </div>
   </div>
 
   <div class="result-card sky" style="border:1.5px solid #bae6fd">
     <div style="background:linear-gradient(135deg,#0c4a6e,#075985);padding:.85rem 1rem;margin:-1.25rem -1.25rem .9rem;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:.85rem">
-      <div style="width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🌮</div>
+      <div style="width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem">??</div>
       <div style="color:#fff">
         <div style="font-size:.9rem;font-weight:900">Maria's Taco Shop &amp; Catering</div>
-        <div style="font-size:.7rem;opacity:.8;margin-top:2px">Monthly Financial Snapshot · April 2026 · Austin, TX</div>
+        <div style="font-size:.7rem;opacity:.8;margin-top:2px">Monthly Financial Snapshot � April 2026 � Austin, TX</div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem">
       <div style="background:#f0fdf4;border-radius:8px;padding:.65rem .75rem;border:1px solid #86efac">
         <div style="font-size:.65rem;font-weight:800;color:#15803d;margin-bottom:2px">REVENUE</div>
         <div style="font-size:1.2rem;font-weight:900;color:#16a34a">$22,000</div>
-        <div style="font-size:.65rem;color:var(--sub)">✅ On target</div>
+        <div style="font-size:.65rem;color:var(--sub)">? On target</div>
       </div>
       <div style="background:#f0fdf4;border-radius:8px;padding:.65rem .75rem;border:1px solid #86efac">
         <div style="font-size:.65rem;font-weight:800;color:#15803d;margin-bottom:2px">EXPENSES</div>
         <div style="font-size:1.2rem;font-weight:900;color:#374151">$17,500</div>
-        <div style="font-size:.65rem;color:var(--sub)">✅ Within budget</div>
+        <div style="font-size:.65rem;color:var(--sub)">? Within budget</div>
       </div>
       <div style="background:#f0fdf4;border-radius:8px;padding:.65rem .75rem;border:1px solid #86efac">
         <div style="font-size:.65rem;font-weight:800;color:#15803d;margin-bottom:2px">NET CASH FLOW</div>
         <div style="font-size:1.2rem;font-weight:900;color:#16a34a">$4,500</div>
-        <div style="font-size:.65rem;color:var(--sub)">✅ Positive</div>
+        <div style="font-size:.65rem;color:var(--sub)">? Positive</div>
       </div>
       <div style="background:#fffbeb;border-radius:8px;padding:.65rem .75rem;border:1px solid #fde68a">
         <div style="font-size:.65rem;font-weight:800;color:#854d0e;margin-bottom:2px">HEALTH SCORE</div>
         <div style="font-size:1.2rem;font-weight:900;color:#d97706">58/100</div>
-        <div style="font-size:.65rem;color:var(--sub)">⚠️ Grade C</div>
+        <div style="font-size:.65rem;color:var(--sub)">?? Grade C</div>
       </div>
       <div style="background:#fef2f2;border-radius:8px;padding:.65rem .75rem;border:1px solid #fca5a5">
         <div style="font-size:.65rem;font-weight:800;color:#991b1b;margin-bottom:2px">CASH RUNWAY</div>
         <div style="font-size:1.2rem;font-weight:900;color:#dc2626">0.46 months</div>
-        <div style="font-size:.65rem;color:var(--sub)">🔴 Critical</div>
+        <div style="font-size:.65rem;color:var(--sub)">?? Critical</div>
       </div>
       <div style="background:#fffbeb;border-radius:8px;padding:.65rem .75rem;border:1px solid #fde68a">
         <div style="font-size:.65rem;font-weight:800;color:#854d0e;margin-bottom:2px">LOAN SAFETY</div>
         <div style="font-size:1.2rem;font-weight:900;color:#d97706">71/100</div>
-        <div style="font-size:.65rem;color:var(--sub)">⚠️ Moderate risk</div>
+        <div style="font-size:.65rem;color:var(--sub)">?? Moderate risk</div>
       </div>
     </div>
     <div style="margin-top:.85rem;padding:.65rem;background:#f0f9ff;border-radius:7px;font-size:.75rem;color:#0369a1;border:1px solid #bae6fd">
-      📋 <strong>Download/Share:</strong> This one-pager is automatically generated from your data. Print it, email it, or share a link with your banker, business partner, or accountant — in one click.
+      ?? <strong>Download/Share:</strong> This one-pager is automatically generated from your data. Print it, email it, or share a link with your banker, business partner, or accountant � in one click.
     </div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 Who wants this snapshot</h4>
+      <h4 class="green">?? Who wants this snapshot</h4>
       <ul>
         <li>Banks ask for a financial summary before any loan</li>
         <li>Investors want to see monthly performance at a glance</li>
@@ -827,7 +831,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 Without a snapshot</h4>
+      <h4 class="red">?? Without a snapshot</h4>
       <ul>
         <li>Digging through bank statements takes 2+ hours</li>
         <li>Unprofessional appearance hurts loan approval odds</li>
@@ -838,18 +842,18 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why a monthly snapshot matters <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why a monthly snapshot matters <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="sky-box"><strong>Banks ask for this. Investors want this. Grant applications require this.</strong><br><br>
       Having a clean, professionally formatted one-page summary does three things:<br>
       1. Shows you're organized and on top of your finances<br>
       2. Removes the manual work of pulling numbers from multiple places<br>
-      3. Tells your financial story clearly — instead of making a banker squint at 3 months of bank statements<br><br>
-      <strong>Real example:</strong> A taco shop owner in Dallas got approved for an SBA Microloan in 12 days (vs the typical 30–45) because she came in with a clean one-pager. The loan officer said it was "the most prepared application we've seen this quarter."</div>
+      3. Tells your financial story clearly � instead of making a banker squint at 3 months of bank statements<br><br>
+      <strong>Real example:</strong> A taco shop owner in Dallas got approved for an SBA Microloan in 12 days (vs the typical 30�45) because she came in with a clean one-pager. The loan officer said it was "the most prepared application we've seen this quarter."</div>
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 How to use this for a loan application <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? How to use this for a loan application <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Use the monthly snapshot as your cover sheet:</strong>
         <ul>
@@ -864,15 +868,15 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Automated Monthly Reports</strong>Starter auto-generates and emails Maria's snapshot on the 1st of every month. Never manually compile financial data again — it's just there, ready to share.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Automated Monthly Reports</strong>Starter auto-generates and emails Maria's snapshot on the 1st of every month. Never manually compile financial data again � it's just there, ready to share.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 8: WHAT-IF SCENARIOS ═══ -->
+<!-- --- SLIDE 8: WHAT-IF SCENARIOS --- -->
 <div class="slide" id="slide-8">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🔮</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">What-If Scenarios <span class="free-badge-inline">Free</span></div>
       <div class="slide-subtitle">Stress-test your business before making a big decision. See what happens before it happens.</div>
@@ -880,7 +884,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="result-card sky">
-    <div class="result-label">Maria's Business — 4 Scenarios Compared</div>
+    <div class="result-label">Maria's Business � 4 Scenarios Compared</div>
     <table class="scenario-table">
       <thead>
         <tr><th>Scenario</th><th>Revenue</th><th>Expenses</th><th>Net Cash Flow</th><th>Status</th></tr>
@@ -891,39 +895,39 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
           <td>$22,000</td>
           <td>$17,500</td>
           <td style="color:#16a34a;font-weight:800">+$4,500/mo</td>
-          <td><span style="color:#16a34a;font-weight:800">✅ Healthy</span></td>
+          <td><span style="color:#16a34a;font-weight:800">? Healthy</span></td>
         </tr>
         <tr>
           <td><strong>Scenario 1: Revenue -20%</strong><div style="font-size:.68rem;color:var(--sub)">Slow summer / key client cancels</div></td>
           <td style="color:#d97706">$17,600</td>
           <td>$17,500</td>
           <td style="color:#d97706;font-weight:800">+$100/mo</td>
-          <td><span style="color:#d97706;font-weight:800">⚠️ Barely breaking even</span></td>
+          <td><span style="color:#d97706;font-weight:800">?? Barely breaking even</span></td>
         </tr>
         <tr>
           <td><strong>Scenario 2: New $25K loan</strong><div style="font-size:.68rem;color:var(--sub)">Adds $513/mo fixed expense</div></td>
           <td>$22,000</td>
           <td style="color:#d97706">$18,013</td>
           <td style="color:#16a34a;font-weight:800">+$3,987/mo</td>
-          <td><span style="color:#16a34a;font-weight:800">✅ Still fine</span></td>
+          <td><span style="color:#16a34a;font-weight:800">? Still fine</span></td>
         </tr>
         <tr style="background:#fef2f2">
-          <td><strong>Scenario 3: Rev -20% AND loan</strong><div style="font-size:.68rem;color:var(--sub)">Worst case — slow month after taking loan</div></td>
+          <td><strong>Scenario 3: Rev -20% AND loan</strong><div style="font-size:.68rem;color:var(--sub)">Worst case � slow month after taking loan</div></td>
           <td style="color:#dc2626">$17,600</td>
           <td style="color:#dc2626">$18,013</td>
-          <td style="color:#dc2626;font-weight:800">−$413/mo</td>
-          <td><span style="color:#dc2626;font-weight:800">🔴 DANGER</span></td>
+          <td style="color:#dc2626;font-weight:800">-$413/mo</td>
+          <td><span style="color:#dc2626;font-weight:800">?? DANGER</span></td>
         </tr>
       </tbody>
     </table>
     <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:.65rem .85rem;font-size:.78rem;color:#991b1b;margin-top:.5rem">
-      🔴 <strong>Scenario 3 warning:</strong> If Maria takes the loan and revenue drops 20% in the same month (slow summer, catering cancellation, bad weather week) — she's in the red. This is why building a cash reserve FIRST is critical.
+      ?? <strong>Scenario 3 warning:</strong> If Maria takes the loan and revenue drops 20% in the same month (slow summer, catering cancellation, bad weather week) � she's in the red. This is why building a cash reserve FIRST is critical.
     </div>
   </div>
 
   <div class="situation-grid">
     <div class="situation-panel good">
-      <h4 class="green">🟢 How Maria uses this safely</h4>
+      <h4 class="green">?? How Maria uses this safely</h4>
       <ul>
         <li>Take the loan only after building $15K+ cash reserve</li>
         <li>Time the loan application for after a strong revenue month</li>
@@ -932,7 +936,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
       </ul>
     </div>
     <div class="situation-panel bad">
-      <h4 class="red">🔴 What happens without stress-testing</h4>
+      <h4 class="red">?? What happens without stress-testing</h4>
       <ul>
         <li>Take loan in June, slow summer hits in July</li>
         <li>Miss a loan payment, lender charges 5% penalty</li>
@@ -943,23 +947,23 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">💡 Why what-if scenarios matter <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? Why what-if scenarios matter <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="sky-box"><strong>What-If scenarios help you stress-test your business before making a decision.</strong><br><br>
-      Running Scenario 3 showed Maria that taking a loan during a potentially slow summer is risky. This one insight — which takes 30 seconds to run — could save her from a debt spiral.<br><br>
-      <strong>Real outcome:</strong> Running Scenario 3 saved Maria from taking a $25K loan in June. She waited until October (after summer catering season built her cash reserve to $18K), took the loan, and never hit the danger zone — even during a slow January.
+      Running Scenario 3 showed Maria that taking a loan during a potentially slow summer is risky. This one insight � which takes 30 seconds to run � could save her from a debt spiral.<br><br>
+      <strong>Real outcome:</strong> Running Scenario 3 saved Maria from taking a $25K loan in June. She waited until October (after summer catering season built her cash reserve to $18K), took the loan, and never hit the danger zone � even during a slow January.
       </div>
     </div>
   </div>
   <div class="explain-accordion">
-    <button class="acc-btn" onclick="toggleAcc(this)">🔧 More scenarios to test before the loan <span class="arrow">▼</span></button>
+    <button class="acc-btn" onclick="toggleAcc(this)">?? More scenarios to test before the loan <span class="arrow">?</span></button>
     <div class="acc-body">
       <div class="improve-box"><strong>Other scenarios Maria should run:</strong>
         <ul>
-          <li><strong>New oven increases capacity:</strong> Revenue +$2,500/mo → Scenario 2 net flow = $6,487/mo ✅</li>
-          <li><strong>Staff hire (+$2,000/mo):</strong> Expenses = $20,013 → Net flow = $1,987/mo ⚠️</li>
-          <li><strong>Ingredient cost spike +15%:</strong> COGS increases from 45% to 52% → Break-even rises to $16,667 ⚠️</li>
-          <li><strong>Lose biggest catering client ($3,000/mo):</strong> Revenue drops to $19,000 → Net flow = $987/mo with loan ⚠️</li>
+          <li><strong>New oven increases capacity:</strong> Revenue +$2,500/mo ? Scenario 2 net flow = $6,487/mo ?</li>
+          <li><strong>Staff hire (+$2,000/mo):</strong> Expenses = $20,013 ? Net flow = $1,987/mo ??</li>
+          <li><strong>Ingredient cost spike +15%:</strong> COGS increases from 45% to 52% ? Break-even rises to $16,667 ??</li>
+          <li><strong>Lose biggest catering client ($3,000/mo):</strong> Revenue drops to $19,000 ? Net flow = $987/mo with loan ??</li>
         </ul>
         Each scenario takes 10 seconds to run and gives you a clear go/no-go signal before making the decision.
       </div>
@@ -967,52 +971,52 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
   </div>
 
   <div class="free-callout">
-    <div class="free-callout-icon">⭐</div>
-    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Forecast Builder</strong>Starter lets Maria build a 12-month financial forecast — projecting revenue growth from the new oven, staffing costs, and loan payments month by month. See the full picture before signing anything.</div>
+    <div class="free-callout-icon">?</div>
+    <div class="free-callout-text"><strong>Upgrade to Starter to unlock: Forecast Builder</strong>Starter lets Maria build a 12-month financial forecast � projecting revenue growth from the new oven, staffing costs, and loan payments month by month. See the full picture before signing anything.</div>
   </div>
 </div>
 
-<!-- ═══ SLIDE 9: SUMMARY & NEXT STEPS ═══ -->
+<!-- --- SLIDE 9: SUMMARY & NEXT STEPS --- -->
 <div class="slide" id="slide-9">
   <div class="slide-hdr">
-    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">🏁</div>
+    <div class="slide-icon-wrap" style="background:#f0f9ff;color:#0ea5e9">??</div>
     <div>
       <div class="slide-title">Summary &amp; Next Steps <span class="free-badge-inline">Free</span></div>
-      <div class="slide-subtitle">What the free tools found for Maria — and what to do next.</div>
+      <div class="slide-subtitle">What the free tools found for Maria � and what to do next.</div>
     </div>
   </div>
 
   <div class="summary-grid">
     <div class="summary-item">
-      <div class="sum-icon">🩺</div>
-      <div><div class="sum-title">Financial Checkup</div><div class="sum-val">Grade C — 1 critical area (savings buffer)</div><div class="sum-badge sum-amber">Needs attention</div></div>
+      <div class="sum-icon">??</div>
+      <div><div class="sum-title">Financial Checkup</div><div class="sum-val">Grade C � 1 critical area (savings buffer)</div><div class="sum-badge sum-amber">Needs attention</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">⛽</div>
-      <div><div class="sum-title">Cash Runway</div><div class="sum-val">14 days — urgent attention needed</div><div class="sum-badge sum-red">🔴 Critical</div></div>
+      <div class="sum-icon">?</div>
+      <div><div class="sum-title">Cash Runway</div><div class="sum-val">14 days � urgent attention needed</div><div class="sum-badge sum-red">?? Critical</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🛡️</div>
-      <div><div class="sum-title">Loan Safety Score</div><div class="sum-val">71/100 — moderate risk, improvable</div><div class="sum-badge sum-amber">Moderate risk</div></div>
+      <div class="sum-icon">???</div>
+      <div><div class="sum-title">Loan Safety Score</div><div class="sum-val">71/100 � moderate risk, improvable</div><div class="sum-badge sum-amber">Moderate risk</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">📉</div>
-      <div><div class="sum-title">Break-Even</div><div class="sum-val">34% safety margin — healthy</div><div class="sum-badge sum-green">✅ Healthy</div></div>
+      <div class="sum-icon">??</div>
+      <div><div class="sum-title">Break-Even</div><div class="sum-val">34% safety margin � healthy</div><div class="sum-badge sum-green">? Healthy</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🏦</div>
-      <div><div class="sum-title">Lender Match</div><div class="sum-val">5 lenders found — SBA best fit</div><div class="sum-badge sum-sky">5 matches</div></div>
+      <div class="sum-icon">??</div>
+      <div><div class="sum-title">Lender Match</div><div class="sum-val">5 lenders found � SBA best fit</div><div class="sum-badge sum-sky">5 matches</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🧮</div>
-      <div><div class="sum-title">EMI for $25K Loan</div><div class="sum-val">$513/mo — only 2.3% of revenue</div><div class="sum-badge sum-green">✅ Affordable</div></div>
+      <div class="sum-icon">??</div>
+      <div><div class="sum-title">EMI for $25K Loan</div><div class="sum-val">$513/mo � only 2.3% of revenue</div><div class="sum-badge sum-green">? Affordable</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">📅</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">Monthly Snapshot</div><div class="sum-val">One-pager ready for April 2026</div><div class="sum-badge sum-sky">Share-ready</div></div>
     </div>
     <div class="summary-item">
-      <div class="sum-icon">🔮</div>
+      <div class="sum-icon">??</div>
       <div><div class="sum-title">What-If Scenarios</div><div class="sum-val">Loan + revenue drop = danger zone</div><div class="sum-badge sum-amber">Wait + build reserve</div></div>
     </div>
   </div>
@@ -1024,13 +1028,13 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
         <strong style="color:#15803d">1. Immediate (this week):</strong> Open a separate business savings account and auto-transfer $500/month starting the 1st.
       </div>
       <div style="background:#fffbeb;border-radius:8px;padding:.65rem .85rem;border:1px solid #fde68a;font-size:.78rem">
-        <strong style="color:#854d0e">2. Short-term (1–3 months):</strong> Build cash reserve to $15,000 (1 month runway) before applying for any loan.
+        <strong style="color:#854d0e">2. Short-term (1�3 months):</strong> Build cash reserve to $15,000 (1 month runway) before applying for any loan.
       </div>
       <div style="background:#f0f9ff;border-radius:8px;padding:.65rem .85rem;border:1px solid #bae6fd;font-size:.78rem">
         <strong style="color:#0369a1">3. Loan timing:</strong> Apply to SBA Microloan or CDFI when reserve hits $15K+. At that point, Loan Safety Score jumps to ~80.
       </div>
       <div style="background:#f0fdf4;border-radius:8px;padding:.65rem .85rem;border:1px solid #86efac;font-size:.78rem">
-        <strong style="color:#15803d">4. Loan goal:</strong> $25,000 at 6.5% (SBA) = $513/mo — affordable and the oven upgrade pays for itself at +$2,500/mo catering capacity.
+        <strong style="color:#15803d">4. Loan goal:</strong> $25,000 at 6.5% (SBA) = $513/mo � affordable and the oven upgrade pays for itself at +$2,500/mo catering capacity.
       </div>
     </div>
   </div>
@@ -1039,32 +1043,32 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
     <div style="font-size:1rem;font-weight:900;color:#fff;margin-bottom:.4rem">What Starter ($9/mo) adds for Maria:</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem">
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">🏆 Business Health Score</div>
-        Full A–F grade with 6 sub-scores and monthly tracking
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? Business Health Score</div>
+        Full A�F grade with 6 sub-scores and monthly tracking
       </div>
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">🎁 Grant Finder</div>
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? Grant Finder</div>
         $85,000+ in available grants for Maria's profile
       </div>
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">📄 Invoice Tracker</div>
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? Invoice Tracker</div>
         Stop losing money on unpaid catering invoices
       </div>
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">🧾 Tax Estimator</div>
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? Tax Estimator</div>
         Avoid surprise quarterly tax bills
       </div>
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">💸 Owner's Pay Calculator</div>
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? Owner's Pay Calculator</div>
         How much can Maria safely pay herself?
       </div>
       <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:.6rem .75rem;font-size:.76rem;color:#e0f2fe">
-        <div style="font-weight:800;color:#fff;margin-bottom:2px">📈 + 10 More Tools</div>
+        <div style="font-weight:800;color:#fff;margin-bottom:2px">?? + 10 More Tools</div>
         Forecast Builder, Expense Tracker, and more
       </div>
     </div>
     <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap">
-      <a href="pricing.html" style="display:inline-block;background:#7dd3fc;color:#0c4a6e;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:900;text-decoration:none">Upgrade to Starter ($9/mo) →</a>
+      <a href="pricing.html" style="display:inline-block;background:#7dd3fc;color:#0c4a6e;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:900;text-decoration:none">Upgrade to Starter ($9/mo) ?</a>
       <a href="dashboard.html" style="display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#bae6fd;padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none">Explore All Free Tools</a>
     </div>
   </div>
@@ -1075,9 +1079,9 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#082f49;color:va
 
 <!-- Nav -->
 <div class="slide-nav">
-  <button class="nav-btn nav-prev" id="prevBtn" onclick="prevSlide()" disabled>← Prev</button>
-  <div class="nav-center" id="navCenter">Slide 1 of 10 — Welcome</div>
-  <button class="nav-btn nav-next" id="nextBtn" onclick="nextSlide()">Next →</button>
+  <button class="nav-btn nav-prev" id="prevBtn" onclick="prevSlide()" disabled>? Prev</button>
+  <div class="nav-center" id="navCenter">Slide 1 of 10 � Welcome</div>
+  <button class="nav-btn nav-next" id="nextBtn" onclick="nextSlide()">Next ?</button>
 </div>
 
 <script>
@@ -1103,9 +1107,9 @@ function goSlide(n){
   var pct = Math.round(((current+1)/total)*100);
   document.getElementById('progressFill').style.width = pct+'%';
   document.getElementById('slideCounter').textContent = 'Slide '+(current+1)+' of '+total;
-  document.getElementById('navCenter').textContent = 'Slide '+(current+1)+' of '+total+' — '+titles[current];
+  document.getElementById('navCenter').textContent = 'Slide '+(current+1)+' of '+total+' � '+titles[current];
   document.getElementById('prevBtn').disabled = current === 0;
-  document.getElementById('nextBtn').textContent = current === total-1 ? '🏁 Done' : 'Next →';
+  document.getElementById('nextBtn').textContent = current === total-1 ? '?? Done' : 'Next ?';
   document.getElementById('nextBtn').disabled = false;
 
   document.querySelectorAll('.sb-step')[current].scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -1120,7 +1124,7 @@ function toggleAcc(btn){
   if(!body || !body.classList) return;
   var open = body.classList.toggle('open');
   var arrow = btn.querySelector('.arrow');
-  if(arrow) arrow.textContent = open ? '▲' : '▼';
+  if(arrow) arrow.textContent = open ? '?' : '?';
 }
 
 document.addEventListener('keydown', function(e){

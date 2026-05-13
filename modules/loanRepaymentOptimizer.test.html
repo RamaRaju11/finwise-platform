@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Repayment Optimizer — BizScale</title>
+<title>Loan Repayment Optimizer � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -84,6 +84,10 @@ button.print-btn{margin-top:10px;margin-left:10px;padding:10px 20px;background:#
 button.print-btn:hover{background:#e2e8f0}
 @media print{.back-link,button{display:none!important}body{background:#fff;padding:8px}#resultsSection{display:block!important}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -93,9 +97,9 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <script src="fw-amortize.js"></script>
 
-<a href="../try.html" class="back-link">← Back to Demo</a>
+<a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Loan Repayment Optimizer</h1>
-<p class="subtitle">BizScale · Compare Debt Snowball vs Debt Avalanche — find the fastest, cheapest path to debt-free.</p>
+<p class="subtitle">BizScale � Compare Debt Snowball vs Debt Avalanche � find the fastest, cheapest path to debt-free.</p>
 
 <!-- Loans Input Card -->
 <div class="card">
@@ -119,7 +123,7 @@ button.print-btn:hover{background:#e2e8f0}
     </div>
   </div>
   <button class="primary" onclick="calculate()">Calculate Repayment Strategies</button>
-  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
   <div id="extra-impact" class="hidden" style="margin-top:12px"></div>
 </div>
 
@@ -147,12 +151,12 @@ button.print-btn:hover{background:#e2e8f0}
       <table id="schedule-table"></table>
     </div>
     <p class="table-note">Balances shown at end of each month after payments. "Done" = loan fully paid off.</p>
-    <button onclick="exportCSV()" style="margin-top:10px;padding:7px 16px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:6px;font-size:.82rem;cursor:pointer;font-weight:700;font-family:inherit">⬇️ Download Full Amortization CSV</button>
+    <button onclick="exportCSV()" style="margin-top:10px;padding:7px 16px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:6px;font-size:.82rem;cursor:pointer;font-weight:700;font-family:inherit">?? Download Full Amortization CSV</button>
   </div>
 
   <div class="card" id="chartCard">
-    <h2>📊 Balance Over Time</h2>
-    <p style="font-size:.78rem;color:#64748b;margin-bottom:12px">Total remaining debt (blue) and cumulative interest paid (orange) — winning strategy.</p>
+    <h2>?? Balance Over Time</h2>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:12px">Total remaining debt (blue) and cumulative interest paid (orange) � winning strategy.</p>
     <div style="overflow-x:auto">
       <canvas id="lro-chart" width="720" height="240" style="max-width:100%;display:block"></canvas>
     </div>
@@ -164,14 +168,14 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" id="payoffCalCard">
     <h2>Payoff Calendar</h2>
-    <p style="font-size:.78rem;color:#64748b;margin-bottom:10px">Exact month-year each loan is paid off — both strategies compared.</p>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:10px">Exact month-year each loan is paid off � both strategies compared.</p>
     <div style="overflow-x:auto"><table class="pc-table" id="payoffCalTable"></table></div>
   </div>
 
 </div>
 
 <script>
-// ── Persistence ──────────────────────────────────────────────────
+// -- Persistence --------------------------------------------------
 const LRO_KEY = 'fw_lro';
 function saveState() {
   try {
@@ -192,7 +196,7 @@ function saveState() {
   } catch(e) {}
 }
 
-// ── Loan management ──────────────────────────────────────────────
+// -- Loan management ----------------------------------------------
 const DEFAULT_LOANS = [
   { name: 'Car Loan',      balance: 15000, rate: 8.5,  minPay: 350 },
   { name: 'Business Loan', balance: 32000, rate: 12,   minPay: 700 },
@@ -263,12 +267,12 @@ function getLoans() {
   return loans;
 }
 
-// ── Repayment simulation (delegates to shared fw-amortize.js) ────
+// -- Repayment simulation (delegates to shared fw-amortize.js) ----
 function simulateFull(loans, extra, sortFn) {
   return fwSimulateFull(loans, extra, sortFn);
 }
 
-// ── Formatting helpers ───────────────────────────────────────────
+// -- Formatting helpers -------------------------------------------
 function fmt(n) {
   return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
@@ -280,7 +284,7 @@ function fmtMonths(m) {
   return yr + ' yr ' + mo + ' mo';
 }
 
-// ── Main calculate ───────────────────────────────────────────────
+// -- Main calculate -----------------------------------------------
 var _lastWinResult = null;
 var _lastWinStrategy = '';
 var _lastOriginalLoans = null;
@@ -377,7 +381,7 @@ function renderStratCard(type, result, color) {
 
 function renderSchedule(result, stratName) {
   document.getElementById('schedule-title').textContent =
-    '12-Month Balance Schedule — ' + (stratName === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy';
+    '12-Month Balance Schedule � ' + (stratName === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy';
 
   const months = Math.min(12, result.monthlyData.length);
   if (months === 0) return;
@@ -406,7 +410,7 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Payoff Calendar ──────────────────────────────────────────────
+// -- Payoff Calendar ----------------------------------------------
 function renderPayoffCalendar(snowball, avalanche) {
   var nameSet = {};
   snowball.payoffOrder.forEach(function(p){ nameSet[p.name] = true; });
@@ -447,7 +451,7 @@ function renderPayoffCalendar(snowball, avalanche) {
   document.getElementById('payoffCalTable').innerHTML = html;
 }
 
-// ── Extra payment impact ─────────────────────────────────────────
+// -- Extra payment impact -----------------------------------------
 function renderExtraImpact(extra, loans) {
   var el = document.getElementById('extra-impact');
   if (!el) return;
@@ -458,14 +462,14 @@ function renderExtraImpact(extra, loans) {
   var interestSaved = baseline.totalInterest - withExtra.totalInterest;
   el.classList.remove('hidden');
   el.innerHTML = '<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:12px 16px;font-size:.84rem;color:#166534;display:flex;flex-wrap:wrap;gap:14px;align-items:center">' +
-    '<strong>💰 Extra ' + fmt(extra) + '/mo saves you:</strong>' +
-    '<span>⏱ <strong>' + (monthsSaved > 0 ? fmtMonths(monthsSaved) + ' faster' : 'same timeline') + '</strong></span>' +
-    '<span>💵 <strong>' + fmt(Math.max(0, interestSaved)) + ' less interest</strong></span>' +
+    '<strong>?? Extra ' + fmt(extra) + '/mo saves you:</strong>' +
+    '<span>? <strong>' + (monthsSaved > 0 ? fmtMonths(monthsSaved) + ' faster' : 'same timeline') + '</strong></span>' +
+    '<span>?? <strong>' + fmt(Math.max(0, interestSaved)) + ' less interest</strong></span>' +
     '<span style="color:#94a3b8;font-size:.78rem">vs. minimums-only (Avalanche baseline)</span>' +
     '</div>';
 }
 
-// ── CSV export ───────────────────────────────────────────────────
+// -- CSV export ---------------------------------------------------
 function exportCSV() {
   if (!_lastWinResult) { alert('Run Calculate first.'); return; }
   var result = _lastWinResult;
@@ -498,7 +502,7 @@ function exportCSV() {
   setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
 }
 
-// ── Principal vs interest chart ──────────────────────────────────
+// -- Principal vs interest chart ----------------------------------
 function renderChart(result, origTotal) {
   var canvas = document.getElementById('lro-chart');
   if (!canvas || !canvas.getContext) return;
@@ -587,7 +591,7 @@ function renderChart(result, origTotal) {
   ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top + cH); ctx.lineTo(PAD.left + cW, PAD.top + cH); ctx.stroke();
 }
 
-// ── Marketplace URL param import ─────────────────────────────────
+// -- Marketplace URL param import ---------------------------------
 function checkMarketplaceParams() {
   try {
     var params = new URLSearchParams(window.location.search);
@@ -601,11 +605,11 @@ function checkMarketplaceParams() {
       : Math.round(loanAmount / tenure);
     var banner = document.createElement('div');
     banner.style.cssText = 'background:#faf5ff;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
-    banner.innerHTML = '🏦 <strong>Loan from Marketplace/Score Engine:</strong> ' + fmt(loanAmount) +
+    banner.innerHTML = '?? <strong>Loan from Marketplace/Score Engine:</strong> ' + fmt(loanAmount) +
       ' @ ' + rate + '% for ' + tenure + ' months (EMI ~' + fmt(emi) + '/mo) &mdash; ' +
       '<button onclick="importMarketplaceLoan(' + loanAmount + ',' + rate + ',' + tenure + ',' + emi + ',this.parentNode)" ' +
       'style="background:#7c3aed;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Add to Optimizer</button>' +
-      ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">✕</button>';
+      ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">?</button>';
     var firstCard = document.querySelector('.card');
     if (firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
   } catch(e) {}
@@ -617,7 +621,7 @@ function importMarketplaceLoan(amount, rate, tenure, emi, banner) {
   saveState();
 }
 
-// ── Save total EMI to fw_profile ─────────────────────────────────
+// -- Save total EMI to fw_profile ---------------------------------
 function saveEmiToProfile(emi){
   try{
     var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');
@@ -628,13 +632,13 @@ function saveEmiToProfile(emi){
     if(arr[idx]){arr[idx].emi=Math.round(emi);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.createElement('div');
     t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-    t.textContent='✓ EMI $'+Math.round(emi).toLocaleString()+'/mo saved — cashRunway, breakEven & ownersPay updated';
+    t.textContent='? EMI $'+Math.round(emi).toLocaleString()+'/mo saved � cashRunway, breakEven & ownersPay updated';
     document.body.appendChild(t);
     setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},4000);
   }catch(e){}
 }
 
-// ── Load loans from fw_loans (Debt Command Center) ───────────────
+// -- Load loans from fw_loans (Debt Command Center) ---------------
 function loadFromDebtCenter() {
   var saved = [];
   try{ saved = JSON.parse(localStorage.getItem('fw_loans')||'[]'); }catch(e){}
@@ -646,12 +650,12 @@ function loadFromDebtCenter() {
   });
   var t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-  t.textContent = '✓ ' + saved.length + ' loan' + (saved.length>1?'s':'') + ' loaded from Debt Center';
+  t.textContent = '? ' + saved.length + ' loan' + (saved.length>1?'s':'') + ' loaded from Debt Center';
   document.body.appendChild(t);
   setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
 }
 
-// ── Save current optimizer loans back to fw_loans ────────────────
+// -- Save current optimizer loans back to fw_loans ----------------
 function saveToDebtCenter() {
   var loans = getLoans();
   if(loans.length === 0){ alert('No loans to save.'); return; }
@@ -674,12 +678,12 @@ function saveToDebtCenter() {
   localStorage.setItem('fw_loans', JSON.stringify(existing));
   var t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-  t.innerHTML = '✓ Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View →</a>';
+  t.innerHTML = '? Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View ?</a>';
   document.body.appendChild(t);
   setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 4000);
 }
 
-// ── Init: pre-fill from localStorage profile if available ────────
+// -- Init: pre-fill from localStorage profile if available --------
 function init() {
   // Check for URL params from loanDecisionScoreEngine / loanMarketplaceEngine
   checkMarketplaceParams();

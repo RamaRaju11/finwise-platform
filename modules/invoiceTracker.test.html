@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice Tracker — BizScale</title>
+<title>Invoice Tracker � BizScale</title>
 <script src="../sidebar.js" defer></script>
 <link rel="manifest" href="../manifest.json">
 <style>
@@ -153,6 +153,10 @@ input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
   .inv-footer{font-size:.72rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:12px}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <div id="invoicePrintWrap"></div>
@@ -191,7 +195,7 @@ input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
     </table>
     <div class="empty" id="emptyState" style="display:none">
       <div class="empty-icon">&#128203;</div>
-      <div class="empty-text">No invoices yet — add your first one</div>
+      <div class="empty-text">No invoices yet � add your first one</div>
       <button class="empty-btn" onclick="openModal()">&#65291; Add Invoice</button>
     </div>
   </div>
@@ -200,7 +204,7 @@ input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
   <div class="aging-section" id="agingSection">
     <div class="section-title">&#128200; Invoice Aging Report</div>
     <div class="dso-row">
-      <label>Annual Revenue ($) — for DSO calculation:</label>
+      <label>Annual Revenue ($) � for DSO calculation:</label>
       <input type="number" id="dsoRevInput" placeholder="e.g. 600000" min="0" oninput="renderAgingReport()"/>
     </div>
     <div class="aging-cards" id="agingCards"></div>
@@ -222,7 +226,7 @@ input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#2563eb}
 
     <div class="section-label">Template</div>
     <select id="fTemplate" onchange="applyTemplate(this.value)">
-      <option value="">— Select template (optional) —</option>
+      <option value="">� Select template (optional) �</option>
       <option value="consulting">Consulting Services</option>
       <option value="product">Product Sale</option>
       <option value="retainer">Monthly Retainer</option>
@@ -285,14 +289,14 @@ var _invoices = [];
 var _db = null;
 var _userId = null;
 
-// ── STORAGE ──────────────────────────────────────────────────────────────────
+// -- STORAGE ------------------------------------------------------------------
 function load(){ return _invoices; }
 function save(invs){
   _invoices = invs;
   localStorage.setItem(KEY, JSON.stringify(invs));
 }
 
-// ── SUPABASE ROW CONVERSION ───────────────────────────────────────────────────
+// -- SUPABASE ROW CONVERSION ---------------------------------------------------
 function toSupaRow(inv){
   return {
     id: inv.id, user_id: _userId,
@@ -326,7 +330,7 @@ function supaDelete(id){
   _db.from('invoices').delete().eq('id',id).eq('user_id',_userId).then(function(){});
 }
 
-// ── UTC DATE HELPERS (P1 Calculation: timezone-safe) ─────────────────────────
+// -- UTC DATE HELPERS (P1 Calculation: timezone-safe) -------------------------
 function parseUTCDate(str){
   if(!str) return null;
   var p=str.split('-');
@@ -337,13 +341,13 @@ function todayUTC(){
   return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()));
 }
 
-// ── FORMATTING ───────────────────────────────────────────────────────────────
+// -- FORMATTING ---------------------------------------------------------------
 function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-function fmtDate(d){ if(!d) return '—'; var p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
+function fmtDate(d){ if(!d) return '�'; var p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
 function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },3000); }
 
-// ── STATUS / DAYS ─────────────────────────────────────────────────────────────
+// -- STATUS / DAYS -------------------------------------------------------------
 function getStatus(inv){
   if(inv.status==='paid') return 'paid';
   var today=todayUTC();
@@ -355,7 +359,7 @@ function getStatus(inv){
 function daysInfo(inv){
   var today=todayUTC();
   var due=parseUTCDate(inv.dueDate);
-  if(!due) return {text:'—',cls:'ok'};
+  if(!due) return {text:'�',cls:'ok'};
   var diff=Math.round((due-today)/86400000);
   var st=getStatus(inv);
   if(st==='paid') return {text:'Paid',cls:'ok'};
@@ -380,7 +384,7 @@ function isThisWeek(dueStr){
   return diff>=0&&diff<=7;
 }
 
-// ── P1 INTEGRATION: PUSH INVOICE TOTALS ──────────────────────────────────────
+// -- P1 INTEGRATION: PUSH INVOICE TOTALS --------------------------------------
 function pushInvoiceTotals(){
   var invs=load();
   var byMonth={}, byYear={};
@@ -416,7 +420,7 @@ function pushInvoiceTotals(){
     inflows.length+' pending inflow'+(inflows.length!==1?'s':'')+' pushed to Cash Flow Calendar';
 }
 
-// ── RENDER SUMMARY ────────────────────────────────────────────────────────────
+// -- RENDER SUMMARY ------------------------------------------------------------
 function renderSummary(invoices){
   var outstanding=invoices.filter(function(i){ return getStatus(i)!=='paid'; });
   var overdue    =invoices.filter(function(i){ return getStatus(i)==='overdue'; });
@@ -434,7 +438,7 @@ function renderSummary(invoices){
   document.getElementById('sumPaidCount').textContent       =paidMonth.length+' this month';
 }
 
-// ── RENDER TABLE ──────────────────────────────────────────────────────────────
+// -- RENDER TABLE --------------------------------------------------------------
 function renderTable(){
   var invoices=load();
   renderSummary(invoices);
@@ -474,7 +478,7 @@ function renderTable(){
       ?'<button class="act-btn btn-email" onclick="sendReminder(\''+inv.id+'\')" title="Send reminder email">&#128231; Remind</button>':'' ;
     var pdfBtn='<button class="act-btn btn-pdf" onclick="printInvoice(\''+inv.id+'\')" title="Export PDF">&#128438; PDF</button>';
     html+='<tr>'+
-      '<td><div class="td-client">'+esc(inv.client)+recurBadge+'</div><div class="td-num">'+(inv.invNo||'—')+'</div></td>'+
+      '<td><div class="td-client">'+esc(inv.client)+recurBadge+'</div><div class="td-num">'+(inv.invNo||'�')+'</div></td>'+
       '<td><div class="'+amtCls+'">'+fmt(inv.amount)+'</div></td>'+
       '<td>'+fmtDate(inv.issued)+'</td>'+
       '<td><div>'+fmtDate(inv.dueDate)+'</div><div class="td-days '+di.cls+'">'+di.text+'</div></td>'+
@@ -496,7 +500,7 @@ function setFilter(f,btn){
   renderTable();
 }
 
-// ── P2 FEATURE: SEND REMINDER (mailto:) ──────────────────────────────────────
+// -- P2 FEATURE: SEND REMINDER (mailto:) --------------------------------------
 function sendReminder(id){
   var inv=load().find(function(i){ return i.id===id; });
   if(!inv) return;
@@ -505,7 +509,7 @@ function sendReminder(id){
   try{ p=JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
   var from=p.bizName||p.name||'[Your Business]';
   var invNum=inv.invNo||'#';
-  var subj=encodeURIComponent('Follow-up: Invoice '+invNum+' — Payment Past Due');
+  var subj=encodeURIComponent('Follow-up: Invoice '+invNum+' � Payment Past Due');
   var body=encodeURIComponent(
     'Dear '+(inv.client||'Client')+',\n\n'+
     'I hope this finds you well. This is a friendly reminder that Invoice '+invNum+' for '+
@@ -516,7 +520,7 @@ function sendReminder(id){
   window.location.href='mailto:'+email+'?subject='+subj+'&body='+body;
 }
 
-// ── P2 FEATURE: INVOICE TEMPLATES ────────────────────────────────────────────
+// -- P2 FEATURE: INVOICE TEMPLATES --------------------------------------------
 var TEMPLATES={
   consulting:{notes:'Professional consulting services as discussed. Net 30.', amount:''},
   product:   {notes:'Products per attached order. Payment due on receipt.',   amount:''},
@@ -530,7 +534,7 @@ function applyTemplate(type){
   if(t.notes) document.getElementById('fNotes').value=t.notes;
 }
 
-// ── P2 EXPORT: PRINT INDIVIDUAL INVOICE PDF ───────────────────────────────────
+// -- P2 EXPORT: PRINT INDIVIDUAL INVOICE PDF -----------------------------------
 function printInvoice(id){
   var inv=load().find(function(i){ return i.id===id; });
   if(!inv) return;
@@ -568,7 +572,7 @@ function printInvoice(id){
       '<tfoot>'+
         '<tr class="inv-total-row"><td style="padding:12px;font-size:1rem;font-weight:900">TOTAL DUE</td>'+
         '<td style="padding:12px;text-align:right;font-size:1.1rem;font-weight:900;color:'+(inv.status==='paid'?'#16a34a':'#2563eb')+'">'+
-          fmt(inv.amount)+(inv.status==='paid'?' ✓ PAID':'')+'</td></tr>'+
+          fmt(inv.amount)+(inv.status==='paid'?' ? PAID':'')+'</td></tr>'+
       '</tfoot>'+
     '</table>'+
     (inv.notes?'<div class="inv-notes"><strong>Notes / Terms:</strong> '+esc(inv.notes)+'</div>':'')+
@@ -577,7 +581,7 @@ function printInvoice(id){
   window.print();
 }
 
-// ── MODAL ─────────────────────────────────────────────────────────────────────
+// -- MODAL ---------------------------------------------------------------------
 function toggleRecurring(){
   var on=document.getElementById('fRecurring').checked;
   document.getElementById('recurringFields').style.display=on?'':'none';
@@ -692,7 +696,7 @@ function deleteInvoice(id){
   renderTable();
 }
 
-// ── P3 FEATURE: RECURRING INVOICE GENERATION ─────────────────────────────────
+// -- P3 FEATURE: RECURRING INVOICE GENERATION ---------------------------------
 function generateRecurring(){
   var invs=load();
   var today=todayUTC();
@@ -710,7 +714,7 @@ function generateRecurring(){
 
     var months=inv.recurring==='quarterly'?3:1;
     var nextDue=new Date(Date.UTC(due.getUTCFullYear(),due.getUTCMonth()+months,due.getUTCDate()));
-    if(nextDue>today) return; // next due is in future — wait
+    if(nextDue>today) return; // next due is in future � wait
 
     // Check if we haven't already generated this next invoice
     var nextStr=nextDue.toISOString().split('T')[0];
@@ -744,7 +748,7 @@ function generateRecurring(){
   return false;
 }
 
-// ── P3 UX: AGING REPORT ───────────────────────────────────────────────────────
+// -- P3 UX: AGING REPORT -------------------------------------------------------
 function renderAgingReport(){
   var invoices=load();
   var today=todayUTC();
@@ -766,8 +770,8 @@ function renderAgingReport(){
 
   var bDefs=[
     {cls:'current',label:'Current',       arr:bCurrent},
-    {cls:'late1',  label:'1–30 Days',     arr:b1_30},
-    {cls:'late2',  label:'31–60 Days',    arr:b31_60},
+    {cls:'late1',  label:'1�30 Days',     arr:b1_30},
+    {cls:'late2',  label:'31�60 Days',    arr:b31_60},
     {cls:'late3',  label:'60+ Days',      arr:b61plus}
   ];
   document.getElementById('agingCards').innerHTML=bDefs.map(function(b){
@@ -785,7 +789,7 @@ function renderAgingReport(){
   var collRate=totalInvoiced>0?(totalCollected/totalInvoiced*100):0;
   var annualRev=parseFloat(document.getElementById('dsoRevInput').value)||0;
   var dso=annualRev>0?(totalOutstanding/annualRev*365):null;
-  var dsoText=dso!==null?dso.toFixed(0)+' days':'Enter revenue →';
+  var dsoText=dso!==null?dso.toFixed(0)+' days':'Enter revenue ?';
   var dsoColor=dso===null?'#64748b':dso<=30?'#16a34a':dso<=60?'#ca8a04':'#dc2626';
   var crColor=collRate>=90?'#16a34a':collRate>=70?'#ca8a04':'#dc2626';
 
@@ -835,13 +839,13 @@ function renderAgingReport(){
       '<td>'+fmt(c.invoiced)+'</td>'+
       '<td style="color:#16a34a;font-weight:700">'+fmt(c.collected)+'</td>'+
       '<td style="font-weight:800;color:'+(c.outstanding>0?'#dc2626':'#64748b')+'">'+fmt(c.outstanding)+'</td>'+
-      '<td style="color:'+(c.maxOverdue>60?'#dc2626':c.maxOverdue>30?'#f59e0b':'#64748b')+'">'+(c.maxOverdue>0?c.maxOverdue+' days':'—')+'</td>'+
+      '<td style="color:'+(c.maxOverdue>60?'#dc2626':c.maxOverdue>30?'#f59e0b':'#64748b')+'">'+(c.maxOverdue>0?c.maxOverdue+' days':'�')+'</td>'+
       '<td><span class="'+riskCls+'">'+riskLabel+'</span></td>'+
       '</tr>';
   }).join('');
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// -- INIT ---------------------------------------------------------------------
 async function init(){
   // Load localStorage immediately so UI is instant
   try{ _invoices=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ _invoices=[]; }

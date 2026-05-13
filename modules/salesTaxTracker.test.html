@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sales Tax Tracker — BizScale</title>
+<title>Sales Tax Tracker � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
@@ -94,11 +94,11 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .fw-toast.toast-err{background:#dc2626}
 .disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.6;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #e2e8f0}
 
-/* ── STALE RATES BANNER ── */
+/* -- STALE RATES BANNER -- */
 .stale-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:10px 16px;margin-bottom:16px;font-size:.8rem;color:#92400e;display:none;align-items:center;gap:10px;flex-wrap:wrap}
 .stale-banner strong{color:#78350f}
 
-/* ── MULTI-STATE NEXUS ── */
+/* -- MULTI-STATE NEXUS -- */
 .nexus-grid{display:flex;flex-direction:column;gap:10px;margin-top:12px}
 .nexus-row{padding:12px 14px;border-radius:9px;border:1.5px solid #e2e8f0;background:#f8fafc}
 .nexus-row.nr-danger{border-color:#fca5a5;background:#fff5f5}
@@ -109,7 +109,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .nr-pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.68rem;font-weight:800}
 .nrp-d{background:#fee2e2;color:#dc2626}.nrp-w{background:#fef3c7;color:#92400e}.nrp-s{background:#dcfce7;color:#166534}
 
-/* ── FREQ RECOMMENDATION ── */
+/* -- FREQ RECOMMENDATION -- */
 .freq-card{background:#fff;border-radius:10px;padding:22px 24px;margin-bottom:16px;border:2px solid #7c3aed;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .freq-opts{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
 .freq-opt{flex:1;min-width:120px;border-radius:9px;padding:14px;border:2px solid #e2e8f0;text-align:center;cursor:default}
@@ -120,12 +120,12 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .fo-badge{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:800}
 .fob-cur{background:#dbeafe;color:#1d4ed8}.fob-rec{background:#ede9fe;color:#6d28d9}
 
-/* ── INVOICE CONN STRIP ── */
+/* -- INVOICE CONN STRIP -- */
 .inv-strip{padding:8px 14px;border-radius:7px;font-size:.78rem;margin-bottom:12px;display:none}
 .inv-on{background:#dcfce7;color:#166534;border:1px solid #86efac}
 .inv-off{background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0}
 
-/* ── PRINT / EXPORT ── */
+/* -- PRINT / EXPORT -- */
 .print-hdr{display:none}
 .btn-csv{padding:9px 18px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:.84rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif;margin-left:10px}
 .btn-csv:hover{background:#15803d}
@@ -139,6 +139,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   .card,.freq-card{box-shadow:none;page-break-inside:avoid}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -153,10 +157,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="print-hdr-name" id="printBizName">Sales Tax Liability Report</div>
   <div class="print-hdr-meta" id="printMeta"></div>
 </div>
-<h1>🏷️ Sales Tax Tracker</h1>
-<p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds — all 50 states + DC.</p>
+<h1>??? Sales Tax Tracker</h1>
+<p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds � all 50 states + DC.</p>
 <div id="staleRatesBanner" class="stale-banner no-print">
-  ⚠️ <strong>Heads-up:</strong> <span id="staleMsg"></span> <a href="#" style="color:#92400e;font-weight:800;margin-left:6px" onclick="return false">Contact your CPA or check your state revenue website for current rates.</a>
+  ?? <strong>Heads-up:</strong> <span id="staleMsg"></span> <a href="#" style="color:#92400e;font-weight:800;margin-left:6px" onclick="return false">Contact your CPA or check your state revenue website for current rates.</a>
 </div>
 <div id="invConnStrip" class="inv-strip no-print"></div>
 
@@ -229,7 +233,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="form-grid" style="margin-top:14px">
     <div>
       <label>Customer State <span style="font-weight:500;color:#94a3b8">(for nexus tracking)</span></label>
-      <select id="txState"><option value="">— Same as my primary state —</option></select>
+      <select id="txState"><option value="">� Same as my primary state �</option></select>
     </div>
     <div style="display:flex;align-items:flex-end;gap:16px;padding-bottom:1px">
       <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-top:0;font-size:.84rem;font-weight:700;color:#475569">
@@ -247,12 +251,12 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="period-header">
     <div>
       <div class="card-title" style="margin-bottom:2px">Period Summary</div>
-      <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">—</div>
+      <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">�</div>
     </div>
     <div class="period-nav">
-      <button class="btn-period" onclick="changePeriod(-1)">← Prev</button>
+      <button class="btn-period" onclick="changePeriod(-1)">? Prev</button>
       <button class="btn-period btn-today" onclick="goToToday()">Today</button>
-      <button class="btn-period" onclick="changePeriod(1)">Next →</button>
+      <button class="btn-period" onclick="changePeriod(1)">Next ?</button>
     </div>
   </div>
   <div class="summary-stats" id="summaryStats"></div>
@@ -262,7 +266,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- NEXUS TRACKER -->
 <div class="card">
-  <div class="card-title">Economic Nexus Tracker — <span id="nexusYearLabel"></span></div>
+  <div class="card-title">Economic Nexus Tracker � <span id="nexusYearLabel"></span></div>
   <p style="font-size:.78rem;color:#64748b;margin-bottom:14px">Shows your home state plus any state where you've logged sales this year. Tag a <strong>Customer State</strong> on transactions to track exposure across multiple states.</p>
   <div id="nexusContent"></div>
   <div id="multiNexusContent"></div>
@@ -278,7 +282,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <div class="card-title" style="margin-bottom:0">Filing History</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn-csv no-print" onclick="exportCSV()">&#8595; Export CSV</button>
-      <button class="btn-sm no-print" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">🖨️ Print</button>
+      <button class="btn-sm no-print" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">??? Print</button>
       <button class="btn-sm btn-neutral" onclick="clearAllData()" style="font-size:.7rem">Clear All Data</button>
     </div>
   </div>
@@ -287,22 +291,22 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- SAVE TO PROFILE -->
 <div class="card save-card">
-  <button class="save-btn" onclick="saveSalesTaxToProfile()">💾 Save Setup to Profile</button>
+  <button class="save-btn" onclick="saveSalesTaxToProfile()">?? Save Setup to Profile</button>
   <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves your state and filing frequency to your BizScale profile.</p>
 </div>
 
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> Rates shown are 2024 averages. Actual local rates (county, city, special district) vary — verify your exact combined rate with your state revenue department before filing. Services taxability, digital goods, and SaaS rules vary by state. Not legal or tax advice.
+  <strong>Disclaimer:</strong> Rates shown are 2024 averages. Actual local rates (county, city, special district) vary � verify your exact combined rate with your state revenue department before filing. Services taxability, digital goods, and SaaS rules vary by state. Not legal or tax advice.
 </div>
 </div>
 
 <script>
-/* ── RATES LAST UPDATED — UPDATE THIS DATE WHENEVER RATES ARE REFRESHED ── */
+/* -- RATES LAST UPDATED � UPDATE THIS DATE WHENEVER RATES ARE REFRESHED -- */
 // UPDATE ANNUALLY: Verify state tax rates against each state's revenue dept.
 // Many states adjust rates quarterly. Flag stale if >90 days since this date.
 var RATES_DATE = '2024-01-01';
 
-/* ── STATE TAX DATA 2024 ── */
+/* -- STATE TAX DATA 2024 -- */
 /* stateRate=state rate | avgLocal=avg local add-on | noTax=no sales tax at all */
 /* localOnly=no state tax but local may apply (AK) | nexus=$ threshold | nexusTx=transaction threshold */
 var ST = {
@@ -317,7 +321,7 @@ var ST = {
   DE:{name:'Delaware',      sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
   FL:{name:'Florida',       sr:0.06,    al:0.0105, nx:100000,nt:200},
   GA:{name:'Georgia',       sr:0.04,    al:0.034,  nx:100000,nt:200},
-  HI:{name:'Hawaii',        sr:0.04,    al:0.0044, nx:100000,nt:200, note:'General Excise Tax (GET) applies to gross receipts — not a traditional sales tax.'},
+  HI:{name:'Hawaii',        sr:0.04,    al:0.0044, nx:100000,nt:200, note:'General Excise Tax (GET) applies to gross receipts � not a traditional sales tax.'},
   ID:{name:'Idaho',         sr:0.06,    al:0.0003, nx:100000,nt:200},
   IL:{name:'Illinois',      sr:0.0625,  al:0.0253, nx:100000,nt:200},
   IN:{name:'Indiana',       sr:0.07,    al:0,      nx:100000,nt:200},
@@ -337,7 +341,7 @@ var ST = {
   NV:{name:'Nevada',        sr:0.0685,  al:0.0138, nx:100000,nt:200},
   NH:{name:'New Hampshire', sr:0,       al:0,      noTax:true,      nx:100000,nt:200},
   NJ:{name:'New Jersey',    sr:0.06625, al:0,      nx:100000,nt:200},
-  NM:{name:'New Mexico',    sr:0.04875, al:0.0273, nx:100000,nt:200, note:'Gross Receipts Tax (GRT) — seller pays the tax, not the buyer.'},
+  NM:{name:'New Mexico',    sr:0.04875, al:0.0273, nx:100000,nt:200, note:'Gross Receipts Tax (GRT) � seller pays the tax, not the buyer.'},
   NY:{name:'New York',      sr:0.04,    al:0.0452, nx:500000,nt:100},
   NC:{name:'North Carolina',sr:0.0475,  al:0.0223, nx:100000,nt:200},
   ND:{name:'North Dakota',  sr:0.05,    al:0.0197, nx:100000,nt:200},
@@ -359,14 +363,14 @@ var ST = {
   WY:{name:'Wyoming',       sr:0.04,    al:0.0139, nx:100000,nt:200}
 };
 
-/* ── APP STATE ── */
+/* -- APP STATE -- */
 var _setup = {state:'TX', freq:'monthly', type:'product', customLocal:null};
 var _txList = [];
 var _filedMap = {};
 var _periodOffset = 0;
 var _toastTimer = null;
 
-/* ── INIT ── */
+/* -- INIT -- */
 window.onload = function(){
   loadData();
   populateStateDropdown();
@@ -387,7 +391,7 @@ function saveData(){
   localStorage.setItem('fw_sales_filed',JSON.stringify(_filedMap));
 }
 
-/* ── STATE DROPDOWN ── */
+/* -- STATE DROPDOWN -- */
 function populateStateDropdown(){
   var sel = document.getElementById('setupState');
   var keys = Object.keys(ST).sort(function(a,b){ return ST[a].name.localeCompare(ST[b].name); });
@@ -397,19 +401,19 @@ function populateStateDropdown(){
   taxKeys.forEach(function(k){
     var d = ST[k];
     var combined = ((d.sr + d.al)*100).toFixed(2);
-    html += '<option value="'+k+'">'+d.name+' — avg '+combined+'%</option>';
+    html += '<option value="'+k+'">'+d.name+' � avg '+combined+'%</option>';
   });
   html += '</optgroup><optgroup label="No State Sales Tax">';
   specialKeys.forEach(function(k){
     var d = ST[k];
-    var suffix = d.localOnly ? ' — local taxes may apply' : ' — no sales tax';
+    var suffix = d.localOnly ? ' � local taxes may apply' : ' � no sales tax';
     html += '<option value="'+k+'">'+d.name+suffix+'</option>';
   });
   html += '</optgroup>';
   sel.innerHTML = html;
   // Also populate customer state selector in transaction form
   var txSel = document.getElementById('txState');
-  var stateOpts = '<option value="">— Same as my primary state —</option>';
+  var stateOpts = '<option value="">� Same as my primary state �</option>';
   keys.forEach(function(k){ stateOpts += '<option value="'+k+'">'+ST[k].name+'</option>'; });
   txSel.innerHTML = stateOpts;
 }
@@ -462,7 +466,7 @@ function renderRateDisplay(){
   if(!d){ el.innerHTML=''; return; }
   if(d.noTax){
     el.innerHTML = '<div style="margin-top:14px;padding:12px 16px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;color:#166534;font-size:.82rem">'+
-      '✓ <strong>'+d.name+'</strong> has no state sales tax. No collection obligation.'+(d.note?' '+d.note:'')+'</div>';
+      '? <strong>'+d.name+'</strong> has no state sales tax. No collection obligation.'+(d.note?' '+d.note:'')+'</div>';
     return;
   }
   var useCustom = document.getElementById('useCustomLocal').checked;
@@ -474,10 +478,10 @@ function renderRateDisplay(){
     '<div class="rate-box"><div class="rate-box-lbl">'+(useCustom?'Your Local Rate':'Avg Local Rate')+'</div><div class="rate-box-val">'+(localRate*100).toFixed(2)+'%</div></div>'+
     '<div class="rate-box"><div class="rate-box-lbl">Combined Rate</div><div class="rate-box-val">'+(combined*100).toFixed(2)+'%</div></div>'+
     '</div>'+
-    (d.note ? '<div class="rate-note">⚠️ '+d.note+'</div>' : '');
+    (d.note ? '<div class="rate-note">?? '+d.note+'</div>' : '');
 }
 
-/* ── TRANSACTIONS ── */
+/* -- TRANSACTIONS -- */
 function setDefaultDate(){
   var now = new Date();
   document.getElementById('txDate').value =
@@ -496,7 +500,7 @@ function updateTaxableHint(){
     product:'Physical products are taxable in almost all states.',
     service:'Services: taxable in ~30 states. Check your state rules.',
     shipping:'Shipping: taxable in ~24 states when the sale is taxable.',
-    digital:'SaaS/digital goods: taxable in ~30 states — rules vary significantly.',
+    digital:'SaaS/digital goods: taxable in ~30 states � rules vary significantly.',
     other:'Check your state rules for this category.'
   };
   document.getElementById('taxableHint').textContent = hints[cat]||'';
@@ -525,7 +529,7 @@ function addTransaction(){
   document.getElementById('txDesc').value='';
   document.getElementById('txAmount').value='';
   renderPeriodCard(); renderNexus(); renderHistory();
-  showToast('Added — tax: '+fmt(tax));
+  showToast('Added � tax: '+fmt(tax));
 }
 
 function deleteTx(id){
@@ -536,7 +540,7 @@ function deleteTx(id){
   showToast('Deleted');
 }
 
-/* ── PERIOD LOGIC ── */
+/* -- PERIOD LOGIC -- */
 /* offset: 0=current, +1=next, -1=prev */
 function periodKey(off){
   var now=new Date(), freq=_setup.freq;
@@ -561,7 +565,7 @@ function periodLabel(key){
     return new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleString('en-US',{month:'long',year:'numeric'});
   } else if(freq==='quarterly'){
     var m=key.match(/(\d+)-Q(\d)/);
-    var ranges={1:'Jan–Mar',2:'Apr–Jun',3:'Jul–Sep',4:'Oct–Dec'};
+    var ranges={1:'Jan�Mar',2:'Apr�Jun',3:'Jul�Sep',4:'Oct�Dec'};
     return 'Q'+m[2]+' '+m[1]+' ('+ranges[parseInt(m[2])]+')';
   } else { return 'Year '+key; }
 }
@@ -601,7 +605,7 @@ function txInPeriod(key){
 function changePeriod(dir){ _periodOffset+=dir; renderPeriodCard(); }
 function goToToday(){ _periodOffset=0; renderPeriodCard(); }
 
-/* ── RENDER ── */
+/* -- RENDER -- */
 function renderAll(){
   renderRateDisplay();
   updateTaxableHint();
@@ -621,7 +625,7 @@ function renderPeriodCard(){
   var cur=isCurrent(key), fut=isFuture(key);
 
   document.getElementById('periodTitle').textContent =
-    lbl+(cur?' — Current Period':'')+(fut?' — Future Period':'');
+    lbl+(cur?' � Current Period':'')+(fut?' � Future Period':'');
 
   var totSales=0, taxableSales=0, taxColl=0;
   txs.forEach(function(t){ totSales+=t.amount; if(t.taxable){taxableSales+=t.amount;taxColl+=t.tax;} });
@@ -648,8 +652,8 @@ function renderPeriodCard(){
         '<td><span class="cat-tag cat-'+t.category+'">'+getCatLabel(t.category)+'</span></td>'+
         '<td><span class="taxbadge '+(t.taxable?'tb-yes':'tb-no')+'">'+(t.taxable?'Taxable':'Exempt')+'</span></td>'+
         '<td class="r">'+fmt(t.amount)+'</td>'+
-        '<td class="r">'+(t.taxable?fmt(t.tax):'—')+'</td>'+
-        '<td><button class="btn-sm btn-danger" onclick="deleteTx(\''+t.id+'\')">✕</button></td>'+
+        '<td class="r">'+(t.taxable?fmt(t.tax):'�')+'</td>'+
+        '<td><button class="btn-sm btn-danger" onclick="deleteTx(\''+t.id+'\')">?</button></td>'+
         '</tr>';
     });
     tbl+='</tbody></table>';
@@ -661,16 +665,16 @@ function renderPeriodCard(){
   if(txs.length||filed){
     fr='<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">';
     if(filed){
-      fr+='<span class="fbadge fb-filed">✓ Filed '+filed.date+'</span>';
+      fr+='<span class="fbadge fb-filed">? Filed '+filed.date+'</span>';
       fr+='<span class="due-info">'+fmt(filed.amount)+' remitted</span>';
       if(!fut) fr+='<button class="btn-sm btn-neutral" onclick="unmarkFiled(\''+key+'\')">Undo</button>';
     } else if(!fut){
-      fr+='<span class="fbadge fb-unfiled">⚠ Not Filed</span>';
+      fr+='<span class="fbadge fb-unfiled">? Not Filed</span>';
       fr+='<span class="due-info">Due: '+periodDue(key)+'</span>';
       if(taxColl>0)
-        fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">✓ Mark as Filed</button>';
+        fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">? Mark as Filed</button>';
     } else {
-      fr+='<span style="font-size:.78rem;color:#94a3b8">Future period — due '+periodDue(key)+'</span>';
+      fr+='<span style="font-size:.78rem;color:#94a3b8">Future period � due '+periodDue(key)+'</span>';
     }
     fr+='</div>';
   }
@@ -685,7 +689,7 @@ function markFiled(key,amount){
   var now=new Date();
   _filedMap[key]={date:now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),amount:amount};
   saveData(); renderPeriodCard(); renderHistory();
-  showToast('Period filed — '+fmt(amount)+' recorded');
+  showToast('Period filed � '+fmt(amount)+' recorded');
 }
 function unmarkFiled(key){
   delete _filedMap[key];
@@ -700,7 +704,7 @@ function renderNexus(){
 
   if(d.noTax&&!d.localOnly){
     document.getElementById('nexusContent').innerHTML=
-      '<div class="nexus-alert na-notax">✓ <strong>'+d.name+'</strong> has no sales tax. Economic nexus does not apply.</div>';
+      '<div class="nexus-alert na-notax">? <strong>'+d.name+'</strong> has no sales tax. Economic nexus does not apply.</div>';
     return;
   }
 
@@ -717,7 +721,7 @@ function renderNexus(){
   var warn=!reached&&(salesPct>=0.7||txPct>=0.7);
 
   var html='<div class="nexus-bar">'+
-    '<div class="nb-label">'+d.name+' — Sales Threshold: '+fmtBig(threshold)+'</div>'+
+    '<div class="nb-label">'+d.name+' � Sales Threshold: '+fmtBig(threshold)+'</div>'+
     '<div class="progress-track"><div class="progress-fill '+(reached?'pf-danger':warn?'pf-warn':'pf-safe')+
     '" style="width:'+(salesPct*100).toFixed(1)+'%"></div></div>'+
     '<div class="nb-nums"><span>'+fmt(ytdSales)+' YTD sales</span><span>'+fmtBig(threshold)+' threshold</span></div>'+
@@ -734,14 +738,14 @@ function renderNexus(){
 
   var alertCls=reached?'na-danger':warn?'na-warn':'na-safe';
   var alertMsg=reached
-    ? '🚨 <strong>Nexus reached.</strong> You must collect and remit sales tax in '+d.name+'. Register with the state revenue department immediately if not already registered.'
+    ? '?? <strong>Nexus reached.</strong> You must collect and remit sales tax in '+d.name+'. Register with the state revenue department immediately if not already registered.'
     : warn
-    ? '⚠️ <strong>Approaching nexus.</strong> You may reach the '+d.name+' threshold this year. Consider registering proactively.'
-    : '✓ <strong>Below nexus threshold.</strong> Not currently required to collect sales tax in '+d.name+' based on this year\'s sales.';
+    ? '?? <strong>Approaching nexus.</strong> You may reach the '+d.name+' threshold this year. Consider registering proactively.'
+    : '? <strong>Below nexus threshold.</strong> Not currently required to collect sales tax in '+d.name+' based on this year\'s sales.';
 
   html+='<div class="nexus-alert '+alertCls+'">'+alertMsg+'</div>';
   if(d.localOnly) html+='<div class="nexus-alert na-notax" style="margin-top:8px">'+
-    '🔵 Alaska has no state sales tax but local jurisdictions (cities/boroughs) may impose rates up to 7.5%.</div>';
+    '?? Alaska has no state sales tax but local jurisdictions (cities/boroughs) may impose rates up to 7.5%.</div>';
 
   document.getElementById('nexusContent').innerHTML=html;
 }
@@ -758,9 +762,9 @@ function renderHistory(){
     var filed=_filedMap[key];
     var fut=isFuture(key), cur=isCurrent(key);
     var statusHtml=fut?'<span class="s-future">Future</span>':
-      cur?'<span class="s-current">● Current</span>':
-      filed?'<span class="s-filed">✓ Filed</span>':
-      tax>0?'<span class="s-unfiled">⚠ Unfiled</span>':'<span class="s-clean">—</span>';
+      cur?'<span class="s-current">? Current</span>':
+      filed?'<span class="s-filed">? Filed</span>':
+      tax>0?'<span class="s-unfiled">? Unfiled</span>':'<span class="s-clean">�</span>';
     rows+='<tr style="'+(cur?'background:#f0f7ff':'')+'">'+'<td style="font-weight:'+(cur?'800':'600')+'">'+periodLabel(key)+'</td>'+
       '<td class="r">'+fmt(sales)+'</td>'+
       '<td class="r">'+fmt(tax)+'</td>'+
@@ -771,12 +775,12 @@ function renderHistory(){
   }
   document.getElementById('filingHistory').innerHTML = rows
     ? '<table class="hist-table"><thead><tr><th>Period</th><th class="r">Total Sales</th><th class="r">Tax Collected</th><th class="r">Due Date</th><th class="r">Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>'
-    : '<div class="empty">No periods yet — add your first transaction above.</div>';
+    : '<div class="empty">No periods yet � add your first transaction above.</div>';
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    MULTI-STATE NEXUS TRACKER
-══════════════════════════════════════════ */
+------------------------------------------ */
 function renderMultiStateNexus(){
   var now = new Date(), yr = now.getFullYear();
   var ytd = _txList.filter(function(t){ return t.date.startsWith(yr); });
@@ -816,9 +820,9 @@ function renderMultiStateNexus(){
   document.getElementById('multiNexusContent').innerHTML = html;
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    FILING FREQUENCY RECOMMENDATION
-══════════════════════════════════════════ */
+------------------------------------------ */
 function renderFilingFreqRec(){
   var el = document.getElementById('freqCard');
   if(!el || !_txList.length){ if(el) el.innerHTML=''; return; }
@@ -831,13 +835,13 @@ function renderFilingFreqRec(){
   var cur = _setup.freq;
   var freqInfo = {
     monthly:{label:'Monthly', note:'Required in most states when annual tax liability exceeds $50K.'},
-    quarterly:{label:'Quarterly', note:'Common for mid-volume sellers — balance compliance with less admin overhead.'},
-    annual:{label:'Annual', note:'Best for low-volume sellers. Check your state — some require quarterly even at low volumes.'}
+    quarterly:{label:'Quarterly', note:'Common for mid-volume sellers � balance compliance with less admin overhead.'},
+    annual:{label:'Annual', note:'Best for low-volume sellers. Check your state � some require quarterly even at low volumes.'}
   };
   var match = rec === cur;
   el.innerHTML =
-    '<div class="card-title" style="color:#7c3aed">📅 Filing Frequency Recommendation</div>'+
-    '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months × 12).</p>'+
+    '<div class="card-title" style="color:#7c3aed">?? Filing Frequency Recommendation</div>'+
+    '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months � 12).</p>'+
     '<div class="freq-opts">'+
     Object.keys(freqInfo).map(function(f){
       var isCur = f === cur, isRec = f === rec;
@@ -850,26 +854,26 @@ function renderFilingFreqRec(){
         '</div>';
     }).join('')+
     '</div>'+
-    (!match ? '<div class="rate-note" style="margin-top:12px">💡 Your current setting is <strong>'+cur+'</strong> but your volume suggests <strong>'+rec+'</strong> may be more appropriate. Update in the setup above.</div>' : '');
+    (!match ? '<div class="rate-note" style="margin-top:12px">?? Your current setting is <strong>'+cur+'</strong> but your volume suggests <strong>'+rec+'</strong> may be more appropriate. Update in the setup above.</div>' : '');
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    STALE RATES CHECK
-══════════════════════════════════════════ */
+------------------------------------------ */
 function checkRatesStaleness(){
   var updated = new Date(RATES_DATE);
   var daysSince = Math.floor((new Date() - updated)/(1000*60*60*24));
   var el = document.getElementById('staleRatesBanner');
   if(el && daysSince > 90){
     document.getElementById('staleMsg').textContent =
-      'Sales tax rates were last verified '+daysSince+' days ago ('+RATES_DATE+'). State rates change frequently — verify your exact combined rate before filing.';
+      'Sales tax rates were last verified '+daysSince+' days ago ('+RATES_DATE+'). State rates change frequently � verify your exact combined rate before filing.';
     el.style.display = 'flex';
   }
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    INVOICE TRACKER INTEGRATION
-══════════════════════════════════════════ */
+------------------------------------------ */
 function loadInvoiceIntegration(){
   var strip = document.getElementById('invConnStrip');
   if(!strip) return;
@@ -882,16 +886,16 @@ function loadInvoiceIntegration(){
     var stateTagged = paidInv.filter(function(i){ return i.state||i.customerState; }).length;
     strip.className = 'inv-strip inv-on no-print';
     strip.style.display = 'block';
-    strip.innerHTML = '✓ Invoice Tracker connected — '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
+    strip.innerHTML = '? Invoice Tracker connected � '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
       (stateTagged > 0 ? '. '+stateTagged+' invoices have state tags for nexus tracking.' :
       '. Add a <em>state</em> field on invoices to enable per-state nexus tracking.')+
-      ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">→ Open Invoice Tracker</a>';
+      ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">? Open Invoice Tracker</a>';
   }catch(e){ strip.style.display='none'; }
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    CSV EXPORT
-══════════════════════════════════════════ */
+------------------------------------------ */
 function exportCSV(){
   var rows = [['Period','State','Total Sales','Taxable Sales','Exempt Sales','Tax Collected','Filed','Filed Amount','Due Date']];
   var freq = _setup.freq;
@@ -930,7 +934,7 @@ function exportCSV(){
     Object.keys(stateAgg).sort().forEach(function(k){
       var d = ST[k], s = stateAgg[k];
       if(!d) return;
-      var pct = d.nx > 0 ? (s.sales/d.nx*100).toFixed(1) : '—';
+      var pct = d.nx > 0 ? (s.sales/d.nx*100).toFixed(1) : '�';
       var status = s.sales >= d.nx ? 'REACHED' : s.sales/d.nx >= 0.7 ? 'APPROACHING' : 'Below';
       rows.push([d.name, s.sales.toFixed(2), s.tax.toFixed(2), s.count, d.nx, pct+'%', status,'','']);
     });
@@ -944,7 +948,7 @@ function exportCSV(){
   showToast('CSV downloaded');
 }
 
-/* ── PROFILE ── */
+/* -- PROFILE -- */
 function saveProfile(u){
   try{
     var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
@@ -959,7 +963,7 @@ function saveProfile(u){
 }
 function saveSalesTaxToProfile(){
   saveProfile({state:_setup.state, salesTaxFreq:_setup.freq});
-  showToast('Saved — state: '+_setup.state+', freq: '+_setup.freq);
+  showToast('Saved � state: '+_setup.state+', freq: '+_setup.freq);
 }
 function autoPopulate(){
   try{
@@ -976,7 +980,7 @@ function autoPopulate(){
   }catch(e){}
 }
 
-/* ── UTILS ── */
+/* -- UTILS -- */
 function fmt(n){ return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function fmtBig(n){ return n>=1000000?'$'+(n/1000000).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n; }
 function zz(n){ return String(n).padStart(2,'0'); }

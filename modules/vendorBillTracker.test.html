@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vendor Bill Tracker — BizScale</title>
+<title>Vendor Bill Tracker � BizScale</title>
 <script src="../sidebar.js" defer></script>
 <script src="fw-auth.js"></script>
 <link rel="manifest" href="../manifest.json">
@@ -106,6 +106,10 @@ input:focus,select:focus{border-color:#2563eb}
 #fwToast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(30px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:.9rem;font-weight:600;opacity:0;pointer-events:none;transition:all .35s;z-index:9999;white-space:nowrap}
 #fwToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <div id="fwSidebar"></div>
@@ -125,7 +129,7 @@ input:focus,select:focus{border-color:#2563eb}
     <div class="input-row-5">
       <div><label>Vendor Name</label><input type="text" id="vendorName" placeholder="e.g. Office Rent"/></div>
       <div><label>Amount ($/mo)</label><input type="number" id="billAmount" placeholder="e.g. 1200" min="0" step="0.01"/></div>
-      <div><label>Due Day (1–31)</label><input type="number" id="dueDay" placeholder="e.g. 1" min="1" max="31"/></div>
+      <div><label>Due Day (1�31)</label><input type="number" id="dueDay" placeholder="e.g. 1" min="1" max="31"/></div>
       <div>
         <label>Category</label>
         <select id="billCategory">
@@ -202,7 +206,7 @@ var _userId = null;
 var DEFAULT_BILLS = [
   {id:uid(), vendor:'Office Rent',           amount:2500, dueDay:1,  category:'Rent',          autoPay:true,  contractExpiry:null, scheduledPayDate:null},
   {id:uid(), vendor:'Electricity & Internet', amount:380, dueDay:5,  category:'Utilities',      autoPay:false, contractExpiry:null, scheduledPayDate:null},
-  {id:uid(), vendor:'Payroll — Staff',        amount:4800, dueDay:15, category:'Payroll',       autoPay:false, contractExpiry:null, scheduledPayDate:null},
+  {id:uid(), vendor:'Payroll � Staff',        amount:4800, dueDay:15, category:'Payroll',       autoPay:false, contractExpiry:null, scheduledPayDate:null},
   {id:uid(), vendor:'SaaS Subscriptions',     amount:290, dueDay:20, category:'Subscriptions',  autoPay:true,  contractExpiry:null, scheduledPayDate:null},
   {id:uid(), vendor:'Business Insurance',     amount:450, dueDay:28, category:'Insurance',      autoPay:true,  contractExpiry:null, scheduledPayDate:null}
 ];
@@ -241,7 +245,7 @@ function supaDeleteBill(id){
   _db.from('vendor_bills').delete().eq('id',id).eq('user_id',_userId).then(function(){});
 }
 
-// ── UTILS ────────────────────────────────────────────────────────────────────
+// -- UTILS --------------------------------------------------------------------
 function fmt$(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2}); }
 function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 function toast(msg){ var t=document.getElementById('fwToast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },3000); }
@@ -282,7 +286,7 @@ function billDueDate(dueDay){
   return yr+'-'+mo+'-'+d;
 }
 
-// ── P1 INTEGRATION: PUSH OUTFLOWS + AP BALANCE ───────────────────────────────
+// -- P1 INTEGRATION: PUSH OUTFLOWS + AP BALANCE -------------------------------
 function pushIntegration(bills){
   var now=new Date();
   var todayDay=now.getDate();
@@ -320,7 +324,7 @@ function pushIntegration(bills){
   strip.innerHTML='&#128202; Bills synced &mdash; <strong>'+outflows.length+' monthly outflows</strong> pushed to Cash Flow Calendar &nbsp;|&nbsp; AP balance <strong>'+fmt$(unpaidTotal)+'</strong> shared with Working Capital Calculator';
 }
 
-// ── P3 UX: DUE-THIS-WEEK BANNER ──────────────────────────────────────────────
+// -- P3 UX: DUE-THIS-WEEK BANNER ----------------------------------------------
 function renderDueBanner(bills,todayDay){
   var dueThisWeek=bills.filter(function(b){
     var s=getDayStatus(b.dueDay,todayDay);
@@ -334,7 +338,7 @@ function renderDueBanner(bills,todayDay){
   bannerText.innerHTML='<strong>'+dueThisWeek.length+' bill'+(dueThisWeek.length!==1?'s':'')+' totaling '+fmt$(total)+'</strong> are overdue or due within 7 days &mdash; review the timeline below';
 }
 
-// ── RENDER ALL ────────────────────────────────────────────────────────────────
+// -- RENDER ALL ----------------------------------------------------------------
 function renderAll(){
   var bills=loadBills();
   var now=new Date();
@@ -361,7 +365,7 @@ function renderAll(){
   document.getElementById('sumAutoPay').textContent =fmt$(autoPayTotal);
 
   // Timeline
-  document.getElementById('timelineHeading').textContent='Next 30 Days — '+now.toLocaleString('en-US',{month:'long'})+' '+yr;
+  document.getElementById('timelineHeading').textContent='Next 30 Days � '+now.toLocaleString('en-US',{month:'long'})+' '+yr;
   var sorted=bills.slice().sort(function(a,b){
     var order={overdue:0,today:1,week:2,upcoming:3};
     var sa=getDayStatus(a.dueDay,todayDay), sb=getDayStatus(b.dueDay,todayDay);
@@ -378,7 +382,7 @@ function renderAll(){
     var dateDisp=moStr+'/'+dayStr+'/'+yr;
     var schedCell=b.scheduledPayDate
       ?'<span class="sched-badge">&#128197; '+b.scheduledPayDate+'</span>'
-      :'<span style="color:#cbd5e1;font-size:.75rem">—</span>';
+      :'<span style="color:#cbd5e1;font-size:.75rem">�</span>';
     return '<tr class="'+rowCls.trim()+'">'+
       '<td>'+dateDisp+'</td>'+
       '<td><strong>'+esc(b.vendor)+'</strong></td>'+
@@ -386,7 +390,7 @@ function renderAll(){
       '<td>'+catBadge(b.category)+'</td>'+
       '<td>'+apChip(b.autoPay)+'</td>'+
       '<td>'+schedCell+'</td>'+
-      '<td>'+(b.contractExpiry?expiryBadge(b.contractExpiry):'<span style="color:#cbd5e1">—</span>')+'</td>'+
+      '<td>'+(b.contractExpiry?expiryBadge(b.contractExpiry):'<span style="color:#cbd5e1">�</span>')+'</td>'+
       '<td>'+statusBadge(status)+'</td>'+
     '</tr>';
   }).join('');
@@ -423,7 +427,7 @@ function renderAll(){
   }).join(''):'<p class="empty-msg">No bills added yet.</p>';
 }
 
-// ── P2 FEATURE: SCHEDULE PAYMENT ─────────────────────────────────────────────
+// -- P2 FEATURE: SCHEDULE PAYMENT ---------------------------------------------
 function schedulePayment(id, date){
   var updated;
   var bills=loadBills().map(function(b){
@@ -437,14 +441,14 @@ function schedulePayment(id, date){
   if(date) toast('Payment scheduled for '+date);
 }
 
-// ── P2 EXPORT: CSV ────────────────────────────────────────────────────────────
+// -- P2 EXPORT: CSV ------------------------------------------------------------
 function exportCSV(){
   var bills=loadBills();
   var now=new Date();
   var yr=now.getFullYear();
   var mo=String(now.getMonth()+1).padStart(2,'0');
 
-  var rows=[['Vendor Bill Tracker Export — '+now.toLocaleDateString()],[]];
+  var rows=[['Vendor Bill Tracker Export � '+now.toLocaleDateString()],[]];
   rows.push(['Due Date','Vendor','Amount','Category','Auto-Pay','Scheduled Payment Date','Contract Expiry','Status']);
 
   var todayDay=now.getDate();
@@ -472,7 +476,7 @@ function exportCSV(){
   toast('CSV exported');
 }
 
-// ── ADD / DELETE ──────────────────────────────────────────────────────────────
+// -- ADD / DELETE --------------------------------------------------------------
 function addBill(){
   var vendor  =document.getElementById('vendorName').value.trim();
   var amount  =parseFloat(document.getElementById('billAmount').value);
@@ -483,7 +487,7 @@ function addBill(){
 
   if(!vendor){ toast('Enter vendor name'); return; }
   if(isNaN(amount)||amount<0){ toast('Enter a valid amount'); return; }
-  if(isNaN(dueDay)||dueDay<1||dueDay>31){ toast('Due day must be 1–31'); return; }
+  if(isNaN(dueDay)||dueDay<1||dueDay>31){ toast('Due day must be 1�31'); return; }
 
   var bills=loadBills();
   var newBill={id:uid(),vendor:vendor,amount:amount,dueDay:dueDay,category:category,
@@ -510,7 +514,7 @@ function deleteBill(id){
   toast('Bill removed');
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// -- INIT ---------------------------------------------------------------------
 renderAll(); // immediate render from localStorage
 
 function initDb(){

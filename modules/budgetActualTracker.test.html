@@ -1,9 +1,9 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Budget vs. Actual Tracker ‚Äî BizScale</title>
+<title>Budget vs. Actual Tracker ó BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
@@ -80,6 +80,10 @@ button.print-btn{margin-top:0;margin-left:8px;padding:9px 18px;background:#f1f5f
 button.print-btn:hover{background:#e2e8f0}
 @media print{.back-link,.toolbar-row,button{display:none!important}body{background:#fff;padding:8px}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -90,9 +94,9 @@ button.print-btn:hover{background:#e2e8f0}
 
 <div id="mainWrap">
 
-<a href="../try.html" class="back-link">‚Üê Back to Demo</a>
-<h1>üìä Budget vs. Actual Tracker</h1>
-<p class="subtitle">BizScale ¬∑ Set monthly budgets, import actuals from invoices &amp; bills, and track variance at a glance.</p>
+<a href="../try.html" class="back-link">? Back to Demo</a>
+<h1>?? Budget vs. Actual Tracker</h1>
+<p class="subtitle">BizScale ∑ Set monthly budgets, import actuals from invoices &amp; bills, and track variance at a glance.</p>
 
 <div class="int-strip" id="intStrip"></div>
 <div class="toast" id="toast"></div>
@@ -103,9 +107,9 @@ button.print-btn:hover{background:#e2e8f0}
     <h2 style="margin:0">Monthly Data</h2>
     <select id="monthSel" onchange="loadMonth()"></select>
     <button class="primary" onclick="saveMonth()">Save Month</button>
-    <button class="btn-green" onclick="importAllActuals()">‚¨á Import Actuals</button>
-    <button class="btn-export" onclick="exportCSV()">‚¨á Export CSV</button>
-    <button class="print-btn" onclick="window.print()">üñ®Ô∏è Print</button>
+    <button class="btn-green" onclick="importAllActuals()">? Import Actuals</button>
+    <button class="btn-export" onclick="exportCSV()">? Export CSV</button>
+    <button class="print-btn" onclick="window.print()">??? Print</button>
     <button class="secondary" onclick="clearMonth()">Clear</button>
   </div>
 
@@ -124,7 +128,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <!-- Expense breakdown from vendor bills -->
 <div class="card" id="catBreakCard" style="display:none">
-  <h2>Expense Breakdown by Category <span style="font-size:.75rem;color:#94a3b8;font-weight:400">‚Äî from Vendor Bills (live)</span></h2>
+  <h2>Expense Breakdown by Category <span style="font-size:.75rem;color:#94a3b8;font-weight:400">ó from Vendor Bills (live)</span></h2>
   <div id="catBreakList"></div>
 </div>
 
@@ -159,7 +163,7 @@ var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var trendMonths = 6;
 
-/* Category definitions ‚Äî bKey/aKey map to localStorage fields */
+/* Category definitions ó bKey/aKey map to localStorage fields */
 var CATS = [
   {id:'rev',   label:'Revenue',                hint:'Total income for the month',              rev:true,  bKey:'bRev',   aKey:'aRev'},
   {id:'cogs',  label:'COGS / Direct Costs',    hint:'Materials, direct labor, subcontractors', rev:false, bKey:'bCogs',  aKey:'aCogs'},
@@ -169,7 +173,7 @@ var CATS = [
   {id:'opex',  label:'Other Operating Expenses',hint:'Insurance, professional services, misc', rev:false, bKey:'bOpex',  aKey:'aOpex'}
 ];
 
-/* Map fw_expense_by_category category names ‚Üí CATS id */
+/* Map fw_expense_by_category category names ? CATS id */
 var CAT_MAP = {
   'Rent':'rent','Utilities':'rent',
   'Payroll':'payrl','Salaries':'payrl',
@@ -203,7 +207,7 @@ function varClass(pct, isRevenue){
 }
 
 function varText(pct){
-  if(pct === null) return '‚Äî';
+  if(pct === null) return 'ó';
   return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
 }
 
@@ -216,22 +220,22 @@ function renderEntryTable(){
       '<td><div class="cat-label">'+c.label+'</div><div class="cat-hint">'+c.hint+'</div></td>'+
       '<td><input type="number" id="'+c.bKey+'" placeholder="0" min="0" oninput="updateVariance()"/></td>'+
       '<td><input type="number" id="'+c.aKey+'" placeholder="0" min="0" oninput="updateVariance()"/></td>'+
-      '<td><span id="v_'+c.id+'" class="var-neutral">‚Äî</span></td>'+
+      '<td><span id="v_'+c.id+'" class="var-neutral">ó</span></td>'+
       '</tr>';
   });
   /* Total Expenses subtotal */
   html += '<tr class="subtotal-row">'+
     '<td><div class="cat-label">Total Expenses</div></td>'+
-    '<td><span id="sub_bExp" style="font-weight:800;color:#64748b">‚Äî</span></td>'+
-    '<td><span id="sub_aExp" style="font-weight:800;color:#64748b">‚Äî</span></td>'+
-    '<td><span id="v_totexp" class="var-neutral">‚Äî</span></td>'+
+    '<td><span id="sub_bExp" style="font-weight:800;color:#64748b">ó</span></td>'+
+    '<td><span id="sub_aExp" style="font-weight:800;color:#64748b">ó</span></td>'+
+    '<td><span id="v_totexp" class="var-neutral">ó</span></td>'+
     '</tr>';
   /* Net Profit subtotal */
   html += '<tr class="profit-row">'+
     '<td><div class="cat-label">Net Profit</div></td>'+
-    '<td><span id="sub_bProfit" style="font-weight:800;color:#64748b">‚Äî</span></td>'+
-    '<td><span id="sub_aProfit" style="font-weight:800;color:#64748b">‚Äî</span></td>'+
-    '<td><span id="v_profit" class="var-neutral">‚Äî</span></td>'+
+    '<td><span id="sub_bProfit" style="font-weight:800;color:#64748b">ó</span></td>'+
+    '<td><span id="sub_aProfit" style="font-weight:800;color:#64748b">ó</span></td>'+
+    '<td><span id="v_profit" class="var-neutral">ó</span></td>'+
     '</tr>';
   document.getElementById('entryBody').innerHTML = html;
 }
@@ -249,8 +253,8 @@ function updateVariance(){
   var bProfit = getVal('bRev') - bExp;
   var aProfit = getVal('aRev') - aExp;
 
-  var se = document.getElementById('sub_bExp'); if(se) se.textContent = bExp ? fmt(bExp) : '‚Äî';
-  var ae = document.getElementById('sub_aExp'); if(ae) ae.textContent = aExp ? fmt(aExp) : '‚Äî';
+  var se = document.getElementById('sub_bExp'); if(se) se.textContent = bExp ? fmt(bExp) : 'ó';
+  var ae = document.getElementById('sub_aExp'); if(ae) ae.textContent = aExp ? fmt(aExp) : 'ó';
   var sp = document.getElementById('sub_bProfit'); if(sp) sp.textContent = fmt(bProfit);
   var ap = document.getElementById('sub_aProfit'); if(ap) ap.textContent = fmt(aProfit);
 
@@ -269,11 +273,11 @@ function updateSummary(bProfit, aProfit){
   var sel = document.getElementById('monthSel');
   var parts = sel.value.split('-');
   var mName = MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
-  document.getElementById('summaryTitle').textContent = mName + ' ‚Äî Summary';
+  document.getElementById('summaryTitle').textContent = mName + ' ó Summary';
 
   var profPct = varPct(bProfit, aProfit);
   document.getElementById('sumRow').innerHTML = [
-    {label:'Budgeted Net Profit', val:fmt(bProfit), col:'#475569', sub:'Revenue ‚àí All Expenses'},
+    {label:'Budgeted Net Profit', val:fmt(bProfit), col:'#475569', sub:'Revenue - All Expenses'},
     {label:'Actual Net Profit',   val:fmt(aProfit), col:aProfit>=bProfit?'#16a34a':aProfit>=0?'#ca8a04':'#dc2626', sub:varText(profPct)+' vs budget'},
     {label:'Net Variance',        val:fmt(aProfit-bProfit), col:(aProfit-bProfit)>=0?'#16a34a':'#dc2626', sub:(aProfit-bProfit)>=0?'Surplus':'Shortfall'}
   ].map(function(c){
@@ -351,8 +355,8 @@ function checkIntegration(){
   var strip = document.getElementById('intStrip');
   if(sources.length){
     strip.style.display='';
-    strip.innerHTML = '‚úÖ Live data available: '+sources.join(', ')+
-      ' ‚Äî click <strong>Import Actuals</strong> to pull into the selected month.';
+    strip.innerHTML = '? Live data available: '+sources.join(', ')+
+      ' ó click <strong>Import Actuals</strong> to pull into the selected month.';
   }
 }
 
@@ -417,9 +421,9 @@ function importAllActuals(){
   renderCatBreakdown();
 
   if(imported.length){
-    showToast('‚úÖ '+imported.slice(0,2).join(' ¬∑ ')+(imported.length>2?' +more':''));
+    showToast('? '+imported.slice(0,2).join(' ∑ ')+(imported.length>2?' +more':''));
   } else {
-    showToast('No live data found ‚Äî enter actuals manually');
+    showToast('No live data found ó enter actuals manually');
   }
 }
 
@@ -512,8 +516,8 @@ function renderTrend(){
       var pct = varPct(b, a);
       var vc = varClass(pct, cat.rev);
       var vcol = vc==='var-green'?'#166534':vc==='var-yellow'?'#92400e':vc==='var-red'?'#991b1b':'#64748b';
-      var bCell = hasB ? '<span style="color:#475569">'+fmt(b)+'</span>' : '<span style="color:#cbd5e1">‚Äî</span>';
-      var aCell = hasA ? '<span style="color:'+vcol+';font-weight:700">'+fmt(a)+'</span>' : '<span style="color:#cbd5e1">‚Äî</span>';
+      var bCell = hasB ? '<span style="color:#475569">'+fmt(b)+'</span>' : '<span style="color:#cbd5e1">ó</span>';
+      var aCell = hasA ? '<span style="color:'+vcol+';font-weight:700">'+fmt(a)+'</span>' : '<span style="color:#cbd5e1">ó</span>';
       return '<td>'+bCell+'</td><td>'+aCell+'</td>';
     }).join('');
     return '<tr'+rowCls+'><td>'+cat.label+'</td>'+cells+'</tr>';
@@ -548,13 +552,13 @@ function exportCSV(){
       var b = m[cat.bKey]||0, a = m[cat.aKey]||0;
       if(!b && !a) return;
       var varD = a - b;
-      var varP = b ? ((varD/Math.abs(b))*100).toFixed(1)+'%' : '‚Äî';
+      var varP = b ? ((varD/Math.abs(b))*100).toFixed(1)+'%' : 'ó';
       rows.push([mo, cat.label.replace(/&amp;/g,'&'), b, a, varD, varP]);
     });
     var p = computeProfit(m);
     if(p.b || p.a){
       var vD = p.a - p.b;
-      var vP = p.b ? ((vD/Math.abs(p.b))*100).toFixed(1)+'%' : '‚Äî';
+      var vP = p.b ? ((vD/Math.abs(p.b))*100).toFixed(1)+'%' : 'ó';
       rows.push([mo, 'Net Profit', p.b, p.a, vD, vP]);
     }
   });

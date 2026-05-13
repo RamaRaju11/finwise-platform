@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Refinance Analyzer — BizScale</title>
+<title>Loan Refinance Analyzer � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -90,6 +90,10 @@ button.primary:hover{background:#1d4ed8}
   .two-col{grid-template-columns:1fr}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <div class="print-hdr" id="printHdr"><strong>BizScale Loan Refinance Analysis</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span></div>
@@ -100,15 +104,15 @@ button.primary:hover{background:#1d4ed8}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="../try.html" class="back-link">← Back to Demo</a>
-<h1>🔄 Loan Refinance Analyzer</h1>
-<p class="subtitle">BizScale · Compare your existing loan against a refinance offer — monthly savings, break-even, and net benefit.</p>
+<a href="../try.html" class="back-link">? Back to Demo</a>
+<h1>?? Loan Refinance Analyzer</h1>
+<p class="subtitle">BizScale � Compare your existing loan against a refinance offer � monthly savings, break-even, and net benefit.</p>
 
 <!-- Input panel -->
 <div class="two-col">
 
   <div class="card">
-    <h2><span style="color:#dc2626">●</span> Existing Loan</h2>
+    <h2><span style="color:#dc2626">?</span> Existing Loan</h2>
     <label>Outstanding Balance ($)</label>
     <input type="number" id="eBal" placeholder="e.g. 150000" min="0" oninput="save()"/>
     <label>Annual Interest Rate (%)</label>
@@ -120,7 +124,7 @@ button.primary:hover{background:#1d4ed8}
   </div>
 
   <div class="card">
-    <h2><span style="color:#16a34a">●</span> Refinance Offer</h2>
+    <h2><span style="color:#16a34a">?</span> Refinance Offer</h2>
     <label>New Annual Interest Rate (%)</label>
     <input type="number" id="rRate" placeholder="e.g. 7.0" step="0.01" min="0" oninput="save()"/>
     <label>New Loan Term (months)</label>
@@ -135,8 +139,8 @@ button.primary:hover{background:#1d4ed8}
 </div>
 
 <div style="text-align:center;margin-bottom:16px">
-  <button class="primary" onclick="analyze()">Compare Loans →</button>
-  <button class="btn-print" onclick="printAnalysis()">🖨️ Print / Save PDF</button>
+  <button class="primary" onclick="analyze()">Compare Loans ?</button>
+  <button class="btn-print" onclick="printAnalysis()">??? Print / Save PDF</button>
 </div>
 
 <div id="results" style="display:none">
@@ -177,14 +181,14 @@ button.primary:hover{background:#1d4ed8}
   </div>
 
   <div class="card" style="text-align:right">
-    <button class="save-btn" onclick="saveRefinanceToProfile()">💾 Save Loan Details to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term — auto-fills all 40 tools</p>
+    <button class="save-btn" onclick="saveRefinanceToProfile()">?? Save Loan Details to Profile</button>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term � auto-fills all 40 tools</p>
   </div>
 
 </div>
 
 <script>
-// ── Persistence ──────────────────────────────────────────────────
+// -- Persistence --------------------------------------------------
 var LRA_KEY = 'fw_lra';
 function save(){
   try{
@@ -225,7 +229,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='✅ Saved — all 40 tools updated';
+    t.textContent='? Saved � all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -311,14 +315,14 @@ function analyze(){
 
   /* Monthly payment comparison card (P3 UX) */
   var savColor = monthlySav > 0 ? '#16a34a' : '#dc2626';
-  var savSign  = monthlySav > 0 ? '↓ Saving ' : '↑ Costing extra ';
+  var savSign  = monthlySav > 0 ? '? Saving ' : '? Costing extra ';
   document.getElementById('payCompare').innerHTML =
     '<div class="pc-box old">'+
       '<div class="pc-lbl">You Pay Now</div>'+
       '<div class="pc-amt" style="color:#dc2626">'+fmt(Math.round(eEmi))+'</div>'+
       '<div class="pc-sub">per month</div>'+
     '</div>'+
-    '<div class="pc-arrow">→</div>'+
+    '<div class="pc-arrow">?</div>'+
     '<div class="pc-box new-r">'+
       '<div class="pc-lbl">After Refi</div>'+
       '<div class="pc-amt" style="color:#16a34a">'+fmt(Math.round(newEmi))+'</div>'+
@@ -341,34 +345,34 @@ function analyze(){
       '<div style="font-size:.72rem;color:#94a3b8">After break-even, every month saves you '+fmt(monthlySav)+'</div>';
     /* P1 Calculation: warn if break-even is beyond remaining term */
     if(breakEvenMos > eMos){
-      beHtml += '<div class="be-warn">⚠️ <strong>Break-even warning:</strong> Refinancing does not break even within your current loan term. '+
+      beHtml += '<div class="be-warn">?? <strong>Break-even warning:</strong> Refinancing does not break even within your current loan term. '+
         'You need '+Math.ceil(breakEvenMos)+' months to recover closing costs, but only '+eMos+' months remain on your existing loan. '+
         'This refinance costs you money overall unless you extend your repayment period intentionally.</div>';
     }
   } else if(monthlySav <= 0){
-    beHtml = '<div class="be-warn">⚠️ Monthly payment increases with this refinance — no break-even point exists. Review the new rate and term.</div>';
+    beHtml = '<div class="be-warn">?? Monthly payment increases with this refinance � no break-even point exists. Review the new rate and term.</div>';
   }
   document.getElementById('beBar').innerHTML = beHtml;
 
   /* Verdict */
   var vHtml = '';
   if(monthlySav <= 0){
-    vHtml = '<div class="verdict bad"><div class="v-icon">❌</div><div>'+
+    vHtml = '<div class="verdict bad"><div class="v-icon">?</div><div>'+
       '<div class="v-title" style="color:#dc2626">Refinance Not Recommended</div>'+
       '<div class="v-desc">The new loan has a higher monthly payment ('+fmt(newEmi)+' vs '+fmt(eEmi)+'). Unless you specifically need to extend the term for cash-flow reasons, keeping your existing loan is better.</div>'+
       '</div></div>';
   } else if(netBenefit > 0 && breakEvenMos <= 24){
-    vHtml = '<div class="verdict good"><div class="v-icon">✅</div><div>'+
+    vHtml = '<div class="verdict good"><div class="v-icon">?</div><div>'+
       '<div class="v-title" style="color:#166534">Refinance Recommended</div>'+
       '<div class="v-desc">You\'ll save '+fmt(monthlySav)+'/month and break even in '+Math.ceil(breakEvenMos)+' months. Total net benefit after fees: '+fmt(netBenefit)+'. Proceed if your credit score supports the new rate.</div>'+
       '</div></div>';
   } else if(netBenefit > 0){
-    vHtml = '<div class="verdict neutral"><div class="v-icon">⚠️</div><div>'+
+    vHtml = '<div class="verdict neutral"><div class="v-icon">??</div><div>'+
       '<div class="v-title" style="color:#92400e">Possibly Worth It</div>'+
       '<div class="v-desc">Monthly savings of '+fmt(monthlySav)+' exist, but break-even takes '+Math.ceil(breakEvenMos)+' months. If you plan to keep the loan for at least that long, net benefit is '+fmt(netBenefit)+'.</div>'+
       '</div></div>';
   } else {
-    vHtml = '<div class="verdict bad"><div class="v-icon">❌</div><div>'+
+    vHtml = '<div class="verdict bad"><div class="v-icon">?</div><div>'+
       '<div class="v-title" style="color:#dc2626">Net Loss After Fees</div>'+
       '<div class="v-desc">Even with monthly savings, the closing fees ('+fmt(rFees)+') exceed the total interest savings over the loan term. Negotiate lower fees or a better rate before proceeding.</div>'+
       '</div></div>';
@@ -378,10 +382,10 @@ function analyze(){
   /* Insights */
   var items = [];
   if(eRate - rRate >= 1.5) items.push({cls:'good', text:'A rate reduction of '+(eRate-rRate).toFixed(2)+'% is significant. Over the life of the refinanced loan, you\'ll pay '+fmt(Math.abs(intSavings))+' less in interest.'});
-  if(rTerm > eMos) items.push({cls:'warn', text:'The new term ('+rTerm+' months) is longer than your remaining term ('+eMos+' months). Lower monthly payments come at the cost of paying interest for longer — make sure the net benefit still holds.'});
-  if(rFees > monthlySav * 12 * 2) items.push({cls:'warn', text:'Closing fees of '+fmt(rFees)+' are high relative to savings. Try negotiating a fee waiver or lender credit — even reducing fees by 50% would cut break-even from '+Math.ceil(breakEvenMos)+' to '+Math.ceil(breakEvenMos/2)+' months.'});
+  if(rTerm > eMos) items.push({cls:'warn', text:'The new term ('+rTerm+' months) is longer than your remaining term ('+eMos+' months). Lower monthly payments come at the cost of paying interest for longer � make sure the net benefit still holds.'});
+  if(rFees > monthlySav * 12 * 2) items.push({cls:'warn', text:'Closing fees of '+fmt(rFees)+' are high relative to savings. Try negotiating a fee waiver or lender credit � even reducing fees by 50% would cut break-even from '+Math.ceil(breakEvenMos)+' to '+Math.ceil(breakEvenMos/2)+' months.'});
   if(monthlySav > 0 && breakEvenMos <= 6) items.push({cls:'good', text:'Break-even in only '+Math.ceil(breakEvenMos)+' months is excellent. Any savings beyond that point flow directly to your bottom line.'});
-  if(!items.length) items.push({cls:'', text:'Review your credit report before applying — each 0.5% rate improvement on '+fmt(eBal)+' saves you roughly '+fmt(eBal*0.005/12)+'/month.'});
+  if(!items.length) items.push({cls:'', text:'Review your credit report before applying � each 0.5% rate improvement on '+fmt(eBal)+' saves you roughly '+fmt(eBal*0.005/12)+'/month.'});
 
   document.getElementById('insightList').innerHTML = items.map(function(i){
     return '<li class="insight-item'+(i.cls?' '+i.cls:'')+'">'+i.text+'</li>';
@@ -397,7 +401,7 @@ function printAnalysis(){
 }
 
 (function(){
-  // 1. Restore from LRA_KEY (user's own previous inputs — highest priority)
+  // 1. Restore from LRA_KEY (user's own previous inputs � highest priority)
   var restoredFromSave = false;
   try{
     var saved = JSON.parse(localStorage.getItem(LRA_KEY)||'null');
@@ -438,11 +442,11 @@ function printAnalysis(){
       if(parseFloat(biggest.balance) > 0){
         var banner = document.createElement('div');
         banner.style.cssText = 'background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
-        banner.innerHTML = '📊 <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
-          ' found in Repayment Optimizer</strong> — largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
+        banner.innerHTML = '?? <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
+          ' found in Repayment Optimizer</strong> � largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
           ' $' + Number(biggest.balance).toLocaleString() + ' @ ' + biggest.rate + '% ' +
           '&mdash; <button onclick="importFromOptimizer(this)" style="background:#2563eb;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Use as Existing Loan</button>' +
-          ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">✕</button>';
+          ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">?</button>';
         var firstCard = document.querySelector('.card');
         if(firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
       }

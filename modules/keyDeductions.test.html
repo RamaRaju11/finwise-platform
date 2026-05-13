@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Key Deductions Calculator — BizScale</title>
+<title>Key Deductions Calculator � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
@@ -74,11 +74,11 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .fw-toast.toast-err{background:#dc2626}
 .disclaimer{font-size:.72rem;color:#94a3b8;line-height:1.6;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #e2e8f0}
 
-/* ── SYNC BANNER ── */
+/* -- SYNC BANNER -- */
 .sync-band{background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:9px 16px;margin-bottom:16px;font-size:.8rem;color:#166534;align-items:center;gap:10px;flex-wrap:wrap}
 .sync-pill{background:#dcfce7;border-radius:999px;padding:2px 10px;font-weight:800;font-size:.72rem;color:#166534;border:1px solid #86efac;white-space:nowrap}
 
-/* ── VEHICLE COMPARISON ── */
+/* -- VEHICLE COMPARISON -- */
 .veh-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 @media(max-width:580px){.veh-cmp{grid-template-columns:1fr}}
 .veh-box{border-radius:10px;padding:18px;border:2px solid #e2e8f0;text-align:center;background:#f8fafc}
@@ -90,7 +90,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 .veh-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800}
 .vb-win{background:#22c55e;color:#fff}.vb-lose{background:#e2e8f0;color:#94a3b8}
 
-/* ── PRINT / EXPORT ── */
+/* -- PRINT / EXPORT -- */
 .print-hdr{display:none}
 .btn-export{padding:9px 22px;background:#7c3aed;color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif;margin-left:12px}
 .btn-export:hover{background:#6d28d9}
@@ -106,6 +106,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
 }
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -120,21 +124,21 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="print-hdr-name" id="printBizName">Key Deductions Report</div>
   <div class="print-hdr-meta" id="printMeta"></div>
 </div>
-<h1>💼 Key Deductions Calculator</h1>
-<p class="subtitle">Home office, mileage log, and Section 179 equipment deductions — maximize your Schedule C write-offs.</p>
+<h1>?? Key Deductions Calculator</h1>
+<p class="subtitle">Home office, mileage log, and Section 179 equipment deductions � maximize your Schedule C write-offs.</p>
 <div id="syncBand" class="sync-band no-print" style="display:none">
-  <span>✓ Deductions synced to Tax Estimator &amp; Tax Command Center:</span>
+  <span>? Deductions synced to Tax Estimator &amp; Tax Command Center:</span>
   <span id="syncPills" style="display:flex;gap:6px;flex-wrap:wrap"></span>
   <span style="margin-left:auto;font-size:.7rem;color:#94a3b8">Updates automatically as you enter data</span>
 </div>
 
 <div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('home')" id="tbtn-home">🏠 Home Office</button>
-  <button class="tab-btn" onclick="switchTab('mileage')" id="tbtn-mileage">🚗 Mileage Log</button>
-  <button class="tab-btn" onclick="switchTab('s179')" id="tbtn-s179">🏭 Section 179</button>
+  <button class="tab-btn active" onclick="switchTab('home')" id="tbtn-home">?? Home Office</button>
+  <button class="tab-btn" onclick="switchTab('mileage')" id="tbtn-mileage">?? Mileage Log</button>
+  <button class="tab-btn" onclick="switchTab('s179')" id="tbtn-s179">?? Section 179</button>
 </div>
 
-<!-- ══════════════ HOME OFFICE ══════════════ -->
+<!-- -------------- HOME OFFICE -------------- -->
 <div id="panel-home" class="panel active">
   <div class="card">
     <div class="card-title">Home Office Setup</div>
@@ -179,14 +183,14 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     </div>
     <div class="card" id="ho-cmp"></div>
   </div>
-  <div class="info-box">ℹ️ <strong>Exclusive &amp; Regular Use required.</strong> The space must be used only for business, every working day. Simplified method: no depreciation recapture. Regular method (Form 8829): larger deduction but requires tracking actual expenses.</div>
+  <div class="info-box">?? <strong>Exclusive &amp; Regular Use required.</strong> The space must be used only for business, every working day. Simplified method: no depreciation recapture. Regular method (Form 8829): larger deduction but requires tracking actual expenses.</div>
 </div>
 
-<!-- ══════════════ MILEAGE ══════════════ -->
+<!-- -------------- MILEAGE -------------- -->
 <div id="panel-mileage" class="panel">
   <div class="card no-print">
     <div class="card-title">Vehicle Method Comparison</div>
-    <p style="font-size:.8rem;color:#64748b;margin-bottom:14px">Compare <strong>Standard Mileage Rate</strong> (IRS cents/mile × business miles) vs. <strong>Actual Cost Method</strong> (real vehicle expenses × business-use %). Take whichever is larger — but you must pick one method per vehicle and stick with it.</p>
+    <p style="font-size:.8rem;color:#64748b;margin-bottom:14px">Compare <strong>Standard Mileage Rate</strong> (IRS cents/mile � business miles) vs. <strong>Actual Cost Method</strong> (real vehicle expenses � business-use %). Take whichever is larger � but you must pick one method per vehicle and stick with it.</p>
     <div class="g3">
       <div><label>Total Miles Driven (all purposes)</label><input type="number" id="vc-total" placeholder="e.g. 15000" min="0" oninput="calcVehicle()"/></div>
       <div><label>Business Miles</label><input type="number" id="vc-biz" placeholder="e.g. 6000" min="0" oninput="calcVehicle()"/></div>
@@ -197,7 +201,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         </select>
       </div>
     </div>
-    <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin:14px 0 8px">Annual Vehicle Expenses — Actual Cost Method</div>
+    <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin:14px 0 8px">Annual Vehicle Expenses � Actual Cost Method</div>
     <div class="g3">
       <div><label>Gas / Fuel ($)</label><input type="number" id="vc-gas" placeholder="0" min="0" oninput="calcVehicle()"/></div>
       <div><label>Insurance ($)</label><input type="number" id="vc-ins" placeholder="0" min="0" oninput="calcVehicle()"/></div>
@@ -248,7 +252,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   </div>
 </div>
 
-<!-- ══════════════ SECTION 179 ══════════════ -->
+<!-- -------------- SECTION 179 -------------- -->
 <div id="panel-s179" class="panel">
   <div class="card">
     <div class="card-title">Section 179 Setup</div>
@@ -280,8 +284,8 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
           <option value="software">Software</option>
           <option value="furniture">Office Furniture</option>
           <option value="improvement">Qualified Improvement</option>
-          <option value="vehicle-light">Vehicle ≤6,000 lbs (passenger)</option>
-          <option value="vehicle-suv">Heavy SUV (6,001–14,000 lbs)</option>
+          <option value="vehicle-light">Vehicle =6,000 lbs (passenger)</option>
+          <option value="vehicle-suv">Heavy SUV (6,001�14,000 lbs)</option>
           <option value="vehicle-work">Work Truck / Cargo Van (&gt;6,000 lbs)</option>
         </select>
       </div>
@@ -290,7 +294,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <div style="margin-top:12px"><button class="btn-add" onclick="addAsset()">+ Add Asset</button></div>
   </div>
   <div class="card">
-    <div class="card-title">Deduction Summary — <span id="s179-yr-lbl"></span></div>
+    <div class="card-title">Deduction Summary � <span id="s179-yr-lbl"></span></div>
     <div class="stat-row" id="s179-stats"></div>
     <div id="s179-tbl"></div>
     <div id="s179-bk" style="margin-top:16px"></div>
@@ -299,17 +303,17 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- SAVE / EXPORT -->
 <div class="card save-card">
-  <button class="save-btn" onclick="saveToProfile()">💾 Save Deduction Summary to Profile</button>
-  <button class="btn-export no-print" onclick="exportPDF()">📄 Export for CPA</button>
+  <button class="save-btn" onclick="saveToProfile()">?? Save Deduction Summary to Profile</button>
+  <button class="btn-export no-print" onclick="exportPDF()">?? Export for CPA</button>
   <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves estimated deduction totals to your BizScale profile. Export creates a print-ready PDF for your CPA.</p>
 </div>
 <div class="disclaimer">
-  <strong>Disclaimer:</strong> IRS rates: 2024 mileage 67¢/mi, 2025 70¢/mi. Section 179 limits change annually. Home office requires exclusive/regular business use. Vehicle luxury-auto caps and bonus depreciation phase-down (60% in 2024, 40% in 2025, 20% in 2026) apply. Not tax advice — consult a CPA.
+  <strong>Disclaimer:</strong> IRS rates: 2024 mileage 67�/mi, 2025 70�/mi. Section 179 limits change annually. Home office requires exclusive/regular business use. Vehicle luxury-auto caps and bonus depreciation phase-down (60% in 2024, 40% in 2025, 20% in 2026) apply. Not tax advice � consult a CPA.
 </div>
 </div>
 
 <script>
-/* ── CONSTANTS ── */
+/* -- CONSTANTS -- */
 var ML_RATES = {
   2026:{biz:.70,med:.21,cha:.14},
   2025:{biz:.70,med:.21,cha:.14},
@@ -327,7 +331,7 @@ var S179 = {
   2022:{lim:1080000,po:2700000,bon:1.00,vlight:11200,vsuv:27000}
 };
 
-/* ── STATE ── */
+/* -- STATE -- */
 var _hoMethod = 'simplified';
 var _hoSetup = {};
 var _mlTrips = [];
@@ -337,7 +341,7 @@ var _s179Setup = {year:2024,income:0};
 var _vcSetup = {};
 var _toastTimer = null;
 
-/* ── INIT ── */
+/* -- INIT -- */
 window.onload = function(){
   var curYr = new Date().getFullYear();
   try{var s=localStorage.getItem('fw_ho'); if(s){_hoSetup=JSON.parse(s);_hoMethod=_hoSetup.method||'simplified';}}catch(e){}
@@ -377,7 +381,7 @@ function persist(){
   localStorage.setItem('fw_s179_setup',JSON.stringify(_s179Setup));
 }
 
-/* ── TABS ── */
+/* -- TABS -- */
 function switchTab(n){
   ['home','mileage','s179'].forEach(function(t){
     document.getElementById('panel-'+t).classList.remove('active');
@@ -387,9 +391,9 @@ function switchTab(n){
   document.getElementById('tbtn-'+n).classList.add('active');
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    HOME OFFICE
-══════════════════════════════════════════ */
+------------------------------------------ */
 function setHOMethod(m){
   _hoMethod=m;
   document.getElementById('hm-simp').classList.toggle('active',m==='simplified');
@@ -465,7 +469,7 @@ function calcHO(){
     if(s.rep>0)  bk+=br('Repairs & Maintenance',fmtD(s.rep));
     if(s.oth>0)  bk+=br('Other',fmtD(s.oth));
     bk+=br('Total Home Expenses',fmtD(totalExp));
-    bk+=br('× Business Use %','× '+(bizPct*100).toFixed(2)+'%');
+    bk+=br('� Business Use %','� '+(bizPct*100).toFixed(2)+'%');
     if(s.inc>0&&totalExp*bizPct>s.inc) bk+=br('Limited to net income',fmtD(s.inc));
     bk+=bt('Regular Method Deduction',fmtD(reg));
   }
@@ -473,23 +477,23 @@ function calcHO(){
 
   var mkBox=function(title,val,hl){
     return '<div class="cmp-box" style="border-color:'+(hl?'#86efac':'#e2e8f0')+';background:'+(hl?'#f0fdf4':'#f8fafc')+'">'+
-      '<div style="font-size:.75rem;font-weight:800;color:'+(hl?'#16a34a':'#94a3b8')+';margin-bottom:6px">'+title+(hl?' ← Better':'')+
+      '<div style="font-size:.75rem;font-weight:800;color:'+(hl?'#16a34a':'#94a3b8')+';margin-bottom:6px">'+title+(hl?' ? Better':'')+
       '</div><div style="font-size:1rem;font-weight:900;color:#1e293b">'+val+'</div></div>';
   };
   document.getElementById('ho-cmp').innerHTML=
     '<div style="font-size:.82rem;font-weight:800;color:#475569;margin-bottom:12px">Method Comparison</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
-    mkBox('Simplified','$5 × '+Math.min(s.off,300)+' sq ft = '+fmtD(simp),better==='simplified')+
-    mkBox('Regular Method',bizPct>0?(bizPct*100).toFixed(1)+'% × expenses = '+fmtD(reg):'Enter expenses →',better==='regular')+
+    mkBox('Simplified','$5 � '+Math.min(s.off,300)+' sq ft = '+fmtD(simp),better==='simplified')+
+    mkBox('Regular Method',bizPct>0?(bizPct*100).toFixed(1)+'% � expenses = '+fmtD(reg):'Enter expenses ?',better==='regular')+
     '</div>'+
     '<div style="font-size:.75rem;color:#64748b;margin-top:10px">'+
-    (better==='simplified'?'✓ Simplified gives you a larger deduction in this scenario.':'✓ Regular method gives you a larger deduction — use Form 8829.')+
+    (better==='simplified'?'? Simplified gives you a larger deduction in this scenario.':'? Regular method gives you a larger deduction � use Form 8829.')+
     '</div><div style="font-size:.72rem;color:#94a3b8;margin-top:6px">* Est. tax savings based on 25% marginal rate. Actual varies by your effective rate.</div>';
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    MILEAGE LOG
-══════════════════════════════════════════ */
+------------------------------------------ */
 function applyMLToUI(){
   document.getElementById('ml-yr').value=_mlSetup.year||2024;
   document.getElementById('ml-veh').value=_mlSetup.vehicle||'';
@@ -526,7 +530,7 @@ function addTrip(){
   document.getElementById('ml-pur').value='';
   document.getElementById('ml-mi').value='';
   renderMileage();
-  showToast('Trip added — '+fmtD(ded)+' deduction');
+  showToast('Trip added � '+fmtD(ded)+' deduction');
 }
 
 function delTrip(id){
@@ -577,17 +581,17 @@ function renderMileage(){
       '<td class="r">'+t.miles+'</td>'+
       '<td class="r">'+c(t.rate)+'/mi</td>'+
       '<td class="r">'+fmtD(t.deduction)+'</td>'+
-      '<td><button class="btn-sm btn-danger" onclick="delTrip(\''+t.id+'\')">✕</button></td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delTrip(\''+t.id+'\')">?</button></td>'+
       '</tr>';
   });
   tbl+='</tbody></table></div>';
-  if(bMi>0) tbl+='<div class="info-box">📋 <strong>IRS Log:</strong> This log satisfies IRS requirements — date, destination, purpose, and miles per trip. Total: '+bMi.toLocaleString()+' mi × '+c(r.biz)+'/mi = '+fmtD(bDed)+'.</div>';
+  if(bMi>0) tbl+='<div class="info-box">?? <strong>IRS Log:</strong> This log satisfies IRS requirements � date, destination, purpose, and miles per trip. Total: '+bMi.toLocaleString()+' mi � '+c(r.biz)+'/mi = '+fmtD(bDed)+'.</div>';
   document.getElementById('ml-table').innerHTML=tbl;
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    SECTION 179
-══════════════════════════════════════════ */
+------------------------------------------ */
 function updateS179Limits(){
   var yr=parseInt(document.getElementById('s179-yr').value)||2024;
   var lim=S179[yr]||S179[2024];
@@ -702,7 +706,7 @@ function renderS179(){
       '<td class="r">'+fmtD(c.elig)+'</td>'+
       '<td class="r" style="color:#2563eb;font-weight:800">'+fmtD(c.s179)+'</td>'+
       '<td class="r" style="color:#7c3aed;font-weight:800">'+fmtD(c.bonus)+'</td>'+
-      '<td><button class="btn-sm btn-danger" onclick="delAsset(\''+c.a.id+'\')">✕</button></td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delAsset(\''+c.a.id+'\')">?</button></td>'+
       '</tr>';
   });
   tbl+='</tbody></table>';
@@ -727,9 +731,9 @@ function renderS179(){
 
   var extra='';
   if(income>0&&totYr1>0)
-    extra+='<div class="info-box" style="margin-top:10px">💰 Estimated tax savings at 25% marginal rate: <strong>'+fmtD(totYr1*.25)+'</strong>.</div>';
+    extra+='<div class="info-box" style="margin-top:10px">?? Estimated tax savings at 25% marginal rate: <strong>'+fmtD(totYr1*.25)+'</strong>.</div>';
   if(reduction>0)
-    extra+='<div class="warn-box" style="margin-top:8px">⚠️ Phase-out: total eligible cost exceeds '+yr+' threshold of '+fmtBig(lim.po)+'. Section 179 reduced dollar-for-dollar.</div>';
+    extra+='<div class="warn-box" style="margin-top:8px">?? Phase-out: total eligible cost exceeds '+yr+' threshold of '+fmtBig(lim.po)+'. Section 179 reduced dollar-for-dollar.</div>';
 
   document.getElementById('s179-bk').innerHTML='<table class="breakdown">'+bk+'</table>'+extra;
   pushDeductions();
@@ -746,7 +750,7 @@ function albl(t){
     improvement:'Building','vehicle-light':'Vehicle <6K','vehicle-suv':'Heavy SUV','vehicle-work':'Work Truck'}[t]||t;
 }
 
-/* ── PROFILE ── */
+/* -- PROFILE -- */
 function saveProfile(u){
   try{
     var idx=parseInt(localStorage.getItem('fw_active_idx')||'0');
@@ -776,9 +780,9 @@ function saveToProfile(){
   showToast('Deduction totals saved to profile');
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    VEHICLE METHOD COMPARISON
-══════════════════════════════════════════ */
+------------------------------------------ */
 function calcVehicle(){
   var total = parseFloat(document.getElementById('vc-total').value)||0;
   var biz   = parseFloat(document.getElementById('vc-biz').value)||0;
@@ -807,30 +811,30 @@ function calcVehicle(){
     '<div class="veh-box '+(winner==='standard'?'winner':'')+'">'+
     '<div class="veh-lbl">Standard Mileage Rate</div>'+
     '<div class="veh-amt">'+fmtD(stdDed)+'</div>'+
-    '<div class="veh-sub">'+biz.toLocaleString()+' mi × '+c(r.biz)+'/mi</div>'+
-    '<span class="veh-badge '+(winner==='standard'?'vb-win':'vb-lose')+'">'+(winner==='standard'?'✓ Better':'—')+'</span>'+
+    '<div class="veh-sub">'+biz.toLocaleString()+' mi � '+c(r.biz)+'/mi</div>'+
+    '<span class="veh-badge '+(winner==='standard'?'vb-win':'vb-lose')+'">'+(winner==='standard'?'? Better':'�')+'</span>'+
     '</div>'+
     '<div class="veh-box '+(winner==='actual'?'winner':'')+'">'+
     '<div class="veh-lbl">Actual Cost Method</div>'+
     '<div class="veh-amt">'+fmtD(actualDed)+'</div>'+
-    '<div class="veh-sub">'+(bizPct*100).toFixed(1)+'% × '+fmtD(totalExp)+' expenses</div>'+
-    '<span class="veh-badge '+(winner==='actual'?'vb-win':'vb-lose')+'">'+(winner==='actual'?'✓ Better':'—')+'</span>'+
+    '<div class="veh-sub">'+(bizPct*100).toFixed(1)+'% � '+fmtD(totalExp)+' expenses</div>'+
+    '<span class="veh-badge '+(winner==='actual'?'vb-win':'vb-lose')+'">'+(winner==='actual'?'? Better':'�')+'</span>'+
     '</div></div>';
 
   if(diff > 0){
     html += '<div class="info-box" style="margin-top:12px">'+
-      '💡 <strong>'+(winner==='standard'?'Standard mileage rate':'Actual cost method')+
+      '?? <strong>'+(winner==='standard'?'Standard mileage rate':'Actual cost method')+
       ' saves you an extra '+fmtD(diff)+'</strong> this year. '+
-      (winner==='standard'?'Just log your miles — no receipts needed for fuel or repairs.':
+      (winner==='standard'?'Just log your miles � no receipts needed for fuel or repairs.':
       'Keep receipts for gas, insurance, maintenance, registration, and depreciation. Once you choose actual cost for a vehicle, you must use it for the life of the vehicle.')+
       ' Est. tax savings at 25%: '+fmtD(Math.max(stdDed,actualDed)*0.25)+'.</div>';
   }
   el.innerHTML = html;
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    PUSH DEDUCTIONS TO SHARED KEY
-══════════════════════════════════════════ */
+------------------------------------------ */
 function pushDeductions(){
   var s = _hoSetup;
   var bizPct = s.tot>0 ? s.off/s.tot : 0;
@@ -857,34 +861,34 @@ function pushDeductions(){
   var band = document.getElementById('syncBand');
   if(!band) return;
   var pills = [];
-  if(hoDed>0) pills.push('<span class="sync-pill">🏠 Home Office '+fmtD(hoDed)+'</span>');
+  if(hoDed>0) pills.push('<span class="sync-pill">?? Home Office '+fmtD(hoDed)+'</span>');
   var mlYr = parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
-  if(byYear[mlYr]&&byYear[mlYr].mileage>0) pills.push('<span class="sync-pill">🚗 Mileage '+fmtD(byYear[mlYr].mileage)+'</span>');
+  if(byYear[mlYr]&&byYear[mlYr].mileage>0) pills.push('<span class="sync-pill">?? Mileage '+fmtD(byYear[mlYr].mileage)+'</span>');
   var s179Yr = parseInt(document.getElementById('s179-yr').value)||mlYr;
-  if(byYear[s179Yr]&&byYear[s179Yr].s179>0) pills.push('<span class="sync-pill">💻 Equipment '+fmtD(byYear[s179Yr].s179)+'</span>');
+  if(byYear[s179Yr]&&byYear[s179Yr].s179>0) pills.push('<span class="sync-pill">?? Equipment '+fmtD(byYear[s179Yr].s179)+'</span>');
   if(pills.length>0){
     document.getElementById('syncPills').innerHTML = pills.join('');
     band.style.display = 'flex';
   }
 }
 
-/* ══════════════════════════════════════════
+/* ------------------------------------------
    EXPORT PDF
-══════════════════════════════════════════ */
+------------------------------------------ */
 function exportPDF(){
   try{
     var p = JSON.parse(localStorage.getItem('fw_profile')||'{}');
-    document.getElementById('printBizName').textContent = (p.name||p.biz||'My Business')+' — Key Deductions Report';
+    document.getElementById('printBizName').textContent = (p.name||p.biz||'My Business')+' � Key Deductions Report';
   }catch(e){ document.getElementById('printBizName').textContent = 'Key Deductions Report'; }
   var yr = parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
   document.getElementById('printMeta').textContent = 'Tax Year: '+yr+' | Generated: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   window.print();
 }
 
-/* ── UTILS ── */
+/* -- UTILS -- */
 function fmtD(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-US');}
 function fmtBig(n){return n>=1000000?'$'+(n/1000000).toFixed(2)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n;}
-function c(r){return Math.round(r*100)+'¢';}
+function c(r){return Math.round(r*100)+'�';}
 function zz(n){return String(n).padStart(2,'0');}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function dd(d){var p=d.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}

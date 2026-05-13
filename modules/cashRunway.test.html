@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Cash Runway Calculator — BizScale</title>
+<title>Cash Runway Calculator � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -93,6 +93,10 @@ button.print-btn:hover{background:#e2e8f0}
 .explain-body li{font-size:.8rem;color:#374151;margin-bottom:3px;line-height:1.45}
 .explain-example{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 11px;border-radius:0 5px 5px 0;margin-top:6px;font-size:.8rem;color:#78350f;line-height:1.5}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -102,9 +106,9 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="../try.html" class="back-link">← Back to Demo</a>
+<a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Cash Runway Calculator</h1>
-<p class="subtitle">BizScale · How many months can your business survive if revenue drops?</p>
+<p class="subtitle">BizScale � How many months can your business survive if revenue drops?</p>
 
 <div class="conn-band" id="bankBanner"></div>
 <div class="conn-band" id="calendarBanner"></div>
@@ -137,8 +141,8 @@ button.print-btn:hover{background:#e2e8f0}
       <input type="number" id="ownerPay" placeholder="e.g. 2000" oninput="saveCRInputs()"/>
     </div>
   </div>
-  <button class="primary" onclick="calculate()">Calculate Runway →</button>
-  <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button class="primary" onclick="calculate()">Calculate Runway ?</button>
+  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
 </div>
 
 <div id="resultsSection" style="display:none">
@@ -148,7 +152,7 @@ button.print-btn:hover{background:#e2e8f0}
   <div class="card">
     <h2>Runway Scenarios</h2>
     <div class="exp-cut-wrap">
-      <div class="exp-cut-label"><span>✂️ Cut Expenses By</span><span class="cut-val" id="expCutVal">0%</span></div>
+      <div class="exp-cut-label"><span>?? Cut Expenses By</span><span class="cut-val" id="expCutVal">0%</span></div>
       <input type="range" id="expCutSlider" min="0" max="30" step="5" value="0" style="width:100%;accent-color:#2563eb" oninput="updateExpCut()"/>
       <div style="font-size:.7rem;color:#94a3b8;display:flex;justify-content:space-between;margin-top:2px"><span>No cuts</span><span>30% reduction</span></div>
     </div>
@@ -184,25 +188,25 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" style="text-align:right">
     <button class="save-btn" onclick="saveCashRunwayToProfile()">&#128190; Save Numbers to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, expenses, EMI &amp; reserve — auto-fills all 40 tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, expenses, EMI &amp; reserve � auto-fills all 40 tools</p>
   </div>
 
 </div>
 
 <script>
-// ── Plain-English Explain Helpers ────────────────────────────────
+// -- Plain-English Explain Helpers --------------------------------
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'▲':'▼');
+  btn.innerHTML='[Why this matters] '+(open?'?':'?');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ▼</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">📌 Example: '+example+'</div>'+
+    '<div class="explain-example">?? Example: '+example+'</div>'+
     '</div></div>';
 }
 
@@ -243,15 +247,15 @@ function renderCalendarBanner(){
   var el=document.getElementById('calendarBanner');
   if(!d.billCount&&!d.incomeEvents&&!d.empCount){el.className='conn-band';return;}
   var pills='';
-  if(d.billCount) pills+='<span class="cb-pill">🧾 '+d.billCount+' bills · '+fmt(d.totalBills)+'/mo</span>';
-  if(d.empCount) pills+='<span class="cb-pill">👤 '+d.empCount+' employees · '+fmt(d.monthlyWages)+'/mo wages</span>';
-  if(d.incomeEvents) pills+='<span class="cb-pill">💵 '+d.incomeEvents+' income events · '+fmt(d.monthlyIncome)+'/mo</span>';
+  if(d.billCount) pills+='<span class="cb-pill">?? '+d.billCount+' bills � '+fmt(d.totalBills)+'/mo</span>';
+  if(d.empCount) pills+='<span class="cb-pill">?? '+d.empCount+' employees � '+fmt(d.monthlyWages)+'/mo wages</span>';
+  if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events � '+fmt(d.monthlyIncome)+'/mo</span>';
   el.className='conn-band has-data';
-  el.innerHTML='<div class="cb-icon">🗓️</div>'
+  el.innerHTML='<div class="cb-icon">???</div>'
     +'<div class="cb-body">'
-    +'<div class="cb-title">Connected data available — import for accurate runway</div>'
+    +'<div class="cb-title">Connected data available � import for accurate runway</div>'
     +'<div class="cb-pills">'+pills+'</div>'
-    +'<button class="cb-btn" onclick="importFromCalendar()">⬇️ Import bills + wages + revenue</button>'
+    +'<button class="cb-btn" onclick="importFromCalendar()">?? Import bills + wages + revenue</button>'
     +'</div>';
 }
 
@@ -262,7 +266,7 @@ function importFromCalendar(){
   if(totalFixed>0){document.getElementById('fixedCosts').value=Math.round(totalFixed);msg.push('Fixed Costs = '+fmt(totalFixed)+' (bills + wages)');}
   if(d.monthlyIncome){document.getElementById('revenue').value=Math.round(d.monthlyIncome);msg.push('Revenue = '+fmt(d.monthlyIncome));}
   var t=document.getElementById('fwToast');
-  t.textContent='✅ Imported: '+msg.join(', ');
+  t.textContent='? Imported: '+msg.join(', ');
   t.style.display='block';
   setTimeout(function(){t.style.display='none';},3000);
 }
@@ -276,7 +280,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='✅ Saved — all 40 tools updated';
+    t.textContent='? Saved � all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -303,7 +307,7 @@ function fmtRunway(months){
   return months;
 }
 function fmtRunwayText(months){
-  if(months === -1) return 'N/A — no burn';
+  if(months === -1) return 'N/A � no burn';
   if(months >= 999) return 'indefinite';
   return months + ' months';
 }
@@ -350,10 +354,10 @@ function renderScenarios(expCutPct){
       '<div style="grid-column:1/-1" class="scenario-box safe">' +
         '<div class="sc-label safe">No Monthly Burn</div>' +
         '<div class="sc-months safe">N/A</div>' +
-        '<div class="sc-sub">Monthly expenses are zero — cash reserve is not being consumed</div>' +
+        '<div class="sc-sub">Monthly expenses are zero � cash reserve is not being consumed</div>' +
       '</div>';
     document.getElementById('barSection').innerHTML =
-      '<div style="padding:10px 0;color:#16a34a;font-weight:700">&#10003; No monthly burn recorded — runway is indefinite.</div>';
+      '<div style="padding:10px 0;color:#16a34a;font-weight:700">&#10003; No monthly burn recorded � runway is indefinite.</div>';
     document.getElementById('thresholdGrid').innerHTML = '';
     document.getElementById('recBox').textContent = 'Zero burn rate detected. If correct, your cash reserve lasts indefinitely. Verify that all costs are entered above.';
     document.getElementById('revDropResult').innerHTML = '';
@@ -374,7 +378,7 @@ function renderScenarios(expCutPct){
     sgHtml += '<div class="scenario-box '+col+'">';
     sgHtml += '<div class="sc-label '+col+'">'+s.label+(expCutPct>0?' <span style="font-size:.65rem;font-weight:400">&minus;'+expCutPct+'% costs</span>':'')+'</div>';
     sgHtml += '<div class="sc-months '+col+'">'+fmtRunway(months)+'</div>';
-    sgHtml += '<div class="sc-sub">'+(months>=999?'Business survives indefinitely':months===-1?'N/A — no burn':months+' months of runway')+'</div>';
+    sgHtml += '<div class="sc-sub">'+(months>=999?'Business survives indefinitely':months===-1?'N/A � no burn':months+' months of runway')+'</div>';
     sgHtml += '</div>';
   });
   document.getElementById('scenarioGrid').innerHTML = sgHtml;
@@ -397,15 +401,15 @@ function renderScenarios(expCutPct){
     '<div class="threshold-box"><div class="th-label">Minimum Revenue to Survive</div><div class="th-value">'+fmt(totalMonthly)+'/mo</div><div class="th-sub">Covers all costs'+(expCutPct>0?' after '+expCutPct+'% cut':'')+'</div></div>'+
     '<div class="threshold-box"><div class="th-label">Safe Revenue Target (20% buffer)</div><div class="th-value">'+fmt(totalMonthly*1.2)+'/mo</div><div class="th-sub">Costs + 20% safety margin</div></div>'+
     '<div class="threshold-box"><div class="th-label">Monthly Burn</div><div class="th-value">'+fmt(totalMonthly)+'/mo</div><div class="th-sub">'+(expCutPct>0?'After '+expCutPct+'% cut (was '+fmt(origMonthly)+')':'Fixed + Variable + EMI + Owner Pay')+'</div></div>'+
-    '<div class="threshold-box"><div class="th-label">Monthly Surplus / Deficit</div><div class="th-value" style="color:'+(revenue>=totalMonthly?'#16a34a':'#dc2626')+'">'+fmt(revenue-totalMonthly)+'/mo</div><div class="th-sub">'+(revenue>=totalMonthly?'Cash positive — healthy':'Cash negative — monitor closely')+'</div></div>';
+    '<div class="threshold-box"><div class="th-label">Monthly Surplus / Deficit</div><div class="th-value" style="color:'+(revenue>=totalMonthly?'#16a34a':'#dc2626')+'">'+fmt(revenue-totalMonthly)+'/mo</div><div class="th-sub">'+(revenue>=totalMonthly?'Cash positive � healthy':'Cash negative � monitor closely')+'</div></div>';
 
   /* Recommendation */
   var rec = '';
   if(zeroR < 3)        rec = '&#9888;&#65039; Critical: Cash reserve covers less than 3 months at zero revenue. Build at least '+fmt(totalMonthly*3)+' reserve before new debt.';
   else if(zeroR < 6)   rec = '&#9888;&#65039; Caution: '+zeroR+' months runway. Target 6+. Avoid large new loans until reserve reaches '+fmt(totalMonthly*6)+'.';
-  else if(zeroR < 12)  rec = '&#10003; Healthy: '+zeroR+' months runway is solid. New loan is manageable — keep reserve above '+fmt(totalMonthly*3)+' after EMI starts.';
+  else if(zeroR < 12)  rec = '&#10003; Healthy: '+zeroR+' months runway is solid. New loan is manageable � keep reserve above '+fmt(totalMonthly*3)+' after EMI starts.';
   else if(zeroR < 999) rec = '&#10003; Strong: '+zeroR+'+ months runway. Excellent financial resilience. New financing poses low risk.';
-  else                  rec = '&#10003; Profitable: Revenue exceeds burn rate — reserves grow each month. Excellent position.';
+  else                  rec = '&#10003; Profitable: Revenue exceeds burn rate � reserves grow each month. Excellent position.';
   document.getElementById('recBox').innerHTML = rec;
 
   /* P2 Feature: revenue drop scenario */
@@ -425,10 +429,10 @@ function renderRunwayAlert(zeroR, totalMonthly){
   if(zeroR < 3){
     cls = 'danger'; icon = '&#128308;';
     title = 'Critical: Less than 3 months of runway at zero revenue';
-    sub = 'Immediate action required — cut costs or secure emergency funding. Target minimum: '+fmt(totalMonthly*3)+' cash reserve.';
+    sub = 'Immediate action required � cut costs or secure emergency funding. Target minimum: '+fmt(totalMonthly*3)+' cash reserve.';
   } else if(zeroR < 6){
     cls = 'warn'; icon = '&#128993;';
-    title = 'Caution: ' + zeroR + ' months runway — below the 6-month safety target';
+    title = 'Caution: ' + zeroR + ' months runway � below the 6-month safety target';
     sub = 'Build reserves to '+fmt(totalMonthly*6)+' before taking on new debt or major commitments.';
   } else {
     var displayR = zeroR >= 999 ? 'Profitable (indefinite)' : zeroR + ' months';
@@ -441,17 +445,17 @@ function renderRunwayAlert(zeroR, totalMonthly){
   var explainBlock = '';
   if(zeroR < 3){
     explainBlock = explainHtml(
-      ['Less than 3 months of cash means you could close before a loan is even approved (takes 2–8 weeks)',
+      ['Less than 3 months of cash means you could close before a loan is even approved (takes 2�8 weeks)',
        'Payroll, rent, and supplier payments will be missed within weeks',
        'Investors and lenders treat under-3-month runway as a crisis signal'],
-      'You have '+fmt(_cf_reserve)+' in cash and burn '+fmt(totalMonthly)+'/month → only '+zeroR+' months until $0. Loan approval alone takes 2–6 weeks'
+      'You have '+fmt(_cf_reserve)+' in cash and burn '+fmt(totalMonthly)+'/month ? only '+zeroR+' months until $0. Loan approval alone takes 2�6 weeks'
     );
   } else if(zeroR < 6){
     explainBlock = explainHtml(
       ['Below the recommended 6-month safety buffer',
        'An unexpected expense or slow month could push you into crisis',
        'Now is the right time to cut non-essential costs and build reserves'],
-      'You have '+zeroR+' months of runway at zero revenue and burn '+fmt(totalMonthly)+'/month — you need at least 6 months to be considered safe'
+      'You have '+zeroR+' months of runway at zero revenue and burn '+fmt(totalMonthly)+'/month � you need at least 6 months to be considered safe'
     );
   }
   el.innerHTML = '<div class="ra-icon">'+icon+'</div><div><div class="ra-title">'+title+'</div><div class="ra-sub">'+sub+'</div>'+explainBlock+'</div>';
@@ -492,7 +496,7 @@ function renderFundraisingCalc(){
   var expCutPct    = parseInt(document.getElementById('expCutSlider').value) || 0;
   var totalMonthly = (_cf_fixed + _cf_variable + _cf_emi + _cf_owner) * (1 - expCutPct/100);
   if(totalMonthly <= 0){
-    el.innerHTML = '<div class="fund-result-box no-funds"><div class="fund-result-val" style="color:#16a34a">$0 needed &#10003;</div><div class="fund-result-desc">No monthly burn — no additional capital required.</div></div>';
+    el.innerHTML = '<div class="fund-result-box no-funds"><div class="fund-result-val" style="color:#16a34a">$0 needed &#10003;</div><div class="fund-result-desc">No monthly burn � no additional capital required.</div></div>';
     return;
   }
   var monthlyNetBurn = totalMonthly - _cf_revenue;

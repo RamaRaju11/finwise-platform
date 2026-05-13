@@ -1,9 +1,9 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Referral Tracker ‚Äî BizScale Advisor</title>
+<title>Referral Tracker ó BizScale Advisor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -40,6 +40,10 @@ select.inline:focus{outline:none;border-color:#2563eb}
 .back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
 .back-link:hover{text-decoration:underline}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
@@ -48,9 +52,9 @@ select.inline:focus{outline:none;border-color:#2563eb}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="../try.html" class="back-link">‚Üê Back to Demo</a>
+<a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Referral Tracker</h1>
-<p class="subtitle">BizScale Advisor ¬∑ Track client referrals to lenders and estimated commission earnings</p>
+<p class="subtitle">BizScale Advisor ∑ Track client referrals to lenders and estimated commission earnings</p>
 
 <div class="summary-row" id="summaryRow">
   <div class="sum-box"><div class="sum-num blue" id="s_total">0</div><div class="sum-lbl">Total Clients</div></div>
@@ -73,7 +77,7 @@ select.inline:focus{outline:none;border-color:#2563eb}
 </div>
 
 <script>
-var LENDERS_LIST = ['‚Äî Not Referred ‚Äî','SBA 7(a)','SBA Microloan','BlueVine','OnDeck','Funding Circle','Lendio','Kiva'];
+var LENDERS_LIST = ['ó Not Referred ó','SBA 7(a)','SBA Microloan','BlueVine','OnDeck','Funding Circle','Lendio','Kiva'];
 var COMMISSION = {
   'SBA 7(a)': {referred:50, applied:125, approved:400, funded:800},
   'SBA Microloan': {referred:25, applied:60, approved:150, funded:300},
@@ -100,7 +104,7 @@ function saveReferrals(){
 function setLender(clientId, val){
   if(!referralData[clientId]) referralData[clientId] = {lender:'',status:'none'};
   referralData[clientId].lender = val;
-  if(val === '‚Äî Not Referred ‚Äî') referralData[clientId].status = 'none';
+  if(val === 'ó Not Referred ó') referralData[clientId].status = 'none';
   saveReferrals();
   renderTable();
 }
@@ -113,7 +117,7 @@ function setStatus(clientId, val){
 }
 
 function commissionFor(lender, status){
-  if(!lender || lender === '‚Äî Not Referred ‚Äî') return 0;
+  if(!lender || lender === 'ó Not Referred ó') return 0;
   var c = COMMISSION[lender];
   if(!c) return 0;
   return c[status] || 0;
@@ -145,10 +149,10 @@ function renderTable(){
     '<th>Client</th><th>Industry</th><th>Lender</th><th>Status</th><th>Est. Commission</th></tr></thead><tbody>';
 
   clients.forEach(function(c){
-    var r = referralData[c.id] || {lender:'‚Äî Not Referred ‚Äî', status:'none'};
+    var r = referralData[c.id] || {lender:'ó Not Referred ó', status:'none'};
     var comm = commissionFor(r.lender, r.status);
     var statusCls = 's-'+r.status;
-    var statusLabel = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[r.status]||'‚Äî';
+    var statusLabel = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[r.status]||'ó';
 
     var lenderOpts = LENDERS_LIST.map(function(l){
       return '<option value="'+l+'"'+(r.lender===l?' selected':'')+'>'+l+'</option>';
@@ -163,7 +167,7 @@ function renderTable(){
       '<td>'+c.industry+'</td>'+
       '<td><select class="lender-select" onchange="setLender(\''+c.id+'\',this.value)">'+lenderOpts+'</select></td>'+
       '<td><select class="inline" onchange="setStatus(\''+c.id+'\',this.value)">'+statusOpts+'</select></td>'+
-      '<td>'+(comm>0?'<strong style="color:#16a34a">'+fmt(comm)+'</strong>':'<span class="commission-est">‚Äî</span>')+'</td>'+
+      '<td>'+(comm>0?'<strong style="color:#16a34a">'+fmt(comm)+'</strong>':'<span class="commission-est">ó</span>')+'</td>'+
       '</tr>';
   });
   html += '</tbody></table>';
@@ -174,7 +178,7 @@ function renderTable(){
 /* Check advisor plan */
 (function(){
   if(!localStorage.getItem('fw_advisor')){
-    document.querySelector('.subtitle').textContent = '‚ö†Ô∏è Advisor plan required. Load the Advisor demo from try.html first.';
+    document.querySelector('.subtitle').textContent = '?? Advisor plan required. Load the Advisor demo from try.html first.';
   }
   loadReferrals();
   renderTable();

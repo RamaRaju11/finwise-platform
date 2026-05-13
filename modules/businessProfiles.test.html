@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Business Profiles — BizScale</title>
+<title>Business Profiles � BizScale</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:60px}
@@ -20,7 +20,7 @@ a{text-decoration:none;color:inherit}
 .card h2{font-size:.95rem;font-weight:700;margin-bottom:.4rem;color:#1e293b}
 .card-desc{font-size:.8rem;color:#64748b;margin-bottom:14px}
 
-/* ── Usage bar ── */
+/* -- Usage bar -- */
 .usage-bar{background:#fff;border-radius:10px;padding:14px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .usage-dots{display:flex;gap:6px}
 .dot{width:22px;height:22px;border-radius:50%;background:#e2e8f0;border:2px solid #e2e8f0;transition:all .2s}
@@ -32,7 +32,7 @@ a{text-decoration:none;color:inherit}
 .btn-new:hover{background:#3730a3}
 .btn-new:disabled{background:#c7d2fe;cursor:not-allowed}
 
-/* ── Upgrade banner ── */
+/* -- Upgrade banner -- */
 .upgrade-banner{background:linear-gradient(135deg,#fef9c3,#fde68a);border:1.5px solid #f59e0b;border-radius:10px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .ub-text h3{font-size:.9rem;font-weight:800;color:#92400e;margin-bottom:3px}
 .ub-text p{font-size:.78rem;color:#b45309;line-height:1.5}
@@ -43,7 +43,7 @@ a{text-decoration:none;color:inherit}
 .ub-hint{font-size:.7rem;color:#92400e;margin-top:4px}
 .ub-hint code{background:rgba(0,0,0,.08);padding:1px 4px;border-radius:3px;font-family:monospace}
 
-/* ── Profile grid ── */
+/* -- Profile grid -- */
 .profiles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:16px}
 .profile-card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 5px rgba(0,0,0,.07);border:2px solid #e2e8f0;transition:border-color .15s;position:relative}
 .profile-card.active{border-color:#10b981}
@@ -70,7 +70,7 @@ a{text-decoration:none;color:inherit}
 .empty-state .es-icon{font-size:2.8rem;display:block;margin-bottom:10px}
 .empty-state p{font-size:.85rem;line-height:1.6}
 
-/* ── Create / Edit Form ── */
+/* -- Create / Edit Form -- */
 .form-panel{background:#fff;border-radius:10px;padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 5px rgba(0,0,0,.07);border-top:4px solid #4f46e5}
 .form-panel h3{font-size:.92rem;font-weight:800;color:#1e293b;margin-bottom:14px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
@@ -86,7 +86,7 @@ input:focus{outline:none;border-color:#4f46e5}
 .btn-save:hover{background:#3730a3}
 .btn-cancel{padding:9px 18px;background:#f1f5f9;color:#334155;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 .pw-overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);backdrop-filter:blur(4px);z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}
 .pw-box{background:#fff;border-radius:14px;padding:28px 24px;max-width:440px;width:100%;text-align:center}
 .pw-box h2{font-size:1.15rem;font-weight:800;margin:.5rem 0 .4rem}
@@ -119,22 +119,26 @@ input:focus{outline:none;border-color:#4f46e5}
 
 @media print{.pw-overlay,.form-panel,.page-header .ph-back,.usage-bar .btn-new,.pc-actions,.upgrade-banner{display:none!important}body{background:#fff}}
 </style>
+
+<!-- Multi-country localization -->
+<script src="../country-data.js"></script>
+<script src="../country-switcher.js" defer></script>
 </head>
 <body>
 
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">💼</div>
+    <div style="font-size:2.2rem">??</div>
     <h2>Business Profiles Manager</h2>
     <p>Save, switch, and manage multiple business profiles. No more re-entering numbers every time.</p>
     <div class="pw-feats">
-      <div class="pw-feat">💾 Save up to 3 profiles</div>
-      <div class="pw-feat">⚡ One-click switch</div>
-      <div class="pw-feat">✏️ Edit anytime</div>
-      <div class="pw-feat">🔗 Shared across all tools</div>
+      <div class="pw-feat">?? Save up to 3 profiles</div>
+      <div class="pw-feat">? One-click switch</div>
+      <div class="pw-feat">?? Edit anytime</div>
+      <div class="pw-feat">?? Shared across all tools</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">💳 Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro � $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -160,11 +164,11 @@ input:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">← Back to BizScale</a>
-    <h1>💼 Business Profiles Manager</h1>
+    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <h1>?? Business Profiles Manager</h1>
     <p>Save and switch between business profiles across all BizScale tools</p>
   </div>
-  <div class="ph-badge" id="planBadge">Pro · $29/month</div>
+  <div class="ph-badge" id="planBadge">Pro � $29/month</div>
 </div>
 
 <div class="wrap">
@@ -173,9 +177,9 @@ input:focus{outline:none;border-color:#4f46e5}
 
   <!-- Upgrade to unlimited banner -->
   <div class="upgrade-banner" id="upgradeBanner" style="display:none">
-    <div>⭐</div>
+    <div>?</div>
     <div class="ub-text">
-      <h3>Profile limit reached — Upgrade to Unlimited</h3>
+      <h3>Profile limit reached � Upgrade to Unlimited</h3>
       <p>Pro plan allows 3 profiles. Unlock unlimited profiles for teams managing multiple businesses.</p>
       <div class="ub-hint">Demo code: <code>FWUNLIMITED</code></div>
     </div>
@@ -192,7 +196,7 @@ input:focus{outline:none;border-color:#4f46e5}
 
   <!-- Create / Edit form -->
   <div class="form-panel" id="formPanel" style="display:none">
-    <h3 id="formTitle">➕ Create New Profile</h3>
+    <h3 id="formTitle">? Create New Profile</h3>
     <div>
       <label>Business Name</label>
       <input type="text" id="f_name" placeholder="e.g. Acme Consulting"/>
@@ -225,7 +229,7 @@ input:focus{outline:none;border-color:#4f46e5}
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn-save" onclick="saveProfile()">💾 Save Profile</button>
+      <button class="btn-save" onclick="saveProfile()">?? Save Profile</button>
       <button class="btn-cancel" onclick="closeForm()">Cancel</button>
     </div>
   </div>
@@ -234,14 +238,14 @@ input:focus{outline:none;border-color:#4f46e5}
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── Toast ── */
+/* -- Toast -- */
 function showToast(m){
   var t=document.getElementById('toast');
   t.textContent=m; t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); },2800);
 }
 
-/* ── Currency ── */
+/* -- Currency -- */
 var CUR_SYM=(function(){
   var s=localStorage.getItem('bizscale_currency')||'USD';
   return '
@@ -251,7 +255,7 @@ function fmt(n){
   return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();
 }
 
-/* ── Profile store ── */
+/* -- Profile store -- */
 function getProfiles(){
   try{ return JSON.parse(localStorage.getItem('fw_profiles')||'[]'); }
   catch(e){ return []; }
@@ -274,7 +278,7 @@ function setActiveIdx(idx){
   localStorage.setItem('fw_active_idx', String(idx));
 }
 
-/* ── Tier logic ── */
+/* -- Tier logic -- */
 function isUnlimited(){ return localStorage.getItem('fw_unlimited')==='1'; }
 function isPro()      { return localStorage.getItem('fw_pro')==='1'; }
 function getLimit(){
@@ -282,7 +286,7 @@ function getLimit(){
   return 3; // Pro
 }
 
-/* ── Render usage bar ── */
+/* -- Render usage bar -- */
 function renderUsageBar(profiles){
   var limit=getLimit();
   var used=profiles.length;
@@ -291,7 +295,7 @@ function renderUsageBar(profiles){
 
   var dotsHtml='';
   if(unlimited){
-    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">∞</div>';
+    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">8</div>';
   } else {
     for(var i=0;i<limit;i++){
       dotsHtml+='<div class="dot'+(i<used?' used':'')+'"></div>';
@@ -299,11 +303,11 @@ function renderUsageBar(profiles){
   }
 
   var labelText=unlimited
-    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
+    ? 'Unlimited profiles � '+(used>0?used+' saved':'none yet')
     : used+' of '+limit+' profiles used';
   var subText=unlimited
     ? 'Unlimited tier active'
-    : (used>=limit?'Limit reached · Upgrade for more':'Add up to '+limit+' business profiles');
+    : (used>=limit?'Limit reached � Upgrade for more':'Add up to '+limit+' business profiles');
 
   var atLimit=(!unlimited && used>=limit);
 
@@ -311,11 +315,11 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'🔒 Limit Reached':'➕ New Profile')
+    +(atLimit?'?? Limit Reached':'? New Profile')
     +'</button>';
 
   /* Update plan badge */
-  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro · 3 Profiles';
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro � 3 Profiles';
 
   /* Show/hide upgrade banner */
   document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
@@ -326,7 +330,7 @@ function showUpgradeBanner(){
   document.getElementById('upgradeBanner').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* ── Render profile cards ── */
+/* -- Render profile cards -- */
 function renderGrid(){
   var profiles=getProfiles();
   var activeIdx=getActiveIdx(profiles);
@@ -336,7 +340,7 @@ function renderGrid(){
 
   if(!profiles.length){
     grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
-      +'<span class="es-icon">💼</span>'
+      +'<span class="es-icon">??</span>'
       +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
       +'</div>';
     return;
@@ -359,7 +363,7 @@ function renderGrid(){
     var savedAt=p.savedAt?'Saved '+p.savedAt:'';
 
     html+='<div class="profile-card'+(isActive?' active':'')+'">'
-      +(isActive?'<div class="active-badge">✓ Active</div>':'')
+      +(isActive?'<div class="active-badge">? Active</div>':'')
       +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
       +'<div class="pc-metrics">'
         +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
@@ -373,10 +377,10 @@ function renderGrid(){
       +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
       +'<div class="pc-actions">'
         +(isActive
-          ?'<button class="btn-sm btn-active already" disabled>✓ Active</button>'
+          ?'<button class="btn-sm btn-active already" disabled>? Active</button>'
           :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
-        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">✏️ Edit</button>'
-        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">🗑 Delete</button>'
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">?? Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">?? Delete</button>'
       +'</div>'
       +'</div>';
   }
@@ -387,14 +391,14 @@ function escHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── Set active ── */
+/* -- Set active -- */
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('✅ Profile set as active — all tools will load this profile.');
+  showToast('? Profile set as active � all tools will load this profile.');
 }
 
-/* ── Open create form ── */
+/* -- Open create form -- */
 var editIdx=-1;
 function openNewForm(){
   var profiles=getProfiles();
@@ -404,18 +408,18 @@ function openNewForm(){
     return;
   }
   editIdx=-1;
-  document.getElementById('formTitle').textContent='➕ Create New Profile';
+  document.getElementById('formTitle').textContent='? Create New Profile';
   clearForm();
   document.getElementById('formPanel').style.display='block';
   document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ── Open edit form ── */
+/* -- Open edit form -- */
 function openEditForm(idx){
   var profiles=getProfiles();
   var p=profiles[idx];
   editIdx=idx;
-  document.getElementById('formTitle').textContent='✏️ Edit Profile';
+  document.getElementById('formTitle').textContent='?? Edit Profile';
   document.getElementById('f_name').value=p.name||'';
   document.getElementById('f_rev').value=p.rev||'';
   document.getElementById('f_exp').value=p.exp||'';
@@ -437,7 +441,7 @@ function clearForm(){
   });
 }
 
-/* ── Save profile ── */
+/* -- Save profile -- */
 function saveProfile(){
   var name=document.getElementById('f_name').value.trim();
   if(!name){ showToast('Please enter a Business Name.'); return; }
@@ -474,12 +478,12 @@ function saveProfile(){
     profile.savedAt=profiles[editIdx].savedAt||dateStr;
     profiles[editIdx]=profile;
     if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
-    showToast('✅ Profile updated.');
+    showToast('? Profile updated.');
   } else {
     profiles.push(profile);
     /* Auto-set new profile as active */
     setActiveIdx(profiles.length-1);
-    showToast('✅ Profile saved and set as active.');
+    showToast('? Profile saved and set as active.');
   }
 
   putProfiles(profiles);
@@ -487,7 +491,7 @@ function saveProfile(){
   renderGrid();
 }
 
-/* ── Delete ── */
+/* -- Delete -- */
 var deleteIdx=-1;
 function askDelete(idx){
   var profiles=getProfiles();
@@ -514,20 +518,20 @@ function confirmDelete(){
   showToast('Profile deleted.');
 }
 
-/* ── Unlock Unlimited ── */
+/* -- Unlock Unlimited -- */
 function tryUnlimited(){
   var code=document.getElementById('unlimitedCode').value.trim().toUpperCase();
   if(code==='FWUNLIMITED'){
     localStorage.setItem('fw_unlimited','1');
     document.getElementById('upgradeBanner').style.display='none';
-    showToast('🎉 Unlimited profiles unlocked!');
+    showToast('?? Unlimited profiles unlocked!');
     renderGrid();
   } else {
     showToast('Invalid code. Try FWUNLIMITED');
   }
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'||code==='FWUNLIMITED'){
@@ -547,7 +551,7 @@ document.getElementById('unlimitedCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlimited();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 if(isPro()||isUnlimited()){
   document.getElementById('pwOverlay').style.display='none';
   renderGrid();
@@ -562,7 +566,7 @@ function fmt(n){
   return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();
 }
 
-/* ── Profile store ── */
+/* -- Profile store -- */
 function getProfiles(){
   try{ return JSON.parse(localStorage.getItem('fw_profiles')||'[]'); }
   catch(e){ return []; }
@@ -585,7 +589,7 @@ function setActiveIdx(idx){
   localStorage.setItem('fw_active_idx', String(idx));
 }
 
-/* ── Tier logic ── */
+/* -- Tier logic -- */
 function isUnlimited(){ return localStorage.getItem('fw_unlimited')==='1'; }
 function isPro()      { return localStorage.getItem('fw_pro')==='1'; }
 function getLimit(){
@@ -593,7 +597,7 @@ function getLimit(){
   return 3; // Pro
 }
 
-/* ── Render usage bar ── */
+/* -- Render usage bar -- */
 function renderUsageBar(profiles){
   var limit=getLimit();
   var used=profiles.length;
@@ -602,7 +606,7 @@ function renderUsageBar(profiles){
 
   var dotsHtml='';
   if(unlimited){
-    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">∞</div>';
+    dotsHtml='<div class="dot unlimited"></div><div class="dot unlimited"></div><div class="dot unlimited"></div><div style="font-size:.8rem;color:#4f46e5;font-weight:800;padding:0 4px">8</div>';
   } else {
     for(var i=0;i<limit;i++){
       dotsHtml+='<div class="dot'+(i<used?' used':'')+'"></div>';
@@ -610,11 +614,11 @@ function renderUsageBar(profiles){
   }
 
   var labelText=unlimited
-    ? 'Unlimited profiles — '+(used>0?used+' saved':'none yet')
+    ? 'Unlimited profiles � '+(used>0?used+' saved':'none yet')
     : used+' of '+limit+' profiles used';
   var subText=unlimited
     ? 'Unlimited tier active'
-    : (used>=limit?'Limit reached · Upgrade for more':'Add up to '+limit+' business profiles');
+    : (used>=limit?'Limit reached � Upgrade for more':'Add up to '+limit+' business profiles');
 
   var atLimit=(!unlimited && used>=limit);
 
@@ -622,11 +626,11 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'🔒 Limit Reached':'➕ New Profile')
+    +(atLimit?'?? Limit Reached':'? New Profile')
     +'</button>';
 
   /* Update plan badge */
-  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro · 3 Profiles';
+  document.getElementById('planBadge').textContent=unlimited?'Unlimited':'Pro � 3 Profiles';
 
   /* Show/hide upgrade banner */
   document.getElementById('upgradeBanner').style.display=atLimit?'flex':'none';
@@ -637,7 +641,7 @@ function showUpgradeBanner(){
   document.getElementById('upgradeBanner').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* ── Render profile cards ── */
+/* -- Render profile cards -- */
 function renderGrid(){
   var profiles=getProfiles();
   var activeIdx=getActiveIdx(profiles);
@@ -647,7 +651,7 @@ function renderGrid(){
 
   if(!profiles.length){
     grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
-      +'<span class="es-icon">💼</span>'
+      +'<span class="es-icon">??</span>'
       +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
       +'</div>';
     return;
@@ -670,7 +674,7 @@ function renderGrid(){
     var savedAt=p.savedAt?'Saved '+p.savedAt:'';
 
     html+='<div class="profile-card'+(isActive?' active':'')+'">'
-      +(isActive?'<div class="active-badge">✓ Active</div>':'')
+      +(isActive?'<div class="active-badge">? Active</div>':'')
       +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
       +'<div class="pc-metrics">'
         +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
@@ -684,10 +688,10 @@ function renderGrid(){
       +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
       +'<div class="pc-actions">'
         +(isActive
-          ?'<button class="btn-sm btn-active already" disabled>✓ Active</button>'
+          ?'<button class="btn-sm btn-active already" disabled>? Active</button>'
           :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
-        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">✏️ Edit</button>'
-        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">🗑 Delete</button>'
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">?? Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">?? Delete</button>'
       +'</div>'
       +'</div>';
   }
@@ -698,14 +702,14 @@ function escHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── Set active ── */
+/* -- Set active -- */
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('✅ Profile set as active — all tools will load this profile.');
+  showToast('? Profile set as active � all tools will load this profile.');
 }
 
-/* ── Open create form ── */
+/* -- Open create form -- */
 var editIdx=-1;
 function openNewForm(){
   var profiles=getProfiles();
@@ -715,18 +719,18 @@ function openNewForm(){
     return;
   }
   editIdx=-1;
-  document.getElementById('formTitle').textContent='➕ Create New Profile';
+  document.getElementById('formTitle').textContent='? Create New Profile';
   clearForm();
   document.getElementById('formPanel').style.display='block';
   document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ── Open edit form ── */
+/* -- Open edit form -- */
 function openEditForm(idx){
   var profiles=getProfiles();
   var p=profiles[idx];
   editIdx=idx;
-  document.getElementById('formTitle').textContent='✏️ Edit Profile';
+  document.getElementById('formTitle').textContent='?? Edit Profile';
   document.getElementById('f_name').value=p.name||'';
   document.getElementById('f_rev').value=p.rev||'';
   document.getElementById('f_exp').value=p.exp||'';
@@ -748,7 +752,7 @@ function clearForm(){
   });
 }
 
-/* ── Save profile ── */
+/* -- Save profile -- */
 function saveProfile(){
   var name=document.getElementById('f_name').value.trim();
   if(!name){ showToast('Please enter a Business Name.'); return; }
@@ -785,12 +789,12 @@ function saveProfile(){
     profile.savedAt=profiles[editIdx].savedAt||dateStr;
     profiles[editIdx]=profile;
     if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
-    showToast('✅ Profile updated.');
+    showToast('? Profile updated.');
   } else {
     profiles.push(profile);
     /* Auto-set new profile as active */
     setActiveIdx(profiles.length-1);
-    showToast('✅ Profile saved and set as active.');
+    showToast('? Profile saved and set as active.');
   }
 
   putProfiles(profiles);
@@ -798,7 +802,7 @@ function saveProfile(){
   renderGrid();
 }
 
-/* ── Delete ── */
+/* -- Delete -- */
 var deleteIdx=-1;
 function askDelete(idx){
   var profiles=getProfiles();
@@ -825,20 +829,20 @@ function confirmDelete(){
   showToast('Profile deleted.');
 }
 
-/* ── Unlock Unlimited ── */
+/* -- Unlock Unlimited -- */
 function tryUnlimited(){
   var code=document.getElementById('unlimitedCode').value.trim().toUpperCase();
   if(code==='FWUNLIMITED'){
     localStorage.setItem('fw_unlimited','1');
     document.getElementById('upgradeBanner').style.display='none';
-    showToast('🎉 Unlimited profiles unlocked!');
+    showToast('?? Unlimited profiles unlocked!');
     renderGrid();
   } else {
     showToast('Invalid code. Try FWUNLIMITED');
   }
 }
 
-/* ── Paywall ── */
+/* -- Paywall -- */
 function tryUnlock(){
   var code=document.getElementById('pwCode').value.trim().toUpperCase();
   if(code==='FINWISE29'||code==='FWUNLIMITED'){
@@ -858,7 +862,7 @@ document.getElementById('unlimitedCode').addEventListener('keydown',function(e){
   if(e.key==='Enter') tryUnlimited();
 });
 
-/* ── Boot ── */
+/* -- Boot -- */
 if(isPro()||isUnlimited()){
   document.getElementById('pwOverlay').style.display='none';
   renderGrid();
