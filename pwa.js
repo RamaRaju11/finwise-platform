@@ -1,4 +1,4 @@
-﻿// BizScale PWA — service worker registration + install prompt
+﻿// BizSco PWA — service worker registration + install prompt
 
 (function() {
   'use strict';
@@ -31,7 +31,7 @@
       '<div style="display:flex;align-items:center;gap:12px;flex:1">' +
         '<span style="font-size:1.4rem">📈</span>' +
         '<div>' +
-          '<div style="font-size:.85rem;font-weight:800;color:#fff">Install BizScale App</div>' +
+          '<div style="font-size:.85rem;font-weight:800;color:#fff">Install BizSco App</div>' +
           '<div style="font-size:.75rem;color:#94a3b8">Analyze, Fund, Grow · Works offline</div>' +
         '</div>' +
       '</div>' +
