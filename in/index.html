@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Analyze, Fund, Grow</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<title>BizSco India — MSME Loan Safety & Cash Flow Engine</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="BizScale">
+<meta name="apple-mobile-web-app-title" content="BizSco India">
 <meta name="theme-color" content="#0f172a">
-<script src="pwa.js" defer></script>
-<meta name="description" content="AI-powered Loan Decision Engine for small businesses. Get a Loan Safety Score in 60 seconds — know if a loan will help or destroy your cash flow. Free, no sign-up, runs in your browser."/>
+<script src="../pwa.js" defer></script>
+<meta name="description" content="AI-powered Loan Decision Engine for Indian MSMEs. Check loan safety against SBI, HDFC, ICICI, MUDRA & NBFC offers in 60 seconds. Get scheme matches (PMMY, CGTMSE, Stand-up India). Free, no sign-up."/>
 <!-- ═══════════════════════════════════════════════════════════════
      GOOGLE ANALYTICS 4
      SETUP: Go to analytics.google.com → Create property → Get Measurement ID
@@ -22,37 +22,6 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-DC9C8M6R9T');
-</script>
-<!-- Auto-detect country and offer redirect (non-intrusive) -->
-<script>
-(function(){
-  // Only run once per session, only on root page
-  if (sessionStorage.getItem('countryChecked')) return;
-  if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
-  sessionStorage.setItem('countryChecked','1');
-
-  // Detect country from browser language as a quick heuristic
-  var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-  var countryMap = {
-    'en-in': '/in/', 'hi-in': '/in/', 'te-in': '/in/', 'ta-in': '/in/', 'mr-in': '/in/',
-    'en-gb': '/uk/',
-    'en-au': '/au/',
-    'en-ca': '/ca/', 'fr-ca': '/ca/',
-    'en-sg': '/sg/'
-  };
-  var suggested = countryMap[lang];
-  if (suggested) {
-    // Show a non-intrusive banner offering the localized version
-    window.addEventListener('DOMContentLoaded', function(){
-      var banner = document.createElement('div');
-      banner.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#0f172a;color:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:9999;font-family:Inter,sans-serif;font-size:.88rem;max-width:320px;border:1px solid rgba(255,255,255,.1)';
-      var country = suggested.replace(/\//g,'').toUpperCase();
-      var flag = suggested==='/in/'?'🇮🇳':suggested==='/uk/'?'🇬🇧':suggested==='/au/'?'🇦🇺':suggested==='/ca/'?'🇨🇦':'🇸🇬';
-      banner.innerHTML = '<div style="font-weight:700;margin-bottom:6px">'+flag+' Visit '+country+' version?</div><div style="font-size:.78rem;color:#94a3b8;margin-bottom:10px">Localized pricing, lenders &amp; schemes</div><a href="'+suggested+'" style="display:inline-block;background:#4f46e5;color:#fff;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:.82rem">Go to '+country+' →</a> <button onclick="this.parentNode.remove()" style="background:transparent;border:none;color:#64748b;cursor:pointer;font-size:.82rem;margin-left:8px">Stay</button>';
-      document.body.appendChild(banner);
-    });
-  }
-})();
 </script>
 <style>
 /* ── Reset & base ───────────────────────────────────────────── */
@@ -724,7 +693,7 @@ h1,h2,h3,h4{color:var(--dark)}
 <!-- ── Announcement bar ──────────────────────────────────────────────── -->
 <div class="announce">
   ✨ New: Payoff Calendar · Grant Deadline Tracker · Expense-Cut Scenarios · Invoice Email Templates · Savings Milestones &amp; more.
-  <a href="try.html">Explore Tools →</a>
+  <a href="../try.html">Explore Tools →</a>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════
@@ -734,19 +703,19 @@ h1,h2,h3,h4{color:var(--dark)}
   <div class="nav-inner">
     <a href="#" class="nav-logo">
       <div class="logo-icon">📈</div>
-      Biz<span>Scale</span>
+      Biz<span>Sco</span>
+      <span style="font-size:.7rem;background:#f59e0b;color:#fff;padding:.15rem .5rem;border-radius:4px;margin-left:.4rem;font-weight:700;letter-spacing:.05em">🇮🇳 INDIA</span>
     </a>
     <ul class="nav-links">
       <li><a href="#how-it-works">How It Works</a></li>
       <li><a href="#modules">Tools</a></li>
       <li><a href="#pricing">Pricing</a></li>
-      <li><a href="try.html" style="color:var(--green);font-weight:700">▶ Try Live</a></li>
-      <li><a href="checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
+      <li><a href="../try.html" style="color:var(--green);font-weight:700">▶ Try Live</a></li>
+      <li><a href="../checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
       <li>
         <select onchange="if(this.value)window.location.href=this.value" style="padding:.35rem .6rem;border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-weight:600;background:#fff;cursor:pointer">
           <option value="">🌍 Country</option>
-          <option value="/" selected>🌍 Global</option>
-          <option value="/in/">🇮🇳 India</option>
+          <option value="/in/" selected>🇮🇳 India</option>
           <option value="/us/">🇺🇸 USA</option>
           <option value="/uk/">🇬🇧 UK</option>
           <option value="/au/">🇦🇺 Australia</option>
@@ -756,8 +725,8 @@ h1,h2,h3,h4{color:var(--dark)}
       </li>
     </ul>
     <div class="nav-actions">
-      <a href="auth.html" class="btn btn-outline btn-sm">Sign In</a>
-      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-sm">⚡ Check Loan Risk Free →</a>
+      <a href="../auth.html" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-sm">⚡ Check Loan Risk Free →</a>
     </div>
     <button class="nav-toggle" id="navToggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
       ☰
@@ -773,20 +742,20 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="hero-content">
     <div class="hero-eyebrow">
       <span class="dot"></span>
-      Analyze · Fund · Grow — 30 tools for small business owners
+      Built for Indian MSMEs · 30 tools · Made in India 🇮🇳
     </div>
     <h1>
-      Will your next loan<br>
-      <span class="grad">help or hurt</span> your business?
+      Will that MSME loan<br>
+      <span class="grad">grow or break</span> your business?
     </h1>
     <p class="hero-sub">
-      Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds — plus 29 more tools for cash flow, health score, grants, and AI-powered financial advice. Free. No sign-up.
+      Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds — across SBI, HDFC, ICICI, MUDRA & NBFC offers. Plus 29 more tools for cash flow, GST, schemes (PMMY, CGTMSE), and AI CA advice. Free. No sign-up.
     </p>
     <div class="hero-ctas">
-      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg">
-        ⚡ Find Out If Your Loan Is Safe
+      <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg">
+        ⚡ Check My Loan Safety
       </a>
-      <a href="try.html" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2)">
+      <a href="../try.html" class="btn btn-lg" style="background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2)">
         ▶ See All 30 Tools
       </a>
     </div>
@@ -809,7 +778,7 @@ h1,h2,h3,h4{color:var(--dark)}
         <div class="hero-stat-label">Tools Available</div>
       </div>
       <div>
-        <div class="hero-stat-val">$0</div>
+        <div class="hero-stat-val">₹0</div>
         <div class="hero-stat-label">To Get Started</div>
       </div>
     </div>
@@ -817,13 +786,13 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="hero-visual">
       <div class="hero-card">
         <div class="hc-header">
-          <span class="hc-brand">BizScale · Loan Score</span>
+          <span class="hc-brand">BizSco · Loan Score</span>
           <span class="hc-badge">Sample Analysis</span>
         </div>
         <div class="hc-inputs">
-          <div class="hc-row"><span>Monthly Revenue</span><span>$15,000</span></div>
-          <div class="hc-row"><span>Monthly Expenses</span><span>$8,500</span></div>
-          <div class="hc-row"><span>Loan Requested</span><span>$75,000 @ 12%</span></div>
+          <div class="hc-row"><span>Monthly Revenue</span><span>₹12,50,000</span></div>
+          <div class="hc-row"><span>Monthly Expenses</span><span>₹7,10,000</span></div>
+          <div class="hc-row"><span>Loan Requested</span><span>₹60,00,000 @ 11.5%</span></div>
         </div>
         <div class="hc-sep"></div>
         <div class="hc-score-wrap">
@@ -835,9 +804,9 @@ h1,h2,h3,h4{color:var(--dark)}
         </div>
         <div class="hc-verdict">✅ SAFE TO BORROW</div>
         <div class="hc-metrics">
-          <div class="hc-metric"><span class="hc-ml">Max Safe Loan</span><span class="hc-mv">$92,000</span></div>
-          <div class="hc-metric"><span class="hc-ml">New EMI / mo</span><span class="hc-mv">$2,490</span></div>
-          <div class="hc-metric"><span class="hc-ml">Net Cash After EMI</span><span class="hc-mv green">$4,010</span></div>
+          <div class="hc-metric"><span class="hc-ml">Max Safe Loan</span><span class="hc-mv">₹75,00,000</span></div>
+          <div class="hc-metric"><span class="hc-ml">New EMI / mo</span><span class="hc-mv">₹1,32,500</span></div>
+          <div class="hc-metric"><span class="hc-ml">Net Cash After EMI</span><span class="hc-mv green">₹4,07,500</span></div>
           <div class="hc-metric"><span class="hc-ml">Debt Coverage</span><span class="hc-mv">2.4x</span></div>
         </div>
       </div>
@@ -854,7 +823,7 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="trust-item"><span class="ti-icon">🔒</span> Data stays in your browser — always private</div>
     <div class="trust-item"><span class="ti-icon">👤</span> Set up profile once — auto-fills all 30 tools</div>
     <div class="trust-item"><span class="ti-icon">🆓</span> Free to start — no sign-up needed</div>
-    <div class="trust-item"><span class="ti-icon">🎯</span> Women · Minority · Veteran-owned grants included</div>
+    <div class="trust-item"><span class="ti-icon">🎯</span> MUDRA · PMMY · CGTMSE · Stand-up India schemes included</div>
   </div>
 </div>
 
@@ -900,7 +869,7 @@ h1,h2,h3,h4{color:var(--dark)}
       </div>
     </div>
     <div style="text-align:center">
-      <a href="checkup.html" class="btn btn-primary btn-lg">🩺 Start Free Checkup →</a>
+      <a href="../checkup.html" class="btn btn-primary btn-lg">🩺 Start Free Checkup →</a>
       <div style="font-size:.74rem;color:#94a3b8;margin-top:10px">No account needed · Takes 2 minutes · Results are private</div>
     </div>
   </div>
@@ -947,7 +916,7 @@ h1,h2,h3,h4{color:var(--dark)}
       </div>
     </div>
     <div style="text-align:center;margin-top:3rem" class="reveal">
-      <a href="try.html" class="btn btn-primary btn-lg">⚡ Try All 30 Tools Free</a>
+      <a href="../try.html" class="btn btn-primary btn-lg">⚡ Try All 30 Tools Free</a>
     </div>
   </div>
 </section>
@@ -964,7 +933,7 @@ h1,h2,h3,h4{color:var(--dark)}
         <p style="color:var(--gray);margin-top:.75rem;font-size:.95rem;line-height:1.7">
           They take a loan based on gut feel, a banker's pitch, or a spreadsheet they don't fully trust. The result: cash flow collapse 3–6 months later.
         </p>
-        <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary" style="margin-top:1.75rem">
+        <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-primary" style="margin-top:1.75rem">
           ⚡ Check Your Loan Safety Free
         </a>
       </div>
@@ -1005,7 +974,7 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="section-title-block reveal">
       <div class="eyebrow">The Solution</div>
       <h2>Three questions. Thirty tools. One platform.</h2>
-      <p>Whatever question you have about your business finances — BizScale has a tool for it.</p>
+      <p>Whatever question you have about your business finances — BizSco has a tool for it.</p>
     </div>
     <div class="flow-grid reveal">
       <div class="flow-card flow-1">
@@ -1064,7 +1033,7 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="ss-lbl">Free Tools</div>
   </div>
   <div class="ss-item">
-    <div class="ss-val">$0</div>
+    <div class="ss-val">₹0</div>
     <div class="ss-lbl">To Get Started</div>
   </div>
 </div>
@@ -1074,20 +1043,20 @@ h1,h2,h3,h4{color:var(--dark)}
     <div class="section-title-block reveal">
       <div class="eyebrow">Real Business Owners</div>
       <h2>They got the numbers — then got the loan</h2>
-      <p>BizScale turns confusing financials into decisions you can act on today.</p>
+      <p>BizSco turns confusing financials into decisions you can act on today.</p>
     </div>
     <div class="testi-grid reveal">
 
       <div class="testi-card featured">
-        <div class="testi-badge">Loan Approved ✓</div>
+        <div class="testi-badge">SBI Loan Approved ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">My loan score went from 58 to 82 in six weeks. I knew exactly which numbers to fix because BizScale showed me the DSCR gap. The bank approved me on the first try.</p>
+        <p class="testi-quote">My loan score went from 58 to 82 in six weeks. I knew exactly which numbers to fix because BizSco showed me the DSCR gap. SBI approved my ₹50L loan on the first try.</p>
         <div class="testi-metric">Loan Score 58 → 82</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#dbeafe;color:#1e40af">SM</div>
+          <div class="testi-avatar" style="background:#dbeafe;color:#1e40af">PS</div>
           <div>
-            <div class="testi-name">Sarah Mitchell</div>
-            <div class="testi-role">Boutique Owner · Survive Plan</div>
+            <div class="testi-name">Priya Sharma</div>
+            <div class="testi-role">Boutique Owner, Bangalore · Survive Plan</div>
           </div>
         </div>
       </div>
@@ -1095,27 +1064,27 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="testi-card">
         <div class="testi-badge">6.8 Mo Runway ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Cash runway was my blind spot. I thought I had plenty of buffer — BizScale calculated 2.4 months. I cut two expenses and pushed it to 6.8 months in a single afternoon.</p>
+        <p class="testi-quote">Cash runway was my blind spot. I thought I had plenty of buffer — BizSco calculated 2.4 months. I cut two expenses and pushed it to 6.8 months in a single afternoon.</p>
         <div class="testi-metric">Runway 2.4 → 6.8 months</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#d1fae5;color:#065f46">MJ</div>
+          <div class="testi-avatar" style="background:#d1fae5;color:#065f46">RK</div>
           <div>
-            <div class="testi-name">Marcus Johnson</div>
-            <div class="testi-role">IT Services · Scale Plan</div>
+            <div class="testi-name">Rahul Kumar</div>
+            <div class="testi-role">IT Services, Hyderabad · Scale Plan</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card">
-        <div class="testi-badge">3 Clients Funded ✓</div>
+        <div class="testi-badge">3 MUDRA Loans ✓</div>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">I'm a bookkeeper and I now run every client through the Financial Checkup before their loan meetings. Three of my clients got approved last quarter after we fixed what BizScale flagged.</p>
-        <div class="testi-metric">3 clients funded in Q1</div>
+        <p class="testi-quote">I'm a CA and now run every client through the Financial Checkup before their bank meetings. Three of my clients got MUDRA approvals last quarter after we fixed what BizSco flagged.</p>
+        <div class="testi-metric">3 MUDRA loans approved in Q1</div>
         <div class="testi-footer">
-          <div class="testi-avatar" style="background:#fce7f3;color:#9d174d">LC</div>
+          <div class="testi-avatar" style="background:#fce7f3;color:#9d174d">AM</div>
           <div>
-            <div class="testi-name">Lisa Chen</div>
-            <div class="testi-role">SMB Advisor · Advise Plan</div>
+            <div class="testi-name">CA Anjali Mehta</div>
+            <div class="testi-role">MSME Advisor, Mumbai · Advise Plan</div>
           </div>
         </div>
       </div>
@@ -1132,7 +1101,7 @@ h1,h2,h3,h4{color:var(--dark)}
 <section class="before-after">
   <div class="container">
     <div class="section-title-block reveal">
-      <div class="eyebrow">Before vs After BizScale</div>
+      <div class="eyebrow">Before vs After BizSco</div>
       <h2>Excel confusion → AI clarity</h2>
       <p>The same decision. A completely different experience.</p>
     </div>
@@ -1142,30 +1111,30 @@ h1,h2,h3,h4{color:var(--dark)}
         <h3>Spreadsheet guesswork</h3>
         <ul class="ba-list">
           <li>Hours in Excel with no clear answer</li>
-          <li>Banker says "you qualify" — but for how much, safely?</li>
-          <li>No stress test — what if revenue drops?</li>
+          <li>Bank RM says "you qualify" — but for how much, safely?</li>
+          <li>No stress test — what if GST collections drop?</li>
           <li>No verdict — just numbers on a screen</li>
-          <li>Wrong loan taken, cash flow collapses in month 4</li>
-          <li>No action plan when things go wrong</li>
+          <li>Wrong loan taken, EMI eats your working capital</li>
+          <li>Missing out on MUDRA / CGTMSE / PMMY schemes</li>
         </ul>
       </div>
       <div class="ba-arrow">→</div>
       <div class="ba-card after">
-        <div class="ba-label">✅ After — With BizScale</div>
+        <div class="ba-label">✅ After — With BizSco</div>
         <h3>AI-powered clarity</h3>
         <ul class="ba-list">
           <li>Fill profile once — all 30 tools auto-personalise</li>
           <li>Loan Decision Score: SAFE / RISKY / DANGEROUS in 60s</li>
           <li>Business Health Grade A–F across 6 metrics</li>
-          <li>Grants matched to your industry, state &amp; owner category</li>
+          <li>Schemes matched — PMMY, CGTMSE, Stand-up India, MUDRA</li>
           <li>Cash runway, break-even &amp; owner's pay calculated instantly</li>
-          <li>Women / Minority / Veteran-owned categories recognised</li>
+          <li>Women · SC/ST · MSME · Startup India recognised</li>
         </ul>
       </div>
     </div>
     <div style="text-align:center;margin-top:2.5rem" class="reveal">
-      <a href="try.html" class="btn btn-outline btn-lg">👤 Set Up My Profile Free</a>
-      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg" style="margin-left:1rem">⚡ Check Loan Safety Now</a>
+      <a href="../try.html" class="btn btn-outline btn-lg">👤 Set Up My Profile Free</a>
+      <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg" style="margin-left:1rem">⚡ Check Loan Safety Now</a>
     </div>
   </div>
 </section>
@@ -1221,7 +1190,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>EMI impact on cash flow</li>
           <li>Payoff calendar — exact month each loan clears</li>
         </ul>
-        <a href="modules/loanDecisionScoreEngine.test.html" class="start-cta">⚡ Check Loan Safety</a>
+        <a href="../modules/loanDecisionScoreEngine.test.html" class="start-cta">⚡ Check Loan Safety</a>
       </div>
 
       <!-- Flow 2 -->
@@ -1236,7 +1205,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>Cash runway + expense-cut scenarios</li>
           <li>Actionable recommendations</li>
         </ul>
-        <a href="modules/businessHealthScore.test.html" class="start-cta">📊 Get Health Score</a>
+        <a href="../modules/businessHealthScore.test.html" class="start-cta">📊 Get Health Score</a>
       </div>
 
       <!-- Flow 3 -->
@@ -1251,7 +1220,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>Grant deadline calendar — sorted by urgency</li>
           <li>6 vetted lenders with rates &amp; terms</li>
         </ul>
-        <a href="modules/grantFinder.test.html" class="start-cta">💰 Find Grants &amp; Lenders</a>
+        <a href="../modules/grantFinder.test.html" class="start-cta">💰 Find Grants &amp; Lenders</a>
       </div>
 
     </div>
@@ -1288,7 +1257,7 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="module-grid">
 
         <div class="mod-card" style="--accent:#4f46e5;--icon-bg:#eef2ff">
-          <a href="modules/cashFlowEngine.test.html" class="full-link"></a>
+          <a href="../modules/cashFlowEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">💵</div>
             <div class="mod-meta">
@@ -1300,12 +1269,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Single Period</span><span class="mod-tag">Multi-Period</span><span class="mod-tag">Surplus/Deficit</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/cashFlowEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/cashFlowEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#0891b2;--icon-bg:#ecfeff">
-          <a href="modules/loanEngine.test.html" class="full-link"></a>
+          <a href="../modules/loanEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🏦</div>
             <div class="mod-meta">
@@ -1317,12 +1286,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">EMI</span><span class="mod-tag">Amortization</span><span class="mod-tag">Prepayment</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/loanEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/loanEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#16a34a;--icon-bg:#f0fdf4">
-          <a href="modules/loanAffordabilityEngine.test.html" class="full-link"></a>
+          <a href="../modules/loanAffordabilityEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">📊</div>
             <div class="mod-meta">
@@ -1334,12 +1303,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Safe EMI</span><span class="mod-tag">Max Loan</span><span class="mod-tag">Verdict</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/loanAffordabilityEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/loanAffordabilityEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#dc2626;--icon-bg:#fff1f2">
-          <a href="modules/riskDebtEngine.test.html" class="full-link"></a>
+          <a href="../modules/riskDebtEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">⚠️</div>
             <div class="mod-meta">
@@ -1351,12 +1320,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">DSCR</span><span class="mod-tag">DTI</span><span class="mod-tag">Risk Score</span><span class="mod-tag">Alerts</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/riskDebtEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/riskDebtEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#d97706;--icon-bg:#fffbeb">
-          <a href="modules/stressTestEngine.test.html" class="full-link"></a>
+          <a href="../modules/stressTestEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🔥</div>
             <div class="mod-meta">
@@ -1368,12 +1337,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Revenue Drop</span><span class="mod-tag">Expense Spike</span><span class="mod-tag">Rate Hike</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/stressTestEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/stressTestEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#0f766e;--icon-bg:#f0fdfa">
-          <a href="modules/multiLoanManager.test.html" class="full-link"></a>
+          <a href="../modules/multiLoanManager.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🗂️</div>
             <div class="mod-meta">
@@ -1385,12 +1354,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Portfolio</span><span class="mod-tag">Total EMI</span><span class="mod-tag">Exposure</span><span class="mod-tag">Simulation</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/multiLoanManager.test.html" class="mod-link">Open →</a>
+            <a href="../modules/multiLoanManager.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#7c3aed;--icon-bg:#faf5ff">
-          <a href="modules/recommendationEngine.test.html" class="full-link"></a>
+          <a href="../modules/recommendationEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">💡</div>
             <div class="mod-meta">
@@ -1402,7 +1371,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Prepayment</span><span class="mod-tag">Tenure Change</span><span class="mod-tag">Loan Decision</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/recommendationEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/recommendationEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
@@ -1416,7 +1385,7 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="module-grid">
 
         <div class="mod-card" style="--accent:#0369a1;--icon-bg:#f0f9ff">
-          <a href="modules/profitLossEngine.test.html" class="full-link"></a>
+          <a href="../modules/profitLossEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">📈</div>
             <div class="mod-meta">
@@ -1428,12 +1397,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Gross Profit</span><span class="mod-tag">EBIT</span><span class="mod-tag">Net Margin</span><span class="mod-tag">Multi-Period</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/profitLossEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/profitLossEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#0f766e;--icon-bg:#f0fdfa">
-          <a href="modules/balanceSheetEngine.test.html" class="full-link"></a>
+          <a href="../modules/balanceSheetEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">⚖️</div>
             <div class="mod-meta">
@@ -1445,12 +1414,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Assets</span><span class="mod-tag">Liabilities</span><span class="mod-tag">Equity</span><span class="mod-tag">Ratios</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/balanceSheetEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/balanceSheetEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#0284c7;--icon-bg:#e0f2fe">
-          <a href="modules/cashFlowStatementEngine.test.html" class="full-link"></a>
+          <a href="../modules/cashFlowStatementEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">💧</div>
             <div class="mod-meta">
@@ -1462,12 +1431,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Operating CF</span><span class="mod-tag">Investing CF</span><span class="mod-tag">Financing CF</span><span class="mod-tag">Reconcile</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/cashFlowStatementEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/cashFlowStatementEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#92400e;--icon-bg:#fff7ed">
-          <a href="modules/accountingMappingEngine.test.html" class="full-link"></a>
+          <a href="../modules/accountingMappingEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🔑</div>
             <div class="mod-meta">
@@ -1479,12 +1448,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">EMI Split</span><span class="mod-tag">Journal Entries</span><span class="mod-tag">Depreciation</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/accountingMappingEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/accountingMappingEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#4338ca;--icon-bg:#eef2ff">
-          <a href="modules/forecastingEngine.test.html" class="full-link"></a>
+          <a href="../modules/forecastingEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🔮</div>
             <div class="mod-meta">
@@ -1496,7 +1465,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">CF Forecast</span><span class="mod-tag">P&L Forecast</span><span class="mod-tag">3 Scenarios</span><span class="mod-tag">Loan Balance</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/forecastingEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/forecastingEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
@@ -1510,7 +1479,7 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="module-grid">
 
         <div class="mod-card" style="--accent:#1e3a8a;--icon-bg:#eff6ff">
-          <a href="modules/loanMarketplaceEngine.test.html" class="full-link"></a>
+          <a href="../modules/loanMarketplaceEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🏪</div>
             <div class="mod-meta">
@@ -1522,12 +1491,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Lender Search</span><span class="mod-tag">Offer Compare</span><span class="mod-tag">Referral Links</span><span class="mod-tag">Savings</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/loanMarketplaceEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/loanMarketplaceEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#7c3aed;--icon-bg:#faf5ff">
-          <a href="modules/subscriptionEngine.test.html" class="full-link"></a>
+          <a href="../modules/subscriptionEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">💳</div>
             <div class="mod-meta">
@@ -1539,12 +1508,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Feature Gates</span><span class="mod-tag">Usage Limits</span><span class="mod-tag">Billing</span><span class="mod-tag">Tier Recommender</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/subscriptionEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/subscriptionEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#065f46;--icon-bg:#f0fdf4">
-          <a href="modules/paidReportsEngine.test.html" class="full-link"></a>
+          <a href="../modules/paidReportsEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">📄</div>
             <div class="mod-meta">
@@ -1556,7 +1525,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Loan Risk</span><span class="mod-tag">Business Plan</span><span class="mod-tag">Financial Summary</span><span class="mod-tag">Viability</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/paidReportsEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/paidReportsEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
@@ -1570,7 +1539,7 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="module-grid">
 
         <div class="mod-card" style="--accent:#0891b2;--icon-bg:#ecfeff">
-          <a href="modules/seoToolsEngine.test.html" class="full-link"></a>
+          <a href="../modules/seoToolsEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🔍</div>
             <div class="mod-meta">
@@ -1582,12 +1551,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Meta Tags</span><span class="mod-tag">Schema.org</span><span class="mod-tag">UTM Builder</span><span class="mod-tag">Embed Widget</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/seoToolsEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/seoToolsEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#0284c7;--icon-bg:#e0f2fe">
-          <a href="modules/shareableResultsEngine.test.html" class="full-link"></a>
+          <a href="../modules/shareableResultsEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">📤</div>
             <div class="mod-meta">
@@ -1599,12 +1568,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">URL Share</span><span class="mod-tag">Print Report</span><span class="mod-tag">CSV Export</span><span class="mod-tag">JSON Export</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/shareableResultsEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/shareableResultsEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#7c3aed;--icon-bg:#faf5ff">
-          <a href="modules/aiAdvisorEngine.test.html" class="full-link"></a>
+          <a href="../modules/aiAdvisorEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">🤖</div>
             <div class="mod-meta">
@@ -1616,12 +1585,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">Health Score</span><span class="mod-tag">Loan Readiness</span><span class="mod-tag">Action Plan</span><span class="mod-tag">Ratio Analysis</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/aiAdvisorEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/aiAdvisorEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
         <div class="mod-card" style="--accent:#d97706;--icon-bg:#fffbeb">
-          <a href="modules/industryBenchmarksEngine.test.html" class="full-link"></a>
+          <a href="../modules/industryBenchmarksEngine.test.html" class="full-link"></a>
           <div class="mod-header">
             <div class="mod-icon-wrap">📊</div>
             <div class="mod-meta">
@@ -1633,7 +1602,7 @@ h1,h2,h3,h4{color:var(--dark)}
           <div class="mod-tags"><span class="mod-tag">10 Industries</span><span class="mod-tag">7 Ratios</span><span class="mod-tag">Percentile Rank</span><span class="mod-tag">Insights</span></div>
           <div class="mod-footer">
             <span class="mod-status"><span class="mod-status-dot"></span> Ready</span>
-            <a href="modules/industryBenchmarksEngine.test.html" class="mod-link">Open →</a>
+            <a href="../modules/industryBenchmarksEngine.test.html" class="mod-link">Open →</a>
           </div>
         </div>
 
@@ -1660,83 +1629,81 @@ h1,h2,h3,h4{color:var(--dark)}
 
       <div class="price-card">
         <div class="price-tier">Free</div>
-        <div class="price-amount">$0 <span>/ month</span></div>
+        <div class="price-amount">₹0 <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:.25rem">→ "Is this loan safe for me?"</div>
         <div class="price-desc">Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds. No sign-up, no credit card, ever.</div>
         <ul class="price-features">
           <li>🏦 Loan Score Engine (SAFE / RISKY / DANGEROUS)</li>
           <li>🧮 EMI Calculator + repayment schedule</li>
-          <li>🏪 Lender Marketplace (SBA, BlueVine, OnDeck…)</li>
+          <li>🏪 Lender Marketplace (SBI, HDFC, ICICI, MUDRA, NBFCs…)</li>
           <li class="no">Save profile / scenarios</li>
-          <li class="no">Grant & Scheme Finder</li>
+          <li class="no">Scheme Finder (PMMY, CGTMSE, Stand-up India)</li>
           <li class="no">Cash Runway / Break-Even</li>
-          <li class="no">AI CFO advisor</li>
+          <li class="no">AI CA advisor</li>
         </ul>
         <div class="price-cta">
-          <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-outline" style="width:100%;margin-bottom:8px">⚡ Check Loan Risk Free</a>
-          <a href="try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ See a sample analysis</a>
+          <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-outline" style="width:100%;margin-bottom:8px">⚡ Check Loan Risk Free</a>
+          <a href="../try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ See a sample analysis</a>
         </div>
       </div>
 
       <div class="price-card">
         <div class="price-tier">Survive</div>
-        <div class="price-amount">$9 <span>/ month</span></div>
+        <div class="price-amount">₹499 <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:#16a34a;margin-bottom:.25rem">→ "Am I running out of cash?"</div>
-        <div class="price-desc">Know your runway before it's too late. Understand exactly when cash runs dry and what to cut.</div>
+        <div class="price-desc">Know your cash runway before it's too late. Understand exactly when cash runs dry and what to cut.</div>
         <ul class="price-features">
           <li>Everything in Free (3 tools)</li>
           <li>⛽ Cash Runway Calculator</li>
           <li>📉 Break-Even Analyzer</li>
           <li>📋 Loan Safety Planner — 3 scenarios + PDF</li>
-          <li>✅ Loan Eligibility Pre-Checker</li>
-          <li>🎯 Grant &amp; Scheme Finder (USA)</li>
-          <li class="no">AI CFO advisor</li>
+          <li>✅ Loan Eligibility Pre-Checker (SBI/HDFC/MUDRA)</li>
+          <li>🎯 Scheme Finder — PMMY, CGTMSE, MUDRA, Stand-up India</li>
+          <li class="no">AI CA advisor</li>
           <li class="no">Owner's Pay / Health Score</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $9/mo Survive plan -->
-          <a href="#" class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Survive')">Get Survive — $9/mo →</a>
-          <a href="modules/starterPlan.test.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ Try tools first (no card)</a>
+          <a href="#" class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Survive')">Get Survive — ₹499/mo →</a>
+          <a href="../modules/starterPlan.test.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ Try tools first (no card)</a>
         </div>
       </div>
 
       <div class="price-card featured">
         <div class="price-badge">Most Popular</div>
         <div class="price-tier">Scale</div>
-        <div class="price-amount">$29 <span>/ month</span></div>
+        <div class="price-amount">₹1,499 <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:.25rem">→ "How do I grow without blowing up?"</div>
         <div class="price-desc">AI-powered clarity for the next 12 months — before you sign a lease, hire staff, or take a loan.</div>
         <ul class="price-features">
           <li>Everything in Survive (8 tools)</li>
-          <li>🤖 AI CFO Chat advisor</li>
+          <li>🤖 AI CA Chat advisor (GST, TDS, MSME)</li>
           <li>📈 12-month Revenue Forecast</li>
-          <li>📊 Industry Benchmarks — see how you compare</li>
+          <li>📊 Industry Benchmarks — see how you compare (Indian SMEs)</li>
           <li>📑 P&amp;L, Balance Sheet, Cash Flow</li>
-          <li>💰 Owner's Pay Optimizer</li>
+          <li>💰 Owner's Pay Optimizer (tax-efficient)</li>
           <li>🔀 Debt Consolidation Analyzer</li>
           <li>🏥 Business Health Score Card (A–F)</li>
           <li class="no">White-label / client dashboard</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $29/mo Scale plan -->
-          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Scale')">Get Scale — $29/mo →</a>
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Scale')">Get Scale — ₹1,499/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
-            <a href="modules/aiCfoChat.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🤖 AI CFO</a>
-            <a href="modules/businessHealthScore.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🏥 Health</a>
+            <a href="../modules/aiCfoChat.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🤖 AI CA</a>
+            <a href="../modules/businessHealthScore.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🏥 Health</a>
           </div>
           <div style="display:flex;gap:8px">
-            <a href="modules/ownersPay.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💰 Pay</a>
-            <a href="modules/debtConsolidation.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🔀 Debt</a>
+            <a href="../modules/ownersPay.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💰 Pay</a>
+            <a href="../modules/debtConsolidation.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">🔀 Debt</a>
           </div>
-          <a href="try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:8px 0 0">▶ See a sample analysis</a>
+          <a href="../try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:8px 0 0">▶ See a sample analysis</a>
         </div>
       </div>
 
       <div class="price-card">
         <div class="price-tier">Advise</div>
-        <div class="price-amount">$79 <span>/ month</span></div>
+        <div class="price-amount">₹3,999 <span>/ month</span></div>
         <div class="price-tagline" style="font-size:.8rem;font-weight:700;color:#0d9488;margin-bottom:.25rem">→ "I help other businesses with their finances"</div>
-        <div class="price-desc">White-label client tools for CAs, bookkeepers & financial advisors. Manage 50+ clients, send branded reports.</div>
+        <div class="price-desc">White-label client tools for CAs, tax consultants & financial advisors. Manage 50+ clients, send branded reports.</div>
         <ul class="price-features">
           <li>Everything in Scale (16 tools)</li>
           <li>👥 Advisor Dashboard — client portfolio</li>
@@ -1748,13 +1715,12 @@ h1,h2,h3,h4{color:var(--dark)}
           <li>Priority support + early access</li>
         </ul>
         <div class="price-cta">
-          <!-- STRIPE: Replace # with your Stripe Payment Link for $79/mo Advise plan -->
-          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Advise')">Get Advise — $79/mo →</a>
+          <a href="#" class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="return stripeClick(this,'Advise')">Get Advise — ₹3,999/mo →</a>
           <div style="display:flex;gap:8px;margin-bottom:8px">
-            <a href="modules/clientRiskEmail.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">📬 Risk Email</a>
-            <a href="modules/referralTracker.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💸 Referrals</a>
+            <a href="../modules/clientRiskEmail.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">📬 Risk Email</a>
+            <a href="../modules/referralTracker.test.html" class="btn btn-outline" style="flex:1;text-align:center;font-size:.8rem;padding:7px">💸 Referrals</a>
           </div>
-          <a href="try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ See a sample analysis (5 clients)</a>
+          <a href="../try.html" style="display:block;text-align:center;font-size:.74rem;color:var(--gray);padding:4px 0">▶ See a sample analysis (5 clients)</a>
         </div>
       </div>
 
@@ -1770,8 +1736,8 @@ h1,h2,h3,h4{color:var(--dark)}
     <h2>Will this loan help or destroy your business?</h2>
     <p>No sign-up. No bank meeting. No spreadsheet. Enter your numbers and get a clear YES / NO answer in 60 seconds — free.</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-      <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-white btn-lg">⚡ Check Your Loan Risk Now</a>
-      <a href="demo.html" class="btn btn-lg" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3)">🎬 Watch Live Demo</a>
+      <a href="../modules/loanDecisionScoreEngine.test.html" class="btn btn-white btn-lg">⚡ Check Your Loan Risk Now</a>
+      <a href="../demo.html" class="btn btn-lg" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3)">🎬 Watch Live Demo</a>
     </div>
   </div>
 </section>
@@ -1804,101 +1770,103 @@ h1,h2,h3,h4{color:var(--dark)}
       <div class="footer-brand">
         <div class="logo-text">
           <div class="fi">📈</div>
-          Biz<span style="color:#818cf8">Scale</span>
+          Biz<span style="color:#818cf8">Sco</span>
+          <span style="font-size:.6rem;background:#f59e0b;color:#fff;padding:.1rem .4rem;border-radius:4px;margin-left:.3rem;font-weight:700">🇮🇳 INDIA</span>
         </div>
-        <p style="margin-bottom:.3rem">Analyze, Fund, Grow — 30 financial tools for small businesses. Loan safety, grants, health scores, AI CFO, forecasting, and advisor tools. 100% browser-based, no sign-up.</p>
+        <p style="margin-bottom:.3rem">Made in India for Indian MSMEs — 30 financial tools. Loan safety across SBI/HDFC/ICICI/MUDRA, GST tools, government schemes (PMMY, CGTMSE), AI CA advisor, forecasting. 100% browser-based, no sign-up.</p>
         <p style="font-size:.72rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Analyze · Fund · Grow</p>
         <div style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap">
           <span class="chip chip-indigo">100% Browser-Based</span>
           <span class="chip chip-green">Free to Start</span>
+          <span class="chip chip-amber">🇮🇳 Made in India</span>
         </div>
       </div>
 
       <div class="footer-col">
         <h4>Free Tools</h4>
         <ul>
-          <li><a href="modules/loanDecisionScoreEngine.test.html">Loan Safety Score</a></li>
-          <li><a href="modules/emiCalculator.test.html">EMI Calculator</a></li>
-          <li><a href="modules/lenderMarketplace.html">Lender Marketplace</a></li>
+          <li><a href="../modules/loanDecisionScoreEngine.test.html">Loan Safety Score</a></li>
+          <li><a href="../modules/emiCalculator.test.html">EMI Calculator</a></li>
+          <li><a href="../modules/lenderMarketplace.html">Lender Marketplace</a></li>
         </ul>
         <h4 style="margin-top:1.5rem">Starter Tools</h4>
         <ul>
-          <li><a href="modules/starterPlan.test.html">Starter Plan Dashboard</a></li>
-          <li><a href="modules/cashRunway.test.html">Cash Runway Calculator</a></li>
-          <li><a href="modules/breakEven.test.html">Break-Even Analyzer</a></li>
-          <li><a href="modules/debtCommandCenter.test.html">Debt Command Center (all loans, payoff strategies, debt insights)</a></li>
-          <li><a href="modules/loanEligibility.test.html">Loan Eligibility Check</a></li>
-          <li><a href="modules/grantFinder.test.html">Grant Finder</a></li>
-          <li><a href="modules/taxCommandCenter.test.html">Tax Command Center (Income Tax + Deductions + Sales Tax + Contractors)</a></li>
-          <li><a href="modules/taxEstimator.test.html">Tax Estimator</a></li>
-          <li><a href="modules/salesTaxTracker.test.html">Sales Tax Tracker</a></li>
-          <li><a href="modules/keyDeductions.test.html">Key Deductions Calculator</a></li>
-          <li><a href="modules/contractorPayroll.test.html">Contractor &amp; Payroll Tax (1099-NEC / FUTA / SUTA)</a></li>
-          <li><a href="modules/invoiceTracker.test.html">Invoice Tracker</a></li>
-          <li><a href="modules/payrollEstimator.test.html">Payroll Estimator</a></li>
-          <li><a href="modules/bankStatementUpload.test.html">Bank Statement Upload</a></li>
-          <li><a href="modules/goalTracker.test.html">Goal Tracker</a></li>
-          <li><a href="modules/loanRepaymentOptimizer.test.html">Loan Repayment Optimizer</a></li>
-          <li><a href="modules/loanRefinanceAnalyzer.test.html">Loan Refinance Analyzer</a></li>
-          <li><a href="modules/profitMarginAnalyzer.test.html">Profit Margin Analyzer</a></li>
-          <li><a href="modules/workingCapitalCalc.test.html">Working Capital Calculator</a></li>
-          <li><a href="modules/budgetActualTracker.test.html">Budget &amp; Actual Tracker</a></li>
-          <li><a href="modules/businessSavingsPlanner.test.html">Business Savings Planner</a></li>
-          <li><a href="modules/vendorBillTracker.test.html">Vendor Bill Tracker</a></li>
-          <li><a href="modules/payrollImpactSim.test.html">Payroll Impact Simulator</a></li>
-          <li><a href="modules/monthlySnapshot.test.html">Monthly Snapshot</a></li>
-          <li><a href="modules/scoreCard.test.html">Business Score Card</a></li>
-          <li><a href="modules/businessProfiles.test.html">Business Profiles</a></li>
-          <li><a href="modules/cashFlowCalendar.test.html">Cash Flow Calendar</a></li>
+          <li><a href="../modules/starterPlan.test.html">Starter Plan Dashboard</a></li>
+          <li><a href="../modules/cashRunway.test.html">Cash Runway Calculator</a></li>
+          <li><a href="../modules/breakEven.test.html">Break-Even Analyzer</a></li>
+          <li><a href="../modules/debtCommandCenter.test.html">Debt Command Center (all loans, payoff strategies, debt insights)</a></li>
+          <li><a href="../modules/loanEligibility.test.html">Loan Eligibility Check</a></li>
+          <li><a href="../modules/grantFinder.test.html">Grant Finder</a></li>
+          <li><a href="../modules/taxCommandCenter.test.html">Tax Command Center (Income Tax + GST + TDS + Professional Tax)</a></li>
+          <li><a href="../modules/taxEstimator.test.html">Income Tax Estimator (Old vs New regime)</a></li>
+          <li><a href="../modules/salesTaxTracker.test.html">GST Tracker (CGST + SGST + IGST)</a></li>
+          <li><a href="../modules/keyDeductions.test.html">80C / 80D / Section 35 Deductions</a></li>
+          <li><a href="../modules/contractorPayroll.test.html">Contractor &amp; Payroll (TDS / EPF / ESI / PT)</a></li>
+          <li><a href="../modules/invoiceTracker.test.html">Invoice Tracker</a></li>
+          <li><a href="../modules/payrollEstimator.test.html">Payroll Estimator</a></li>
+          <li><a href="../modules/bankStatementUpload.test.html">Bank Statement Upload</a></li>
+          <li><a href="../modules/goalTracker.test.html">Goal Tracker</a></li>
+          <li><a href="../modules/loanRepaymentOptimizer.test.html">Loan Repayment Optimizer</a></li>
+          <li><a href="../modules/loanRefinanceAnalyzer.test.html">Loan Refinance Analyzer</a></li>
+          <li><a href="../modules/profitMarginAnalyzer.test.html">Profit Margin Analyzer</a></li>
+          <li><a href="../modules/workingCapitalCalc.test.html">Working Capital Calculator</a></li>
+          <li><a href="../modules/budgetActualTracker.test.html">Budget &amp; Actual Tracker</a></li>
+          <li><a href="../modules/businessSavingsPlanner.test.html">Business Savings Planner</a></li>
+          <li><a href="../modules/vendorBillTracker.test.html">Vendor Bill Tracker</a></li>
+          <li><a href="../modules/payrollImpactSim.test.html">Payroll Impact Simulator</a></li>
+          <li><a href="../modules/monthlySnapshot.test.html">Monthly Snapshot</a></li>
+          <li><a href="../modules/scoreCard.test.html">Business Score Card</a></li>
+          <li><a href="../modules/businessProfiles.test.html">Business Profiles</a></li>
+          <li><a href="../modules/cashFlowCalendar.test.html">Cash Flow Calendar</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <h4>Pro Tools</h4>
         <ul>
-          <li><a href="modules/forecastingEngine.test.html">Revenue Forecasting</a></li>
-          <li><a href="modules/aiAdvisorEngine.test.html">AI CFO Advisor</a></li>
-          <li><a href="modules/industryBenchmarksEngine.test.html">Industry Benchmarks</a></li>
-          <li><a href="modules/profitLossEngine.test.html">P&amp;L Statement</a></li>
-          <li><a href="modules/caExport.test.html">CA Export Pack</a></li>
-          <li><a href="modules/ownersPay.test.html">Owner's Pay Optimizer</a></li>
-          <li><a href="modules/debtConsolidation.test.html">Debt Consolidation</a></li>
-          <li><a href="modules/businessHealthScore.test.html">Business Health Score</a></li>
-          <li><a href="modules/forecastPro.test.html">Forecast Pro</a></li>
-          <li><a href="modules/financialStatements.test.html">Financial Statements Hub</a></li>
-          <li><a href="modules/benchmarkPro.test.html">Benchmark Pro</a></li>
+          <li><a href="../modules/forecastingEngine.test.html">Revenue Forecasting</a></li>
+          <li><a href="../modules/aiAdvisorEngine.test.html">AI CFO Advisor</a></li>
+          <li><a href="../modules/industryBenchmarksEngine.test.html">Industry Benchmarks</a></li>
+          <li><a href="../modules/profitLossEngine.test.html">P&amp;L Statement</a></li>
+          <li><a href="../modules/caExport.test.html">CA Export Pack</a></li>
+          <li><a href="../modules/ownersPay.test.html">Owner's Pay Optimizer</a></li>
+          <li><a href="../modules/debtConsolidation.test.html">Debt Consolidation</a></li>
+          <li><a href="../modules/businessHealthScore.test.html">Business Health Score</a></li>
+          <li><a href="../modules/forecastPro.test.html">Forecast Pro</a></li>
+          <li><a href="../modules/financialStatements.test.html">Financial Statements Hub</a></li>
+          <li><a href="../modules/benchmarkPro.test.html">Benchmark Pro</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <h4>Advisor Tools</h4>
         <ul>
-          <li><a href="modules/advisorDashboard.test.html">Advisor Dashboard</a></li>
-          <li><a href="modules/brandedReport.test.html">Branded Client Report</a></li>
-          <li><a href="modules/clientRiskEmail.test.html">Client Risk Email</a></li>
-          <li><a href="modules/referralTracker.test.html">Referral Tracker</a></li>
-          <li><a href="modules/clientPortal.test.html">Client Portal</a></li>
-          <li><a href="modules/whiteLabelSettings.test.html">White-Label Settings</a></li>
-          <li><a href="modules/aiCfoChat.test.html">AI CFO Chat</a></li>
+          <li><a href="../modules/advisorDashboard.test.html">Advisor Dashboard</a></li>
+          <li><a href="../modules/brandedReport.test.html">Branded Client Report</a></li>
+          <li><a href="../modules/clientRiskEmail.test.html">Client Risk Email</a></li>
+          <li><a href="../modules/referralTracker.test.html">Referral Tracker</a></li>
+          <li><a href="../modules/clientPortal.test.html">Client Portal</a></li>
+          <li><a href="../modules/whiteLabelSettings.test.html">White-Label Settings</a></li>
+          <li><a href="../modules/aiCfoChat.test.html">AI CFO Chat</a></li>
         </ul>
         <h4 style="margin-top:1.5rem">Platform</h4>
         <ul>
-          <li><a href="dashboard.html">📊 All Tools Dashboard</a></li>
-          <li><a href="try.html">▶ Try All 30 Tools</a></li>
+          <li><a href="../dashboard.html">📊 All Tools Dashboard</a></li>
+          <li><a href="../try.html">▶ Try All 30 Tools</a></li>
           <li><a href="#modules">Start Here</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#features">Why BizScale</a></li>
+          <li><a href="#features">Why BizSco</a></li>
         </ul>
       </div>
 
     </div>
     <div class="footer-bottom">
-      <span>© 2025 BizScale · SmallBiz Financial Platform · 30 Tools · 100% Browser-Based</span>
+      <span>© 2025 BizSco · SmallBiz Financial Platform · 30 Tools · 100% Browser-Based</span>
       <div class="footer-bottom-links">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
-        <a href="try.html">All Tools</a>
+        <a href="../try.html">All Tools</a>
       </div>
     </div>
   </div>
@@ -2008,7 +1976,7 @@ document.addEventListener('click', function(e){
     <!-- Step 1 -->
     <div id="wzStep0">
       <div class="wiz-badge">Quick Setup · Step 1 of 2</div>
-      <div class="wiz-title">Welcome to BizScale 👋</div>
+      <div class="wiz-title">Welcome to BizSco 👋</div>
       <div class="wiz-sub">Set up your business profile once — all 30 tools auto-fill from it.</div>
       <div class="wiz-field">
         <label class="wiz-label">Business Name</label>
@@ -2044,19 +2012,19 @@ document.addEventListener('click', function(e){
       <div class="wiz-field">
         <label class="wiz-label">Monthly Revenue Tier</label>
         <div class="wiz-opts" id="wzRevOpts">
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','&lt;5k')">Under $5K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','5-20k')">$5K – $20K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','20-50k')">$20K – $50K</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','50k+')">$50K+</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','&lt;5L')">Under ₹5L</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','5-20L')">₹5L – ₹20L</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','20-50L')">₹20L – ₹50L</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzRevOpts',this,'rev','50L+')">₹50L+</div>
         </div>
       </div>
       <div class="wiz-field" style="margin-top:14px">
         <label class="wiz-label">Entity Type</label>
         <div class="wiz-opts" id="wzEntOpts">
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','Sole Proprietor')">Sole Proprietor</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','LLC')">LLC</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','S-Corp')">S-Corp</div>
-          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','C-Corp')">C-Corp</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','Proprietorship')">Sole Proprietor</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','Partnership')">Partnership</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','LLP')">LLP</div>
+          <div class="wiz-opt" onclick="setWzOpt('wzEntOpts',this,'ent','Pvt Ltd')">Pvt Ltd</div>
         </div>
       </div>
       <div class="wiz-footer">
