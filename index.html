@@ -1999,7 +1999,27 @@ document.addEventListener('click', function(e){
     <div id="wzStep1" style="display:none">
       <div class="wiz-badge">Quick Setup · Step 2 of 2</div>
       <div class="wiz-title">A bit more about your business</div>
-      <div class="wiz-sub">Helps tailor benchmarks and grant eligibility across all tools.</div>
+      <div class="wiz-sub">Helps tailor benchmarks, lender matches, schemes and tax tools to your country.</div>
+
+      <div class="wiz-field" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;margin-bottom:14px">
+        <label class="wiz-label" style="display:flex;align-items:center;gap:6px">
+          🌍 Business Country
+          <span style="font-size:.7rem;color:#64748b;font-weight:500">(locks currency &amp; rules)</span>
+        </label>
+        <select id="wzCountrySelect" style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:6px;font-size:.92rem;font-weight:600;background:#fff;cursor:pointer;margin-top:4px"
+                onchange="wzPreviewCountry(this.value)">
+          <option value="us">🇺🇸 United States (USD $)</option>
+          <option value="in">🇮🇳 India (INR ₹)</option>
+          <option value="uk">🇬🇧 United Kingdom (GBP £)</option>
+          <option value="au">🇦🇺 Australia (AUD A$)</option>
+          <option value="ca">🇨🇦 Canada (CAD C$)</option>
+          <option value="sg">🇸🇬 Singapore (SGD S$)</option>
+        </select>
+        <div id="wzCountryNote" style="font-size:.74rem;color:#475569;margin-top:6px;line-height:1.4">
+          ℹ️ Your business country determines currency, lender list (banks/NBFCs), government schemes &amp; tax rules. <strong>It's locked once saved</strong> — switching country later requires updating your profile.
+        </div>
+      </div>
+
       <div class="wiz-field">
         <label class="wiz-label">Monthly Revenue Tier</label>
         <div class="wiz-opts" id="wzRevOpts">
@@ -2174,12 +2194,32 @@ function wzNext(){
   document.getElementById('wzStep0').style.display='none';
   document.getElementById('wzStep1').style.display='block';
   document.getElementById('wzSeg1').classList.add('active');
+
+  // Pre-select the country in the wizard dropdown based on current detected country
+  var current = (window.BizScoCountry && window.BizScoCountry.getCurrent) ? window.BizScoCountry.getCurrent() : 'us';
+  var sel = document.getElementById('wzCountrySelect');
+  if (sel) sel.value = current;
 }
 
 function wzBack(){
   document.getElementById('wzStep1').style.display='none';
   document.getElementById('wzStep0').style.display='block';
   document.getElementById('wzSeg1').classList.remove('active');
+}
+
+// Preview UI updates as user picks country in wizard
+function wzPreviewCountry(cn){
+  if (!window.BizScoCountry || !window.COUNTRY_DATA || !window.COUNTRY_DATA[cn]) return;
+  // Apply UI changes for preview (does NOT save profile yet)
+  // We need to apply without going through profile-mismatch check
+  if (window.BizScoCountry.apply) window.BizScoCountry.apply(cn);
+  else if (window.BizScoCountry.set) window.BizScoCountry.set(cn);
+
+  var data = window.COUNTRY_DATA[cn];
+  var note = document.getElementById('wzCountryNote');
+  if (note) {
+    note.innerHTML = 'ℹ️ Currency: <strong>' + data.currencyCode + ' (' + data.currency + ')</strong> · Lenders: <strong>' + (data.lenders||'').split(',').slice(0,3).join(',') + '…</strong> · Schemes: <strong>' + (data.schemes||'') + '</strong>. <span style="color:#92400e">🔒 Locked once you click Finish.</span>';
+  }
 }
 
 function setWzOpt(groupId,el,field,val){
@@ -2189,7 +2229,20 @@ function setWzOpt(groupId,el,field,val){
 }
 
 function wzFinish(){
-  var prof={name:WZ.name,industry:WZ.industry,revTier:WZ.rev,entityType:WZ.ent,createdAt:Date.now()};
+  // Use the country selected in the wizard (Step 2 dropdown), or fall back to current
+  var sel = document.getElementById('wzCountrySelect');
+  var currentCountry = (sel && sel.value) ? sel.value : ((window.BizScoCountry && window.BizScoCountry.getCurrent) ? window.BizScoCountry.getCurrent() : 'us');
+  var countryInfo = (window.COUNTRY_DATA && window.COUNTRY_DATA[currentCountry]) || {};
+  var prof={
+    name:WZ.name,
+    industry:WZ.industry,
+    revTier:WZ.rev,
+    entityType:WZ.ent,
+    country:currentCountry,
+    currency:countryInfo.currencyCode || 'USD',
+    countryName:countryInfo.name || 'USA',
+    createdAt:Date.now()
+  };
   var profiles=sg('fw_profiles')||[];
   if(!profiles.length){
     profiles.push(prof);
@@ -2201,6 +2254,18 @@ function wzFinish(){
   localStorage.setItem('fw_profiles',JSON.stringify(profiles));
   localStorage.setItem('fw_profile',JSON.stringify(prof));
   localStorage.setItem('fw_setup_done','1');
+
+  // Lock the country switcher to this profile's country
+  if (window.BizScoCountry && window.BizScoCountry.saveProfile) {
+    window.BizScoCountry.saveProfile({
+      country: currentCountry,
+      businessName: WZ.name,
+      industry: WZ.industry,
+      revTier: WZ.rev,
+      entityType: WZ.ent
+    });
+  }
+
   document.getElementById('wizWrap').classList.remove('open');
 }
 
