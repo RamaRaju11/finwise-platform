@@ -336,12 +336,28 @@
     updateSelectorLockState();
   }
 
+  /* ── Inject emoji font fallback so icons render properly on all systems ── */
+  function injectEmojiFontFix(){
+    if (document.getElementById('cn-emoji-fix-style')) return;
+    const style = document.createElement('style');
+    style.id = 'cn-emoji-fix-style';
+    style.textContent = `
+      body, body * {
+        font-family: var(--app-font, "Inter"), "Segoe UI", "Apple Color Emoji",
+                     "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol",
+                     system-ui, -apple-system, sans-serif;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   /* ── Init ────────────────────────────────────────────────────── */
   async function init(){
     if (typeof COUNTRY_DATA === 'undefined') {
       console.error('country-data.js must load before country-switcher.js');
       return;
     }
+    injectEmojiFontFix();
 
     // Step 1: Apply initial country immediately (sync sources only)
     const initial = getInitialCountry();

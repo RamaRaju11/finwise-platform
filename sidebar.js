@@ -1,4 +1,4 @@
-﻿/* BizScale Shared Sidebar — include in any page, handles path detection automatically */
+﻿/* BizSco Shared Sidebar — include in any page, handles path detection automatically */
 (function(){
   var page = location.pathname.split('/').pop() || 'index.html';
 
@@ -30,7 +30,8 @@
     'body.fw-sb-page .hero-eyebrow{color:#2563eb!important}',
     'body.fw-sb-page .hero span.g{color:#4f46e5!important;background:none!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:unset!important}',
 
-    /* sidebar */
+    /* sidebar — include emoji-capable fonts so icons render on Windows */
+    '.fw-sidebar,.fw-sidebar *,.fw-topbar,.fw-topbar *{font-family:"Inter","Segoe UI","Segoe UI Emoji","Segoe UI Symbol","Apple Color Emoji","Noto Color Emoji",system-ui,sans-serif!important}',
     '.fw-sidebar{width:220px;background:#0f172a;height:100vh;position:fixed!important;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none}',
     '.fw-sidebar::-webkit-scrollbar{display:none}',
 
@@ -172,7 +173,7 @@
       'financialStatements.test.html':'Financial Statements',
       'whiteLabelSettings.test.html':'White-Label Settings'
     };
-    var pageTitle = titles[page] || 'BizScale';
+    var pageTitle = titles[page] || 'BizSco';
 
     /* helper to build a sidebar link */
     function lnk(href, icon, label, dataP){
@@ -184,7 +185,7 @@
     aside.className = 'fw-sidebar';
     aside.id = 'fwSidebar';
     aside.innerHTML =
-      '<a href="'+B+'dashboard.html" class="fw-sb-logo"><div class="fw-sb-logo-text">&#128200; Biz<span>Scale</span></div></a>'+
+      '<a href="'+B+'dashboard.html" class="fw-sb-logo"><div class="fw-sb-logo-text">&#128200; Biz<span>Sco</span></div></a>'+
       '<div style="font-size:.58rem;color:#475569;padding:0 16px 10px;margin-top:-6px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>'+
       '<div class="fw-sb-biz" id="fwSbBiz">Your dashboard</div>'+
       '<span class="fw-sb-plan-chip" id="fwSbPlan">Free Plan</span>'+
