@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>12-Month Cash Flow Forecast — BizScale Pro</title>
+<title>12-Month Cash Flow Forecast ï¿½ BizSco Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding-bottom:48px}
@@ -175,7 +175,7 @@ tbody tr:hover td{background:#fafafa}
   <div class="pw-box">
     <div style="font-size:2.2rem">??</div>
     <h2>12-Month Cash Flow Forecast</h2>
-    <p>See where your business will be in 12 months — revenue, expenses, EMI impact, and cash position month by month.</p>
+    <p>See where your business will be in 12 months ï¿½ revenue, expenses, EMI impact, and cash position month by month.</p>
     <div class="pw-feats">
       <div class="pw-feat">?? Month-by-month table</div>
       <div class="pw-feat">?? Visual chart</div>
@@ -184,7 +184,7 @@ tbody tr:hover td{background:#fafafa}
       <div class="pw-feat">?? Seasonal adjustments</div>
       <div class="pw-feat">??? Print report</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro ï¿½ $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -198,11 +198,11 @@ tbody tr:hover td{background:#fafafa}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">? Back to BizScale</a>
+    <a href="../index.html" class="ph-back">? Back to BizSco</a>
     <h1>?? 12-Month Cash Flow Forecast</h1>
     <p>Project your revenue, expenses, and loan impact month by month</p>
   </div>
-  <div class="ph-badge">Pro · $29/month</div>
+  <div class="ph-badge">Pro ï¿½ $29/month</div>
 </div>
 
 <div class="wrap">
@@ -225,7 +225,7 @@ tbody tr:hover td{background:#fafafa}
     <div>
       <label>Revenue Growth % / month</label>
       <input type="number" id="f_rgrow" placeholder="2" step="0.1"/>
-      <div class="hint">0 = flat · 2 = +2% each month</div>
+      <div class="hint">0 = flat ï¿½ 2 = +2% each month</div>
       <div class="growth-toggle">
         <label><input type="radio" name="growthMode" value="compound" checked> Compound</label>
         <label><input type="radio" name="growthMode" value="linear"> Linear</label>
@@ -235,7 +235,7 @@ tbody tr:hover td{background:#fafafa}
     <div>
       <label>Expense Growth % / month</label>
       <input type="number" id="f_egrow" placeholder="0.5" step="0.1"/>
-      <div class="hint">0 = flat · 0.5 = normal cost inflation</div>
+      <div class="hint">0 = flat ï¿½ 0.5 = normal cost inflation</div>
     </div>
     <div><label>Existing Monthly EMI</label><input type="number" id="f_emi" placeholder="0" min="0"/></div>
     <div>
@@ -271,7 +271,7 @@ tbody tr:hover td{background:#fafafa}
         <button class="btn btn-sm" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:4px 12px" onclick="applySeasonal('restaurant')">?? Restaurant</button>
         <button class="btn btn-sm" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:4px 12px" onclick="applySeasonal('services')">?? Services</button>
         <button class="btn btn-sm" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:4px 12px" onclick="applySeasonal('beauty')">?? Beauty/Salon</button>
-        <button class="btn btn-sm" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:4px 12px" onclick="applySeasonal('flat')">— Reset</button>
+        <button class="btn btn-sm" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:4px 12px" onclick="applySeasonal('flat')">ï¿½ Reset</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px" id="seaGrid"></div>
     </div>
@@ -306,7 +306,7 @@ tbody tr:hover td{background:#fafafa}
       <div class="leg"><div class="leg-dot" style="background:rgba(79,70,229,.4)"></div>Revenue</div>
       <div class="leg"><div class="leg-dot" style="background:rgba(239,68,68,.4)"></div>Total Outflow</div>
       <div class="leg"><div class="leg-dot" style="background:#10b981"></div>Net Cash Flow</div>
-      <div class="leg"><div class="leg-dot" style="background:rgba(16,185,129,0.25);border:1px solid #10b981"></div>±15% Band</div>
+      <div class="leg"><div class="leg-dot" style="background:rgba(16,185,129,0.25);border:1px solid #10b981"></div>ï¿½15% Band</div>
       <div class="leg"><div class="leg-dot" style="background:#f59e0b;border-radius:50%"></div>Cumulative Balance</div>
     </div>
     <canvas id="chart" height="260"></canvas>
@@ -334,7 +334,7 @@ tbody tr:hover td{background:#fafafa}
 
   <div class="card">
     <h2>?? 3-Scenario Comparison</h2>
-    <p class="card-desc">Base vs Optimistic (+10% revenue) vs Pessimistic (-10% revenue) — side by side</p>
+    <p class="card-desc">Base vs Optimistic (+10% revenue) vs Pessimistic (-10% revenue) ï¿½ side by side</p>
     <div class="tbl-wrap"><table class="sc-compare" id="scCompareTable"></table></div>
   </div>
 
@@ -371,12 +371,12 @@ function renderCalendarBanner(){
   var el=document.getElementById('calendarBanner');
   if(!d.billCount&&!d.incomeEvents){el.className='conn-band';return;}
   var pills='';
-  if(d.billCount) pills+='<span class="cb-pill">?? '+d.billCount+' committed bills · $'+Math.round(d.totalBills).toLocaleString()+'/mo</span>';
-  if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events · $'+Math.round(d.monthlyIncome).toLocaleString()+'/mo</span>';
+  if(d.billCount) pills+='<span class="cb-pill">?? '+d.billCount+' committed bills ï¿½ $'+Math.round(d.totalBills).toLocaleString()+'/mo</span>';
+  if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events ï¿½ $'+Math.round(d.monthlyIncome).toLocaleString()+'/mo</span>';
   el.className='conn-band has-data';
   el.innerHTML='<div class="cb-icon">???</div>'
     +'<div class="cb-body">'
-    +'<div class="cb-title">Cash Flow Calendar · committed data available</div>'
+    +'<div class="cb-title">Cash Flow Calendar ï¿½ committed data available</div>'
     +'<div class="cb-pills">'+pills+'</div>'
     +'<button class="cb-btn" onclick="importFromCalendar()">?? Import committed expenses</button>'
     +'</div>';
@@ -399,17 +399,17 @@ function showToast(m){
 
 /* --- Currency --- */
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('bizscale_currency')||'USD';
+  var s=localStorage.getItem('BizSco_currency')||'USD';
   return '$';
 })();
 
 function fmt(n){
-  if(n===null||n===undefined||isNaN(n))return'—';
+  if(n===null||n===undefined||isNaN(n))return'ï¿½';
   var abs=Math.abs(Math.round(n));
   return CUR_SYM+abs.toLocaleString();
 }
 function fmtS(n){
-  if(isNaN(n))return'—';
+  if(isNaN(n))return'ï¿½';
   return (n<0?'-':'')+fmt(n);
 }
 
@@ -497,7 +497,7 @@ function checkSnapshotSeed(){
     pills += ' <span class="seed-badge">?? Avg Exp: $'+avgExp.toLocaleString()+'/mo</span>';
     var band = document.getElementById('seedBanner');
     band.className='seed-band';
-    band.innerHTML = '<div style="font-size:.82rem;font-weight:700;color:#15803d">?? Monthly Snapshot data available — seed forecast from actuals?</div>'
+    band.innerHTML = '<div style="font-size:.82rem;font-weight:700;color:#15803d">?? Monthly Snapshot data available ï¿½ seed forecast from actuals?</div>'
       + '<div style="margin-top:4px">'+pills+'</div>'
       + '<button class="btn-seed" onclick="seedFromSnapshots('+avgRev+','+avgExp+(lastSnap&&lastSnap.revenue?','+Math.round(lastSnap.currentBalance||0):'')+')">'
       + '?? Seed Baseline from '+keys.length+' months of actuals</button>';
@@ -737,9 +737,9 @@ function renderComparisonTable(){
     var b=stored.base[i], o=stored.opt[i], p=stored.pes[i];
     rows+='<tr>'
       +'<td>'+b.mo+'</td>'
-      +'<td>'+fmt(b.rev)+'</td><td>'+fmt(b.exp)+'</td><td>'+(b.emi?fmt(b.emi):'—')+'</td><td class="'+(b.net>=0?'pos':'neg')+'">'+fmtS(b.net)+'</td><td class="'+(b.close>=0?'pos':'neg')+'">'+fmtS(b.close)+'</td>'
-      +'<td>'+fmt(o.rev)+'</td><td>'+fmt(o.exp)+'</td><td>'+(o.emi?fmt(o.emi):'—')+'</td><td class="'+(o.net>=0?'pos':'neg')+'">'+fmtS(o.net)+'</td><td class="'+(o.close>=0?'pos':'neg')+'">'+fmtS(o.close)+'</td>'
-      +'<td>'+fmt(p.rev)+'</td><td>'+fmt(p.exp)+'</td><td>'+(p.emi?fmt(p.emi):'—')+'</td><td class="'+(p.net>=0?'pos':'neg')+'">'+fmtS(p.net)+'</td><td class="'+(p.close>=0?'pos':'neg')+'">'+fmtS(p.close)+'</td>'
+      +'<td>'+fmt(b.rev)+'</td><td>'+fmt(b.exp)+'</td><td>'+(b.emi?fmt(b.emi):'ï¿½')+'</td><td class="'+(b.net>=0?'pos':'neg')+'">'+fmtS(b.net)+'</td><td class="'+(b.close>=0?'pos':'neg')+'">'+fmtS(b.close)+'</td>'
+      +'<td>'+fmt(o.rev)+'</td><td>'+fmt(o.exp)+'</td><td>'+(o.emi?fmt(o.emi):'ï¿½')+'</td><td class="'+(o.net>=0?'pos':'neg')+'">'+fmtS(o.net)+'</td><td class="'+(o.close>=0?'pos':'neg')+'">'+fmtS(o.close)+'</td>'
+      +'<td>'+fmt(p.rev)+'</td><td>'+fmt(p.exp)+'</td><td>'+(p.emi?fmt(p.emi):'ï¿½')+'</td><td class="'+(p.net>=0?'pos':'neg')+'">'+fmtS(p.net)+'</td><td class="'+(p.close>=0?'pos':'neg')+'">'+fmtS(p.close)+'</td>'
       +'</tr>';
   }
   // Totals row
@@ -750,9 +750,9 @@ function renderComparisonTable(){
   var ybB=stored.base[11].close, ybO=stored.opt[11].close, ybP=stored.pes[11].close;
   rows+='<tr class="row-total">'
     +'<td>Year Total</td>'
-    +'<td>'+fmt(totB.rev)+'</td><td>'+fmt(totB.exp)+'</td><td>'+(totB.emi?fmt(totB.emi):'—')+'</td><td class="'+(totB.net>=0?'pos':'neg')+'">'+fmtS(totB.net)+'</td><td class="'+(ybB>=0?'pos':'neg')+'">'+fmtS(ybB)+'</td>'
-    +'<td>'+fmt(totO.rev)+'</td><td>'+fmt(totO.exp)+'</td><td>'+(totO.emi?fmt(totO.emi):'—')+'</td><td class="'+(totO.net>=0?'pos':'neg')+'">'+fmtS(totO.net)+'</td><td class="'+(ybO>=0?'pos':'neg')+'">'+fmtS(ybO)+'</td>'
-    +'<td>'+fmt(totP.rev)+'</td><td>'+fmt(totP.exp)+'</td><td>'+(totP.emi?fmt(totP.emi):'—')+'</td><td class="'+(totP.net>=0?'pos':'neg')+'">'+fmtS(totP.net)+'</td><td class="'+(ybP>=0?'pos':'neg')+'">'+fmtS(ybP)+'</td>'
+    +'<td>'+fmt(totB.rev)+'</td><td>'+fmt(totB.exp)+'</td><td>'+(totB.emi?fmt(totB.emi):'ï¿½')+'</td><td class="'+(totB.net>=0?'pos':'neg')+'">'+fmtS(totB.net)+'</td><td class="'+(ybB>=0?'pos':'neg')+'">'+fmtS(ybB)+'</td>'
+    +'<td>'+fmt(totO.rev)+'</td><td>'+fmt(totO.exp)+'</td><td>'+(totO.emi?fmt(totO.emi):'ï¿½')+'</td><td class="'+(totO.net>=0?'pos':'neg')+'">'+fmtS(totO.net)+'</td><td class="'+(ybO>=0?'pos':'neg')+'">'+fmtS(ybO)+'</td>'
+    +'<td>'+fmt(totP.rev)+'</td><td>'+fmt(totP.exp)+'</td><td>'+(totP.emi?fmt(totP.emi):'ï¿½')+'</td><td class="'+(totP.net>=0?'pos':'neg')+'">'+fmtS(totP.net)+'</td><td class="'+(ybP>=0?'pos':'neg')+'">'+fmtS(ybP)+'</td>'
     +'</tr>';
   tbl.innerHTML=th+rows;
 }
@@ -810,7 +810,7 @@ function renderTable(data){
       +'<td>'+r.mo+badge+'</td>'
       +'<td>'+fmt(r.rev)+'</td>'
       +'<td>'+fmt(r.exp)+'</td>'
-      +'<td>'+(r.emi?fmt(r.emi):'—')+'</td>'
+      +'<td>'+(r.emi?fmt(r.emi):'ï¿½')+'</td>'
       +'<td class="'+netCls+'">'+fmtS(r.net)+'</td>'
       +'<td>'+fmtS(r.open)+'</td>'
       +'<td class="'+balCls+'">'+fmtS(r.close)+'</td>'
@@ -824,9 +824,9 @@ function renderTable(data){
     +'<td>Total / Year-End</td>'
     +'<td>'+fmt(tRev)+'</td>'
     +'<td>'+fmt(tExp)+'</td>'
-    +'<td>'+(tEMI?fmt(tEMI):'—')+'</td>'
+    +'<td>'+(tEMI?fmt(tEMI):'ï¿½')+'</td>'
     +'<td class="'+(tNet>=0?'pos':'neg')+'">'+fmtS(tNet)+'</td>'
-    +'<td>—</td>'
+    +'<td>ï¿½</td>'
     +'<td class="'+(fb>=0?'pos':'neg')+'">'+fmtS(fb)+'</td>'
     +'</tr>';
   document.getElementById('tblBody').innerHTML=html;
@@ -884,7 +884,7 @@ function drawChart(data){
     ctx.setLineDash([]);
   }
 
-  // ±15% confidence band (shaded area around net cash flow)
+  // ï¿½15% confidence band (shaded area around net cash flow)
   var bandNets=nets.map(function(v,i){return nets[i];});
   ctx.beginPath();
   for(var i=0;i<n;i++) i===0?ctx.moveTo(tx(i),ty(bandNets[i]*1.15)):ctx.lineTo(tx(i),ty(bandNets[i]*1.15));
@@ -977,10 +977,10 @@ function renderInsights(data,sc){
   }
   if(defMos.length>0){
     var names=defMos.map(function(r){return r.mo;}).join(', ');
-    ins.push({t:'bad',icon:'??',h:defMos.length+' deficit month'+(defMos.length>1?'s':'')+' forecast',b:names+' are projected deficit months. Reserve covers '+(ex.res&&totalEMI?(ex.res/totalEMI).toFixed(1):0)+' months of EMI — top up before these months arrive.'});
+    ins.push({t:'bad',icon:'??',h:defMos.length+' deficit month'+(defMos.length>1?'s':'')+' forecast',b:names+' are projected deficit months. Reserve covers '+(ex.res&&totalEMI?(ex.res/totalEMI).toFixed(1):0)+' months of EMI ï¿½ top up before these months arrive.'});
   }
   if(finalBal>=0){
-    ins.push({t:'good',icon:'??',h:'Year-end balance: '+fmt(finalBal),b:finalBal>ex.res?'Your cash reserve has grown by year end — a strong sign.':'Positive year-end balance. Consider investing surplus into growth or prepaying debt.'});
+    ins.push({t:'good',icon:'??',h:'Year-end balance: '+fmt(finalBal),b:finalBal>ex.res?'Your cash reserve has grown by year end ï¿½ a strong sign.':'Positive year-end balance. Consider investing surplus into growth or prepaying debt.'});
   } else {
     ins.push({t:'bad',icon:'??',h:'Year-end cash deficit: '+fmt(Math.abs(finalBal)),b:'Cash position goes negative by year end. Reduce expenses, adjust loan size, or increase revenue growth target.'});
   }
@@ -993,22 +993,22 @@ function renderInsights(data,sc){
     if(netCF>0){
       var ep=Math.round(totalEMI/netCF*100);
       var ecls=ep<=40?'good':ep<=60?'warn':'bad';
-      ins.push({t:ecls,icon:'??',h:'EMI is '+ep+'% of net cash flow',b:ep<=40?'EMI is within safe limits (below 40%). Cash flow stays healthy after loan payments.':'EMI consumes '+ep+'% of net cash flow — above 40% safe threshold. Consider extending tenure.'});
+      ins.push({t:ecls,icon:'??',h:'EMI is '+ep+'% of net cash flow',b:ep<=40?'EMI is within safe limits (below 40%). Cash flow stays healthy after loan payments.':'EMI consumes '+ep+'% of net cash flow ï¿½ above 40% safe threshold. Consider extending tenure.'});
     }
   }
   if(sc==='pes'&&defMos.length>3){
     ins.push({t:'warn',icon:'???',h:'High sensitivity to revenue drop',b:'A 10% revenue decline causes '+defMos.length+' deficit months. Consider reducing fixed costs or negotiating EMI holiday with lender as contingency.'});
   }
   var revGrowth=data[data.length-1].rev/data[0].rev-1;
-  ins.push({t:'info',icon:'??',h:'Revenue growth over 12 months',b:'Starting at '+fmt(data[0].rev)+'/month, revenue reaches '+fmt(data[data.length-1].rev)+'/month by month 12 — a '+(revGrowth*100).toFixed(1)+'% increase.'});
+  ins.push({t:'info',icon:'??',h:'Revenue growth over 12 months',b:'Starting at '+fmt(data[0].rev)+'/month, revenue reaches '+fmt(data[data.length-1].rev)+'/month by month 12 ï¿½ a '+(revGrowth*100).toFixed(1)+'% increase.'});
 
   // Goal Tracker cross-reference
   if(_revGoal && _revGoal.target > 0){
     var monthsOverGoal=data.filter(function(r){return r.rev>=_revGoal.target;});
     if(monthsOverGoal.length===12){
-      ins.push({t:'good',icon:'??',h:'?? Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal — consider raising the goal in Goal Tracker to keep pushing growth.'});
+      ins.push({t:'good',icon:'??',h:'?? Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal ï¿½ consider raising the goal in Goal Tracker to keep pushing growth.'});
     } else if(monthsOverGoal.length>0){
-      ins.push({t:'good',icon:'??',h:'Goal reachable in '+monthsOverGoal[0].mo,b:'Forecast revenue first hits the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in '+monthsOverGoal[0].mo+' and is exceeded in '+monthsOverGoal.length+' of 12 months. You\'re on track — the dashed pink line on the chart shows the target.'});
+      ins.push({t:'good',icon:'??',h:'Goal reachable in '+monthsOverGoal[0].mo,b:'Forecast revenue first hits the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in '+monthsOverGoal[0].mo+' and is exceeded in '+monthsOverGoal.length+' of 12 months. You\'re on track ï¿½ the dashed pink line on the chart shows the target.'});
     } else {
       var gap=_revGoal.target-data[data.length-1].rev;
       ins.push({t:'warn',icon:'??',h:'Stretch gap to goal: '+fmt(gap)+'/mo',b:'Revenue never reaches the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in this 12-month window. Year-end revenue ('+fmt(data[data.length-1].rev)+'/mo) is '+fmt(gap)+'/mo short. Try increasing the revenue growth rate or raising prices.'});
@@ -1016,7 +1016,7 @@ function renderInsights(data,sc){
   }
 
   if(_calData.billCount>0){
-    ins.push({t:'info',icon:'??',h:'Committed expense floor: '+fmt(_calData.totalBills)+'/mo from '+_calData.billCount+' bills',b:'Your '+_calData.billCount+' recurring bills create a minimum burn of '+fmt(_calData.totalBills)+'/month even in a zero-revenue scenario. The pessimistic scenario (-10%) already floors at this level — use it as your worst-case planning baseline.'});
+    ins.push({t:'info',icon:'??',h:'Committed expense floor: '+fmt(_calData.totalBills)+'/mo from '+_calData.billCount+' bills',b:'Your '+_calData.billCount+' recurring bills create a minimum burn of '+fmt(_calData.totalBills)+'/month even in a zero-revenue scenario. The pessimistic scenario (-10%) already floors at this level ï¿½ use it as your worst-case planning baseline.'});
   }
 
   var html='';
@@ -1048,7 +1048,7 @@ function exportCSV(){
   var name=storeExtra.name||'Business';
   var scLabel=curSc==='opt'?'Optimistic':curSc==='pes'?'Pessimistic':'Base';
   var rows=[
-    ['BizScale 12-Month Cash Flow Forecast'],
+    ['BizSco 12-Month Cash Flow Forecast'],
     ['Business: '+name+' | Scenario: '+scLabel+' | Generated: '+new Date().toLocaleDateString()],
     [],
     ['Month','Revenue','Expenses','EMI','Net Cash Flow','Opening Balance','Closing Balance']
@@ -1069,7 +1069,7 @@ function exportCSV(){
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
   a.href=url;
-  a.download='BizScale_Forecast_'+name.replace(/\s+/g,'_')+'_'+scLabel+'.csv';
+  a.download='BizSco_Forecast_'+name.replace(/\s+/g,'_')+'_'+scLabel+'.csv';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   showToast('CSV downloaded!');
@@ -1080,7 +1080,7 @@ function exportAllCSV(){
   if(!stored.base||!stored.opt||!stored.pes){showToast('Generate a forecast first.');return;}
   var name=storeExtra.name||'Business';
   var rows=[
-    ['BizScale 12-Month Forecast — All Scenarios'],
+    ['BizSco 12-Month Forecast ï¿½ All Scenarios'],
     ['Business: '+name+' | Generated: '+new Date().toLocaleDateString()],
     [],
     ['Month',
@@ -1116,7 +1116,7 @@ function exportAllCSV(){
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
   a.href=url;
-  a.download='BizScale_AllScenarios_'+name.replace(/\s+/g,'_')+'.csv';
+  a.download='BizSco_AllScenarios_'+name.replace(/\s+/g,'_')+'.csv';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   showToast('All-scenarios CSV downloaded!');

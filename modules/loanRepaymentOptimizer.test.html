@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Repayment Optimizer — BizScale</title>
+<title>Loan Repayment Optimizer ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -99,7 +99,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Loan Repayment Optimizer</h1>
-<p class="subtitle">BizScale · Compare Debt Snowball vs Debt Avalanche — find the fastest, cheapest path to debt-free.</p>
+<p class="subtitle">BizSco ï¿½ Compare Debt Snowball vs Debt Avalanche ï¿½ find the fastest, cheapest path to debt-free.</p>
 
 <!-- Loans Input Card -->
 <div class="card">
@@ -156,7 +156,7 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" id="chartCard">
     <h2>?? Balance Over Time</h2>
-    <p style="font-size:.78rem;color:#64748b;margin-bottom:12px">Total remaining debt (blue) and cumulative interest paid (orange) — winning strategy.</p>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:12px">Total remaining debt (blue) and cumulative interest paid (orange) ï¿½ winning strategy.</p>
     <div style="overflow-x:auto">
       <canvas id="lro-chart" width="720" height="240" style="max-width:100%;display:block"></canvas>
     </div>
@@ -168,7 +168,7 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" id="payoffCalCard">
     <h2>Payoff Calendar</h2>
-    <p style="font-size:.78rem;color:#64748b;margin-bottom:10px">Exact month-year each loan is paid off — both strategies compared.</p>
+    <p style="font-size:.78rem;color:#64748b;margin-bottom:10px">Exact month-year each loan is paid off ï¿½ both strategies compared.</p>
     <div style="overflow-x:auto"><table class="pc-table" id="payoffCalTable"></table></div>
   </div>
 
@@ -381,7 +381,7 @@ function renderStratCard(type, result, color) {
 
 function renderSchedule(result, stratName) {
   document.getElementById('schedule-title').textContent =
-    '12-Month Balance Schedule — ' + (stratName === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy';
+    '12-Month Balance Schedule ï¿½ ' + (stratName === 'avalanche' ? 'Avalanche' : 'Snowball') + ' Strategy';
 
   const months = Math.min(12, result.monthlyData.length);
   if (months === 0) return;
@@ -632,7 +632,7 @@ function saveEmiToProfile(emi){
     if(arr[idx]){arr[idx].emi=Math.round(emi);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.createElement('div');
     t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-    t.textContent='? EMI $'+Math.round(emi).toLocaleString()+'/mo saved — cashRunway, breakEven & ownersPay updated';
+    t.textContent='? EMI $'+Math.round(emi).toLocaleString()+'/mo saved ï¿½ cashRunway, breakEven & ownersPay updated';
     document.body.appendChild(t);
     setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},4000);
   }catch(e){}

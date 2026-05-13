@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payroll Impact Simulator — BizScale</title>
+<title>Payroll Impact Simulator ï¿½ BizSco</title>
 <script src="../sidebar.js" defer></script>
 <link rel="manifest" href="../manifest.json">
 <style>
@@ -111,9 +111,9 @@ input[type=range]{width:100%;accent-color:#2563eb;margin-top:2px}
     <h2>Current Financials (Monthly)</h2>
     <div class="grid2">
       <div><label>Monthly Revenue ($)</label><input type="number" id="revenue" placeholder="e.g. 50000" min="0" oninput="recalc()"/></div>
-      <div><label>Monthly Expenses — excl. new hires ($)</label><input type="number" id="expenses" placeholder="e.g. 35000" min="0" oninput="recalc()"/><div class="hint">Include existing payroll if already in expenses</div></div>
+      <div><label>Monthly Expenses ï¿½ excl. new hires ($)</label><input type="number" id="expenses" placeholder="e.g. 35000" min="0" oninput="recalc()"/><div class="hint">Include existing payroll if already in expenses</div></div>
       <div><label>Cash Reserve ($)</label><input type="number" id="reserve" placeholder="e.g. 60000" min="0" oninput="recalc()"/></div>
-      <div><label>Existing Monthly Payroll ($)</label><input type="number" id="curPayroll" placeholder="Optional — for display only" min="0" oninput="recalc()"/><div class="hint">Leave blank if included in expenses</div></div>
+      <div><label>Existing Monthly Payroll ($)</label><input type="number" id="curPayroll" placeholder="Optional ï¿½ for display only" min="0" oninput="recalc()"/><div class="hint">Leave blank if included in expenses</div></div>
     </div>
   </div>
 
@@ -165,12 +165,12 @@ input[type=range]{width:100%;accent-color:#2563eb;margin-top:2px}
       <button class="save-scenario-btn" onclick="saveScenario()">&#128190; Save This Scenario</button>
       <button style="margin-left:8px;padding:7px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:7px;font-size:.83rem;cursor:pointer" onclick="window.print()">??? Print</button>
     </div>
-    <div id="histList"><p style="font-size:.83rem;color:#94a3b8">No saved scenarios yet — configure a scenario and click Save.</p></div>
+    <div id="histList"><p style="font-size:.83rem;color:#94a3b8">No saved scenarios yet ï¿½ configure a scenario and click Save.</p></div>
   </div>
 
   <div class="card" style="text-align:right">
     <button class="save-btn" onclick="savePayrollToProfile()">&#128190; Save Numbers to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, expenses &amp; cash reserve — auto-fills all tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, expenses &amp; cash reserve ï¿½ auto-fills all tools</p>
   </div>
 </div>
 <div id="fwToast"></div>
@@ -242,7 +242,7 @@ function importFromPayroll(){
   if(ps && ps.sSalary) document.getElementById('sSalary').value = Math.round(parseFloat(ps.sSalary)*12/parseFloat(ps.numEmp||1));
 
   if(imported){ recalc(); toast('Payroll data imported'); }
-  else{ toast('No payroll data found — enter figures manually'); }
+  else{ toast('No payroll data found ï¿½ enter figures manually'); }
 }
 
 // -- TOAST --------------------------------------------------------------------
@@ -344,7 +344,7 @@ function recalc(){
   } else if(aFlow>=0){
     warnHtml='<div class="warning-box ok"><div class="wb-icon">&#10003;</div><div class="wb-text"><strong>Cash flow remains positive after hiring.</strong> Revenue covers the increased payroll. Monitor monthly to ensure actuals match.</div></div>';
   } else if(aRunway>=12){
-    warnHtml='<div class="warning-box ok"><div class="wb-icon">&#10003;</div><div class="wb-text"><strong>'+aRunway.toFixed(1)+' months runway</strong> after hiring — sufficient time to grow revenue before reserves deplete.</div></div>';
+    warnHtml='<div class="warning-box ok"><div class="wb-icon">&#10003;</div><div class="wb-text"><strong>'+aRunway.toFixed(1)+' months runway</strong> after hiring ï¿½ sufficient time to grow revenue before reserves deplete.</div></div>';
   }
   document.getElementById('warningBox').innerHTML=warnHtml;
 
@@ -354,7 +354,7 @@ function recalc(){
   if(aMargin<5&&aMargin>=0) items.push({cls:'warn',text:'Net margin after hiring drops to '+aMargin.toFixed(1)+'%. Consider a phased plan: hire one, hit break-even, then expand.'});
   if(bMargin-aMargin>15) items.push({cls:'warn',text:'Margin shrinks by '+(bMargin-aMargin).toFixed(1)+' pp. Factor in at least 3 months of ramp-up before new hires reach full productivity.'});
   if(aRunway>=18) items.push({cls:'good',text:'Runway of '+aRunway.toFixed(1)+' months is strong. Set 90-day and 180-day success metrics for each new hire.'});
-  if(benPct<15) items.push({cls:'',text:'Benefits set at '+benPct+'%. Employer taxes (FICA ~7.65%), workers comp, and health contributions typically bring true all-in cost to 20–30% above base salary.'});
+  if(benPct<15) items.push({cls:'',text:'Benefits set at '+benPct+'%. Employer taxes (FICA ~7.65%), workers comp, and health contributions typically bring true all-in cost to 20ï¿½30% above base salary.'});
   if(!items.length) items.push({cls:'',text:'Adjust the sliders or enter your financials above to see personalized insights.'});
 
   document.getElementById('insightList').innerHTML=items.map(function(i){
@@ -437,7 +437,7 @@ function savePayrollToProfile(){
   p.exp = parseFloat(document.getElementById('expenses').value)||0;
   p.reserve = parseFloat(document.getElementById('reserve').value)||0;
   localStorage.setItem('fw_profile',JSON.stringify(p));
-  toast('Saved to profile — all tools updated');
+  toast('Saved to profile ï¿½ all tools updated');
 }
 
 // -- INIT ---------------------------------------------------------------------

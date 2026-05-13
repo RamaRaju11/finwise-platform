@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>EMI Calculator — BizScale</title>
+<title>EMI Calculator ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -63,7 +63,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <a href="loanDecisionScoreEngine.test.html" class="back-link">? Back to Loan Score</a>
 <h1>EMI Calculator</h1>
-<p class="subtitle">BizScale · Calculate your monthly EMI, total interest and full repayment schedule</p>
+<p class="subtitle">BizSco ï¿½ Calculate your monthly EMI, total interest and full repayment schedule</p>
 
 <div class="card">
   <div class="input-grid">
@@ -91,15 +91,15 @@ button.print-btn:hover{background:#e2e8f0}
     <div class="result-grid">
       <div class="result-box">
         <div class="rb-label">Monthly EMI</div>
-        <div class="rb-value blue" id="r_emi">—</div>
+        <div class="rb-value blue" id="r_emi">ï¿½</div>
       </div>
       <div class="result-box">
         <div class="rb-label">Total Interest</div>
-        <div class="rb-value red" id="r_interest">—</div>
+        <div class="rb-value red" id="r_interest">ï¿½</div>
       </div>
       <div class="result-box">
         <div class="rb-label">Total Payment</div>
-        <div class="rb-value" id="r_total">—</div>
+        <div class="rb-value" id="r_total">ï¿½</div>
       </div>
     </div>
     <div class="bar-wrap">
@@ -133,7 +133,7 @@ button.print-btn:hover{background:#e2e8f0}
 
   <div class="card" style="text-align:right">
     <button class="save-btn" onclick="saveEmiToProfile()">?? Save Loan Details to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves loan amount, rate &amp; tenure — auto-fills all 40 tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves loan amount, rate &amp; tenure ï¿½ auto-fills all 40 tools</p>
   </div>
 
 </div>
@@ -150,7 +150,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='? Saved — all 40 tools updated';
+    t.textContent='? Saved ï¿½ all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -180,7 +180,7 @@ function calculate(){
   var iPct = 100 - pPct;
   document.getElementById('barPrincipal').style.width = pPct+'%';
   document.getElementById('barInterest').style.width = iPct+'%';
-  document.getElementById('bar_pct').textContent = pPct+'% principal · '+iPct+'% interest';
+  document.getElementById('bar_pct').textContent = pPct+'% principal ï¿½ '+iPct+'% interest';
 
   /* Year-by-year */
   var balance = P;

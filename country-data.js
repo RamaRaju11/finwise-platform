@@ -9,7 +9,7 @@ const COUNTRY_DATA = {
   /* ───── USA (default) ───────────────────────────────────────── */
   us: {
     code: 'US', name: 'USA', flag: '🇺🇸', lang: 'en',
-    currency: '$', currencyCode: 'USD',
+    currency: '$', currencyCode: 'USD', exchangeRate: 1.0,
     title: 'BizSco USA — Loan Safety & Cash Flow Engine',
     description: 'AI-powered Loan Decision Engine for US small businesses. Loan Safety Score in 60 seconds across SBA, BlueVine, OnDeck. Free, no sign-up.',
     brandSuffix: 'USA',
@@ -68,7 +68,7 @@ const COUNTRY_DATA = {
   /* ───── INDIA ───────────────────────────────────────────────── */
   in: {
     code: 'IN', name: 'India', flag: '🇮🇳', lang: 'en-IN',
-    currency: '₹', currencyCode: 'INR',
+    currency: '₹', currencyCode: 'INR', exchangeRate: 83.0,
     title: 'BizSco India — MSME Loan Safety & Cash Flow Engine',
     description: 'AI-powered Loan Decision Engine for Indian MSMEs. Check loan safety across SBI, HDFC, ICICI, MUDRA & NBFC offers in 60 seconds. Schemes: PMMY, CGTMSE, Stand-up India. Free, no sign-up.',
     brandSuffix: 'INDIA',
@@ -127,7 +127,7 @@ const COUNTRY_DATA = {
   /* ───── UNITED KINGDOM ──────────────────────────────────────── */
   uk: {
     code: 'UK', name: 'UK', flag: '🇬🇧', lang: 'en-GB',
-    currency: '£', currencyCode: 'GBP',
+    currency: '£', currencyCode: 'GBP', exchangeRate: 0.79,
     title: 'BizSco UK — SME Loan Safety & Cash Flow Engine',
     description: 'AI-powered Loan Decision Engine for UK SMEs. Loan Safety Score across Barclays, HSBC, Lloyds, NatWest, Funding Circle. Government schemes: Start Up Loans, Recovery Loan Scheme. Free.',
     brandSuffix: 'UK',
@@ -186,7 +186,7 @@ const COUNTRY_DATA = {
   /* ───── AUSTRALIA ───────────────────────────────────────────── */
   au: {
     code: 'AU', name: 'Australia', flag: '🇦🇺', lang: 'en-AU',
-    currency: 'A$', currencyCode: 'AUD',
+    currency: 'A$', currencyCode: 'AUD', exchangeRate: 1.55,
     title: 'BizSco Australia — Small Business Loan Safety Engine',
     description: 'AI-powered Loan Decision Engine for Australian small businesses. Loan Safety Score across CommBank, NAB, ANZ, Westpac, Prospa. Government grants: NEIS, Export Market Development Grants.',
     brandSuffix: 'AU',
@@ -245,7 +245,7 @@ const COUNTRY_DATA = {
   /* ───── CANADA ──────────────────────────────────────────────── */
   ca: {
     code: 'CA', name: 'Canada', flag: '🇨🇦', lang: 'en-CA',
-    currency: 'C$', currencyCode: 'CAD',
+    currency: 'C$', currencyCode: 'CAD', exchangeRate: 1.36,
     title: 'BizSco Canada — Small Business Loan Safety Engine',
     description: 'AI-powered Loan Decision Engine for Canadian small businesses. Loan Safety Score across RBC, TD, BMO, Scotiabank, CIBC, BDC. Government programs: CSBFP, IRAP, CEBA.',
     brandSuffix: 'CA',
@@ -304,7 +304,7 @@ const COUNTRY_DATA = {
   /* ───── SINGAPORE ───────────────────────────────────────────── */
   sg: {
     code: 'SG', name: 'Singapore', flag: '🇸🇬', lang: 'en-SG',
-    currency: 'S$', currencyCode: 'SGD',
+    currency: 'S$', currencyCode: 'SGD', exchangeRate: 1.34,
     title: 'BizSco Singapore — SME Loan Safety & Cash Flow Engine',
     description: 'AI-powered Loan Decision Engine for Singapore SMEs. Loan Safety Score across DBS, OCBC, UOB, Maybank, Standard Chartered. Government schemes: EFS, ESG Grants, PSG.',
     brandSuffix: 'SG',

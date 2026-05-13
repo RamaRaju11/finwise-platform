@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Goal Tracker — BizScale</title>
+<title>Goal Tracker ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
@@ -125,7 +125,7 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>?? Goal Tracker</h1>
-<p class="subtitle">BizScale · Set revenue, profit, savings, debt, and customer targets — sync live data automatically</p>
+<p class="subtitle">BizSco ï¿½ Set revenue, profit, savings, debt, and customer targets ï¿½ sync live data automatically</p>
 
 <div class="int-strip" id="intStrip"></div>
 
@@ -138,7 +138,7 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 <div class="goals-grid" id="goalsGrid"></div>
 <div class="empty-state" id="emptyState" style="display:none">
   <div class="empty-icon">??</div>
-  <div class="empty-text">No goals yet — set your first financial target</div>
+  <div class="empty-text">No goals yet ï¿½ set your first financial target</div>
   <button class="empty-btn" onclick="openModal()">+ Add My First Goal</button>
 </div>
 
@@ -391,7 +391,7 @@ function renderGoals(){
       '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">?</button></div>'+
       '<span class="gc-type '+def.cls+'">'+def.icon+' '+def.label+'</span>'+
       '<div class="gc-name">'+esc(g.name)+'</div>'+
-      '<div class="gc-deadline">?? '+g.deadline+' · '+moLeft+' mo left</div>'+
+      '<div class="gc-deadline">?? '+g.deadline+' ï¿½ '+moLeft+' mo left</div>'+
       '<div class="gc-amounts">'+
         '<span style="color:#64748b">Current: <strong style="color:#1e293b">'+fmtVal(g.current||0,unit)+'</strong></span>'+
         '<span style="color:#1e293b;font-weight:700">Target: '+fmtVal(g.target||0,unit)+'</span>'+
@@ -403,7 +403,7 @@ function renderGoals(){
       '</div>'+
       '<span class="status-chip '+status.cls+'">'+status.label+'</span>'+
       '<div class="gc-monthly">Need <strong>'+fmtVal(monthlyNeeded,unit)+'/mo</strong>'+
-        (gainPerMo>0?' · Avg gain <strong>'+fmtVal(gainPerMo,unit)+'/mo</strong>':'')+
+        (gainPerMo>0?' ï¿½ Avg gain <strong>'+fmtVal(gainPerMo,unit)+'/mo</strong>':'')+
       '</div>'+
       renderTimeline(g)+
       (barHtml?'<div class="months-row">'+barHtml+'</div>':'')+

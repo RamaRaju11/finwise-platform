@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Welcome to BizScale — Quick Setup</title>
-<meta name="description" content="Set up your BizScale profile in 2 minutes — enter your business details and financials to instantly unlock your loan score, cash runway, and 30 free tools."/>
+<title>Welcome to BizSco ï¿½ Quick Setup</title>
+<meta name="description" content="Set up your BizSco profile in 2 minutes ï¿½ enter your business details and financials to instantly unlock your loan score, cash runway, and 30 free tools."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -107,7 +107,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <!-- Brand header -->
   <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
     <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em">?? Biz<span style="color:#818cf8">Scale</span></div>
-    <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze · Fund · Grow</div>
+    <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze ï¿½ Fund ï¿½ Grow</div>
   </div>
 
   <!-- Progress -->
@@ -125,7 +125,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="panel active" id="step1">
     <div class="panel-icon">??</div>
     <h2>Welcome! Let's set up your business</h2>
-    <p>This takes 2 minutes. Your details pre-fill all 40 tools — you never enter them again.</p>
+    <p>This takes 2 minutes. Your details pre-fill all 40 tools ï¿½ you never enter them again.</p>
 
     <label>Business Name <span style="color:#ef4444">*</span></label>
     <input type="text" id="bizName" placeholder="e.g. Sarah's Boutique"/>
@@ -160,9 +160,9 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <select id="yearsInBiz">
           <option value="">-- Select --</option>
           <option>Less than 1 year</option>
-          <option>1–2 years</option>
-          <option>2–5 years</option>
-          <option>5–10 years</option>
+          <option>1ï¿½2 years</option>
+          <option>2ï¿½5 years</option>
+          <option>5ï¿½10 years</option>
           <option>10+ years</option>
         </select>
       </div>
@@ -193,17 +193,17 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <select id="employees">
           <option value="">-- Select --</option>
           <option>Just me (Solo)</option>
-          <option>2–5</option>
-          <option>6–20</option>
-          <option>21–50</option>
-          <option>51–100</option>
+          <option>2ï¿½5</option>
+          <option>6ï¿½20</option>
+          <option>21ï¿½50</option>
+          <option>51ï¿½100</option>
           <option>100+</option>
         </select>
       </div>
     </div>
 
     <div style="margin-top:18px">
-      <label style="font-size:.82rem;font-weight:700;color:#374151;margin-bottom:8px;display:block">Business Owner Category <span class="oc-optional" style="display:inline">(optional — helps match targeted funding)</span></label>
+      <label style="font-size:.82rem;font-weight:700;color:#374151;margin-bottom:8px;display:block">Business Owner Category <span class="oc-optional" style="display:inline">(optional ï¿½ helps match targeted funding)</span></label>
       <div class="owner-cats">
         <label class="oc-item" id="oc-women">
           <input type="checkbox" id="cat-women" value="women-owned" onchange="toggleOC(this)">
@@ -227,7 +227,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <div class="btn-row">
       <button class="btn-next" onclick="goStep2()">Next: Financial Numbers ?</button>
     </div>
-    <button class="btn-skip" onclick="skipOnboarding()">Skip for now — I'll set this up later</button>
+    <button class="btn-skip" onclick="skipOnboarding()">Skip for now ï¿½ I'll set this up later</button>
   </div>
 
   <!-- -- STEP 2: Financials -- -->
@@ -394,7 +394,7 @@ var INDUSTRY_RECS = {
 
 var DEFAULT_RECS = [{icon:'??',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
                     {icon:'?',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
-                    {icon:'??',name:'Business Health Score', desc:'Overall A–F grade for your finances', href:'modules/businessHealthScore.test.html'}];
+                    {icon:'??',name:'Business Health Score', desc:'Overall Aï¿½F grade for your finances', href:'modules/businessHealthScore.test.html'}];
 
 function buildRecommendations(){
   var industry = document.getElementById('industry').value;
@@ -507,9 +507,9 @@ window.addEventListener('load', function(){
       var h2 = document.querySelector('.panel h2');
       var ph = document.querySelector('.panel p');
       if(h2) h2.textContent = 'Edit your business profile';
-      if(ph) ph.textContent = 'Update any details below — all tools will re-fill automatically.';
+      if(ph) ph.textContent = 'Update any details below ï¿½ all tools will re-fill automatically.';
 
-      /* Step 1 — Business fields */
+      /* Step 1 ï¿½ Business fields */
       var set = function(id, val){ var el=document.getElementById(id); if(el && val) el.value = val; };
       set('bizName',   p.bizName);
       set('ownerName', p.ownerName);
@@ -518,7 +518,7 @@ window.addEventListener('load', function(){
       set('bizState',  p.state);
       set('employees', p.employees);
 
-      /* Step 2 — Financials */
+      /* Step 2 ï¿½ Financials */
       set('revenue',  p.rev  || '');
       set('expenses', p.exp  || '');
       set('emi',      p.emi  || '');
@@ -533,7 +533,7 @@ window.addEventListener('load', function(){
         });
       }
     } else if(auth.user){
-      /* New user — just pre-fill name */
+      /* New user ï¿½ just pre-fill name */
       var name = auth.displayName();
       if(name) { var el=document.getElementById('ownerName'); if(el) el.value=name; }
     }

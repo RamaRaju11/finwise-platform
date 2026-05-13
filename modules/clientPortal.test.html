@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Portal — BizScale</title>
+<title>Client Portal ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
@@ -163,7 +163,7 @@ textarea{resize:vertical;min-height:68px}
   <div class="hero-inner">
     <div>
       <h1>?? Client Portal</h1>
-      <p>Share secure, read-only financial reports with clients — no login needed on their end.</p>
+      <p>Share secure, read-only financial reports with clients ï¿½ no login needed on their end.</p>
       <div class="hero-badge">? Advisor Feature</div>
     </div>
     <div style="text-align:right">
@@ -223,7 +223,7 @@ textarea{resize:vertical;min-height:68px}
         </div>
         <div class="check-item">
           <input type="checkbox" id="shareHealth"/>
-          <div><label for="shareHealth">Business Health Score <small>A–F overall grade</small></label></div>
+          <div><label for="shareHealth">Business Health Score <small>Aï¿½F overall grade</small></label></div>
         </div>
         <div class="check-item">
           <input type="checkbox" id="shareLoan"/>
@@ -237,7 +237,7 @@ textarea{resize:vertical;min-height:68px}
       </div>
 
       <div class="link-result" id="linkResult">
-        <div class="lr-label">? Portal link ready — share this with your client</div>
+        <div class="lr-label">? Portal link ready ï¿½ share this with your client</div>
         <div class="lr-row">
           <input type="text" class="lr-inp" id="generatedLink" readonly/>
           <button class="lr-copy" id="copyNewBtn" onclick="copyLink('generatedLink','copyNewBtn')">Copy</button>
@@ -265,7 +265,7 @@ textarea{resize:vertical;min-height:68px}
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInp').click()" ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)">
         <div class="dz-icon">??</div>
         <div class="dz-title">Drop your file here</div>
-        <div class="dz-sub">CSV or Excel (.xlsx, .xls) — max 200 clients</div>
+        <div class="dz-sub">CSV or Excel (.xlsx, .xls) ï¿½ max 200 clients</div>
         <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('fileInp').click()">Browse File</button>
         <input type="file" id="fileInp" class="dz-file" accept=".csv,.xlsx,.xls" onchange="fileSelected(this)"/>
       </div>
@@ -363,7 +363,7 @@ function createPortal(){
   var msg   = document.getElementById('clientMsg').value.trim();
   if(!name||!email){ alert('Please enter client name and email.'); return; }
   if(!advisorId){ alert('Not signed in.'); return; }
-  document.getElementById('createStatus').textContent = 'Generating…';
+  document.getElementById('createStatus').textContent = 'Generatingï¿½';
   insertPortal(name, email, msg,
     document.getElementById('shareRevenue').checked,
     document.getElementById('shareCashflow').checked,
@@ -376,8 +376,8 @@ function createPortal(){
     document.getElementById('generatedLink').value = url;
     document.getElementById('linkResult').style.display = 'block';
     var waMsg = 'Hi '+name+'! Here is your financial report portal: '+url;
-    var emSubj = 'Your Financial Report — '+(bizName||advisorName);
-    var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by BizScale';
+    var emSubj = 'Your Financial Report ï¿½ '+(bizName||advisorName);
+    var emBody = 'Hi '+name+',\n\n'+(msg||'Please find your financial report at the link below.')+'\n\n'+url+'\n\nPowered by BizSco';
     document.getElementById('waShareBtn').onclick = function(){ window.open('https://wa.me/?text='+encodeURIComponent(waMsg)); };
     document.getElementById('emShareBtn').onclick = function(){ window.location.href='mailto:'+email+'?subject='+encodeURIComponent(emSubj)+'&body='+encodeURIComponent(emBody); };
     document.getElementById('clientName').value='';
@@ -437,7 +437,7 @@ function loadClients(){
       var url = portalURL(r.token);
       var created = new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
       var lastViewed = r.last_viewed_at ? 'Viewed '+new Date(r.last_viewed_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Not viewed yet';
-      var lastSent = r.schedule_last_sent ? ' · Sent '+new Date(r.schedule_last_sent).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      var lastSent = r.schedule_last_sent ? ' ï¿½ Sent '+new Date(r.schedule_last_sent).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
       var checked = r.schedule_enabled ? 'checked' : '';
       return '<div class="client-row">' +
         '<div class="cr-avatar">'+initials+'</div>' +
@@ -446,7 +446,7 @@ function loadClients(){
         '<div class="cr-meta" style="min-width:90px">'+created+'<br><span style="color:#94a3b8">'+lastViewed+'</span></div>' +
         '<div class="sched-wrap">' +
           '<label class="toggle-switch"><input type="checkbox" '+checked+' onchange="toggleSchedule(\''+r.id+'\',this.checked)"/><span class="toggle-slider"></span></label>' +
-          '<div><div class="sched-label">Monthly email</div><div class="sched-sent">'+lastSent.replace(' · ','')+'</div></div>' +
+          '<div><div class="sched-label">Monthly email</div><div class="sched-sent">'+lastSent.replace(' ï¿½ ','')+'</div></div>' +
         '</div>' +
         '<div class="cr-actions">' +
           '<button class="cr-copy" id="cp_'+r.id+'" onclick="copyRowLink(\''+url+'\',\'cp_'+r.id+'\')">Copy Link</button>' +
@@ -573,7 +573,7 @@ function applyMapping(){
   var thead = '<tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Status</th></tr>';
   var tbody = mapped.map(function(r,i){
     var badge = r.valid ? '<span class="badge-ok">Valid</span>' : '<span class="badge-err">Invalid</span>';
-    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.msg||'—')+'</td><td>'+badge+'</td></tr>';
+    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.msg||'ï¿½')+'</td><td>'+badge+'</td></tr>';
   }).join('');
   document.getElementById('previewTable').innerHTML = thead+tbody;
   document.getElementById('previewWrap').style.display='block';
@@ -590,7 +590,7 @@ function runImport(){
   if(!valid.length){ alert('No valid rows to import.'); return; }
 
   var btn = document.getElementById('importBtn');
-  btn.textContent='Importing…';btn.disabled=true;
+  btn.textContent='Importingï¿½';btn.disabled=true;
 
   var promises = valid.map(function(r){
     return insertPortal(r.name, r.email, r.msg, true, true, false, false, false).then(function(){ return {ok:true}; }).catch(function(){ return {ok:false,email:r.email}; });
@@ -599,7 +599,7 @@ function runImport(){
   Promise.all(promises).then(function(results){
     var ok = results.filter(function(r){ return r.ok; }).length;
     var fail = results.length - ok;
-    document.getElementById('importResultTitle').textContent = '? Import complete — '+ok+' portals created';
+    document.getElementById('importResultTitle').textContent = '? Import complete ï¿½ '+ok+' portals created';
     document.getElementById('importResultDesc').textContent = (fail>0?fail+' rows failed (duplicate email or server error). ':'')+'All clients can now access their report via their unique link.';
     document.getElementById('importResult').style.display='block';
     btn.textContent='Import Clients ?';btn.disabled=false;
@@ -635,7 +635,7 @@ window.addEventListener('load', function(){
       tagline     : p.wl_tagline      || '',
       color       : p.wl_color        || '#4f46e5',
       logo_url    : p.wl_logo_url     || '',
-      hide_bizscale: p.wl_hide_bizscale  || false
+      hide_BizSco: p.wl_hide_BizSco  || false
     };
     loadClients();
   });

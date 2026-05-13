@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BizScale — Sign In</title>
+<title>BizSco ï¿½ Sign In</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:Arial,sans-serif;background:linear-gradient(160deg,#0f172a,#1e3a5f);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -39,7 +39,7 @@ input:focus{outline:none;border-color:#2563eb}
 <body>
 <div class="card">
   <div class="logo">?? Biz<em>Scale</em></div>
-  <div class="tagline">Analyze · Fund · Grow — 30 tools · Your data stays private</div>
+  <div class="tagline">Analyze ï¿½ Fund ï¿½ Grow ï¿½ 30 tools ï¿½ Your data stays private</div>
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('login')">Sign In</button>
@@ -68,7 +68,7 @@ input:focus{outline:none;border-color:#2563eb}
     <div class="err" id="su_err"></div>
     <div class="ok" id="su_ok"></div>
     <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account ?</button>
-    <div class="plan-note">? Free plan — no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
+    <div class="plan-note">? Free plan ï¿½ no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
   </div>
 
   <!-- RESET -->
@@ -162,7 +162,7 @@ function doSignup(){
     if(data && data.user && data.user.identities && data.user.identities.length===0){
       showErr('su_err','An account with this email already exists. Please sign in.'); return;
     }
-    /* Clear all stale data — list must stay in sync with USER_KEYS in fw-auth.js */
+    /* Clear all stale data ï¿½ list must stay in sync with USER_KEYS in fw-auth.js */
     ['fw_ref','fw_onboarded','fw_profile','fw_profiles','fw_active_idx',
      'fw_recent','fw_biz_profile','fw_starter','fw_pro','fw_advisor',
      'fw_checkup','fw_score_history','fw_grant_tracker','fw_bills',

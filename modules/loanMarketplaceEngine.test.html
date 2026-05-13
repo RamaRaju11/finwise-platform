@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -124,7 +124,7 @@
 
 <header>
   <h1>Loan Marketplace Engine</h1>
-  <p>Search US lenders · Compare total cost · Generate referral links</p>
+  <p>Search US lenders ï¿½ Compare total cost ï¿½ Generate referral links</p>
 </header>
 
 <div class="tabs">
@@ -183,7 +183,7 @@
   <div class="search-toolbar" id="searchToolbar" style="display:none">
     <span id="searchCount" style="font-size:0.85rem;color:#64748b"></span>
     <button class="btn-sm btn-export" onclick="exportSearchPDF()">??? Export / Print PDF</button>
-    <span style="font-size:0.78rem;color:#94a3b8">— or select up to 3 lenders below to compare side-by-side</span>
+    <span style="font-size:0.78rem;color:#94a3b8">ï¿½ or select up to 3 lenders below to compare side-by-side</span>
   </div>
   <div id="search-results"></div>
 </div>
@@ -534,7 +534,7 @@ function prefillFromModules() {
 
   if (msgs.length > 0) {
     var b = document.getElementById('intBanner');
-    b.innerHTML = '?? <strong>Auto-filled from your data:</strong> ' + msgs.join(' &nbsp;·&nbsp; ') +
+    b.innerHTML = '?? <strong>Auto-filled from your data:</strong> ' + msgs.join(' &nbsp;ï¿½&nbsp; ') +
       ' &nbsp;<button onclick="this.parentNode.style.display=\'none\'" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.8rem">?</button>';
     b.classList.add('show');
   }
@@ -555,7 +555,7 @@ function calcEligibility(lender, amount, tenure, creditScore) {
       reasons.push({ cls: 'er-bad', text: 'Credit score ' + Math.abs(gap) + ' pts below minimum (' + lender.minCreditScore + ' required)' });
     } else if (gap < 30) {
       score -= 15;
-      reasons.push({ cls: 'er-warn', text: 'Credit score only ' + gap + ' pts above minimum — borderline' });
+      reasons.push({ cls: 'er-warn', text: 'Credit score only ' + gap + ' pts above minimum ï¿½ borderline' });
     } else if (gap < 80) {
       score -= 5;
       reasons.push({ cls: 'er-good', text: 'Credit score meets requirement (+' + gap + ' pts headroom)' });
@@ -580,7 +580,7 @@ function calcEligibility(lender, amount, tenure, creditScore) {
   // Rate factor (20 pts)
   if (lender.minRate > 20) {
     score -= 15;
-    reasons.push({ cls: 'er-warn', text: 'High minimum rate (' + lender.minRate + '%) — expensive option' });
+    reasons.push({ cls: 'er-warn', text: 'High minimum rate (' + lender.minRate + '%) ï¿½ expensive option' });
   } else if (lender.minRate <= 10) {
     reasons.push({ cls: 'er-good', text: 'Competitive starting rate (' + lender.minRate + '%)' });
   }
@@ -590,7 +590,7 @@ function calcEligibility(lender, amount, tenure, creditScore) {
     reasons.push({ cls: 'er-good', text: 'Same-day / next-day approval possible' });
   } else if (lender.turnaroundDays.min > 14) {
     score -= 8;
-    reasons.push({ cls: 'er-warn', text: 'Slow approval (' + lender.turnaroundDays.min + '–' + lender.turnaroundDays.max + ' days)' });
+    reasons.push({ cls: 'er-warn', text: 'Slow approval (' + lender.turnaroundDays.min + 'ï¿½' + lender.turnaroundDays.max + ' days)' });
   }
 
   score = Math.max(0, Math.min(100, score));
@@ -634,7 +634,7 @@ function updateCompareBar() {
     return;
   }
   bar.classList.add('show');
-  names.textContent = ids.map(function(id) { return compareSet[id].name.split(' ').slice(0,3).join(' '); }).join(' · ');
+  names.textContent = ids.map(function(id) { return compareSet[id].name.split(' ').slice(0,3).join(' '); }).join(' ï¿½ ');
 }
 
 function clearCompare() {
@@ -658,13 +658,13 @@ function showCompare() {
   var rows = [
     { label: 'Lender',          fn: function(o) { return o.icon + ' <strong>' + o.name + '</strong>'; } },
     { label: 'Type',            fn: function(o) { return '<span class="type-badge ' + o.type + '">' + o.type.replace('_',' ') + '</span>'; } },
-    { label: 'Rate Range',      fn: function(o) { return o.minRate + '–' + o.maxRate + '%'; } },
+    { label: 'Rate Range',      fn: function(o) { return o.minRate + 'ï¿½' + o.maxRate + '%'; } },
     { label: 'Monthly EMI',     fn: function(o) { return '<strong>$' + fmt(o.emi) + '</strong>'; } },
     { label: 'Total Interest',  fn: function(o) { return '$' + fmt(o.totalInterest); } },
     { label: 'Processing Fee',  fn: function(o) { return '$' + fmt(o.processingFeeAmt) + ' (' + o.processingFee + '%)'; } },
     { label: 'Total Cost',      fn: function(o) { return '<strong>$' + fmt(o.totalCost) + '</strong>'; } },
     { label: 'Min FICO',        fn: function(o) { return o.minCreditScore + (creditScore && creditScore < o.minCreditScore ? ' <span style="color:#dc2626">? below yours</span>' : ''); } },
-    { label: 'Approval Time',   fn: function(o) { return o.turnaroundDays.min + '–' + o.turnaroundDays.max + ' days'; } },
+    { label: 'Approval Time',   fn: function(o) { return o.turnaroundDays.min + 'ï¿½' + o.turnaroundDays.max + ' days'; } },
     { label: 'Eligibility',     fn: function(o) { var e = calcEligibility(o, amount, tenure, creditScore); return '<span class="elig-badge" style="background:' + e.bg + ';color:' + e.color + '">' + e.score + '/100 ' + e.label + '</span>'; } },
     { label: 'Apply',           fn: function(o) { return '<a href="' + (APPLY_URLS[o.id]||'#') + '" target="_blank" class="btn-apply" style="display:inline-block;margin-top:0">Apply Now ?</a>'; } },
   ];
@@ -746,11 +746,11 @@ function doSearch() {
   document.getElementById('searchCount').textContent = results.length + ' lender' + (results.length !== 1 ? 's' : '') + ' matched';
 
   if (results.length === 0) {
-    el.innerHTML = '<div class="no-result"><h2>No lenders found</h2><p>Try relaxing your criteria — lower the loan amount, increase the credit score, or remove the rate cap.</p></div>';
+    el.innerHTML = '<div class="no-result"><h2>No lenders found</h2><p>Try relaxing your criteria ï¿½ lower the loan amount, increase the credit score, or remove the rate cap.</p></div>';
     return;
   }
 
-  el.innerHTML = '<div class="print-only"><strong>BizScale Loan Marketplace — Matched Lenders</strong><br>Amount: $' + fmt(amount) + ' · Tenure: ' + tenureMonths + ' months · FICO: ' + (creditScore||'—') + ' · Generated: ' + new Date().toLocaleDateString() + '</div>' +
+  el.innerHTML = '<div class="print-only"><strong>BizSco Loan Marketplace ï¿½ Matched Lenders</strong><br>Amount: $' + fmt(amount) + ' ï¿½ Tenure: ' + tenureMonths + ' months ï¿½ FICO: ' + (creditScore||'ï¿½') + ' ï¿½ Generated: ' + new Date().toLocaleDateString() + '</div>' +
     '<div class="lender-grid" id="lenderGrid">' +
     results.map(function(l) {
       var e = l._elig;
@@ -759,12 +759,12 @@ function doSearch() {
         '<div class="lender-name">' + l.icon + ' ' + l.name + ' <span class="type-badge ' + l.type + '">' + l.type.replace('_',' ') + '</span></div>' +
         '<div class="lender-inst">' + l.institution + '</div>' +
         '<div class="stat-row">' +
-          '<div class="stat-pill"><b>' + l.minRate + '–' + l.maxRate + '%</b> p.a.</div>' +
-          '<div class="stat-pill">$<b>' + fmt(l.minAmount) + '–' + fmt(l.maxAmount) + '</b></div>' +
-          '<div class="stat-pill"><b>' + l.minTenure + '–' + l.maxTenure + '</b> mo</div>' +
+          '<div class="stat-pill"><b>' + l.minRate + 'ï¿½' + l.maxRate + '%</b> p.a.</div>' +
+          '<div class="stat-pill">$<b>' + fmt(l.minAmount) + 'ï¿½' + fmt(l.maxAmount) + '</b></div>' +
+          '<div class="stat-pill"><b>' + l.minTenure + 'ï¿½' + l.maxTenure + '</b> mo</div>' +
           '<div class="stat-pill">FICO <b>' + l.minCreditScore + '+</b></div>' +
           '<div class="stat-pill">Fee <b>' + l.processingFee + '%</b></div>' +
-          '<div class="stat-pill">TAT <b>' + l.turnaroundDays.min + '–' + l.turnaroundDays.max + 'd</b></div>' +
+          '<div class="stat-pill">TAT <b>' + l.turnaroundDays.min + 'ï¿½' + l.turnaroundDays.max + 'd</b></div>' +
         '</div>' +
         '<ul class="highlights">' + l.highlights.map(function(h) { return '<li>' + h + '</li>'; }).join('') + '</ul>' +
         // Eligibility score
@@ -801,7 +801,7 @@ function doCompare() {
 
   const savings = getSavingsSummary(offers);
 
-  let html = `<div class="card"><h3>Ranked Offers — ${offers.length} Lenders ($${fmt(principal)}, ${tenureMonths} months)</h3>
+  let html = `<div class="card"><h3>Ranked Offers ï¿½ ${offers.length} Lenders ($${fmt(principal)}, ${tenureMonths} months)</h3>
     <div style="overflow-x:auto"><table>
     <thead><tr>
       <th>Rank</th><th>Lender</th><th>Rate</th><th>EMI/mo</th>
@@ -815,13 +815,13 @@ function doCompare() {
       <td>$${fmt(o.processingFeeAmt)} (${o.processingFee}%)</td>
       <td>$${fmt(o.totalInterest)}</td>
       <td><b>$${fmt(o.totalCost)}</b></td>
-      <td>${o.turnaroundDays.min}–${o.turnaroundDays.max}d</td>
+      <td>${o.turnaroundDays.min}ï¿½${o.turnaroundDays.max}d</td>
     </tr>`.replace('#{o.rank}', o.rank)).join('') +
     `</tbody></table></div>`;
 
   if (savings) {
     html += `<div class="savings-box">
-      <h4>Potential Savings — ${savings.bestLender} vs ${savings.worstLender}</h4>
+      <h4>Potential Savings ï¿½ ${savings.bestLender} vs ${savings.worstLender}</h4>
       <div class="savings-grid">
         <div class="savings-item"><div class="val">$${fmt(savings.emiSaving)}/mo</div><div class="lbl">EMI Saving</div></div>
         <div class="savings-item"><div class="val">$${fmt(savings.totalCostSaving)}</div><div class="lbl">Total Cost Saving</div></div>
@@ -868,7 +868,7 @@ function doSavings() {
   }
   document.getElementById('savings-result').innerHTML = `
     <div class="savings-box" style="margin-top:16px">
-      <h4>Savings Summary — ${offers.length} Offers Compared</h4>
+      <h4>Savings Summary ï¿½ ${offers.length} Offers Compared</h4>
       <div style="font-size:0.85rem;color:#166534;margin-bottom:8px">
         Best: <b>${savings.bestLender}</b> &nbsp;|&nbsp; Worst: <b>${savings.worstLender}</b>
       </div>
@@ -892,35 +892,35 @@ function runTests() {
   function assert(cond, msg) { if (!cond) throw new Error(msg || "Assertion failed"); }
 
   test("getAllLenders returns 9 lenders", () => assert(getAllLenders().length === 9));
-  test("searchLenders — no criteria returns all", () => assert(searchLenders().length === 9));
-  test("searchLenders — filters by loanType sba", () => {
+  test("searchLenders ï¿½ no criteria returns all", () => assert(searchLenders().length === 9));
+  test("searchLenders ï¿½ filters by loanType sba", () => {
     const res = searchLenders({ loanType: "sba" });
     assert(res.every(l => l.loanTypes.includes("sba")));
     assert(res.length > 0);
   });
-  test("searchLenders — filters by amount $100K", () => {
+  test("searchLenders ï¿½ filters by amount $100K", () => {
     const res = searchLenders({ amount: 100000 });
     assert(res.every(l => l.minAmount <= 100000 && l.maxAmount >= 100000));
   });
-  test("searchLenders — filters by FICO 700", () => {
+  test("searchLenders ï¿½ filters by FICO 700", () => {
     const res = searchLenders({ creditScore: 700 });
     assert(res.every(l => l.minCreditScore <= 700));
     const blocked = res.filter(l => l.minCreditScore > 700);
     assert(blocked.length === 0);
   });
-  test("compareOffers — ranked by totalCost ascending", () => {
+  test("compareOffers ï¿½ ranked by totalCost ascending", () => {
     const lenders = getAllLenders();
     const offers  = compareOffers(lenders, 100000, 36);
     for (let i = 1; i < offers.length; i++) {
       assert(offers[i].totalCost >= offers[i-1].totalCost, "Not sorted");
     }
   });
-  test("compareOffers — rank 1 is best deal", () => {
+  test("compareOffers ï¿½ rank 1 is best deal", () => {
     const offers = compareOffers(getAllLenders(), 100000, 36);
     assert(offers[0].isBestDeal === true && offers[0].rank === 1);
     assert(offers.slice(1).every(o => !o.isBestDeal));
   });
-  test("compareOffers — EMI formula validation", () => {
+  test("compareOffers ï¿½ EMI formula validation", () => {
     const lenders = [LENDER_CATALOG[0]]; // SBA 7a 8.5%
     const offers  = compareOffers(lenders, 120000, 24);
     const r = 8.5 / 12 / 100;
@@ -928,47 +928,47 @@ function runTests() {
     const expected = _r((120000 * r * factor) / (factor - 1));
     assert(Math.abs(offers[0].emi - expected) < 1, `EMI mismatch: ${offers[0].emi} vs ${expected}`);
   });
-  test("compareOffers — total cost = interest + processing fee", () => {
+  test("compareOffers ï¿½ total cost = interest + processing fee", () => {
     const offers = compareOffers(getAllLenders(), 50000, 24);
     offers.forEach(o => {
       const expected = _r(o.totalInterest + o.processingFeeAmt);
       assert(Math.abs(o.totalCost - expected) < 1, `totalCost mismatch for ${o.name}`);
     });
   });
-  test("rankOffers — re-sort by EMI", () => {
+  test("rankOffers ï¿½ re-sort by EMI", () => {
     const offers = compareOffers(getAllLenders(), 100000, 36);
     const ranked = rankOffers(offers, "emi");
     for (let i = 1; i < ranked.length; i++) assert(ranked[i].emi >= ranked[i-1].emi);
   });
-  test("getBestOffer — returns lowest total cost", () => {
+  test("getBestOffer ï¿½ returns lowest total cost", () => {
     const offers = compareOffers(getAllLenders(), 100000, 36);
     const best = getBestOffer(offers);
     const minCost = Math.min(...offers.map(o => o.totalCost));
     assert(best.totalCost === minCost);
   });
-  test("generateReferralLink — URL contains lenderId and referralCode", () => {
+  test("generateReferralLink ï¿½ URL contains lenderId and referralCode", () => {
     const link = generateReferralLink("sba-7a", "TEST123", 100000);
     assert(link.url.includes("sba-7a"));
     assert(link.url.includes("TEST123"));
     assert(link.estimatedReferralFee === 500); // 0.5% of $100K
   });
-  test("getSavingsSummary — returns correct fields", () => {
+  test("getSavingsSummary ï¿½ returns correct fields", () => {
     const offers  = compareOffers(getAllLenders(), 100000, 36);
     const summary = getSavingsSummary(offers);
     assert(typeof summary.emiSaving === "number");
     assert(typeof summary.totalCostSaving === "number");
     assert(summary.totalCostSaving >= 0);
   });
-  test("getSavingsSummary — null for single offer", () => {
+  test("getSavingsSummary ï¿½ null for single offer", () => {
     const offers = compareOffers([LENDER_CATALOG[0]], 100000, 36);
     assert(getSavingsSummary(offers) === null);
   });
-  test("compareOffers — throws on empty lenders array", () => {
+  test("compareOffers ï¿½ throws on empty lenders array", () => {
     let threw = false;
     try { compareOffers([], 1000000, 36); } catch { threw = true; }
     assert(threw);
   });
-  test("compareOffers — worst case rate higher EMI", () => {
+  test("compareOffers ï¿½ worst case rate higher EMI", () => {
     const lenders = [LENDER_CATALOG[0]];
     const best  = compareOffers(lenders, 1000000, 36, true)[0].emi;
     const worst = compareOffers(lenders, 1000000, 36, false)[0].emi;
@@ -978,10 +978,10 @@ function runTests() {
   const ul = document.getElementById('unitResults');
   const pass = results.filter(r => r.ok).length;
   ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
-    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' ï¿½ '+r.err}</li>`).join('');
 }
 
-// Auto-run search on load — restore filters, prefill from other modules, then search
+// Auto-run search on load ï¿½ restore filters, prefill from other modules, then search
 window.onload = function() {
   restoreFilters();
   prefillFromModules();

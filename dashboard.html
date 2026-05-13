@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Dashboard — BizScale</title>
+<title>Dashboard ï¿½ BizSco</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BizScale">
+<meta name="apple-mobile-web-app-title" content="BizSco">
 <meta name="theme-color" content="#0f172a">
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="pwa.js" defer></script>
-<meta name="description" content="Your BizScale financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
+<meta name="description" content="Your BizSco financial dashboard ï¿½ track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;min-height:100vh;display:flex}
@@ -258,7 +258,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 .ref-credit-msg{background:#fbbf24;color:#1e293b;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;margin-top:10px;display:inline-block}
 
 /* -------------------------------
-   RESPONSIVE — collapse sidebar
+   RESPONSIVE ï¿½ collapse sidebar
 ------------------------------- */
 @media(max-width:900px){
   .sidebar{transform:translateX(-220px)}
@@ -329,7 +329,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   .page-content{padding:0!important;max-width:100%!important}
   .metrics-row,.gauges-row{grid-template-columns:repeat(2,1fr)!important}
   body{background:#fff}
-  .page-header p::after{content:" · Printed " attr(data-date)}
+  .page-header p::after{content:" ï¿½ Printed " attr(data-date)}
 }
 </style>
 
@@ -347,7 +347,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   <a href="dashboard.html" class="sb-logo">
     <div class="sb-logo-text">?? Biz<span>Scale</span></div>
   </a>
-  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>
+  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze ï¿½ Fund ï¿½ Grow</div>
   <div class="sb-biz" id="heroBiz">Your dashboard</div>
   <span class="sb-plan-chip badge-free" id="planBadge">Free Plan</span>
 
@@ -519,7 +519,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="page-header">
       <div class="ph-text">
         <h1 id="heroGreeting">Welcome back!</h1>
-        <p id="dashSubtitle">Your financial snapshot — updated in real time</p>
+        <p id="dashSubtitle">Your financial snapshot ï¿½ updated in real time</p>
       </div>
       <div class="ph-spacer"></div>
       <button class="export-btn" onclick="exportDashboard()">?? Export PDF</button>
@@ -539,7 +539,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <!-- SETUP BANNER (shown if no profile) -->
     <div class="setup-banner" id="setupBanner" style="display:none">
       <div>??</div>
-      <div class="sb-text"><strong>Complete your business profile</strong> — takes 2 minutes. Pre-fills all 40 tools automatically.</div>
+      <div class="sb-text"><strong>Complete your business profile</strong> ï¿½ takes 2 minutes. Pre-fills all 40 tools automatically.</div>
       <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now ?</a>
     </div>
 
@@ -558,7 +558,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
             <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="22" font-weight="900" font-family="Arial" id="scoreNum">--</text>
             <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">/100</text>
           </svg>
-          <div id="scoreLabel" style="font-size:.72rem;font-weight:800;padding:3px 14px;border-radius:999px;display:inline-block;margin-top:4px;background:#1e293b;color:#94a3b8">Loading…</div>
+          <div id="scoreLabel" style="font-size:.72rem;font-weight:800;padding:3px 14px;border-radius:999px;display:inline-block;margin-top:4px;background:#1e293b;color:#94a3b8">Loadingï¿½</div>
         </div>
 
         <!-- Dimensions -->
@@ -581,14 +581,14 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- START HERE CARD (new users) -->
     <div class="start-here" id="startHereCard" style="display:none">
-      <div class="sh-title">?? Welcome to BizScale — here's how to get started</div>
+      <div class="sh-title">?? Welcome to BizSco ï¿½ here's how to get started</div>
       <div class="sh-sub">Three quick steps to unlock your personalized financial picture</div>
       <div class="sh-steps">
         <a href="onboarding.html" class="sh-step" onclick="localStorage.removeItem('fw_onboarded')">
           <div class="sh-num">1</div>
           <div class="sh-icon">??</div>
           <div class="sh-sname">Set Up Profile</div>
-          <div class="sh-sdesc">Business details &amp; financials — 2 min</div>
+          <div class="sh-sdesc">Business details &amp; financials ï¿½ 2 min</div>
         </a>
         <a href="checkup.html" class="sh-step">
           <div class="sh-num">2</div>
@@ -637,7 +637,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
           <span class="ai-title">Tasks requiring attention</span>
           <span class="ai-count" id="aiCount"></span>
         </div>
-        <div id="aiList"><div class="ai-empty">Calculating…</div></div>
+        <div id="aiList"><div class="ai-empty">Calculatingï¿½</div></div>
       </div>
     </div>
 
@@ -656,22 +656,22 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="metrics-row">
       <div class="metric-card">
         <div class="mc-label">Monthly Revenue</div>
-        <div class="mc-value green" id="m_rev">—</div>
+        <div class="mc-value green" id="m_rev">ï¿½</div>
         <div class="mc-sub">from your profile</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Monthly Expenses</div>
-        <div class="mc-value red" id="m_exp">—</div>
+        <div class="mc-value red" id="m_exp">ï¿½</div>
         <div class="mc-sub">incl. loan EMI</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Net Profit</div>
-        <div class="mc-value blue" id="m_net">—</div>
+        <div class="mc-value blue" id="m_net">ï¿½</div>
         <div class="mc-sub">rev minus expenses</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Cash Runway</div>
-        <div class="mc-value amber" id="m_runway">—</div>
+        <div class="mc-value amber" id="m_runway">ï¿½</div>
         <div class="mc-sub">months at current burn</div>
       </div>
     </div>
@@ -698,7 +698,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="plan-card" id="planCard">
       <div class="pc-left">
         <h3 id="planTitle">Free Plan</h3>
-        <p id="planDesc">Access to 9 free tools — no sign-up needed. Upgrade to unlock all 40 tools.</p>
+        <p id="planDesc">Access to 9 free tools ï¿½ no sign-up needed. Upgrade to unlock all 40 tools.</p>
         <div class="plan-features" id="planFeatures"></div>
       </div>
       <div class="pc-right">
@@ -763,7 +763,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="two-col">
       <div class="activity-card">
         <h3>? Recent Activity</h3>
-        <div id="activityList"><div class="act-empty">No activity yet — open a tool to get started</div></div>
+        <div id="activityList"><div class="act-empty">No activity yet ï¿½ open a tool to get started</div></div>
       </div>
       <div class="profile-card">
         <h3>?? Business Profile</h3>
@@ -885,8 +885,8 @@ function renderActionItems(){
   var cashD = sg('fw_cash_runway');
   if(cashD && cashD.runway !== undefined){
     var rw = parseFloat(cashD.runway)||0;
-    if(rw < 2) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw*10)/10+' months remaining — immediate action needed', href:'modules/cashFlowTracker.test.html'});
-    else if(rw < 4) items.push({prio:'med', text:'Cash runway below safe threshold', sub:Math.round(rw*10)/10+' months — goal is 6 months', href:'modules/cashFlowTracker.test.html'});
+    if(rw < 2) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw*10)/10+' months remaining ï¿½ immediate action needed', href:'modules/cashFlowTracker.test.html'});
+    else if(rw < 4) items.push({prio:'med', text:'Cash runway below safe threshold', sub:Math.round(rw*10)/10+' months ï¿½ goal is 6 months', href:'modules/cashFlowTracker.test.html'});
   } else {
     var lm = getLiveMetrics();
     var burn = lm.exp + lm.emi;
@@ -943,7 +943,7 @@ function renderActionItems(){
   countEl.className = 'ai-count '+(urgent ? 'has-urgent' : 'all-clear');
 
   if(!items.length){
-    listEl.innerHTML = '<div class="ai-empty">? No urgent action items — finances look on track.</div>';
+    listEl.innerHTML = '<div class="ai-empty">? No urgent action items ï¿½ finances look on track.</div>';
     return;
   }
   listEl.innerHTML = items.slice(0,4).map(function(it){
@@ -979,7 +979,7 @@ function refreshMetrics(){
     var netEl = document.getElementById('m_net');
     netEl.textContent = fmt(net);
     netEl.className = 'mc-value '+(net>=0?'blue':'red');
-    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '—';
+    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : 'ï¿½';
   }
   if(m.sources.length){
     var badge = document.getElementById('liveDataBadge');
@@ -1025,10 +1025,10 @@ document.querySelectorAll('.sb-link').forEach(function(a){
 });
 
 var PLAN_CONFIG = {
-  free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools — no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
-  starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools — grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
-  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access — AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizScale at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
-  advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite — manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
+  free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools ï¿½ no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
+  starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools ï¿½ grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
+  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access ï¿½ AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizSco at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
+  advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite ï¿½ manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
 };
 
 var ALL_TOOLS = [
@@ -1040,10 +1040,10 @@ var ALL_TOOLS = [
   {icon:'?',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
   {icon:'?',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
   {icon:'??',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
-  {icon:'??', name:'Monthly Snapshot',    desc:'One-page visual — download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
+  {icon:'??', name:'Monthly Snapshot',    desc:'One-page visual ï¿½ download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
   {icon:'?', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
   {icon:'??', name:"Owner's Pay",           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
-  {icon:'??', name:'Business Health Score', desc:'Overall A–F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
+  {icon:'??', name:'Business Health Score', desc:'Overall Aï¿½F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
   {icon:'??', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
   {icon:'??', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
   {icon:'??', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
@@ -1052,7 +1052,7 @@ var ALL_TOOLS = [
   {icon:'??', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
   {icon:'??', name:'Stress Test Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
   {icon:'??', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
-  {icon:'??', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors — one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
+  {icon:'??', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors ï¿½ one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
   {icon:'??', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
   {icon:'???', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
   {icon:'??', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
@@ -1063,7 +1063,7 @@ var ALL_TOOLS = [
   {icon:'???', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
   {icon:'??', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
   {icon:'??', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
-  {icon:'??', name:'Debt Command Center',      desc:'All loans in one view — track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
+  {icon:'??', name:'Debt Command Center',      desc:'All loans in one view ï¿½ track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
   {icon:'??', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
   {icon:'??', name:'Working Capital Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
   {icon:'??', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
@@ -1152,7 +1152,7 @@ function renderDashboard(plan){
   /* Sidebar locks */
   updateSidebarLocks(plan);
 
-  /* Tools grid — show plan's tools + 2 locked previews */
+  /* Tools grid ï¿½ show plan's tools + 2 locked previews */
   var html = '';
   var shown = 0;
   ALL_TOOLS.forEach(function(t){
@@ -1174,7 +1174,7 @@ function renderDashboard(plan){
   });
   document.getElementById('toolsGrid').innerHTML = html;
 
-  /* Metrics — live module data with profile fallback */
+  /* Metrics ï¿½ live module data with profile fallback */
   var p = sg('fw_profile')||{};
   var m = getLiveMetrics();
   var rev = m.rev, exp = m.exp, emi = m.emi, res = m.res;
@@ -1187,7 +1187,7 @@ function renderDashboard(plan){
     document.getElementById('m_exp').textContent = fmt(exp+emi);
     document.getElementById('m_net').textContent = fmt(net);
     document.getElementById('m_net').className = 'mc-value '+(net>=0?'blue':'red');
-    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '—';
+    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : 'ï¿½';
     if(m.sources.length){
       var ldb = document.getElementById('liveDataBadge');
       if(ldb){ ldb.style.display='inline-flex'; ldb.title='Live from: '+m.sources.join(', '); }
@@ -1204,14 +1204,14 @@ function renderDashboard(plan){
   /* Profile summary */
   var profHtml = '';
   if(p.bizName||p.name){
-    var bizName = p.bizName||p.name||'—';
+    var bizName = p.bizName||p.name||'ï¿½';
     var rows = [
       ['Business', bizName],
-      ['Industry', p.industry||'—'],
-      ['Entity', p.entityType||p.entity||'—'],
-      ['Revenue', m.rev ? fmt(m.rev)+'/mo' : '—'],
-      ['Expenses', m.exp ? fmt(m.exp)+'/mo' : '—'],
-      ['EMI', m.emi ? fmt(m.emi)+'/mo' : '—']
+      ['Industry', p.industry||'ï¿½'],
+      ['Entity', p.entityType||p.entity||'ï¿½'],
+      ['Revenue', m.rev ? fmt(m.rev)+'/mo' : 'ï¿½'],
+      ['Expenses', m.exp ? fmt(m.exp)+'/mo' : 'ï¿½'],
+      ['EMI', m.emi ? fmt(m.emi)+'/mo' : 'ï¿½']
     ];
     rows.forEach(function(r){
       profHtml += '<div class="prof-row"><span class="prof-label">'+r[0]+'</span><span class="prof-value">'+r[1]+'</span></div>';
@@ -1261,29 +1261,29 @@ function renderAlerts(plan, p, runway){
     var burn=exp+emi;
     var er=rev>0?(exp+emi)/rev:1;
     if(net<0)
-      alerts.push({cls:'alert-crit',i:'??',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Operating at a loss ï¿½ -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
     else if(er>0.85)
-      alerts.push({cls:'alert-warn',i:'??',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
+      alerts.push({cls:'alert-warn',i:'??',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue ï¿½ thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
 
     if(runway<=2&&burn>0)
-      alerts.push({cls:'alert-crit',i:'??',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Cash runway critically low ï¿½ '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
     else if(runway<=4&&burn>0)
-      alerts.push({cls:'alert-warn',i:'??',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
+      alerts.push({cls:'alert-warn',i:'??',title:'Low cash runway ï¿½ '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
   }
 
   if(checkup){
     if(checkup.loanVerdict==='DANGEROUS')
-      alerts.push({cls:'alert-crit',i:'??',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
+      alerts.push({cls:'alert-crit',i:'??',title:'Loan score DANGEROUS ï¿½ '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
     else if(checkup.loanVerdict==='RISKY')
-      alerts.push({cls:'alert-warn',i:'??',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
+      alerts.push({cls:'alert-warn',i:'??',title:'Loan score RISKY ï¿½ '+checkup.loanScore+'/100',msg:'Borderline ï¿½ any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
     if(checkup.runwayStatus==='CRITICAL'&&runway>2)
       alerts.push({cls:'alert-crit',i:'??',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup ?'});
   } else if(hasProfile){
-    alerts.push({cls:'alert-info',i:'??',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes — free.',href:'checkup.html',htext:'Start Free Checkup ?'});
+    alerts.push({cls:'alert-info',i:'??',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes ï¿½ free.',href:'checkup.html',htext:'Start Free Checkup ?'});
   }
 
   if(alerts.length===0)
-    alerts.push({cls:'alert-good',i:'?',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
+    alerts.push({cls:'alert-good',i:'?',title:'All clear ï¿½ finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
 
   document.getElementById('alertsList').innerHTML=alerts.slice(0,3).map(function(a){
     var onclick = a.href==='onboarding.html' ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
@@ -1332,7 +1332,7 @@ function renderHistWidget(){
     return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap">'
       +'<span style="font-size:.76rem;color:#64748b;width:50px;flex-shrink:0">'+date+'</span>'
       +'<span style="background:'+GB[h.grade]+';color:'+GC[h.grade]+';font-size:.74rem;font-weight:900;padding:2px 9px;border-radius:20px;flex-shrink:0">Grade '+h.grade+'</span>'
-      +'<span style="font-size:.76rem;color:#475569;flex:1">'+h.loanScore+'/100 · '+rw+' mo runway</span>'
+      +'<span style="font-size:.76rem;color:#475569;flex:1">'+h.loanScore+'/100 ï¿½ '+rw+' mo runway</span>'
       +delta+'</div>';
   }).join('');
 }
@@ -1382,7 +1382,7 @@ window.addEventListener('load', function(){
     document.getElementById('userName').textContent = name;
     document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' ??';
 
-    /* Plan — always use authoritative value from auth server */
+    /* Plan ï¿½ always use authoritative value from auth server */
     var plan = auth.plan || 'free';
 
     /* Business name in sidebar */
@@ -1427,7 +1427,7 @@ function loadHealthBriefing(auth){
 function calcHealth(){
   if(!_authRef) return;
   var btn = document.querySelector('[onclick="calcHealth()"]');
-  if(btn) btn.textContent = 'Calculating…';
+  if(btn) btn.textContent = 'Calculatingï¿½';
   _authRef.client.auth.getSession().then(function(res){
     var token = res&&res.data&&res.data.session&&res.data.session.access_token;
     if(!token) return;
@@ -1496,7 +1496,7 @@ function renderBriefing(data){
       (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action ?</a>' : '')+
     '</div>';
   }).join('');
-  document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet — click Recalculate.</div>';
+  document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet ï¿½ click Recalculate.</div>';
 }
 
 function doSignOut(){
@@ -1512,10 +1512,10 @@ function loadReferral(userId){
   document.getElementById('refLink').value = link;
   document.getElementById('referralCard').style.display = 'flex';
 
-  var msg = 'Join me on BizScale — 20 free financial tools for your small business! Use my link: ' + link;
+  var msg = 'Join me on BizSco ï¿½ 20 free financial tools for your small business! Use my link: ' + link;
   document.getElementById('refWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  document.getElementById('refEmail').href = 'mailto:?subject=Try BizScale — free financial tools for small business&body=' + encodeURIComponent(msg);
-  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizScale — 20 free financial tools for small businesses! ' + link);
+  document.getElementById('refEmail').href = 'mailto:?subject=Try BizSco ï¿½ free financial tools for small business&body=' + encodeURIComponent(msg);
+  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizSco ï¿½ 20 free financial tools for small businesses! ' + link);
 
   if(!window.fwAuth || !window.fwAuth.client) return;
 
@@ -1630,7 +1630,7 @@ function renderGauges(){
   var hWrap=document.getElementById('healthGaugeWrap');
   if(hWrap){
     var hs=checkup.healthScore||50;
-    var hg=checkup.grade||'—';
+    var hg=checkup.grade||'ï¿½';
     var gradeVal={A:90,B:72,C:55,D:35,F:15}[hg]||hs||50;
     var hColor={A:'#16a34a',B:'#22c55e',C:'#d97706',D:'#ea580c',F:'#dc2626'}[hg]||'#64748b';
     var hBg={A:'#dcfce7',B:'#dcfce7',C:'#fef9c3',D:'#fed7aa',F:'#fee2e2'}[hg]||'#f1f5f9';

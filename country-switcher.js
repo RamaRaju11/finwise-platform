@@ -93,6 +93,30 @@
     return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined) ? acc[key] : undefined, obj);
   }
 
+  /* ── Currency conversion helper ──────────────────────────────── */
+  function smartRound(n){
+    if (n < 100) return Math.round(n / 5) * 5;
+    if (n < 1000) return Math.round(n / 50) * 50;
+    if (n < 10000) return Math.round(n / 100) * 100;
+    if (n < 100000) return Math.round(n / 500) * 500;
+    if (n < 1000000) return Math.round(n / 5000) * 5000;
+    return Math.round(n / 50000) * 50000;
+  }
+  function formatLocal(num, country){
+    const data = COUNTRY_DATA[country] || COUNTRY_DATA[DEFAULT_COUNTRY];
+    const sym = data.currency || '$';
+    // Indian numbering system (lakh/crore) for INR
+    if (data.code === 'IN') {
+      return sym + num.toLocaleString('en-IN');
+    }
+    return sym + num.toLocaleString('en-US');
+  }
+  function convertUSD(usdAmount, country){
+    const data = COUNTRY_DATA[country] || COUNTRY_DATA[DEFAULT_COUNTRY];
+    const rate = data.exchangeRate || 1.0;
+    return smartRound(usdAmount * rate);
+  }
+
   /* ── Apply country to DOM ────────────────────────────────────── */
   function applyCountry(country){
     const data = COUNTRY_DATA[country] || COUNTRY_DATA[DEFAULT_COUNTRY];
@@ -121,6 +145,22 @@
       if (Array.isArray(value)) {
         el.innerHTML = value.map(item => `<${tpl}>${item}</${tpl}>`).join('');
       }
+    });
+
+    // Convert USD amounts to local currency
+    // <span data-cn-usd="5000">$5,000</span> → "₹4,15,000" in India
+    // Use data-cn-usd-suffix="/mo" to keep suffix intact
+    document.querySelectorAll('[data-cn-usd]').forEach(el => {
+      const usd = parseFloat(el.getAttribute('data-cn-usd'));
+      if (isNaN(usd)) return;
+      const localAmount = convertUSD(usd, country);
+      const suffix = el.getAttribute('data-cn-usd-suffix') || '';
+      el.textContent = formatLocal(localAmount, country) + suffix;
+    });
+
+    // Just swap currency symbol (for non-numeric currency references)
+    document.querySelectorAll('[data-cn-symbol]').forEach(el => {
+      el.textContent = data.currency || '$';
     });
 
     // Sync selector + chip
@@ -334,6 +374,15 @@
 
     // Apply UI only (no profile check) — used by wizard preview
     apply: applyCountry,
+
+    // Currency helpers — convert USD amount to current country's currency, formatted string
+    convertUSD: (usd, opts) => {
+      const country = window.BizScoCountry.getCurrent();
+      const amount = convertUSD(usd, country);
+      if (opts && opts.numberOnly) return amount;
+      return formatLocal(amount, country) + (opts && opts.suffix ? opts.suffix : '');
+    },
+    formatLocal: (num) => formatLocal(num, window.BizScoCountry.getCurrent()),
 
     // Profile API
     getProfile,

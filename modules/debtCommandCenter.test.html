@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Debt Command Center — BizScale</title>
+<title>Debt Command Center ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -208,17 +208,17 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
 
 <div class="print-hdr">
   <h2>Debt Command Center &mdash; Payoff Summary</h2>
-  <p>Generated: <span id="printDate"></span> &bull; BizScale SmallBiz Platform</p>
+  <p>Generated: <span id="printDate"></span> &bull; BizSco SmallBiz Platform</p>
 </div>
 
 <h1>&#128184; Debt Command Center</h1>
-<p class="subtitle">BizScale &middot; All your loans in one place &mdash; track balances, compare payoff strategies, and eliminate debt faster.</p>
+<p class="subtitle">BizSco &middot; All your loans in one place &mdash; track balances, compare payoff strategies, and eliminate debt faster.</p>
 
 <div class="dff-chip" id="dff-chip" style="display:none">
   <div class="dff-icon">&#127942;</div>
   <div>
     <div class="dff-label">Projected Debt-Free Date (Avalanche at Minimums)</div>
-    <div class="dff-date" id="dff-date">—</div>
+    <div class="dff-date" id="dff-date">ï¿½</div>
     <div class="dff-days" id="dff-days"></div>
   </div>
 </div>
@@ -271,7 +271,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
       <div>
         <label>Original Balance ($)</label>
         <input type="number" id="ln-orig-balance" placeholder="e.g. 40000" min="0"/>
-        <p class="hint">What you originally borrowed — used for the payoff progress bar</p>
+        <p class="hint">What you originally borrowed ï¿½ used for the payoff progress bar</p>
       </div>
       <div>
         <label>Annual Interest Rate (%)</label>
@@ -310,16 +310,16 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
 ------------------------------------------------------- -->
 <div id="tab-strategy" class="panel">
   <div class="card">
-    <h2>&#127942; Snowball vs Avalanche — Which Strategy Wins for You?</h2>
+    <h2>&#127942; Snowball vs Avalanche ï¿½ Which Strategy Wins for You?</h2>
     <p class="desc">
-      <strong>Debt Snowball</strong> — pay off your smallest balance first. Fast wins, great for motivation.<br>
-      <strong>Debt Avalanche</strong> — pay off your highest interest rate first. Saves the most money overall.<br>
-      This runs both strategies on your saved loans and tells you exactly which one wins — and by how much.
+      <strong>Debt Snowball</strong> ï¿½ pay off your smallest balance first. Fast wins, great for motivation.<br>
+      <strong>Debt Avalanche</strong> ï¿½ pay off your highest interest rate first. Saves the most money overall.<br>
+      This runs both strategies on your saved loans and tells you exactly which one wins ï¿½ and by how much.
     </p>
     <div style="max-width:300px">
       <label>Extra Monthly Payment Beyond Minimums ($)</label>
       <input type="number" id="strat-extra" value="200" min="0" placeholder="e.g. 200"/>
-      <p class="hint">Even $50–$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
+      <p class="hint">Even $50ï¿½$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
     </div>
     <button class="btn-primary" onclick="runStrategy()">&#9654; Calculate Best Payoff Strategy</button>
   </div>
@@ -541,7 +541,7 @@ function renderLoansList() {
       '<td>'+fmt(l.balance)+'</td>' +
       '<td>'+l.rate+'%</td>' +
       '<td>'+fmt(l.minPay)+'</td>' +
-      '<td>'+escHtml(l.lender||'—')+'</td>' +
+      '<td>'+escHtml(l.lender||'ï¿½')+'</td>' +
       '<td style="white-space:nowrap">' +
         '<button class="btn-edit"   onclick="editLoan(\''+l.id+'\')">Edit</button>' +
         '<button class="btn-danger" onclick="deleteLoan(\''+l.id+'\')">Delete</button>' +
@@ -762,7 +762,7 @@ function buildPayoffCalendar(snow, aval) {
   }
   var sorted = Object.keys(names).sort(function(a,b){ return (avalMap[a]||9999)-(avalMap[b]||9999); });
   var html = '<div class="card"><h2>Payoff Calendar</h2>' +
-    '<p class="desc" style="margin-bottom:10px">Exact month-year each loan is paid off — both strategies side by side.</p>' +
+    '<p class="desc" style="margin-bottom:10px">Exact month-year each loan is paid off ï¿½ both strategies side by side.</p>' +
     '<div style="overflow-x:auto"><table class="sched-table">' +
     '<thead><tr><th>Loan</th><th>&#10052; Snowball Payoff</th><th>&#9650; Avalanche Payoff</th><th>Months Away</th></tr></thead><tbody>';
   sorted.forEach(function(name) {
@@ -802,7 +802,7 @@ function renderInsights() {
   var burdenDesc  = burden===null ?
     'Set your monthly revenue in Profile (top toolbar) to see your debt burden ratio.' :
     'Your loan payments are <strong>'+burden.toFixed(0)+'%</strong> of monthly revenue. '+
-    (burden<30?'Healthy — well within the 30% safe zone.':burden<50?'Elevated. Aim to get below 30% by accelerating payoff.':'High. Prioritize debt reduction before taking on any new debt.');
+    (burden<30?'Healthy ï¿½ well within the 30% safe zone.':burden<50?'Elevated. Aim to get below 30% by accelerating payoff.':'High. Prioritize debt reduction before taking on any new debt.');
 
   // Highest rate loan
   var sortedByRate  = loans.slice().sort(function(a,b){ return b.rate - a.rate; });
@@ -877,7 +877,7 @@ function renderInsights() {
     debtFreeExplain = explainHtml([
       'Being in debt for this long limits your ability to invest in growth',
       'Future loan applications will be harder with existing long-term debt',
-      'Even $100–$200 extra per month can cut years off this timeline'
+      'Even $100ï¿½$200 extra per month can cut years off this timeline'
     ], 'At current minimums, you\'ll be debt-free around '+debtFreeYear+' (in ~'+estYears+' years). Adding $200/mo extra saves '+fmt(interestSaved200)+' in interest and cuts '+monthsSaved200+' months off your payoff timeline');
   }
 
@@ -897,13 +897,13 @@ function renderInsights() {
   recs += '</div>';
 
   // Plain-English glossary
-  var glossaryHtml = '<div class="card"><h2>&#128216; Debt Terms — Plain English</h2><p class="desc">No jargon, just what these terms actually mean for your business.</p><div class="glossary">' +
+  var glossaryHtml = '<div class="card"><h2>&#128216; Debt Terms ï¿½ Plain English</h2><p class="desc">No jargon, just what these terms actually mean for your business.</p><div class="glossary">' +
     '<div class="gl-item"><div class="gl-term">Debt Snowball</div><div class="gl-def">Pay off your smallest loan first, then roll that freed-up payment into the next smallest. Quick wins boost motivation. Example: Clear a $3,000 credit card, then add that $80/mo minimum to your car loan.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Debt Avalanche</div><div class="gl-def">Pay off your highest-interest loan first regardless of balance. Mathematically optimal — saves the most money. Best if you can stay disciplined even without quick wins.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Avalanche</div><div class="gl-def">Pay off your highest-interest loan first regardless of balance. Mathematically optimal ï¿½ saves the most money. Best if you can stay disciplined even without quick wins.</div></div>' +
     '<div class="gl-item"><div class="gl-term">Minimum Payment</div><div class="gl-def">The smallest amount you must pay to avoid a late fee or default. Paying only the minimum means most of your payment goes to interest, not the balance.</div></div>' +
     '<div class="gl-item"><div class="gl-term">Interest Rate (APR)</div><div class="gl-def">The annual cost of borrowing expressed as a percentage. A 12% APR means a $10,000 loan costs ~$1,200 in interest per year if the balance stays the same.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Debt Burden Ratio</div><div class="gl-def">Your monthly loan payments as a percentage of monthly revenue. Below 30% = healthy. 30–50% = elevated. Above 50% = high risk. Lenders check this when you apply for new credit.</div></div>' +
-    '<div class="gl-item"><div class="gl-term">Freed Minimum Cascade</div><div class="gl-def">When you pay off a loan, its monthly payment doesn\'t disappear — it gets redirected to the next loan. This snowball effect accelerates payoff on all remaining loans.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Debt Burden Ratio</div><div class="gl-def">Your monthly loan payments as a percentage of monthly revenue. Below 30% = healthy. 30ï¿½50% = elevated. Above 50% = high risk. Lenders check this when you apply for new credit.</div></div>' +
+    '<div class="gl-item"><div class="gl-term">Freed Minimum Cascade</div><div class="gl-def">When you pay off a loan, its monthly payment doesn\'t disappear ï¿½ it gets redirected to the next loan. This snowball effect accelerates payoff on all remaining loans.</div></div>' +
   '</div></div>';
 
   el.innerHTML = '<div class="card"><h2>&#128161; Debt Insights</h2>' + insGrid + '</div>' + costHtml + recs + glossaryHtml;
@@ -923,7 +923,7 @@ function renderDebtFreeChip() {
   var dateStr = d.toLocaleString('en-US', {month:'long', year:'numeric'});
   chip.style.display = 'flex';
   document.getElementById('dff-date').textContent = dateStr;
-  document.getElementById('dff-days').textContent = 'In approximately ' + fmtMonths(months) + ' — keep going!';
+  document.getElementById('dff-days').textContent = 'In approximately ' + fmtMonths(months) + ' ï¿½ keep going!';
 }
 
 // ----------------------------------------------------------------
@@ -938,7 +938,7 @@ function syncToCalendar() {
   loans.forEach(function(l) {
     bills.push({
       id: 'dcc_' + l.id,
-      name: l.name + ' — loan payment',
+      name: l.name + ' ï¿½ loan payment',
       amount: l.minPay,
       dueDay: 1,
       recurring: true,

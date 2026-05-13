@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Bank Statement Upload — BizScale</title>
+<title>Bank Statement Upload ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;min-height:100vh}
@@ -118,7 +118,7 @@ select:focus{outline:none;border-color:#2563eb}
 
 <div class="page">
   <h1>?? Bank Statement Upload</h1>
-  <p class="subtitle">BizScale · Upload your bank CSV ? auto-calculate monthly revenue & expenses</p>
+  <p class="subtitle">BizSco ï¿½ Upload your bank CSV ? auto-calculate monthly revenue & expenses</p>
 
   <!-- Steps -->
   <div class="steps">
@@ -145,11 +145,11 @@ select:focus{outline:none;border-color:#2563eb}
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
         <div class="upload-icon">??</div>
         <div class="upload-title">Drop your bank statement here</div>
-        <div class="upload-sub">or click to browse · CSV, OFX, QFX, QBO supported · Your data stays in your browser</div>
+        <div class="upload-sub">or click to browse ï¿½ CSV, OFX, QFX, QBO supported ï¿½ Your data stays in your browser</div>
         <button class="btn-browse" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Browse File</button>
       </div>
       <input type="file" id="fileInput" accept=".csv,.txt,.ofx,.qfx,.qbo" onchange="handleFile(event)"/>
-      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">?? Your file is processed locally — never uploaded to any server</div>
+      <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">?? Your file is processed locally ï¿½ never uploaded to any server</div>
     </div>
   </div>
 
@@ -157,13 +157,13 @@ select:focus{outline:none;border-color:#2563eb}
   <div id="step2" style="display:none">
     <div class="card">
       <div class="card-title">Map Your CSV Columns</div>
-      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Tell us which column means what. We auto-detected a suggestion — adjust if needed.</p>
+      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Tell us which column means what. We auto-detected a suggestion ï¿½ adjust if needed.</p>
       <div class="col-map">
         <div><label>Date Column</label><select id="mapDate"></select></div>
         <div><label>Description Column</label><select id="mapDesc"></select></div>
-        <div><label>Amount Column <span style="color:#64748b;font-weight:400">(or use Debit/Credit below)</span></label><select id="mapAmt"><option value="">— Not used —</option></select></div>
-        <div><label>Debit Column (expenses out)</label><select id="mapDebit"><option value="">— Not used —</option></select></div>
-        <div><label>Credit Column (income in)</label><select id="mapCredit"><option value="">— Not used —</option></select></div>
+        <div><label>Amount Column <span style="color:#64748b;font-weight:400">(or use Debit/Credit below)</span></label><select id="mapAmt"><option value="">ï¿½ Not used ï¿½</option></select></div>
+        <div><label>Debit Column (expenses out)</label><select id="mapDebit"><option value="">ï¿½ Not used ï¿½</option></select></div>
+        <div><label>Credit Column (income in)</label><select id="mapCredit"><option value="">ï¿½ Not used ï¿½</option></select></div>
         <div>
           <label>Amount Sign Convention</label>
           <select id="mapSign">
@@ -215,10 +215,10 @@ select:focus{outline:none;border-color:#2563eb}
 
     <div class="card">
       <div class="card-title">Save to Your Business Profile</div>
-      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Update your BizScale profile with these numbers so all 30 tools auto-fill with real data.</p>
+      <p style="font-size:.84rem;color:#64748b;margin-bottom:16px">Update your BizSco profile with these numbers so all 30 tools auto-fill with real data.</p>
       <div style="background:#f8fafc;border-radius:8px;padding:14px 16px;font-size:.84rem;margin-bottom:16px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#64748b">Monthly Revenue will be set to:</span><strong id="saveRevLabel">—</strong></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Monthly Expenses will be set to:</span><strong id="saveExpLabel">—</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#64748b">Monthly Revenue will be set to:</span><strong id="saveRevLabel">ï¿½</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Monthly Expenses will be set to:</span><strong id="saveExpLabel">ï¿½</strong></div>
       </div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="goStep(2)">? Back</button>
@@ -276,7 +276,7 @@ function readFile(file){
 
 function parseOFX(text){
   var transactions = [];
-  /* OFX 2.x / QFX / QBO — try XML first */
+  /* OFX 2.x / QFX / QBO ï¿½ try XML first */
   var xmlStart = text.indexOf('<OFX>');
   if(xmlStart === -1) xmlStart = text.indexOf('<ofx>');
   var xmlBody = xmlStart >= 0 ? text.slice(xmlStart) : text;
@@ -346,7 +346,7 @@ function buildColumnMapUI(){
   var defs = BANK_DEFAULTS[bankFormat];
   selIds.forEach(function(id, idx){
     var sel = document.getElementById(id);
-    var cur = sel.innerHTML.match(/Not used/) ? '<option value="">— Not used —</option>' : '';
+    var cur = sel.innerHTML.match(/Not used/) ? '<option value="">ï¿½ Not used ï¿½</option>' : '';
     csvHeaders.forEach(function(h,i){ cur += '<option value="'+i+'">'+h+'</option>'; });
     if(sel.innerHTML.indexOf('Not used')===-1) sel.innerHTML = cur;
     else sel.innerHTML = cur;
@@ -462,7 +462,7 @@ function processData(){
   document.getElementById('r3Expense').textContent  = fmt(avgExpense);
   document.getElementById('r3Net').textContent      = fmt(avgIncome-avgExpense);
   document.getElementById('r3Net').className        = 'rc-value '+(avgIncome>=avgExpense?'blue':'red');
-  document.getElementById('r3IncomeSub').textContent = fmt(totalIncome)+' total · '+numMonths+' months';
+  document.getElementById('r3IncomeSub').textContent = fmt(totalIncome)+' total ï¿½ '+numMonths+' months';
   document.getElementById('r3ExpenseSub').textContent= fmt(totalExpense)+' total';
   document.getElementById('r3Months').textContent   = 'Avg over '+numMonths+' month'+(numMonths!==1?'s':'');
   document.getElementById('saveRevLabel').textContent = fmt(avgIncome)+'/mo';

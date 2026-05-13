@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -156,7 +156,7 @@
 <body>
 <header>
   <h1>AI Financial Advisor</h1>
-  <p>Ask your CFO anything · Health scoring · Loan readiness · Ratio analysis · Action plan</p>
+  <p>Ask your CFO anything ï¿½ Health scoring ï¿½ Loan readiness ï¿½ Ratio analysis ï¿½ Action plan</p>
 </header>
 
 <!-- Region indicator -->
@@ -185,7 +185,7 @@
       <p>Ask a question or tap one below. Answers use your currency and your numbers.</p>
     </div>
 
-    <!-- Quick question chips — updated by JS when currency changes -->
+    <!-- Quick question chips ï¿½ updated by JS when currency changes -->
     <div class="question-chips" id="qChips"></div>
 
     <!-- Custom question input -->
@@ -346,7 +346,7 @@ function explainHtml(bullets,example){
 }
 
 // ----------------------------------------------------------------
-// SHARED CURRENCY ENGINE — mirrors loanDecisionScoreEngine
+// SHARED CURRENCY ENGINE ï¿½ mirrors loanDecisionScoreEngine
 // ----------------------------------------------------------------
 const CURRENCIES = {
   USD: { symbol: '$', locale: 'en-US', kDiv: 1000, kSuffix: 'K', mDiv: 1000000, mSuffix: 'M', kThreshold: 10000, examples: { loan5L: '$50,000', loan1L: '$10,000', rev: '$10,000' } },
@@ -364,7 +364,7 @@ function fmt(n) {
 
 function setCurrency(code) {
   activeCurrency = CURRENCIES[code];
-  localStorage.setItem('bizscale_currency', code);
+  localStorage.setItem('BizSco_currency', code);
   document.querySelectorAll('.cb-pill').forEach(p => p.classList.remove('active'));
   event.target.closest('.cb-pill').classList.add('active');
   // Update all currency symbol spans in labels
@@ -430,24 +430,24 @@ function updateAutoInsights() {
   const debtLoad = revenue > 0 ? existingEmi / revenue : 0;
   let html = '';
   if (netCF < 0) {
-    html += `<div class="auto-insight danger">?? <strong>Negative cash flow</strong> — expenses exceed revenue by ${fmt(Math.abs(netCF))}/month. A loan will make this worse.</div>`;
+    html += `<div class="auto-insight danger">?? <strong>Negative cash flow</strong> ï¿½ expenses exceed revenue by ${fmt(Math.abs(netCF))}/month. A loan will make this worse.</div>`;
     html += explainHtml(
       ['Cash flow is the #1 reason small businesses fail',
        'Negative or low cash flow means you cannot pay bills, staff, or loan EMIs reliably',
        'Even a profitable business can fail from poor cash flow timing'],
       'You are spending ' + fmt(Math.abs(netCF)) + ' more per month than you earn. Adding a loan EMI on top of this deficit makes the gap even larger and accelerates cash depletion'
     );
-  } else if (cfRatio < 0.1) html += `<div class="auto-insight warn">?? <strong>Thin cash flow margin</strong> (${(cfRatio*100).toFixed(1)}%) — very little buffer to absorb an EMI.</div>`;
-  else                    html += `<div class="auto-insight good">? <strong>Cash flow positive</strong> — ${fmt(netCF)}/month surplus before any new loan EMI.</div>`;
+  } else if (cfRatio < 0.1) html += `<div class="auto-insight warn">?? <strong>Thin cash flow margin</strong> (${(cfRatio*100).toFixed(1)}%) ï¿½ very little buffer to absorb an EMI.</div>`;
+  else                    html += `<div class="auto-insight good">? <strong>Cash flow positive</strong> ï¿½ ${fmt(netCF)}/month surplus before any new loan EMI.</div>`;
   if (debtLoad > 0.4) {
-    html += `<div class="auto-insight danger">?? <strong>High existing debt load</strong> — current EMIs are ${(debtLoad*100).toFixed(1)}% of revenue. Most lenders want this below 40%.</div>`;
+    html += `<div class="auto-insight danger">?? <strong>High existing debt load</strong> ï¿½ current EMIs are ${(debtLoad*100).toFixed(1)}% of revenue. Most lenders want this below 40%.</div>`;
     html += explainHtml(
       ['Too much debt relative to income is the #2 business failure cause',
        'High debt load leaves no room for unexpected expenses or revenue dips',
        'Focus on paying down existing debt before taking on new loans'],
-      'Your existing EMIs use ' + (debtLoad*100).toFixed(1) + '% of your revenue. Lenders typically require this below 40% before approving new credit — you are at or above that limit'
+      'Your existing EMIs use ' + (debtLoad*100).toFixed(1) + '% of your revenue. Lenders typically require this below 40% before approving new credit ï¿½ you are at or above that limit'
     );
-  } else if (debtLoad > 0.25) html += `<div class="auto-insight warn">?? Existing EMIs are ${(debtLoad*100).toFixed(1)}% of revenue — watch carefully before adding more.</div>`;
+  } else if (debtLoad > 0.25) html += `<div class="auto-insight warn">?? Existing EMIs are ${(debtLoad*100).toFixed(1)}% of revenue ï¿½ watch carefully before adding more.</div>`;
   document.getElementById('autoInsights').innerHTML = html;
 }
 
@@ -493,21 +493,21 @@ function askCFO(preset) {
       const stressed    = (n.revenue * 0.8) - n.expenses - totalDebt;
 
       if (cashLeft > 0 && dscr > 1.5 && stressed > 0) {
-        answer = `? <strong>Yes — this loan looks SAFE.</strong><br><br>
+        answer = `? <strong>Yes ï¿½ this loan looks SAFE.</strong><br><br>
           Your ${sym}${n.loanAmount.toLocaleString()} loan at ${n.rate}% for ${n.tenure} months gives an EMI of <strong>${fmt(newEMI)}/month</strong>.<br><br>
-          After all payments, you'll have <strong>${fmt(cashLeft)}/month</strong> left — a comfortable buffer.<br>
-          Your DSCR will be <strong>${dscr.toFixed(2)}</strong> (needs to be > 1.25 — ? you're clear).<br>
+          After all payments, you'll have <strong>${fmt(cashLeft)}/month</strong> left ï¿½ a comfortable buffer.<br>
+          Your DSCR will be <strong>${dscr.toFixed(2)}</strong> (needs to be > 1.25 ï¿½ ? you're clear).<br>
           Even if revenue drops 20%, your business survives with <strong>${fmt(stressed)}</strong> to spare.<br><br>
           ?? Go ahead, but keep 2 months of EMI as a cash reserve.`;
       } else if (cashLeft > 0 && dscr > 1.0) {
         answer = `?? <strong>Possible, but RISKY.</strong><br><br>
-          EMI will be <strong>${fmt(newEMI)}/month</strong>. That leaves only <strong>${fmt(cashLeft)}/month</strong> — a thin buffer.<br>
-          ${stressed < 0 ? `A 20% revenue drop would leave you short by <strong>${fmt(Math.abs(stressed))}/month</strong> — you'd struggle to pay. ` : ''}
-          <br><br>?? Consider reducing the loan by 25–30% or extending the tenure to lower the EMI.`;
+          EMI will be <strong>${fmt(newEMI)}/month</strong>. That leaves only <strong>${fmt(cashLeft)}/month</strong> ï¿½ a thin buffer.<br>
+          ${stressed < 0 ? `A 20% revenue drop would leave you short by <strong>${fmt(Math.abs(stressed))}/month</strong> ï¿½ you'd struggle to pay. ` : ''}
+          <br><br>?? Consider reducing the loan by 25ï¿½30% or extending the tenure to lower the EMI.`;
       } else {
-        answer = `?? <strong>No — this loan is DANGEROUS right now.</strong><br><br>
-          EMI of <strong>${fmt(newEMI)}/month</strong> leaves <strong>${fmt(cashLeft)}/month</strong> — ${cashLeft < 0 ? 'you\'d be in deficit every month.' : 'an unsafe margin.'}<br>
-          DSCR = <strong>${dscr.toFixed(2)}</strong> ${dscr < 1 ? '(below 1.0 — income cannot cover debt payments).' : '(below safe threshold of 1.25).'}<br><br>
+        answer = `?? <strong>No ï¿½ this loan is DANGEROUS right now.</strong><br><br>
+          EMI of <strong>${fmt(newEMI)}/month</strong> leaves <strong>${fmt(cashLeft)}/month</strong> ï¿½ ${cashLeft < 0 ? 'you\'d be in deficit every month.' : 'an unsafe margin.'}<br>
+          DSCR = <strong>${dscr.toFixed(2)}</strong> ${dscr < 1 ? '(below 1.0 ï¿½ income cannot cover debt payments).' : '(below safe threshold of 1.25).'}<br><br>
           ?? Use the "Max Safe Loan" tab in the Loan Decision Score Engine to find a loan size that works.`;
       }
       break;
@@ -516,18 +516,18 @@ function askCFO(preset) {
       if (needNumbers) { answer = `Fill in your monthly revenue and expenses above, then ask again.`; break; }
       const cfRatio = n.revenue > 0 ? (netCF / n.revenue * 100).toFixed(1) : 0;
       if (netCF < 0)
-        answer = `?? <strong>Your cash flow is negative</strong> — you're spending <strong>${fmt(Math.abs(netCF))}/month more than you earn.</strong><br><br>
+        answer = `?? <strong>Your cash flow is negative</strong> ï¿½ you're spending <strong>${fmt(Math.abs(netCF))}/month more than you earn.</strong><br><br>
           This is the root cause of any risk. Before any loan, fix the cash flow first.<br><br>
           <strong>Top 3 actions:</strong><br>
-          1. Audit your top 5 expenses — cut anything not directly generating revenue.<br>
-          2. Chase outstanding invoices — outstanding receivables are cash sitting idle.<br>
-          3. Review pricing — a 5% price increase on your top service can change everything.`;
+          1. Audit your top 5 expenses ï¿½ cut anything not directly generating revenue.<br>
+          2. Chase outstanding invoices ï¿½ outstanding receivables are cash sitting idle.<br>
+          3. Review pricing ï¿½ a 5% price increase on your top service can change everything.`;
       else if (parseFloat(cfRatio) < 10)
-        answer = `?? <strong>Cash flow is positive but very thin</strong> — only ${cfRatio}% margin on ${fmt(n.revenue)} revenue.<br><br>
+        answer = `?? <strong>Cash flow is positive but very thin</strong> ï¿½ only ${cfRatio}% margin on ${fmt(n.revenue)} revenue.<br><br>
           You earn ${fmt(netCF)}/month after expenses. That's not enough to safely absorb a loan EMI without risk.<br><br>
-          ?? Target a cash flow margin of at least 15–20% before taking on new debt.`;
+          ?? Target a cash flow margin of at least 15ï¿½20% before taking on new debt.`;
       else
-        answer = `? <strong>Cash flow is healthy</strong> — ${fmt(netCF)}/month surplus, ${cfRatio}% margin.<br><br>
+        answer = `? <strong>Cash flow is healthy</strong> ï¿½ ${fmt(netCF)}/month surplus, ${cfRatio}% margin.<br><br>
           This is a good base for loan eligibility. Your cash flow covers operating costs comfortably.<br><br>
           ?? Use the Loan Check question to see how much loan you can safely layer on top of this.`;
       break;
@@ -540,13 +540,13 @@ function askCFO(preset) {
 
       if (netCF > 0 && dscrR > 1.5 && dtiR < 35)
         answer = `? <strong>LOAN READY.</strong><br><br>
-          • Cash flow: ${fmt(netCF)}/month positive ?<br>
-          • DSCR: ${dscrR === 99 ? 'No existing debt' : dscrR.toFixed(2)} ?<br>
-          • Debt-to-income: ${dtiR.toFixed(1)}% ?<br><br>
+          ï¿½ Cash flow: ${fmt(netCF)}/month positive ?<br>
+          ï¿½ DSCR: ${dscrR === 99 ? 'No existing debt' : dscrR.toFixed(2)} ?<br>
+          ï¿½ Debt-to-income: ${dtiR.toFixed(1)}% ?<br><br>
           You meet all three core lender criteria. Head to the Loan Marketplace to compare offers.`;
       else if (netCF > 0)
         answer = `?? <strong>CONDITIONALLY READY.</strong><br><br>
-          You have positive cash flow (${fmt(netCF)}/month) — that's the most important signal.<br>
+          You have positive cash flow (${fmt(netCF)}/month) ï¿½ that's the most important signal.<br>
           ${dscrR < 1.5 ? `DSCR of ${dscrR.toFixed(2)} is below the ideal 1.5 threshold. ` : ''}
           ${dtiR > 35 ? `Existing debt load (${dtiR.toFixed(1)}% of revenue) is high. ` : ''}<br><br>
           ?? Address the issues above to get the best rates. You may still qualify, just at higher rates.`;
@@ -572,8 +572,8 @@ function askCFO(preset) {
         const safeEMI = calcEMI(best, n.rate, n.tenure);
         answer = `? <strong>Maximum safe loan: ${fmt(best)}</strong><br><br>
           At this amount:<br>
-          • EMI = <strong>${fmt(safeEMI)}/month</strong><br>
-          • Cash remaining after all payments = <strong>${fmt(netCF - n.existingEmi - safeEMI)}/month</strong><br><br>
+          ï¿½ EMI = <strong>${fmt(safeEMI)}/month</strong><br>
+          ï¿½ Cash remaining after all payments = <strong>${fmt(netCF - n.existingEmi - safeEMI)}/month</strong><br><br>
           ?? For a comfortable cushion, target <strong>${fmt(best * 0.85)}</strong> (85% of maximum). This gives you breathing room if revenue dips.`;
       }
       break;
@@ -584,12 +584,12 @@ function askCFO(preset) {
       const cashLeft2 = netCF - n.existingEmi;
       const cfPct = n.revenue > 0 ? (netCF / n.revenue * 100) : 0;
       const items = [];
-      if (netCF < 0) items.push(`?? <strong>Fix cash flow first</strong> — cut expenses by at least ${fmt(Math.abs(netCF) + 1000)}/month before anything else.`);
-      else if (cfPct < 15) items.push(`?? <strong>Increase cash flow margin</strong> — target 15–20% (${fmt(n.revenue * 0.15)}/month). Review pricing and recurring costs.`);
-      if (n.existingEmi / n.revenue > 0.35) items.push(`?? <strong>Reduce existing debt load</strong> — existing EMIs are ${(n.existingEmi/n.revenue*100).toFixed(1)}% of revenue. Prepay the highest-rate loan first.`);
-      if (cashLeft2 > 0) items.push(`? <strong>Build a 3-month cash reserve</strong> — target ${fmt(n.existingEmi * 3 || netCF * 3)} as an emergency buffer before taking new debt.`);
-      items.push(`?? <strong>Run a stress test</strong> — open the Loan Decision Score Engine, enter your numbers, and check the Stress Test tab to see your 20% revenue drop scenario.`);
-      items.push(`?? <strong>Compare your industry</strong> — open the Industry Benchmarks module to see how your margins compare to similar businesses.`);
+      if (netCF < 0) items.push(`?? <strong>Fix cash flow first</strong> ï¿½ cut expenses by at least ${fmt(Math.abs(netCF) + 1000)}/month before anything else.`);
+      else if (cfPct < 15) items.push(`?? <strong>Increase cash flow margin</strong> ï¿½ target 15ï¿½20% (${fmt(n.revenue * 0.15)}/month). Review pricing and recurring costs.`);
+      if (n.existingEmi / n.revenue > 0.35) items.push(`?? <strong>Reduce existing debt load</strong> ï¿½ existing EMIs are ${(n.existingEmi/n.revenue*100).toFixed(1)}% of revenue. Prepay the highest-rate loan first.`);
+      if (cashLeft2 > 0) items.push(`? <strong>Build a 3-month cash reserve</strong> ï¿½ target ${fmt(n.existingEmi * 3 || netCF * 3)} as an emergency buffer before taking new debt.`);
+      items.push(`?? <strong>Run a stress test</strong> ï¿½ open the Loan Decision Score Engine, enter your numbers, and check the Stress Test tab to see your 20% revenue drop scenario.`);
+      items.push(`?? <strong>Compare your industry</strong> ï¿½ open the Industry Benchmarks module to see how your margins compare to similar businesses.`);
       answer = `<strong>Your improvement plan:</strong><br><br>` + items.map((item, i) => `${i+1}. ${item}`).join('<br><br>');
       break;
     }
@@ -606,53 +606,53 @@ function askCFO(preset) {
 function _r(n){return Math.round(n*100)/100;}
 
 const RATIO_DEFINITIONS={
-  dscr:{name:"Debt Service Coverage Ratio (DSCR)",formula:"Net Operating Income ÷ Annual Debt Service",whatItMeasures:"How many times your income covers your loan payments.",higherIsBetter:true,
-    thresholds:[{min:2.0,label:"Excellent",color:"green",text:"Income covers debt 2× over — qualifies for best loan rates."},{min:1.5,label:"Good",color:"blue",text:"Comfortable coverage — most lenders will approve."},{min:1.25,label:"Acceptable",color:"amber",text:"Meets minimum threshold — may face higher interest rates."},{min:1.0,label:"Tight",color:"orange",text:"Barely covering debt — high default risk."},{min:0,label:"Critical",color:"red",text:"Income cannot cover debt payments. Immediate restructuring needed."}],
+  dscr:{name:"Debt Service Coverage Ratio (DSCR)",formula:"Net Operating Income ï¿½ Annual Debt Service",whatItMeasures:"How many times your income covers your loan payments.",higherIsBetter:true,
+    thresholds:[{min:2.0,label:"Excellent",color:"green",text:"Income covers debt 2ï¿½ over ï¿½ qualifies for best loan rates."},{min:1.5,label:"Good",color:"blue",text:"Comfortable coverage ï¿½ most lenders will approve."},{min:1.25,label:"Acceptable",color:"amber",text:"Meets minimum threshold ï¿½ may face higher interest rates."},{min:1.0,label:"Tight",color:"orange",text:"Barely covering debt ï¿½ high default risk."},{min:0,label:"Critical",color:"red",text:"Income cannot cover debt payments. Immediate restructuring needed."}],
     tip:"Aim for DSCR = 1.5. Improve by growing revenue, reducing fixed costs, or extending loan tenure."},
-  dtiPct:{name:"Debt-to-Income Ratio (DTI)",formula:"Total Monthly Debt Payments ÷ Gross Monthly Income × 100",whatItMeasures:"Percentage of your income consumed by debt repayments.",higherIsBetter:false,
-    thresholds:[{max:20,label:"Conservative",color:"green",text:"Excellent — significant borrowing headroom available."},{max:30,label:"Manageable",color:"blue",text:"Within acceptable range for most lenders."},{max:40,label:"Moderate",color:"amber",text:"Approaching lender limits. Avoid new debt if possible."},{max:50,label:"High",color:"orange",text:"Many lenders will hesitate. Reduce existing debt first."},{max:999,label:"Critical",color:"red",text:"Debt consuming over half your income — unsustainable."}],
+  dtiPct:{name:"Debt-to-Income Ratio (DTI)",formula:"Total Monthly Debt Payments ï¿½ Gross Monthly Income ï¿½ 100",whatItMeasures:"Percentage of your income consumed by debt repayments.",higherIsBetter:false,
+    thresholds:[{max:20,label:"Conservative",color:"green",text:"Excellent ï¿½ significant borrowing headroom available."},{max:30,label:"Manageable",color:"blue",text:"Within acceptable range for most lenders."},{max:40,label:"Moderate",color:"amber",text:"Approaching lender limits. Avoid new debt if possible."},{max:50,label:"High",color:"orange",text:"Many lenders will hesitate. Reduce existing debt first."},{max:999,label:"Critical",color:"red",text:"Debt consuming over half your income ï¿½ unsustainable."}],
     tip:"Keep DTI below 35% to maintain credit access."},
-  grossMarginPct:{name:"Gross Profit Margin",formula:"(Revenue - COGS) ÷ Revenue × 100",whatItMeasures:"Percentage of revenue remaining after direct production costs.",higherIsBetter:true,
-    thresholds:[{min:60,label:"Excellent",color:"green",text:"High-value product or service with strong pricing power."},{min:40,label:"Good",color:"blue",text:"Healthy margin — sufficient to cover operating costs."},{min:25,label:"Average",color:"amber",text:"Typical for product businesses. Watch operating costs."},{min:10,label:"Thin",color:"orange",text:"Low margin — very sensitive to cost increases."},{min:0,label:"Critical",color:"red",text:"Gross margin critically low — pricing strategy needs urgent review."}],
+  grossMarginPct:{name:"Gross Profit Margin",formula:"(Revenue - COGS) ï¿½ Revenue ï¿½ 100",whatItMeasures:"Percentage of revenue remaining after direct production costs.",higherIsBetter:true,
+    thresholds:[{min:60,label:"Excellent",color:"green",text:"High-value product or service with strong pricing power."},{min:40,label:"Good",color:"blue",text:"Healthy margin ï¿½ sufficient to cover operating costs."},{min:25,label:"Average",color:"amber",text:"Typical for product businesses. Watch operating costs."},{min:10,label:"Thin",color:"orange",text:"Low margin ï¿½ very sensitive to cost increases."},{min:0,label:"Critical",color:"red",text:"Gross margin critically low ï¿½ pricing strategy needs urgent review."}],
     tip:"Improve by negotiating better supplier terms or shifting to higher-margin offerings."},
-  netMarginPct:{name:"Net Profit Margin",formula:"Net Profit After Tax ÷ Revenue × 100",whatItMeasures:"The percentage of revenue left after ALL expenses and taxes.",higherIsBetter:true,
-    thresholds:[{min:20,label:"Excellent",color:"green",text:"Outstanding profitability — highly efficient operations."},{min:10,label:"Good",color:"blue",text:"Above-average profitability for most industries."},{min:5,label:"Average",color:"amber",text:"Acceptable margin — monitor costs to prevent erosion."},{min:0,label:"Thin",color:"orange",text:"Very thin profit — vulnerable to any cost increase."},{min:-999,label:"Loss",color:"red",text:"Operating at a loss. Immediate cost review needed."}],
+  netMarginPct:{name:"Net Profit Margin",formula:"Net Profit After Tax ï¿½ Revenue ï¿½ 100",whatItMeasures:"The percentage of revenue left after ALL expenses and taxes.",higherIsBetter:true,
+    thresholds:[{min:20,label:"Excellent",color:"green",text:"Outstanding profitability ï¿½ highly efficient operations."},{min:10,label:"Good",color:"blue",text:"Above-average profitability for most industries."},{min:5,label:"Average",color:"amber",text:"Acceptable margin ï¿½ monitor costs to prevent erosion."},{min:0,label:"Thin",color:"orange",text:"Very thin profit ï¿½ vulnerable to any cost increase."},{min:-999,label:"Loss",color:"red",text:"Operating at a loss. Immediate cost review needed."}],
     tip:"Below 5% leaves little room for reinvestment."},
-  currentRatio:{name:"Current Ratio",formula:"Current Assets ÷ Current Liabilities",whatItMeasures:"Ability to pay short-term obligations using short-term assets.",higherIsBetter:true,
-    thresholds:[{min:2.5,label:"Very Strong",color:"green",text:"Excellent liquidity."},{min:1.5,label:"Healthy",color:"blue",text:"Good liquidity — comfortable buffer."},{min:1.0,label:"Adequate",color:"amber",text:"Just enough assets to cover liabilities."},{min:0.7,label:"Tight",color:"orange",text:"Struggling to meet short-term obligations."},{min:0,label:"Critical",color:"red",text:"Unable to cover short-term liabilities — insolvency risk."}],
-    tip:"Aim for 1.5–2.5. Too low risks default; too high may mean idle cash."},
-  debtToEquity:{name:"Debt-to-Equity Ratio",formula:"Total Liabilities ÷ Total Equity",whatItMeasures:"How much the business relies on debt versus owner investment.",higherIsBetter:false,
-    thresholds:[{max:0.5,label:"Conservative",color:"green",text:"Very low leverage — mostly equity-funded."},{max:1.0,label:"Balanced",color:"blue",text:"Good balance of debt and equity."},{max:2.0,label:"Moderate",color:"amber",text:"More debt than equity — acceptable for capital-intensive sectors."},{max:4.0,label:"High",color:"orange",text:"High leverage — increased vulnerability."},{max:999,label:"Critical",color:"red",text:"Very high leverage — seek debt reduction immediately."}],
+  currentRatio:{name:"Current Ratio",formula:"Current Assets ï¿½ Current Liabilities",whatItMeasures:"Ability to pay short-term obligations using short-term assets.",higherIsBetter:true,
+    thresholds:[{min:2.5,label:"Very Strong",color:"green",text:"Excellent liquidity."},{min:1.5,label:"Healthy",color:"blue",text:"Good liquidity ï¿½ comfortable buffer."},{min:1.0,label:"Adequate",color:"amber",text:"Just enough assets to cover liabilities."},{min:0.7,label:"Tight",color:"orange",text:"Struggling to meet short-term obligations."},{min:0,label:"Critical",color:"red",text:"Unable to cover short-term liabilities ï¿½ insolvency risk."}],
+    tip:"Aim for 1.5ï¿½2.5. Too low risks default; too high may mean idle cash."},
+  debtToEquity:{name:"Debt-to-Equity Ratio",formula:"Total Liabilities ï¿½ Total Equity",whatItMeasures:"How much the business relies on debt versus owner investment.",higherIsBetter:false,
+    thresholds:[{max:0.5,label:"Conservative",color:"green",text:"Very low leverage ï¿½ mostly equity-funded."},{max:1.0,label:"Balanced",color:"blue",text:"Good balance of debt and equity."},{max:2.0,label:"Moderate",color:"amber",text:"More debt than equity ï¿½ acceptable for capital-intensive sectors."},{max:4.0,label:"High",color:"orange",text:"High leverage ï¿½ increased vulnerability."},{max:999,label:"Critical",color:"red",text:"Very high leverage ï¿½ seek debt reduction immediately."}],
     tip:"Service businesses: aim below 1.0. Capital-intensive: can sustain up to 2.0."},
-  operatingCFMarginPct:{name:"Operating Cash Flow Margin",formula:"Operating Cash Flow ÷ Revenue × 100",whatItMeasures:"Percentage of revenue converted to actual operating cash.",higherIsBetter:true,
-    thresholds:[{min:20,label:"Excellent",color:"green",text:"Strong cash conversion — generates significant real cash."},{min:10,label:"Good",color:"blue",text:"Healthy cash generation."},{min:5,label:"Average",color:"amber",text:"Adequate but thin."},{min:0,label:"Thin",color:"orange",text:"Very low cash conversion."},{min:-999,label:"Negative",color:"red",text:"Negative operating cash flow — burning through reserves."}],
+  operatingCFMarginPct:{name:"Operating Cash Flow Margin",formula:"Operating Cash Flow ï¿½ Revenue ï¿½ 100",whatItMeasures:"Percentage of revenue converted to actual operating cash.",higherIsBetter:true,
+    thresholds:[{min:20,label:"Excellent",color:"green",text:"Strong cash conversion ï¿½ generates significant real cash."},{min:10,label:"Good",color:"blue",text:"Healthy cash generation."},{min:5,label:"Average",color:"amber",text:"Adequate but thin."},{min:0,label:"Thin",color:"orange",text:"Very low cash conversion."},{min:-999,label:"Negative",color:"red",text:"Negative operating cash flow ï¿½ burning through reserves."}],
     tip:"Operating CF margin often reveals true business health better than net margin."},
 };
 
 function scoreFinancialHealth({revenue=0,netCashFlow=0,netMarginPct=0,dscr=0,dtiPct=0,currentRatio,debtToEquity,grossMarginPct,revenueGrowthPct}={}){
   const scores={};const strengths=[];const weaknesses=[];const recommendations=[];
   const cfM=revenue>0?_r((netCashFlow/revenue)*100):0;
-  if(netCashFlow>0&&cfM>=20){scores.cashFlow=25;strengths.push({area:"Cash Flow",message:`Strong cash flow margin of ${cfM}% — ample room for debt service and growth.`});}
+  if(netCashFlow>0&&cfM>=20){scores.cashFlow=25;strengths.push({area:"Cash Flow",message:`Strong cash flow margin of ${cfM}% ï¿½ ample room for debt service and growth.`});}
   else if(netCashFlow>0&&cfM>=10){scores.cashFlow=18;strengths.push({area:"Cash Flow",message:`Positive cash flow with ${cfM}% margin.`});}
   else if(netCashFlow>0&&cfM>=5){scores.cashFlow=12;}
-  else if(netCashFlow>0){scores.cashFlow=6;weaknesses.push({area:"Cash Flow",message:`Cash flow margin below 5% — thin buffer.`});}
-  else{scores.cashFlow=0;weaknesses.push({area:"Cash Flow",message:`Negative cash flow — urgent action required.`});recommendations.push({priority:1,action:"Conduct expense audit. Cut variable costs to restore positive cash flow.",impact:"Critical"});}
-  if(dscr>=2.0){scores.debtCoverage=25;strengths.push({area:"Debt Coverage",message:`Excellent DSCR of ${dscr} — income covers debt 2× over.`});}
-  else if(dscr>=1.5){scores.debtCoverage=20;strengths.push({area:"Debt Coverage",message:`Good DSCR of ${dscr} — comfortable coverage.`});}
+  else if(netCashFlow>0){scores.cashFlow=6;weaknesses.push({area:"Cash Flow",message:`Cash flow margin below 5% ï¿½ thin buffer.`});}
+  else{scores.cashFlow=0;weaknesses.push({area:"Cash Flow",message:`Negative cash flow ï¿½ urgent action required.`});recommendations.push({priority:1,action:"Conduct expense audit. Cut variable costs to restore positive cash flow.",impact:"Critical"});}
+  if(dscr>=2.0){scores.debtCoverage=25;strengths.push({area:"Debt Coverage",message:`Excellent DSCR of ${dscr} ï¿½ income covers debt 2ï¿½ over.`});}
+  else if(dscr>=1.5){scores.debtCoverage=20;strengths.push({area:"Debt Coverage",message:`Good DSCR of ${dscr} ï¿½ comfortable coverage.`});}
   else if(dscr>=1.25){scores.debtCoverage=14;}
   else if(dscr>=1.0){scores.debtCoverage=7;weaknesses.push({area:"Debt Coverage",message:`DSCR of ${dscr} below recommended 1.25.`});recommendations.push({priority:2,action:"Increase DSCR above 1.25 before seeking new loans.",impact:"High"});}
-  else if(dscr>0){scores.debtCoverage=0;weaknesses.push({area:"Debt Coverage",message:`DSCR of ${dscr} below 1.0 — income cannot cover debt.`});recommendations.push({priority:1,action:"Renegotiate loan terms to extend tenure.",impact:"Critical"});}
+  else if(dscr>0){scores.debtCoverage=0;weaknesses.push({area:"Debt Coverage",message:`DSCR of ${dscr} below 1.0 ï¿½ income cannot cover debt.`});recommendations.push({priority:1,action:"Renegotiate loan terms to extend tenure.",impact:"Critical"});}
   else{scores.debtCoverage=0;}
   if(netMarginPct>=20){scores.profitability=25;strengths.push({area:"Profitability",message:`Outstanding net margin of ${netMarginPct}%.`});}
   else if(netMarginPct>=10){scores.profitability=20;strengths.push({area:"Profitability",message:`Solid net margin of ${netMarginPct}%.`});}
   else if(netMarginPct>=5){scores.profitability=14;}
   else if(netMarginPct>=0){scores.profitability=7;weaknesses.push({area:"Profitability",message:`Net margin of ${netMarginPct}% is thin.`});}
-  else{scores.profitability=0;weaknesses.push({area:"Profitability",message:`Negative net margin — operating at a loss.`});recommendations.push({priority:1,action:"Conduct urgent cost audit. Review pricing and overhead.",impact:"Critical"});}
-  if(dtiPct<=20){scores.debtLoad=25;strengths.push({area:"Debt Load",message:`Low DTI of ${dtiPct}% — significant borrowing headroom.`});}
+  else{scores.profitability=0;weaknesses.push({area:"Profitability",message:`Negative net margin ï¿½ operating at a loss.`});recommendations.push({priority:1,action:"Conduct urgent cost audit. Review pricing and overhead.",impact:"Critical"});}
+  if(dtiPct<=20){scores.debtLoad=25;strengths.push({area:"Debt Load",message:`Low DTI of ${dtiPct}% ï¿½ significant borrowing headroom.`});}
   else if(dtiPct<=30){scores.debtLoad=20;strengths.push({area:"Debt Load",message:`Manageable DTI of ${dtiPct}%.`});}
   else if(dtiPct<=40){scores.debtLoad=12;}
   else if(dtiPct<=50){scores.debtLoad=5;weaknesses.push({area:"Debt Load",message:`High DTI of ${dtiPct}%.`});recommendations.push({priority:2,action:"Reduce existing debt before applying for new loans.",impact:"High"});}
-  else{scores.debtLoad=0;weaknesses.push({area:"Debt Load",message:`Critical DTI of ${dtiPct}% — over half of income is debt.`});recommendations.push({priority:1,action:"Seek debt restructuring or consolidation.",impact:"Critical"});}
+  else{scores.debtLoad=0;weaknesses.push({area:"Debt Load",message:`Critical DTI of ${dtiPct}% ï¿½ over half of income is debt.`});recommendations.push({priority:1,action:"Seek debt restructuring or consolidation.",impact:"Critical"});}
   if(currentRatio!==undefined){
     if(currentRatio<1.0){weaknesses.push({area:"Liquidity",message:`Current ratio of ${currentRatio} below 1.0.`});recommendations.push({priority:2,action:"Accelerate receivables. Offer early payment discounts.",impact:"High"});}
     else if(currentRatio>=2.0){strengths.push({area:"Liquidity",message:`Strong current ratio of ${currentRatio}.`});}
@@ -664,38 +664,38 @@ function scoreFinancialHealth({revenue=0,netCashFlow=0,netMarginPct=0,dscr=0,dti
   if(grossMarginPct!==undefined&&grossMarginPct<25){weaknesses.push({area:"Gross Margin",message:`Low gross margin of ${grossMarginPct}%.`});recommendations.push({priority:3,action:"Negotiate supplier contracts and review pricing.",impact:"Medium"});}
   const totalScore=Math.min(100,Object.values(scores).reduce((s,v)=>s+v,0));
   let grade,gradeColor;
-  if(totalScore>=80){grade="A — Excellent";gradeColor="green";}
-  else if(totalScore>=65){grade="B — Good";gradeColor="blue";}
-  else if(totalScore>=50){grade="C — Fair";gradeColor="amber";}
-  else if(totalScore>=35){grade="D — Weak";gradeColor="orange";}
-  else{grade="F — Poor";gradeColor="red";}
+  if(totalScore>=80){grade="A ï¿½ Excellent";gradeColor="green";}
+  else if(totalScore>=65){grade="B ï¿½ Good";gradeColor="blue";}
+  else if(totalScore>=50){grade="C ï¿½ Fair";gradeColor="amber";}
+  else if(totalScore>=35){grade="D ï¿½ Weak";gradeColor="orange";}
+  else{grade="F ï¿½ Poor";gradeColor="red";}
   recommendations.sort((a,b)=>a.priority-b.priority);
   return{overallScore:totalScore,maxScore:100,grade,gradeColor,scores,strengths,weaknesses,recommendations,summary:`${grade} (${totalScore}/100). ${strengths.length} strength(s), ${weaknesses.length} area(s) need attention.`};
 }
 
 function assessLoanReadiness({dscr=0,dtiPct=100,netCashFlow=0,creditScore,monthsInBusiness,currentRatio}={}){
   let score=0;const blockers=[];const enablers=[];
-  if(dscr>=1.75){score+=30;enablers.push(`DSCR of ${dscr} — excellent debt repayment capacity.`);}
-  else if(dscr>=1.5){score+=25;enablers.push(`DSCR of ${dscr} — good debt service coverage.`);}
+  if(dscr>=1.75){score+=30;enablers.push(`DSCR of ${dscr} ï¿½ excellent debt repayment capacity.`);}
+  else if(dscr>=1.5){score+=25;enablers.push(`DSCR of ${dscr} ï¿½ good debt service coverage.`);}
   else if(dscr>=1.25){score+=18;enablers.push(`DSCR of ${dscr} meets minimum lender requirements.`);}
-  else if(dscr>=1.0){score+=8;blockers.push(`DSCR of ${dscr} is below 1.25 minimum — most lenders will decline or charge premium rates.`);}
-  else{blockers.push(`DSCR of ${dscr} below 1.0 — loan repayment not feasible at current income.`);}
-  if(dtiPct<=25){score+=25;enablers.push(`Low DTI of ${dtiPct}% — significant debt headroom.`);}
+  else if(dscr>=1.0){score+=8;blockers.push(`DSCR of ${dscr} is below 1.25 minimum ï¿½ most lenders will decline or charge premium rates.`);}
+  else{blockers.push(`DSCR of ${dscr} below 1.0 ï¿½ loan repayment not feasible at current income.`);}
+  if(dtiPct<=25){score+=25;enablers.push(`Low DTI of ${dtiPct}% ï¿½ significant debt headroom.`);}
   else if(dtiPct<=35){score+=18;enablers.push(`Manageable DTI of ${dtiPct}%.`);}
-  else if(dtiPct<=45){score+=8;blockers.push(`DTI of ${dtiPct}% is high — lenders prefer below 40%.`);}
-  else{blockers.push(`Critical DTI of ${dtiPct}% — unlikely to qualify for additional debt.`);}
+  else if(dtiPct<=45){score+=8;blockers.push(`DTI of ${dtiPct}% is high ï¿½ lenders prefer below 40%.`);}
+  else{blockers.push(`Critical DTI of ${dtiPct}% ï¿½ unlikely to qualify for additional debt.`);}
   if(netCashFlow>0){score+=20;enablers.push("Positive cash flow demonstrates operational health.");}
   else{blockers.push("Negative cash flow is a primary red flag for all lenders.");}
   if(creditScore!==undefined){
     if(creditScore>=750){score+=15;enablers.push(`Excellent credit score of ${creditScore}.`);}
     else if(creditScore>=700){score+=10;enablers.push(`Good credit score of ${creditScore}.`);}
     else if(creditScore>=650){score+=5;}
-    else{blockers.push(`Credit score of ${creditScore} below 650 — limits lender options.`);}
+    else{blockers.push(`Credit score of ${creditScore} below 650 ï¿½ limits lender options.`);}
   }else{score+=8;}
   if(monthsInBusiness!==undefined){
-    if(monthsInBusiness>=36){score+=10;enablers.push(`${Math.floor(monthsInBusiness/12)} years in business — demonstrates stability.`);}
+    if(monthsInBusiness>=36){score+=10;enablers.push(`${Math.floor(monthsInBusiness/12)} years in business ï¿½ demonstrates stability.`);}
     else if(monthsInBusiness>=12){score+=6;}
-    else{blockers.push("Business under 12 months — most traditional lenders require 1+ year history.");}
+    else{blockers.push("Business under 12 months ï¿½ most traditional lenders require 1+ year history.");}
   }else{score+=5;}
   if(currentRatio!==undefined&&currentRatio>=1.5){score=Math.min(100,score+5);enablers.push(`Healthy current ratio of ${currentRatio}.`);}
   score=Math.min(100,score);
@@ -722,9 +722,9 @@ function generateActionPlan(metrics={}){
   const health=scoreFinancialHealth(metrics);const readiness=assessLoanReadiness(metrics);
   const actions=[...health.recommendations];
   const{dscr=0,dtiPct=0,netMarginPct=0,netCashFlow=0,currentRatio,grossMarginPct}=metrics;
-  if(dscr>=1.5&&dtiPct<=30&&netCashFlow>0){actions.push({priority:4,action:"Build a 3-month operating cash reserve before your next growth move.",impact:"Medium"});actions.push({priority:4,action:"Explore refinancing existing loans at lower rates — DSCR is strong.",impact:"Medium"});}
+  if(dscr>=1.5&&dtiPct<=30&&netCashFlow>0){actions.push({priority:4,action:"Build a 3-month operating cash reserve before your next growth move.",impact:"Medium"});actions.push({priority:4,action:"Explore refinancing existing loans at lower rates ï¿½ DSCR is strong.",impact:"Medium"});}
   if(dscr>=1.25&&dscr<1.5){actions.push({priority:2,action:"Build a 2-month emergency cash reserve before any new debt.",impact:"High"});}
-  if(netMarginPct>0&&netMarginPct<8){actions.push({priority:3,action:"Review bottom 20% product/service lines — eliminate or reprice low-margin offerings.",impact:"Medium"});}
+  if(netMarginPct>0&&netMarginPct<8){actions.push({priority:3,action:"Review bottom 20% product/service lines ï¿½ eliminate or reprice low-margin offerings.",impact:"Medium"});}
   if(currentRatio!==undefined&&currentRatio<1.5&&currentRatio>=1.0){actions.push({priority:3,action:"Offer 2% early-payment discounts to customers and extend supplier payment terms.",impact:"Medium"});}
   if(netCashFlow>0&&dtiPct<=35){actions.push({priority:4,action:"Make extra principal payments on highest-rate loans to reduce total interest.",impact:"Low"});}
   actions.sort((a,b)=>a.priority-b.priority);
@@ -750,7 +750,7 @@ function getAdvisoryInsight(category,metrics={}){
       if(revenueGrowthPct!==undefined&&revenueGrowthPct>20)return{insight:`Revenue growing at ${revenueGrowthPct}%.`,recommendation:"Ensure systems and cash flow can handle scale. Hire ahead of demand.",urgency:"low"};
       if(revenueGrowthPct!==undefined&&revenueGrowthPct<0)return{insight:`Revenue declining ${Math.abs(revenueGrowthPct)}%.`,recommendation:"Conduct customer exit interviews. Audit top churned accounts.",urgency:"high"};
       return{insight:"Growth is steady. Focus on improving unit economics before scaling.",recommendation:"Identify highest-margin customer segment and focus acquisition there.",urgency:"low"};}
-    case"loan":{const r=assessLoanReadiness(metrics);return{insight:`Loan readiness: ${r.score}/100 — ${r.verdict}.`,recommendation:r.blockers.length>0?`Address: ${r.blockers[0]}`:r.enablers[0]||"Financials are in good shape for a loan application.",urgency:r.verdict==="NOT READY"?"high":r.verdict==="CONDITIONALLY READY"?"medium":"low"};}
+    case"loan":{const r=assessLoanReadiness(metrics);return{insight:`Loan readiness: ${r.score}/100 ï¿½ ${r.verdict}.`,recommendation:r.blockers.length>0?`Address: ${r.blockers[0]}`:r.enablers[0]||"Financials are in good shape for a loan application.",urgency:r.verdict==="NOT READY"?"high":r.verdict==="CONDITIONALLY READY"?"medium":"low"};}
     default:throw new Error(`Unknown category: "${category}"`);
   }
 }
@@ -784,7 +784,7 @@ function doHealthScore(){
   const r=scoreFinancialHealth(m);
   const gc=COLOR_MAP[r.gradeColor]||"#64748b";
   const dfEx = r.overallScore < 40 ? explainHtml(
-    ['Critical financial health — immediate action required',
+    ['Critical financial health ï¿½ immediate action required',
      'Banks, investors, and lenders will see this as a high-risk business',
      'Multiple core metrics are in dangerous territory simultaneously'],
     'A score of '+r.overallScore+'/100 ('+r.grade+') means your business has serious issues in cash flow, debt, and/or profitability that need fixing before applying for any funding'
@@ -799,7 +799,7 @@ function doHealthScore(){
     ['Too much debt relative to income is the #2 business failure cause',
      'High debt load leaves no room for unexpected expenses or revenue dips',
      'Focus on paying down existing debt before taking on new loans'],
-    'DTI of '+(m.dtiPct||0)+'% means '+( m.dtiPct||0)+'¢ of every $1 earned goes to debt payments. Lenders prefer below 35–40% before approving new credit'
+    'DTI of '+(m.dtiPct||0)+'% means '+( m.dtiPct||0)+'ï¿½ of every $1 earned goes to debt payments. Lenders prefer below 35ï¿½40% before approving new credit'
   ) : '';
   document.getElementById('health-output').innerHTML=`
     <div class="card">
@@ -834,7 +834,7 @@ function doLoanReadiness(){
   const lrEx = (r.verdict==="NOT READY"||r.verdict==="CONDITIONALLY READY") ? explainHtml(
     ['One or more of your core financial metrics fall below lender requirements',
      'Applying for a loan now is likely to result in rejection and hurt your credit score',
-     'Fix the highlighted blockers first — then re-run this assessment'],
+     'Fix the highlighted blockers first ï¿½ then re-run this assessment'],
     'Lenders check DSCR, DTI, cash runway, and credit score. Your current profile fails on: '+(r.blockers.length>0?r.blockers[0]:'one or more key metrics')
   ) : '';
   document.getElementById('readiness-output').innerHTML=`
@@ -869,7 +869,7 @@ function doRatios(){
   document.getElementById('ratios-output').innerHTML=`<div class="ratio-grid">`+
     results.map(r=>`<div class="ratio-card c-${r.color}">
       <div class="r-name">${r.name||r.ratioKey}</div>
-      <div class="r-val">${r.value}${r.higherIsBetter!==undefined&&r.ratioKey.includes('Pct')?'%':'×'.includes(r.value)?'':''}${r.higherIsBetter!==undefined?'':''}</div>
+      <div class="r-val">${r.value}${r.higherIsBetter!==undefined&&r.ratioKey.includes('Pct')?'%':'ï¿½'.includes(r.value)?'':''}${r.higherIsBetter!==undefined?'':''}</div>
       <div class="r-label">${r.label}</div>
       <div style="font-size:.78rem;color:#374151;margin-bottom:6px">${r.interpretation}</div>
       <div class="r-tip">${r.tip||""}</div>
@@ -928,71 +928,71 @@ function runTests(){
   function test(n,fn){try{fn();results.push({n,ok:true});}catch(e){results.push({n,ok:false,err:e.message});}}
   function assert(c,m){if(!c)throw new Error(m||"fail");}
 
-  test("scoreFinancialHealth — strong metrics ? A grade",()=>{
+  test("scoreFinancialHealth ï¿½ strong metrics ? A grade",()=>{
     const r=scoreFinancialHealth({revenue:300000,netCashFlow:75000,netMarginPct:15,dscr:2.2,dtiPct:20});
     assert(r.gradeColor==="green");assert(r.overallScore>=70);
   });
-  test("scoreFinancialHealth — poor metrics ? low score",()=>{
+  test("scoreFinancialHealth ï¿½ poor metrics ? low score",()=>{
     const r=scoreFinancialHealth({revenue:100000,netCashFlow:-5000,netMarginPct:-2,dscr:0.8,dtiPct:60});
     assert(r.overallScore<40);assert(r.weaknesses.length>=3);
   });
-  test("scoreFinancialHealth — score is 0-100",()=>{
+  test("scoreFinancialHealth ï¿½ score is 0-100",()=>{
     const r=scoreFinancialHealth({revenue:200000,netCashFlow:30000,netMarginPct:8,dscr:1.6,dtiPct:28});
     assert(r.overallScore>=0&&r.overallScore<=100);
   });
-  test("scoreFinancialHealth — strengths array populated on good metrics",()=>{
+  test("scoreFinancialHealth ï¿½ strengths array populated on good metrics",()=>{
     const r=scoreFinancialHealth({revenue:300000,netCashFlow:90000,netMarginPct:20,dscr:2.5,dtiPct:15});
     assert(r.strengths.length>=3);
   });
-  test("assessLoanReadiness — LOAN READY for strong metrics",()=>{
+  test("assessLoanReadiness ï¿½ LOAN READY for strong metrics",()=>{
     const r=assessLoanReadiness({dscr:1.8,dtiPct:22,netCashFlow:50000,creditScore:750,monthsInBusiness:48});
     assert(r.verdict==="LOAN READY");assert(r.blockers.length===0);
   });
-  test("assessLoanReadiness — NOT READY for poor metrics",()=>{
+  test("assessLoanReadiness ï¿½ NOT READY for poor metrics",()=>{
     const r=assessLoanReadiness({dscr:0.9,dtiPct:55,netCashFlow:-5000,creditScore:580});
     assert(r.verdict==="NOT READY");assert(r.blockers.length>=2);
   });
-  test("assessLoanReadiness — score in range 0-100",()=>{
+  test("assessLoanReadiness ï¿½ score in range 0-100",()=>{
     const r=assessLoanReadiness({dscr:1.5,dtiPct:30,netCashFlow:40000});
     assert(r.score>=0&&r.score<=100);
   });
-  test("analyzeRatios — returns array with correct keys",()=>{
+  test("analyzeRatios ï¿½ returns array with correct keys",()=>{
     const r=analyzeRatios({dscr:1.8,netMarginPct:12});
     assert(r.length===2);assert(r[0].hasOwnProperty("label"));assert(r[0].hasOwnProperty("color"));
   });
-  test("analyzeRatios — DSCR 2.5 ? Excellent",()=>{
+  test("analyzeRatios ï¿½ DSCR 2.5 ? Excellent",()=>{
     const r=analyzeRatios({dscr:2.5});
     assert(r[0].label==="Excellent"&&r[0].color==="green");
   });
-  test("analyzeRatios — DTI 25 ? Manageable/Conservative",()=>{
+  test("analyzeRatios ï¿½ DTI 25 ? Manageable/Conservative",()=>{
     const r=analyzeRatios({dtiPct:25});
     assert(["Conservative","Manageable"].includes(r[0].label));
   });
-  test("analyzeRatios — debtToEquity 0.3 ? Conservative (lower is better)",()=>{
+  test("analyzeRatios ï¿½ debtToEquity 0.3 ? Conservative (lower is better)",()=>{
     const r=analyzeRatios({debtToEquity:0.3});
     assert(r[0].label==="Conservative");
   });
-  test("generateActionPlan — returns at least 1 action",()=>{
+  test("generateActionPlan ï¿½ returns at least 1 action",()=>{
     const r=generateActionPlan({revenue:100000,netCashFlow:5000,netMarginPct:4,dscr:1.2,dtiPct:42});
     assert(r.actions.length>=1);assert(r.overallGrade.length>0);
   });
-  test("generateActionPlan — critical actions for poor metrics",()=>{
+  test("generateActionPlan ï¿½ critical actions for poor metrics",()=>{
     const r=generateActionPlan({revenue:100000,netCashFlow:-5000,netMarginPct:-3,dscr:0.8,dtiPct:60});
     assert(r.criticalCount>=1);
   });
-  test("getAdvisoryInsight — returns insight/recommendation/urgency",()=>{
+  test("getAdvisoryInsight ï¿½ returns insight/recommendation/urgency",()=>{
     const r=getAdvisoryInsight("cashflow",{netCashFlow:30000,revenue:200000});
     assert(r.insight&&r.recommendation&&r.urgency);
   });
-  test("getAdvisoryInsight — negative cashflow ? high urgency",()=>{
+  test("getAdvisoryInsight ï¿½ negative cashflow ? high urgency",()=>{
     const r=getAdvisoryInsight("cashflow",{netCashFlow:-5000,revenue:100000});
     assert(r.urgency==="high");
   });
-  test("getAdvisoryInsight — throws on unknown category",()=>{
+  test("getAdvisoryInsight ï¿½ throws on unknown category",()=>{
     let threw=false;try{getAdvisoryInsight("xyz",{});}catch{threw=true;}
     assert(threw);
   });
-  test("getAdvisoryInsight — loan category returns readiness score",()=>{
+  test("getAdvisoryInsight ï¿½ loan category returns readiness score",()=>{
     const r=getAdvisoryInsight("loan",{dscr:1.8,dtiPct:25,netCashFlow:40000});
     assert(r.insight.includes("Loan readiness"));
   });
@@ -1000,12 +1000,12 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' ï¿½ '+r.err}</li>`).join('');
 }
 
 // -- Init: restore currency from localStorage -------------------
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('bizscale_currency');
+  const saved = localStorage.getItem('BizSco_currency');
   if (saved && CURRENCIES[saved]) {
     activeCurrency = CURRENCIES[saved];
     document.querySelectorAll('.cb-pill').forEach(pill => {

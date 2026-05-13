@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Loan Refinance Analyzer — BizScale</title>
+<title>Loan Refinance Analyzer ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -96,7 +96,7 @@ button.primary:hover{background:#1d4ed8}
 <script src="../country-switcher.js" defer></script>
 </head>
 <body>
-<div class="print-hdr" id="printHdr"><strong>BizScale Loan Refinance Analysis</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span></div>
+<div class="print-hdr" id="printHdr"><strong>BizSco Loan Refinance Analysis</strong> &nbsp;|&nbsp; Generated: <span id="printDate"></span></div>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="../sidebar.js"></script>
 <script src="nav.js"></script>
@@ -106,7 +106,7 @@ button.primary:hover{background:#1d4ed8}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>?? Loan Refinance Analyzer</h1>
-<p class="subtitle">BizScale · Compare your existing loan against a refinance offer — monthly savings, break-even, and net benefit.</p>
+<p class="subtitle">BizSco ï¿½ Compare your existing loan against a refinance offer ï¿½ monthly savings, break-even, and net benefit.</p>
 
 <!-- Input panel -->
 <div class="two-col">
@@ -182,7 +182,7 @@ button.primary:hover{background:#1d4ed8}
 
   <div class="card" style="text-align:right">
     <button class="save-btn" onclick="saveRefinanceToProfile()">?? Save Loan Details to Profile</button>
-    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term — auto-fills all 40 tools</p>
+    <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term ï¿½ auto-fills all 40 tools</p>
   </div>
 
 </div>
@@ -229,7 +229,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='? Saved — all 40 tools updated';
+    t.textContent='? Saved ï¿½ all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}
@@ -350,7 +350,7 @@ function analyze(){
         'This refinance costs you money overall unless you extend your repayment period intentionally.</div>';
     }
   } else if(monthlySav <= 0){
-    beHtml = '<div class="be-warn">?? Monthly payment increases with this refinance — no break-even point exists. Review the new rate and term.</div>';
+    beHtml = '<div class="be-warn">?? Monthly payment increases with this refinance ï¿½ no break-even point exists. Review the new rate and term.</div>';
   }
   document.getElementById('beBar').innerHTML = beHtml;
 
@@ -382,10 +382,10 @@ function analyze(){
   /* Insights */
   var items = [];
   if(eRate - rRate >= 1.5) items.push({cls:'good', text:'A rate reduction of '+(eRate-rRate).toFixed(2)+'% is significant. Over the life of the refinanced loan, you\'ll pay '+fmt(Math.abs(intSavings))+' less in interest.'});
-  if(rTerm > eMos) items.push({cls:'warn', text:'The new term ('+rTerm+' months) is longer than your remaining term ('+eMos+' months). Lower monthly payments come at the cost of paying interest for longer — make sure the net benefit still holds.'});
-  if(rFees > monthlySav * 12 * 2) items.push({cls:'warn', text:'Closing fees of '+fmt(rFees)+' are high relative to savings. Try negotiating a fee waiver or lender credit — even reducing fees by 50% would cut break-even from '+Math.ceil(breakEvenMos)+' to '+Math.ceil(breakEvenMos/2)+' months.'});
+  if(rTerm > eMos) items.push({cls:'warn', text:'The new term ('+rTerm+' months) is longer than your remaining term ('+eMos+' months). Lower monthly payments come at the cost of paying interest for longer ï¿½ make sure the net benefit still holds.'});
+  if(rFees > monthlySav * 12 * 2) items.push({cls:'warn', text:'Closing fees of '+fmt(rFees)+' are high relative to savings. Try negotiating a fee waiver or lender credit ï¿½ even reducing fees by 50% would cut break-even from '+Math.ceil(breakEvenMos)+' to '+Math.ceil(breakEvenMos/2)+' months.'});
   if(monthlySav > 0 && breakEvenMos <= 6) items.push({cls:'good', text:'Break-even in only '+Math.ceil(breakEvenMos)+' months is excellent. Any savings beyond that point flow directly to your bottom line.'});
-  if(!items.length) items.push({cls:'', text:'Review your credit report before applying — each 0.5% rate improvement on '+fmt(eBal)+' saves you roughly '+fmt(eBal*0.005/12)+'/month.'});
+  if(!items.length) items.push({cls:'', text:'Review your credit report before applying ï¿½ each 0.5% rate improvement on '+fmt(eBal)+' saves you roughly '+fmt(eBal*0.005/12)+'/month.'});
 
   document.getElementById('insightList').innerHTML = items.map(function(i){
     return '<li class="insight-item'+(i.cls?' '+i.cls:'')+'">'+i.text+'</li>';
@@ -401,7 +401,7 @@ function printAnalysis(){
 }
 
 (function(){
-  // 1. Restore from LRA_KEY (user's own previous inputs — highest priority)
+  // 1. Restore from LRA_KEY (user's own previous inputs ï¿½ highest priority)
   var restoredFromSave = false;
   try{
     var saved = JSON.parse(localStorage.getItem(LRA_KEY)||'null');
@@ -443,7 +443,7 @@ function printAnalysis(){
         var banner = document.createElement('div');
         banner.style.cssText = 'background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
         banner.innerHTML = '?? <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
-          ' found in Repayment Optimizer</strong> — largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
+          ' found in Repayment Optimizer</strong> ï¿½ largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
           ' $' + Number(biggest.balance).toLocaleString() + ' @ ' + biggest.rate + '% ' +
           '&mdash; <button onclick="importFromOptimizer(this)" style="background:#2563eb;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Use as Existing Loan</button>' +
           ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">?</button>';

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Business Health Score — BizScale</title>
+<title>Business Health Score ï¿½ BizSco</title>
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script src="../sidebar.js" defer></script>
 <script src="fw-auth.js"></script>
@@ -175,7 +175,7 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 <div id="mainWrap">
 
 <h1>&#127942; Business Health Score</h1>
-<p class="subtitle">A–F grade across 13 signals — financial ratios + live data from your other tools</p>
+<p class="subtitle">Aï¿½F grade across 13 signals ï¿½ financial ratios + live data from your other tools</p>
 
 <!-- data connections -->
 <div id="connStrip" class="conn-strip"></div>
@@ -186,12 +186,12 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 <!-- historical sparkline -->
 <div class="sparkline-wrap" id="sparkWrap" style="display:none">
   <div class="spark-left">
-    <div class="spark-title">&#128200; Health Score — Last 6 Months</div>
+    <div class="spark-title">&#128200; Health Score ï¿½ Last 6 Months</div>
     <canvas id="sparkCanvas" height="50"></canvas>
     <div class="spark-months" id="sparkMonths"></div>
   </div>
   <div class="spark-right">
-    <div class="spark-cur" id="sparkCurScore">—</div>
+    <div class="spark-cur" id="sparkCurScore">ï¿½</div>
     <div class="spark-cur-lbl">Current Score</div>
   </div>
 </div>
@@ -217,7 +217,7 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 
 <div id="resultsSection" style="display:none">
   <div id="gradeBanner" class="grade-banner grade-A"></div>
-  <div id="shareBanner" class="share-banner" style="display:none">&#128279; Health Score saved — visible in <strong>AI CFO Chat</strong> context and <strong>Loan Decision Engine</strong>. Re-run monthly to track progress.</div>
+  <div id="shareBanner" class="share-banner" style="display:none">&#128279; Health Score saved ï¿½ visible in <strong>AI CFO Chat</strong> context and <strong>Loan Decision Engine</strong>. Re-run monthly to track progress.</div>
 
   <!-- core financials -->
   <div class="section-hd">Core Financial Ratios <span style="font-weight:400;text-transform:none;letter-spacing:0;font-style:italic">(from your numbers above)</span></div>
@@ -465,20 +465,20 @@ function renderConnStrip(ld){
       detail: ld.deductionsConnected ? fmt(ld.totalDeductions)+' tracked' : 'Not set up',
       warn: false },
     { label:'Savings Goals', on: ld.savingsConnected,
-      detail: ld.savingsConnected ? ld.savingsGoalCount+' goals · '+Math.round(ld.savingsFundedPct)+'% funded' : 'Not set up',
+      detail: ld.savingsConnected ? ld.savingsGoalCount+' goals ï¿½ '+Math.round(ld.savingsFundedPct)+'% funded' : 'Not set up',
       warn: ld.savingsConnected && ld.savingsFundedPct < 30 },
     { label:'Goal Tracker', on: ld.goalTrackerConnected,
       detail: ld.goalTrackerConnected ? ld.goalCompleted+'/'+ld.goalTotal+' goals met' : 'Not set up',
       warn: ld.goalTrackerConnected && ld.goalHitRate < 50 },
     { label:'Tax Payments', on: ld.taxConnected,
-      detail: ld.taxConnected ? ld.taxPaymentCount+' payments · '+fmt(ld.taxTotalPaid) : 'Not set up',
+      detail: ld.taxConnected ? ld.taxPaymentCount+' payments ï¿½ '+fmt(ld.taxTotalPaid) : 'Not set up',
       warn: ld.taxConnected && ld.monthsSinceLastTax > 3 }
   ];
   var html = '';
   items.forEach(function(it){
     var cls = it.on ? (it.warn ? 'conn-warn' : 'conn-on') : 'conn-off';
     var dcls = it.on ? (it.warn ? 'cdot-warn' : 'cdot-on') : 'cdot-off';
-    html += '<span class="conn-pill '+cls+'"><span class="conn-dot '+dcls+'"></span>'+it.label+' — '+it.detail+'</span>';
+    html += '<span class="conn-pill '+cls+'"><span class="conn-dot '+dcls+'"></span>'+it.label+' ï¿½ '+it.detail+'</span>';
   });
   document.getElementById('connStrip').innerHTML = html;
 }
@@ -505,7 +505,7 @@ function mcCard(name, value, pct, desc, score, source){
 function mcCardGrey(name, desc, source){
   return '<div class="metric-card mc-grey"><span class="live-chip">Live</span>'+
     '<div class="mc-name">'+name+'</div>'+
-    '<div class="mc-value">—</div>'+
+    '<div class="mc-value">ï¿½</div>'+
     '<div class="mc-bar-track"><div class="mc-bar-fill" style="width:4%"></div></div>'+
     '<div class="mc-desc">'+desc+'</div>'+
     '<div class="mc-source">Set up '+source+' to track this</div>'+
@@ -536,31 +536,31 @@ function calculate(){
   // -- Core 6 metrics --
   var coreMetrics = [
     { name:'Debt Coverage',    label:'Loan Repayment Safety',
-      value: emi>0 ? fmtR(dscr)+'x' : '—', raw:dscr, pct:Math.min(dscr/3*100,100),
+      value: emi>0 ? fmtR(dscr)+'x' : 'ï¿½', raw:dscr, pct:Math.min(dscr/3*100,100),
       thresh:[1.5,1.2],
-      desc: dscr>=1.5?'Strong — cash flow comfortably covers debt payments':dscr>=1.2?'Adequate — but not much cushion':'Warning — cash flow barely covers loans' },
+      desc: dscr>=1.5?'Strong ï¿½ cash flow comfortably covers debt payments':dscr>=1.2?'Adequate ï¿½ but not much cushion':'Warning ï¿½ cash flow barely covers loans' },
     { name:'Cost Efficiency',  label:'Expense Ratio',
       value: fmtR(expenseRatio)+'%', raw:100-expenseRatio, pct:Math.max(0,100-expenseRatio),
       thresh:[30,10],
-      desc: expenseRatio<=70?'Healthy — 30%+ of revenue becomes profit':expenseRatio<=90?'Tight — slim profit margin':'Critical — expenses equal or exceed revenue' },
+      desc: expenseRatio<=70?'Healthy ï¿½ 30%+ of revenue becomes profit':expenseRatio<=90?'Tight ï¿½ slim profit margin':'Critical ï¿½ expenses equal or exceed revenue' },
     { name:'Profitability',    label:'Profit Margin',
       value: fmtR(profitMargin)+'%', raw:profitMargin, pct:Math.max(0,Math.min(profitMargin*3,100)),
       thresh:[15,5],
-      desc: profitMargin>=15?'Strong profit margin':profitMargin>=5?'Moderate — room to grow':'Low or negative — needs urgent attention' },
+      desc: profitMargin>=15?'Strong profit margin':profitMargin>=5?'Moderate ï¿½ room to grow':'Low or negative ï¿½ needs urgent attention' },
     { name:'Survival Runway',  label:'Cash Buffer',
       value: fmtR(cashBuffer)+' mo', raw:cashBuffer, pct:Math.min(cashBuffer/6*100,100),
       thresh:[3,1.5],
-      desc: cashBuffer>=3?'3+ months reserve — excellent safety net':cashBuffer>=1.5?'1.5–3 months — acceptable, keep building':'Under 1.5 months — high vulnerability' },
+      desc: cashBuffer>=3?'3+ months reserve ï¿½ excellent safety net':cashBuffer>=1.5?'1.5ï¿½3 months ï¿½ acceptable, keep building':'Under 1.5 months ï¿½ high vulnerability' },
     { name:'Liquidity',        label:'Current Ratio',
-      value: asst>0 ? fmtR(currentRatio) : '—', raw:currentRatio, pct:asst>0?Math.min(currentRatio/4*100,100):0,
+      value: asst>0 ? fmtR(currentRatio) : 'ï¿½', raw:currentRatio, pct:asst>0?Math.min(currentRatio/4*100,100):0,
       thresh:[2,1.2],
       desc: currentRatio>=2?'Assets comfortably cover liabilities':currentRatio>=1.2?'Adequate liquidity':'Assets barely cover liabilities' },
     { name:'Leverage',         label:'Debt vs Equity',
-      value: asst>0 ? fmtR(debtToEquity)+'x' : '—',
+      value: asst>0 ? fmtR(debtToEquity)+'x' : 'ï¿½',
       raw: asst>0 ? (debtToEquity<=1?2:debtToEquity<=2?1:0) : 1,
       pct: asst>0 ? Math.max(0,100-(debtToEquity-0.5)*40) : 50,
       thresh:[1,0],
-      desc: debtToEquity<=1?'Low leverage — strong equity position':debtToEquity<=2?'Moderate — manageable debt level':'High leverage — debt exceeds equity' }
+      desc: debtToEquity<=1?'Low leverage ï¿½ strong equity position':debtToEquity<=2?'Moderate ï¿½ manageable debt level':'High leverage ï¿½ debt exceeds equity' }
   ];
 
   var coreScore = 0, coreMax = 0;
@@ -584,15 +584,15 @@ function calculate(){
     var arScore = scoreM(100 - ld.invoiceOverdueRate, 100, 75); // green=0% overdue, yellow=<25%, red=25%+
     liveScore += arScore.score; liveMax += 2;
     var arDesc = ld.invoiceOverdueRate === 0
-      ? 'All invoices current — no overdue amounts'
+      ? 'All invoices current ï¿½ no overdue amounts'
       : fmtR(ld.invoiceOverdueRate,0)+'% of outstanding balance is overdue ('+fmt(ld.invoiceOverdueAmt)+')';
     liveHtml += mcCard('Receivables Health', fmt(ld.invoiceOutstandingAmt)+' out', Math.max(0,100-ld.invoiceOverdueRate), arDesc, arScore, 'Invoice Tracker');
     if(ld.invoiceOverdueAmt > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+fmt(ld.invoiceOverdueAmt)+' overdue</strong> across '+ld.invoiceOverdueCount+' invoice'+(ld.invoiceOverdueCount>1?'s':'')+'. Send payment reminders today — every day delayed reduces collection probability.',href:'invoiceTracker.test.html'});
-      extraRecs.push({cls:'bad', text:'Overdue invoices total '+fmt(ld.invoiceOverdueAmt)+' — contact those clients this week for payment.'});
+      insights.push({cls:'bad',ico:'??',txt:'<strong>'+fmt(ld.invoiceOverdueAmt)+' overdue</strong> across '+ld.invoiceOverdueCount+' invoice'+(ld.invoiceOverdueCount>1?'s':'')+'. Send payment reminders today ï¿½ every day delayed reduces collection probability.',href:'invoiceTracker.test.html'});
+      extraRecs.push({cls:'bad', text:'Overdue invoices total '+fmt(ld.invoiceOverdueAmt)+' ï¿½ contact those clients this week for payment.'});
     }
     if(ld.badDebt && ld.badDebt.length > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.badDebt.length+' invoice'+(ld.badDebt.length>1?'s are':' is')+' 60+ days overdue</strong> — these are at serious risk of becoming uncollectible. Consider formal follow-up or a collection process.',href:'invoiceTracker.test.html'});
+      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.badDebt.length+' invoice'+(ld.badDebt.length>1?'s are':' is')+' 60+ days overdue</strong> ï¿½ these are at serious risk of becoming uncollectible. Consider formal follow-up or a collection process.',href:'invoiceTracker.test.html'});
     }
     if(ld.dso > 45){
       insights.push({cls:'warn',ico:'??',txt:'Your customers take an average of <strong>~'+Math.round(ld.dso)+' days to pay</strong>. Industry best practice is under 30 days. Consider offering 2% early-payment discounts.',href:'invoiceTracker.test.html'});
@@ -609,7 +609,7 @@ function calculate(){
     liveHtml += mcCard('Payables Burden', fmtR(ld.billsToRev,0)+'% of rev', Math.max(0,100-ld.billsToRev), payDesc, payScore, 'Bill Tracker');
     if(ld.billsToRev > 55){
       insights.push({cls:'warn',ico:'??',txt:'Your fixed monthly bills represent <strong>'+fmtR(ld.billsToRev,0)+'% of revenue</strong> ('+fmt(ld.totalMonthlyBills)+'/mo). Any revenue dip leaves little for payroll and profit. Identify bills to reduce or renegotiate.',href:'vendorBillTracker.test.html'});
-      extraRecs.push({cls:'warn', text:'Monthly bills at '+fmtR(ld.billsToRev,0)+'% of revenue — renegotiate 2–3 vendor contracts to reduce fixed costs by 10%.'});
+      extraRecs.push({cls:'warn', text:'Monthly bills at '+fmtR(ld.billsToRev,0)+'% of revenue ï¿½ renegotiate 2ï¿½3 vendor contracts to reduce fixed costs by 10%.'});
     }
     if(ld.expiringContracts.length > 0){
       var names = ld.expiringContracts.map(function(b){ return b.vendor; }).join(', ');
@@ -627,14 +627,14 @@ function calculate(){
     else { compScore = {cls:'mc-red',score:0}; }
     liveScore += compScore.score; liveMax += 2;
     var compPct = ld.w9ComplianceRate;
-    var compDesc = ld.contractorTotal+' contractor'+(ld.contractorTotal>1?'s':'')+ ' · '+fmtR(ld.w9ComplianceRate,0)+'% W-9 compliance'+(ld.necRequired.length?' · '+ld.necRequired.length+' 1099s required':'');
+    var compDesc = ld.contractorTotal+' contractor'+(ld.contractorTotal>1?'s':'')+ ' ï¿½ '+fmtR(ld.w9ComplianceRate,0)+'% W-9 compliance'+(ld.necRequired.length?' ï¿½ '+ld.necRequired.length+' 1099s required':'');
     liveHtml += mcCard('Contractor Compliance', fmtR(ld.w9ComplianceRate,0)+'%', compPct, compDesc, compScore, 'Contractor & Payroll');
     if(ld.noW9.length > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s are':' is')+' missing a W-9</strong>: '+ld.noW9.map(function(c){return c.name;}).join(', ')+'. You must withhold 24% of payments without a W-9 — this is an IRS requirement.',href:'contractorPayroll.test.html'});
-      extraRecs.push({cls:'bad', text:'Collect W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' immediately — required before making any payment.'});
+      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s are':' is')+' missing a W-9</strong>: '+ld.noW9.map(function(c){return c.name;}).join(', ')+'. You must withhold 24% of payments without a W-9 ï¿½ this is an IRS requirement.',href:'contractorPayroll.test.html'});
+      extraRecs.push({cls:'bad', text:'Collect W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' immediately ï¿½ required before making any payment.'});
     }
     if(ld.necRequired.length > 0){
-      insights.push({cls:'warn',ico:'??',txt:'<strong>'+ld.necRequired.length+' contractor'+(ld.necRequired.length>1?'s':'')+' require 1099-NEC forms</strong> this year (paid $600+). Deadline: January 31. File early to avoid $60–$310 penalty per form.',href:'contractorPayroll.test.html'});
+      insights.push({cls:'warn',ico:'??',txt:'<strong>'+ld.necRequired.length+' contractor'+(ld.necRequired.length>1?'s':'')+' require 1099-NEC forms</strong> this year (paid $600+). Deadline: January 31. File early to avoid $60ï¿½$310 penalty per form.',href:'contractorPayroll.test.html'});
     }
   } else {
     liveHtml += mcCardGrey('Contractor Compliance', 'Track W-9s and 1099-NEC filing requirements', 'Contractor & Payroll');
@@ -646,7 +646,7 @@ function calculate(){
   if(!ld.deductionsConnected){
     liveHtml += mcCardGrey('Deduction Tracking', 'Log home office, mileage and equipment to reduce your tax bill', 'Key Deductions');
     if(annualProfit > 15000){
-      insights.push({cls:'info',ico:'??',txt:'<strong>You haven\'t logged any tax deductions.</strong> Self-employed businesses can typically deduct $5,000–$20,000+ per year in home office, mileage, and equipment costs. Every $1,000 in deductions saves roughly $220–$370 in taxes.',href:'keyDeductions.test.html'});
+      insights.push({cls:'info',ico:'??',txt:'<strong>You haven\'t logged any tax deductions.</strong> Self-employed businesses can typically deduct $5,000ï¿½$20,000+ per year in home office, mileage, and equipment costs. Every $1,000 in deductions saves roughly $220ï¿½$370 in taxes.',href:'keyDeductions.test.html'});
     }
   } else {
     var dedRate = annualProfit > 0 ? (ld.totalDeductions/annualProfit)*100 : 0;
@@ -655,27 +655,27 @@ function calculate(){
     else { dedScore = {cls:'mc-red',score:0}; }
     liveScore += dedScore.score; liveMax += 2;
     var dedDesc = fmt(ld.totalDeductions)+' deducted this year';
-    if(ld.hoSetup) dedDesc += ' · Home office: '+fmt(ld.hoDeduction);
-    if(ld.mlSetup) dedDesc += ' · Mileage: '+fmt(ld.mlDeduction);
-    if(ld.s179Setup) dedDesc += ' · Equipment: '+fmt(ld.s179Deduction);
+    if(ld.hoSetup) dedDesc += ' ï¿½ Home office: '+fmt(ld.hoDeduction);
+    if(ld.mlSetup) dedDesc += ' ï¿½ Mileage: '+fmt(ld.mlDeduction);
+    if(ld.s179Setup) dedDesc += ' ï¿½ Equipment: '+fmt(ld.s179Deduction);
     liveHtml += mcCard('Deduction Tracking', fmt(ld.totalDeductions), Math.min(dedRate*5,100), dedDesc, dedScore, 'Key Deductions');
     if(dedRate < 3 && annualProfit > 20000){
-      insights.push({cls:'warn',ico:'??',txt:'Your tracked deductions are only '+fmtR(dedRate,1)+'% of your annual profit. Most businesses can deduct 10–25%+ of profit. Check if you\'re missing home office, mileage, or equipment write-offs.',href:'keyDeductions.test.html'});
+      insights.push({cls:'warn',ico:'??',txt:'Your tracked deductions are only '+fmtR(dedRate,1)+'% of your annual profit. Most businesses can deduct 10ï¿½25%+ of profit. Check if you\'re missing home office, mileage, or equipment write-offs.',href:'keyDeductions.test.html'});
     } else if(dedRate >= 8){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Strong deduction tracking</strong> — you\'ve logged '+fmt(ld.totalDeductions)+' which is '+fmtR(dedRate,1)+'% of your annual profit. This could save you approximately '+fmt(ld.totalDeductions*0.25)+'–'+fmt(ld.totalDeductions*0.37)+' in taxes.'});
+      insights.push({cls:'good',ico:'?',txt:'<strong>Strong deduction tracking</strong> ï¿½ you\'ve logged '+fmt(ld.totalDeductions)+' which is '+fmtR(dedRate,1)+'% of your annual profit. This could save you approximately '+fmt(ld.totalDeductions*0.25)+'ï¿½'+fmt(ld.totalDeductions*0.37)+' in taxes.'});
     }
   }
   // Savings Goal Progress
   if(ld.savingsConnected){
     var savScore = scoreM(ld.savingsFundedPct, 75, 40);
     liveScore += savScore.score; liveMax += 2;
-    var savDesc = ld.savingsGoalCount+' goal'+(ld.savingsGoalCount>1?'s':'')+' · '+fmt(ld.savingsTotalSaved)+' saved of '+fmt(ld.savingsTotalTarget)+' target';
+    var savDesc = ld.savingsGoalCount+' goal'+(ld.savingsGoalCount>1?'s':'')+' ï¿½ '+fmt(ld.savingsTotalSaved)+' saved of '+fmt(ld.savingsTotalTarget)+' target';
     liveHtml += mcCard('Savings Progress', Math.round(ld.savingsFundedPct)+'%', Math.min(ld.savingsFundedPct,100), savDesc, savScore, 'Savings Goals');
     if(ld.savingsFundedPct < 40){
-      insights.push({cls:'warn',ico:'??',txt:'Savings goals are only <strong>'+Math.round(ld.savingsFundedPct)+'% funded</strong> — deficit of '+fmt(ld.savingsDeficit)+'. Underfunded reserves increase vulnerability to unexpected expenses.',href:'savingsGoals.test.html'});
-      extraRecs.push({cls:'warn', text:'Savings goals '+Math.round(ld.savingsFundedPct)+'% funded ('+fmt(ld.savingsDeficit)+' short) — set up an auto-transfer to close the gap.'});
+      insights.push({cls:'warn',ico:'??',txt:'Savings goals are only <strong>'+Math.round(ld.savingsFundedPct)+'% funded</strong> ï¿½ deficit of '+fmt(ld.savingsDeficit)+'. Underfunded reserves increase vulnerability to unexpected expenses.',href:'savingsGoals.test.html'});
+      extraRecs.push({cls:'warn', text:'Savings goals '+Math.round(ld.savingsFundedPct)+'% funded ('+fmt(ld.savingsDeficit)+' short) ï¿½ set up an auto-transfer to close the gap.'});
     } else if(ld.savingsFundedPct >= 75){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Savings goals '+Math.round(ld.savingsFundedPct)+'% funded</strong> — '+fmt(ld.savingsTotalSaved)+' saved toward '+fmt(ld.savingsTotalTarget)+' total goal. Strong financial resilience.'});
+      insights.push({cls:'good',ico:'?',txt:'<strong>Savings goals '+Math.round(ld.savingsFundedPct)+'% funded</strong> ï¿½ '+fmt(ld.savingsTotalSaved)+' saved toward '+fmt(ld.savingsTotalTarget)+' total goal. Strong financial resilience.'});
     }
   } else {
     liveHtml += mcCardGrey('Savings Progress', 'Track savings goals to measure financial resilience', 'Savings Goals');
@@ -685,13 +685,13 @@ function calculate(){
   if(ld.goalTrackerConnected){
     var gtrScore = scoreM(ld.goalHitRate, 70, 40);
     liveScore += gtrScore.score; liveMax += 2;
-    var gtrDesc = ld.goalCompleted+' of '+ld.goalTotal+' goals completed — '+Math.round(ld.goalHitRate)+'% execution rate';
+    var gtrDesc = ld.goalCompleted+' of '+ld.goalTotal+' goals completed ï¿½ '+Math.round(ld.goalHitRate)+'% execution rate';
     liveHtml += mcCard('Goal Hit Rate', Math.round(ld.goalHitRate)+'%', Math.min(ld.goalHitRate,100), gtrDesc, gtrScore, 'Goal Tracker');
     if(ld.goalHitRate < 40){
-      insights.push({cls:'warn',ico:'??',txt:'Goal hit rate is <strong>'+Math.round(ld.goalHitRate)+'%</strong> — only '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Break goals into smaller milestones to improve execution.',href:'goalTracker.test.html'});
-      extraRecs.push({cls:'warn', text:'Goal hit rate of '+Math.round(ld.goalHitRate)+'% — set smaller monthly milestones in Goal Tracker to improve execution cadence.'});
+      insights.push({cls:'warn',ico:'??',txt:'Goal hit rate is <strong>'+Math.round(ld.goalHitRate)+'%</strong> ï¿½ only '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Break goals into smaller milestones to improve execution.',href:'goalTracker.test.html'});
+      extraRecs.push({cls:'warn', text:'Goal hit rate of '+Math.round(ld.goalHitRate)+'% ï¿½ set smaller monthly milestones in Goal Tracker to improve execution cadence.'});
     } else if(ld.goalHitRate >= 70){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Strong execution: '+Math.round(ld.goalHitRate)+'% goal hit rate</strong> — '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Consistent performance signals operational maturity.'});
+      insights.push({cls:'good',ico:'?',txt:'<strong>Strong execution: '+Math.round(ld.goalHitRate)+'% goal hit rate</strong> ï¿½ '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Consistent performance signals operational maturity.'});
     }
   } else {
     liveHtml += mcCardGrey('Goal Hit Rate', 'Track goal completion to measure execution health', 'Goal Tracker');
@@ -705,13 +705,13 @@ function calculate(){
     else{ taxScore2 = {cls:'mc-red',score:0}; }
     liveScore += taxScore2.score; liveMax += 2;
     var taxBar = Math.max(0, 100 - ld.monthsSinceLastTax*15);
-    var taxDesc = 'Last payment: '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago · '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' · '+fmt(ld.taxTotalPaid)+' total';
+    var taxDesc = 'Last payment: '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago ï¿½ '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' ï¿½ '+fmt(ld.taxTotalPaid)+' total';
     liveHtml += mcCard('Tax Compliance', ld.monthsSinceLastTax+' mo ago', taxBar, taxDesc, taxScore2, 'Tax Payments');
     if(ld.monthsSinceLastTax > 3){
       insights.push({cls:'bad',ico:'??',txt:'Last estimated tax payment was <strong>'+ld.monthsSinceLastTax+' months ago</strong>. IRS estimated taxes are due quarterly (Apr 15, Jun 16, Sep 15, Jan 15). Late payments incur underpayment penalties.',href:'taxPayments.test.html'});
-      extraRecs.push({cls:'bad', text:'Estimated tax payment overdue — last payment was '+ld.monthsSinceLastTax+' months ago. Pay this quarter to avoid IRS penalty.'});
+      extraRecs.push({cls:'bad', text:'Estimated tax payment overdue ï¿½ last payment was '+ld.monthsSinceLastTax+' months ago. Pay this quarter to avoid IRS penalty.'});
     } else {
-      insights.push({cls:'good',ico:'?',txt:'<strong>Tax payments current</strong> — last payment '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago. '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' totaling '+fmt(ld.taxTotalPaid)+' this year.'});
+      insights.push({cls:'good',ico:'?',txt:'<strong>Tax payments current</strong> ï¿½ last payment '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago. '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' totaling '+fmt(ld.taxTotalPaid)+' this year.'});
     }
   } else {
     liveHtml += mcCardGrey('Tax Compliance', 'Log estimated tax payments to track compliance', 'Tax Payments');
@@ -732,12 +732,12 @@ function calculate(){
 
   var banner = document.getElementById('gradeBanner');
   banner.className = 'grade-banner grade-'+grade;
-  var gradeMsg = {A:'Excellent financial health',B:'Good financial health — minor improvements available',C:'Fair health — a few areas need attention',D:'Weak health — action required soon',F:'Critical — immediate attention needed'}[grade];
-  var liveStr = liveMax > 0 ? ' &nbsp;·&nbsp; Live Signals: '+liveScore+'/'+liveMax+' pts' : '';
+  var gradeMsg = {A:'Excellent financial health',B:'Good financial health ï¿½ minor improvements available',C:'Fair health ï¿½ a few areas need attention',D:'Weak health ï¿½ action required soon',F:'Critical ï¿½ immediate attention needed'}[grade];
+  var liveStr = liveMax > 0 ? ' &nbsp;ï¿½&nbsp; Live Signals: '+liveScore+'/'+liveMax+' pts' : '';
   var dfExplain = '';
   if(pctScore < 40){
     dfExplain = explainHtml(
-      ['Critical financial health — immediate action required',
+      ['Critical financial health ï¿½ immediate action required',
        'Banks, investors, and lenders will see this as a high-risk business',
        'Multiple core metrics are in dangerous territory simultaneously'],
       'A score of '+pctScore+'/100 (Grade '+grade+') means your business has serious issues in cash flow, debt, and/or profitability that need fixing before applying for any funding'
@@ -769,12 +769,12 @@ function calculate(){
 
   // -- Recommendations --
   var recs = [];
-  if(dscr < 1.2 && emi > 0) recs.push({cls:'bad', text:'DSCR is '+fmtR(dscr)+'x — cash flow barely covers debt. Reduce expenses or pay down existing debt before taking on any new loans.'});
+  if(dscr < 1.2 && emi > 0) recs.push({cls:'bad', text:'DSCR is '+fmtR(dscr)+'x ï¿½ cash flow barely covers debt. Reduce expenses or pay down existing debt before taking on any new loans.'});
   else if(dscr >= 1.5) recs.push({cls:'good', text:'Strong debt coverage ratio of '+fmtR(dscr)+'x. You can comfortably service existing debt.'});
   if(cashBuffer < 1.5) recs.push({cls:'bad', text:'Cash reserve covers less than 1.5 months of costs. Build to at least 3 months (target: '+fmt((exp+emi)*3)+').', explain:'cashflow'});
-  else if(cashBuffer >= 3) recs.push({cls:'good', text:'Cash buffer of '+fmtR(cashBuffer)+' months — well protected against revenue surprises.'});
-  if(profitMargin < 5) recs.push({cls:'bad', text:'Profit margin under 5% — review pricing and cut unnecessary expenses. Target 15%+.'});
-  if(expenseRatio > 90) recs.push({cls:'bad', text:'Expenses are '+fmtR(expenseRatio)+'% of revenue. Find 2–3 categories to cut by 10%.'});
+  else if(cashBuffer >= 3) recs.push({cls:'good', text:'Cash buffer of '+fmtR(cashBuffer)+' months ï¿½ well protected against revenue surprises.'});
+  if(profitMargin < 5) recs.push({cls:'bad', text:'Profit margin under 5% ï¿½ review pricing and cut unnecessary expenses. Target 15%+.'});
+  if(expenseRatio > 90) recs.push({cls:'bad', text:'Expenses are '+fmtR(expenseRatio)+'% of revenue. Find 2ï¿½3 categories to cut by 10%.'});
   if(debtToEquity > 2 && asst > 0) recs.push({cls:'warn', text:'Debt-to-equity of '+fmtR(debtToEquity)+'x is high. Focus on reducing liabilities before new borrowing.', explain:'debt', dteVal:fmtR(debtToEquity)});
   extraRecs.forEach(function(r){ recs.push(r); });
   if(recs.length === 0) recs.push({cls:'good', text:'All metrics are healthy. Maintain financial discipline and keep reserves growing.'});
@@ -832,13 +832,13 @@ function renderActionPlan(grade, f, ld){
   var el = document.getElementById('actionPlanSection');
   if(grade === 'A'){ el.style.display='none'; return; }
   var nextGrade = {B:'A',C:'B',D:'C',F:'D'}[grade];
-  document.getElementById('actionPlanTitle').textContent = '90-Day Action Plan — Reach Grade '+nextGrade;
+  document.getElementById('actionPlanTitle').textContent = '90-Day Action Plan ï¿½ Reach Grade '+nextGrade;
   document.getElementById('actionPlanSub').textContent = 'Specific actions with your numbers baked in. Work through these three months to improve your grade.';
 
   var m1=[], m2=[], m3=[];
   var rev=f.rev, exp=f.exp, emi=f.emi, res=f.res, liab=f.liab, netProfit=f.netProfit;
 
-  // Month 1 — Quick wins
+  // Month 1 ï¿½ Quick wins
   if(f.cashBuffer < 1.5){
     m1.push('Set up an auto-transfer of <strong>'+fmt(Math.round(rev*.10))+'/mo</strong> to a dedicated reserve account. Do this on Day 1.');
   }
@@ -846,46 +846,46 @@ function renderActionPlan(grade, f, ld){
     m1.push('Audit your top 3 expense categories. Target cutting <strong>'+fmt(Math.round(exp*.08))+'/mo</strong> (8% reduction).');
   }
   if(f.profitMargin < 5){
-    m1.push('Consider a <strong>5% price increase</strong> — on '+fmt(rev)+'/mo revenue that adds <strong>'+fmt(Math.round(rev*.05))+'/mo</strong> directly to profit.');
+    m1.push('Consider a <strong>5% price increase</strong> ï¿½ on '+fmt(rev)+'/mo revenue that adds <strong>'+fmt(Math.round(rev*.05))+'/mo</strong> directly to profit.');
   }
   if(ld.invoicesConnected && ld.invoiceOverdueAmt > 0){
     m1.push('Send payment reminders to <strong>'+ld.invoiceOverdueCount+' overdue client'+(ld.invoiceOverdueCount>1?'s':'')+' ('+fmt(ld.invoiceOverdueAmt)+' outstanding)</strong>. Set a 3-day follow-up cadence.');
   }
   if(ld.contractorsConnected && ld.noW9.length > 0){
-    m1.push('Collect <strong>W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' ('+ld.noW9.map(function(c){return c.name;}).join(', ')+')</strong> — required by IRS before next payment.');
+    m1.push('Collect <strong>W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' ('+ld.noW9.map(function(c){return c.name;}).join(', ')+')</strong> ï¿½ required by IRS before next payment.');
   }
   if(!ld.deductionsConnected && netProfit > 0){
-    m1.push('Open Key Deductions and log your home office and vehicle use. <strong>Most small businesses find $3,000–$10,000+</strong> in previously un-tracked deductions.');
+    m1.push('Open Key Deductions and log your home office and vehicle use. <strong>Most small businesses find $3,000ï¿½$10,000+</strong> in previously un-tracked deductions.');
   }
   if(ld.taxConnected && ld.monthsSinceLastTax > 3){
-    m1.push('Make your <strong>quarterly estimated tax payment now</strong> — last payment was '+ld.monthsSinceLastTax+' months ago. IRS underpayment penalty accrues at ~3% annually.');
+    m1.push('Make your <strong>quarterly estimated tax payment now</strong> ï¿½ last payment was '+ld.monthsSinceLastTax+' months ago. IRS underpayment penalty accrues at ~3% annually.');
   }
-  if(m1.length === 0){ m1.push('Review all subscriptions and recurring charges — cancel anything not used in the past 60 days.'); }
+  if(m1.length === 0){ m1.push('Review all subscriptions and recurring charges ï¿½ cancel anything not used in the past 60 days.'); }
 
-  // Month 2 — Build momentum
+  // Month 2 ï¿½ Build momentum
   if(f.cashBuffer < 3){
     var tgt = Math.round((exp+emi)*3);
-    m2.push('Continue building reserves. Goal: <strong>'+fmt(tgt)+'</strong> total (3× monthly costs). Gap: <strong>'+fmt(Math.max(0,tgt-res))+'</strong>.');
+    m2.push('Continue building reserves. Goal: <strong>'+fmt(tgt)+'</strong> total (3ï¿½ monthly costs). Gap: <strong>'+fmt(Math.max(0,tgt-res))+'</strong>.');
   }
   if(f.debtToEquity > 2 && liab > 0){
     m2.push('Make an extra <strong>'+fmt(Math.round(liab*.04))+' payment</strong> toward your highest-interest loan to reduce your leverage ratio.');
   }
   if(ld.billsConnected && ld.billsToRev > 50){
     var topBill = ''; // we don't have sorted bills easily
-    m2.push('Renegotiate with your 2 highest recurring vendors. A <strong>5–10% discount</strong> saves <strong>'+fmt(Math.round(ld.totalMonthlyBills*.075))+'/mo</strong>.');
+    m2.push('Renegotiate with your 2 highest recurring vendors. A <strong>5ï¿½10% discount</strong> saves <strong>'+fmt(Math.round(ld.totalMonthlyBills*.075))+'/mo</strong>.');
   }
   if(f.profitMargin < 15){
-    m2.push('Launch one upsell offer to existing customers — even a <strong>'+fmt(Math.round(rev*.07))+'/mo</strong> revenue lift meaningfully moves margin.');
+    m2.push('Launch one upsell offer to existing customers ï¿½ even a <strong>'+fmt(Math.round(rev*.07))+'/mo</strong> revenue lift meaningfully moves margin.');
   }
   if(ld.contractorsConnected && ld.necRequired.length > 0){
-    m2.push('Prepare <strong>'+ld.necRequired.length+' 1099-NEC form'+(ld.necRequired.length>1?'s':'')+' now</strong> for January 31 filing — doing it early avoids the rush and $60–$310 penalties.');
+    m2.push('Prepare <strong>'+ld.necRequired.length+' 1099-NEC form'+(ld.necRequired.length>1?'s':'')+' now</strong> for January 31 filing ï¿½ doing it early avoids the rush and $60ï¿½$310 penalties.');
   }
   if(ld.savingsConnected && ld.savingsFundedPct < 50){
-    m2.push('Set up automatic savings contributions — current goal deficit is <strong>'+fmt(ld.savingsDeficit)+'</strong>. Start with <strong>'+fmt(Math.max(100,Math.round(ld.savingsDeficit*.1)))+'/mo</strong> auto-transfer.');
+    m2.push('Set up automatic savings contributions ï¿½ current goal deficit is <strong>'+fmt(ld.savingsDeficit)+'</strong>. Start with <strong>'+fmt(Math.max(100,Math.round(ld.savingsDeficit*.1)))+'/mo</strong> auto-transfer.');
   }
   if(m2.length === 0){ m2.push('Document your top 3 revenue sources. Double down on the most profitable one.'); }
 
-  // Month 3 — Consolidate
+  // Month 3 ï¿½ Consolidate
   if(f.cashBuffer < 3){
     m3.push('Verify reserve has reached at least <strong>'+fmt(Math.round((exp+emi)*2))+'</strong> (2 months). If not, extend the savings plan one more month.');
   }
@@ -893,17 +893,17 @@ function renderActionPlan(grade, f, ld){
     m3.push('Re-check debt coverage: your net profit needs to reach <strong>'+fmt(Math.round(emi*1.5))+'</strong> for a healthy 1.5x ratio. Current gap: <strong>'+fmt(Math.max(0,Math.round(emi*1.5-netProfit)))+'</strong>.');
   }
   if(ld.deductionsConnected){
-    m3.push('File your tax deductions before year-end. Logged so far: <strong>'+fmt(ld.totalDeductions)+'</strong> — verify nothing is missing with your accountant.');
+    m3.push('File your tax deductions before year-end. Logged so far: <strong>'+fmt(ld.totalDeductions)+'</strong> ï¿½ verify nothing is missing with your accountant.');
   }
   if(ld.goalTrackerConnected && ld.goalHitRate < 70){
     var pending = ld.goalTotal - ld.goalCompleted;
-    m3.push('Review <strong>'+pending+' pending goal'+(pending!==1?'s':'')+' in Goal Tracker</strong>. Complete or reset each to improve your execution score — target 70%+ hit rate.');
+    m3.push('Review <strong>'+pending+' pending goal'+(pending!==1?'s':'')+' in Goal Tracker</strong>. Complete or reset each to improve your execution score ï¿½ target 70%+ hit rate.');
   }
   m3.push('Re-run this Health Score on Day 90. Target: move from Grade <strong>'+grade+'</strong> ? <strong>'+nextGrade+'</strong>.');
 
   function mth(n, label, color, acts){
     return '<div class="plan-month" style="border-color:'+color+'">'+
-      '<div class="pm-head">Month '+n+' · Days '+({1:'1–30',2:'31–60',3:'61–90'}[n])+'</div>'+
+      '<div class="pm-head">Month '+n+' ï¿½ Days '+({1:'1ï¿½30',2:'31ï¿½60',3:'61ï¿½90'}[n])+'</div>'+
       '<div class="pm-title" style="color:'+color+'">'+label+'</div>'+
       '<ul class="pm-actions">'+acts.map(function(a){ return '<li><span class="pm-icon">?</span><span>'+a+'</span></li>'; }).join('')+'</ul>'+
       '</div>';
@@ -916,7 +916,7 @@ function renderActionPlan(grade, f, ld){
 }
 
 /* ------------------------------------------------------
-   SPARKLINE — historical health scores
+   SPARKLINE ï¿½ historical health scores
 ------------------------------------------------------ */
 function renderSparkline(){
   var snaps; try{snaps=JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{};}catch(e){snaps={};}

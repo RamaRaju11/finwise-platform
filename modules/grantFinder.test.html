@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Grant &amp; Scheme Finder — BizScale</title>
+  <title>Grant &amp; Scheme Finder ï¿½ BizSco</title>
   <script src="grants-data.js"></script>
   <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -161,8 +161,8 @@ button.print-btn:hover{background:#e2e8f0}
 <!-- PROFILE PANEL -->
 <div id="profilePanel">
 <h1>Grant &amp; Scheme Finder</h1>
-<p class="subtitle">BizScale · Find government and private funding you qualify for — USA</p>
-<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">?? <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently — always verify on the official program website before applying.</p>
+<p class="subtitle">BizSco ï¿½ Find government and private funding you qualify for ï¿½ USA</p>
+<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">?? <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently ï¿½ always verify on the official program website before applying.</p>
 <div class="card">
   <h2>Your Business Profile</h2>
   <p class="desc">Fill this once. We match you to every grant and scheme you qualify for.</p>
@@ -221,7 +221,7 @@ button.print-btn:hover{background:#e2e8f0}
 <!-- RESULTS PANEL -->
 <div id="resultsPanel" style="display:none">
   <h1>Grant &amp; Scheme Finder</h1>
-  <p class="subtitle">BizScale · USA Funding Matches</p>
+  <p class="subtitle">BizSco ï¿½ USA Funding Matches</p>
   <div id="profileBar"></div>
   <div id="trackerBar"></div>
   <div id="deadlineCalendar"></div>
@@ -404,7 +404,7 @@ function createMatchGoal(grantName, amtStr, btn){
   var surplus = 0, annualRate = 0;
   if(Array.isArray(stored)){ goals = stored; }
   else if(stored && stored.goals){ goals = stored.goals; surplus = stored.surplus||0; annualRate = stored.annualRate||0; }
-  var goalName = grantName.slice(0,42)+' — Match Fund';
+  var goalName = grantName.slice(0,42)+' ï¿½ Match Fund';
   var exists = goals.some(function(g){ return g.name === goalName; });
   if(exists){
     alert('A savings goal for this grant already exists in Business Savings Planner.');
@@ -424,7 +424,7 @@ function createMatchGoal(grantName, amtStr, btn){
     var norm = normalizeProfile(profile);
     localStorage.setItem('fw_biz_profile', JSON.stringify(norm)); // save cleaned data
     if(!norm.businessName){
-      /* Critical field still missing — show form pre-filled from main profile */
+      /* Critical field still missing ï¿½ show form pre-filled from main profile */
       preFillFromMainProfile();
       editProfile();
       return;
@@ -497,7 +497,7 @@ function renderTrackerBar(){
   var el = document.getElementById('trackerBar');
   if(!el) return;
   if(!keys.length){
-    el.innerHTML = '<div class="tracker-bar"><span class="tb-title">Application Tracker</span><span class="tb-empty">No grants tracked yet — use the status selector on any grant below</span></div>';
+    el.innerHTML = '<div class="tracker-bar"><span class="tb-title">Application Tracker</span><span class="tb-empty">No grants tracked yet ï¿½ use the status selector on any grant below</span></div>';
     renderDeadlineCalendar();
     return;
   }
@@ -524,15 +524,15 @@ function showResults(profile) {
   document.getElementById('profilePanel').style.display = 'none';
   document.getElementById('resultsPanel').style.display = 'block';
   var catMap = {women:'Women',veteran:'Veteran',minority:'Minority',rural:'Rural',rd:'R&D',export:'Export'};
-  var cats = (profile.specialCategories||[]).map(function(c){ return catMap[c]; }).filter(Boolean).join(' · ');
+  var cats = (profile.specialCategories||[]).map(function(c){ return catMap[c]; }).filter(Boolean).join(' ï¿½ ');
   var indLabel = (function(){
     var found = INDUSTRIES.filter(function(i){return i.v===profile.industry;})[0];
-    return found ? found.l : (profile.industry||'—');
+    return found ? found.l : (profile.industry||'ï¿½');
   })();
   document.getElementById('profileBar').innerHTML =
     '<div class="profile-bar">'+
     '<div><div class="pb-name">'+(profile.businessName||'Your Business')+'</div>'+
-    '<div class="pb-detail">'+indLabel+' · '+(profile.state||'—')+' · '+(profile.businessAge||0)+' yrs · '+(profile.employees||1)+' emp'+(cats?' · '+cats:'')+' · '+(profile.country||'USA')+'</div></div>'+
+    '<div class="pb-detail">'+indLabel+' ï¿½ '+(profile.state||'ï¿½')+' ï¿½ '+(profile.businessAge||0)+' yrs ï¿½ '+(profile.employees||1)+' emp'+(cats?' ï¿½ '+cats:'')+' ï¿½ '+(profile.country||'USA')+'</div></div>'+
     '<div style="margin-left:auto;display:flex;gap:6px">'+
     '<button class="pb-edit" onclick="var p=getProfile();if(p){STATE_ONLY=false;SORT_MODE=\'match\';showResults(p);}">?? Refresh Match</button>'+
     '<button class="pb-edit" onclick="editProfile()">?? Edit Profile</button>'+
@@ -653,7 +653,7 @@ function renderPaidResults() {
     var monthsOld = (new Date().getFullYear() - catDate.getFullYear())*12 + (new Date().getMonth() - catDate.getMonth());
     var staleColor = monthsOld >= 6 ? '#dc2626' : '#64748b';
     var staleIcon  = monthsOld >= 6 ? '??' : '??';
-    var staleMsg   = monthsOld >= 6 ? ' — verify details before applying' : '';
+    var staleMsg   = monthsOld >= 6 ? ' ï¿½ verify details before applying' : '';
     staleWarning = '<span style="font-size:.72rem;color:'+staleColor+';background:'+(monthsOld>=6?'#fee2e2':'#f1f5f9')+';border-radius:999px;padding:3px 10px;font-weight:700">'+staleIcon+' Updated: '+catalogDateStr+staleMsg+'</span>';
   }
 
@@ -679,9 +679,9 @@ function renderPaidResults() {
     filtered.forEach(function(r){ html += renderGrantCard(r); });
   }
   if(nearMiss.length>0){
-    html += '<div class="near-miss-section"><div class="nm-header">?? Close Matches — Almost Eligible ('+nearMiss.length+')</div>';
+    html += '<div class="near-miss-section"><div class="nm-header">?? Close Matches ï¿½ Almost Eligible ('+nearMiss.length+')</div>';
     nearMiss.forEach(function(r){
-      html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' — '+r.grant.amount+'</div>';
+      html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' ï¿½ '+r.grant.amount+'</div>';
       r.fails.forEach(function(f){ html += '<span class="nm-fail">? '+f+'</span> '; });
       html += '</div>';
     });
@@ -741,12 +741,12 @@ function renderFreeTeaser(matched) {
   html += '<div class="ft-sub">Unlock all '+count+' grants + full details + documents required</div>';
   html += '<ul class="ft-names">';
   matched.slice(0,3).forEach(function(r){
-    html += '<li><span class="lock">??</span><span class="ft-locked">'+r.grant.name+' — '+r.grant.amount+'</span></li>';
+    html += '<li><span class="lock">??</span><span class="ft-locked">'+r.grant.name+' ï¿½ '+r.grant.amount+'</span></li>';
   });
   if(count>3) html += '<li><span class="lock">??</span><span class="ft-locked">+ '+(count-3)+' more grants hidden</span></li>';
   html += '</ul>';
-  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants — $9 / month ?</a>';
-  html += '<p style="font-size:.75rem;color:#94a3b8;margin-top:10px">30-day money-back guarantee · Cancel anytime</p>';
+  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants ï¿½ $9 / month ?</a>';
+  html += '<p style="font-size:.75rem;color:#94a3b8;margin-top:10px">30-day money-back guarantee ï¿½ Cancel anytime</p>';
   html += '</div>';
   return html;
 }

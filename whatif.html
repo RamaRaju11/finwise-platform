@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>What-If Scenarios — BizScale</title>
-<meta name="description" content="Model revenue, expense, and loan changes with BizScale's free What-If Scenario Planner — see instantly how your loan score and cash runway would change."/>
+<title>What-If Scenarios ï¿½ BizSco</title>
+<meta name="description" content="Model revenue, expense, and loan changes with BizSco's free What-If Scenario Planner ï¿½ see instantly how your loan score and cash runway would change."/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
@@ -177,34 +177,34 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <!-- CURRENT -->
     <div class="panel">
-      <div class="panel-title">Current — Baseline</div>
+      <div class="panel-title">Current ï¿½ Baseline</div>
       <div class="score-big">
-        <div class="sb-num" id="curScore" style="color:#0f172a">—</div>
+        <div class="sb-num" id="curScore" style="color:#0f172a">ï¿½</div>
         <div class="sb-lbl">Loan Score / 100</div>
         <div id="curVerdict"></div>
       </div>
       <div class="metric-row">
-        <div class="m-item"><div class="m-val" id="curRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
-        <div class="m-item"><div class="m-val" id="curDSCR">—</div><div class="m-lbl">DSCR</div></div>
-        <div class="m-item"><div class="m-val" id="curNet">—</div><div class="m-lbl">Net/mo</div></div>
+        <div class="m-item"><div class="m-val" id="curRunway">ï¿½</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="curDSCR">ï¿½</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="curNet">ï¿½</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="curGrade">—</div><div style="font-size:.74rem;color:#64748b" id="curGlabel">—</div></div>
+      <div style="text-align:center"><div class="grade-circ" id="curGrade">ï¿½</div><div style="font-size:.74rem;color:#64748b" id="curGlabel">ï¿½</div></div>
     </div>
 
     <!-- PROJECTED -->
     <div class="panel" style="border-color:#2563eb;background:linear-gradient(135deg,#f8faff 0%,#f0fdf4 100%)">
-      <div class="panel-title" style="color:#2563eb">Projected — With Changes</div>
+      <div class="panel-title" style="color:#2563eb">Projected ï¿½ With Changes</div>
       <div class="score-big">
-        <div class="sb-num" id="projScore" style="color:#0f172a">—</div>
+        <div class="sb-num" id="projScore" style="color:#0f172a">ï¿½</div>
         <div class="sb-lbl">Loan Score / 100</div>
         <div id="projVerdict"></div>
       </div>
       <div class="metric-row">
-        <div class="m-item"><div class="m-val" id="projRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
-        <div class="m-item"><div class="m-val" id="projDSCR">—</div><div class="m-lbl">DSCR</div></div>
-        <div class="m-item"><div class="m-val" id="projNet">—</div><div class="m-lbl">Net/mo</div></div>
+        <div class="m-item"><div class="m-val" id="projRunway">ï¿½</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="projDSCR">ï¿½</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="projNet">ï¿½</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="projGrade">—</div><div style="font-size:.74rem;color:#64748b" id="projGlabel">—</div></div>
+      <div style="text-align:center"><div class="grade-circ" id="projGrade">ï¿½</div><div style="font-size:.74rem;color:#64748b" id="projGlabel">ï¿½</div></div>
       <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
         <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px">Projected Numbers</div>
         <div id="projNumbers"></div>
@@ -229,13 +229,13 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
   <!-- NOTE + APPLY -->
   <div class="note-tip">
-    ?? <strong>How to use this:</strong> Drag the sliders above to model changes — cutting expenses, growing revenue, adding reserves, or taking on a new loan. The projected column updates instantly. When you find a scenario you like, click "Apply to Profile" to save those numbers for all 30 tools.
+    ?? <strong>How to use this:</strong> Drag the sliders above to model changes ï¿½ cutting expenses, growing revenue, adding reserves, or taking on a new loan. The projected column updates instantly. When you find a scenario you like, click "Apply to Profile" to save those numbers for all 30 tools.
   </div>
 
   <div class="apply-row" id="applyRow" style="display:none">
     <div class="ar-text">
       <strong>Save this scenario as your profile</strong>
-      <span>Updates the numbers pre-filled across all 30 BizScale tools so you can explore this scenario in full detail.</span>
+      <span>Updates the numbers pre-filled across all 30 BizSco tools so you can explore this scenario in full detail.</span>
     </div>
     <button class="btn-primary" onclick="applyScenario()">Save Scenario ?</button>
     <a href="checkup.html" class="btn-outline">Run Full Checkup ?</a>
@@ -434,7 +434,7 @@ function applyScenario(){
   p.emi=Math.round(s.emi);
   p.reserve=Math.round(s.res);
   localStorage.setItem('fw_profile',JSON.stringify(p));
-  showToast('? Scenario saved — all 30 tools will now use these numbers','ok',4000);
+  showToast('? Scenario saved ï¿½ all 30 tools will now use these numbers','ok',4000);
 }
 
 window.addEventListener('load',function(){

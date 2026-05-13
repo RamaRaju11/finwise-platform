@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Client Report — BizScale</title>
+<title>Client Report ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -179,7 +179,7 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
 <script src="help.js"></script>
 
 <div class="controls-bar" id="ctrlBar">
-  <span class="ctrl-info" id="ctrlInfo">Loading…</span>
+  <span class="ctrl-info" id="ctrlInfo">Loadingï¿½</span>
   <button class="ctrl-btn ctrl-back" onclick="history.back()">? Dashboard</button>
   <button class="ctrl-btn" id="tplToggle" onclick="toggleTplPanel()" style="background:rgba(255,255,255,.1);color:#cbd5e1">? Template</button>
   <button class="ctrl-btn ctrl-share" onclick="openShareModal()">?? Share Link</button>
@@ -213,7 +213,7 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
     </div>
   </div>
 
-  <!-- Color themes — palette cards -->
+  <!-- Color themes ï¿½ palette cards -->
   <div class="tpl-group" style="min-width:200px">
     <div class="tpl-group-title">Color Theme</div>
     <div id="themeSwatches"></div>
@@ -242,7 +242,7 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
     <div class="tpl-group-title">Custom Details</div>
     <div class="tpl-custom-field">
       <label>Report Subtitle</label>
-      <input type="text" id="tpl-subtitle" placeholder="e.g. Loan Assessment — Q1 2026" oninput="saveAndRender()"/>
+      <input type="text" id="tpl-subtitle" placeholder="e.g. Loan Assessment ï¿½ Q1 2026" oninput="saveAndRender()"/>
     </div>
     <div class="tpl-custom-field" style="margin-top:6px">
       <label>Prepared For</label>
@@ -256,7 +256,7 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
 <div class="share-modal-wrap" id="shareModal" onclick="if(event.target===this)closeShareModal()">
   <div class="share-modal-box">
     <div class="share-modal-title">?? Shareable Link</div>
-    <div class="share-modal-note">This link encodes the full report into the URL. Anyone with it can view a read-only version — no account required. Note: large logos may produce very long URLs.</div>
+    <div class="share-modal-note">This link encodes the full report into the URL. Anyone with it can view a read-only version ï¿½ no account required. Note: large logos may produce very long URLs.</div>
     <textarea class="share-link-box" id="shareLinkBox" readonly></textarea>
     <div class="share-modal-btns">
       <button class="smb smb-close" onclick="closeShareModal()">Close</button>
@@ -284,8 +284,8 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 /* -- Currency -- */
 var CUR_SYM=(function(){
-  var s=localStorage.getItem('bizscale_currency')||'USD';
-  return s==='INR'?'?':s==='EUR'?'€':s==='GBP'?'£':'$';
+  var s=localStorage.getItem('BizSco_currency')||'USD';
+  return s==='INR'?'?':s==='EUR'?'ï¿½':s==='GBP'?'ï¿½':'$';
 })();
 function fmt(n){return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();}
 function fmtS(n){return (n<0?'-':'')+fmt(n);}
@@ -324,7 +324,7 @@ function findMaxSafe(rev,exp,emi,res,rate,ten){
 }
 
 /* -- White-label -- */
-var WL={brand:'BizScale',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
+var WL={brand:'BizSco',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
 function loadWL(){
   try{var s=localStorage.getItem('fw_wl');if(s)WL=Object.assign(WL,JSON.parse(s));}catch(e){}
 }
@@ -339,7 +339,7 @@ function pill(ok,warn){
 }
 
 /* ------------------------------------------
-   SHARE LINK — detect encoded state in URL hash
+   SHARE LINK ï¿½ detect encoded state in URL hash
 ------------------------------------------ */
 var SHARE_DATA=null;
 (function(){
@@ -392,7 +392,7 @@ function refreshBizInfo(){
   var el=document.getElementById('bizInfoDisplay');
   if(!el) return;
   var prof=loadBusinessProfile();
-  if(!prof){el.innerHTML='<span style="font-size:.7rem;color:#334155">No profile — set up in Business Profiles.</span>';return;}
+  if(!prof){el.innerHTML='<span style="font-size:.7rem;color:#334155">No profile ï¿½ set up in Business Profiles.</span>';return;}
   var name=prof.name||prof.businessName||'';
   var addr=(prof.address||'')+(prof.city?', '+prof.city:'')+(prof.state?' '+prof.state:'');
   var ein=prof.ein||prof.taxId||'';
@@ -545,7 +545,7 @@ function render(){
   var V=T.vis||PRESETS.full;
   loadWL();applyTheme(T);
 
-  /* Client data — share link takes priority over localStorage */
+  /* Client data ï¿½ share link takes priority over localStorage */
   var c=null;
   if(SHARE_DATA&&SHARE_DATA.c){
     c=SHARE_DATA.c;
@@ -584,12 +584,12 @@ function render(){
   var npm=rev>0?net/rev*100:0,emr=rev>0?totEMI/rev*100:0,opMgn=rev>0?(rev-exp)/rev*100:0;
 
   var gcls=score>=70?'#10b981':score>=50?'#f59e0b':'#dc2626';
-  var grade=score>=70?'? SAFE — LOAN READY':score>=50?'? RISKY — REVIEW NEEDED':'? HIGH RISK — NOT ADVISED';
+  var grade=score>=70?'? SAFE ï¿½ LOAN READY':score>=50?'? RISKY ï¿½ REVIEW NEEDED':'? HIGH RISK ï¿½ NOT ADVISED';
   var gradeBg=score>=70?'#dcfce7':score>=50?'#fef9c3':'#fee2e2';
   var gradeFg=score>=70?'#166534':score>=50?'#854d0e':'#991b1b';
   var dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
-  document.getElementById('ctrlInfo').textContent=esc(c.name||'Client')+' · '+dateStr;
+  document.getElementById('ctrlInfo').textContent=esc(c.name||'Client')+' ï¿½ '+dateStr;
 
   var html='';
 
@@ -613,7 +613,7 @@ function render(){
   html+='<div class="client-banner">'
     +'<div class="cb-info">'
       +'<div class="cb-name">'+esc(c.name||'Unnamed Client')+'</div>'
-      +'<div class="cb-sub">'+(c.industry?esc(c.industry)+' · ':'')+'Report generated '+dateStr+'</div>'
+      +'<div class="cb-sub">'+(c.industry?esc(c.industry)+' ï¿½ ':'')+'Report generated '+dateStr+'</div>'
     +'</div>'
     +'<div class="cb-score-block">'
       +'<div class="cb-score-num" style="color:'+gcls+'">'+score+'<span class="cb-score-denom">/100</span></div>'
@@ -626,11 +626,11 @@ function render(){
   /* -- SCORE BREAKDOWN -- */
   if(V.scoreBreakdown){
     function compBar(val,max){var p=val/max;var col=p>=0.8?'#10b981':p>=0.5?'#f59e0b':'#dc2626';return bar(val,max,col);}
-    html+='<div class="section"><div class="section-title">Loan Safety Score — Component Breakdown</div>'
+    html+='<div class="section"><div class="section-title">Loan Safety Score ï¿½ Component Breakdown</div>'
       +'<div class="score-components">'
         +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Cash Flow Ratio (max 30)</span><span class="sc-comp-val">'+comp.cf+' / 30</span></div>'+compBar(comp.cf,30)+'</div>'
         +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">EMI Affordability (max 30)</span><span class="sc-comp-val">'+comp.af+' / 30</span></div>'+compBar(comp.af,30)+'</div>'
-        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Debt Coverage — DSCR (max 25)</span><span class="sc-comp-val">'+comp.dscr+' / 25</span></div>'+compBar(comp.dscr,25)+'</div>'
+        +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Debt Coverage ï¿½ DSCR (max 25)</span><span class="sc-comp-val">'+comp.dscr+' / 25</span></div>'+compBar(comp.dscr,25)+'</div>'
         +'<div class="sc-comp"><div class="sc-comp-top"><span class="sc-comp-label">Stress Test -20% Revenue (max 15)</span><span class="sc-comp-val">'+comp.st+' / 15</span></div>'+compBar(comp.st,15)+'</div>'
       +'</div></div>';
   }
@@ -672,7 +672,7 @@ function render(){
 
   /* -- STRESS ANALYSIS -- */
   if(V.stressAnalysis)
-  html+='<div class="section"><div class="section-title">Stress Analysis — 20% Revenue Reduction Scenario</div>'
+  html+='<div class="section"><div class="section-title">Stress Analysis ï¿½ 20% Revenue Reduction Scenario</div>'
     +'<div class="stress-grid">'
       +'<div class="stress-item"><div class="si-lbl">Normal Revenue</div><div class="si-val" style="color:#10b981">'+fmt(rev)+'</div></div>'
       +'<div class="stress-item"><div class="si-lbl">Revenue at -20%</div><div class="si-val" style="color:#f59e0b">'+fmt(stressRev)+'</div></div>'
@@ -680,7 +680,7 @@ function render(){
       +'<div class="stress-item"><div class="si-lbl">Stressed Net CF</div><div class="si-val" style="color:'+(stressNet>=0?'#10b981':'#dc2626')+'">'+fmtS(stressNet)+'</div></div>'
     +'</div>'
     +'<div style="margin-top:10px;padding:9px 14px;border-radius:7px;font-size:.8rem;font-weight:700;background:'+(stressNet>=0?'#dcfce7':'#fee2e2')+';color:'+(stressNet>=0?'#166534':'#991b1b')+'">'
-      +(stressNet>=0?'? Business survives a 20% revenue shock — cash flow remains positive.':'? A 20% revenue drop would turn cash flow negative. Build reserves or reduce fixed costs before taking on debt.')
+      +(stressNet>=0?'? Business survives a 20% revenue shock ï¿½ cash flow remains positive.':'? A 20% revenue drop would turn cash flow negative. Build reserves or reduce fixed costs before taking on debt.')
     +'</div></div>';
 
   /* -- RECOMMENDATION -- */
@@ -698,11 +698,11 @@ function render(){
             :'This business qualifies for a loan of up to <strong>'+fmt(maxSafe)+'</strong>. Cash flow margins are healthy, DSCR is above threshold, and the stress test passes. Proceed with confidence.'
         )+'</div>';
     } else {
-      html+='<div class="rec-max" style="color:'+recBorder+'">Caution — Maximum Supportable Loan: '+fmt(maxSafe)+'</div>'
+      html+='<div class="rec-max" style="color:'+recBorder+'">Caution ï¿½ Maximum Supportable Loan: '+fmt(maxSafe)+'</div>'
         +'<div class="rec-text">Current financial metrics present elevated risk (score: <strong>'+score+'/100</strong>). '
-        +(net<0?'Net cash flow is currently negative ('+fmtS(net)+'/month) — address operating expenses or revenue growth first. ':'')
+        +(net<0?'Net cash flow is currently negative ('+fmtS(net)+'/month) ï¿½ address operating expenses or revenue growth first. ':'')
         +(dscr<1.25&&dscr<99&&totEMI>0?'DSCR of '+dscr.toFixed(2)+'x falls below the 1.25x minimum threshold. ':'')
-        +(resMo<3&&totEMI>0?'Cash reserve covers only '+resMo.toFixed(1)+' months of obligations — target 3+. ':'')
+        +(resMo<3&&totEMI>0?'Cash reserve covers only '+resMo.toFixed(1)+' months of obligations ï¿½ target 3+. ':'')
         +(stressNet<0?'Business does not survive the stress scenario. ':'')
         +'Recommend revisiting after addressing the above metrics.</div>';
     }
@@ -724,10 +724,10 @@ function render(){
     var ba=(bizProf.address||'')+(bizProf.city?', '+bizProf.city:'')+(bizProf.state?' '+bizProf.state:'');
     var be=bizProf.ein||bizProf.taxId||'';
     if(bn||ba||be) bizFooter='<div style="font-size:.63rem;color:#64748b;font-weight:400;margin-top:3px">'
-      +(bn?esc(bn)+(ba||be?' · ':''):'')+(ba?esc(ba)+(be?' · ':''):'')+(be?'EIN '+esc(be):'')+'</div>';
+      +(bn?esc(bn)+(ba||be?' ï¿½ ':''):'')+(ba?esc(ba)+(be?' ï¿½ ':''):'')+(be?'EIN '+esc(be):'')+'</div>';
   }
   html+='<div class="rpt-footer">'
-    +'<div class="rf-brand">'+esc(WL.brand)+(WL.email?' &nbsp;·&nbsp; '+esc(WL.email):'')+bizFooter+'</div>'
+    +'<div class="rf-brand">'+esc(WL.brand)+(WL.email?' &nbsp;ï¿½&nbsp; '+esc(WL.email):'')+bizFooter+'</div>'
     +'<div class="rf-disc">This report is prepared by '+esc(WL.brand)+' for advisory purposes only. It is indicative in nature and does not constitute financial, investment, or lending advice. Loan decisions should be made in consultation with your lender.</div>'
   +'</div>';
 

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>White-Label Settings — BizScale</title>
+<title>White-Label Settings ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px;padding-bottom:60px}
@@ -118,7 +118,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <div class="hero">
   <div class="hero-inner">
     <h1>?? White-Label Settings</h1>
-    <p>Replace BizScale branding with your own — clients see your name, logo, and colors on every report.</p>
+    <p>Replace BizSco branding with your own ï¿½ clients see your name, logo, and colors on every report.</p>
     <div class="hero-badge">? Advisor Feature</div>
   </div>
 </div>
@@ -141,7 +141,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 
       <label>Brand Name</label>
       <input type="text" id="wlBrandName" placeholder="Acme Financial Advisors" oninput="updatePreview()"/>
-      <div class="hint">Replaces "BizScale" everywhere in client-facing reports</div>
+      <div class="hint">Replaces "BizSco" everywhere in client-facing reports</div>
 
       <label>Tagline</label>
       <input type="text" id="wlTagline" placeholder="Financial Advisory Services" oninput="updatePreview()"/>
@@ -164,7 +164,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 
       <label>Logo URL (optional)</label>
       <input type="url" id="wlLogoUrl" placeholder="https://yoursite.com/logo.png" oninput="updatePreview()"/>
-      <div class="hint">Square logo, min 64×64px. Leave blank to use emoji icon.</div>
+      <div class="hint">Square logo, min 64ï¿½64px. Leave blank to use emoji icon.</div>
     </div>
 
     <!-- Display options -->
@@ -172,8 +172,8 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
       <div class="card-title"><span>??</span> Display Options</div>
       <div class="toggle-row">
         <div>
-          <div class="tr-label">Hide "Powered by BizScale"</div>
-          <div class="tr-sub">Remove the BizScale footer from client reports</div>
+          <div class="tr-label">Hide "Powered by BizSco"</div>
+          <div class="tr-sub">Remove the BizSco footer from client reports</div>
         </div>
         <label class="toggle-switch"><input type="checkbox" id="wlHideFinwise" onchange="updatePreview()"/><span class="toggle-slider"></span></label>
       </div>
@@ -182,7 +182,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
     <!-- Custom Domain -->
     <div class="card">
       <div class="card-title"><span>??</span> Custom Domain</div>
-      <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Serve client report links from your own subdomain (e.g., <em>reports.yourfirm.com</em>). Requires deploying BizScale on Netlify or Vercel.</p>
+      <p style="font-size:.82rem;color:#64748b;margin-bottom:12px">Serve client report links from your own subdomain (e.g., <em>reports.yourfirm.com</em>). Requires deploying BizSco on Netlify or Vercel.</p>
 
       <label>Your Desired Domain</label>
       <input type="text" id="wlDomain" placeholder="reports.yourfirm.com" oninput="updateDomainInstructions()"/>
@@ -195,7 +195,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
         <button class="cname-copy" id="cnameCopyBtn" onclick="copyCname()">Copy Instructions</button>
         <div class="domain-status">
           <div class="ds-dot" style="background:#f59e0b"></div>
-          <span style="color:#92400e">Pending — set up DNS first, then deploy to Netlify/Vercel with this custom domain</span>
+          <span style="color:#92400e">Pending ï¿½ set up DNS first, then deploy to Netlify/Vercel with this custom domain</span>
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
         </div>
       </div>
       <div class="prev-body">
-        <div style="font-size:.88rem;font-weight:700;color:#1e293b;margin-bottom:10px">Client Report — March 2025</div>
+        <div style="font-size:.88rem;font-weight:700;color:#1e293b;margin-bottom:10px">Client Report ï¿½ March 2025</div>
         <div class="prev-row"><span class="label">Revenue</span><span class="val" style="color:#2563eb">$15,000</span></div>
         <div class="prev-row"><span class="label">Expenses</span><span class="val" style="color:#d97706">$10,000</span></div>
         <div class="prev-row"><span class="label">Net Profit</span><span class="val" style="color:#16a34a">$5,000</span></div>
@@ -229,7 +229,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
           <div id="prevBtn" style="display:inline-block;padding:8px 18px;background:#4f46e5;color:#fff;border-radius:6px;font-size:.78rem;font-weight:800">View Full Report ?</div>
         </div>
       </div>
-      <div class="prev-footer" id="prevFooter">Powered by <span>BizScale</span></div>
+      <div class="prev-footer" id="prevFooter">Powered by <span>BizSco</span></div>
     </div>
 
     <div style="font-size:.7rem;color:#94a3b8;text-align:center;margin-top:10px">This is how clients see their report</div>
@@ -290,7 +290,7 @@ function updateDomainInstructions(){
   var box = document.getElementById('domainInstructions');
   if(!domain){ box.style.display='none'; return; }
   box.style.display='block';
-  var netlifyDomain = 'bizscale.netlify.app';
+  var netlifyDomain = 'BizSco.netlify.app';
   document.getElementById('cnameBox').textContent =
     'Type:  CNAME\nName:  '+domain+'\nValue: '+netlifyDomain+'\nTTL:   Auto (or 3600)';
 }
@@ -323,17 +323,17 @@ function saveSettings(){
     wl_color        : document.getElementById('colorText').value.trim() || '#4f46e5',
     wl_logo_url     : document.getElementById('wlLogoUrl').value.trim() || null,
     wl_domain       : document.getElementById('wlDomain').value.trim() || null,
-    wl_hide_bizscale : document.getElementById('wlHideFinwise').checked
+    wl_hide_BizSco : document.getElementById('wlHideFinwise').checked
   };
   var status = document.getElementById('saveStatus');
-  status.textContent = 'Saving…';
+  status.textContent = 'Savingï¿½';
   fetch(SUPA_URL+'/rest/v1/profiles?id=eq.'+advisorId,{
     method:'PATCH',
     headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken(),'Content-Type':'application/json','Prefer':'return=minimal' },
     body: JSON.stringify(updates)
   }).then(function(r){
     if(r.ok){ status.textContent='? Saved! New portals will use this branding.'; setTimeout(function(){ status.textContent=''; },4000); }
-    else { status.textContent='? Save failed — try again.'; }
+    else { status.textContent='? Save failed ï¿½ try again.'; }
   }).catch(function(){ status.textContent='? Network error.'; });
 }
 
@@ -365,7 +365,7 @@ window.addEventListener('load', function(){
     }
     if(p.wl_logo_url)     { document.getElementById('wlLogoUrl').value = p.wl_logo_url; }
     if(p.wl_domain)       { document.getElementById('wlDomain').value = p.wl_domain; updateDomainInstructions(); }
-    if(p.wl_hide_bizscale) { document.getElementById('wlHideFinwise').checked = true; }
+    if(p.wl_hide_BizSco) { document.getElementById('wlHideFinwise').checked = true; }
     updatePreview();
   });
 });

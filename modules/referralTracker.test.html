@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Referral Tracker — BizScale Advisor</title>
+<title>Referral Tracker ï¿½ BizSco Advisor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;padding:24px;font-size:14px}
@@ -54,7 +54,7 @@ select.inline:focus{outline:none;border-color:#2563eb}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Referral Tracker</h1>
-<p class="subtitle">BizScale Advisor · Track client referrals to lenders and estimated commission earnings</p>
+<p class="subtitle">BizSco Advisor ï¿½ Track client referrals to lenders and estimated commission earnings</p>
 
 <div class="summary-row" id="summaryRow">
   <div class="sum-box"><div class="sum-num blue" id="s_total">0</div><div class="sum-lbl">Total Clients</div></div>
@@ -77,7 +77,7 @@ select.inline:focus{outline:none;border-color:#2563eb}
 </div>
 
 <script>
-var LENDERS_LIST = ['— Not Referred —','SBA 7(a)','SBA Microloan','BlueVine','OnDeck','Funding Circle','Lendio','Kiva'];
+var LENDERS_LIST = ['ï¿½ Not Referred ï¿½','SBA 7(a)','SBA Microloan','BlueVine','OnDeck','Funding Circle','Lendio','Kiva'];
 var COMMISSION = {
   'SBA 7(a)': {referred:50, applied:125, approved:400, funded:800},
   'SBA Microloan': {referred:25, applied:60, approved:150, funded:300},
@@ -104,7 +104,7 @@ function saveReferrals(){
 function setLender(clientId, val){
   if(!referralData[clientId]) referralData[clientId] = {lender:'',status:'none'};
   referralData[clientId].lender = val;
-  if(val === '— Not Referred —') referralData[clientId].status = 'none';
+  if(val === 'ï¿½ Not Referred ï¿½') referralData[clientId].status = 'none';
   saveReferrals();
   renderTable();
 }
@@ -117,7 +117,7 @@ function setStatus(clientId, val){
 }
 
 function commissionFor(lender, status){
-  if(!lender || lender === '— Not Referred —') return 0;
+  if(!lender || lender === 'ï¿½ Not Referred ï¿½') return 0;
   var c = COMMISSION[lender];
   if(!c) return 0;
   return c[status] || 0;
@@ -149,10 +149,10 @@ function renderTable(){
     '<th>Client</th><th>Industry</th><th>Lender</th><th>Status</th><th>Est. Commission</th></tr></thead><tbody>';
 
   clients.forEach(function(c){
-    var r = referralData[c.id] || {lender:'— Not Referred —', status:'none'};
+    var r = referralData[c.id] || {lender:'ï¿½ Not Referred ï¿½', status:'none'};
     var comm = commissionFor(r.lender, r.status);
     var statusCls = 's-'+r.status;
-    var statusLabel = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[r.status]||'—';
+    var statusLabel = {none:'Not Referred',referred:'Referred',applied:'Applied',approved:'Approved',funded:'Funded'}[r.status]||'ï¿½';
 
     var lenderOpts = LENDERS_LIST.map(function(l){
       return '<option value="'+l+'"'+(r.lender===l?' selected':'')+'>'+l+'</option>';
@@ -167,7 +167,7 @@ function renderTable(){
       '<td>'+c.industry+'</td>'+
       '<td><select class="lender-select" onchange="setLender(\''+c.id+'\',this.value)">'+lenderOpts+'</select></td>'+
       '<td><select class="inline" onchange="setStatus(\''+c.id+'\',this.value)">'+statusOpts+'</select></td>'+
-      '<td>'+(comm>0?'<strong style="color:#16a34a">'+fmt(comm)+'</strong>':'<span class="commission-est">—</span>')+'</td>'+
+      '<td>'+(comm>0?'<strong style="color:#16a34a">'+fmt(comm)+'</strong>':'<span class="commission-est">ï¿½</span>')+'</td>'+
       '</tr>';
   });
   html += '</tbody></table>';

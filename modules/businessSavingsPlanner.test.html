@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Business Savings Planner — BizScale</title>
+<title>Business Savings Planner ï¿½ BizSco</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1e293b;font-size:14px}
@@ -116,7 +116,7 @@ button.print-btn:hover{background:#e2e8f0}
 
 <a href="../try.html" class="back-link">? Back to Demo</a>
 <h1>Business Savings Planner</h1>
-<p class="subtitle">BizScale · Plan and allocate your monthly surplus across multiple savings goals</p>
+<p class="subtitle">BizSco ï¿½ Plan and allocate your monthly surplus across multiple savings goals</p>
 
 <div class="int-strip" id="intStrip"></div>
 
@@ -138,7 +138,7 @@ button.print-btn:hover{background:#e2e8f0}
 <!-- Goals -->
 <div class="card">
   <h2>Savings Goals</h2>
-  <p class="section-note">Add up to 4 goals. Priority determines how the monthly surplus is split: High ˜ 50%, Medium ˜ 33%, Low ˜ 17%.</p>
+  <p class="section-note">Add up to 4 goals. Priority determines how the monthly surplus is split: High ï¿½ 50%, Medium ï¿½ 33%, Low ï¿½ 17%.</p>
   <div class="goals-list" id="goalsList"></div>
   <button class="btn-add-goal" id="btnAddGoal" onclick="addGoal()">+ Add Goal</button>
 </div>
@@ -303,7 +303,7 @@ function checkIntegration(){
   }catch(e){}
   if(items.length){
     strip.style.display = '';
-    strip.innerHTML = '?? Starting point — '+items.join(' · ')+'. Enter this as "Already Saved" in your Emergency Fund goal.';
+    strip.innerHTML = '?? Starting point ï¿½ '+items.join(' ï¿½ ')+'. Enter this as "Already Saved" in your Emergency Fund goal.';
   }
 }
 
@@ -361,7 +361,7 @@ function calculate(){
     html += '<div class="prog-row"><span>'+fmt(r.goal.saved)+' saved of '+fmt(r.goal.target)+' target</span><span>'+r.pct+'%</span></div>';
     html += '<div class="rg-stats">';
     html += '<div class="stat-box"><div class="stat-label">Monthly Allocation</div><div class="stat-value">'+fmt(r.alloc)+'/mo</div><div class="stat-sub">'+(Math.round(r.alloc/surplus*100))+'% of surplus</div></div>';
-    html += '<div class="stat-box"><div class="stat-label">Months to Goal</div><div class="stat-value '+r.color+'">'+(r.months <= 0 ? '—' : monthsDisplay)+'</div><div class="stat-sub">'+fmt(r.remaining)+' remaining</div></div>';
+    html += '<div class="stat-box"><div class="stat-label">Months to Goal</div><div class="stat-value '+r.color+'">'+(r.months <= 0 ? 'ï¿½' : monthsDisplay)+'</div><div class="stat-sub">'+fmt(r.remaining)+' remaining</div></div>';
     html += '<div class="stat-box"><div class="stat-label">Target Date</div><div class="stat-value '+r.color+'" style="font-size:.88rem">'+r.dateStr+'</div><div class="stat-sub">'+(r.months <= 0 ? 'Fully funded' : r.months >= 600 ? 'Increase savings' : 'Estimated')+'</div></div>';
     html += '</div>';
     var m25 = monthsToReach(r.goal.target*0.25, r.goal.saved, r.alloc, ratePA);
@@ -369,9 +369,9 @@ function calculate(){
     var m75 = monthsToReach(r.goal.target*0.75, r.goal.saved, r.alloc, ratePA);
     html += '<div class="milestone-row">';
     html += '<span class="ms-label">Milestones</span>';
-    html += '<span class="ms-item ms-25">25% — '+(m25<=0?'Done ?':targetDateLabel(m25))+'</span>';
-    html += '<span class="ms-item ms-50">50% — '+(m50<=0?'Done ?':targetDateLabel(m50))+'</span>';
-    html += '<span class="ms-item ms-75">75% — '+(m75<=0?'Done ?':targetDateLabel(m75))+'</span>';
+    html += '<span class="ms-item ms-25">25% ï¿½ '+(m25<=0?'Done ?':targetDateLabel(m25))+'</span>';
+    html += '<span class="ms-item ms-50">50% ï¿½ '+(m50<=0?'Done ?':targetDateLabel(m50))+'</span>';
+    html += '<span class="ms-item ms-75">75% ï¿½ '+(m75<=0?'Done ?':targetDateLabel(m75))+'</span>';
     html += '</div>';
     html += '</div>';
   });
@@ -400,14 +400,14 @@ function calculate(){
 
   document.getElementById('hysaSection').innerHTML =
     '<div class="hysa-card">'+
-    '<h2>?? HYSA Comparison — High-Yield Savings at '+hysaRate+'% APY</h2>'+
+    '<h2>?? HYSA Comparison ï¿½ High-Yield Savings at '+hysaRate+'% APY</h2>'+
     '<p style="font-size:.83rem;color:#64748b;margin-bottom:14px">Keeping your savings in a High-Yield Savings Account (HYSA) vs. a regular checking account over <strong>'+horizon+' months</strong>:</p>'+
     '<div class="hysa-grid">'+
     '<div class="hysa-chip"><div class="hc-label">Checking Account (0%)</div><div class="hc-val">'+fmt(checkingFV)+'</div><div class="hc-sub">Principal only</div></div>'+
     '<div class="hysa-chip highlight"><div class="hc-label">HYSA at '+hysaRate+'% APY</div><div class="hc-val">'+fmt(hysaFV)+'</div><div class="hc-sub">Principal + interest</div></div>'+
     '<div class="hysa-chip highlight"><div class="hc-label">Extra Interest Earned</div><div class="hc-val">+'+fmt(extraInterest)+'</div><div class="hc-sub">Free money from HYSA</div></div>'+
     '</div>'+
-    '<p style="font-size:.78rem;color:#64748b;margin-top:12px">Popular HYSAs: Marcus by Goldman Sachs, SoFi Savings, Ally Bank, Discover Online Savings. Rates change — verify current rates at your institution. FDIC insured.</p>'+
+    '<p style="font-size:.78rem;color:#64748b;margin-top:12px">Popular HYSAs: Marcus by Goldman Sachs, SoFi Savings, Ally Bank, Discover Online Savings. Rates change ï¿½ verify current rates at your institution. FDIC insured.</p>'+
     '</div>';
 
   /* Tip */
@@ -448,7 +448,7 @@ window.addEventListener('DOMContentLoaded', function(){
   var surplus = 0, annualRate = 0;
 
   if(Array.isArray(stored)){
-    /* Format from grantFinder — array of goals */
+    /* Format from grantFinder ï¿½ array of goals */
     goalsArr = stored;
   } else if(stored && stored.goals && stored.goals.length){
     /* Full state object from businessSavingsPlanner */
