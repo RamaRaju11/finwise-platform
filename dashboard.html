@@ -1255,27 +1255,27 @@ function renderAlerts(plan, p, runway){
   var hasProfile=rev>0||exp>0;
 
   if(!hasProfile){
-    alerts.push({cls:'alert-info',i:'??',title:'Set up your business profile',msg:'Pre-fills all 40 tools automatically and unlocks personalised alerts.',href:'onboarding.html',htext:'Set Up Profile ?'});
+    alerts.push({cls:'alert-info',i:'👤',title:'Set up your business profile',msg:'Pre-fills all 40 tools automatically and unlocks personalised alerts.',href:'onboarding.html',htext:'Set Up Profile ?'});
   } else {
     var net=rev-exp-emi;
     var burn=exp+emi;
     var er=rev>0?(exp+emi)/rev:1;
     if(net<0)
-      alerts.push({cls:'alert-crit',i:'??',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
+      alerts.push({cls:'alert-crit',i:'📉',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
     else if(er>0.85)
       alerts.push({cls:'alert-warn',i:'??',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
 
     if(runway<=2&&burn>0)
-      alerts.push({cls:'alert-crit',i:'??',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
+      alerts.push({cls:'alert-crit',i:'⏱',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
     else if(runway<=4&&burn>0)
-      alerts.push({cls:'alert-warn',i:'??',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
+      alerts.push({cls:'alert-warn',i:'⏱',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
   }
 
   if(checkup){
     if(checkup.loanVerdict==='DANGEROUS')
-      alerts.push({cls:'alert-crit',i:'??',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
+      alerts.push({cls:'alert-crit',i:'🏦',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
     else if(checkup.loanVerdict==='RISKY')
-      alerts.push({cls:'alert-warn',i:'??',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
+      alerts.push({cls:'alert-warn',i:'🏦',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
     if(checkup.runwayStatus==='CRITICAL'&&runway>2)
       alerts.push({cls:'alert-crit',i:'??',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup ?'});
   } else if(hasProfile){
@@ -1283,7 +1283,7 @@ function renderAlerts(plan, p, runway){
   }
 
   if(alerts.length===0)
-    alerts.push({cls:'alert-good',i:'?',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
+    alerts.push({cls:'alert-good',i:'🏥',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
 
   document.getElementById('alertsList').innerHTML=alerts.slice(0,3).map(function(a){
     var onclick = a.href==='onboarding.html' ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';

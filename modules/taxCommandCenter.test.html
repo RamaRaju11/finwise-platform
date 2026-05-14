@@ -584,29 +584,29 @@ function buildActions(d){
       }
     });
   } else {
-    items.push({sev:'warn', ico:'??', title:'Set up income & expenses to estimate your tax bill', desc:'Enter your monthly revenue and expenses in your profile or in the Tax Estimator.', href:'taxEstimator.test.html'});
+    items.push({sev:'warn', ico:'🧮', title:'Set up income & expenses to estimate your tax bill', desc:'Enter your monthly revenue and expenses in your profile or in the Tax Estimator.', href:'taxEstimator.test.html'});
   }
 
-  if(!d.hoSetup) items.push({sev:'warn', ico:'??', title:'Check if you qualify for the Home Office deduction', desc:'If you have a dedicated workspace at home, you could deduct $1,500 or more per year.', href:'keyDeductions.test.html'});
-  if(!d.mileageSetup) items.push({sev:'warn', ico:'??', title:'Start logging business miles', desc:'Every business mile driven is worth 70— in deductions (2025). 1,000 miles = $700 off your taxable income.', href:'keyDeductions.test.html'});
-  if(!d.s179Setup) items.push({sev:'warn', ico:'??', title:'Have you bought equipment this year?', desc:'Computers, machinery, software — you can write off the full cost in the year you bought it (Section 179).', href:'keyDeductions.test.html'});
+  if(!d.hoSetup) items.push({sev:'warn', ico:'🏠', title:'Check if you qualify for the Home Office deduction', desc:'If you have a dedicated workspace at home, you could deduct $1,500 or more per year.', href:'keyDeductions.test.html'});
+  if(!d.mileageSetup) items.push({sev:'warn', ico:'🚗', title:'Start logging business miles', desc:'Every business mile driven is worth 70¢ in deductions (2025). 1,000 miles = $700 off your taxable income.', href:'keyDeductions.test.html'});
+  if(!d.s179Setup) items.push({sev:'warn', ico:'💻', title:'Have you bought equipment this year?', desc:'Computers, machinery, software — you can write off the full cost in the year you bought it (Section 179).', href:'keyDeductions.test.html'});
 
   if(d.salesConfigured && d.salesUnfiled > 0){
-    items.push({sev:'urgent', ico:'???', title:'You have '+fmtD(d.salesUnfiled)+' in unfiled sales tax', desc:'Sales tax you collected belongs to the state — holding it too long can result in penalties.', href:'salesTaxTracker.test.html'});
+    items.push({sev:'urgent', ico:'🛒', title:'You have '+fmtD(d.salesUnfiled)+' in unfiled sales tax', desc:'Sales tax you collected belongs to the state — holding it too long can result in penalties.', href:'salesTaxTracker.test.html'});
   } else if(d.salesConfigured){
-    items.push({sev:'ok', ico:'?', title:'Sales tax filings are up to date', desc:'All collected sales tax has been accounted for.'});
+    items.push({sev:'ok', ico:'✅', title:'Sales tax filings are up to date', desc:'All collected sales tax has been accounted for.'});
   } else {
-    items.push({sev:'warn', ico:'???', title:'Set up Sales Tax tracking', desc:'If your business sells goods or taxable services, you may be required to collect and remit sales tax.', href:'salesTaxTracker.test.html'});
+    items.push({sev:'warn', ico:'🛒', title:'Set up Sales Tax tracking', desc:'If your business sells goods or taxable services, you may be required to collect and remit sales tax.', href:'salesTaxTracker.test.html'});
   }
 
   if(d.necRequired.length > 0){
     var jan31 = new Date(d.year+1, 0, 31);
     var daysLeft = daysBetween(now, jan31);
     var sev = daysLeft <= 30 ? 'urgent' : 'warn';
-    items.push({sev:sev, ico:'??', title:'Send 1099-NEC to '+d.necRequired.length+' contractor'+(d.necRequired.length>1?'s':''), desc:'Contractors who received $600+ this year: '+d.necRequired.slice(0,3).map(function(c){return c.name;}).join(', ')+(d.necRequired.length>3?'...':'')+'. Deadline: Jan 31, '+(d.year+1)+'.', href:'contractorPayroll.test.html'});
+    items.push({sev:sev, ico:'📄', title:'Send 1099-NEC to '+d.necRequired.length+' contractor'+(d.necRequired.length>1?'s':''), desc:'Contractors who received $600+ this year: '+d.necRequired.slice(0,3).map(function(c){return c.name;}).join(', ')+(d.necRequired.length>3?'...':'')+'. Deadline: Jan 31, '+(d.year+1)+'.', href:'contractorPayroll.test.html'});
   }
   if(d.noW9 > 0){
-    items.push({sev:'urgent', ico:'??', title:'Collect W-9 forms from '+d.noW9+' contractor'+(d.noW9>1?'s':''), desc:'Without a W-9, you\'re required to withhold 24% of every payment as "backup withholding" for the IRS.', href:'contractorPayroll.test.html'});
+    items.push({sev:'urgent', ico:'📋', title:'Collect W-9 forms from '+d.noW9+' contractor'+(d.noW9>1?'s':''), desc:'Without a W-9, you\'re required to withhold 24% of every payment as "backup withholding" for the IRS.', href:'contractorPayroll.test.html'});
   }
   if(d.necApproaching.length > 0){
     items.push({sev:'warn', ico:'??', title:d.necApproaching.length+' contractor'+(d.necApproaching.length>1?'s are':' is')+' approaching the $600 reporting threshold', desc:d.necApproaching.map(function(c){return c.name+' ('+fmtD(c.paid)+')';}).join(', ')+'. A 1099 will be required once they reach $600.', href:'contractorPayroll.test.html'});
@@ -630,10 +630,10 @@ function renderHealth(d){
 
 function renderModConnStrip(d){
   var modules = [
-    {name:'Tax Estimator', on:d.hasTaxEstimator, ico:'??'},
-    {name:'Key Deductions', on:d.deductionsSetup, ico:'??'},
-    {name:'Sales Tax', on:d.salesConfigured, ico:'???'},
-    {name:'Contractor / Payroll', on:d.contractorSetup||d.employeeSetup, ico:'??'}
+    {name:'Tax Estimator', on:d.hasTaxEstimator, ico:'🧮'},
+    {name:'Key Deductions', on:d.deductionsSetup, ico:'💰'},
+    {name:'Sales Tax', on:d.salesConfigured, ico:'🛒'},
+    {name:'Contractor / Payroll', on:d.contractorSetup||d.employeeSetup, ico:'👥'}
   ];
   var html = '<div class="mod-conn-strip">';
   modules.forEach(function(m){
@@ -666,7 +666,7 @@ function renderIncomeTaxCard(d){
     var paid = d.qPaid[qi.n];
     var past = now > qi.due;
     var cls = paid ? 'q-paid' : (past ? 'q-due' : 'q-future');
-    var status = paid ? '? Paid' : (past ? '? Overdue' : 'Upcoming');
+    var status = paid ? '✓ Paid' : (past ? '⚠ Overdue' : 'Upcoming');
     qHtml += '<div class="qc '+cls+'"><div class="qn">'+qLabels[i]+'</div><div class="qd">'+qDates[i]+'</div><div class="qs">'+status+'</div></div>';
   });
   qHtml += '</div>';
@@ -953,11 +953,11 @@ function renderTaxSavingsOpps(d){
   var el = document.getElementById('taxSavingsCard');
   if(!d.hasIncomeSetup){ el.innerHTML = ''; return; }
   var opps = [];
-  if(!d.hoSetup) opps.push({ico:'??',title:'Home Office Deduction',desc:'If you have a dedicated workspace at home, deduct $5/sq ft (up to 300 sq ft) or actual home expenses — business-use %.',save:'Potential savings: $750 — $3,500+',href:'keyDeductions.test.html'});
-  if(!d.mileageSetup) opps.push({ico:'??',title:'Business Mileage Deduction',desc:'Every business mile is worth 70— in deductions (2025 IRS rate). Log trips in Key Deductions — takes 60 seconds each.',save:'Potential savings: $700 — $3,500+ per year',href:'keyDeductions.test.html'});
-  if(!d.s179Setup && d.annualProfit > 5000) opps.push({ico:'??',title:'Section 179 Equipment Write-Off',desc:'Computers, phones, furniture, software — deduct the full purchase price in the year you bought it. No waiting 5 years.',save:'Potential savings: $500 — $10,000+ depending on purchases',href:'keyDeductions.test.html'});
+  if(!d.hoSetup) opps.push({ico:'💰',title:'Home Office Deduction',desc:'If you have a dedicated workspace at home, deduct $5/sq ft (up to 300 sq ft) or actual home expenses — business-use %.',save:'Potential savings: $750 — $3,500+',href:'keyDeductions.test.html'});
+  if(!d.mileageSetup) opps.push({ico:'💰',title:'Business Mileage Deduction',desc:'Every business mile is worth 70— in deductions (2025 IRS rate). Log trips in Key Deductions — takes 60 seconds each.',save:'Potential savings: $700 — $3,500+ per year',href:'keyDeductions.test.html'});
+  if(!d.s179Setup && d.annualProfit > 5000) opps.push({ico:'💻',title:'Section 179 Equipment Write-Off',desc:'Computers, phones, furniture, software — deduct the full purchase price in the year you bought it. No waiting 5 years.',save:'Potential savings: $500 — $10,000+ depending on purchases',href:'keyDeductions.test.html'});
   if(d.hasSE && d.annualProfit > 30000) opps.push({ico:'??',title:'SEP-IRA Retirement Contribution',desc:'Contribute up to 25% of net self-employment income (max $69,000 for 2025) to a SEP-IRA. 100% deductible.',save:'Potential savings: $3,000 — $15,000+',href:'taxEstimator.test.html'});
-  if(d.hasSE) opps.push({ico:'??',title:'Self-Employed Health Insurance',desc:'If you pay for your own health, dental, or vision insurance, you can deduct 100% of premiums directly from gross income.',save:'Potential savings: $2,000 — $8,000+',href:'taxEstimator.test.html'});
+  if(d.hasSE) opps.push({ico:'🏥',title:'Self-Employed Health Insurance',desc:'If you pay for your own health, dental, or vision insurance, you can deduct 100% of premiums directly from gross income.',save:'Potential savings: $2,000 — $8,000+',href:'taxEstimator.test.html'});
   if(opps.length === 0){
     el.innerHTML = '<div class="opp-card"><div class="card-title">Tax Savings Opportunities</div><p style="color:#16a34a;font-size:.85rem;padding:8px 0">You\'ve set up all key deductions we track. Make sure your Tax Estimator has current income and expense figures to keep estimates accurate.</p></div>';
     return;

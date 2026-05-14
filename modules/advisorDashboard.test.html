@@ -746,11 +746,11 @@ function renderAlerts(){
 
   // Cash runway < 3 months
   if(k.runway!=null&&k.runway<3){
-    alerts.push({cls:'urgent',ico:'??',
+    alerts.push({cls:'urgent',ico:'⏱',
       text:'<strong>Cash runway is only '+k.runway.toFixed(1)+' months.</strong> At current burn of '+fmt(k.monthlyBurn||0)+'/mo, funds run out within 90 days. Reduce costs or accelerate revenue immediately.',
       link:'cashRunway.test.html',linkText:'⏱ Open Cash Runway'});
   } else if(k.runway!=null&&k.runway<6){
-    alerts.push({cls:'warn',ico:'??',
+    alerts.push({cls:'warn',ico:'⏱',
       text:'<strong>Cash runway is '+k.runway.toFixed(1)+' months</strong> — below the recommended 6-month buffer. Build reserves now.',
       link:'cashRunway.test.html',linkText:'⏱ Open Cash Runway'});
   }
@@ -759,7 +759,7 @@ function renderAlerts(){
   if(k.taxDueSoon&&k.taxDueSoon.length){
     var dueStr=k.taxDueSoon[0];
     var daysLeft=Math.round((new Date(dueStr)-new Date())/864e5);
-    alerts.push({cls:daysLeft<=7?'urgent':'warn',ico:'??',
+    alerts.push({cls:daysLeft<=7?'urgent':'warn',ico:'💼',
       text:'<strong>IRS estimated tax payment due '+new Date(dueStr).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</strong> — '+daysLeft+' day'+(daysLeft!==1?'s':'')+' away. File to avoid underpayment penalties.',
       link:'taxPayments.test.html',linkText:'💼 Open Tax Payments'});
   }
@@ -774,7 +774,7 @@ function renderAlerts(){
 
   // Health score low
   if(k.healthScore!=null&&k.healthScore<50){
-    alerts.push({cls:'urgent',ico:'??',
+    alerts.push({cls:'urgent',ico:'🏥',
       text:'<strong>Business health score is '+k.healthScore+'/100</strong> — critical range. Review the Health Score breakdown for specific action items.',
       link:'businessHealthScore.test.html',linkText:'🏥 Open Health Score'});
   }
@@ -783,7 +783,7 @@ function renderAlerts(){
   var curMo=new Date().toISOString().substring(0,7);
   var snaps=sg('fw_monthly_snapshots')||{};
   if(!snaps[curMo]){
-    alerts.push({cls:'info',ico:'??',
+    alerts.push({cls:'info',ico:'📸',
       text:'<strong>No monthly snapshot saved for '+curMo+'</strong> — run Monthly Snapshot to lock in this month\'s numbers for trend tracking.',
       link:'monthlySnapshot.test.html',linkText:'📸 Open Monthly Snapshot'});
   }
