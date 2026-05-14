@@ -357,12 +357,12 @@ function analyze(){
   /* Verdict */
   var vHtml = '';
   if(monthlySav <= 0){
-    vHtml = '<div class="verdict bad"><div class="v-icon">?</div><div>'+
+    vHtml = '<div class="verdict bad"><div class="v-icon">🧮</div><div>'+
       '<div class="v-title" style="color:#dc2626">Refinance Not Recommended</div>'+
       '<div class="v-desc">The new loan has a higher monthly payment ('+fmt(newEmi)+' vs '+fmt(eEmi)+'). Unless you specifically need to extend the term for cash-flow reasons, keeping your existing loan is better.</div>'+
       '</div></div>';
   } else if(netBenefit > 0 && breakEvenMos <= 24){
-    vHtml = '<div class="verdict good"><div class="v-icon">?</div><div>'+
+    vHtml = '<div class="verdict good"><div class="v-icon">📊</div><div>'+
       '<div class="v-title" style="color:#166534">Refinance Recommended</div>'+
       '<div class="v-desc">You\'ll save '+fmt(monthlySav)+'/month and break even in '+Math.ceil(breakEvenMos)+' months. Total net benefit after fees: '+fmt(netBenefit)+'. Proceed if your credit score supports the new rate.</div>'+
       '</div></div>';
@@ -372,7 +372,7 @@ function analyze(){
       '<div class="v-desc">Monthly savings of '+fmt(monthlySav)+' exist, but break-even takes '+Math.ceil(breakEvenMos)+' months. If you plan to keep the loan for at least that long, net benefit is '+fmt(netBenefit)+'.</div>'+
       '</div></div>';
   } else {
-    vHtml = '<div class="verdict bad"><div class="v-icon">?</div><div>'+
+    vHtml = '<div class="verdict bad"><div class="v-icon">🐷</div><div>'+
       '<div class="v-title" style="color:#dc2626">Net Loss After Fees</div>'+
       '<div class="v-desc">Even with monthly savings, the closing fees ('+fmt(rFees)+') exceed the total interest savings over the loan term. Negotiate lower fees or a better rate before proceeding.</div>'+
       '</div></div>';
