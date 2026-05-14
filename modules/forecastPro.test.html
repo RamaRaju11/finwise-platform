@@ -973,50 +973,50 @@ function renderInsights(data,sc){
   var ex=storeExtra;
 
   if(totNet>0&&defMos.length===0){
-    ins.push({t:'good',icon:'?',h:'All 12 months cash flow positive',b:'Your business generates '+fmt(avgNet)+'/month average net cash flow with no deficit months forecast.'});
+    ins.push({t:'good',icon:'•',h:'All 12 months cash flow positive',b:'Your business generates '+fmt(avgNet)+'/month average net cash flow with no deficit months forecast.'});
   }
   if(defMos.length>0){
     var names=defMos.map(function(r){return r.mo;}).join(', ');
-    ins.push({t:'bad',icon:'??',h:defMos.length+' deficit month'+(defMos.length>1?'s':'')+' forecast',b:names+' are projected deficit months. Reserve covers '+(ex.res&&totalEMI?(ex.res/totalEMI).toFixed(1):0)+' months of EMI — top up before these months arrive.'});
+    ins.push({t:'bad',icon:'•',h:defMos.length+' deficit month'+(defMos.length>1?'s':'')+' forecast',b:names+' are projected deficit months. Reserve covers '+(ex.res&&totalEMI?(ex.res/totalEMI).toFixed(1):0)+' months of EMI — top up before these months arrive.'});
   }
   if(finalBal>=0){
-    ins.push({t:'good',icon:'??',h:'Year-end balance: '+fmt(finalBal),b:finalBal>ex.res?'Your cash reserve has grown by year end — a strong sign.':'Positive year-end balance. Consider investing surplus into growth or prepaying debt.'});
+    ins.push({t:'good',icon:'•',h:'Year-end balance: '+fmt(finalBal),b:finalBal>ex.res?'Your cash reserve has grown by year end — a strong sign.':'Positive year-end balance. Consider investing surplus into growth or prepaying debt.'});
   } else {
-    ins.push({t:'bad',icon:'??',h:'Year-end cash deficit: '+fmt(Math.abs(finalBal)),b:'Cash position goes negative by year end. Reduce expenses, adjust loan size, or increase revenue growth target.'});
+    ins.push({t:'bad',icon:'•',h:'Year-end cash deficit: '+fmt(Math.abs(finalBal)),b:'Cash position goes negative by year end. Reduce expenses, adjust loan size, or increase revenue growth target.'});
   }
-  ins.push({t:'info',icon:'??',h:'Best month: '+bestRow.mo,b:'Highest net cash flow at '+fmt(bestRow.net)+'. Use peak months to build reserve and prepay loan principal where possible.'});
+  ins.push({t:'info',icon:'•',h:'Best month: '+bestRow.mo,b:'Highest net cash flow at '+fmt(bestRow.net)+'. Use peak months to build reserve and prepay loan principal where possible.'});
   if(worstRow.net<0){
-    ins.push({t:'warn',icon:'??',h:'Weakest month: '+worstRow.mo,b:'Cash flow drops to '+fmtS(worstRow.net)+' in '+worstRow.mo+'. Set aside '+fmt(Math.abs(worstRow.net))+' buffer before this month arrives.'});
+    ins.push({t:'warn',icon:'•',h:'Weakest month: '+worstRow.mo,b:'Cash flow drops to '+fmtS(worstRow.net)+' in '+worstRow.mo+'. Set aside '+fmt(Math.abs(worstRow.net))+' buffer before this month arrives.'});
   }
   if(ex.loan>0&&totalEMI>0){
     var netCF=ex.rev-ex.exp;
     if(netCF>0){
       var ep=Math.round(totalEMI/netCF*100);
       var ecls=ep<=40?'good':ep<=60?'warn':'bad';
-      ins.push({t:ecls,icon:'??',h:'EMI is '+ep+'% of net cash flow',b:ep<=40?'EMI is within safe limits (below 40%). Cash flow stays healthy after loan payments.':'EMI consumes '+ep+'% of net cash flow — above 40% safe threshold. Consider extending tenure.'});
+      ins.push({t:ecls,icon:'•',h:'EMI is '+ep+'% of net cash flow',b:ep<=40?'EMI is within safe limits (below 40%). Cash flow stays healthy after loan payments.':'EMI consumes '+ep+'% of net cash flow — above 40% safe threshold. Consider extending tenure.'});
     }
   }
   if(sc==='pes'&&defMos.length>3){
-    ins.push({t:'warn',icon:'???',h:'High sensitivity to revenue drop',b:'A 10% revenue decline causes '+defMos.length+' deficit months. Consider reducing fixed costs or negotiating EMI holiday with lender as contingency.'});
+    ins.push({t:'warn',icon:'•',h:'High sensitivity to revenue drop',b:'A 10% revenue decline causes '+defMos.length+' deficit months. Consider reducing fixed costs or negotiating EMI holiday with lender as contingency.'});
   }
   var revGrowth=data[data.length-1].rev/data[0].rev-1;
-  ins.push({t:'info',icon:'??',h:'Revenue growth over 12 months',b:'Starting at '+fmt(data[0].rev)+'/month, revenue reaches '+fmt(data[data.length-1].rev)+'/month by month 12 — a '+(revGrowth*100).toFixed(1)+'% increase.'});
+  ins.push({t:'info',icon:'•',h:'Revenue growth over 12 months',b:'Starting at '+fmt(data[0].rev)+'/month, revenue reaches '+fmt(data[data.length-1].rev)+'/month by month 12 — a '+(revGrowth*100).toFixed(1)+'% increase.'});
 
   // Goal Tracker cross-reference
   if(_revGoal && _revGoal.target > 0){
     var monthsOverGoal=data.filter(function(r){return r.rev>=_revGoal.target;});
     if(monthsOverGoal.length===12){
-      ins.push({t:'good',icon:'??',h:'?? Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal — consider raising the goal in Goal Tracker to keep pushing growth.'});
+      ins.push({t:'good',icon:'•',h:'?? Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal — consider raising the goal in Goal Tracker to keep pushing growth.'});
     } else if(monthsOverGoal.length>0){
-      ins.push({t:'good',icon:'??',h:'Goal reachable in '+monthsOverGoal[0].mo,b:'Forecast revenue first hits the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in '+monthsOverGoal[0].mo+' and is exceeded in '+monthsOverGoal.length+' of 12 months. You\'re on track — the dashed pink line on the chart shows the target.'});
+      ins.push({t:'good',icon:'•',h:'Goal reachable in '+monthsOverGoal[0].mo,b:'Forecast revenue first hits the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in '+monthsOverGoal[0].mo+' and is exceeded in '+monthsOverGoal.length+' of 12 months. You\'re on track — the dashed pink line on the chart shows the target.'});
     } else {
       var gap=_revGoal.target-data[data.length-1].rev;
-      ins.push({t:'warn',icon:'??',h:'Stretch gap to goal: '+fmt(gap)+'/mo',b:'Revenue never reaches the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in this 12-month window. Year-end revenue ('+fmt(data[data.length-1].rev)+'/mo) is '+fmt(gap)+'/mo short. Try increasing the revenue growth rate or raising prices.'});
+      ins.push({t:'warn',icon:'•',h:'Stretch gap to goal: '+fmt(gap)+'/mo',b:'Revenue never reaches the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in this 12-month window. Year-end revenue ('+fmt(data[data.length-1].rev)+'/mo) is '+fmt(gap)+'/mo short. Try increasing the revenue growth rate or raising prices.'});
     }
   }
 
   if(_calData.billCount>0){
-    ins.push({t:'info',icon:'??',h:'Committed expense floor: '+fmt(_calData.totalBills)+'/mo from '+_calData.billCount+' bills',b:'Your '+_calData.billCount+' recurring bills create a minimum burn of '+fmt(_calData.totalBills)+'/month even in a zero-revenue scenario. The pessimistic scenario (-10%) already floors at this level — use it as your worst-case planning baseline.'});
+    ins.push({t:'info',icon:'•',h:'Committed expense floor: '+fmt(_calData.totalBills)+'/mo from '+_calData.billCount+' bills',b:'Your '+_calData.billCount+' recurring bills create a minimum burn of '+fmt(_calData.totalBills)+'/month even in a zero-revenue scenario. The pessimistic scenario (-10%) already floors at this level — use it as your worst-case planning baseline.'});
   }
 
   var html='';

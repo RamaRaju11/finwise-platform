@@ -1096,45 +1096,45 @@ function runStressTest(){
   const scoreResult = computeScore(rev, exp, emi, loan, rate, ten);
 
   if(scoreResult.cls === 'safe' && drop20.cls === 'ok'){
-    recs.push({cls:'good', icon:'??', title:'Loan looks safe', body:`Your business handles this loan comfortably even at -20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
+    recs.push({cls:'good', icon:'•', title:'Loan looks safe', body:`Your business handles this loan comfortably even at -20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
   }
   if(drop20.cls === 'warn' || drop20.cls === 'fail'){
     const needed = Math.round(totalEMI*3);
     const shortfall = needed - reserve;
     if(shortfall > 0){
-      recs.push({cls:'caution', icon:'??', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
+      recs.push({cls:'caution', icon:'•', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
     } else {
-      recs.push({cls:'good', icon:'?', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
+      recs.push({cls:'good', icon:'•', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
     }
   }
   const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, ten);
   if(drop30.cls === 'fail'){
     if(maxSafe < loan){
-      recs.push({cls:'urgent', icon:'??', title:'Consider a smaller loan', body:`At -30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
+      recs.push({cls:'urgent', icon:'•', title:'Consider a smaller loan', body:`At -30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
     } else {
       const needed3mo = Math.round(totalEMI * 3);
       if(reserve >= needed3mo){
-        recs.push({cls:'good', icon:'???', title:'Reserve covers the -30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
+        recs.push({cls:'good', icon:'•', title:'Reserve covers the -30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
       } else {
         const shortfall = needed3mo - reserve;
-        recs.push({cls:'caution', icon:'??', title:'Stress risk at -30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
+        recs.push({cls:'caution', icon:'•', title:'Stress risk at -30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
       }
     }
   }
   if(totalEMI / netCF > 0.5){
-    recs.push({cls:'caution', icon:'??', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
+    recs.push({cls:'caution', icon:'•', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
   }
   if(emi > 0 && (emi / netCF) > 0.25){
-    recs.push({cls:'caution', icon:'??', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
+    recs.push({cls:'caution', icon:'•', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
   }
   if(scoreResult.c1 < 15){
-    recs.push({cls:'urgent', icon:'??', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10—15% before borrowing. A stronger margin means a safer loan.`});
+    recs.push({cls:'urgent', icon:'•', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10—15% before borrowing. A stronger margin means a safer loan.`});
   }
   if(scoreResult.cls === 'safe' && drop30.cls !== 'fail'){
-    recs.push({cls:'good', icon:'??', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
+    recs.push({cls:'good', icon:'•', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
   }
   if(!recs.length){
-    recs.push({cls:'good', icon:'?', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
+    recs.push({cls:'good', icon:'•', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
   }
 
   document.getElementById('stressRecsList').innerHTML = recs.map(r=>`
@@ -1681,45 +1681,45 @@ function runStressTest(){
   const scoreResult = computeScore(rev, exp, emi, loan, rate, ten);
 
   if(scoreResult.cls === 'safe' && drop20.cls === 'ok'){
-    recs.push({cls:'good', icon:'??', title:'Loan looks safe', body:`Your business handles this loan comfortably even at -20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
+    recs.push({cls:'good', icon:'•', title:'Loan looks safe', body:`Your business handles this loan comfortably even at -20% revenue. DSCR stays above 1.25x under stress. You are in a strong position to proceed.`});
   }
   if(drop20.cls === 'warn' || drop20.cls === 'fail'){
     const needed = Math.round(totalEMI*3);
     const shortfall = needed - reserve;
     if(shortfall > 0){
-      recs.push({cls:'caution', icon:'??', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
+      recs.push({cls:'caution', icon:'•', title:'Build a cash buffer first', body:`A 20% revenue drop puts your EMI at risk. You have ${fmt(reserve)} saved — aim for ${fmt(needed)} (3 months EMI). You need ${fmt(shortfall)} more before safely taking this loan.`});
     } else {
-      recs.push({cls:'good', icon:'?', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
+      recs.push({cls:'good', icon:'•', title:'Cash reserve is adequate', body:`Your ${fmt(reserve)} reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — enough cushion to handle a short revenue dip safely.`});
     }
   }
   const maxSafe = findMaxSafeLoan(rev, exp, emi, rate, ten);
   if(drop30.cls === 'fail'){
     if(maxSafe < loan){
-      recs.push({cls:'urgent', icon:'??', title:'Consider a smaller loan', body:`At -30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
+      recs.push({cls:'urgent', icon:'•', title:'Consider a smaller loan', body:`At -30% revenue your business runs a cash deficit. Reduce the loan to ${fmt(maxSafe)} — the maximum your cash flow safely supports.`});
     } else {
       const needed3mo = Math.round(totalEMI * 3);
       if(reserve >= needed3mo){
-        recs.push({cls:'good', icon:'???', title:'Reserve covers the -30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
+        recs.push({cls:'good', icon:'•', title:'Reserve covers the -30% risk', body:`A 30% revenue drop causes a short deficit, but your ${fmt(reserve)} cash reserve covers ${(reserve/totalEMI).toFixed(1)} months of EMI — well above the 3-month buffer needed. Your loan size is safe; just monitor revenue closely.`});
       } else {
         const shortfall = needed3mo - reserve;
-        recs.push({cls:'caution', icon:'??', title:'Stress risk at -30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
+        recs.push({cls:'caution', icon:'•', title:'Stress risk at -30% revenue', body:`A 30% revenue drop puts your cash flow into deficit. Your loan size is within safe limits, but your current reserve (${fmt(reserve)}) covers only ${totalEMI>0?(reserve/totalEMI).toFixed(1):'0'} months of EMI. Top up by ${fmt(shortfall)} to reach a 3-month buffer (${fmt(needed3mo)}).`});
       }
     }
   }
   if(totalEMI / netCF > 0.5){
-    recs.push({cls:'caution', icon:'??', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
+    recs.push({cls:'caution', icon:'•', title:'EMI is over 50% of net cash flow', body:`Your EMI-to-cashflow ratio is ${((totalEMI/netCF)*100).toFixed(0)}%. Aim to keep it under 40%. Try extending the tenure to ${Math.ceil(ten*1.4)} months to reduce the monthly EMI to ${fmt(Math.round(calcEMI(loan,rate,Math.ceil(ten*1.4))))}.`});
   }
   if(emi > 0 && (emi / netCF) > 0.25){
-    recs.push({cls:'caution', icon:'??', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
+    recs.push({cls:'caution', icon:'•', title:'Existing debt is high', body:`You already pay ${fmt(emi)}/month in EMI — ${((emi/netCF)*100).toFixed(0)}% of your net cash flow. Clear or reduce existing loans before adding a new one.`});
   }
   if(scoreResult.c1 < 15){
-    recs.push({cls:'urgent', icon:'??', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10—15% before borrowing. A stronger margin means a safer loan.`});
+    recs.push({cls:'urgent', icon:'•', title:'Improve cash flow margins', body:`Your net margin is below 10%. Focus on cutting expenses or raising prices by 10—15% before borrowing. A stronger margin means a safer loan.`});
   }
   if(scoreResult.cls === 'safe' && drop30.cls !== 'fail'){
-    recs.push({cls:'good', icon:'??', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
+    recs.push({cls:'good', icon:'•', title:'You can negotiate better terms', body:`With a strong DSCR of ${baseline.dscr.toFixed(2)}x, you have leverage to negotiate a lower interest rate or longer tenure. Even 1% less saves ${fmt(Math.round((calcEMI(loan,rate,ten)-calcEMI(loan,rate-1,ten))*ten))}.`});
   }
   if(!recs.length){
-    recs.push({cls:'good', icon:'?', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
+    recs.push({cls:'good', icon:'•', title:'Financials look healthy', body:'Your business demonstrates solid cash flow and debt coverage. Monitor monthly and recheck if conditions change.'});
   }
 
   document.getElementById('stressRecsList').innerHTML = recs.map(r=>`

@@ -1032,51 +1032,51 @@ var PLAN_CONFIG = {
 };
 
 var ALL_TOOLS = [
-  {icon:'??', name:'Financial Checkup',   desc:'4-point health check in 2 min',        href:'checkup.html',                               tier:'free'},
-  {icon:'??', name:'Score History',       desc:'Track your health score over time',     href:'history.html',                               tier:'free'},
-  {icon:'??', name:'What-If Scenarios',  desc:'Model revenue & expense changes',       href:'whatif.html',                                tier:'free'},
-  {icon:'??', name:'Loan Safety Score',   desc:'SAFE/RISKY verdict in 60 sec',        href:'modules/loanDecisionScoreEngine.test.html', tier:'free'},
-  {icon:'??', name:'EMI Calculator',       desc:'Monthly payment & total cost',         href:'modules/emiCalculator.test.html',            tier:'free'},
-  {icon:'?',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
-  {icon:'?',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
-  {icon:'??',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
-  {icon:'??', name:'Monthly Snapshot',    desc:'One-page visual — download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
-  {icon:'?', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
-  {icon:'??', name:"Owner's Pay",           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
-  {icon:'??', name:'Business Health Score', desc:'Overall A—F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
-  {icon:'??', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
-  {icon:'??', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
-  {icon:'??', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
-  {icon:'??', name:'Industry Benchmarks',   desc:'Compare to your industry',             href:'modules/benchmarkPro.test.html',             tier:'pro'},
-  {icon:'??', name:'Financial Statements',  desc:'P&L, Balance Sheet, Cash Flow',        href:'modules/financialStatements.test.html',      tier:'pro'},
-  {icon:'??', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
-  {icon:'??', name:'Stress Test Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
-  {icon:'??', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
-  {icon:'??', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors — one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
-  {icon:'??', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
-  {icon:'???', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
-  {icon:'??', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
-  {icon:'??', name:'Contractor & Payroll',  desc:'1099-NEC tracking + FUTA/SUTA estimates',   href:'modules/contractorPayroll.test.html',         tier:'starter'},
-  {icon:'??', name:'Invoice Tracker',        desc:'Overdue invoices + follow-up emails',   href:'modules/invoiceTracker.test.html',            tier:'starter'},
-  {icon:'??', name:'Payroll Estimator',      desc:'What can you afford to pay staff?',    href:'modules/payrollEstimator.test.html',          tier:'starter'},
-  {icon:'??', name:'Bank Statement Upload',  desc:'Upload CSV ? auto-fill cash flow',     href:'modules/bankStatementUpload.test.html',       tier:'starter'},
-  {icon:'???', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
-  {icon:'??', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
-  {icon:'??', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
-  {icon:'??', name:'Debt Command Center',      desc:'All loans in one view — track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
-  {icon:'??', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
-  {icon:'??', name:'Working Capital Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
-  {icon:'??', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
-  {icon:'??', name:'Payroll Impact Sim',     desc:'Model new hires: runway & break-even', href:'modules/payrollImpactSim.test.html',          tier:'starter'},
-  {icon:'??', name:'Loan Refinance Analyzer',desc:'Monthly savings, break-even & net benefit', href:'modules/loanRefinanceAnalyzer.test.html', tier:'starter'},
-  {icon:'??', name:'Cash Flow Calendar',  desc:'Visual monthly bill & income calendar',  href:'modules/cashFlowCalendar.test.html',         tier:'starter'},
-  {icon:'??', name:'Goal Tracker',           desc:'Set targets, track monthly progress',  href:'modules/goalTracker.test.html',               tier:'free'},
-  {icon:'??', name:'Advisor Dashboard',     desc:'Manage all clients in one view',       href:'modules/advisorDashboard.test.html',         tier:'advisor'},
-  {icon:'??', name:'Branded Reports',       desc:'White-label PDF for clients',          href:'modules/brandedReport.test.html',            tier:'advisor'},
-  {icon:'??', name:'Client Risk Email',     desc:'One-click risk summary to clients',    href:'modules/clientRiskEmail.test.html',          tier:'advisor'},
-  {icon:'??', name:'Referral Tracker',      desc:'Track referrals & commissions',        href:'modules/referralTracker.test.html',          tier:'advisor'},
-  {icon:'??', name:'Client Portal',         desc:'Share secure reports with clients',     href:'modules/clientPortal.test.html',              tier:'advisor'},
-  {icon:'??', name:'White-Label Settings', desc:'Your brand, colors & domain on reports', href:'modules/whiteLabelSettings.test.html',        tier:'advisor'}
+  {icon:'🩺', name:'Financial Checkup',   desc:'4-point health check in 2 min',        href:'checkup.html',                               tier:'free'},
+  {icon:'📊', name:'Score History',       desc:'Track your health score over time',     href:'history.html',                               tier:'free'},
+  {icon:'🔮', name:'What-If Scenarios',  desc:'Model revenue & expense changes',       href:'whatif.html',                                tier:'free'},
+  {icon:'🏦', name:'Loan Safety Score',   desc:'SAFE/RISKY verdict in 60 sec',        href:'modules/loanDecisionScoreEngine.test.html', tier:'free'},
+  {icon:'🧮', name:'EMI Calculator',       desc:'Monthly payment & total cost',         href:'modules/emiCalculator.test.html',            tier:'free'},
+  {icon:'⏱',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
+  {icon:'⚖',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
+  {icon:'🏪',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
+  {icon:'📸', name:'Monthly Snapshot',    desc:'One-page visual — download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
+  {icon:'✅', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
+  {icon:'💰', name:'Owner's Pay',           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
+  {icon:'🏥', name:'Business Health Score', desc:'Overall A—F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
+  {icon:'🎯', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
+  {icon:'•', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
+  {icon:'🤖', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
+  {icon:'📊', name:'Industry Benchmarks',   desc:'Compare to your industry',             href:'modules/benchmarkPro.test.html',             tier:'pro'},
+  {icon:'📑', name:'Financial Statements',  desc:'P&L, Balance Sheet, Cash Flow',        href:'modules/financialStatements.test.html',      tier:'pro'},
+  {icon:'🔀', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
+  {icon:'🧪', name:'Stress Test' Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
+  {icon:'📋', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
+  {icon:'💼', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors — one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
+  {icon:'🧮', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
+  {icon:'🛒', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
+  {icon:'💰', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
+  {icon:'•', name:'Contractor & Payroll',  desc:'1099-NEC tracking + FUTA/SUTA estimates',   href:'modules/contractorPayroll.test.html',         tier:'starter'},
+  {icon:'📄', name:'Invoice Tracker',        desc:'Overdue invoices + follow-up emails',   href:'modules/invoiceTracker.test.html',            tier:'starter'},
+  {icon:'💸', name:'Payroll Estimator',      desc:'What can you afford to pay staff?',    href:'modules/payrollEstimator.test.html',          tier:'starter'},
+  {icon:'📤', name:'Bank Statement Upload',  desc:'Upload CSV ? auto-fill cash flow',     href:'modules/bankStatementUpload.test.html',       tier:'starter'},
+  {icon:'🧾', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
+  {icon:'📊', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
+  {icon:'🐷', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
+  {icon:'💸', name:'Debt Command Center',      desc:'All loans in one view — track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
+  {icon:'•', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
+  {icon:'💼', name:'Working Capital' Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
+  {icon:'•', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
+  {icon:'📊', name:'Payroll Impact Sim',     desc:'Model new hires: runway & break-even', href:'modules/payrollImpactSim.test.html',          tier:'starter'},
+  {icon:'•', name:'Loan Refinance Analyzer',desc:'Monthly savings, break-even & net benefit', href:'modules/loanRefinanceAnalyzer.test.html', tier:'starter'},
+  {icon:'📅', name:'Cash Flow Calendar',  desc:'Visual monthly bill & income calendar',  href:'modules/cashFlowCalendar.test.html',         tier:'starter'},
+  {icon:'🎯', name:'Goal Tracker',           desc:'Set targets, track monthly progress',  href:'modules/goalTracker.test.html',               tier:'free'},
+  {icon:'🎓', name:'Advisor Dashboard',     desc:'Manage all clients in one view',       href:'modules/advisorDashboard.test.html',         tier:'advisor'},
+  {icon:'📄', name:'Branded Reports',       desc:'White-label PDF for clients',          href:'modules/brandedReport.test.html',            tier:'advisor'},
+  {icon:'📧', name:'Client Risk Email',     desc:'One-click risk summary to clients',    href:'modules/clientRiskEmail.test.html',          tier:'advisor'},
+  {icon:'💸', name:'Referral Tracker',      desc:'Track referrals & commissions',        href:'modules/referralTracker.test.html',          tier:'advisor'},
+  {icon:'👥', name:'Client Portal',         desc:'Share secure reports with clients',     href:'modules/clientPortal.test.html',              tier:'advisor'},
+  {icon:'⚙', name:'White-Label Settings', desc:'Your brand, colors & domain on reports', href:'modules/whiteLabelSettings.test.html',        tier:'advisor'}
 ];
 
 var TIER_ORDER = ['free','starter','pro','advisor'];
@@ -1380,7 +1380,7 @@ window.addEventListener('load', function(){
     /* Greeting */
     var name = auth.displayName();
     document.getElementById('userName').textContent = name;
-    document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' ??';
+    document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' 👋';
 
     /* Plan — always use authoritative value from auth server */
     var plan = auth.plan || 'free';
@@ -1486,10 +1486,10 @@ function renderBriefing(data){
 
   // Priority cards
   var urgencyMap = { urgent:'pri-urgent', high:'pri-high', medium:'pri-medium', low:'pri-low' };
-  var urgencyEmoji = { urgent:'??', high:'??', medium:'??', low:'??' };
+  var urgencyEmoji = { urgent:'🚨', high:'⚠️', medium:'💡', low:'ℹ️' };
   var pHtml = (data.priorities||[]).map(function(p){
     var cls = urgencyMap[p.urgency]||'pri-medium';
-    var em  = urgencyEmoji[p.urgency]||'??';
+    var em  = urgencyEmoji[p.urgency]||'💡';
     return '<div class="pri-card '+cls+'">'+
       '<div class="pri-title">'+em+' '+p.title+'</div>'+
       '<div class="pri-desc">'+p.description+'</div>'+

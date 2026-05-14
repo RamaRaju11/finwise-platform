@@ -372,29 +372,29 @@ function goStep4(){
 }
 
 var INDUSTRY_RECS = {
-  'Food & Restaurant':      [{icon:'?',name:'Cash Flow Tracker',   desc:'Track daily cash and monthly runway',                href:'modules/cashFlowTracker.test.html'},
-                              {icon:'??',name:'Payroll Estimator',     desc:'Know exactly what staff you can afford',             href:'modules/payrollEstimator.test.html'},
-                              {icon:'??',name:'Tax Command Center',    desc:'Sales tax, income tax & deductions in one place',    href:'modules/taxCommandCenter.test.html'}],
-  'Retail / E-commerce':    [{icon:'??',name:'Invoice Tracker',        desc:'Track unpaid invoices & follow-up reminders',        href:'modules/invoiceTracker.test.html'},
-                              {icon:'??',name:'Break-Even Analyzer',   desc:'Find the revenue needed to cover all costs',         href:'modules/breakEven.test.html'},
-                              {icon:'??',name:'Benchmark Pro',          desc:'Compare margins to other retailers',                 href:'modules/benchmarkPro.test.html'}],
-  'Health & Wellness':       [{icon:'??',name:'Loan Safety Score',      desc:'Know if a loan is safe before applying',             href:'modules/loanDecisionScoreEngine.test.html'},
-                              {icon:'??',name:"Owner's Pay Optimizer",  desc:'How much can you safely pay yourself?',              href:'modules/ownersPay.test.html'},
-                              {icon:'??',name:'Grant Finder',            desc:'Health & wellness specific grants & SBA funds',      href:'modules/grantFinder.test.html'}],
-  'Professional Services':   [{icon:'??',name:'Forecast Pro',           desc:'Project your next 12 months of revenue',             href:'modules/forecastPro.test.html'},
-                              {icon:'??',name:'Vendor Bill Tracker',    desc:'Track recurring vendor payments & contracts',        href:'modules/vendorBillTracker.test.html'},
-                              {icon:'??',name:'Tax Command Center',    desc:'Quarterly estimates & key deductions',               href:'modules/taxCommandCenter.test.html'}],
-  'Construction & Trades':  [{icon:'??',name:'Debt Command Center',    desc:'Manage all loans & equipment financing',             href:'modules/debtCommandCenter.test.html'},
-                              {icon:'??',name:"Owner's Pay Optimizer",  desc:'Set safe owner salary based on cash flow',           href:'modules/ownersPay.test.html'},
-                              {icon:'?',name:'Cash Flow Tracker',      desc:'Track project-to-project cash in & out',             href:'modules/cashFlowTracker.test.html'}],
-  'Technology / Software':  [{icon:'??',name:'Forecast Pro',           desc:'Model growth scenarios & burn rate',                 href:'modules/forecastPro.test.html'},
-                              {icon:'??',name:'AI CFO Advisor',          desc:'Ask a CFO AI about funding & strategy',             href:'modules/aiCfoChat.test.html'},
-                              {icon:'??',name:'Benchmark Pro',           desc:'Compare SaaS metrics to industry peers',            href:'modules/benchmarkPro.test.html'}],
+  'Food & Restaurant':      [{icon:'💵',name:'Cash Flow Tracker',   desc:'Track daily cash and monthly runway',                href:'modules/cashFlowTracker.test.html'},
+                              {icon:'💸',name:'Payroll Estimator',     desc:'Know exactly what staff you can afford',             href:'modules/payrollEstimator.test.html'},
+                              {icon:'💼',name:'Tax Command Center',    desc:'Sales tax, income tax & deductions in one place',    href:'modules/taxCommandCenter.test.html'}],
+  'Retail / E-commerce':    [{icon:'📄',name:'Invoice Tracker',        desc:'Track unpaid invoices & follow-up reminders',        href:'modules/invoiceTracker.test.html'},
+                              {icon:'⚖',name:'Break-Even' Analyzer',   desc:'Find the revenue needed to cover all costs',         href:'modules/breakEven.test.html'},
+                              {icon:'📊',name:'Benchmark Pro',          desc:'Compare margins to other retailers',                 href:'modules/benchmarkPro.test.html'}],
+  'Health & Wellness':       [{icon:'🏦',name:'Loan Safety Score',      desc:'Know if a loan is safe before applying',             href:'modules/loanDecisionScoreEngine.test.html'},
+                              {icon:'💰',name:'Owner's Pay' Optimizer",  desc:'How much can you safely pay yourself?',              href:'modules/ownersPay.test.html'},
+                              {icon:'🎯',name:'Grant Finder',            desc:'Health & wellness specific grants & SBA funds',      href:'modules/grantFinder.test.html'}],
+  'Professional Services':   [{icon:'📈',name:'Forecast Pro',           desc:'Project your next 12 months of revenue',             href:'modules/forecastPro.test.html'},
+                              {icon:'🧾',name:'Vendor Bill Tracker',    desc:'Track recurring vendor payments & contracts',        href:'modules/vendorBillTracker.test.html'},
+                              {icon:'💼',name:'Tax Command Center',    desc:'Quarterly estimates & key deductions',               href:'modules/taxCommandCenter.test.html'}],
+  'Construction & Trades':  [{icon:'💸',name:'Debt Command Center',    desc:'Manage all loans & equipment financing',             href:'modules/debtCommandCenter.test.html'},
+                              {icon:'💰',name:'Owner's Pay' Optimizer",  desc:'Set safe owner salary based on cash flow',           href:'modules/ownersPay.test.html'},
+                              {icon:'💵',name:'Cash Flow Tracker',      desc:'Track project-to-project cash in & out',             href:'modules/cashFlowTracker.test.html'}],
+  'Technology / Software':  [{icon:'📈',name:'Forecast Pro',           desc:'Model growth scenarios & burn rate',                 href:'modules/forecastPro.test.html'},
+                              {icon:'🤖',name:'AI CFO Advisor',          desc:'Ask a CFO AI about funding & strategy',             href:'modules/aiCfoChat.test.html'},
+                              {icon:'📊',name:'Benchmark Pro',           desc:'Compare SaaS metrics to industry peers',            href:'modules/benchmarkPro.test.html'}],
 };
 
-var DEFAULT_RECS = [{icon:'??',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
-                    {icon:'?',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
-                    {icon:'??',name:'Business Health Score', desc:'Overall A—F grade for your finances', href:'modules/businessHealthScore.test.html'}];
+var DEFAULT_RECS = [{icon:'🏦',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
+                    {icon:'💵',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
+                    {icon:'🏥',name:'Business Health Score', desc:'Overall A—F grade for your finances', href:'modules/businessHealthScore.test.html'}];
 
 function buildRecommendations(){
   var industry = document.getElementById('industry').value;

@@ -474,7 +474,7 @@ function loadLiveData(){
   if(invRevD&&invRevD.byMonth){
     var lRev=invRevD.byMonth[curMo]||null;
     if(!lRev){var ks=Object.keys(invRevD.byMonth).sort();if(ks.length)lRev=invRevD.byMonth[ks[ks.length-1]];}
-    if(lRev){document.getElementById('fs_rev').value=Math.round(lRev);sourced.push({icon:'??',src:'Invoice Tracker',field:'Revenue'});}
+    if(lRev){document.getElementById('fs_rev').value=Math.round(lRev);sourced.push({icon:'•',src:'Invoice Tracker',field:'Revenue'});}
   }
 
   // Payroll from Payroll Estimator ? fs_sal
@@ -488,7 +488,7 @@ function loadLiveData(){
         document.getElementById('fs_detailed').checked=true;
         toggleDetailed();
       }
-      sourced.push({icon:'??',src:'Payroll Estimator',field:'Salaries'});
+      sourced.push({icon:'•',src:'Payroll Estimator',field:'Salaries'});
     }
   }
 
@@ -517,21 +517,21 @@ function loadLiveData(){
     } else {
       document.getElementById('fs_exp').value=Math.round(expD.totalMonthly);
     }
-    sourced.push({icon:'??',src:'Bill Tracker',field:'Expenses'});
+    sourced.push({icon:'•',src:'Bill Tracker',field:'Expenses'});
   }
 
   // Cash balance from Cash Runway
   var cashD=sg('fw_cash_runway');
   if(cashD&&cashD.currentBalance){
     document.getElementById('fs_cash').value=Math.round(cashD.currentBalance);
-    sourced.push({icon:'??',src:'Cash Runway',field:'Cash Balance'});
+    sourced.push({icon:'•',src:'Cash Runway',field:'Cash Balance'});
   }
 
   // Outstanding invoices ? Accounts Receivable
   var invs=sg('fw_invoices')||[];
   if(invs.length){
     var openAmt=invs.filter(function(i){return i.status!=='paid';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    if(openAmt>0){document.getElementById('fs_rec').value=Math.round(openAmt);sourced.push({icon:'??',src:'Invoice Tracker',field:'Receivables'});}
+    if(openAmt>0){document.getElementById('fs_rec').value=Math.round(openAmt);sourced.push({icon:'•',src:'Invoice Tracker',field:'Receivables'});}
   }
 
   // Show live badge

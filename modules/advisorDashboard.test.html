@@ -988,7 +988,7 @@ function loadClients(){ try{ clients=JSON.parse(localStorage.getItem('fw_clients
 function saveClients(){ localStorage.setItem('fw_clients',JSON.stringify(clients)); }
 
 /* -- White-label store -- */
-var WL={brand:'BizSco',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
+var WL={brand:'BizSco',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'•',email:''};
 function loadWL(){
   try{
     var s=localStorage.getItem('fw_wl');
@@ -1056,7 +1056,7 @@ function applyWL(){
   toggleWL();
 }
 function resetWL(){
-  WL={brand:'BizSco',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'??',email:''};
+  WL={brand:'BizSco',tag:'AI-Powered Loan Safety Platform',color:'#4f46e5',icon:'•',email:''};
   saveWL(); applyWLToDOM();
   document.getElementById('wl_brand').value=WL.brand;
   document.getElementById('wl_tag').value=WL.tag;

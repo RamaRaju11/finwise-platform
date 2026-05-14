@@ -172,7 +172,7 @@ function failExplain(missText, profile){
 }
 
 var LENDERS = [
-  {icon:'???', name:'SBA 7(a) Loan', range:'Up to $5,000,000', url:'https://www.sba.gov/funding-programs/loans/7a-loans',
+  {icon:'•', name:'SBA 7(a) Loan', range:'Up to $5,000,000', url:'https://www.sba.gov/funding-programs/loans/7a-loans',
    criteria:[
      {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K minimum'},
@@ -180,41 +180,41 @@ var LENDERS = [
      {label:'US for-profit business', check:function(p){ return true; }, miss:''},
      {label:'Strong cash flow (DSCR >1.25)', check:function(p){ return p.dscr>=1.25; }, miss:'DSCR below 1.25 — cash flow too tight'}
    ]},
-  {icon:'??', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
+  {icon:'•', name:'SBA Microloan', range:'Up to $50,000', url:'https://www.sba.gov/funding-programs/loans/microloans',
    criteria:[
      {label:'Any stage business (startups OK)', check:function(p){ return true; }, miss:''},
      {label:'Credit score 575+', check:function(p){ return p.credit>=575; }, miss:'Credit score too low'},
      {label:'Loan need = $50,000', check:function(p){ return p.loanNeed<=50000; }, miss:'Loan needed exceeds $50K limit'},
      {label:'Business plan or collateral', check:function(p){ return true; }, miss:''}
    ]},
-  {icon:'??', name:'BlueVine (Line of Credit)', range:'Up to $250,000', url:'https://www.bluevine.com',
+  {icon:'•', name:'BlueVine (Line of Credit)', range:'Up to $250,000', url:'https://www.bluevine.com',
    criteria:[
      {label:'Min 24 months in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 24+ months in business'},
      {label:'Annual revenue $120K+', check:function(p){ return p.annualRev>=120000; }, miss:'Revenue below $120K minimum'},
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
      {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'?', name:'OnDeck', range:'$5K — $250,000', url:'https://www.ondeck.com',
+  {icon:'•', name:'OnDeck', range:'$5K — $250,000', url:'https://www.ondeck.com',
    criteria:[
      {label:'Min 12 months in business', check:function(p){ return p.bizAge>=12; }, miss:'Need 12+ months in business'},
      {label:'Annual revenue $100K+', check:function(p){ return p.annualRev>=100000; }, miss:'Revenue below $100K'},
      {label:'Credit score 625+', check:function(p){ return p.credit>=625; }, miss:'Credit score below 625'},
      {label:'Loan need = $250,000', check:function(p){ return p.loanNeed<=250000; }, miss:'Amount exceeds $250K limit'}
    ]},
-  {icon:'??', name:'Funding Circle', range:'$25K — $500,000', url:'https://www.fundingcircle.com/us/',
+  {icon:'•', name:'Funding Circle', range:'$25K — $500,000', url:'https://www.fundingcircle.com/us/',
    criteria:[
      {label:'Min 2 years in business', check:function(p){ return p.bizAge>=24; }, miss:'Need 2+ years in business'},
      {label:'Annual revenue $150K+', check:function(p){ return p.annualRev>=150000; }, miss:'Revenue below $150K'},
      {label:'Credit score 660+', check:function(p){ return p.credit>=660; }, miss:'Credit score below 660'},
      {label:'Loan $25K—$500K', check:function(p){ return p.loanNeed>=25000&&p.loanNeed<=500000; }, miss:'Amount outside $25K—$500K range'}
    ]},
-  {icon:'??', name:'Lendio (Marketplace)', range:'$1K — $5,000,000', url:'https://www.lendio.com',
+  {icon:'•', name:'Lendio (Marketplace)', range:'$1K — $5,000,000', url:'https://www.lendio.com',
    criteria:[
      {label:'Any stage (matches 75+ lenders)', check:function(p){ return true; }, miss:''},
      {label:'Credit score 550+', check:function(p){ return p.credit>=550; }, miss:'Credit score below 550'},
      {label:'6+ months in business preferred', check:function(p){ return p.bizAge>=6; }, miss:'Less than 6 months — fewer options available'}
    ]},
-  {icon:'??', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
+  {icon:'•', name:'Kiva (0% Interest)', range:'Up to $15,000', url:'https://www.kiva.org/borrow',
    criteria:[
      {label:'Open to all — no minimum revenue', check:function(p){ return true; }, miss:''},
      {label:'No credit score requirement', check:function(p){ return true; }, miss:''},

@@ -589,11 +589,11 @@ h1{font-size:1.4rem;margin-bottom:4px}
     ctx.beginPath(); ctx.moveTo(0,106); ctx.lineTo(W,106); ctx.stroke();
 
     var tiles=[
-      {icon:'??',label:'LOAN SAFETY',  value:loanScore+'/100',         badge:verdict,              color:tileColor(verdCls)},
-      {icon:'?',label:'CASH RUNWAY',  value:runway.toFixed(1)+' mo',  badge:runwaySt,             color:tileColor(runCls)},
-      {icon:'??',label:'HEALTH GRADE', value:grade,                    badge:gradeLbl(grade),      color:gradeColor(grade)},
-      {icon:'??',label:'NET PROFIT',   value:(netProfit>=0?'+':'-')+fmt(netProfit), badge:netProfit>=0?'POSITIVE':'NEGATIVE', color:netProfit>=0?'#15803d':'#b91c1c'},
-      {icon:'??',label:'HEALTH SCORE', value:healthScore+'/100',       badge:healthLbl,            color:tileColorH(healthScore)}
+      {icon:'•',label:'LOAN SAFETY',  value:loanScore+'/100',         badge:verdict,              color:tileColor(verdCls)},
+      {icon:'•',label:'CASH RUNWAY',  value:runway.toFixed(1)+' mo',  badge:runwaySt,             color:tileColor(runCls)},
+      {icon:'•',label:'HEALTH GRADE', value:grade,                    badge:gradeLbl(grade),      color:gradeColor(grade)},
+      {icon:'•',label:'NET PROFIT',   value:(netProfit>=0?'+':'-')+fmt(netProfit), badge:netProfit>=0?'POSITIVE':'NEGATIVE', color:netProfit>=0?'#15803d':'#b91c1c'},
+      {icon:'•',label:'HEALTH SCORE', value:healthScore+'/100',       badge:healthLbl,            color:tileColorH(healthScore)}
     ];
 
     var tW=Math.floor((W-56-40)/5), tH=185, tTop=120, gap=10, sx=28;

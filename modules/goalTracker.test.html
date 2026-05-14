@@ -191,15 +191,15 @@ function fmtVal(n, unit){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
 
 var GOAL_DEFS = {
-  revenue:   {label:'Revenue Target',  cls:'type-revenue',   color:'#2563eb', icon:'??', unit:'$',
+  revenue:   {label:'Revenue Target',  cls:'type-revenue',   color:'#2563eb', icon:'•', unit:'$',
                liveDesc:'Syncs from Invoice Tracker (paid invoices this month)'},
-  profit:    {label:'Profit Target',   cls:'type-profit',    color:'#16a34a', icon:'??', unit:'$',
+  profit:    {label:'Profit Target',   cls:'type-profit',    color:'#16a34a', icon:'•', unit:'$',
                liveDesc:'Syncs from Budget vs. Actual (actual net profit this month)'},
-  savings:   {label:'Savings Goal',    cls:'type-savings',   color:'#d97706', icon:'??', unit:'$',
+  savings:   {label:'Savings Goal',    cls:'type-savings',   color:'#d97706', icon:'•', unit:'$',
                liveDesc:'Syncs total already-saved from Business Savings Planner'},
-  debt:      {label:'Debt Payoff',     cls:'type-debt',      color:'#7c3aed', icon:'??', unit:'$',
+  debt:      {label:'Debt Payoff',     cls:'type-debt',      color:'#7c3aed', icon:'•', unit:'$',
                liveDesc:'Syncs current loan balance from Business Profile (progress = balance going down)'},
-  customers: {label:'Customer Count',  cls:'type-customers', color:'#0891b2', icon:'??', unit:'#',
+  customers: {label:'Customer Count',  cls:'type-customers', color:'#0891b2', icon:'•', unit:'#',
                liveDesc:'Syncs unique paying clients this year from Invoice Tracker'}
 };
 

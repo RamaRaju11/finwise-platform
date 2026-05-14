@@ -251,7 +251,7 @@ function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){
 ------------------------------- */
 var BENCH={
   retail:{
-    label:'Retail', icon:'???', desc:'Stores & multi-channel',
+    label:'Retail', icon:'•', desc:'Stores & multi-channel',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:2,   avg:4,   high:8,   scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:75,  avg:85,  high:93,  scale:100 },
@@ -261,7 +261,7 @@ var BENCH={
     }
   },
   restaurant:{
-    label:'Restaurant / F&B', icon:'???', desc:'Food service & cafes',
+    label:'Restaurant / F&B', icon:'•', desc:'Food service & cafes',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:3,   avg:6,   high:12,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:70,  avg:82,  high:92,  scale:100 },
@@ -271,7 +271,7 @@ var BENCH={
     }
   },
   itservices:{
-    label:'IT / Software', icon:'??', desc:'Tech services & SaaS',
+    label:'IT / Software', icon:'•', desc:'Tech services & SaaS',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:12,  avg:22,  high:35,  scale:50 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:55,  avg:65,  high:80,  scale:100 },
@@ -281,7 +281,7 @@ var BENCH={
     }
   },
   consulting:{
-    label:'Consulting', icon:'??', desc:'Professional advisory services',
+    label:'Consulting', icon:'•', desc:'Professional advisory services',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:18,  avg:30,  high:45,  scale:60 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:48,  avg:58,  high:72,  scale:100 },
@@ -291,7 +291,7 @@ var BENCH={
     }
   },
   manufacturing:{
-    label:'Manufacturing', icon:'???', desc:'Production & industrial',
+    label:'Manufacturing', icon:'•', desc:'Production & industrial',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:5,   avg:10,  high:18,  scale:30 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:70,  avg:78,  high:88,  scale:100 },
@@ -301,7 +301,7 @@ var BENCH={
     }
   },
   healthcare:{
-    label:'Healthcare', icon:'??', desc:'Clinics & diagnostic centres',
+    label:'Healthcare', icon:'•', desc:'Clinics & diagnostic centres',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:8,   avg:15,  high:25,  scale:40 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:62,  avg:72,  high:84,  scale:100 },
@@ -311,7 +311,7 @@ var BENCH={
     }
   },
   construction:{
-    label:'Construction', icon:'???', desc:'Contractors & civil works',
+    label:'Construction', icon:'•', desc:'Contractors & civil works',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:3,   avg:6,   high:12,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:72,  avg:82,  high:92,  scale:100 },
@@ -321,7 +321,7 @@ var BENCH={
     }
   },
   ecommerce:{
-    label:'E-Commerce', icon:'??', desc:'Online retail & D2C brands',
+    label:'E-Commerce', icon:'•', desc:'Online retail & D2C brands',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:4,   avg:8,   high:18,  scale:30 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:68,  avg:78,  high:90,  scale:100 },
@@ -331,7 +331,7 @@ var BENCH={
     }
   },
   realestate:{
-    label:'Real Estate', icon:'???', desc:'Agents, brokers & rentals',
+    label:'Real Estate', icon:'•', desc:'Agents, brokers & rentals',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:10,  avg:20,  high:35,  scale:50 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:55,  avg:68,  high:82,  scale:100 },
@@ -341,7 +341,7 @@ var BENCH={
     }
   },
   transport:{
-    label:'Transport / Logistics', icon:'??', desc:'Fleet, freight & courier',
+    label:'Transport / Logistics', icon:'•', desc:'Fleet, freight & courier',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:4,   avg:8,   high:14,  scale:25 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:72,  avg:80,  high:90,  scale:100 },
@@ -351,7 +351,7 @@ var BENCH={
     }
   },
   education:{
-    label:'Education / Training', icon:'??', desc:'Coaching & training institutes',
+    label:'Education / Training', icon:'•', desc:'Coaching & training institutes',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:10,  avg:18,  high:30,  scale:45 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:58,  avg:70,  high:82,  scale:100 },
@@ -361,7 +361,7 @@ var BENCH={
     }
   },
   salon:{
-    label:'Salon / Beauty', icon:'??', desc:'Salons, spas & wellness',
+    label:'Salon / Beauty', icon:'•', desc:'Salons, spas & wellness',
     m:{
       profitMargin:{ label:'Net Profit Margin',    unit:'%',   dir:1,  low:6,   avg:12,  high:22,  scale:35 },
       expenseRatio:{ label:'Expense Ratio',         unit:'%',   dir:-1, low:65,  avg:75,  high:86,  scale:100 },
@@ -706,12 +706,12 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
 
   /* Net cash flow */
   if(netCF>0){
-    ins.push({t:'good',icon:'?',
+    ins.push({t:'good',icon:'•',
       h:'Positive monthly net cash flow: '+fmt(netCF),
       b:'After all expenses and EMI, your business retains '+fmt(netCF)+'/month. Lenders view consistent positive cash flow as the strongest indicator of loan repayment ability.'
     });
   } else {
-    ins.push({t:'bad',icon:'??',
+    ins.push({t:'bad',icon:'•',
       h:'Negative net cash flow: '+fmt(Math.abs(netCF))+' deficit',
       b:'Expenses and EMI exceed revenue by '+fmt(Math.abs(netCF))+'/month. This is unsustainable — taking on new debt in this position is high risk. Focus on revenue growth or cost reduction first.'
     });
@@ -720,12 +720,12 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* Profit margin */
   if(ratings.profitMargin){
     if(ratings.profitMargin.grade==='exc'){
-      ins.push({t:'good',icon:'??',
+      ins.push({t:'good',icon:'•',
         h:'Top-tier profit margin: '+um.profitMargin.toFixed(1)+'% (Industry avg: '+bm.profitMargin.avg+'%)',
         b:'You outperform most '+b.label+' peers on profitability. Protect this margin as you scale — avoid adding fixed costs without proportional revenue growth.'
       });
     } else if(ratings.profitMargin.grade==='poor'){
-      ins.push({t:'bad',icon:'??',
+      ins.push({t:'bad',icon:'•',
         h:'Profit margin below industry floor: '+um.profitMargin.toFixed(1)+'% (Floor: '+bm.profitMargin.low+'%)',
         b:'Review your pricing strategy — even a 5% price increase on 50% of revenue significantly boosts margin. Also audit your top 3 expense categories for cuts.',
         cta:{href:'forecastPro.test.html',label:'?? Model growth in Forecast Pro'}
@@ -736,13 +736,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* Expense ratio */
   if(ratings.expenseRatio){
     if(ratings.expenseRatio.grade==='poor'){
-      ins.push({t:'warn',icon:'??',
+      ins.push({t:'warn',icon:'•',
         h:'Expense ratio too high: '+um.expenseRatio.toFixed(1)+'% (Industry avg: '+bm.expenseRatio.avg+'%)',
         b:'You spend '+um.expenseRatio.toFixed(1)+'% of revenue on expenses vs the '+b.label+' average of '+bm.expenseRatio.avg+'%. Identify fixed vs variable costs — renegotiate rent, subscriptions, and supplier contracts.',
         cta:{href:'vendorBillTracker.test.html',label:'?? Review bills in Bill Tracker'}
       });
     } else if(ratings.expenseRatio.grade==='exc'){
-      ins.push({t:'good',icon:'??',
+      ins.push({t:'good',icon:'•',
         h:'Lean cost structure: '+um.expenseRatio.toFixed(1)+'% expense ratio',
         b:'Your operational efficiency is in the top tier for '+b.label+'. This gives you a competitive buffer — use the savings to build reserves or service debt comfortably.'
       });
@@ -753,13 +753,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   if(ratings.reserveMo){
     var resLabel=hasLoan ? 'EMI payments' : 'monthly expenses';
     if(ratings.reserveMo.grade==='poor'){
-      ins.push({t:'warn',icon:'??',
+      ins.push({t:'warn',icon:'•',
         h:'Low cash reserve: '+um.reserveMo.toFixed(1)+' months cover (Target: '+bm.reserveMo.high+' mo)',
         b:b.label+' businesses typically maintain '+bm.reserveMo.avg+' months of '+resLabel+' as a cash buffer. At your current level, one bad month could cause a default. Build reserves before taking on more debt.',
         cta:{href:'cashFlowTracker.test.html',label:'?? Track in Cash Flow Tracker'}
       });
     } else if(ratings.reserveMo.grade==='exc'){
-      ins.push({t:'good',icon:'???',
+      ins.push({t:'good',icon:'•',
         h:'Strong cash cushion: '+um.reserveMo.toFixed(1)+' months cover',
         b:'You hold more than the '+b.label+' benchmark of '+bm.reserveMo.high+' months reserve. This resilience significantly reduces your lender\'s perceived risk and supports better loan terms.'
       });
@@ -769,13 +769,13 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* DSCR */
   if(ratings.dscr && hasLoan){
     if(ratings.dscr.grade==='poor'){
-      ins.push({t:'bad',icon:'??',
+      ins.push({t:'bad',icon:'•',
         h:'DSCR below safe threshold: '+um.dscr.toFixed(2)+'x (Safe: ='+bm.dscr.low+'x)',
         b:'A DSCR below 1.0x means operating income cannot cover debt payments from within the business. Most lenders require minimum 1.25x. Extend loan tenure to reduce EMI, or increase revenue before applying for new loans.',
         cta:{href:'debtCommandCenter.test.html',label:'?? Restructure in Debt Command Center'}
       });
     } else if(ratings.dscr.grade==='exc'){
-      ins.push({t:'good',icon:'??',
+      ins.push({t:'good',icon:'•',
         h:'Excellent debt coverage ratio: '+um.dscr.toFixed(2)+'x',
         b:'A DSCR of '+um.dscr.toFixed(2)+'x is well above the '+b.label+' average of '+bm.dscr.avg+'x. You are in a strong position to qualify for additional credit at competitive rates.'
       });
@@ -785,7 +785,7 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   /* EMI burden */
   if(ratings.emiRatio && hasLoan){
     if(ratings.emiRatio.grade==='poor'){
-      ins.push({t:'warn',icon:'??',
+      ins.push({t:'warn',icon:'•',
         h:'High EMI burden: '+um.emiRatio.toFixed(1)+'% of revenue goes to debt',
         b:b.label+' peers average '+bm.emiRatio.avg+'% EMI-to-revenue. At '+um.emiRatio.toFixed(1)+'%, a 10% revenue drop would create serious cash flow pressure. Consider prepaying some principal or renegotiating tenure.',
         cta:{href:'debtCommandCenter.test.html',label:'?? Manage in Debt Command Center'}
@@ -795,7 +795,7 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
 
   /* No loan */
   if(!hasLoan){
-    ins.push({t:'info',icon:'??',
+    ins.push({t:'info',icon:'•',
       h:'No active loan — DSCR and EMI metrics not applicable',
       b:'If you\'re planning to apply for a business loan, add the expected EMI above to model how it impacts your benchmark scores.',
       cta:{href:'forecastPro.test.html',label:'?? Project with Forecast Pro'}

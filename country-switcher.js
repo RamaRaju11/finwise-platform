@@ -425,11 +425,17 @@
     function processTextNode(node){
       if (!node.nodeValue) return;
       let val = node.nodeValue;
-      // Strip leading "?? ", "??? ", "? " when followed by letter
-      const cleaned = val.replace(/^[\s]*\?{1,3}\s+(?=[A-Z$₹£€])/gm, '');
-      // Strip trailing " ?" arrows
-      const cleaned2 = cleaned.replace(/\s+\?(?=\s*$)/gm, ' →');
-      if (cleaned2 !== val) node.nodeValue = cleaned2;
+      // Strip leading "?? ", "??? " when followed by capital letter or currency
+      let cleaned = val.replace(/(^|\s)\?{2,3}\s+(?=[A-Z$₹£€])/g, '$1');
+      // Convert trailing " ??" or " ???" (broken emoji at end) to a friendly wave 👋 if after greeting context
+      // Otherwise strip them
+      cleaned = cleaned.replace(/(Welcome[^.!?\n]*?),?\s+\?{2,3}/gi, '$1 👋');
+      cleaned = cleaned.replace(/(Hi|Hello|Hey)([^.!?\n]*?),?\s+\?{2,3}/gi, '$1$2 👋');
+      // Strip remaining trailing "??" / "???"
+      cleaned = cleaned.replace(/\s+\?{2,3}(?=\s|$|\.|!|,)/g, '');
+      // Strip trailing single " ?" as arrow
+      cleaned = cleaned.replace(/\s+\?(?=\s*$)/gm, ' →');
+      if (cleaned !== val) node.nodeValue = cleaned;
     }
 
     function walk(el){
@@ -469,6 +475,19 @@
     if (document.body) walk(document.body);
   }
 
+  /* ── MutationObserver: re-clean when DOM changes (for JS-inserted content) ── */
+  function watchForBrokenEmojis(){
+    if (!window.MutationObserver || !document.body) return;
+    let pending = false;
+    const obs = new MutationObserver(() => {
+      if (pending) return;
+      pending = true;
+      // Debounce — batch up changes before cleaning
+      setTimeout(() => { pending = false; cleanBrokenEmojis(); }, 100);
+    });
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
   /* ── Init ────────────────────────────────────────────────────── */
   async function init(){
     if (typeof COUNTRY_DATA === 'undefined') {
@@ -477,6 +496,7 @@
     }
     injectEmojiFontFix();
     cleanBrokenEmojis();
+    watchForBrokenEmojis();
 
     // Step 1: Apply initial country immediately (sync sources only)
     const initial = getInitialCountry();
