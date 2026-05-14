@@ -300,13 +300,13 @@
 
     const wrap = document.createElement('div');
     wrap.id = 'cn-selector-wrap';
-    wrap.style.cssText = 'position:fixed;top:14px;right:14px;z-index:10000;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:4px;box-shadow:0 4px 16px rgba(0,0,0,.08);font-family:Inter,system-ui,sans-serif;transition:border-color .2s';
 
+    // Choose location based on what's available on this page:
+    // 1. If a sidebar exists (.sidebar / .fw-sidebar), inject INSIDE it (top-right of pages)
+    // 2. Otherwise place subtle inline at top-right of viewport
     const select = document.createElement('select');
     select.id = 'cn-selector';
-    select.style.cssText = 'border:none;background:transparent;padding:6px 10px;font-size:.85rem;font-weight:600;cursor:pointer;outline:none;color:#0f172a';
     select.setAttribute('aria-label','Select country');
-
     Object.keys(COUNTRY_DATA).forEach(key => {
       const opt = document.createElement('option');
       opt.value = key;
@@ -317,22 +317,41 @@
     select.addEventListener('change', (e) => {
       const newCountry = e.target.value;
       const profile = getProfile();
-
-      // If profile exists, check for country mismatch
       if (profile && profile.country && profile.country !== newCountry) {
         showProfileMismatchWarning(profile.country, newCountry);
-        // Revert immediately
         e.target.value = profile.country;
         return;
       }
-
-      // No profile — free to switch
       localStorage.setItem(STORAGE_KEY, newCountry);
       applyCountry(newCountry);
     });
 
-    wrap.appendChild(select);
-    document.body.appendChild(wrap);
+    // Look for a sidebar to attach to
+    const sidebar = document.querySelector('.sidebar, .fw-sidebar, aside.sidebar');
+    if (sidebar) {
+      // Place inside sidebar at the top (after logo)
+      wrap.style.cssText = 'margin:0 16px 14px;padding:6px 8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px';
+      select.style.cssText = 'width:100%;border:none;background:transparent;padding:4px 6px;font-size:.78rem;font-weight:600;cursor:pointer;outline:none;color:#e2e8f0';
+      // Make sidebar dropdown options show dark text on light bg (browser default)
+      wrap.appendChild(select);
+
+      // Insert AFTER logo and plan chip if they exist
+      const logo = sidebar.querySelector('.sb-logo, .fw-sb-logo, .nav-logo');
+      const planChip = sidebar.querySelector('.sb-plan-chip, .fw-sb-plan-chip');
+      const insertAfter = planChip || logo || sidebar.firstChild;
+      if (insertAfter && insertAfter.nextSibling) {
+        sidebar.insertBefore(wrap, insertAfter.nextSibling);
+      } else {
+        sidebar.appendChild(wrap);
+      }
+    } else {
+      // Fallback: floating at top-right (less intrusive — smaller and lower opacity)
+      wrap.style.cssText = 'position:fixed;top:60px;right:14px;z-index:9990;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,.06);font-family:Inter,system-ui,sans-serif;opacity:.92';
+      select.style.cssText = 'border:none;background:transparent;padding:5px 8px;font-size:.78rem;font-weight:600;cursor:pointer;outline:none;color:#0f172a';
+      wrap.appendChild(select);
+      document.body.appendChild(wrap);
+    }
+
     updateSelectorLockState();
   }
 
