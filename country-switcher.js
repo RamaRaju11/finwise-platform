@@ -351,14 +351,77 @@
     document.head.appendChild(style);
   }
 
+  /* ── Context-aware emoji map (keyword → emoji) ────────────────── */
+  const EMOJI_KEYWORDS = [
+    // [keyword, emoji] — ORDER MATTERS (longer/more specific first)
+    ['ai cfo', '🤖'], ['ai advisor', '🤖'], ['ai chat', '🤖'], ['ai ', '🤖'],
+    ['cash runway', '⏱'], ['cash flow calendar', '📅'], ['cash flow', '💵'], ['cash reserve', '💰'], ['cash', '💵'],
+    ['loan safety', '🏦'], ['loan eligibility', '✅'], ['loan affordability', '💰'],
+    ['loan engine', '🏦'], ['loan marketplace', '🏪'], ['loan refinance', '🔄'],
+    ['loan repayment', '🔁'], ['loan', '🏦'],
+    ['lender marketplace', '🏪'], ['lender', '🏪'],
+    ['debt command', '💸'], ['debt consolidation', '🔀'], ['debt', '💸'],
+    ['credit', '💳'], ['stress test', '🧪'],
+    ['tax command', '💼'], ['tax estimator', '🧮'], ['sales tax', '🛒'], ['gst', '💼'], ['vat', '💼'], ['tax', '💼'],
+    ['key deductions', '💰'], ['contractor', '👥'], ['payroll', '💸'],
+    ['profit margin', '📊'], ['profit & loss', '📑'], ['profit', '📈'],
+    ['balance sheet', '📋'], ['cash flow statement', '💵'], ['accounting', '🗺'],
+    ['forecast pro', '📈'], ['forecasting', '📈'], ['forecast', '📈'],
+    ['financial statement', '📑'], ['financial checkup', '🩺'], ['financial', '💵'],
+    ['working capital', '💼'], ["owner's pay", '💰'], ['owners pay', '💰'],
+    ['savings planner', '🐷'], ['savings', '🐷'],
+    ['goal tracker', '🎯'], ['goal', '🎯'],
+    ['budget', '📊'], ['monthly snapshot', '📸'], ['snapshot', '📸'],
+    ['score card', '📊'], ['health score', '🏥'], ['health', '🏥'],
+    ['starter plan', '🌱'], ['starter', '🌱'],
+    ['bank statement', '📤'], ['banking', '🏦'], ['bank', '🏦'],
+    ['invoice', '📄'], ['vendor bill', '🧾'], ['vendor', '🏢'],
+    ['business profile', '👤'], ['business plan', '📋'], ['business health', '🏥'], ['business', '🏢'],
+    ['benchmark', '📊'], ['industry', '🏭'],
+    ['paid report', '📑'], ['report', '📋'],
+    ['shareable', '🔗'], ['share', '🔗'],
+    ['seo', '🔍'], ['search', '🔍'],
+    ['advisor dashboard', '🎓'], ['advisor', '🎓'],
+    ['client portal', '👥'], ['client risk', '⚠'], ['client', '👥'],
+    ['branded', '🏷'], ['white-label', '🏷'], ['white label', '🏷'],
+    ['referral', '💸'],
+    ['subscription', '💳'],
+    ['dashboard', '🏠'],
+    ['edit profile', '✏'], ['edit', '✏'], ['profile', '👤'],
+    ['checkup', '🩺'],
+    ['history', '📜'], ['what-if', '🔮'], ['scenario', '🔮'],
+    ['all tools', '🛠'], ['tools directory', '🛠'], ['tool', '🛠'],
+    ['interactive demo', '🎬'], ['demo', '🎬'],
+    ['core engine', '⚙'], ['engine', '⚙'],
+    ['recommendation', '💡'], ['insight', '💡'],
+    ['emi', '🧮'], ['calculator', '🧮'],
+    ['break-even', '⚖'], ['break even', '⚖'],
+    ['risk', '⚠'], ['eligibility', '✅'],
+    ['grant finder', '🎯'], ['grant', '🎯'], ['scheme', '🎯'],
+    ['upgrade', '⚡'], ['plan', '📋'], ['pricing', '💳'],
+    ['welcome', '👋'], ['next step', '➡'],
+    ['email', '📧'], ['settings', '⚙'],
+    ['export', '📤'], ['import', '📥'],
+    ['multi-loan', '📋'], ['multi loan', '📋'],
+    ['optimizer', '🎯'], ['refinance', '🔄'],
+    ['p&l', '📑'], ['balance', '⚖'],
+    ['stability', '🛡'], ['liquidity', '💧'],
+    ['priority', '⭐'], ['alert', '🚨'], ['notification', '🔔']
+  ];
+
+  function pickEmojiForText(text){
+    if (!text) return null;
+    const lower = text.toLowerCase();
+    for (let i = 0; i < EMOJI_KEYWORDS.length; i++) {
+      if (lower.indexOf(EMOJI_KEYWORDS[i][0]) !== -1) {
+        return EMOJI_KEYWORDS[i][1];
+      }
+    }
+    return null;
+  }
+
   /* ── Clean broken emoji placeholders (literal ?, ??, ??? in text) ── */
   function cleanBrokenEmojis(){
-    // Word patterns of '?' that appear as broken emojis:
-    // 1. <element>?</element>, <element>??</element>, <element>???</element>
-    //    (element content is JUST question marks — clearly a broken emoji)
-    // 2. "?? Some Text" or "??? Some Text" at the start of a text node
-    //    (leading question marks before space and capitalized word)
-
     function processTextNode(node){
       if (!node.nodeValue) return;
       let val = node.nodeValue;
@@ -370,12 +433,23 @@
     }
 
     function walk(el){
-      // For elements whose entire text content is just ?, ??, ??? — clear them
+      // For elements whose entire text content is just ?, ??, ??? or a bullet — try to enrich
       if (el.children.length === 0) {
         const txt = (el.textContent || '').trim();
-        if (/^\?{1,3}$/.test(txt)) {
-          // Replace with a neutral bullet
-          el.textContent = '•';
+        if (/^[\?●•]{1,4}$/.test(txt)) {
+          // Try to determine emoji from sibling/parent context
+          let contextText = '';
+          // 1. Check next sibling text
+          if (el.nextSibling) {
+            contextText = (el.nextSibling.textContent || '').trim();
+          }
+          // 2. Check parent's text (excluding this element)
+          if (!contextText && el.parentElement) {
+            const parentText = (el.parentElement.textContent || '').trim();
+            contextText = parentText.replace(txt, '').trim();
+          }
+          const emoji = pickEmojiForText(contextText);
+          el.textContent = emoji || '•';
           return;
         }
       }
@@ -385,7 +459,6 @@
         if (child.nodeType === 3) { // text node
           processTextNode(child);
         } else if (child.nodeType === 1) { // element
-          // Skip script/style/select/option
           const tag = child.tagName.toLowerCase();
           if (tag === 'script' || tag === 'style' || tag === 'select' || tag === 'option' || tag === 'input' || tag === 'textarea') continue;
           walk(child);
