@@ -105,7 +105,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
 <div class="live-offers-section" id="liveOffersSection">
   <div class="live-header">
     <div class="live-title">Your Pre-Qualified Offers</div>
-    <button class="btn-refresh" id="refreshOffersBtn" onclick="loadOffers(true)">Refresh</button>
+    <button class="btn-refresh" id="refreshOffersBtn" onclick="loadOffers(true)">🔄 Refresh</button>
   </div>
   <div class="live-sub" id="offersSubtitle">Personalized offers based on your BizSco profile</div>
   <div id="profileStrip" style="display:none" class="live-profile-strip"></div>
@@ -370,14 +370,14 @@ async function loadOffers(refresh) {
       const buildResult = await callFn('loans-build-profile', 'POST', profileBody)
       if (!buildResult || buildResult.error) {
         container.innerHTML = '<div class="no-offers">Profile build failed: ' + (buildResult?.error || 'unknown error') + '</div>'
-        if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
+        if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh' }
         return
       }
       container.innerHTML = '<div class="loading-offers">Running lender matching—</div>'
       const prequalResult = await callFn('loans-prequalify', 'POST')
       if (!prequalResult || prequalResult.error) {
         container.innerHTML = '<div class="no-offers">Matching failed: ' + (prequalResult?.error || 'unknown error') + '</div>'
-        if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
+        if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh' }
         return
       }
     }
@@ -408,7 +408,7 @@ async function loadOffers(refresh) {
   } catch(e) {
     container.innerHTML = '<div class="no-offers">Error loading offers. Try refreshing.</div>'
   }
-  if (btn) { btn.disabled = false; btn.textContent = '? Refresh' }
+  if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh' }
 }
 
 // Auto-load on page open (read cached offers, no API rebuild)

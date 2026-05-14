@@ -339,7 +339,7 @@ function importPayrollToBizExp(btn){
   var d=loadPayrollData();
   if(d.total<=0) return;
   document.getElementById('bizExp').value=Math.round(d.total);
-  if(btn){var orig=btn.textContent;btn.textContent='? Imported!';setTimeout(function(){btn.textContent=orig;},2500);}
+  if(btn){var orig=btn.textContent;btn.textContent='📥 Imported!';setTimeout(function(){btn.textContent=orig;},2500);}
 }
 
 // -- _lastCalc stores latest results for recordDraw() ----------------------

@@ -412,7 +412,7 @@ function createMatchGoal(grantName, amtStr, btn){
   }
   goals.push({id:'sg_'+Date.now(),name:goalName,target:matchAmt,saved:0,priority:'High',note:'50% match fund required for '+grantName});
   localStorage.setItem('fw_savings_goals',JSON.stringify({surplus:surplus,annualRate:annualRate,goals:goals,calculatedAt:new Date().toISOString()}));
-  if(btn){ btn.textContent='? Goal Created!'; btn.classList.add('created'); btn.disabled=true; }
+  if(btn){ btn.textContent='➕ Goal Created!'; btn.classList.add('created'); btn.disabled=true; }
   var openNow = confirm('? Savings goal created!\n\nName: '+goalName+'\nTarget: $'+matchAmt.toLocaleString()+'\n\nOpen Business Savings Planner to track progress?');
   if(openNow) window.open('businessSavingsPlanner.test.html','_blank');
 }
@@ -589,7 +589,7 @@ function renderGrantCard(result) {
     html += '</ul>';
   }
   if(g.ca){
-    html += '<div class="ca-box'+(g.ca.need?' recommended':'')+'"><div class="ca-title">'+(g.ca.need?'? Consultant Recommended':'Consultant Optional')+'</div>';
+    html += '<div class="ca-box'+(g.ca.need?' recommended':'')+'"><div class="ca-title">'+(g.ca.need?'🎓 Consultant Recommended':'Consultant Optional')+'</div>';
     html += '<div class="ca-role">'+g.ca.role+'</div><div class="ca-cost">'+g.ca.cost+'</div>';
     if(g.ca.help&&g.ca.help.length){
       html += '<ul class="ca-help-list">';

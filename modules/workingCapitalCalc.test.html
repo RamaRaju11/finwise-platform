@@ -269,7 +269,7 @@ function importAR(){
   if(!_arAmount) return;
   var cur = parseFloat(document.getElementById('assets').value)||0;
   document.getElementById('assets').value = cur + _arAmount;
-  document.getElementById('arImportBtn').textContent = '? Imported';
+  document.getElementById('arImportBtn').textContent = '📥 Imported';
   document.getElementById('arImportBtn').disabled = true;
   saveInputs();
 }
@@ -278,7 +278,7 @@ function importAP(){
   if(!_apAmount) return;
   var cur = parseFloat(document.getElementById('liabilities').value)||0;
   document.getElementById('liabilities').value = cur + _apAmount;
-  document.getElementById('apImportBtn').textContent = '? Imported';
+  document.getElementById('apImportBtn').textContent = '📥 Imported';
   document.getElementById('apImportBtn').disabled = true;
   saveInputs();
 }

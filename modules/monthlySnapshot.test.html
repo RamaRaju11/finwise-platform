@@ -549,11 +549,11 @@ h1{font-size:1.4rem;margin-bottom:4px}
   window.copySummary = function(){
     var txt = buildTextSummary();
     if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(txt).then(function(){ showToast('? Copied to clipboard!'); });
+      navigator.clipboard.writeText(txt).then(function(){ showToast('✓ Copied to clipboard!'); });
     } else {
       var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
       document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      showToast('? Copied to clipboard!');
+      showToast('✓ Copied to clipboard!');
     }
   };
   window.emailSummary = function(){

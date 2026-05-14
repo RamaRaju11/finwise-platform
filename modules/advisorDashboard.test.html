@@ -737,22 +737,22 @@ function renderAlerts(){
     var amt=k.overdue30.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
     alerts.push({cls:'urgent',ico:'??',
       text:'<strong>'+k.overdue30.length+' invoice'+(k.overdue30.length>1?'s are':' is')+' 30+ days overdue</strong> — '+fmt(amt)+' at serious collection risk. Send final payment notices immediately.',
-      link:'invoiceTracker.test.html',linkText:'? Open Invoice Tracker'});
+      link:'invoiceTracker.test.html',linkText:'📄 Open Invoice Tracker'});
   } else if(k.overdueCount){
     alerts.push({cls:'warn',ico:'??',
       text:'<strong>'+k.overdueCount+' overdue invoice'+(k.overdueCount>1?'s':'')+' ('+fmt(k.overdueAmount)+')</strong> — follow up before they hit 30+ days.',
-      link:'invoiceTracker.test.html',linkText:'? Open Invoice Tracker'});
+      link:'invoiceTracker.test.html',linkText:'📄 Open Invoice Tracker'});
   }
 
   // Cash runway < 3 months
   if(k.runway!=null&&k.runway<3){
     alerts.push({cls:'urgent',ico:'??',
       text:'<strong>Cash runway is only '+k.runway.toFixed(1)+' months.</strong> At current burn of '+fmt(k.monthlyBurn||0)+'/mo, funds run out within 90 days. Reduce costs or accelerate revenue immediately.',
-      link:'cashRunway.test.html',linkText:'? Open Cash Runway'});
+      link:'cashRunway.test.html',linkText:'⏱ Open Cash Runway'});
   } else if(k.runway!=null&&k.runway<6){
     alerts.push({cls:'warn',ico:'??',
       text:'<strong>Cash runway is '+k.runway.toFixed(1)+' months</strong> — below the recommended 6-month buffer. Build reserves now.',
-      link:'cashRunway.test.html',linkText:'? Open Cash Runway'});
+      link:'cashRunway.test.html',linkText:'⏱ Open Cash Runway'});
   }
 
   // Tax payment due soon
@@ -761,7 +761,7 @@ function renderAlerts(){
     var daysLeft=Math.round((new Date(dueStr)-new Date())/864e5);
     alerts.push({cls:daysLeft<=7?'urgent':'warn',ico:'??',
       text:'<strong>IRS estimated tax payment due '+new Date(dueStr).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</strong> — '+daysLeft+' day'+(daysLeft!==1?'s':'')+' away. File to avoid underpayment penalties.',
-      link:'taxPayments.test.html',linkText:'? Open Tax Payments'});
+      link:'taxPayments.test.html',linkText:'💼 Open Tax Payments'});
   }
 
   // Contracts expiring
@@ -769,14 +769,14 @@ function renderAlerts(){
     var names=k.expiringContracts.slice(0,2).map(function(b){return b.vendor||'Vendor';}).join(', ');
     alerts.push({cls:'warn',ico:'??',
       text:'<strong>'+k.expiringContracts.length+' vendor contract'+(k.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review renewal terms before they auto-renew.',
-      link:'vendorBillTracker.test.html',linkText:'? Open Bill Tracker'});
+      link:'vendorBillTracker.test.html',linkText:'🧾 Open Bill Tracker'});
   }
 
   // Health score low
   if(k.healthScore!=null&&k.healthScore<50){
     alerts.push({cls:'urgent',ico:'??',
       text:'<strong>Business health score is '+k.healthScore+'/100</strong> — critical range. Review the Health Score breakdown for specific action items.',
-      link:'businessHealthScore.test.html',linkText:'? Open Health Score'});
+      link:'businessHealthScore.test.html',linkText:'🏥 Open Health Score'});
   }
 
   // No snapshot this month
@@ -785,7 +785,7 @@ function renderAlerts(){
   if(!snaps[curMo]){
     alerts.push({cls:'info',ico:'??',
       text:'<strong>No monthly snapshot saved for '+curMo+'</strong> — run Monthly Snapshot to lock in this month\'s numbers for trend tracking.',
-      link:'monthlySnapshot.test.html',linkText:'? Open Monthly Snapshot'});
+      link:'monthlySnapshot.test.html',linkText:'📸 Open Monthly Snapshot'});
   }
 
   var sec=document.getElementById('alertsSection');
@@ -1187,7 +1187,7 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 var editIdx=-1;
 function openAddModal(){
   editIdx=-1;
-  document.getElementById('editModalTitle').textContent='? Add New Client';
+  document.getElementById('editModalTitle').textContent='➕ Add New Client';
   ['ec_name','ec_ind','ec_rev','ec_exp','ec_emi','ec_res','ec_loan','ec_rate','ec_ten','ec_notes'].forEach(function(id){
     document.getElementById(id).value='';
   });
@@ -1569,7 +1569,7 @@ function doImport(){
     }
   }
   saveClients(); closeImport(); renderGrid();
-  showToast('? Imported '+added+(updated?' + '+updated+' updated':'')+' client'+(importRows.length>1?'s':'')+'.');
+  showToast('📥 Imported '+added+(updated?' + '+updated+' updated':'')+' client'+(importRows.length>1?'s':'')+'.');
   importRows=[];
 }
 
@@ -1589,7 +1589,7 @@ function exportCSV(){
   var a=document.createElement('a');
   a.href=url; a.download=(WL.brand||'BizSco')+'_clients_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  showToast('? Exported '+clients.length+' clients as CSV.');
+  showToast('📤 Exported '+clients.length+' clients as CSV.');
 }
 
 /* -- Paywall -- */

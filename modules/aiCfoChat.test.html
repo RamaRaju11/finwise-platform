@@ -1001,11 +1001,11 @@ window.copyMsgText=function(btn){
   const bubble=btn.closest('.msg-actions').previousElementSibling;
   const text=bubble?(bubble.getAttribute('data-raw')||bubble.innerText):'';
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(function(){showToast('? Response copied!');});
+    navigator.clipboard.writeText(text).then(function(){showToast('✓ Response copied!');});
   } else {
     const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    showToast('? Response copied!');
+    showToast('✓ Response copied!');
   }
 };
 

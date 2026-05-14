@@ -506,7 +506,7 @@ function renderSmartSuggestions(recurring){
       '<span class="suggest-amt">~'+fmt2(r.avgAmt)+'/mo</span>'+
       '<button class="btn-add-bill'+(alreadyAdded?' added':'')
         +'" id="addBillBtn'+i+'" onclick="addRecurringToBills('+i+',this)" '+(alreadyAdded?'disabled':'')+'>'+
-        (alreadyAdded?'? In Bills':'+ Add to Bills')+
+        (alreadyAdded?'🧾 In Bills':'+ Add to Bills')+
       '</button>'+
     '</div>';
   });

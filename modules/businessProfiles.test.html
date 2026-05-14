@@ -315,7 +315,7 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'?? Limit Reached':'? New Profile')
+    +(atLimit?'?? Limit Reached':'👤 New Profile')
     +'</button>';
 
   /* Update plan badge */
@@ -408,7 +408,7 @@ function openNewForm(){
     return;
   }
   editIdx=-1;
-  document.getElementById('formTitle').textContent='? Create New Profile';
+  document.getElementById('formTitle').textContent='➕ Create New Profile';
   clearForm();
   document.getElementById('formPanel').style.display='block';
   document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
@@ -626,7 +626,7 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'?? Limit Reached':'? New Profile')
+    +(atLimit?'?? Limit Reached':'👤 New Profile')
     +'</button>';
 
   /* Update plan badge */
@@ -719,7 +719,7 @@ function openNewForm(){
     return;
   }
   editIdx=-1;
-  document.getElementById('formTitle').textContent='? Create New Profile';
+  document.getElementById('formTitle').textContent='➕ Create New Profile';
   clearForm();
   document.getElementById('formPanel').style.display='block';
   document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});

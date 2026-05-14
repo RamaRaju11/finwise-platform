@@ -996,7 +996,7 @@ function importRevenue(){
   [1,2,3,4].forEach(function(n){
     if(!document.getElementById('q'+n+'rev').value){document.getElementById('q'+n+'rev').value=_importedRev; updateProfit(n);}
   });
-  document.getElementById('revImportBtn').textContent='? Imported';
+  document.getElementById('revImportBtn').textContent='📥 Imported';
   document.getElementById('revImportBtn').disabled=true;
   saveTaxInputs();
 }
@@ -1005,7 +1005,7 @@ function importExpenses(){
   [1,2,3,4].forEach(function(n){
     if(!document.getElementById('q'+n+'exp').value){document.getElementById('q'+n+'exp').value=_importedExp; updateProfit(n);}
   });
-  document.getElementById('expImportBtn').textContent='? Imported';
+  document.getElementById('expImportBtn').textContent='📥 Imported';
   document.getElementById('expImportBtn').disabled=true;
   saveTaxInputs();
 }
@@ -1207,7 +1207,7 @@ function renderConnectedBanner(){
 
   var applied = _appliedDeductions !== null;
   var warnCls  = d.unfiledSalesTax>0 ? ' warn' : '';
-  var btnLabel = applied ? '? Deductions Applied' : '? Apply Deductions + Payroll Data';
+  var btnLabel = applied ? '💰 Deductions Applied' : '? Apply Deductions + Payroll Data';
   var btnCls   = applied ? ' applied' : '';
   var desc = d.totalDed > 0
     ? 'Key Deductions found <strong>'+fmt(d.totalDed)+'</strong> in deductible expenses that reduce your taxable income.'

@@ -519,7 +519,7 @@ function copyScoreText(){
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(()=>{
       const fb = document.getElementById('share-feedback');
-      fb.textContent = '? Copied to clipboard';
+      fb.textContent = '✓ Copied to clipboard';
       fb.style.display = 'block';
       setTimeout(()=>{fb.style.display='none';},2500);
     });
@@ -1079,7 +1079,7 @@ function copyScoreText(){
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(()=>{
       const fb = document.getElementById('share-feedback');
-      fb.textContent = '? Copied to clipboard';
+      fb.textContent = '✓ Copied to clipboard';
       fb.style.display = 'block';
       setTimeout(()=>{fb.style.display='none';},2500);
     });

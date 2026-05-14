@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -518,8 +518,8 @@ function renderStmtCards(pnlItems, bsItems, cfsItems) {
     </div>
     <div class="stmt-card stmt-cfs">
       <div class="stmt-card-title">💧 Cash Flow Statement</div>
-      ${cfsItems.map(i => row(i.label, i.amount, i.addback ? "stmt-amount-pos" : "stmt-amount-neg",
-                               i.note || (i.addback ? "Add-back (non-cash)" : "Cash outflow"))).join("")}
+      ${cfsItems.map(i => row(i.label, i.amount, i.add← Back "stmt-amount-pos" : "stmt-amount-neg",
+                               i.note || (i.add← Back "Add-back (non-cash)" : "Cash outflow"))).join("")}
     </div>
   </div>`;
 }
