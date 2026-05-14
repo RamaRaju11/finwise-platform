@@ -97,7 +97,7 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <script src="fw-amortize.js"></script>
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
+<a href="../try.html" class="back-link">Back to Demo</a>
 <h1>Loan Repayment Optimizer</h1>
 <p class="subtitle">BizSco — Compare Debt Snowball vs Debt Avalanche — find the fastest, cheapest path to debt-free.</p>
 
@@ -123,7 +123,7 @@ button.print-btn:hover{background:#e2e8f0}
     </div>
   </div>
   <button class="primary" onclick="calculate()">Calculate Repayment Strategies</button>
-  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
   <div id="extra-impact" class="hidden" style="margin-top:12px"></div>
 </div>
 
@@ -151,11 +151,11 @@ button.print-btn:hover{background:#e2e8f0}
       <table id="schedule-table"></table>
     </div>
     <p class="table-note">Balances shown at end of each month after payments. "Done" = loan fully paid off.</p>
-    <button onclick="exportCSV()" style="margin-top:10px;padding:7px 16px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:6px;font-size:.82rem;cursor:pointer;font-weight:700;font-family:inherit">?? Download Full Amortization CSV</button>
+    <button onclick="exportCSV()" style="margin-top:10px;padding:7px 16px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:6px;font-size:.82rem;cursor:pointer;font-weight:700;font-family:inherit">Download Full Amortization CSV</button>
   </div>
 
   <div class="card" id="chartCard">
-    <h2>?? Balance Over Time</h2>
+    <h2>Balance Over Time</h2>
     <p style="font-size:.78rem;color:#64748b;margin-bottom:12px">Total remaining debt (blue) and cumulative interest paid (orange) — winning strategy.</p>
     <div style="overflow-x:auto">
       <canvas id="lro-chart" width="720" height="240" style="max-width:100%;display:block"></canvas>
@@ -462,7 +462,7 @@ function renderExtraImpact(extra, loans) {
   var interestSaved = baseline.totalInterest - withExtra.totalInterest;
   el.classList.remove('hidden');
   el.innerHTML = '<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:12px 16px;font-size:.84rem;color:#166534;display:flex;flex-wrap:wrap;gap:14px;align-items:center">' +
-    '<strong>?? Extra ' + fmt(extra) + '/mo saves you:</strong>' +
+    '<strong>Extra ' + fmt(extra) + '/mo saves you:</strong>' +
     '<span>? <strong>' + (monthsSaved > 0 ? fmtMonths(monthsSaved) + ' faster' : 'same timeline') + '</strong></span>' +
     '<span>?? <strong>' + fmt(Math.max(0, interestSaved)) + ' less interest</strong></span>' +
     '<span style="color:#94a3b8;font-size:.78rem">vs. minimums-only (Avalanche baseline)</span>' +
@@ -678,7 +678,7 @@ function saveToDebtCenter() {
   localStorage.setItem('fw_loans', JSON.stringify(existing));
   var t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-  t.innerHTML = '? Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View ?</a>';
+  t.innerHTML = '? Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View &rarr;</a>';
   document.body.appendChild(t);
   setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 4000);
 }

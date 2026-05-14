@@ -508,7 +508,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="tb-title">Dashboard</div>
     <div class="tb-spacer"></div>
     <a href="onboarding.html" onclick="localStorage.removeItem('fw_onboarded')" style="font-size:.82rem;font-weight:700;color:#374151;text-decoration:none;" title="Edit your profile" id="userName"></a>
-    <a href="pricing.html" class="tb-upgrade" id="heroUpgrade">? Upgrade</a>
+    <a href="pricing.html" class="tb-upgrade" id="heroUpgrade">Upgrade</a>
     <button onclick="doSignOut()" style="padding:5px 12px;background:transparent;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;font-weight:700;color:#64748b;cursor:pointer;" title="Sign Out">Sign Out</button>
   </header>
 
@@ -522,7 +522,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
         <p id="dashSubtitle">Your financial snapshot — updated in real time</p>
       </div>
       <div class="ph-spacer"></div>
-      <button class="export-btn" onclick="exportDashboard()">?? Export PDF</button>
+      <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
 
     <!-- TRIAL BANNER -->
@@ -533,14 +533,14 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
         Enjoy Loan Eligibility, Owner's Pay, Business Health Score and more. Upgrade before your trial ends to keep access.
       </div>
       <span class="tb-days" id="trialDaysLeft"></span>
-      <a href="pricing.html" class="tb-btn">Upgrade Now ?</a>
+      <a href="pricing.html" class="tb-btn">Upgrade Now &rarr;</a>
     </div>
 
     <!-- SETUP BANNER (shown if no profile) -->
     <div class="setup-banner" id="setupBanner" style="display:none">
-      <div>??</div>
+      <div>&#9679;</div>
       <div class="sb-text"><strong>Complete your business profile</strong> — takes 2 minutes. Pre-fills all 40 tools automatically.</div>
-      <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now ?</a>
+      <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now &rarr;</a>
     </div>
 
     <!-- -- DAILY BRIEFING -- -->
@@ -581,24 +581,24 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- START HERE CARD (new users) -->
     <div class="start-here" id="startHereCard" style="display:none">
-      <div class="sh-title">?? Welcome to BizSco — here's how to get started</div>
+      <div class="sh-title">Welcome to BizSco — here's how to get started</div>
       <div class="sh-sub">Three quick steps to unlock your personalized financial picture</div>
       <div class="sh-steps">
         <a href="onboarding.html" class="sh-step" onclick="localStorage.removeItem('fw_onboarded')">
           <div class="sh-num">1</div>
-          <div class="sh-icon">??</div>
+          <div class="sh-icon">&#9679;</div>
           <div class="sh-sname">Set Up Profile</div>
           <div class="sh-sdesc">Business details &amp; financials — 2 min</div>
         </a>
         <a href="checkup.html" class="sh-step">
           <div class="sh-num">2</div>
-          <div class="sh-icon">??</div>
+          <div class="sh-icon">&#9679;</div>
           <div class="sh-sname">Run Checkup</div>
           <div class="sh-sdesc">Get your loan score &amp; health grade</div>
         </a>
         <a href="try.html" class="sh-step">
           <div class="sh-num">3</div>
-          <div class="sh-icon">???</div>
+          <div class="sh-icon">&#9679;</div>
           <div class="sh-sname">Explore 40 Tools</div>
           <div class="sh-sdesc">EMI, grants, forecasting &amp; more</div>
         </a>
@@ -607,15 +607,15 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
     <!-- SMART ALERTS -->
     <div class="alerts-widget" id="alertsWidget" style="display:none">
-      <div class="sec-title">? Smart Alerts</div>
+      <div class="sec-title">Smart Alerts</div>
       <div id="alertsList"></div>
     </div>
 
     <!-- VENDOR BILLS WIDGET -->
     <div class="inv-widget" id="billsWidget" style="display:none">
       <div class="inv-widget-header">
-        <span class="inv-widget-title">?? Monthly Bills</span>
-        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All ?</a>
+        <span class="inv-widget-title">Monthly Bills</span>
+        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All &rarr;</a>
       </div>
       <div class="inv-stat-row" id="billsStatRow"></div>
     </div>
@@ -623,15 +623,15 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <!-- INVOICE WIDGET -->
     <div class="inv-widget" id="invoiceWidget" style="display:none">
       <div class="inv-widget-header">
-        <span class="inv-widget-title">?? Invoice Summary</span>
-        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All ?</a>
+        <span class="inv-widget-title">Invoice Summary</span>
+        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All &rarr;</a>
       </div>
       <div class="inv-stat-row" id="invStatRow"></div>
     </div>
 
     <!-- ACTION ITEMS -->
     <div class="action-items" id="actionItemsWidget" style="display:none;margin-bottom:20px">
-      <div class="sec-title">?? Action Items</div>
+      <div class="sec-title">Action Items</div>
       <div class="ai-card">
         <div class="ai-header">
           <span class="ai-title">Tasks requiring attention</span>
@@ -682,13 +682,13 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <div class="gauge-card">
         <div class="gc-title">Loan Safety Score</div>
         <div id="loanGaugeWrap">
-          <div class="gc-no-data">??<span>Run your Financial Checkup<br>to see your loan score</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup ?</a></div>
+          <div class="gc-no-data">&#9679;<span>Run your Financial Checkup<br>to see your loan score</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup &rarr;</a></div>
         </div>
       </div>
       <div class="gauge-card">
         <div class="gc-title">Business Health Grade</div>
         <div id="healthGaugeWrap">
-          <div class="gc-no-data">??<span>Run your Financial Checkup<br>to see your health grade</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup ?</a></div>
+          <div class="gc-no-data">&#9679;<span>Run your Financial Checkup<br>to see your health grade</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup &rarr;</a></div>
         </div>
       </div>
     </div>
@@ -702,7 +702,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
         <div class="plan-features" id="planFeatures"></div>
       </div>
       <div class="pc-right">
-        <a href="pricing.html" class="upgrade-btn" id="upgradeBtn">Upgrade ?</a>
+        <a href="pricing.html" class="upgrade-btn" id="upgradeBtn">Upgrade &rarr;</a>
       </div>
     </div>
 
@@ -710,16 +710,16 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div class="sec-title">Refer a Friend</div>
     <div class="referral-card" id="referralCard" style="display:none">
       <div class="ref-left">
-        <div class="ref-title">?? Invite a Friend ? Get 1 Month Free</div>
+        <div class="ref-title">Invite a Friend ? Get 1 Month Free</div>
         <div class="ref-desc">Share your personal link. When a friend signs up and pays for any plan, you automatically get 1 month free added to your account.</div>
         <div class="ref-link-row">
           <input type="text" id="refLink" class="ref-link-input" readonly/>
-          <button class="ref-copy-btn" onclick="copyRefLink()">?? Copy</button>
+          <button class="ref-copy-btn" onclick="copyRefLink()">Copy</button>
         </div>
         <div class="ref-share-row">
-          <a id="refWhatsapp" class="ref-share-btn wa" href="#" target="_blank">?? WhatsApp</a>
-          <a id="refEmail" class="ref-share-btn em" href="#">?? Email</a>
-          <a id="refTwitter" class="ref-share-btn tw" href="#" target="_blank">?? Twitter</a>
+          <a id="refWhatsapp" class="ref-share-btn wa" href="#" target="_blank">WhatsApp</a>
+          <a id="refEmail" class="ref-share-btn em" href="#">Email</a>
+          <a id="refTwitter" class="ref-share-btn tw" href="#" target="_blank">Twitter</a>
         </div>
         <div id="refCreditMsg"></div>
       </div>
@@ -743,7 +743,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <div id="histWidget" style="display:none;margin-bottom:24px">
       <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <span>Score History</span>
-        <a href="history.html" style="font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none">View Full History ?</a>
+        <a href="history.html" style="font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none">View Full History &rarr;</a>
       </div>
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px">
         <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:14px">
@@ -762,13 +762,13 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     <!-- TWO COL: Recent + Profile -->
     <div class="two-col">
       <div class="activity-card">
-        <h3>? Recent Activity</h3>
+        <h3>Recent Activity</h3>
         <div id="activityList"><div class="act-empty">No activity yet — open a tool to get started</div></div>
       </div>
       <div class="profile-card">
-        <h3>?? Business Profile</h3>
+        <h3>Business Profile</h3>
         <div id="profileSummary"></div>
-        <a href="onboarding.html" class="edit-profile" onclick="localStorage.removeItem('fw_onboarded')">?? Edit Profile</a>
+        <a href="onboarding.html" class="edit-profile" onclick="localStorage.removeItem('fw_onboarded')">Edit Profile</a>
       </div>
     </div>
 
@@ -943,14 +943,14 @@ function renderActionItems(){
   countEl.className = 'ai-count '+(urgent ? 'has-urgent' : 'all-clear');
 
   if(!items.length){
-    listEl.innerHTML = '<div class="ai-empty">? No urgent action items — finances look on track.</div>';
+    listEl.innerHTML = '<div class="ai-empty">No urgent action items — finances look on track.</div>';
     return;
   }
   listEl.innerHTML = items.slice(0,4).map(function(it){
     return '<div class="ai-item" onclick="location.href=\''+it.href+'\'">'
       +'<div class="ai-prio '+it.prio+'"></div>'
       +'<div class="ai-text"><strong>'+it.text+'</strong><span>'+it.sub+'</span></div>'
-      +'<a class="ai-lnk" href="'+it.href+'">Fix ?</a>'
+      +'<a class="ai-lnk" href="'+it.href+'">Fix &rarr;</a>'
       +'</div>';
   }).join('');
 }
@@ -1165,7 +1165,7 @@ function renderDashboard(plan){
       shown++;
     } else if(!unlocked && shown < 11){
       html += '<div class="tool-card locked">' +
-        '<div class="tc-lock">?? Upgrade</div>' +
+        '<div class="tc-lock">Upgrade</div>' +
         '<div class="tc-icon">'+t.icon+'</div>' +
         '<div class="tc-name">'+t.name+'</div>' +
         '<div class="tc-desc">'+t.desc+'</div></div>';
@@ -1325,8 +1325,8 @@ function renderHistWidget(){
     var delta='';
     if(i===0&&hist[1]){
       var d=GO[h.grade]-GO[hist[1].grade];
-      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">? Grade '+hist[1].grade+'?'+h.grade+'</span>';
-      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">? Grade '+hist[1].grade+'?'+h.grade+'</span>';
+      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'?'+h.grade+'</span>';
+      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'?'+h.grade+'</span>';
       else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'? +':sd<0?'? ':'? ')+sd+' pts</span>';}
     }
     return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap">'
@@ -1493,7 +1493,7 @@ function renderBriefing(data){
     return '<div class="pri-card '+cls+'">'+
       '<div class="pri-title">'+em+' '+p.title+'</div>'+
       '<div class="pri-desc">'+p.description+'</div>'+
-      (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action ?</a>' : '')+
+      (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action &rarr;</a>' : '')+
     '</div>';
   }).join('');
   document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet — click Recalculate.</div>';
@@ -1616,7 +1616,7 @@ function renderGauges(){
       '<canvas id="lGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
       '<div class="gc-num" style="color:'+lColor+'">'+ls+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8">/100</span></div>'+
       '<div class="gc-verdict '+vCls+'">'+vLabel+'</div>'+
-      '<a href="modules/loanDecisionScoreEngine.test.html" class="gc-cta">Full Loan Analysis ?</a>';
+      '<a href="modules/loanDecisionScoreEngine.test.html" class="gc-cta">Full Loan Analysis &rarr;</a>';
     var lcv=document.getElementById('lGc');
     drawSemiGauge(lcv.getContext('2d'),220,124,ls,100,[
       {from:0, to:40, color:'#fca5a5'},
@@ -1639,7 +1639,7 @@ function renderGauges(){
       '<canvas id="hGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
       '<div class="gc-num" style="color:'+hColor+'">'+hg+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8"> grade</span></div>'+
       '<div class="gc-verdict" style="background:'+hBg+';color:'+hColor+'">'+hLabel+'</div>'+
-      '<a href="checkup.html" class="gc-cta">Run New Checkup ?</a>';
+      '<a href="checkup.html" class="gc-cta">Run New Checkup &rarr;</a>';
     var hcv=document.getElementById('hGc');
     drawSemiGauge(hcv.getContext('2d'),220,124,gradeVal,100,[
       {from:0, to:30, color:'#fca5a5'},

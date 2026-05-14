@@ -97,12 +97,12 @@
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('scorecard')">?? Loan Score Card</button>
-  <button class="tab" onclick="showTab('url')">?? URL Sharing</button>
-  <button class="tab" onclick="showTab('print')">??? Print Report</button>
-  <button class="tab" onclick="showTab('csv')">?? CSV Export</button>
-  <button class="tab" onclick="showTab('json')">?? JSON Export</button>
-  <button class="tab" onclick="showTab('tests')">? Unit Tests</button>
+  <button class="tab active" onclick="showTab('scorecard')">Loan Score Card</button>
+  <button class="tab" onclick="showTab('url')">URL Sharing</button>
+  <button class="tab" onclick="showTab('print')">Print Report</button>
+  <button class="tab" onclick="showTab('csv')">CSV Export</button>
+  <button class="tab" onclick="showTab('json')">JSON Export</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
 </div>
 
 <!-- ---------- LOAN SCORE CARD TAB ---------- -->
@@ -398,9 +398,9 @@ function generateScoreCard(){
       <div class="card">
         <h3>Share This Result</h3>
         <div class="share-btns">
-          <button class="btn wa" onclick="shareWhatsApp()">?? Share on WhatsApp</button>
-          <button class="btn green" onclick="printScoreCard()">??? Print / Save as PDF</button>
-          <button class="btn gray" onclick="copyScoreText()">?? Copy as Text</button>
+          <button class="btn wa" onclick="shareWhatsApp()">Share on WhatsApp</button>
+          <button class="btn green" onclick="printScoreCard()">Print / Save as PDF</button>
+          <button class="btn gray" onclick="copyScoreText()">Copy as Text</button>
         </div>
         <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
       </div>
@@ -604,8 +604,8 @@ function doEncode(){
         <span>Encoded length: <b>${result.encoded.length} chars</b></span>
         <span>Full URL length: <b>${result.characterCount} chars</b></span>
       </div>
-      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">?? Copy URL</button>
-      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">? Test Decode</button>
+      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">Copy URL</button>
+      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">Test Decode</button>
     </div>
     <div class="card">
       <h3>Encoded String Only</h3>
@@ -674,7 +674,7 @@ function doCSV(){
   const dl=buildDownloadURI(csv,"text/csv","amortization.csv");
   document.getElementById('csv-output').innerHTML=`
     <div class="output-box" style="margin-top:12px">${csv}</div>
-    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">? Download amortization.csv</a>
+    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">Download amortization.csv</a>
     <div class="info-row"><span>Rows: <b>${rows.length}</b></span><span>Columns: <b>${headers.length}</b></span></div>`;
 }
 
@@ -688,7 +688,7 @@ function doJSON(){
   const dl=buildDownloadURI(result.json,"application/json",filename);
   document.getElementById('json-output').innerHTML=`
     <div class="output-box" style="margin-top:12px">${result.json}</div>
-    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">? Download ${filename}</a>
+    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">Download ${filename}</a>
     <div class="info-row"><span>Size: <b>${result.size}</b></span><span>Characters: <b>${result.characterCount}</b></span></div>`;
 }
 
@@ -958,9 +958,9 @@ function generateScoreCard(){
       <div class="card">
         <h3>Share This Result</h3>
         <div class="share-btns">
-          <button class="btn wa" onclick="shareWhatsApp()">?? Share on WhatsApp</button>
-          <button class="btn green" onclick="printScoreCard()">??? Print / Save as PDF</button>
-          <button class="btn gray" onclick="copyScoreText()">?? Copy as Text</button>
+          <button class="btn wa" onclick="shareWhatsApp()">Share on WhatsApp</button>
+          <button class="btn green" onclick="printScoreCard()">Print / Save as PDF</button>
+          <button class="btn gray" onclick="copyScoreText()">Copy as Text</button>
         </div>
         <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
       </div>
@@ -1164,8 +1164,8 @@ function doEncode(){
         <span>Encoded length: <b>${result.encoded.length} chars</b></span>
         <span>Full URL length: <b>${result.characterCount} chars</b></span>
       </div>
-      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">?? Copy URL</button>
-      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">? Test Decode</button>
+      <button class="btn" style="margin-top:10px" onclick="navigator.clipboard?.writeText('${result.url.replace(/'/g,"\\'")}')">Copy URL</button>
+      <button class="btn gray" style="margin-top:10px;margin-left:8px" onclick="document.getElementById('dec-input').value='${result.encoded}'">Test Decode</button>
     </div>
     <div class="card">
       <h3>Encoded String Only</h3>
@@ -1234,7 +1234,7 @@ function doCSV(){
   const dl=buildDownloadURI(csv,"text/csv","amortization.csv");
   document.getElementById('csv-output').innerHTML=`
     <div class="output-box" style="margin-top:12px">${csv}</div>
-    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">? Download amortization.csv</a>
+    <a class="dl-btn dl-csv" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">Download amortization.csv</a>
     <div class="info-row"><span>Rows: <b>${rows.length}</b></span><span>Columns: <b>${headers.length}</b></span></div>`;
 }
 
@@ -1248,7 +1248,7 @@ function doJSON(){
   const dl=buildDownloadURI(result.json,"application/json",filename);
   document.getElementById('json-output').innerHTML=`
     <div class="output-box" style="margin-top:12px">${result.json}</div>
-    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">? Download ${filename}</a>
+    <a class="dl-btn dl-json" href="${dl.uri}" download="${dl.filename}" style="margin-top:12px;display:inline-block">Download ${filename}</a>
     <div class="info-row"><span>Size: <b>${result.size}</b></span><span>Characters: <b>${result.characterCount}</b></span></div>`;
 }
 

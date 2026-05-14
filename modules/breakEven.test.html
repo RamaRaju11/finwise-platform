@@ -73,7 +73,7 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
+<a href="../try.html" class="back-link">Back to Demo</a>
 <h1>Break-Even Analyzer</h1>
 <p class="subtitle">BizSco — How much extra revenue does your new loan require to stay profitable?</p>
 
@@ -101,8 +101,8 @@ button.print-btn:hover{background:#e2e8f0}
       <input type="number" id="newEmi" placeholder="e.g. 900"/>
     </div>
   </div>
-  <button class="primary" onclick="calculate()">Analyze Break-Even ?</button>
-  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
+  <button class="primary" onclick="calculate()">Analyze Break-Even &rarr;</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
 </div>
 
 <div id="resultsSection" style="display:none">
@@ -130,7 +130,7 @@ button.print-btn:hover{background:#e2e8f0}
   </div>
 
   <div class="card" style="text-align:right">
-    <button class="save-btn" onclick="saveBreakEvenToProfile()">?? Save Numbers to Profile</button>
+    <button class="save-btn" onclick="saveBreakEvenToProfile()">Save Numbers to Profile</button>
     <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves revenue, fixed costs &amp; EMI — auto-fills all 40 tools</p>
   </div>
 
@@ -145,11 +145,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 

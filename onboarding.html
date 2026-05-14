@@ -106,7 +106,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
   <!-- Brand header -->
   <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em">?? Biz<span style="color:#818cf8">Scale</span></div>
+    <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em">Biz<span style="color:#818cf8">Scale</span></div>
     <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze — Fund — Grow</div>
   </div>
 
@@ -123,7 +123,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
   <!-- -- STEP 1: Business info -- -->
   <div class="panel active" id="step1">
-    <div class="panel-icon">??</div>
+    <div class="panel-icon">&#9679;</div>
     <h2>Welcome! Let's set up your business</h2>
     <p>This takes 2 minutes. Your details pre-fill all 40 tools — you never enter them again.</p>
 
@@ -225,14 +225,14 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     </div>
 
     <div class="btn-row">
-      <button class="btn-next" onclick="goStep2()">Next: Financial Numbers ?</button>
+      <button class="btn-next" onclick="goStep2()">Next: Financial Numbers &rarr;</button>
     </div>
     <button class="btn-skip" onclick="skipOnboarding()">Skip for now — I'll set this up later</button>
   </div>
 
   <!-- -- STEP 2: Financials -- -->
   <div class="panel" id="step2">
-    <div class="panel-icon">??</div>
+    <div class="panel-icon">&#9679;</div>
     <h2>Your monthly numbers</h2>
     <p>Rough estimates are fine. These power your Loan Score, Cash Flow, and Pay Optimizer instantly.</p>
 
@@ -265,21 +265,21 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(1)">? Back</button>
-      <button class="btn-next" onclick="goStep3()">Next: Pick Your First Tool ?</button>
+      <button class="btn-back" onclick="goStep(1)">Back</button>
+      <button class="btn-next" onclick="goStep3()">Next: Pick Your First Tool &rarr;</button>
     </div>
     <button class="btn-skip" onclick="saveAndSkip()">Save &amp; skip tool selection</button>
   </div>
 
   <!-- -- STEP 3: First tool -- -->
   <div class="panel" id="step3">
-    <div class="panel-icon">??</div>
+    <div class="panel-icon">&#9679;</div>
     <h2>Pick your first tool</h2>
     <p>Where do you want to start? We'll take you straight there after setup.</p>
 
     <div class="tool-grid" id="toolGrid">
       <div class="tool-card" data-href="modules/loanDecisionScoreEngine.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">??</div>
+        <div class="tc-icon">&#9679;</div>
         <div class="tc-name">Loan Safety Score</div>
         <div class="tc-desc">Is my loan safe? Get a verdict in 60 seconds</div>
       </div>
@@ -289,7 +289,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <div class="tc-desc">How long can my business survive a slow month?</div>
       </div>
       <div class="tool-card" data-href="modules/ownersPay.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">??</div>
+        <div class="tc-icon">&#9679;</div>
         <div class="tc-name">Owner's Pay</div>
         <div class="tc-desc">How much can I safely pay myself?</div>
       </div>
@@ -304,15 +304,15 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         <div class="tc-desc">Extra revenue needed to afford a new loan</div>
       </div>
       <div class="tool-card" data-href="modules/forecastPro.test.html" onclick="selectTool(this)">
-        <div class="tc-icon">??</div>
+        <div class="tc-icon">&#9679;</div>
         <div class="tc-name">Revenue Forecast</div>
         <div class="tc-desc">Predict my next 12 months of revenue</div>
       </div>
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(2)">? Back</button>
-      <button class="btn-next" onclick="goStep4()">See Recommended Tools ?</button>
+      <button class="btn-back" onclick="goStep(2)">Back</button>
+      <button class="btn-next" onclick="goStep4()">See Recommended Tools &rarr;</button>
     </div>
   </div>
 
@@ -323,8 +323,8 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <p>Based on your industry and answers, here are the 3 best tools to start with.</p>
     <div id="recGrid" style="margin-bottom:8px"></div>
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(3)">? Back</button>
-      <button class="btn-next green" id="finishBtn" onclick="finish()">Finish &amp; Open First Tool ?</button>
+      <button class="btn-back" onclick="goStep(3)">Back</button>
+      <button class="btn-next green" id="finishBtn" onclick="finish()">Finish &amp; Open First Tool &rarr;</button>
     </div>
   </div>
 

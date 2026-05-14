@@ -205,7 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script src="sidebar.js"></script>
 <header class="hdr">
   <a href="index.html" class="logo">Biz<span>Scale</span></a>
-  <a href="dashboard.html" class="back">? Dashboard</a>
+  <a href="dashboard.html" class="back">Dashboard</a>
 </header>
 
 <div class="prog-wrap" id="progWrap" style="display:none">
@@ -223,13 +223,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- WELCOME -->
   <div class="screen active" id="screen0">
     <div class="w-hero">
-      <div class="w-emoji">??</div>
+      <div class="w-emoji">&#9679;</div>
       <div class="w-title">Free Financial Checkup</div>
       <div class="w-sub">4 checks — 2 minutes — No sign-up needed<br>Find out exactly where your business stands financially.</div>
     </div>
     <div class="clist">
       <div class="cl-row">
-        <div class="cl-ic" style="background:#dbeafe">??</div>
+        <div class="cl-ic" style="background:#dbeafe">&#9679;</div>
         <div class="cl-bd"><div class="cl-nm">Loan Safety Score</div><div class="cl-ds">SAFE / RISKY / DANGEROUS verdict based on your cash flow and debt ratio</div></div>
         <span class="fbadge">Free</span>
       </div>
@@ -239,17 +239,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="fbadge">Free</span>
       </div>
       <div class="cl-row">
-        <div class="cl-ic" style="background:#fef9c3">??</div>
+        <div class="cl-ic" style="background:#fef9c3">&#9679;</div>
         <div class="cl-bd"><div class="cl-nm">Business Health Grade</div><div class="cl-ds">Overall financial health across 4 metrics — Grade A through F</div></div>
         <span class="fbadge">Free</span>
       </div>
       <div class="cl-row">
-        <div class="cl-ic" style="background:#f3e8ff">??</div>
+        <div class="cl-ic" style="background:#f3e8ff">&#9679;</div>
         <div class="cl-bd"><div class="cl-nm">Funding Opportunities</div><div class="cl-ds">Grants and lenders matched to your business profile</div></div>
         <span class="fbadge">Free</span>
       </div>
     </div>
-    <button class="btn-full" onclick="startCheckup()">Start My Free Checkup ?</button>
+    <button class="btn-full" onclick="startCheckup()">Start My Free Checkup &rarr;</button>
     <p class="note">No account needed — Data stays in your browser</p>
   </div>
 
@@ -267,7 +267,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="fl"><label>Cash Reserve / Savings ($)</label><input type="number" id="ck_res" placeholder="e.g. 25000"></div>
       </div>
       <div id="cfPill" class="cf cf-neu">— Enter revenue &amp; expenses above</div>
-      <button class="btn-full" onclick="runCheckup()">Run My Checkup ?</button>
+      <button class="btn-full" onclick="runCheckup()">Run My Checkup &rarr;</button>
     </div>
   </div>
 
@@ -277,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sh-h">Your Loan Safety Score</div>
     <div class="card">
       <div class="rc">
-        <div class="re">??</div>
+        <div class="re">&#9679;</div>
         <div id="loanBadge" class="verd v-safe">SAFE</div><br>
         <div class="bn" id="loanNum">0</div>
         <div class="bu">out of 100</div>
@@ -321,7 +321,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sh-h">Your Business Health Grade</div>
     <div class="card">
       <div class="rc">
-        <div class="re">??</div>
+        <div class="re">&#9679;</div>
         <div id="gradeCircle" class="gc gB">B</div>
         <div id="gradeBadge" class="verd v-good">GOOD HEALTH</div>
       </div>
@@ -331,7 +331,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="mb-row"><div class="mb-lbl">Cash Runway</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_rw" style="width:0%"></div></div><div class="mb-val" id="val_rw">—</div></div>
         <div class="mb-row"><div class="mb-lbl">Cost Efficiency</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_ce" style="width:0%"></div></div><div class="mb-val" id="val_ce">—</div></div>
       </div>
-      <button class="btn-cont" onclick="goScreen(5)">See My Full Report ?</button>
+      <button class="btn-cont" onclick="goScreen(5)">See My Full Report &rarr;</button>
     </div>
   </div>
 
@@ -364,26 +364,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
     <!-- HISTORY CROSS-LINK -->
     <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:16px;flex-wrap:wrap">
-      <span style="font-size:1.4rem">??</span>
+      <span style="font-size:1.4rem">&#9679;</span>
       <div style="flex:1;min-width:160px">
         <div style="font-size:.85rem;font-weight:800;color:#0f172a">Track your progress over time</div>
         <div style="font-size:.74rem;color:#64748b;margin-top:2px">Score History shows how your numbers change each checkup</div>
       </div>
-      <a href="history.html" style="font-size:.8rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;border:1.5px solid #bfdbfe;padding:7px 14px;border-radius:7px;background:#eff6ff">View History ?</a>
-      <a href="whatif.html" style="font-size:.8rem;font-weight:800;color:#7c3aed;text-decoration:none;flex-shrink:0;border:1.5px solid #ddd6fe;padding:7px 14px;border-radius:7px;background:#f5f3ff">?? What-If ?</a>
+      <a href="history.html" style="font-size:.8rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;border:1.5px solid #bfdbfe;padding:7px 14px;border-radius:7px;background:#eff6ff">View History &rarr;</a>
+      <a href="whatif.html" style="font-size:.8rem;font-weight:800;color:#7c3aed;text-decoration:none;flex-shrink:0;border:1.5px solid #ddd6fe;padding:7px 14px;border-radius:7px;background:#f5f3ff">What-If &rarr;</a>
     </div>
 
     <!-- SHARE CARD -->
     <div class="card" style="text-align:center;padding:24px 28px">
-      <div style="font-size:1.5rem;margin-bottom:8px">??</div>
+      <div style="font-size:1.5rem;margin-bottom:8px">&#9679;</div>
       <div class="ct">Share Your Score Card</div>
       <div class="cs">Download a branded image or copy a link to share with your advisor, lender, or team.</div>
-      <button onclick="openShare()" style="background:#2563eb;color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:.9rem;font-weight:800;cursor:pointer;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Share Your Results ?</button>
+      <button onclick="openShare()" style="background:#2563eb;color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:.9rem;font-weight:800;cursor:pointer;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Share Your Results &rarr;</button>
     </div>
 
     <!-- BLURRED PDF GATE -->
     <div class="card" style="padding:24px 28px">
-      <div style="font-size:1.5rem;margin-bottom:8px">??</div>
+      <div style="font-size:1.5rem;margin-bottom:8px">&#9679;</div>
       <div class="ct">Full Financial Report — PDF</div>
       <div class="cs">12-page lender-ready report: charts, action plan, 12-month forecast, and advisor summary.</div>
       <div style="position:relative;border-radius:10px;overflow:hidden;margin-bottom:18px;border:1px solid #e2e8f0">
@@ -402,12 +402,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div style="height:7px;background:#e2e8f0;border-radius:4px;width:74%;"></div>
         </div>
         <div style="position:absolute;inset:0;background:rgba(248,250,252,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;text-align:center">
-          <div style="font-size:2rem">??</div>
+          <div style="font-size:2rem">&#9679;</div>
           <div style="font-weight:900;color:#0f172a;font-size:.95rem">Pro Feature</div>
           <div style="font-size:.78rem;color:#64748b;line-height:1.55;max-width:240px">Full PDF with lender-ready summary, action plan, 12-month forecast and advisor notes</div>
         </div>
       </div>
-      <a href="pricing.html" style="display:block;text-align:center;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:9px;font-size:.88rem;font-weight:800;text-decoration:none" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">? <span data-tier-badge="pro">Upgrade to Pro — $29/mo</span> ?</a>
+      <a href="pricing.html" style="display:block;text-align:center;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:9px;font-size:.88rem;font-weight:800;text-decoration:none" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">? <span data-tier-badge="pro">Upgrade to Pro — $29/mo</span> &rarr;</a>
       <p class="note" style="margin-top:8px">Includes all 40 tools — AI CFO — Priority Support</p>
     </div>
 
@@ -416,7 +416,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="upg-s">Your checkup identified areas where more detailed tools can help you take action.</div>
       <div class="upg-g" id="upgItems"></div>
       <div class="upg-btns">
-        <a href="dashboard.html" class="upg-p">Unlock Full Suite ?</a>
+        <a href="dashboard.html" class="upg-p">Unlock Full Suite &rarr;</a>
         <a href="try.html" class="upg-q">Explore All 30 Tools</a>
       </div>
     </div>
@@ -432,13 +432,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <p style="font-size:.8rem;color:#64748b;margin-bottom:18px">Download a branded image or copy a shareable link — perfect for sending to your advisor or lender.</p>
     <canvas id="scoreCanvas" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:18px;display:block"></canvas>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-      <button onclick="downloadCard()" style="flex:1;background:#2563eb;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;min-width:140px">? Download PNG</button>
-      <button id="copyBtn" onclick="copyShareLink()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:700;cursor:pointer;min-width:140px;transition:all .2s">?? Copy Link</button>
+      <button onclick="downloadCard()" style="flex:1;background:#2563eb;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;min-width:140px">Download PNG</button>
+      <button id="copyBtn" onclick="copyShareLink()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:700;cursor:pointer;min-width:140px;transition:all .2s">Copy Link</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="shareWA()" style="flex:1;background:#25d366;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">?? WhatsApp</button>
+      <button onclick="shareWA()" style="flex:1;background:#25d366;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">WhatsApp</button>
       <button onclick="shareLI()" style="flex:1;background:#0077b5;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">in LinkedIn</button>
-      <button onclick="shareEmail()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">? Email</button>
+      <button onclick="shareEmail()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">Email</button>
     </div>
   </div>
 </div>
@@ -635,14 +635,14 @@ function fillReport(){
   function mkDelta(val,unit,prevVal){
     if(prevVal==null) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
     var d=Math.round((val-prevVal)*10)/10;
-    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">? No change</div>';
+    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">No change</div>';
     var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'?':'?';
     return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+(up?'+':'')+d+' '+unit+'</div>';
   }
   function mkGradeDelta(g,pg){
     if(!pg) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
     var d=GO[g]-GO[pg];
-    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">? Same as before</div>';
+    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">Same as before</div>';
     var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'?':'?';
     return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+pg+'?'+g+'</div>';
   }
@@ -728,7 +728,7 @@ function fillReport(){
         +'</div>'
         +'<div style="font-size:.74rem;color:#64748b;line-height:1.4">'+t.why+'</div>'
       +'</div>'
-      +'<a href="'+t.h+'" style="font-size:.76rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;padding-top:3px">Open ?</a>'
+      +'<a href="'+t.h+'" style="font-size:.76rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;padding-top:3px">Open &rarr;</a>'
     +'</div>';
   }).join('')+'<div style="border-bottom:none"></div>';
 
@@ -987,7 +987,7 @@ function loadShared(){
   if(biz){
     var el=document.createElement('div');
     el.style.cssText='background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#854d0e;margin-bottom:16px;display:flex;align-items:center;gap:8px';
-    el.innerHTML='<span>??</span> You are viewing <strong>'+biz.replace(/[<>"&]/g,function(c){return{'<':'&lt;','>':'&gt;','"':'&quot;','&':'&amp;'}[c]})+'\'s</strong> financial checkup results — <a href="checkup.html" style="color:#854d0e;font-weight:800">Run yours free ?</a>';
+    el.innerHTML='<span>&#9679;</span> You are viewing <strong>'+biz.replace(/[<>"&]/g,function(c){return{'<':'&lt;','>':'&gt;','"':'&quot;','&':'&amp;'}[c]})+'\'s</strong> financial checkup results — <a href="checkup.html" style="color:#854d0e;font-weight:800">Run yours free &rarr;</a>';
     $('screen5').insertBefore(el,$('screen5').firstChild);
   }
   return true;

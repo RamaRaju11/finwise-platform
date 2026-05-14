@@ -124,18 +124,18 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="print-hdr-name" id="printBizName">Key Deductions Report</div>
   <div class="print-hdr-meta" id="printMeta"></div>
 </div>
-<h1>?? Key Deductions Calculator</h1>
+<h1>Key Deductions Calculator</h1>
 <p class="subtitle">Home office, mileage log, and Section 179 equipment deductions — maximize your Schedule C write-offs.</p>
 <div id="syncBand" class="sync-band no-print" style="display:none">
-  <span>? Deductions synced to Tax Estimator &amp; Tax Command Center:</span>
+  <span>Deductions synced to Tax Estimator &amp; Tax Command Center:</span>
   <span id="syncPills" style="display:flex;gap:6px;flex-wrap:wrap"></span>
   <span style="margin-left:auto;font-size:.7rem;color:#94a3b8">Updates automatically as you enter data</span>
 </div>
 
 <div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('home')" id="tbtn-home">?? Home Office</button>
-  <button class="tab-btn" onclick="switchTab('mileage')" id="tbtn-mileage">?? Mileage Log</button>
-  <button class="tab-btn" onclick="switchTab('s179')" id="tbtn-s179">?? Section 179</button>
+  <button class="tab-btn active" onclick="switchTab('home')" id="tbtn-home">Home Office</button>
+  <button class="tab-btn" onclick="switchTab('mileage')" id="tbtn-mileage">Mileage Log</button>
+  <button class="tab-btn" onclick="switchTab('s179')" id="tbtn-s179">Section 179</button>
 </div>
 
 <!-- -------------- HOME OFFICE -------------- -->
@@ -303,8 +303,8 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- SAVE / EXPORT -->
 <div class="card save-card">
-  <button class="save-btn" onclick="saveToProfile()">?? Save Deduction Summary to Profile</button>
-  <button class="btn-export no-print" onclick="exportPDF()">?? Export for CPA</button>
+  <button class="save-btn" onclick="saveToProfile()">Save Deduction Summary to Profile</button>
+  <button class="btn-export no-print" onclick="exportPDF()">Export for CPA</button>
   <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves estimated deduction totals to your BizSco profile. Export creates a print-ready PDF for your CPA.</p>
 </div>
 <div class="disclaimer">
@@ -731,9 +731,9 @@ function renderS179(){
 
   var extra='';
   if(income>0&&totYr1>0)
-    extra+='<div class="info-box" style="margin-top:10px">?? Estimated tax savings at 25% marginal rate: <strong>'+fmtD(totYr1*.25)+'</strong>.</div>';
+    extra+='<div class="info-box" style="margin-top:10px">Estimated tax savings at 25% marginal rate: <strong>'+fmtD(totYr1*.25)+'</strong>.</div>';
   if(reduction>0)
-    extra+='<div class="warn-box" style="margin-top:8px">?? Phase-out: total eligible cost exceeds '+yr+' threshold of '+fmtBig(lim.po)+'. Section 179 reduced dollar-for-dollar.</div>';
+    extra+='<div class="warn-box" style="margin-top:8px">Phase-out: total eligible cost exceeds '+yr+' threshold of '+fmtBig(lim.po)+'. Section 179 reduced dollar-for-dollar.</div>';
 
   document.getElementById('s179-bk').innerHTML='<table class="breakdown">'+bk+'</table>'+extra;
   pushDeductions();
@@ -861,11 +861,11 @@ function pushDeductions(){
   var band = document.getElementById('syncBand');
   if(!band) return;
   var pills = [];
-  if(hoDed>0) pills.push('<span class="sync-pill">?? Home Office '+fmtD(hoDed)+'</span>');
+  if(hoDed>0) pills.push('<span class="sync-pill">Home Office '+fmtD(hoDed)+'</span>');
   var mlYr = parseInt(document.getElementById('ml-yr').value)||new Date().getFullYear();
-  if(byYear[mlYr]&&byYear[mlYr].mileage>0) pills.push('<span class="sync-pill">?? Mileage '+fmtD(byYear[mlYr].mileage)+'</span>');
+  if(byYear[mlYr]&&byYear[mlYr].mileage>0) pills.push('<span class="sync-pill">Mileage '+fmtD(byYear[mlYr].mileage)+'</span>');
   var s179Yr = parseInt(document.getElementById('s179-yr').value)||mlYr;
-  if(byYear[s179Yr]&&byYear[s179Yr].s179>0) pills.push('<span class="sync-pill">?? Equipment '+fmtD(byYear[s179Yr].s179)+'</span>');
+  if(byYear[s179Yr]&&byYear[s179Yr].s179>0) pills.push('<span class="sync-pill">Equipment '+fmtD(byYear[s179Yr].s179)+'</span>');
   if(pills.length>0){
     document.getElementById('syncPills').innerHTML = pills.join('');
     band.style.display = 'flex';

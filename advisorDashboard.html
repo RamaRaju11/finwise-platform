@@ -174,7 +174,7 @@ function renderClients(clients) {
   document.getElementById('statAvgScore').textContent = avgScore > 0 ? avgScore + '/100' : '—'
 
   if (clients.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">??</div><div>No clients yet — invite your first client above.</div></div>'
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#9679;</div><div>No clients yet — invite your first client above.</div></div>'
     return
   }
 
@@ -199,7 +199,7 @@ function renderClients(clients) {
         <div class="cr-rev-label">Revenue</div>
       </div>
       <div class="cr-actions">
-        ${c.status === 'pending' ? `<button class="btn-invite" onclick="sendInvite('${c.id}', this)">? Send Invite</button>` : '<button class="btn-invite sent" disabled>? Joined</button>'}
+        ${c.status === 'pending' ? `<button class="btn-invite" onclick="sendInvite('${c.id}', this)">Send Invite</button>` : '<button class="btn-invite sent" disabled>Joined</button>'}
         <button class="btn-remove" onclick="removeClient('${c.id}')" title="Remove client">?</button>
       </div>
     </div>

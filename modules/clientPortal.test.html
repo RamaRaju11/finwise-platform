@@ -152,31 +152,31 @@ textarea{resize:vertical;min-height:68px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <nav class="topnav">
-  <a href="../dashboard.html" class="tn-logo">?? Biz<span>Scale</span></a>
-  <a href="../dashboard.html" class="tn-back">? Dashboard</a>
+  <a href="../dashboard.html" class="tn-logo">Biz<span>Scale</span></a>
+  <a href="../dashboard.html" class="tn-back">Dashboard</a>
   <div class="tn-spacer"></div>
-  <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">?? White-Label Settings</a>
+  <a href="whiteLabelSettings.test.html" class="tn-btn" style="color:#a5b4fc;border-color:#4f46e5">White-Label Settings</a>
   <button class="tn-btn" onclick="if(window.fwAuth) window.fwAuth.signOut()">Sign Out</button>
 </nav>
 
 <div class="hero">
   <div class="hero-inner">
     <div>
-      <h1>?? Client Portal</h1>
+      <h1>Client Portal</h1>
       <p>Share secure, read-only financial reports with clients — no login needed on their end.</p>
-      <div class="hero-badge">? Advisor Feature</div>
+      <div class="hero-badge">Advisor Feature</div>
     </div>
     <div style="text-align:right">
-      <a href="whiteLabelSettings.test.html" class="hero-link">?? Customize your brand ?</a>
+      <a href="whiteLabelSettings.test.html" class="hero-link">Customize your brand &rarr;</a>
     </div>
   </div>
 </div>
 
 <div id="lockMsg" style="display:none;max-width:980px;margin:20px auto;padding:0 18px">
   <div class="lock-msg">
-    <h3>?? Advisor Plan Required</h3>
+    <h3>Advisor Plan Required</h3>
     <p>Client Portal is available on the Advisor plan. Upgrade to share reports with your clients securely.</p>
-    <a href="../pricing.html">Upgrade to Advisor ?</a>
+    <a href="../pricing.html">Upgrade to Advisor &rarr;</a>
   </div>
 </div>
 
@@ -184,8 +184,8 @@ textarea{resize:vertical;min-height:68px}
 
 <div class="tabs">
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('portals',this)">?? Manage Portals</button>
-    <button class="tab-btn" onclick="switchTab('bulk',this)">?? Bulk Import</button>
+    <button class="tab-btn active" onclick="switchTab('portals',this)">Manage Portals</button>
+    <button class="tab-btn" onclick="switchTab('bulk',this)">Bulk Import</button>
   </div>
 </div>
 
@@ -232,12 +232,12 @@ textarea{resize:vertical;min-height:68px}
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-brand" onclick="createPortal()">Generate Portal Link ?</button>
+        <button class="btn btn-brand" onclick="createPortal()">Generate Portal Link &rarr;</button>
         <span id="createStatus" style="font-size:.78rem;color:#64748b"></span>
       </div>
 
       <div class="link-result" id="linkResult">
-        <div class="lr-label">? Portal link ready — share this with your client</div>
+        <div class="lr-label">Portal link ready — share this with your client</div>
         <div class="lr-row">
           <input type="text" class="lr-inp" id="generatedLink" readonly/>
           <button class="lr-copy" id="copyNewBtn" onclick="copyLink('generatedLink','copyNewBtn')">Copy</button>
@@ -250,7 +250,7 @@ textarea{resize:vertical;min-height:68px}
     </div>
 
     <div class="card-plain">
-      <div class="card-title"><span>??</span> Active Client Portals</div>
+      <div class="card-title"><span>&#9679;</span> Active Client Portals</div>
       <div id="clientList"><div class="clients-empty">No portals created yet. Add your first client above.</div></div>
     </div>
 
@@ -259,11 +259,11 @@ textarea{resize:vertical;min-height:68px}
   <!-- TAB: Bulk Import -->
   <div class="tab-panel" id="tab-bulk">
     <div class="card">
-      <div class="card-title"><span>??</span> Bulk Import Clients</div>
+      <div class="card-title"><span>&#9679;</span> Bulk Import Clients</div>
       <p style="font-size:.82rem;color:#64748b;margin-bottom:16px">Upload a CSV or Excel file with client Name, Email, and optional Message columns. Up to 200 rows per import.</p>
 
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInp').click()" ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)">
-        <div class="dz-icon">??</div>
+        <div class="dz-icon">&#9679;</div>
         <div class="dz-title">Drop your file here</div>
         <div class="dz-sub">CSV or Excel (.xlsx, .xls) — max 200 clients</div>
         <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('fileInp').click()">Browse File</button>
@@ -285,7 +285,7 @@ textarea{resize:vertical;min-height:68px}
           <select id="colMessage"><option value="">(none)</option></select>
         </div>
         <div class="btn-row" style="margin-top:12px">
-          <button class="btn btn-brand btn-sm" onclick="applyMapping()">Apply &amp; Preview ?</button>
+          <button class="btn btn-brand btn-sm" onclick="applyMapping()">Apply &amp; Preview &rarr;</button>
         </div>
       </div>
 
@@ -294,7 +294,7 @@ textarea{resize:vertical;min-height:68px}
       </div>
 
       <div class="btn-row" id="importBtnRow" style="display:none">
-        <button class="btn btn-green" id="importBtn" onclick="runImport()">Import Clients ?</button>
+        <button class="btn btn-green" id="importBtn" onclick="runImport()">Import Clients &rarr;</button>
         <span id="importCount" style="font-size:.82rem;color:#64748b"></span>
       </div>
 

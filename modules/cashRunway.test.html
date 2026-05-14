@@ -106,7 +106,7 @@ button.print-btn:hover{background:#e2e8f0}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
+<a href="../try.html" class="back-link">Back to Demo</a>
 <h1>Cash Runway Calculator</h1>
 <p class="subtitle">BizSco — How many months can your business survive if revenue drops?</p>
 
@@ -141,8 +141,8 @@ button.print-btn:hover{background:#e2e8f0}
       <input type="number" id="ownerPay" placeholder="e.g. 2000" oninput="saveCRInputs()"/>
     </div>
   </div>
-  <button class="primary" onclick="calculate()">Calculate Runway ?</button>
-  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
+  <button class="primary" onclick="calculate()">Calculate Runway &rarr;</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
 </div>
 
 <div id="resultsSection" style="display:none">
@@ -152,7 +152,7 @@ button.print-btn:hover{background:#e2e8f0}
   <div class="card">
     <h2>Runway Scenarios</h2>
     <div class="exp-cut-wrap">
-      <div class="exp-cut-label"><span>?? Cut Expenses By</span><span class="cut-val" id="expCutVal">0%</span></div>
+      <div class="exp-cut-label"><span>Cut Expenses By</span><span class="cut-val" id="expCutVal">0%</span></div>
       <input type="range" id="expCutSlider" min="0" max="30" step="5" value="0" style="width:100%;accent-color:#2563eb" oninput="updateExpCut()"/>
       <div style="font-size:.7rem;color:#94a3b8;display:flex;justify-content:space-between;margin-top:2px"><span>No cuts</span><span>30% reduction</span></div>
     </div>
@@ -202,11 +202,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 
@@ -251,11 +251,11 @@ function renderCalendarBanner(){
   if(d.empCount) pills+='<span class="cb-pill">?? '+d.empCount+' employees — '+fmt(d.monthlyWages)+'/mo wages</span>';
   if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events — '+fmt(d.monthlyIncome)+'/mo</span>';
   el.className='conn-band has-data';
-  el.innerHTML='<div class="cb-icon">???</div>'
+  el.innerHTML='<div class="cb-icon">&#9679;</div>'
     +'<div class="cb-body">'
     +'<div class="cb-title">Connected data available — import for accurate runway</div>'
     +'<div class="cb-pills">'+pills+'</div>'
-    +'<button class="cb-btn" onclick="importFromCalendar()">?? Import bills + wages + revenue</button>'
+    +'<button class="cb-btn" onclick="importFromCalendar()">Import bills + wages + revenue</button>'
     +'</div>';
 }
 

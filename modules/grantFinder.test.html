@@ -213,8 +213,8 @@ button.print-btn:hover{background:#e2e8f0}
     <label class="check-item"><input type="checkbox" id="c_rd" value="rd"/> R&amp;D / Innovation</label>
     <label class="check-item"><input type="checkbox" id="c_export" value="export"/> Exporting</label>
   </div>
-  <button class="primary" onclick="saveProfile()">Find My Grants ?</button>
-  <button class="print-btn" onclick="window.print()">??? Print / Save PDF</button>
+  <button class="primary" onclick="saveProfile()">Find My Grants &rarr;</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
 </div>
 </div>
 
@@ -534,8 +534,8 @@ function showResults(profile) {
     '<div><div class="pb-name">'+(profile.businessName||'Your Business')+'</div>'+
     '<div class="pb-detail">'+indLabel+' — '+(profile.state||'—')+' — '+(profile.businessAge||0)+' yrs — '+(profile.employees||1)+' emp'+(cats?' — '+cats:'')+' — '+(profile.country||'USA')+'</div></div>'+
     '<div style="margin-left:auto;display:flex;gap:6px">'+
-    '<button class="pb-edit" onclick="var p=getProfile();if(p){STATE_ONLY=false;SORT_MODE=\'match\';showResults(p);}">?? Refresh Match</button>'+
-    '<button class="pb-edit" onclick="editProfile()">?? Edit Profile</button>'+
+    '<button class="pb-edit" onclick="var p=getProfile();if(p){STATE_ONLY=false;SORT_MODE=\'match\';showResults(p);}">Refresh Match</button>'+
+    '<button class="pb-edit" onclick="editProfile()">Edit Profile</button>'+
     '</div>'+
     '</div>';
   renderTrackerBar();
@@ -615,10 +615,10 @@ function renderGrantCard(result) {
   var deadlineDate = tracker[gKey] && tracker[gKey].deadline ? tracker[gKey].deadline : '';
   var matchAmt = parseGrantAmt(g.amount);
   var matchBtn = matchAmt > 0
-    ? '<button class="btn-match-goal" onclick="createMatchGoal('+JSON.stringify(g.name)+','+JSON.stringify(g.amount)+',this)" title="Create a 50% match savings goal in Business Savings Planner">?? Create Match Goal</button>'
+    ? '<button class="btn-match-goal" onclick="createMatchGoal('+JSON.stringify(g.name)+','+JSON.stringify(g.amount)+',this)" title="Create a 50% match savings goal in Business Savings Planner">Create Match Goal</button>'
     : '';
   html += '<div class="gc-footer"><div class="gc-meta"><span>&#9201; '+g.time+'</span><span>&#128202; '+g.diff+'</span><span>&#128197; <input type="date" class="dl-date-input" value="'+deadlineDate+'" title="Application deadline" onchange="setGrantDeadline(\''+gKey+'\',this.value)"/></span></div>';
-  html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+trackSel+matchBtn+'<a href="'+g.url+'" target="_blank" class="btn-apply">Apply Now ?</a></div></div>';
+  html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+trackSel+matchBtn+'<a href="'+g.url+'" target="_blank" class="btn-apply">Apply Now &rarr;</a></div></div>';
   html += '</div>';
   return html;
 }
@@ -661,11 +661,11 @@ function renderPaidResults() {
   cats.forEach(function(c){
     pillsHtml += '<span class="fpill'+(c===_activeFilter?' active':'')+'" onclick="filterGrants(\''+c+'\')">'+c+'</span>';
   });
-  pillsHtml += '<span class="fpill fpill-state'+(STATE_ONLY?' active':'')+'" onclick="toggleStateOnly()">??? State-Specific</span>';
+  pillsHtml += '<span class="fpill fpill-state'+(STATE_ONLY?' active':'')+'" onclick="toggleStateOnly()">State-Specific</span>';
   pillsHtml += '<span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.78rem;color:#64748b;font-weight:600">Sort:'+
     '<div class="sort-toggle">'+
     '<button onclick="setSort(\'match\')" class="'+(SORT_MODE==='match'?'active':'')+'">Best Match</button>'+
-    '<button onclick="setSort(\'deadline\')" class="'+(SORT_MODE==='deadline'?'active':'')+'">Deadline ?</button>'+
+    '<button onclick="setSort(\'deadline\')" class="'+(SORT_MODE==='deadline'?'active':'')+'">Deadline &rarr;</button>'+
     '</div></span>';
   pillsHtml += '</div>';
 
@@ -679,7 +679,7 @@ function renderPaidResults() {
     filtered.forEach(function(r){ html += renderGrantCard(r); });
   }
   if(nearMiss.length>0){
-    html += '<div class="near-miss-section"><div class="nm-header">?? Close Matches — Almost Eligible ('+nearMiss.length+')</div>';
+    html += '<div class="near-miss-section"><div class="nm-header">Close Matches — Almost Eligible ('+nearMiss.length+')</div>';
     nearMiss.forEach(function(r){
       html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' — '+r.grant.amount+'</div>';
       r.fails.forEach(function(f){ html += '<span class="nm-fail">? '+f+'</span> '; });
@@ -741,11 +741,11 @@ function renderFreeTeaser(matched) {
   html += '<div class="ft-sub">Unlock all '+count+' grants + full details + documents required</div>';
   html += '<ul class="ft-names">';
   matched.slice(0,3).forEach(function(r){
-    html += '<li><span class="lock">??</span><span class="ft-locked">'+r.grant.name+' — '+r.grant.amount+'</span></li>';
+    html += '<li><span class="lock">&#9679;</span><span class="ft-locked">'+r.grant.name+' — '+r.grant.amount+'</span></li>';
   });
-  if(count>3) html += '<li><span class="lock">??</span><span class="ft-locked">+ '+(count-3)+' more grants hidden</span></li>';
+  if(count>3) html += '<li><span class="lock">&#9679;</span><span class="ft-locked">+ '+(count-3)+' more grants hidden</span></li>';
   html += '</ul>';
-  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants — $9 / month ?</a>';
+  html += '<a href="../index.html#pricing" class="ft-cta">Unlock All '+count+' Grants — $9 / month &rarr;</a>';
   html += '<p style="font-size:.75rem;color:#94a3b8;margin-top:10px">30-day money-back guarantee — Cancel anytime</p>';
   html += '</div>';
   return html;

@@ -124,7 +124,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script src="sidebar.js"></script>
 <header class="hdr">
   <a href="index.html" class="logo">Biz<span>Scale</span></a>
-  <a href="dashboard.html" class="back">? Dashboard</a>
+  <a href="dashboard.html" class="back">Dashboard</a>
 </header>
 
 <div class="main">
@@ -162,13 +162,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- NO DATA -->
   <div class="empty" id="emptyState" style="display:none">
-    <div class="empty-icon">??</div>
+    <div class="empty-icon">&#9679;</div>
     <div class="empty-title">No history yet</div>
     <div class="empty-sub">Run your first Financial Checkup to start tracking your score over time. Each checkup is saved automatically.</div>
   </div>
 
   <div class="cta-row">
-    <a href="checkup.html" class="btn-primary">?? Run New Checkup ?</a>
+    <a href="checkup.html" class="btn-primary">Run New Checkup &rarr;</a>
     <a href="dashboard.html" class="btn-secondary">Dashboard</a>
   </div>
 
@@ -212,11 +212,11 @@ function render(){
     var lsDiff=last.loanScore-first.loanScore;
     var banner=document.getElementById('trendBanner');
     if(td>0){
-      banner.innerHTML='<div class="trend-banner trend-up"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Your health is improving</div><div class="tb-sub" style="color:#166534">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong> — Loan score '+( lsDiff>=0?'+':'')+lsDiff+' pts since you started tracking</div></div></div>';
+      banner.innerHTML='<div class="trend-banner trend-up"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Your health is improving</div><div class="tb-sub" style="color:#166534">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong> — Loan score '+( lsDiff>=0?'+':'')+lsDiff+' pts since you started tracking</div></div></div>';
     } else if(td<0){
-      banner.innerHTML='<div class="trend-banner trend-down"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Health has declined — action needed</div><div class="tb-sub" style="color:#991b1b">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong>. Review the insights in your latest checkup.</div></div></div>';
+      banner.innerHTML='<div class="trend-banner trend-down"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Health has declined — action needed</div><div class="tb-sub" style="color:#991b1b">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong>. Review the insights in your latest checkup.</div></div></div>';
     } else {
-      banner.innerHTML='<div class="trend-banner trend-flat"><div class="tb-icon">??</div><div class="tb-body"><div class="tb-title">Score is holding steady</div><div class="tb-sub" style="color:#854d0e">Grade <strong>'+last.grade+'</strong> across your last '+hist.length+' checkups. Focus on the recommendations to push into the next grade.</div></div></div>';
+      banner.innerHTML='<div class="trend-banner trend-flat"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Score is holding steady</div><div class="tb-sub" style="color:#854d0e">Grade <strong>'+last.grade+'</strong> across your last '+hist.length+' checkups. Focus on the recommendations to push into the next grade.</div></div></div>';
     }
   }
 
@@ -358,12 +358,12 @@ function drawTable(hist){
     if(prev){
       var scoreDiff=h.loanScore-prev.loanScore;
       var gradeDiff=GO[h.grade]-GO[prev.grade];
-      if(gradeDiff>0) deltaHtml='<span class="delta-up">? Grade '+prev.grade+'?'+h.grade+'</span>';
-      else if(gradeDiff<0) deltaHtml='<span class="delta-down">? Grade '+prev.grade+'?'+h.grade+'</span>';
+      if(gradeDiff>0) deltaHtml='<span class="delta-up">Grade '+prev.grade+'?'+h.grade+'</span>';
+      else if(gradeDiff<0) deltaHtml='<span class="delta-down">Grade '+prev.grade+'?'+h.grade+'</span>';
       else{
         if(scoreDiff>0) deltaHtml='<span class="delta-up">? +'+scoreDiff+' pts</span>';
         else if(scoreDiff<0) deltaHtml='<span class="delta-down">? '+scoreDiff+' pts</span>';
-        else deltaHtml='<span class="delta-flat">? No change</span>';
+        else deltaHtml='<span class="delta-flat">No change</span>';
       }
     }
 

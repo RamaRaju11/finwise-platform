@@ -106,19 +106,19 @@ button.primary:hover{background:#1d4ed8}
   <p style="font-size:.72rem;color:#94a3b8;margin-top:2px">All figures based on inputs provided. Verify with your accountant or CPA before submission.</p>
 </div>
 
-<a href="../try.html" class="back-link no-print">? Back to Demo</a>
-<h1>?? Working Capital Calculator</h1>
+<a href="../try.html" class="back-link no-print">Back to Demo</a>
+<h1>Working Capital Calculator</h1>
 <p class="subtitle">BizSco — Measure your 30/60/90-day cash coverage and spot funding gaps before they hit.</p>
 
 <div class="conn-band no-print" id="connBand" style="display:none">
-  <div class="conn-band-title">?? Module Data Available — click Import to pre-fill fields</div>
+  <div class="conn-band-title">Module Data Available — click Import to pre-fill fields</div>
   <div class="conn-row" id="arRow" style="display:none">
     <span class="conn-pill" id="arPill"></span>
-    <button class="import-btn" id="arImportBtn" onclick="importAR()">Import to Current Assets ?</button>
+    <button class="import-btn" id="arImportBtn" onclick="importAR()">Import to Current Assets &rarr;</button>
   </div>
   <div class="conn-row" id="apRow" style="display:none">
     <span class="conn-pill" id="apPill"></span>
-    <button class="import-btn" id="apImportBtn" onclick="importAP()">Import to Current Liabilities ?</button>
+    <button class="import-btn" id="apImportBtn" onclick="importAP()">Import to Current Liabilities &rarr;</button>
   </div>
 </div>
 
@@ -154,7 +154,7 @@ button.primary:hover{background:#1d4ed8}
       <input type="number" id="payDays" placeholder="e.g. 20" min="0" oninput="saveInputs()"/>
     </div>
   </div>
-  <button class="primary" onclick="calculate()">Calculate Working Capital ?</button>
+  <button class="primary" onclick="calculate()">Calculate Working Capital &rarr;</button>
 </div>
 
 <div id="results" style="display:none">
@@ -191,8 +191,8 @@ button.primary:hover{background:#1d4ed8}
 
   <div class="card no-print">
     <div class="export-bar">
-      <button class="btn-export" onclick="exportPDF()">?? Export for Bank Loan</button>
-      <button class="save-btn" onclick="saveWCToProfile()">?? Save to Profile</button>
+      <button class="btn-export" onclick="exportPDF()">Export for Bank Loan</button>
+      <button class="save-btn" onclick="saveWCToProfile()">Save to Profile</button>
     </div>
     <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;text-align:right">Bank export: printable working capital report &nbsp;—&nbsp; Save to Profile: updates reserve &amp; COGS across 40 tools</p>
   </div>
@@ -207,11 +207,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 

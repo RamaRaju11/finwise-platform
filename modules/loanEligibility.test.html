@@ -68,7 +68,7 @@ button.primary:hover{background:#1d4ed8}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="lenderMarketplace.html" class="back-link">? Lender Marketplace</a>
+<a href="lenderMarketplace.html" class="back-link">Lender Marketplace</a>
 <h1>Loan Eligibility Pre-Checker</h1>
 <p class="subtitle">BizSco — See which lenders you'd likely qualify for — before you apply</p>
 
@@ -106,13 +106,13 @@ button.primary:hover{background:#1d4ed8}
       <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
     </div>
   </div>
-  <button class="primary" onclick="checkEligibility()">Check My Eligibility ?</button>
+  <button class="primary" onclick="checkEligibility()">Check My Eligibility &rarr;</button>
 </div>
 
 <div id="resultsSection" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <span style="font-size:.78rem;font-weight:700;color:#475569">Eligibility Results</span>
-    <button onclick="window.print()" class="secondary" style="padding:5px 12px;font-size:.75rem">??? Print / Save PDF</button>
+    <button onclick="window.print()" class="secondary" style="padding:5px 12px;font-size:.75rem">Print / Save PDF</button>
   </div>
   <div class="summary-bar" id="summaryBar"></div>
   <div id="lenderResults"></div>
@@ -127,11 +127,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 function failExplain(missText, profile){
@@ -258,11 +258,11 @@ function checkEligibility(){
     html += '<div><div class="lc-name">'+l.name+'</div><div class="lc-range">'+l.range+'</div></div>';
     html += '<span class="lc-verdict '+vcls+'">'+verdict+'</span></div>';
     html += '<div class="lc-body">';
-    passes.forEach(function(p){ html += '<div class="criteria-row"><span class="cr-icon">?</span>'+p+'</div>'; });
-    fails.forEach(function(f){ html += '<div class="criteria-row"><span class="cr-icon">?</span><span class="cr-miss">'+f+'</span>'+failExplain(f, profile)+'</div>'; });
+    passes.forEach(function(p){ html += '<div class="criteria-row"><span class="cr-icon">&#9679;</span>'+p+'</div>'; });
+    fails.forEach(function(f){ html += '<div class="criteria-row"><span class="cr-icon">&#9679;</span><span class="cr-miss">'+f+'</span>'+failExplain(f, profile)+'</div>'; });
     html += '</div>';
     html += '<div class="lc-foot"><span style="font-size:.74rem;color:#94a3b8">Visit lender website to apply</span>';
-    html += '<a href="'+l.url+'" target="_blank" class="btn-visit">Apply ?</a></div>';
+    html += '<a href="'+l.url+'" target="_blank" class="btn-visit">Apply &rarr;</a></div>';
     html += '</div>';
   });
 

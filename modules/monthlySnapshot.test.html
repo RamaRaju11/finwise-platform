@@ -143,8 +143,8 @@ h1{font-size:1.4rem;margin-bottom:4px}
 <script src="help.js"></script>
 
 <div id="mainWrap">
-<a href="../try.html" class="back-link">? Back to Demo</a>
-<h1>?? Monthly Financial Snapshot</h1>
+<a href="../try.html" class="back-link">Back to Demo</a>
+<h1>Monthly Financial Snapshot</h1>
 <p class="subtitle">BizSco — One-click shareable summary of your business finances</p>
 
 <div id="intStrip"></div>
@@ -189,7 +189,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
   // -- No-data guard (loosened) ----------------------------------
   var hasData = invRevData || expData || checkup.loanScore || checkup.runway;
   if(!hasData){
-    root.innerHTML = '<div class="no-data"><div class="nd-icon">??</div><h2 style="margin-bottom:10px;font-size:1.1rem">No data yet</h2><p>Run your Financial Checkup or use Invoice Tracker to generate your snapshot.</p><a href="../checkup.html">Go to Financial Checkup ?</a></div>';
+    root.innerHTML = '<div class="no-data"><div class="nd-icon">&#9679;</div><h2 style="margin-bottom:10px;font-size:1.1rem">No data yet</h2><p>Run your Financial Checkup or use Invoice Tracker to generate your snapshot.</p><a href="../checkup.html">Go to Financial Checkup &rarr;</a></div>';
     return;
   }
 
@@ -328,7 +328,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
         '<div class="snap-header-inner">'+
           '<div class="snap-header-left">'+
             '<div class="snap-logo">Biz<span>Scale</span></div>'+
-            '<div class="snap-title">?? Monthly Financial Snapshot</div>'+
+            '<div class="snap-title">Monthly Financial Snapshot</div>'+
             '<div class="snap-period">'+monthStr+'</div>'+
           '</div>'+
           '<div class="snap-header-right">'+
@@ -339,7 +339,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
       '</div>'+
       '<div class="snap-metrics">'+
         '<div class="metric-tile">'+
-          '<div class="mt-icon">??</div>'+
+          '<div class="mt-icon">&#9679;</div>'+
           '<div class="mt-label">Loan Safety</div>'+
           '<div class="mt-value '+verdCls+'">'+loanScore+'<span style="font-size:.82rem;font-weight:600">/100</span></div>'+
           '<span class="mt-badge badge-'+verdCls+'">'+verdict+'</span>'+
@@ -351,19 +351,19 @@ h1{font-size:1.4rem;margin-bottom:4px}
           '<span class="mt-badge badge-'+runCls+'">'+runwaySt+'</span>'+
         '</div>'+
         '<div class="metric-tile">'+
-          '<div class="mt-icon">??</div>'+
+          '<div class="mt-icon">&#9679;</div>'+
           '<div class="mt-label">Health Grade</div>'+
           '<div class="mt-value '+gradeClass(grade)+'">'+grade+'</div>'+
           '<span class="mt-badge" style="background:#f1f5f9;color:#475569">'+gradeLbl(grade)+'</span>'+
         '</div>'+
         '<div class="metric-tile">'+
-          '<div class="mt-icon">??</div>'+
+          '<div class="mt-icon">&#9679;</div>'+
           '<div class="mt-label">Net Profit</div>'+
           '<div class="mt-value '+netCls+'">'+(netProfit<0?'-':'+')+fmt(netProfit)+'</div>'+
           '<span class="mt-badge badge-'+netCls+'">'+(netProfit>=0?'POSITIVE':'NEGATIVE')+'</span>'+
         '</div>'+
         '<div class="metric-tile">'+
-          '<div class="mt-icon">??</div>'+
+          '<div class="mt-icon">&#9679;</div>'+
           '<div class="mt-label">Health Score</div>'+
           '<div class="mt-value '+healthCls+'">'+healthScore+'<span style="font-size:.82rem;font-weight:600">/100</span></div>'+
           '<span class="mt-badge badge-'+healthCls+'">'+healthLbl+'</span>'+
@@ -382,17 +382,17 @@ h1{font-size:1.4rem;margin-bottom:4px}
 
   var actionsHTML =
     '<div class="share-actions">'+
-      '<button class="share-btn btn-download" onclick="downloadPNG()">?? Download PNG</button>'+
-      '<button class="share-btn btn-print" onclick="window.print()">??? Print / PDF</button>'+
-      '<button class="share-btn btn-whatsapp" onclick="shareWhatsApp()">?? Share on WhatsApp</button>'+
-      '<button class="share-btn btn-copy" onclick="copySummary()">?? Copy Summary</button>'+
-      '<button class="share-btn btn-email" onclick="emailSummary()">?? Email Summary</button>'+
+      '<button class="share-btn btn-download" onclick="downloadPNG()">Download PNG</button>'+
+      '<button class="share-btn btn-print" onclick="window.print()">Print / PDF</button>'+
+      '<button class="share-btn btn-whatsapp" onclick="shareWhatsApp()">Share on WhatsApp</button>'+
+      '<button class="share-btn btn-copy" onclick="copySummary()">Copy Summary</button>'+
+      '<button class="share-btn btn-email" onclick="emailSummary()">Email Summary</button>'+
     '</div>';
 
   root.innerHTML = cardHTML + actionsHTML;
 
   var snapCount = Object.keys(safeJson('fw_monthly_snapshots')||{}).length;
-  document.getElementById('saveBar').innerHTML = '<b>? Snapshot saved</b> for '+monthStr+' — History: '+snapCount+' month'+(snapCount!==1?'s':'');
+  document.getElementById('saveBar').innerHTML = '<b>Snapshot saved</b> for '+monthStr+' — History: '+snapCount+' month'+(snapCount!==1?'s':'');
 
   // -- Functions -------------------------------------------------
 
@@ -510,7 +510,7 @@ h1{font-size:1.4rem;margin-bottom:4px}
   function trendDelta(delta, label){
     if(delta===null) return '';
     var abs=Math.abs(delta).toFixed(1);
-    if(Math.abs(delta)<0.05) return '<span class="trend-item"><span class="trend-name">'+label+'</span><span class="trend-delta trend-flat">? no change</span></span>';
+    if(Math.abs(delta)<0.05) return '<span class="trend-item"><span class="trend-name">'+label+'</span><span class="trend-delta trend-flat">no change</span></span>';
     var dir=delta>0?'?':'?', cls=delta>0?'trend-up':'trend-down';
     return '<span class="trend-item"><span class="trend-name">'+label+'</span><span class="trend-delta '+cls+'">'+dir+' '+abs+'</span></span>';
   }

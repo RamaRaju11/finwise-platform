@@ -128,10 +128,10 @@
 </header>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('search')">?? Lender Search</button>
-  <button class="tab" onclick="showTab('compare')">?? Compare Offers</button>
-  <button class="tab" onclick="showTab('referral')">?? Referral Link</button>
-  <button class="tab" onclick="showTab('tests')">? Unit Tests</button>
+  <button class="tab active" onclick="showTab('search')">Lender Search</button>
+  <button class="tab" onclick="showTab('compare')">Compare Offers</button>
+  <button class="tab" onclick="showTab('referral')">Referral Link</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
 </div>
 
 <!-- Integration banner -->
@@ -182,7 +182,7 @@
   </div>
   <div class="search-toolbar" id="searchToolbar" style="display:none">
     <span id="searchCount" style="font-size:0.85rem;color:#64748b"></span>
-    <button class="btn-sm btn-export" onclick="exportSearchPDF()">??? Export / Print PDF</button>
+    <button class="btn-sm btn-export" onclick="exportSearchPDF()">Export / Print PDF</button>
     <span style="font-size:0.78rem;color:#94a3b8">— or select up to 3 lenders below to compare side-by-side</span>
   </div>
   <div id="search-results"></div>
@@ -293,8 +293,8 @@
     <div class="cmp-bar-names" id="cmpBarNames"></div>
   </div>
   <div style="display:flex;gap:8px">
-    <button class="btn-cmp-clear" onclick="clearCompare()">? Clear</button>
-    <button class="btn-cmp-go" onclick="showCompare()">Compare Side-by-Side ?</button>
+    <button class="btn-cmp-clear" onclick="clearCompare()">Clear</button>
+    <button class="btn-cmp-go" onclick="showCompare()">Compare Side-by-Side &rarr;</button>
   </div>
 </div>
 
@@ -663,10 +663,10 @@ function showCompare() {
     { label: 'Total Interest',  fn: function(o) { return '$' + fmt(o.totalInterest); } },
     { label: 'Processing Fee',  fn: function(o) { return '$' + fmt(o.processingFeeAmt) + ' (' + o.processingFee + '%)'; } },
     { label: 'Total Cost',      fn: function(o) { return '<strong>$' + fmt(o.totalCost) + '</strong>'; } },
-    { label: 'Min FICO',        fn: function(o) { return o.minCreditScore + (creditScore && creditScore < o.minCreditScore ? ' <span style="color:#dc2626">? below yours</span>' : ''); } },
+    { label: 'Min FICO',        fn: function(o) { return o.minCreditScore + (creditScore && creditScore < o.minCreditScore ? ' <span style="color:#dc2626">below yours</span>' : ''); } },
     { label: 'Approval Time',   fn: function(o) { return o.turnaroundDays.min + '—' + o.turnaroundDays.max + ' days'; } },
     { label: 'Eligibility',     fn: function(o) { var e = calcEligibility(o, amount, tenure, creditScore); return '<span class="elig-badge" style="background:' + e.bg + ';color:' + e.color + '">' + e.score + '/100 ' + e.label + '</span>'; } },
-    { label: 'Apply',           fn: function(o) { return '<a href="' + (APPLY_URLS[o.id]||'#') + '" target="_blank" class="btn-apply" style="display:inline-block;margin-top:0">Apply Now ?</a>'; } },
+    { label: 'Apply',           fn: function(o) { return '<a href="' + (APPLY_URLS[o.id]||'#') + '" target="_blank" class="btn-apply" style="display:inline-block;margin-top:0">Apply Now &rarr;</a>'; } },
   ];
 
   var bestId = offers[0].id;
@@ -777,7 +777,7 @@ function doSearch() {
         // Action row
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px">' +
           '<label class="cmp-check-wrap"><input type="checkbox" class="cmp-check" id="cmp-' + l.id + '" onchange="toggleCompare(\'' + l.id + '\')"> Compare</label>' +
-          '<a href="' + applyUrl + '" target="_blank" class="btn-apply">Apply Now ?</a>' +
+          '<a href="' + applyUrl + '" target="_blank" class="btn-apply">Apply Now &rarr;</a>' +
         '</div>' +
       '</div>';
     }).join('') + '</div>';

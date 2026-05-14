@@ -351,6 +351,51 @@
     document.head.appendChild(style);
   }
 
+  /* ── Clean broken emoji placeholders (literal ?, ??, ??? in text) ── */
+  function cleanBrokenEmojis(){
+    // Word patterns of '?' that appear as broken emojis:
+    // 1. <element>?</element>, <element>??</element>, <element>???</element>
+    //    (element content is JUST question marks — clearly a broken emoji)
+    // 2. "?? Some Text" or "??? Some Text" at the start of a text node
+    //    (leading question marks before space and capitalized word)
+
+    function processTextNode(node){
+      if (!node.nodeValue) return;
+      let val = node.nodeValue;
+      // Strip leading "?? ", "??? ", "? " when followed by letter
+      const cleaned = val.replace(/^[\s]*\?{1,3}\s+(?=[A-Z$₹£€])/gm, '');
+      // Strip trailing " ?" arrows
+      const cleaned2 = cleaned.replace(/\s+\?(?=\s*$)/gm, ' →');
+      if (cleaned2 !== val) node.nodeValue = cleaned2;
+    }
+
+    function walk(el){
+      // For elements whose entire text content is just ?, ??, ??? — clear them
+      if (el.children.length === 0) {
+        const txt = (el.textContent || '').trim();
+        if (/^\?{1,3}$/.test(txt)) {
+          // Replace with a neutral bullet
+          el.textContent = '•';
+          return;
+        }
+      }
+      // Walk text nodes
+      for (let i = 0; i < el.childNodes.length; i++) {
+        const child = el.childNodes[i];
+        if (child.nodeType === 3) { // text node
+          processTextNode(child);
+        } else if (child.nodeType === 1) { // element
+          // Skip script/style/select/option
+          const tag = child.tagName.toLowerCase();
+          if (tag === 'script' || tag === 'style' || tag === 'select' || tag === 'option' || tag === 'input' || tag === 'textarea') continue;
+          walk(child);
+        }
+      }
+    }
+
+    if (document.body) walk(document.body);
+  }
+
   /* ── Init ────────────────────────────────────────────────────── */
   async function init(){
     if (typeof COUNTRY_DATA === 'undefined') {
@@ -358,6 +403,7 @@
       return;
     }
     injectEmojiFontFix();
+    cleanBrokenEmojis();
 
     // Step 1: Apply initial country immediately (sync sources only)
     const initial = getInitialCountry();

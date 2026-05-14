@@ -196,8 +196,8 @@
 
 <div class="page-header">
   <div class="ph-left">
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
-    <h1>? Starter Plan</h1>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
+    <h1>Starter Plan</h1>
     <p>PDF Reports — Save Profiles — Compare Scenarios</p>
   </div>
   <div class="ph-badge">$9 / month</div>
@@ -207,23 +207,23 @@
      PAYWALL
 ------------------------------------------------------ -->
 <div class="paywall" id="paywall">
-  <div class="paywall-icon">??</div>
+  <div class="paywall-icon">&#9679;</div>
   <h2>BizSco Starter Plan</h2>
   <p>Get banker-ready PDF reports, save your business profile, and compare up to 3 loan scenarios side by side — all for $9/month.</p>
 
   <div class="paywall-features">
     <div class="pf-item">
-      <div class="pf-icon">??</div>
+      <div class="pf-icon">&#9679;</div>
       <h4>PDF Report</h4>
       <p>Banker-ready loan safety report you can hand to any lender.</p>
     </div>
     <div class="pf-item">
-      <div class="pf-icon">??</div>
+      <div class="pf-icon">&#9679;</div>
       <h4>Save Profile</h4>
       <p>Save your business numbers. Reload instantly — no re-entry.</p>
     </div>
     <div class="pf-item">
-      <div class="pf-icon">??</div>
+      <div class="pf-icon">&#9679;</div>
       <h4>Compare Scenarios</h4>
       <p>Compare 3 loan options side by side. Pick the safest one.</p>
     </div>
@@ -254,14 +254,14 @@
 
   <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:.7rem 1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.6rem;font-size:.87rem;font-weight:600;color:#166534">
     ? Starter Plan Active &nbsp;—&nbsp; <span style="font-weight:400;color:#15803d">All 3 features unlocked</span>
-    <span style="margin-left:auto;font-size:.78rem;font-weight:400;color:#4ade80;cursor:pointer" onclick="lock()">Lock ?</span>
+    <span style="margin-left:auto;font-size:.78rem;font-weight:400;color:#4ade80;cursor:pointer" onclick="lock()">Lock &rarr;</span>
   </div>
 
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('t1',this)">?? Compare Scenarios</div>
-    <div class="tab" onclick="switchTab('t2',this)">?? Save Profile</div>
-    <div class="tab" onclick="switchTab('t3',this)">?? PDF Report</div>
-    <div class="tab" onclick="switchTab('t4',this)">?? Stress Test</div>
+    <div class="tab active" onclick="switchTab('t1',this)">Compare Scenarios</div>
+    <div class="tab" onclick="switchTab('t2',this)">Save Profile</div>
+    <div class="tab" onclick="switchTab('t3',this)">PDF Report</div>
+    <div class="tab" onclick="switchTab('t4',this)">Stress Test</div>
   </div>
 
   <!-- ------------------------------------
@@ -269,7 +269,7 @@
   ------------------------------------ -->
   <div class="panel active" id="t1">
     <div class="card">
-      <h2>?? Compare Up to 3 Loan Scenarios</h2>
+      <h2>Compare Up to 3 Loan Scenarios</h2>
       <div class="desc">Enter different loan amounts, rates, or tenures. See which scenario gives the safest score and fits your cash flow best.</div>
 
       <!-- Shared business inputs -->
@@ -348,7 +348,7 @@
       </div>
 
       <div class="compare-btn-row no-print">
-        <button class="btn-primary" onclick="runCompare()">?? Compare All Scenarios</button>
+        <button class="btn-primary" onclick="runCompare()">Compare All Scenarios</button>
         <button class="btn-outline" onclick="clearCompare()">Clear</button>
       </div>
       <div id="compareWinner" style="display:none;text-align:center;margin-top:1.25rem;padding:1rem;background:#fefce8;border:2px solid #fde047;border-radius:8px"></div>
@@ -360,7 +360,7 @@
   ------------------------------------ -->
   <div class="panel" id="t2">
     <div class="card">
-      <h2>?? Save Business Profile</h2>
+      <h2>Save Business Profile</h2>
       <div class="desc">Save your business numbers to your browser. Load them instantly next time — no re-entry needed. Saved locally, never leaves your device.</div>
 
       <div class="input-grid">
@@ -402,14 +402,14 @@
       </div>
 
       <div style="margin-top:1.25rem">
-        <button class="btn-primary" onclick="saveProfile()">?? Save Profile</button>
+        <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
         <button class="btn-outline" onclick="clearForm()">Clear</button>
       </div>
-      <div class="save-success" id="saveSuccess">? Profile saved successfully!</div>
+      <div class="save-success" id="saveSuccess">Profile saved successfully!</div>
     </div>
 
     <div class="card">
-      <h2>?? Saved Profiles</h2>
+      <h2>Saved Profiles</h2>
       <div class="desc">Click Load to populate any form with saved data. Use it with Compare Scenarios or the PDF Report.</div>
       <div class="profiles-list" id="profilesList"></div>
     </div>
@@ -420,7 +420,7 @@
   ------------------------------------ -->
   <div class="panel" id="t3">
     <div class="card no-print">
-      <h2>?? Banker-Ready PDF Report</h2>
+      <h2>Banker-Ready PDF Report</h2>
       <div class="desc">Generate a professional Loan Safety Report you can hand to any bank or lender. Fill in the details below, then print or save as PDF.</div>
 
       <div class="input-grid">
@@ -467,9 +467,9 @@
       </div>
 
       <div style="margin-top:1rem">
-        <button class="btn-primary" onclick="generateReport()">?? Generate Report</button>
-        <button class="btn-green" onclick="printReport()" id="printBtn" style="display:none">??? Print / Save PDF</button>
-        <button class="btn-outline" onclick="loadFromProfile()" id="loadProfileBtn">?? Load from Saved Profile</button>
+        <button class="btn-primary" onclick="generateReport()">Generate Report</button>
+        <button class="btn-green" onclick="printReport()" id="printBtn" style="display:none">Print / Save PDF</button>
+        <button class="btn-outline" onclick="loadFromProfile()" id="loadProfileBtn">Load from Saved Profile</button>
       </div>
     </div>
 
@@ -484,7 +484,7 @@
   ------------------------------------ -->
   <div class="panel" id="t4">
     <div class="card">
-      <h2>?? Stress Test &amp; Recommendations</h2>
+      <h2>Stress Test &amp; Recommendations</h2>
       <div class="desc">See if your business can still pay the loan EMI if revenue drops 10%, 20%, or 30%. Get a personalised action plan based on your results.</div>
 
       <div class="input-grid" style="margin-bottom:.75rem">
@@ -527,7 +527,7 @@
         </div>
       </div>
       <div style="margin-top:1rem">
-        <button class="btn-primary" onclick="runStressTest()">?? Run Stress Test</button>
+        <button class="btn-primary" onclick="runStressTest()">Run Stress Test</button>
         <button class="btn-outline" onclick="clearStress()">Clear</button>
       </div>
     </div>
@@ -536,14 +536,14 @@
 
       <!-- Scenario cards -->
       <div class="card">
-        <h2>?? Stress Scenarios</h2>
+        <h2>Stress Scenarios</h2>
         <div class="desc">How your cash flow holds up under revenue pressure.</div>
         <div id="stressScenarios" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem"></div>
       </div>
 
       <!-- Recommendations -->
       <div class="card" id="stressRecs">
-        <h2>?? Recommendations</h2>
+        <h2>Recommendations</h2>
         <div id="stressRecsList" style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem"></div>
       </div>
 

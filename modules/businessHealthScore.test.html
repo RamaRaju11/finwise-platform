@@ -208,7 +208,7 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
     <div><label>Total Business Assets ($) <span class="field-hint">equipment, inventory, receivables</span></label><input type="number" id="assets" placeholder="e.g. 80000"/></div>
     <div><label>Total Business Liabilities ($) <span class="field-hint">all outstanding loans</span></label><input type="number" id="liabilities" placeholder="e.g. 45000"/></div>
   </div>
-  <button class="btn-calc" onclick="calculate()">&#127942; Generate Health Score ?</button>
+  <button class="btn-calc" onclick="calculate()">&#127942; Generate Health Score &rarr;</button>
 </div>
 
 <div style="text-align:right;margin-bottom:8px">
@@ -257,11 +257,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 
@@ -905,7 +905,7 @@ function renderActionPlan(grade, f, ld){
     return '<div class="plan-month" style="border-color:'+color+'">'+
       '<div class="pm-head">Month '+n+' — Days '+({1:'1—30',2:'31—60',3:'61—90'}[n])+'</div>'+
       '<div class="pm-title" style="color:'+color+'">'+label+'</div>'+
-      '<ul class="pm-actions">'+acts.map(function(a){ return '<li><span class="pm-icon">?</span><span>'+a+'</span></li>'; }).join('')+'</ul>'+
+      '<ul class="pm-actions">'+acts.map(function(a){ return '<li><span class="pm-icon">&#9679;</span><span>'+a+'</span></li>'; }).join('')+'</ul>'+
       '</div>';
   }
   document.getElementById('planMonths').innerHTML =

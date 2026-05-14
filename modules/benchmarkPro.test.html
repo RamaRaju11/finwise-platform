@@ -156,18 +156,18 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">??</div>
+    <div style="font-size:2.2rem">&#9679;</div>
     <h2>Industry Benchmark Comparison</h2>
     <p>See how your business stacks up against real industry averages — profit margin, expenses, cash reserves, debt coverage, and more.</p>
     <div class="pw-feats">
       <div class="pw-feat">?? 5 key metrics</div>
       <div class="pw-feat">?? 12 industries</div>
-      <div class="pw-feat">?? Visual bar comparison</div>
-      <div class="pw-feat">?? Peer percentile rank</div>
-      <div class="pw-feat">?? Smart insights</div>
-      <div class="pw-feat">??? Print report</div>
+      <div class="pw-feat">Visual bar comparison</div>
+      <div class="pw-feat">Peer percentile rank</div>
+      <div class="pw-feat">Smart insights</div>
+      <div class="pw-feat">Print report</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -181,8 +181,8 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
-    <h1>?? Industry Benchmark Comparison</h1>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
+    <h1>Industry Benchmark Comparison</h1>
     <p>Compare your business metrics against real industry averages</p>
   </div>
   <div class="ph-badge">Pro — $29/month</div>
@@ -192,14 +192,14 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
 
 <!-- Industry Selector -->
 <div class="card">
-  <h2>?? Select Your Industry</h2>
+  <h2>Select Your Industry</h2>
   <p class="card-desc">Click your industry to load its benchmark data. Benchmarks are based on SMB averages.</p>
   <div class="ind-grid" id="indGrid"></div>
 </div>
 
 <!-- Business Inputs -->
 <div class="card">
-  <h2>?? Your Business Numbers</h2>
+  <h2>Your Business Numbers</h2>
   <p class="card-desc">Auto-loaded from live module data. Edit as needed.</p>
   <div class="live-badge" id="liveBadge"><span class="ldot"></span><span id="liveBadgeText">Live data loaded</span></div>
   <div class="g4">
@@ -210,9 +210,9 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   </div>
   <div class="no-ind" id="noIndMsg">Please select an industry above first.</div>
   <div class="btn-row">
-    <button class="btn btn-blue" onclick="compare()">?? Compare vs Industry</button>
+    <button class="btn btn-blue" onclick="compare()">Compare vs Industry</button>
     <button class="btn btn-outline" onclick="clearResults()">Clear</button>
-    <button class="btn btn-green" onclick="window.print()">??? Print Report</button>
+    <button class="btn btn-green" onclick="window.print()">Print Report</button>
   </div>
 </div>
 
@@ -222,7 +222,7 @@ input:focus,select:focus{outline:none;border-color:#4f46e5}
   <div class="score-strip" id="scoreStrip"></div>
   <div id="metricsPanel"></div>
   <div class="card">
-    <h2>?? Insights &amp; Recommendations</h2>
+    <h2>Insights &amp; Recommendations</h2>
     <div class="ins-list" id="insList"></div>
   </div>
 </div>
@@ -661,7 +661,7 @@ function compare(){
 
     var ctaHtml='';
     if(rt.grade==='poor'&&CTA_LINKS[mk]){
-      ctaHtml='<a class="metric-cta" href="'+CTA_LINKS[mk].href+'">'+CTA_LINKS[mk].label+' ?</a>';
+      ctaHtml='<a class="metric-cta" href="'+CTA_LINKS[mk].href+'">'+CTA_LINKS[mk].label+' &rarr;</a>';
     }
 
     mHtml+='<div class="metric-card">'
@@ -805,7 +805,7 @@ function renderInsights(b, um, ratings, rev, exp, emi, res, netCF, hasLoan){
   var html='';
   for(var i=0;i<ins.length;i++){
     var it=ins[i];
-    var ctaTag=it.cta?'<a class="metric-cta" href="'+it.cta.href+'" style="margin-top:8px;display:inline-flex">'+it.cta.label+' ?</a>':'';
+    var ctaTag=it.cta?'<a class="metric-cta" href="'+it.cta.href+'" style="margin-top:8px;display:inline-flex">'+it.cta.label+' &rarr;</a>':'';
     html+='<div class="ins '+it.t+'"><div class="ins-icon">'+it.icon+'</div>'
       +'<div><h4>'+it.h+'</h4><p>'+it.b+'</p>'+ctaTag+'</div></div>';
   }

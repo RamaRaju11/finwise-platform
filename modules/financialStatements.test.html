@@ -161,18 +161,18 @@ table.fs .muted{color:#94a3b8}
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">??</div>
+    <div style="font-size:2.2rem">&#9679;</div>
     <h2>Full Financial Statements</h2>
     <p>Generate bank-ready P&amp;L, Balance Sheet, and Cash Flow Statement from your business numbers in seconds.</p>
     <div class="pw-feats">
-      <div class="pw-feat">?? Profit &amp; Loss Statement</div>
-      <div class="pw-feat">?? Balance Sheet</div>
-      <div class="pw-feat">?? Cash Flow Statement</div>
+      <div class="pw-feat">Profit &amp; Loss Statement</div>
+      <div class="pw-feat">Balance Sheet</div>
+      <div class="pw-feat">Cash Flow Statement</div>
       <div class="pw-feat">?? 12 Key Financial Ratios</div>
-      <div class="pw-feat">??? Print-ready A4 format</div>
-      <div class="pw-feat">?? Monthly + Annual view</div>
+      <div class="pw-feat">Print-ready A4 format</div>
+      <div class="pw-feat">Monthly + Annual view</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -186,8 +186,8 @@ table.fs .muted{color:#94a3b8}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
-    <h1>?? Full Financial Statements</h1>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
+    <h1>Full Financial Statements</h1>
     <p>P&amp;L — Balance Sheet — Cash Flow — Key Ratios</p>
   </div>
   <div class="ph-badge">Pro — $29/month</div>
@@ -197,7 +197,7 @@ table.fs .muted{color:#94a3b8}
 
 <!-- INPUT FORM -->
 <div class="card" id="inputCard">
-  <h2>?? Business Setup</h2>
+  <h2>Business Setup</h2>
   <p class="card-desc">Auto-loaded from your saved profile. All figures are monthly unless noted.</p>
 
   <!-- Business info -->
@@ -353,9 +353,9 @@ table.fs .muted{color:#94a3b8}
 
   <div id="liveBadge" class="live-badge"></div>
   <div class="btn-row">
-    <button class="btn btn-blue" onclick="generate()">?? Generate Financial Statements</button>
+    <button class="btn btn-blue" onclick="generate()">Generate Financial Statements</button>
     <button class="btn btn-gray" onclick="clearForm()">Clear</button>
-    <button class="btn" style="background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d" onclick="fillTechBridge()">?? Fill TechBridge Sample Data</button>
+    <button class="btn" style="background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d" onclick="fillTechBridge()">Fill TechBridge Sample Data</button>
   </div>
 </div>
 
@@ -364,16 +364,16 @@ table.fs .muted{color:#94a3b8}
 
   <div class="btn-row" style="margin-bottom:12px">
     <button class="btn btn-green" onclick="window.print()">&#128424; Export PDF (All Statements)</button>
-    <button class="btn btn-blue" onclick="exportForCA()">?? Export for CA</button>
-    <button class="btn btn-gray" onclick="document.getElementById('inputCard').scrollIntoView({behavior:'smooth'})">?? Edit Inputs</button>
+    <button class="btn btn-blue" onclick="exportForCA()">Export for CA</button>
+    <button class="btn btn-gray" onclick="document.getElementById('inputCard').scrollIntoView({behavior:'smooth'})">Edit Inputs</button>
   </div>
 
   <!-- Tab selector -->
   <div class="stmt-tabs">
-    <button class="stmt-tab active" onclick="switchTab('pl',this)">?? P&amp;L Statement</button>
-    <button class="stmt-tab" onclick="switchTab('bs',this)">?? Balance Sheet</button>
-    <button class="stmt-tab" onclick="switchTab('cf',this)">?? Cash Flow</button>
-    <button class="stmt-tab" onclick="switchTab('ratios',this)">?? Key Ratios</button>
+    <button class="stmt-tab active" onclick="switchTab('pl',this)">P&amp;L Statement</button>
+    <button class="stmt-tab" onclick="switchTab('bs',this)">Balance Sheet</button>
+    <button class="stmt-tab" onclick="switchTab('cf',this)">Cash Flow</button>
+    <button class="stmt-tab" onclick="switchTab('ratios',this)">Key Ratios</button>
   </div>
 
   <!-- P&L Panel -->
@@ -449,7 +449,7 @@ table.fs .muted{color:#94a3b8}
   <!-- Ratios Panel -->
   <div class="stmt-panel" id="panel_ratios" style="display:none">
     <div class="card">
-      <h2>?? Key Financial Ratios</h2>
+      <h2>Key Financial Ratios</h2>
       <p class="card-desc" id="ratios_period">—</p>
       <div class="ratios-grid" id="ratios_grid"></div>
     </div>
@@ -570,7 +570,7 @@ function renderComparison(currentData){
     return '<span class="cmp-delta '+cls+'">'+(pct>0?'+':'')+pct+'%</span>';
   }
 
-  var html='<div class="compare-hd">?? Comparative P&amp;L — Last '+keys.length+' Months (from Monthly Snapshots)</div>'
+  var html='<div class="compare-hd">Comparative P&amp;L — Last '+keys.length+' Months (from Monthly Snapshots)</div>'
     +'<div class="compare-grid">';
 
   cols.forEach(function(col,i){
@@ -1037,9 +1037,9 @@ function renderBS(name,period,cash,rec,inv,netFixed,totalCurrAssets,totalAssets,
   var diff=totalAssets-(totalLiab+totalEquity);
   var balanced=Math.abs(diff)<1;
   if(balanced){
-    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">? Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#10b981;padding:8px;background:#f0fdf4;border-radius:6px">Balance Sheet balances (Assets = Liabilities + Equity)</td></tr>';
   } else {
-    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">? Difference of '+fmtN(Math.abs(diff))+' — check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
+    html+='<tr><td colspan="3" style="text-align:center;font-size:.72rem;color:#854d0e;padding:8px;background:#fffbeb;border-radius:6px">Difference of '+fmtN(Math.abs(diff))+' — check Owner\'s Capital or enter missing assets/liabilities</td></tr>';
   }
   if(totalEquity<0){
     html+=blankRow();

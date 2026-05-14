@@ -38,7 +38,7 @@ input:focus{outline:none;border-color:#2563eb}
 </head>
 <body>
 <div class="card">
-  <div class="logo">?? Biz<em>Scale</em></div>
+  <div class="logo">Biz<em>Scale</em></div>
   <div class="tagline">Analyze — Fund — Grow — 30 tools — Your data stays private</div>
 
   <div class="tabs">
@@ -54,7 +54,7 @@ input:focus{outline:none;border-color:#2563eb}
     <input type="password" id="li_pass" placeholder="Your password" autocomplete="current-password"/>
     <div class="forgot"><a href="#" onclick="showReset();return false;">Forgot password?</a></div>
     <div class="err" id="li_err"></div>
-    <button class="btn" id="li_btn" onclick="doLogin()">Sign In ?</button>
+    <button class="btn" id="li_btn" onclick="doLogin()">Sign In &rarr;</button>
   </div>
 
   <!-- SIGNUP -->
@@ -67,8 +67,8 @@ input:focus{outline:none;border-color:#2563eb}
     <input type="password" id="su_pass" placeholder="Min 6 characters" autocomplete="new-password"/>
     <div class="err" id="su_err"></div>
     <div class="ok" id="su_ok"></div>
-    <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account ?</button>
-    <div class="plan-note">? Free plan — no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
+    <button class="btn" id="su_btn" onclick="doSignup()">Create Free Account &rarr;</button>
+    <div class="plan-note">Free plan — no credit card needed<br/>Upgrade to <span>Starter / Pro / Advisor</span> anytime</div>
   </div>
 
   <!-- RESET -->
@@ -79,7 +79,7 @@ input:focus{outline:none;border-color:#2563eb}
     <div class="err" id="rs_err"></div>
     <div class="ok" id="rs_ok"></div>
     <button class="btn" id="rs_btn" onclick="doReset()">Send Reset Link</button>
-    <div style="margin-top:12px;text-align:center"><a href="#" onclick="switchTab('login');return false;" style="font-size:.82rem;color:#2563eb;font-weight:700">? Back to Sign In</a></div>
+    <div style="margin-top:12px;text-align:center"><a href="#" onclick="switchTab('login');return false;" style="font-size:.82rem;color:#2563eb;font-weight:700">Back to Sign In</a></div>
   </div>
 </div>
 
@@ -105,7 +105,7 @@ if(hash && hash.includes('type=recovery')){
   document.getElementById('loginForm').style.display='none';
   document.getElementById('signupForm').style.display='none';
   document.getElementById('resetForm').style.display='block';
-  document.getElementById('resetForm').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:2rem;margin-bottom:12px">?</div><div style="font-weight:900;color:#1e293b;font-size:1.1rem">Email confirmed!</div><div style="color:#64748b;font-size:.88rem;margin-top:8px">You can now sign in with your new password.</div><div style="margin-top:20px"><a href="auth.html" style="background:#2563eb;color:#fff;padding:10px 28px;border-radius:8px;font-weight:900;text-decoration:none;font-size:.9rem">Sign In ?</a></div></div>';
+  document.getElementById('resetForm').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:2rem;margin-bottom:12px">?</div><div style="font-weight:900;color:#1e293b;font-size:1.1rem">Email confirmed!</div><div style="color:#64748b;font-size:.88rem;margin-top:8px">You can now sign in with your new password.</div><div style="margin-top:20px"><a href="auth.html" style="background:#2563eb;color:#fff;padding:10px 28px;border-radius:8px;font-weight:900;text-decoration:none;font-size:.9rem">Sign In &rarr;</a></div></div>';
 }
 
 function switchTab(t){

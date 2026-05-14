@@ -104,8 +104,8 @@ button.primary:hover{background:#1d4ed8}
 <script src="help.js"></script>
 <div id="fwToast" class="fw-toast"></div>
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
-<h1>?? Loan Refinance Analyzer</h1>
+<a href="../try.html" class="back-link">Back to Demo</a>
+<h1>Loan Refinance Analyzer</h1>
 <p class="subtitle">BizSco — Compare your existing loan against a refinance offer — monthly savings, break-even, and net benefit.</p>
 
 <!-- Input panel -->
@@ -139,8 +139,8 @@ button.primary:hover{background:#1d4ed8}
 </div>
 
 <div style="text-align:center;margin-bottom:16px">
-  <button class="primary" onclick="analyze()">Compare Loans ?</button>
-  <button class="btn-print" onclick="printAnalysis()">??? Print / Save PDF</button>
+  <button class="primary" onclick="analyze()">Compare Loans &rarr;</button>
+  <button class="btn-print" onclick="printAnalysis()">Print / Save PDF</button>
 </div>
 
 <div id="results" style="display:none">
@@ -181,7 +181,7 @@ button.primary:hover{background:#1d4ed8}
   </div>
 
   <div class="card" style="text-align:right">
-    <button class="save-btn" onclick="saveRefinanceToProfile()">?? Save Loan Details to Profile</button>
+    <button class="save-btn" onclick="saveRefinanceToProfile()">Save Loan Details to Profile</button>
     <p style="font-size:.75rem;color:#94a3b8;margin-top:6px">Saves balance, rate &amp; term — auto-fills all 40 tools</p>
   </div>
 
@@ -350,7 +350,7 @@ function analyze(){
         'This refinance costs you money overall unless you extend your repayment period intentionally.</div>';
     }
   } else if(monthlySav <= 0){
-    beHtml = '<div class="be-warn">?? Monthly payment increases with this refinance — no break-even point exists. Review the new rate and term.</div>';
+    beHtml = '<div class="be-warn">Monthly payment increases with this refinance — no break-even point exists. Review the new rate and term.</div>';
   }
   document.getElementById('beBar').innerHTML = beHtml;
 
@@ -367,7 +367,7 @@ function analyze(){
       '<div class="v-desc">You\'ll save '+fmt(monthlySav)+'/month and break even in '+Math.ceil(breakEvenMos)+' months. Total net benefit after fees: '+fmt(netBenefit)+'. Proceed if your credit score supports the new rate.</div>'+
       '</div></div>';
   } else if(netBenefit > 0){
-    vHtml = '<div class="verdict neutral"><div class="v-icon">??</div><div>'+
+    vHtml = '<div class="verdict neutral"><div class="v-icon">&#9679;</div><div>'+
       '<div class="v-title" style="color:#92400e">Possibly Worth It</div>'+
       '<div class="v-desc">Monthly savings of '+fmt(monthlySav)+' exist, but break-even takes '+Math.ceil(breakEvenMos)+' months. If you plan to keep the loan for at least that long, net benefit is '+fmt(netBenefit)+'.</div>'+
       '</div></div>';

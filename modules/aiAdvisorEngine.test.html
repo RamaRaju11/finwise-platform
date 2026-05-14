@@ -168,20 +168,20 @@
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('cfo')">?? Ask CFO</button>
-  <button class="tab" onclick="showTab('health')">?? Health Score</button>
-  <button class="tab" onclick="showTab('readiness')">?? Loan Readiness</button>
-  <button class="tab" onclick="showTab('ratios')">?? Ratio Analysis</button>
-  <button class="tab" onclick="showTab('actions')">?? Action Plan</button>
-  <button class="tab" onclick="showTab('insight')">?? Advisory Insight</button>
-  <button class="tab" onclick="showTab('tests')">? Unit Tests</button>
+  <button class="tab active" onclick="showTab('cfo')">Ask CFO</button>
+  <button class="tab" onclick="showTab('health')">Health Score</button>
+  <button class="tab" onclick="showTab('readiness')">Loan Readiness</button>
+  <button class="tab" onclick="showTab('ratios')">Ratio Analysis</button>
+  <button class="tab" onclick="showTab('actions')">Action Plan</button>
+  <button class="tab" onclick="showTab('insight')">Advisory Insight</button>
+  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
 </div>
 
 <!-- ASK CFO -->
 <div id="tab-cfo" class="panel active">
   <div class="card">
     <div class="cfo-intro">
-      <h3>?? Your AI CFO</h3>
+      <h3>Your AI CFO</h3>
       <p>Ask a question or tap one below. Answers use your currency and your numbers.</p>
     </div>
 
@@ -191,7 +191,7 @@
     <!-- Custom question input -->
     <div class="cfo-input-row">
       <input type="text" id="cfoQuestion" placeholder="e.g. Can I take a loan? / Why is my cash flow risky?" />
-      <button onclick="askCFO()">Ask ?</button>
+      <button onclick="askCFO()">Ask &rarr;</button>
     </div>
 
     <!-- Quick numbers for CFO to use -->
@@ -232,7 +232,7 @@
       <div><label>Revenue Growth % (opt)</label><input type="number" id="h-rg" value="12" step=".1"></div>
     </div>
     <button class="btn" onclick="doHealthScore()">Analyze Financial Health</button>
-    <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">??? Print</button>
+    <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;margin-left:8px" onclick="window.print()">Print</button>
   </div>
   <div id="health-output"></div>
 </div>
@@ -337,11 +337,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 
@@ -447,7 +447,7 @@ function updateAutoInsights() {
        'Focus on paying down existing debt before taking on new loans'],
       'Your existing EMIs use ' + (debtLoad*100).toFixed(1) + '% of your revenue. Lenders typically require this below 40% before approving new credit — you are at or above that limit'
     );
-  } else if (debtLoad > 0.25) html += `<div class="auto-insight warn">?? Existing EMIs are ${(debtLoad*100).toFixed(1)}% of revenue — watch carefully before adding more.</div>`;
+  } else if (debtLoad > 0.25) html += `<div class="auto-insight warn">Existing EMIs are ${(debtLoad*100).toFixed(1)}% of revenue — watch carefully before adding more.</div>`;
   document.getElementById('autoInsights').innerHTML = html;
 }
 
@@ -503,7 +503,7 @@ function askCFO(preset) {
         answer = `?? <strong>Possible, but RISKY.</strong><br><br>
           EMI will be <strong>${fmt(newEMI)}/month</strong>. That leaves only <strong>${fmt(cashLeft)}/month</strong> — a thin buffer.<br>
           ${stressed < 0 ? `A 20% revenue drop would leave you short by <strong>${fmt(Math.abs(stressed))}/month</strong> — you'd struggle to pay. ` : ''}
-          <br><br>?? Consider reducing the loan by 25—30% or extending the tenure to lower the EMI.`;
+          <br><br>Consider reducing the loan by 25—30% or extending the tenure to lower the EMI.`;
       } else {
         answer = `?? <strong>No — this loan is DANGEROUS right now.</strong><br><br>
           EMI of <strong>${fmt(newEMI)}/month</strong> leaves <strong>${fmt(cashLeft)}/month</strong> — ${cashLeft < 0 ? 'you\'d be in deficit every month.' : 'an unsafe margin.'}<br>
@@ -813,8 +813,8 @@ function doHealthScore(){
         ${Object.entries(r.scores).map(([k,v])=>`<div class="health-cell"><div class="hc-score" style="color:${v>=20?"#16a34a":v>=12?"#d97706":"#dc2626"}">${v}<span style="font-size:.65rem">/25</span></div><div class="hc-label">${k.replace(/([A-Z])/g,' $1').trim()}</div></div>`).join('')}
       </div>
       <div class="sw-grid">
-        <div class="sw-box str"><h4>? Strengths (${r.strengths.length})</h4><ul>${r.strengths.length?r.strengths.map(s=>`<li><b>${s.area}:</b> ${s.message}</li>`).join(''):'<li>No standout strengths identified.</li>'}</ul></div>
-        <div class="sw-box weak"><h4>? Areas to Improve (${r.weaknesses.length})</h4><ul>${r.weaknesses.length?r.weaknesses.map(w=>`<li><b>${w.area}:</b> ${w.message}</li>`).join(''):'<li>No major weaknesses found.</li>'}</ul></div>
+        <div class="sw-box str"><h4>Strengths (${r.strengths.length})</h4><ul>${r.strengths.length?r.strengths.map(s=>`<li><b>${s.area}:</b> ${s.message}</li>`).join(''):'<li>No standout strengths identified.</li>'}</ul></div>
+        <div class="sw-box weak"><h4>Areas to Improve (${r.weaknesses.length})</h4><ul>${r.weaknesses.length?r.weaknesses.map(w=>`<li><b>${w.area}:</b> ${w.message}</li>`).join(''):'<li>No major weaknesses found.</li>'}</ul></div>
       </div>
       ${r.recommendations.length?`<h4 style="font-size:.85rem;margin-bottom:10px">Top Recommendations</h4>${r.recommendations.slice(0,3).map(rec=>`<div class="action-item"><div class="action-priority p${rec.priority}">${rec.priority}</div><div class="action-text">${rec.action}</div><span class="impact-badge imp-${rec.impact}">${rec.impact}</span></div>`).join('')}`:''}
     </div>`;

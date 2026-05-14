@@ -140,7 +140,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
     <p class="section-desc">You have built real foundations — more than most platforms at this stage. Here is an honest view of what is working and what has a ceiling.</p>
     <div class="position-grid">
       <div class="pos-card good">
-        <div class="pos-card-label">? Real Strengths</div>
+        <div class="pos-card-label">Real Strengths</div>
         <div class="pos-item"><span class="pos-dot"></span>40+ financial tools covering loans, tax, grants, cash flow, payroll and more</div>
         <div class="pos-item"><span class="pos-dot"></span>Intelligent Loan Safety Score with multi-factor risk engine</div>
         <div class="pos-item"><span class="pos-dot"></span>Profile-based pre-fill — enter data once, all tools use it</div>
@@ -149,7 +149,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
         <div class="pos-item"><span class="pos-dot"></span>Scoring logic is genuinely sophisticated and defensible</div>
       </div>
       <div class="pos-card gap">
-        <div class="pos-card-label">? Current Ceilings</div>
+        <div class="pos-card-label">Current Ceilings</div>
         <div class="pos-item"><span class="pos-dot"></span>All data is manually entered — numbers are estimates, not reality</div>
         <div class="pos-item"><span class="pos-dot"></span>Platform is a toolbox, not an advisor — no proactive intelligence</div>
         <div class="pos-item"><span class="pos-dot"></span>Lender marketplace is static, not connected to real loan APIs</div>
@@ -182,7 +182,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
         <div class="gap-card-body">
           <p>When a business owner types "Monthly Revenue: $22,000" they are guessing. The real number is in their bank account. Every world-class tool in this space — Nav, Kabbage, Bench, QuickBooks — solved this with live bank connections. Without real data, the platform is helping users make important decisions based on approximations.</p>
           <div class="callout">
-            <span class="ci">??</span>
+            <span class="ci">&#9679;</span>
             <div><strong>The fix:</strong> Plaid or Finicity bank connection. The user links their business bank account once. Revenue, expenses, and cash flow auto-populate everywhere — live and accurate. This single change makes every tool on the platform 10x more useful and trustworthy.
             <br/><br/>
             <span class="tech-badge">Plaid API</span>
@@ -205,7 +205,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
         <div class="gap-card-body">
           <p>Right now, a business owner lands on the dashboard and sees a menu of tools. They have to know what their problem is before they can use the platform. World-class software surfaces the problem for them. It watches their data and says: <em>"Your cash runway dropped to 2.1 months. Your loan-to-income ratio crossed 78%. Here are your three priorities this week."</em></p>
           <div class="callout">
-            <span class="ci">??</span>
+            <span class="ci">&#9679;</span>
             <div><strong>The fix:</strong> A Daily Business Health Engine — a server-side process that runs every night, analyzes each user's actual financial data, and generates a ranked list of their most urgent actions. The dashboard stops being a tool list and becomes a personalized briefing. No user should ever have to decide which tool to open.
             <br/><br/>
             <span class="tech-badge">Supabase Edge Functions</span>
@@ -228,7 +228,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
         <div class="gap-card-body">
           <p>The current marketplace shows lender information that a user can find with a Google search. World-class is submitting the user's verified financial profile to lender APIs and returning: <em>"Based on your data, you pre-qualify for $85,000 from Bluevine at 8.4%, $60,000 from OnDeck at 11.2%, and $100,000 SBA 7(a) with a 72% approval probability."</em> This is what Lendio and Fundera built their entire business on.</p>
           <div class="callout">
-            <span class="ci">??</span>
+            <span class="ci">&#9679;</span>
             <div><strong>The fix:</strong> Partner API integrations with 5—10 lenders. SBA, Bluevine, OnDeck, Kabbage/AmEx, Credibly, and Funding Circle all have partner programs. The platform sends a standardized profile, the lenders return real offers. BizSco earns referral revenue on every funded loan. This is also the core monetization engine beyond subscriptions.
             <br/><br/>
             <span class="tech-badge">SBA Partner API</span>
@@ -255,19 +255,19 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
           <div class="arch-grid">
             <div class="arch-card now">
               <div class="arch-card-label">Current Architecture</div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>Static HTML files<span class="limit">No server-side logic</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>localStorage for all data<span class="limit">Browser-only, not synced</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>Supabase Auth only<span class="limit">No data tables</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>No background jobs<span class="limit">No alerts or monitoring</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>No integrations<span class="limit">Cannot connect to banks or lenders</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Static HTML files<span class="limit">No server-side logic</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>localStorage for all data<span class="limit">Browser-only, not synced</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Supabase Auth only<span class="limit">No data tables</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>No background jobs<span class="limit">No alerts or monitoring</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>No integrations<span class="limit">Cannot connect to banks or lenders</span></div></div>
             </div>
             <div class="arch-card future">
               <div class="arch-card-label">Target Architecture</div>
-              <div class="arch-row"><span class="arch-icon">?</span><div>Backend API (Node.js or Python)<span class="good">Business logic, integrations, AI</span></div></div>
-              <div class="arch-row"><span class="arch-icon">???</span><div>Supabase Database (real tables)<span class="good">Transactions, alerts, reports</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>Plaid bank connection<span class="good">Live financial data</span></div></div>
-              <div class="arch-row"><span class="arch-icon">?</span><div>Background job scheduler<span class="good">Nightly health checks, alerts</span></div></div>
-              <div class="arch-row"><span class="arch-icon">??</span><div>Progressive Web App<span class="good">Mobile, offline, installable</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Backend API (Node.js or Python)<span class="good">Business logic, integrations, AI</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Supabase Database (real tables)<span class="good">Transactions, alerts, reports</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Plaid bank connection<span class="good">Live financial data</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Background job scheduler<span class="good">Nightly health checks, alerts</span></div></div>
+              <div class="arch-row"><span class="arch-icon">&#9679;</span><div>Progressive Web App<span class="good">Mobile, offline, installable</span></div></div>
             </div>
           </div>
         </div>
@@ -285,7 +285,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
         <div class="gap-card-body">
           <p>World-class platforms create weekly touchpoints that users actually look forward to. A Monday morning email that says <em>"Your cash runway improved by 0.4 months. You now qualify for 2 new grants with deadlines this month. One action that could save you $1,200 in Q2."</em> is something a business owner forwards to their accountant. That email is also the most powerful retention and upgrade driver possible.</p>
           <div class="callout">
-            <span class="ci">??</span>
+            <span class="ci">&#9679;</span>
             <div><strong>The fix:</strong> Weekly Financial Digest emails generated from real user data. Monthly Score Report. Real-time alerts when a threshold is breached (runway below 3 months, loan eligibility changes, grant deadline approaching). Every email is personalised, data-driven, and genuinely useful.
             <br/><br/>
             <span class="tech-badge">Resend / SendGrid</span>
@@ -395,7 +395,7 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#0f172a;color:#e
 
   <!-- -- Truth block -- -->
   <div class="truth">
-    <div class="truth-icon">??</div>
+    <div class="truth-icon">&#9679;</div>
     <h2>The honest summary</h2>
     <p>The current platform can take BizSco to a good product that real businesses use and pay for. But the best SMB financial platform in the world requires three things that do not exist yet: a backend that can process real data, live bank connections that replace manual entry, and proactive intelligence that tells each business owner exactly what to do next. Those three things are what separate tools from platforms — and platforms from the best in the world.</p>
     <p style="font-size:.85rem;color:#475569">The work to get there is significant but it is entirely buildable. Every phase above has a clear starting point. None of it requires waiting for the others.</p>

@@ -178,14 +178,14 @@
 <!-- Paywall overlay -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-box">
-    <div style="font-size:2.5rem">??</div>
+    <div style="font-size:2.5rem">&#9679;</div>
     <h2>AI CFO Advisor</h2>
     <p>Ask any financial question about your business in plain English. Get expert answers powered by Claude AI — your personal CFO, available 24/7.</p>
     <div class="pw-features">
-      <div class="pw-feat"><span class="fi">??</span>Ask anything — loans, cash flow, growth</div>
-      <div class="pw-feat"><span class="fi">??</span>Answers based on your actual numbers</div>
-      <div class="pw-feat"><span class="fi">??</span>Powered by Claude AI (Anthropic)</div>
-      <div class="pw-feat"><span class="fi">??</span>Private — data stays in your browser</div>
+      <div class="pw-feat"><span class="fi">&#9679;</span>Ask anything — loans, cash flow, growth</div>
+      <div class="pw-feat"><span class="fi">&#9679;</span>Answers based on your actual numbers</div>
+      <div class="pw-feat"><span class="fi">&#9679;</span>Powered by Claude AI (Anthropic)</div>
+      <div class="pw-feat"><span class="fi">&#9679;</span>Private — data stays in your browser</div>
     </div>
     <button class="btn-stripe-pro" onclick="showToast('?? Stripe coming soon! Use FINWISE29 to demo free.');return false;">
       ?? Subscribe Pro — $29/month
@@ -203,8 +203,8 @@
 <!-- Page header -->
 <div class="page-header">
   <div class="ph-left">
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
-    <h1>?? AI CFO Advisor</h1>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
+    <h1>AI CFO Advisor</h1>
     <p>Ask anything about your business finances — powered by Claude AI</p>
   </div>
   <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
@@ -220,7 +220,7 @@
 
     <!-- Auth status (logged-in users) -->
     <div class="sidebar-section" id="authStatusSection" style="display:none">
-      <h3>? Signed In</h3>
+      <h3>Signed In</h3>
       <div style="font-size:.75rem;color:#16a34a;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:8px 10px;line-height:1.6">
         AI CFO is using a secure server-side connection. No API key needed.
       </div>
@@ -228,12 +228,12 @@
 
     <!-- API Key (guest users only) -->
     <div class="sidebar-section" id="apiKeySection">
-      <h3>?? Your Anthropic API Key</h3>
+      <h3>Your Anthropic API Key</h3>
       <div class="api-key-wrap">
         <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-..."/>
-        <button class="api-key-toggle" onclick="toggleKeyVisibility()" title="Show/hide">??</button>
+        <button class="api-key-toggle" onclick="toggleKeyVisibility()" title="Show/hide">&#9679;</button>
       </div>
-      <div class="api-status unset" id="apiStatus">? No key set</div>
+      <div class="api-status unset" id="apiStatus">No key set</div>
       <button class="btn-save-key" onclick="saveApiKey()">Save Key</button>
       <div style="font-size:.7rem;color:#94a3b8;margin-top:.4rem;line-height:1.5">
         Key stored locally in your browser only. Get yours at
@@ -243,7 +243,7 @@
 
     <!-- Business context -->
     <div class="sidebar-section">
-      <h3>?? Business Context</h3>
+      <h3>Business Context</h3>
       <div class="ctx-grid">
         <div class="ctx-field full">
           <label>Business Name</label>
@@ -271,19 +271,19 @@
         </div>
       </div>
       <div style="margin-top:.5rem" id="ctxScoreWrap"></div>
-      <button class="btn-update-ctx" onclick="updateContext()">? Update Context</button>
+      <button class="btn-update-ctx" onclick="updateContext()">Update Context</button>
     </div>
 
     <!-- Module data loaded -->
     <div class="sidebar-section">
-      <h3>?? Module Data Loaded</h3>
+      <h3>Module Data Loaded</h3>
       <div class="mod-chips" id="modChips"><span class="mod-chip no-data">Loading—</span></div>
       <div class="ctx-data-count" id="ctxDataCount"></div>
     </div>
 
     <!-- Quick questions -->
     <div class="sidebar-section">
-      <h3>? Quick Questions</h3>
+      <h3>Quick Questions</h3>
       <div class="quick-list">
         <button class="quick-btn" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</button>
         <button class="quick-btn" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">What is my maximum safe loan?</button>
@@ -305,12 +305,12 @@
 
     <!-- Saved conversations -->
     <div class="sidebar-section" style="flex:1">
-      <h3>?? Saved Conversations</h3>
+      <h3>Saved Conversations</h3>
       <div class="history-list" id="historyList">
         <div class="no-history">No saved conversations yet.</div>
       </div>
-      <button style="width:100%;margin-top:.5rem;padding:.45rem;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:6px;font-size:.78rem;font-weight:700;color:#4f46e5;cursor:pointer" onclick="newChat()">? New Chat</button>
-      <button style="width:100%;margin-top:.4rem;padding:.45rem;background:#fff;border:1.5px solid #fecaca;border-radius:6px;font-size:.78rem;font-weight:700;color:#dc2626;cursor:pointer" onclick="clearChat()">?? Clear &amp; Reset</button>
+      <button style="width:100%;margin-top:.5rem;padding:.45rem;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:6px;font-size:.78rem;font-weight:700;color:#4f46e5;cursor:pointer" onclick="newChat()">New Chat</button>
+      <button style="width:100%;margin-top:.4rem;padding:.45rem;background:#fff;border:1.5px solid #fecaca;border-radius:6px;font-size:.78rem;font-weight:700;color:#dc2626;cursor:pointer" onclick="clearChat()">Clear &amp; Reset</button>
     </div>
 
   </div><!-- /sidebar -->
@@ -321,12 +321,12 @@
     <div class="messages" id="messages">
       <!-- Welcome card shown when no messages -->
       <div class="welcome-card" id="welcomeCard">
-        <div class="wc-icon">??</div>
+        <div class="wc-icon">&#9679;</div>
         <h2>Hi! I'm your AI CFO</h2>
         <p>I know your business numbers. Just ask me a question in plain English — no financial jargon needed.</p>
 
         <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:.9rem 1rem;margin-bottom:1rem;text-align:left">
-          <div style="font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">? You can ask things like:</div>
+          <div style="font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">You can ask things like:</div>
           <div style="font-size:.82rem;color:#166534;display:flex;flex-direction:column;gap:.3rem">
             <span>— "Can I take a $50,000 loan safely?"</span>
             <span>— "What's the maximum I should borrow?"</span>
@@ -337,7 +337,7 @@
         </div>
 
         <div style="background:#fefce8;border:1.5px solid #fde047;border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem;text-align:left">
-          <div style="font-size:.75rem;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">? Before you start:</div>
+          <div style="font-size:.75rem;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Before you start:</div>
           <div style="font-size:.8rem;color:#78350f;line-height:1.6">
             1. Add your <strong>Anthropic API key</strong> in the sidebar (free to get)<br/>
             2. Your <strong>business numbers</strong> are auto-loaded from your saved profile<br/>
@@ -346,16 +346,16 @@
         </div>
 
         <div class="wc-suggestions">
-          <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
-          <div class="wc-suggestion" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">?? What is my maximum safe loan amount?</div>
-          <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
+          <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</div>
+          <div class="wc-suggestion" onclick="sendQuick('What is the maximum loan amount I should take given my cash flow?')">What is my maximum safe loan amount?</div>
+          <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">Give me a 3-step financial action plan</div>
         </div>
       </div>
     </div>
 
     <!-- Typing indicator -->
     <div class="msg typing" id="typingIndicator">
-      <div class="msg-avatar">??</div>
+      <div class="msg-avatar">&#9679;</div>
       <div class="typing-dots">
         <div class="typing-dot"></div>
         <div class="typing-dot"></div>
@@ -368,8 +368,8 @@
       <textarea class="chat-input" id="chatInput" rows="1"
         placeholder="Ask your CFO anything... e.g. 'Can I take a $50,000 loan safely?'"
         onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="btn-action-items" id="actionItemsBtn" onclick="generateActionItems()" title="Generate action items from this conversation" style="display:none">?? Action Items</button>
-      <button class="btn-send" id="sendBtn" onclick="sendMessage()">Send ?</button>
+      <button class="btn-action-items" id="actionItemsBtn" onclick="generateActionItems()" title="Generate action items from this conversation" style="display:none">Action Items</button>
+      <button class="btn-send" id="sendBtn" onclick="sendMessage()">Send &rarr;</button>
     </div>
 
   </div><!-- /chat-area -->
@@ -511,7 +511,7 @@ function loadContextFromProfile(){
   if(cashD&&cashD.currentBalance){ document.getElementById('ctx_reserve').value=Math.round(cashD.currentBalance); liveSourced.push('Cash Balance'); }
   if(liveSourced.length){
     var sWrap=document.getElementById('ctxScoreWrap');
-    if(sWrap){ var badge=document.createElement('div'); badge.style.marginTop='.3rem'; badge.innerHTML='<span class="ctx-live-badge">?? Live: '+liveSourced.join(', ')+'</span>'; sWrap.parentNode.insertBefore(badge,sWrap.nextSibling); }
+    if(sWrap){ var badge=document.createElement('div'); badge.style.marginTop='.3rem'; badge.innerHTML='<span class="ctx-live-badge">Live: '+liveSourced.join(', ')+'</span>'; sWrap.parentNode.insertBefore(badge,sWrap.nextSibling); }
   }
   updateContext();
 }
@@ -945,13 +945,13 @@ function newChat(){
   currentConvId=null;conversation=[];
   document.getElementById('messages').innerHTML=`
     <div class="welcome-card" id="welcomeCard">
-      <div class="wc-icon">??</div>
+      <div class="wc-icon">&#9679;</div>
       <h2>Hi! I'm your AI CFO</h2>
       <p>Ask me anything in plain English — no financial jargon needed.</p>
       <div class="wc-suggestions">
-        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
-        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">?? What\'s my biggest expense risk?</div>
-        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">Give me a 3-step financial action plan</div>
       </div>
     </div>`;
   const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';
@@ -973,7 +973,7 @@ function addMessage(role, content){
   const time=now();
   const div=document.createElement('div');
   div.className=`msg ${role}`;
-  const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">?? Copy</button></div>`:'';
+  const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">Copy</button></div>`:'';
   const safeContent=content.replace(/"/g,'&quot;');
   div.innerHTML=`
     <div class="msg-avatar">${role==='ai'?'??':'??'}</div>
@@ -1139,13 +1139,13 @@ function clearChat(){
   const msgs=document.getElementById('messages');
   msgs.innerHTML=`
     <div class="welcome-card" id="welcomeCard">
-      <div class="wc-icon">??</div>
+      <div class="wc-icon">&#9679;</div>
       <h2>Hi! I'm your AI CFO</h2>
       <p>Ask me anything in plain English — no financial jargon needed.</p>
       <div class="wc-suggestions">
-        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">?? Can I safely take a loan right now?</div>
-        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">?? What\'s my biggest expense risk?</div>
-        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">?? Give me a 3-step financial action plan</div>
+        <div class="wc-suggestion" onclick="sendQuick('Can I safely take a loan right now based on my numbers?')">Can I safely take a loan right now?</div>
+        <div class="wc-suggestion" onclick="sendQuick('What is my biggest expense risk this month?')">What\'s my biggest expense risk?</div>
+        <div class="wc-suggestion" onclick="sendQuick('Give me a 3-step action plan to improve my cash flow.')">Give me a 3-step financial action plan</div>
       </div>
     </div>`;
   const aib=document.getElementById('actionItemsBtn');if(aib)aib.style.display='none';

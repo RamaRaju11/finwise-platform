@@ -290,18 +290,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <!-- --- PAYWALL --- -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">??</div>
+    <div style="font-size:2.2rem">&#9679;</div>
     <h2>Advisor Dashboard</h2>
     <p>Manage all your clients in one place. White-label the platform with your brand and generate branded score cards for every client.</p>
     <div class="pw-feats">
-      <div class="pw-feat">?? Unlimited clients</div>
-      <div class="pw-feat">?? White-label branding</div>
-      <div class="pw-feat">?? Branded score cards</div>
-      <div class="pw-feat">?? Quick risk dashboard</div>
-      <div class="pw-feat">?? Export CSV</div>
-      <div class="pw-feat">?? Open in any tool</div>
+      <div class="pw-feat">Unlimited clients</div>
+      <div class="pw-feat">White-label branding</div>
+      <div class="pw-feat">Branded score cards</div>
+      <div class="pw-feat">Quick risk dashboard</div>
+      <div class="pw-feat">Export CSV</div>
+      <div class="pw-feat">Open in any tool</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FWADVISOR to demo free.')">?? Subscribe Advisor — $79/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FWADVISOR to demo free.')">Subscribe Advisor — $79/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -348,7 +348,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeEdit()">Cancel</button>
-      <button class="btn btn-brand" onclick="saveClient()">?? Save Client</button>
+      <button class="btn btn-brand" onclick="saveClient()">Save Client</button>
     </div>
   </div>
 </div>
@@ -362,8 +362,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
         <div class="sc-btag" id="scm_tag">AI-Powered Loan Safety Platform</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="sc-modal-close" onclick="window.print()">??? Print</button>
-        <button class="sc-modal-close" onclick="closeScModal()">? Close</button>
+        <button class="sc-modal-close" onclick="window.print()">Print</button>
+        <button class="sc-modal-close" onclick="closeScModal()">Close</button>
       </div>
     </div>
     <div class="sc-body">
@@ -401,12 +401,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <div class="modal-overlay" id="importModal">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>?? Import Clients from CSV</h3>
+      <h3>Import Clients from CSV</h3>
       <button class="modal-close" onclick="closeImport()">?</button>
     </div>
     <div class="modal-body">
       <div id="dropZone" class="drop-zone" onclick="document.getElementById('csvFile').click()">
-        <div class="dz-icon">??</div>
+        <div class="dz-icon">&#9679;</div>
         <div class="dz-text">Click to choose a CSV file — or drag &amp; drop it here</div>
         <div class="dz-hint">First row must be headers. Required: <strong>Name, Revenue, Expenses</strong><br>Optional: Industry, EMI, Reserve, Loan, Rate, Tenure, Notes</div>
       </div>
@@ -420,8 +420,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeImport()">Cancel</button>
-      <button class="btn btn-outline btn-sm" id="importResetBtn" onclick="resetImport()" style="display:none">? Choose Different File</button>
-      <button class="btn btn-brand" id="importBtn" onclick="doImport()" style="display:none">?? Import</button>
+      <button class="btn btn-outline btn-sm" id="importResetBtn" onclick="resetImport()" style="display:none">Choose Different File</button>
+      <button class="btn btn-brand" id="importBtn" onclick="doImport()" style="display:none">Import</button>
     </div>
   </div>
 </div>
@@ -429,14 +429,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <!-- --- PAGE --- -->
 <div class="page-header">
   <div class="ph-brand">
-    <div class="ph-brand-icon" id="hdr_icon">??</div>
+    <div class="ph-brand-icon" id="hdr_icon">&#9679;</div>
     <div>
       <div class="ph-brand-name" id="hdr_brand">BizSco</div>
       <div class="ph-brand-tag" id="hdr_tag">Advisor Dashboard — Client Management</div>
     </div>
   </div>
   <div class="ph-right">
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
     <div class="ph-badge">Advisor — $79/month</div>
   </div>
 </div>
@@ -447,7 +447,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 <div class="wl-panel">
   <div class="wl-toggle" id="wlToggle" onclick="toggleWL()">
     <div class="wl-toggle-icon">?</div>
-    <div style="flex:1"><strong>?? White-Label Settings</strong> — Customise your brand name, color &amp; tagline</div>
+    <div style="flex:1"><strong>White-Label Settings</strong> — Customise your brand name, color &amp; tagline</div>
     <div style="font-size:.75rem;color:#94a3b8" id="wlBrandLabel">BizSco</div>
   </div>
   <div class="wl-body" id="wlBody">
@@ -486,12 +486,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
       </div>
     </div>
     <div class="wl-preview" id="wlPreview">
-      <span id="wl_prev_icon" style="font-size:1.3rem">??</span>
+      <span id="wl_prev_icon" style="font-size:1.3rem">&#9679;</span>
       <div><div id="wl_prev_name" style="font-weight:900;font-size:.95rem">BizSco</div>
         <div id="wl_prev_tag" style="font-size:.7rem;opacity:.65">Advisor Dashboard — Client Management</div></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-brand" onclick="applyWL()">? Apply Branding</button>
+      <button class="btn btn-brand" onclick="applyWL()">Apply Branding</button>
       <button class="btn btn-gray" onclick="resetWL()">Reset to BizSco</button>
     </div>
   </div>
@@ -527,9 +527,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
     <option value="score_asc">Sort: Lowest Score (Needs Attention)</option>
     <option value="added">Sort: Recently Added</option>
   </select>
-  <button class="btn btn-brand" onclick="openAddModal()">? Add Client</button>
-  <button class="btn btn-gray" onclick="openImport()">?? Import CSV</button>
-  <button class="btn btn-gray" onclick="exportCSV()">?? Export CSV</button>
+  <button class="btn btn-brand" onclick="openAddModal()">Add Client</button>
+  <button class="btn btn-gray" onclick="openImport()">Import CSV</button>
+  <button class="btn btn-gray" onclick="exportCSV()">Export CSV</button>
   <button class="btn btn-green" onclick="openAdvisorReport()">&#128196; Advisor Report</button>
 </div>
 
@@ -791,7 +791,7 @@ function renderAlerts(){
   var sec=document.getElementById('alertsSection');
   var list=document.getElementById('alertsList');
   if(!alerts.length){
-    list.innerHTML='<div class="no-alerts">? No urgent alerts — your financials look on track.</div>';
+    list.innerHTML='<div class="no-alerts">No urgent alerts — your financials look on track.</div>';
     document.getElementById('alertCountBadge').style.display='none';
   } else {
     document.getElementById('alertCountBadge').textContent=alerts.filter(function(a){return a.cls==='urgent';}).length||alerts.length;
@@ -1126,7 +1126,7 @@ function renderGrid(){
 
   if(!list.length){
     document.getElementById('clientsGrid').innerHTML='<div class="empty-state">'
-      +'<span class="es-icon">??</span>'
+      +'<span class="es-icon">&#9679;</span>'
       +(clients.length?'<p>No clients match your search.</p>':'<p>No clients yet.<br>Click <strong>Add Client</strong> to get started.</p>')
       +'</div>';
     return;
@@ -1169,12 +1169,12 @@ function renderGrid(){
       +'</div>'
       +(hasNotes?'<div class="cc-notes" style="display:block">?? '+esc(c.notes)+'</div>':'')
       +'<div class="cc-actions">'
-        +'<button class="btn btn-brand btn-sm" onclick="openScCard('+idx+')">?? Score Card</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openBrandedReport('+idx+')">?? Report</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'forecast\')">?? Forecast</button>'
-        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'bench\')">?? Bench</button>'
-        +'<button class="btn btn-gray btn-sm" onclick="openEdit('+idx+')">??</button>'
-        +'<button class="btn btn-red btn-sm" onclick="askDelete('+idx+')">??</button>'
+        +'<button class="btn btn-brand btn-sm" onclick="openScCard('+idx+')">Score Card</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openBrandedReport('+idx+')">Report</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'forecast\')">Forecast</button>'
+        +'<button class="btn btn-outline btn-sm" onclick="openInTool('+idx+',\'bench\')">Bench</button>'
+        +'<button class="btn btn-gray btn-sm" onclick="openEdit('+idx+')">&#9679;</button>'
+        +'<button class="btn btn-red btn-sm" onclick="askDelete('+idx+')">&#9679;</button>'
       +'</div>'
       +'<div class="cc-date">Added: '+(c.addedAt||'—')+'</div>'
       +'</div>';

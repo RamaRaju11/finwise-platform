@@ -244,7 +244,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   <div id="topbar"><div id="progress-fill"></div></div>
   <div id="scene-dots"></div>
   <div id="scene-info"></div>
-  <button id="skip-intro" onclick="showScene(scenes.length-1,true)">Skip to End ?</button>
+  <button id="skip-intro" onclick="showScene(scenes.length-1,true)">Skip to End &rarr;</button>
 
   <div id="narration-bar">
     <div class="voice-waves" id="voice-waves">
@@ -255,18 +255,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 
   <div id="controls">
     <button class="cbtn" onclick="prevScene()" title="Previous (?)">?</button>
-    <button class="cbtn primary" id="play-btn" onclick="togglePlay()">? Pause</button>
+    <button class="cbtn primary" id="play-btn" onclick="togglePlay()">Pause</button>
     <button class="cbtn" onclick="nextScene()" title="Next (?)">?</button>
     <span id="ctr-info">1 / 13</span>
     <button class="cbtn" id="speed-btn" onclick="cycleSpeed()">1— speed</button>
-    <button class="cbtn" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute voice (M)">?? Voice</button>
+    <button class="cbtn" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute voice (M)">Voice</button>
     <button class="cbtn" id="voice-settings-btn" onclick="toggleVoicePanel()" title="Voice settings">?</button>
-    <button class="cbtn" onclick="window.open('index.html')">?? Platform</button>
+    <button class="cbtn" onclick="window.open('index.html')">Platform</button>
   </div>
 
   <!-- Voice settings panel -->
   <div id="voice-panel">
-    <h4>?? Voice Settings</h4>
+    <h4>Voice Settings</h4>
     <div class="vp-row">
       <div class="vp-label"><span>Voice</span></div>
       <select id="voice-select" onchange="applyVoiceSettings()"></select>
@@ -283,7 +283,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <div class="vp-label"><span>Volume</span><span id="vol-val">100%</span></div>
       <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="1" oninput="document.getElementById('vol-val').textContent=Math.round(this.value*100)+'%'"/>
     </div>
-    <button class="cbtn primary" onclick="testVoice()" style="margin-top:.25rem;justify-content:center">? Test Voice</button>
+    <button class="cbtn primary" onclick="testVoice()" style="margin-top:.25rem;justify-content:center">Test Voice</button>
   </div>
 
   <!-- --------------------------------------------------------
@@ -304,9 +304,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <strong style="color:#e2e8f0;font-weight:600">in under 60 seconds.</strong>
     </div>
     <div class="a3" style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
-      <span style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#6ee7b7;font-weight:700">?? SAFE</span>
-      <span style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#fbbf24;font-weight:700">?? RISKY</span>
-      <span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#f87171;font-weight:700">?? DANGEROUS</span>
+      <span style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#6ee7b7;font-weight:700">SAFE</span>
+      <span style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#fbbf24;font-weight:700">RISKY</span>
+      <span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#f87171;font-weight:700">DANGEROUS</span>
     </div>
     <div class="a4" style="margin-top:1.25rem;display:flex;gap:1.25rem;flex-wrap:wrap;justify-content:center">
       <span style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:999px;padding:.35rem 1rem;font-size:.75rem;color:#a5b4fc;font-weight:600">? 60-Second Verdict</span>
@@ -325,9 +325,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <div class="a0" style="font-size:clamp(3.5rem,8vw,6rem);font-weight:900;letter-spacing:-.06em;background:linear-gradient(90deg,#ef4444,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Wrong Loan.</div>
     <div class="a1" style="font-size:1.05rem;color:#64748b;margin-top:.35rem">The #1 reason small businesses fail — taking a loan their cash flow can't survive</div>
     <div class="pain-row">
-      <div class="pain-card a2">? Is this loan amount actually safe for me?</div>
-      <div class="pain-card a3" style="animation-delay:.45s">?? Will EMI payments destroy my cash flow?</div>
-      <div class="pain-card a4" style="animation-delay:.6s">?? What's the maximum I can safely borrow?</div>
+      <div class="pain-card a2">Is this loan amount actually safe for me?</div>
+      <div class="pain-card a3" style="animation-delay:.45s">Will EMI payments destroy my cash flow?</div>
+      <div class="pain-card a4" style="animation-delay:.6s">What's the maximum I can safely borrow?</div>
     </div>
   </div>
 
@@ -342,19 +342,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <div class="a1 scene-sub">Your AI CFO analyzes 4 risk factors and delivers a verdict in seconds.</div>
     <div class="phase-row">
       <div class="phase-box a2" style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3)">
-        <div class="pb-num" style="color:#818cf8;font-size:1.1rem">??</div>
+        <div class="pb-num" style="color:#818cf8;font-size:1.1rem">&#9679;</div>
         <div class="pb-lbl" style="color:#818cf8">Cash Flow<br>Strength</div>
       </div>
       <div class="phase-box a2" style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);animation-delay:.2s">
-        <div class="pb-num" style="color:#34d399;font-size:1.1rem">??</div>
+        <div class="pb-num" style="color:#34d399;font-size:1.1rem">&#9679;</div>
         <div class="pb-lbl" style="color:#34d399">Loan<br>Affordability</div>
       </div>
       <div class="phase-box a2" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);animation-delay:.4s">
-        <div class="pb-num" style="color:#fbbf24;font-size:1.1rem">??</div>
+        <div class="pb-num" style="color:#fbbf24;font-size:1.1rem">&#9679;</div>
         <div class="pb-lbl" style="color:#fbbf24">Debt<br>Coverage</div>
       </div>
       <div class="phase-box a2" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);animation-delay:.6s">
-        <div class="pb-num" style="color:#c084fc;font-size:1.1rem">??</div>
+        <div class="pb-num" style="color:#c084fc;font-size:1.1rem">&#9679;</div>
         <div class="pb-lbl" style="color:#c084fc">Stress<br>Resilience</div>
       </div>
     </div>
@@ -373,7 +373,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">Monthly Cash Flow Analysis</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="mock-row">
@@ -403,7 +403,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">Loan Affordability Analysis</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="mock-row">
@@ -438,7 +438,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">?</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">Risk Assessment & Stress Test</div><div class="mockup-sub">Marcus Johnson — TechBridge IT Solutions</div></div>
       </div>
       <div class="met-grid">
@@ -447,9 +447,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
         <div class="met-card"><div class="met-val" style="color:#34d399">85 / 100</div><div class="met-lbl">Loan Safety Score</div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:.45rem">
-        <div class="scenario-row"><span>?? Revenue -20% stress test</span><span class="scenario-badge sb-pass">? PASS</span></div>
-        <div class="scenario-row"><span>?? Reserve coverage</span><span class="scenario-badge sb-pass">? 9.6 months</span></div>
-        <div class="scenario-row"><span>?? Max safe loan</span><span class="scenario-badge sb-pass">? $112,000</span></div>
+        <div class="scenario-row"><span>Revenue -20% stress test</span><span class="scenario-badge sb-pass">PASS</span></div>
+        <div class="scenario-row"><span>Reserve coverage</span><span class="scenario-badge sb-pass">? 9.6 months</span></div>
+        <div class="scenario-row"><span>Max safe loan</span><span class="scenario-badge sb-pass">$112,000</span></div>
       </div>
     </div>
   </div>
@@ -467,7 +467,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">Annual P&L — FY 2025</div><div class="mockup-sub">revenue — COGS — gross profit — net profit</div></div>
       </div>
       <div class="pl-row"><span style="color:#8892b0">Gross Revenue</span><span style="color:#e2e8f0;font-weight:600">$1,020,000</span></div>
@@ -477,10 +477,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <div class="pl-row"><span style="color:#8892b0">- Interest Expense</span><span style="color:#f87171">($33,800)</span></div>
       <div class="pl-row"><span style="color:#818cf8">= Net Profit</span><span style="color:#818cf8">$88,600 <span style="font-size:.72rem;font-weight:400;opacity:.7">8.7% margin</span></span></div>
       <div style="margin-top:.65rem;display:flex;gap:.5rem">
-        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#34d399">? P&L</span>
-        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#38bdf8">? Balance Sheet</span>
-        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#818cf8">? Cash Flow Stmt</span>
-        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#fbbf24">? Accounting Map</span>
+        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#34d399">P&L</span>
+        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#38bdf8">Balance Sheet</span>
+        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#818cf8">Cash Flow Stmt</span>
+        <span style="background:#22263a;border-radius:6px;padding:.3rem .65rem;font-size:.72rem;color:#fbbf24">Accounting Map</span>
       </div>
     </div>
   </div>
@@ -498,7 +498,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">12-Month Cash Flow Forecast</div><div class="mockup-sub">optimistic — base case — pessimistic</div></div>
       </div>
       <div class="chart-box">
@@ -546,7 +546,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">AI CFO — Conversational Financial Advisor</div><div class="mockup-sub">ask questions — get instant answers — act on insights</div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:.55rem">
@@ -579,7 +579,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     </div>
     <div class="mockup si">
       <div class="mockup-hdr">
-        <span class="mockup-icon">??</span>
+        <span class="mockup-icon">&#9679;</span>
         <div><div class="mockup-title">Your Metrics vs. Industry Benchmarks</div><div class="mockup-sub">P25 — median — P75 — your percentile</div></div>
       </div>
       <div class="bm-item">
@@ -616,17 +616,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     <div class="a1 scene-sub" style="margin-bottom:1.5rem">Everything powered by AI. Nothing hidden in jargon.</div>
     <div class="phase-row a2" style="gap:1.2rem">
       <div class="phase-box" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);padding:1.1rem 1.4rem;min-width:165px">
-        <div style="font-size:1.75rem;margin-bottom:.4rem">??</div>
+        <div style="font-size:1.75rem;margin-bottom:.4rem">&#9679;</div>
         <div style="font-size:.85rem;font-weight:800;color:#34d399;margin-bottom:.25rem">Check Loan Safety</div>
         <div style="font-size:.7rem;color:#3d4466;line-height:1.4">Get SAFE / RISKY / DANGEROUS verdict in 60 seconds</div>
       </div>
       <div class="phase-box" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);padding:1.1rem 1.4rem;min-width:165px">
-        <div style="font-size:1.75rem;margin-bottom:.4rem">??</div>
+        <div style="font-size:1.75rem;margin-bottom:.4rem">&#9679;</div>
         <div style="font-size:.85rem;font-weight:800;color:#818cf8;margin-bottom:.25rem">Analyze Business</div>
         <div style="font-size:.7rem;color:#3d4466;line-height:1.4">Cash flow health, P&L, forecasting, benchmarks</div>
       </div>
       <div class="phase-box" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:1.1rem 1.4rem;min-width:165px">
-        <div style="font-size:1.75rem;margin-bottom:.4rem">??</div>
+        <div style="font-size:1.75rem;margin-bottom:.4rem">&#9679;</div>
         <div style="font-size:.85rem;font-weight:800;color:#fbbf24;margin-bottom:.25rem">Improve Finances</div>
         <div style="font-size:.7rem;color:#3d4466;line-height:1.4">AI-driven tips to raise your score and borrow more safely</div>
       </div>
@@ -681,8 +681,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       No sign-up — No server — No complexity<br>Get your SAFE / RISKY / DANGEROUS verdict now.
     </div>
     <div class="cta-btns a2">
-      <a href="modules/loanDecisionScoreEngine.test.html" class="cta-btn cta-primary">? Check Loan Safety Free</a>
-      <a href="index.html" class="cta-btn cta-ghost">?? Explore Full Platform ?</a>
+      <a href="modules/loanDecisionScoreEngine.test.html" class="cta-btn cta-primary">Check Loan Safety Free</a>
+      <a href="index.html" class="cta-btn cta-ghost">Explore Full Platform &rarr;</a>
     </div>
     <div class="a3" style="margin-top:2rem;font-size:.72rem;color:#1e293b;letter-spacing:.05em">
       BizSco — AI Loan Decision Engine — 7 Tools — 4 Tiers — 100% Browser-Based — No Sign-up Required

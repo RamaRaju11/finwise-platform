@@ -81,7 +81,7 @@ input[type=range]{width:100%;accent-color:#2563eb}
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
+<a href="../try.html" class="back-link">Back to Demo</a>
 <h1>Profit Margin Analyzer</h1>
 <p class="subtitle">BizSco — Compare your margins against industry benchmarks and model what-if scenarios.</p>
 
@@ -120,13 +120,13 @@ input[type=range]{width:100%;accent-color:#2563eb}
       </select>
     </div>
   </div>
-  <button class="primary" onclick="analyze()">Analyze Margins ?</button>
+  <button class="primary" onclick="analyze()">Analyze Margins &rarr;</button>
 </div>
 
 <!-- Results -->
 <div id="resultsSection" style="display:none">
   <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
-    <button class="secondary" onclick="window.print()">??? Print / Save PDF</button>
+    <button class="secondary" onclick="window.print()">Print / Save PDF</button>
   </div>
 
   <div class="card">
@@ -190,11 +190,11 @@ function toggleExplain(btn){
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
-    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] ?</button>'+
+    '<button class="explain-toggle" onclick="toggleExplain(this)">[Why this matters] &rarr;</button>'+
     '<div class="explain-body">'+
     '<p>Your business may:</p>'+
     '<ul>'+bullets.map(function(b){return'<li>'+b+'</li>';}).join('')+'</ul>'+
-    '<div class="explain-example">?? Example: '+example+'</div>'+
+    '<div class="explain-example">Example: '+example+'</div>'+
     '</div></div>';
 }
 

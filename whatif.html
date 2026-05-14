@@ -113,11 +113,11 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 <script src="sidebar.js"></script>
 <header class="hdr">
   <a href="index.html" class="logo">Biz<span>Scale</span></a>
-  <a href="dashboard.html" class="back">? Dashboard</a>
+  <a href="dashboard.html" class="back">Dashboard</a>
 </header>
 
 <div class="hero">
-  <h1>?? What-If Scenario Planner</h1>
+  <h1>What-If Scenario Planner</h1>
   <p>Adjust revenue, expenses, and loan details to instantly see how changes affect your loan score, runway, and health grade.</p>
 </div>
 
@@ -129,7 +129,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">?? Revenue change</span>
+        <span class="sl-name">Revenue change</span>
         <span class="sl-val" id="revLabel">+0%</span>
       </div>
       <input type="range" id="revSlider" min="-50" max="100" step="5" value="0" oninput="recalc()">
@@ -139,7 +139,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">?? Expense change</span>
+        <span class="sl-name">Expense change</span>
         <span class="sl-val" id="expLabel">+0%</span>
       </div>
       <input type="range" id="expSlider" min="-50" max="50" step="5" value="0" oninput="recalc()">
@@ -149,7 +149,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">?? Add new loan EMI</span>
+        <span class="sl-name">Add new loan EMI</span>
         <span class="sl-val" id="newEmiLabel">$0/mo</span>
       </div>
       <input type="range" id="newEmiSlider" min="0" max="5000" step="100" value="0" oninput="recalc()">
@@ -159,7 +159,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 
     <div class="sl-group">
       <div class="sl-header">
-        <span class="sl-name">?? Add to cash reserves</span>
+        <span class="sl-name">Add to cash reserves</span>
         <span class="sl-val" id="resLabel">+$0</span>
       </div>
       <input type="range" id="resSlider" min="-20000" max="50000" step="1000" value="0" oninput="recalc()">
@@ -168,7 +168,7 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
     </div>
 
     <div class="btn-row">
-      <button class="btn-outline" onclick="resetSliders()">? Reset to Baseline</button>
+      <button class="btn-outline" onclick="resetSliders()">Reset to Baseline</button>
     </div>
   </div>
 
@@ -237,9 +237,9 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
       <strong>Save this scenario as your profile</strong>
       <span>Updates the numbers pre-filled across all 30 BizSco tools so you can explore this scenario in full detail.</span>
     </div>
-    <button class="btn-primary" onclick="applyScenario()">Save Scenario ?</button>
-    <a href="checkup.html" class="btn-outline">Run Full Checkup ?</a>
-    <a href="history.html" class="btn-outline">?? Score History ?</a>
+    <button class="btn-primary" onclick="applyScenario()">Save Scenario &rarr;</button>
+    <a href="checkup.html" class="btn-outline">Run Full Checkup &rarr;</a>
+    <a href="history.html" class="btn-outline">Score History &rarr;</a>
   </div>
 
 </div>

@@ -123,8 +123,8 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 
 <div id="mainWrap">
 
-<a href="../try.html" class="back-link">? Back to Demo</a>
-<h1>?? Goal Tracker</h1>
+<a href="../try.html" class="back-link">Back to Demo</a>
+<h1>Goal Tracker</h1>
 <p class="subtitle">BizSco — Set revenue, profit, savings, debt, and customer targets — sync live data automatically</p>
 
 <div class="int-strip" id="intStrip"></div>
@@ -132,12 +132,12 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
 <div class="toolbar">
   <div style="flex:1"></div>
   <button class="btn-add" onclick="openModal()">+ Add Goal</button>
-  <button style="margin-left:8px;padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.82rem;cursor:pointer" onclick="window.print()">??? Print</button>
+  <button style="margin-left:8px;padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:.82rem;cursor:pointer" onclick="window.print()">Print</button>
 </div>
 
 <div class="goals-grid" id="goalsGrid"></div>
 <div class="empty-state" id="emptyState" style="display:none">
-  <div class="empty-icon">??</div>
+  <div class="empty-icon">&#9679;</div>
   <div class="empty-text">No goals yet — set your first financial target</div>
   <button class="empty-btn" onclick="openModal()">+ Add My First Goal</button>
 </div>
@@ -150,11 +150,11 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
     <div class="modal-title">Set a New Goal</div>
     <label>Goal Type</label>
     <select id="fType" onchange="updateTypeHint()">
-      <option value="revenue">?? Monthly Revenue Target</option>
-      <option value="profit">?? Monthly Net Profit Target</option>
-      <option value="savings">?? Savings / Cash Reserve Goal</option>
-      <option value="debt">?? Debt Payoff Goal</option>
-      <option value="customers">?? Customer Count Goal</option>
+      <option value="revenue">Monthly Revenue Target</option>
+      <option value="profit">Monthly Net Profit Target</option>
+      <option value="savings">Savings / Cash Reserve Goal</option>
+      <option value="debt">Debt Payoff Goal</option>
+      <option value="customers">Customer Count Goal</option>
     </select>
     <div class="type-hint" id="typeHint"></div>
     <label>Goal Name</label>
@@ -173,7 +173,7 @@ h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
     <input type="month" id="fDeadline"/>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveGoal()">Save Goal ?</button>
+      <button class="btn-save" onclick="saveGoal()">Save Goal &rarr;</button>
     </div>
   </div>
 </div>
@@ -409,8 +409,8 @@ function renderGoals(){
       (barHtml?'<div class="months-row">'+barHtml+'</div>':'')+
       '<div class="log-row">'+
         '<input type="number" class="log-input" id="log_'+g.id+'" placeholder="Log '+(unit==='#'?'customer count':'this month\'s amount')+'"/>'+
-        '<button class="sync-btn" onclick="syncGoal(\''+g.id+'\')" title="'+esc(def.liveDesc)+'">? Sync</button>'+
-        '<button class="log-btn" onclick="logProgress(\''+g.id+'\')">Log ?</button>'+
+        '<button class="sync-btn" onclick="syncGoal(\''+g.id+'\')" title="'+esc(def.liveDesc)+'">Sync</button>'+
+        '<button class="log-btn" onclick="logProgress(\''+g.id+'\')">Log &rarr;</button>'+
       '</div>'+
     '</div>';
   });

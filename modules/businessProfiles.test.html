@@ -129,16 +129,16 @@ input:focus{outline:none;border-color:#4f46e5}
 <!-- Paywall -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div style="font-size:2.2rem">??</div>
+    <div style="font-size:2.2rem">&#9679;</div>
     <h2>Business Profiles Manager</h2>
     <p>Save, switch, and manage multiple business profiles. No more re-entering numbers every time.</p>
     <div class="pw-feats">
-      <div class="pw-feat">?? Save up to 3 profiles</div>
-      <div class="pw-feat">? One-click switch</div>
-      <div class="pw-feat">?? Edit anytime</div>
-      <div class="pw-feat">?? Shared across all tools</div>
+      <div class="pw-feat">Save up to 3 profiles</div>
+      <div class="pw-feat">One-click switch</div>
+      <div class="pw-feat">Edit anytime</div>
+      <div class="pw-feat">Shared across all tools</div>
     </div>
-    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">?? Subscribe Pro — $29/month</button>
+    <button class="pw-btn" onclick="showToast('Stripe coming soon! Use FINWISE29 to demo free.')">Subscribe Pro — $29/month</button>
     <div class="pw-or">or enter promo code</div>
     <div class="pw-row">
       <input type="text" class="pw-inp" id="pwCode" placeholder="PROMO CODE" maxlength="12"/>
@@ -164,8 +164,8 @@ input:focus{outline:none;border-color:#4f46e5}
 <!-- Header -->
 <div class="page-header">
   <div>
-    <a href="../index.html" class="ph-back">? Back to BizSco</a>
-    <h1>?? Business Profiles Manager</h1>
+    <a href="../index.html" class="ph-back">Back to BizSco</a>
+    <h1>Business Profiles Manager</h1>
     <p>Save and switch between business profiles across all BizSco tools</p>
   </div>
   <div class="ph-badge" id="planBadge">Pro — $29/month</div>
@@ -196,7 +196,7 @@ input:focus{outline:none;border-color:#4f46e5}
 
   <!-- Create / Edit form -->
   <div class="form-panel" id="formPanel" style="display:none">
-    <h3 id="formTitle">? Create New Profile</h3>
+    <h3 id="formTitle">Create New Profile</h3>
     <div>
       <label>Business Name</label>
       <input type="text" id="f_name" placeholder="e.g. Acme Consulting"/>
@@ -229,7 +229,7 @@ input:focus{outline:none;border-color:#4f46e5}
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn-save" onclick="saveProfile()">?? Save Profile</button>
+      <button class="btn-save" onclick="saveProfile()">Save Profile</button>
       <button class="btn-cancel" onclick="closeForm()">Cancel</button>
     </div>
   </div>
@@ -340,7 +340,7 @@ function renderGrid(){
 
   if(!profiles.length){
     grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
-      +'<span class="es-icon">??</span>'
+      +'<span class="es-icon">&#9679;</span>'
       +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
       +'</div>';
     return;
@@ -363,7 +363,7 @@ function renderGrid(){
     var savedAt=p.savedAt?'Saved '+p.savedAt:'';
 
     html+='<div class="profile-card'+(isActive?' active':'')+'">'
-      +(isActive?'<div class="active-badge">? Active</div>':'')
+      +(isActive?'<div class="active-badge">Active</div>':'')
       +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
       +'<div class="pc-metrics">'
         +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
@@ -377,10 +377,10 @@ function renderGrid(){
       +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
       +'<div class="pc-actions">'
         +(isActive
-          ?'<button class="btn-sm btn-active already" disabled>? Active</button>'
+          ?'<button class="btn-sm btn-active already" disabled>Active</button>'
           :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
-        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">?? Edit</button>'
-        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">?? Delete</button>'
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">Delete</button>'
       +'</div>'
       +'</div>';
   }
@@ -651,7 +651,7 @@ function renderGrid(){
 
   if(!profiles.length){
     grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">'
-      +'<span class="es-icon">??</span>'
+      +'<span class="es-icon">&#9679;</span>'
       +'<p>No profiles saved yet.<br>Click <strong>New Profile</strong> above to create your first one.</p>'
       +'</div>';
     return;
@@ -674,7 +674,7 @@ function renderGrid(){
     var savedAt=p.savedAt?'Saved '+p.savedAt:'';
 
     html+='<div class="profile-card'+(isActive?' active':'')+'">'
-      +(isActive?'<div class="active-badge">? Active</div>':'')
+      +(isActive?'<div class="active-badge">Active</div>':'')
       +'<div class="pc-name">'+escHtml(p.name||'Unnamed Business')+'</div>'
       +'<div class="pc-metrics">'
         +'<div class="pc-metric"><div class="pc-metric-label">Monthly Revenue</div><div class="pc-metric-val">'+fmt(rev)+'</div></div>'
@@ -688,10 +688,10 @@ function renderGrid(){
       +(savedAt?'<div class="pc-date">'+savedAt+'</div>':'')
       +'<div class="pc-actions">'
         +(isActive
-          ?'<button class="btn-sm btn-active already" disabled>? Active</button>'
+          ?'<button class="btn-sm btn-active already" disabled>Active</button>'
           :'<button class="btn-sm btn-active" onclick="setActive('+i+')">Set Active</button>')
-        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">?? Edit</button>'
-        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">?? Delete</button>'
+        +'<button class="btn-sm btn-edit" onclick="openEditForm('+i+')">Edit</button>'
+        +'<button class="btn-sm btn-del" onclick="askDelete('+i+')">Delete</button>'
       +'</div>'
       +'</div>';
   }

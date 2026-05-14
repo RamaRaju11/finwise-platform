@@ -157,7 +157,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
   <div class="print-hdr-name" id="printBizName">Sales Tax Liability Report</div>
   <div class="print-hdr-meta" id="printMeta"></div>
 </div>
-<h1>??? Sales Tax Tracker</h1>
+<h1>Sales Tax Tracker</h1>
 <p class="subtitle">Track collected sales tax, manage filing periods, and monitor economic nexus thresholds — all 50 states + DC.</p>
 <div id="staleRatesBanner" class="stale-banner no-print">
   ?? <strong>Heads-up:</strong> <span id="staleMsg"></span> <a href="#" style="color:#92400e;font-weight:800;margin-left:6px" onclick="return false">Contact your CPA or check your state revenue website for current rates.</a>
@@ -254,9 +254,9 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
       <div style="font-size:.92rem;font-weight:900;color:#1e293b" id="periodTitle">—</div>
     </div>
     <div class="period-nav">
-      <button class="btn-period" onclick="changePeriod(-1)">? Prev</button>
+      <button class="btn-period" onclick="changePeriod(-1)">Prev</button>
       <button class="btn-period btn-today" onclick="goToToday()">Today</button>
-      <button class="btn-period" onclick="changePeriod(1)">Next ?</button>
+      <button class="btn-period" onclick="changePeriod(1)">Next &rarr;</button>
     </div>
   </div>
   <div class="summary-stats" id="summaryStats"></div>
@@ -282,7 +282,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <div class="card-title" style="margin-bottom:0">Filing History</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn-csv no-print" onclick="exportCSV()">&#8595; Export CSV</button>
-      <button class="btn-sm no-print" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">??? Print</button>
+      <button class="btn-sm no-print" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem" onclick="window.print()">Print</button>
       <button class="btn-sm btn-neutral" onclick="clearAllData()" style="font-size:.7rem">Clear All Data</button>
     </div>
   </div>
@@ -291,7 +291,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
 <!-- SAVE TO PROFILE -->
 <div class="card save-card">
-  <button class="save-btn" onclick="saveSalesTaxToProfile()">?? Save Setup to Profile</button>
+  <button class="save-btn" onclick="saveSalesTaxToProfile()">Save Setup to Profile</button>
   <p style="font-size:.75rem;color:#94a3b8;margin-top:8px">Saves your state and filing frequency to your BizSco profile.</p>
 </div>
 
@@ -665,14 +665,14 @@ function renderPeriodCard(){
   if(txs.length||filed){
     fr='<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">';
     if(filed){
-      fr+='<span class="fbadge fb-filed">? Filed '+filed.date+'</span>';
+      fr+='<span class="fbadge fb-filed">Filed '+filed.date+'</span>';
       fr+='<span class="due-info">'+fmt(filed.amount)+' remitted</span>';
       if(!fut) fr+='<button class="btn-sm btn-neutral" onclick="unmarkFiled(\''+key+'\')">Undo</button>';
     } else if(!fut){
-      fr+='<span class="fbadge fb-unfiled">? Not Filed</span>';
+      fr+='<span class="fbadge fb-unfiled">Not Filed</span>';
       fr+='<span class="due-info">Due: '+periodDue(key)+'</span>';
       if(taxColl>0)
-        fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">? Mark as Filed</button>';
+        fr+='<button class="btn-sm btn-success" onclick="markFiled(\''+key+'\','+taxColl+')">Mark as Filed</button>';
     } else {
       fr+='<span style="font-size:.78rem;color:#94a3b8">Future period — due '+periodDue(key)+'</span>';
     }
@@ -762,9 +762,9 @@ function renderHistory(){
     var filed=_filedMap[key];
     var fut=isFuture(key), cur=isCurrent(key);
     var statusHtml=fut?'<span class="s-future">Future</span>':
-      cur?'<span class="s-current">? Current</span>':
-      filed?'<span class="s-filed">? Filed</span>':
-      tax>0?'<span class="s-unfiled">? Unfiled</span>':'<span class="s-clean">—</span>';
+      cur?'<span class="s-current">Current</span>':
+      filed?'<span class="s-filed">Filed</span>':
+      tax>0?'<span class="s-unfiled">Unfiled</span>':'<span class="s-clean">—</span>';
     rows+='<tr style="'+(cur?'background:#f0f7ff':'')+'">'+'<td style="font-weight:'+(cur?'800':'600')+'">'+periodLabel(key)+'</td>'+
       '<td class="r">'+fmt(sales)+'</td>'+
       '<td class="r">'+fmt(tax)+'</td>'+
@@ -840,7 +840,7 @@ function renderFilingFreqRec(){
   };
   var match = rec === cur;
   el.innerHTML =
-    '<div class="card-title" style="color:#7c3aed">?? Filing Frequency Recommendation</div>'+
+    '<div class="card-title" style="color:#7c3aed">Filing Frequency Recommendation</div>'+
     '<p style="font-size:.8rem;color:#64748b;margin-bottom:4px">Based on your annualized tax liability estimate of <strong>'+fmt(annualized)+'</strong> ('+fmt(ytdTax)+' collected in '+mo+' months — 12).</p>'+
     '<div class="freq-opts">'+
     Object.keys(freqInfo).map(function(f){
@@ -854,7 +854,7 @@ function renderFilingFreqRec(){
         '</div>';
     }).join('')+
     '</div>'+
-    (!match ? '<div class="rate-note" style="margin-top:12px">?? Your current setting is <strong>'+cur+'</strong> but your volume suggests <strong>'+rec+'</strong> may be more appropriate. Update in the setup above.</div>' : '');
+    (!match ? '<div class="rate-note" style="margin-top:12px">Your current setting is <strong>'+cur+'</strong> but your volume suggests <strong>'+rec+'</strong> may be more appropriate. Update in the setup above.</div>' : '');
 }
 
 /* ------------------------------------------
@@ -889,7 +889,7 @@ function loadInvoiceIntegration(){
     strip.innerHTML = '? Invoice Tracker connected — '+paidInv.length+' paid invoices, '+fmt(totalRev)+' in revenue found'+
       (stateTagged > 0 ? '. '+stateTagged+' invoices have state tags for nexus tracking.' :
       '. Add a <em>state</em> field on invoices to enable per-state nexus tracking.')+
-      ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">? Open Invoice Tracker</a>';
+      ' <a href="invoiceTracker.test.html" style="color:#166534;font-weight:800;margin-left:6px">Open Invoice Tracker</a>';
   }catch(e){ strip.style.display='none'; }
 }
 

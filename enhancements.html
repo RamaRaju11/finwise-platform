@@ -135,7 +135,7 @@
 <body>
 
 <nav class="top-nav">
-  <span class="logo">?? BizSco SmallBiz</span>
+  <span class="logo">BizSco SmallBiz</span>
   <span class="subtitle">Platform Enhancement Review — April 2026 — Internal Use Only</span>
 </nav>
 
@@ -155,7 +155,7 @@
 
   <!-- TOC -->
   <div class="toc-card">
-    <h2>?? Table of Contents</h2>
+    <h2>Table of Contents</h2>
     <div class="toc-cols">
       <a href="#exec">Executive Summary &amp; Top 10 Critical Items</a>
       <a href="#groupA">Group A — Loan, Debt &amp; Cash Flow</a>
@@ -170,7 +170,7 @@
   <!-- EXECUTIVE SUMMARY -->
   <div id="exec" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Executive Summary</h2>
     </div>
     <div class="module-card" style="border-radius:0 0 10px 10px; padding: 20px 24px;">
@@ -185,7 +185,7 @@
         <div class="exec-tile"><div class="nt" style="color:#991b1b">8</div><div class="nl">Hard Bugs</div></div>
       </div>
       <div class="top10">
-        <h3>?? Top 10 Critical Items (must-fix before launch)</h3>
+        <h3>Top 10 Critical Items (must-fix before launch)</h3>
         <ol>
           <li><strong>localStorage not persisted in 22+ modules</strong> — inputs reset on every page reload, making the tool feel broken. <span>(Affects all groups)</span></li>
           <li><strong>Division by zero in cashRunway</strong> — if monthly burn = 0 the runway calc returns Infinity/NaN and crashes the display. <span>(cashRunway)</span></li>
@@ -205,7 +205,7 @@
   <!-- GROUP A -->
   <div id="groupA" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Group A — Loan, Debt &amp; Cash Flow (9 Modules)</h2>
       <span class="count">~80 items</span>
     </div>
@@ -344,7 +344,7 @@
   <!-- GROUP B -->
   <div id="groupB" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Group B — Tax, Payroll &amp; Deductions (8 Modules)</h2>
       <span class="count">~56 items</span>
     </div>
@@ -461,7 +461,7 @@
   <!-- GROUP C -->
   <div id="groupC" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Group C — Invoices, Bills, Goals &amp; Grants (8 Modules)</h2>
       <span class="count">~88 items</span>
     </div>
@@ -579,7 +579,7 @@
   <!-- GROUP D -->
   <div id="groupD" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Group D — AI, Analytics, Reports &amp; Dashboard (10 Files)</h2>
       <span class="count">~66 items</span>
     </div>
@@ -714,7 +714,7 @@
   <!-- CROSS-CUTTING THEMES -->
   <div id="cross" class="section">
     <div class="section-header">
-      <span class="icon">??</span>
+      <span class="icon">&#9679;</span>
       <h2>Cross-Cutting Themes</h2>
       <span class="count">8 platform-wide issues</span>
     </div>
@@ -722,49 +722,49 @@
       <div class="cross-grid">
 
         <div class="cross-card">
-          <h3>?? Data Persistence Gap</h3>
+          <h3>Data Persistence Gap</h3>
           <p>22+ modules do not save inputs to localStorage. Every reload requires full re-entry, making the platform feel unreliable and discouraging regular use.</p>
           <p class="affected"><strong>Affects:</strong> All 30+ modules. Fix by adopting a consistent save/restore pattern using the existing <code>fw_*</code> key schema.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? Missing Cross-Module Integration</h3>
+          <h3>Missing Cross-Module Integration</h3>
           <p>Modules do not share data. Revenue entered in invoiceTracker, payroll in payrollEstimator, and taxes in taxEstimator are all siloed. Users re-enter the same numbers in every module.</p>
           <p class="affected"><strong>Affects:</strong> budgetActualTracker, taxEstimator, ownersPay, cashRunway, monthlySnapshot, advisorDashboard, businessHealthScore, forecastPro.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? No Export / Print / PDF</h3>
+          <h3>No Export / Print / PDF</h3>
           <p>Nearly all modules lack a way to get data out. Small business owners need to share financial data with CPAs, lenders, and investors. The gap blocks real-world use.</p>
           <p class="affected"><strong>Affects:</strong> 20+ modules. Minimum viable: browser <code>window.print()</code> with print-optimized CSS. Full solution: html2canvas or jsPDF.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? Hardcoded IRS / Rate Constants</h3>
+          <h3>Hardcoded IRS / Rate Constants</h3>
           <p>Tax brackets, SE tax rates, FICA rates, Section 179 limits, and mileage rates are embedded in logic with no annotation. They will become wrong in 2027 without visible flags.</p>
           <p class="affected"><strong>Affects:</strong> taxEstimator, keyDeductions, payrollEstimator, contractorPayroll, ownersPay. Extract to a <code>TAX_CONSTANTS_2026</code> config object.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? Duplicate Amortization Logic</h3>
+          <h3>Duplicate Amortization Logic</h3>
           <p>debtCommandCenter and loanRepaymentOptimizer both implement independent <code>simulateFull()</code> amortization functions. They will diverge over time and produce inconsistent results.</p>
           <p class="affected"><strong>Affects:</strong> loanRepaymentOptimizer, debtCommandCenter. Extract to a shared <code>amortize(principal, rate, term)</code> utility function.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? Timezone Date Handling</h3>
+          <h3>Timezone Date Handling</h3>
           <p>Date calculations using <code>new Date('YYYY-MM-DD')</code> shift by timezone offset in non-UTC browsers. This causes invoice due dates, tax deadlines, and calendar events to show the wrong day.</p>
           <p class="affected"><strong>Affects:</strong> invoiceTracker, cashFlowCalendar, vendorBillTracker, taxEstimator. Fix: parse dates as <code>new Date(yr, mo-1, day)</code> or use UTC consistently.</p>
         </div>
 
         <div class="cross-card">
-          <h3>??? No Global Business Profile</h3>
+          <h3>No Global Business Profile</h3>
           <p>Business name, industry, entity type, and EIN are entered independently in every module. A global <code>fw_profile</code> localStorage object should be set once during onboarding and read everywhere.</p>
           <p class="affected"><strong>Affects:</strong> All modules. Onboarding.html should be the single source of truth; modules read from <code>fw_profile</code> on load.</p>
         </div>
 
         <div class="cross-card">
-          <h3>?? UI State Not Saved</h3>
+          <h3>UI State Not Saved</h3>
           <p>Filter selections, active tabs, sort order, and toggled views reset on every page reload. Users must re-configure each module every visit, creating friction that erodes daily use habits.</p>
           <p class="affected"><strong>Affects:</strong> loanMarketplaceEngine filters, budgetActualTracker category filter, bankStatementUpload view, grantFinder filter — and ~12 more modules.</p>
         </div>
@@ -776,7 +776,7 @@
   <!-- QUICK WINS -->
   <div id="quickwins" class="section">
     <div class="section-header">
-      <span class="icon">?</span>
+      <span class="icon">&#9679;</span>
       <h2>Quick Wins — Implementable in &lt; 1 Day Each</h2>
       <span class="count">20 items</span>
     </div>

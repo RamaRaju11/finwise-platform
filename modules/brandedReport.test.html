@@ -180,10 +180,10 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
 
 <div class="controls-bar" id="ctrlBar">
   <span class="ctrl-info" id="ctrlInfo">Loading—</span>
-  <button class="ctrl-btn ctrl-back" onclick="history.back()">? Dashboard</button>
-  <button class="ctrl-btn" id="tplToggle" onclick="toggleTplPanel()" style="background:rgba(255,255,255,.1);color:#cbd5e1">? Template</button>
-  <button class="ctrl-btn ctrl-share" onclick="openShareModal()">?? Share Link</button>
-  <button class="ctrl-btn ctrl-print" onclick="window.print()">??? Print / Save PDF</button>
+  <button class="ctrl-btn ctrl-back" onclick="history.back()">Dashboard</button>
+  <button class="ctrl-btn" id="tplToggle" onclick="toggleTplPanel()" style="background:rgba(255,255,255,.1);color:#cbd5e1">Template</button>
+  <button class="ctrl-btn ctrl-share" onclick="openShareModal()">Share Link</button>
+  <button class="ctrl-btn ctrl-print" onclick="window.print()">Print / Save PDF</button>
 </div>
 
 <!-- Template Panel -->
@@ -193,9 +193,9 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
   <div class="tpl-group">
     <div class="tpl-group-title">Layout Preset</div>
     <div class="tpl-presets">
-      <button class="tpl-preset" id="preset-full"      onclick="applyPreset('full')">?? Full Report</button>
-      <button class="tpl-preset" id="preset-executive" onclick="applyPreset('executive')">?? Executive</button>
-      <button class="tpl-preset" id="preset-minimal"   onclick="applyPreset('minimal')">? Minimal</button>
+      <button class="tpl-preset" id="preset-full"      onclick="applyPreset('full')">Full Report</button>
+      <button class="tpl-preset" id="preset-executive" onclick="applyPreset('executive')">Executive</button>
+      <button class="tpl-preset" id="preset-minimal"   onclick="applyPreset('minimal')">Minimal</button>
     </div>
   </div>
 
@@ -224,10 +224,10 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
     <div class="tpl-group-title">Logo</div>
     <div class="logo-upload-area">
       <img id="logoPreviewImg" class="logo-preview-img" alt="Logo" style="display:none"/>
-      <label class="logo-file-label">?? Upload PNG
+      <label class="logo-file-label">Upload PNG
         <input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="onLogoFileChange(event)"/>
       </label>
-      <button class="logo-remove-btn" onclick="removeLogo()">? Remove</button>
+      <button class="logo-remove-btn" onclick="removeLogo()">Remove</button>
     </div>
   </div>
 
@@ -255,7 +255,7 @@ body{font-family:Arial,sans-serif;background:#e8ecf0;color:#1e293b;-webkit-print
 <!-- Share Modal -->
 <div class="share-modal-wrap" id="shareModal" onclick="if(event.target===this)closeShareModal()">
   <div class="share-modal-box">
-    <div class="share-modal-title">?? Shareable Link</div>
+    <div class="share-modal-title">Shareable Link</div>
     <div class="share-modal-note">This link encodes the full report into the URL. Anyone with it can view a read-only version — no account required. Note: large logos may produce very long URLs.</div>
     <textarea class="share-link-box" id="shareLinkBox" readonly></textarea>
     <div class="share-modal-btns">
@@ -335,7 +335,7 @@ function bar(val,max,color){
   return '<div class="sc-bar-track"><div class="sc-bar-fill" style="width:'+w+'%;background:'+color+'"></div></div>';
 }
 function pill(ok,warn){
-  return ok?'<span class="status-pill pill-pass">? Pass</span>':warn?'<span class="status-pill pill-warn">? Marginal</span>':'<span class="status-pill pill-fail">? Fail</span>';
+  return ok?'<span class="status-pill pill-pass">Pass</span>':warn?'<span class="status-pill pill-warn">Marginal</span>':'<span class="status-pill pill-fail">Fail</span>';
 }
 
 /* ------------------------------------------
@@ -557,10 +557,10 @@ function render(){
     try{clients=JSON.parse(localStorage.getItem('fw_clients')||'[]');}catch(e){}
     if(isNaN(idx)||idx<0||idx>=clients.length){
       document.getElementById('reportContent').innerHTML=
-        '<div class="error-state"><span class="es-icon">??</span>'
+        '<div class="error-state"><span class="es-icon">&#9679;</span>'
         +'<h2>No client selected</h2>'
         +'<p>Open this report from the <a href="advisorDashboard.test.html">Advisor Dashboard</a><br>'
-        +'by clicking the <strong>?? Report</strong> button on a client card.</p></div>';
+        +'by clicking the <strong>Report</strong> button on a client card.</p></div>';
       document.getElementById('ctrlInfo').textContent='No client selected.';
       return;
     }
