@@ -439,23 +439,36 @@
     }
 
     function walk(el){
-      // For elements whose entire text content is just ?, ??, ??? or a bullet — try to enrich
+      // Only enrich elements that look like BROKEN emojis (2-3 question marks or big bullet)
+      // Skip legitimate single "?" placeholders and small "•" bullets
       if (el.children.length === 0) {
         const txt = (el.textContent || '').trim();
-        if (/^[\?●•]{1,4}$/.test(txt)) {
-          // Try to determine emoji from sibling/parent context
-          let contextText = '';
-          // 1. Check next sibling text
-          if (el.nextSibling) {
-            contextText = (el.nextSibling.textContent || '').trim();
+        // Match: ??, ???, ● (large bullet from earlier replacement)
+        // Skip: ? (single — legitimate placeholder), • (small bullet — already fine)
+        if (/^(\?{2,3}|●)$/.test(txt)) {
+          // ONLY replace if the element looks like an emoji slot
+          // (has classes like icon/badge or is small/decorative)
+          const cls = (el.className || '').toString().toLowerCase();
+          const isIconSlot = /\b(icon|sb-ic|badge|emoji|tier-ic|step-icon|priority-ic|alert-ic|nav-ic|fw-sb-ic|sb-section)\b/.test(cls);
+
+          if (isIconSlot) {
+            let contextText = '';
+            if (el.nextSibling) {
+              contextText = (el.nextSibling.textContent || '').trim();
+            }
+            if (!contextText && el.parentElement) {
+              const parentText = (el.parentElement.textContent || '').trim();
+              contextText = parentText.replace(txt, '').trim();
+            }
+            const emoji = pickEmojiForText(contextText);
+            el.textContent = emoji || '•';
+          } else {
+            // Not an icon slot — leave it alone (could be a legitimate placeholder)
+            // But strip if it's still corrupted question marks
+            if (/^\?{2,3}$/.test(txt)) {
+              el.textContent = '';
+            }
           }
-          // 2. Check parent's text (excluding this element)
-          if (!contextText && el.parentElement) {
-            const parentText = (el.parentElement.textContent || '').trim();
-            contextText = parentText.replace(txt, '').trim();
-          }
-          const emoji = pickEmojiForText(contextText);
-          el.textContent = emoji || '•';
           return;
         }
       }
