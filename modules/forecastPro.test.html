@@ -447,7 +447,7 @@ function saveState(inputs, extra){
     };
     localStorage.setItem(FCAST_KEY, JSON.stringify(state));
     var badge = document.getElementById('stateBadge');
-    if(badge){ badge.style.display=''; badge.textContent='? Saved '+new Date().toLocaleTimeString([],(function(){return{hour:'2-digit',minute:'2-digit'};})()); }
+    if(badge){ badge.style.display=''; badge.textContent='✓ Saved '+new Date().toLocaleTimeString([],(function(){return{hour:'2-digit',minute:'2-digit'};})()); }
   }catch(e){}
 }
 

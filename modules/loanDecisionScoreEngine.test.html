@@ -818,7 +818,7 @@ function renderConsequence(r) {
   } else {
     var emiPct = r.netCF > 0 ? Math.round((r.newEMI / r.netCF) * 100) : 100;
     var title = r.cls === 'risky'
-      ? '? RISKY — If You Take This Loan Right Now:'
+      ? '⚠ RISKY — If You Take This Loan Right Now:'
       : '?? DANGEROUS — If You Take This Loan Right Now:';
     var items = [];
     items.push('Your EMI will consume <strong>' + emiPct + '%</strong> of your available cash flow every month');
@@ -985,7 +985,7 @@ function updateWhatIf() {
     lastResult.loanAmount, lastResult.rate, lastResult.months, baseCreditScore);
   var delta = r2.total - lastResult.total;
   var sign = delta >= 0 ? '+' : '';
-  var verdictShort = r2.cls === 'safe' ? '? SAFE' : r2.cls === 'risky' ? '?? RISKY' : '?? DANGEROUS';
+  var verdictShort = r2.cls === 'safe' ? '✅ SAFE' : r2.cls === 'risky' ? '?? RISKY' : '?? DANGEROUS';
   document.getElementById('wiResult').textContent =
     '+' + bump + ' pts ? Score: ' + r2.total + ' (' + sign + delta + ') ' + verdictShort;
 }

@@ -678,7 +678,7 @@ function saveToDebtCenter() {
   localStorage.setItem('fw_loans', JSON.stringify(existing));
   var t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-  t.innerHTML = '? Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View &rarr;</a>';
+  t.innerHTML = '✓ Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View &rarr;</a>';
   document.body.appendChild(t);
   setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 4000);
 }

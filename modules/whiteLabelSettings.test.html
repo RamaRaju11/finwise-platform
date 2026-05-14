@@ -332,7 +332,7 @@ function saveSettings(){
     headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+getAccessToken(),'Content-Type':'application/json','Prefer':'return=minimal' },
     body: JSON.stringify(updates)
   }).then(function(r){
-    if(r.ok){ status.textContent='? Saved! New portals will use this branding.'; setTimeout(function(){ status.textContent=''; },4000); }
+    if(r.ok){ status.textContent='✓ Saved! New portals will use this branding.'; setTimeout(function(){ status.textContent=''; },4000); }
     else { status.textContent='? Save failed — try again.'; }
   }).catch(function(){ status.textContent='? Network error.'; });
 }

@@ -165,7 +165,7 @@ function saveProfile(updates){
     var arr=JSON.parse(localStorage.getItem('fw_profiles')||'[]');
     if(arr[idx]){Object.assign(arr[idx],updates);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.getElementById('fwToast');
-    t.textContent='? Saved — all 40 tools updated';
+    t.textContent='✓ Saved — all 40 tools updated';
     t.style.display='block';
     setTimeout(function(){t.style.display='none';},2500);
   }catch(e){}

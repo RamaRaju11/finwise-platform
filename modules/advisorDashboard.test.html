@@ -1309,7 +1309,7 @@ function openScCard(idx){
   var maxSafe=findMaxSafe(rev,exp,emi,res,rate,ten);
   var stressNet=rev*0.8-exp-totEMI;
 
-  var grade=score>=70?'? SAFE — LOAN READY':score>=50?'? RISKY — REVIEW NEEDED':'? HIGH RISK — NOT ADVISED';
+  var grade=score>=70?'✅ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'? HIGH RISK — NOT ADVISED';
   var gradeCls=score>=70?'gbl-safe':score>=50?'gbl-risky':'gbl-danger';
 
   /* Fill modal */

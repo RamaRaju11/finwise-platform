@@ -1656,12 +1656,12 @@ function copyRefLink(){
   var btn = document.querySelector('.ref-copy-btn');
   if(navigator.clipboard){
     navigator.clipboard.writeText(input.value).then(function(){
-      btn.textContent = '? Copied!'; btn.classList.add('copied');
+      btn.textContent = '✓ Copied!'; btn.classList.add('copied');
       setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
     });
   } else {
     document.execCommand('copy');
-    btn.textContent = '? Copied!'; btn.classList.add('copied');
+    btn.textContent = '✓ Copied!'; btn.classList.add('copied');
     setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
   }
 }

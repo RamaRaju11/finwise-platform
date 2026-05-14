@@ -259,7 +259,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sh-h">Confirm your numbers</div>
     <div class="sh-s">We run all 4 checks from these 4 figures. Pre-filled from your profile if saved.</div>
     <div class="card">
-      <div class="pn" id="profNotice" style="display:none"><span>?</span> Pre-filled from your saved profile — edit any value below.</div>
+      <div class="pn" id="profNotice" style="display:none"><span>✓</span> Pre-filled from your saved profile — edit any value below.</div>
       <div class="ig">
         <div class="fl"><label>Monthly Revenue ($)</label><input type="number" id="ck_rev" placeholder="e.g. 15000" oninput="refreshCF();clearErr('ck_rev')"><div class="field-err" id="err_rev">Please enter your monthly revenue</div></div>
         <div class="fl"><label>Monthly Expenses ($)</label><input type="number" id="ck_exp" placeholder="e.g. 11000" oninput="refreshCF();clearErr('ck_exp')"><div class="field-err" id="err_exp">Please enter your monthly expenses</div></div>
@@ -288,7 +288,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="ms"><div class="msv" id="ms_er">—</div><div class="msl">Expense Ratio</div></div>
       </div>
       <ul class="buls" id="loanBullets"></ul>
-      <button class="btn-cont" onclick="goScreen(3)">Continue ? Cash Runway</button>
+      <button class="btn-cont" onclick="goScreen(3)">Continue → Cash Runway</button>
     </div>
   </div>
 
@@ -311,7 +311,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="rw-ticks"><span>0</span><span>3 mo</span><span>6 mo</span><span>9 mo</span><span>12+ mo</span></div>
       </div>
       <ul class="buls" id="rwBullets"></ul>
-      <button class="btn-cont" onclick="goScreen(4)">Continue ? Business Health</button>
+      <button class="btn-cont" onclick="goScreen(4)">Continue → Business Health</button>
     </div>
   </div>
 
@@ -477,9 +477,9 @@ function refreshCF(){
   var rev=parseFloat($('ck_rev').value)||0, exp=parseFloat($('ck_exp').value)||0, net=rev-exp;
   var p=$('cfPill');
   if(!rev&&!exp){p.className='cf cf-neu';p.innerHTML='— Enter revenue &amp; expenses above';return}
-  if(net>0){p.className='cf cf-pos';p.textContent='? Cash-flow positive — +$'+fmt(net)+'/mo'}
-  else if(net===0){p.className='cf cf-neu';p.textContent='? Breaking even — $0 net'}
-  else{p.className='cf cf-neg';p.textContent='? Cash-flow negative — -$'+fmt(-net)+'/mo'}
+  if(net>0){p.className='cf cf-pos';p.textContent='✅ Cash-flow positive — +$'+fmt(net)+'/mo'}
+  else if(net===0){p.className='cf cf-neu';p.textContent='⚖ Breaking even — $0 net'}
+  else{p.className='cf cf-neg';p.textContent='⚠ Cash-flow negative — -$'+fmt(-net)+'/mo'}
 }
 
 function startCheckup(){
@@ -945,8 +945,8 @@ function buildShareUrl(){
 
 function copyShareLink(){
   var url=buildShareUrl(), btn=$('copyBtn');
-  var done=function(){btn.textContent='? Copied!';btn.style.background='#dcfce7';btn.style.color='#15803d';
-    setTimeout(function(){btn.textContent='?? Copy Link';btn.style.background='';btn.style.color='';},2500);};
+  var done=function(){btn.textContent='✓ Copied!';btn.style.background='#dcfce7';btn.style.color='#15803d';
+    setTimeout(function(){btn.textContent='🔗 Copy Link';btn.style.background='';btn.style.color='';},2500);};
   if(navigator.clipboard){navigator.clipboard.writeText(url).then(done);}
   else{var t=document.createElement('textarea');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);done();}
 }
