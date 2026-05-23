@@ -141,7 +141,7 @@ button.print-btn:hover{background:#e2e8f0}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -240,7 +240,7 @@ function calculate(){
     recCls += ' danger';
     var varCostPerSale = rev > 0 ? rev * varRate : 0;
     var lossPerSale = varCostPerSale - rev;
-    recText = '?? Danger: Your variable costs exceed your revenue — you are losing money on every sale.';
+    recText = '❌ Danger: Your variable costs exceed your revenue — you are losing money on every sale.';
     recExplain = explainHtml(
       ['You\'re losing money on every single sale — selling more makes things worse, not better',
        'Variable costs (materials, commission, delivery) exceed your selling price',
@@ -249,7 +249,7 @@ function calculate(){
     );
   } else if(safetyMarginAfter < 0){
     recCls += ' danger';
-    recText = '?? Danger: At your current revenue of '+fmt(rev)+'/mo, you cannot cover the new loan. Your break-even rises to '+fmt(beAfter)+'/mo. You need '+fmt(Math.abs(safetyMarginAfter))+'/mo more revenue just to survive.';
+    recText = '❌ Danger: At your current revenue of '+fmt(rev)+'/mo, you cannot cover the new loan. Your break-even rises to '+fmt(beAfter)+'/mo. You need '+fmt(Math.abs(safetyMarginAfter))+'/mo more revenue just to survive.';
     recExplain = explainHtml(
       ['You need to earn more than you currently do just to cover costs — you\'re operating at a loss',
        'Every unit/dollar of revenue below break-even means you\'re losing money',
@@ -267,7 +267,7 @@ function calculate(){
     }
   } else if(safetyPctAfter < 15){
     recCls += ' warn';
-    recText = '?? Caution: Only '+pct(safetyPctAfter)+' safety margin after the new loan. A small revenue dip could push you into loss. Consider a smaller loan or wait until revenue reaches '+fmt(beAfter*1.2)+'/mo.';
+    recText = '⚠️ Caution: Only '+pct(safetyPctAfter)+' safety margin after the new loan. A small revenue dip could push you into loss. Consider a smaller loan or wait until revenue reaches '+fmt(beAfter*1.2)+'/mo.';
     var fixedPctOfRevWarn = rev > 0 ? (fixedTotalAfter / rev * 100) : 0;
     if(fixedPctOfRevWarn > 50){
       recExplain = explainHtml(
@@ -278,7 +278,7 @@ function calculate(){
       );
     }
   } else {
-    recText = '? Safe: After the new loan your safety margin is '+pct(safetyPctAfter)+'. Your revenue comfortably exceeds the new break-even of '+fmt(beAfter)+'/mo. The loan is financially sound.';
+    recText = '✅ Safe: After the new loan your safety margin is '+pct(safetyPctAfter)+'. Your revenue comfortably exceeds the new break-even of '+fmt(beAfter)+'/mo. The loan is financially sound.';
   }
   document.getElementById('recBox').className = recCls;
   document.getElementById('recBox').innerHTML = recText + recExplain;

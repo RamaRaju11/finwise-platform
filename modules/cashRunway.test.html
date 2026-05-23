@@ -198,7 +198,7 @@ button.print-btn:hover{background:#e2e8f0}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -247,9 +247,9 @@ function renderCalendarBanner(){
   var el=document.getElementById('calendarBanner');
   if(!d.billCount&&!d.incomeEvents&&!d.empCount){el.className='conn-band';return;}
   var pills='';
-  if(d.billCount) pills+='<span class="cb-pill">?? '+d.billCount+' bills — '+fmt(d.totalBills)+'/mo</span>';
-  if(d.empCount) pills+='<span class="cb-pill">?? '+d.empCount+' employees — '+fmt(d.monthlyWages)+'/mo wages</span>';
-  if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events — '+fmt(d.monthlyIncome)+'/mo</span>';
+  if(d.billCount) pills+='<span class="cb-pill">📄 '+d.billCount+' bills — '+fmt(d.totalBills)+'/mo</span>';
+  if(d.empCount) pills+='<span class="cb-pill">👥 '+d.empCount+' employees — '+fmt(d.monthlyWages)+'/mo wages</span>';
+  if(d.incomeEvents) pills+='<span class="cb-pill">💰 '+d.incomeEvents+' income events — '+fmt(d.monthlyIncome)+'/mo</span>';
   el.className='conn-band has-data';
   el.innerHTML='<div class="cb-icon">&#9679;</div>'
     +'<div class="cb-body">'
@@ -266,7 +266,7 @@ function importFromCalendar(){
   if(totalFixed>0){document.getElementById('fixedCosts').value=Math.round(totalFixed);msg.push('Fixed Costs = '+fmt(totalFixed)+' (bills + wages)');}
   if(d.monthlyIncome){document.getElementById('revenue').value=Math.round(d.monthlyIncome);msg.push('Revenue = '+fmt(d.monthlyIncome));}
   var t=document.getElementById('fwToast');
-  t.textContent='? Imported: '+msg.join(', ');
+  t.textContent='✅ Imported: '+msg.join(', ');
   t.style.display='block';
   setTimeout(function(){t.style.display='none';},3000);
 }

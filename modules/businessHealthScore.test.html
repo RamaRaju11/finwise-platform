@@ -253,7 +253,7 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -588,14 +588,14 @@ function calculate(){
       : fmtR(ld.invoiceOverdueRate,0)+'% of outstanding balance is overdue ('+fmt(ld.invoiceOverdueAmt)+')';
     liveHtml += mcCard('Receivables Health', fmt(ld.invoiceOutstandingAmt)+' out', Math.max(0,100-ld.invoiceOverdueRate), arDesc, arScore, 'Invoice Tracker');
     if(ld.invoiceOverdueAmt > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+fmt(ld.invoiceOverdueAmt)+' overdue</strong> across '+ld.invoiceOverdueCount+' invoice'+(ld.invoiceOverdueCount>1?'s':'')+'. Send payment reminders today — every day delayed reduces collection probability.',href:'invoiceTracker.test.html'});
+      insights.push({cls:'bad',ico:'❌',txt:'<strong>'+fmt(ld.invoiceOverdueAmt)+' overdue</strong> across '+ld.invoiceOverdueCount+' invoice'+(ld.invoiceOverdueCount>1?'s':'')+'. Send payment reminders today — every day delayed reduces collection probability.',href:'invoiceTracker.test.html'});
       extraRecs.push({cls:'bad', text:'Overdue invoices total '+fmt(ld.invoiceOverdueAmt)+' — contact those clients this week for payment.'});
     }
     if(ld.badDebt && ld.badDebt.length > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.badDebt.length+' invoice'+(ld.badDebt.length>1?'s are':' is')+' 60+ days overdue</strong> — these are at serious risk of becoming uncollectible. Consider formal follow-up or a collection process.',href:'invoiceTracker.test.html'});
+      insights.push({cls:'bad',ico:'❌',txt:'<strong>'+ld.badDebt.length+' invoice'+(ld.badDebt.length>1?'s are':' is')+' 60+ days overdue</strong> — these are at serious risk of becoming uncollectible. Consider formal follow-up or a collection process.',href:'invoiceTracker.test.html'});
     }
     if(ld.dso > 45){
-      insights.push({cls:'warn',ico:'??',txt:'Your customers take an average of <strong>~'+Math.round(ld.dso)+' days to pay</strong>. Industry best practice is under 30 days. Consider offering 2% early-payment discounts.',href:'invoiceTracker.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'Your customers take an average of <strong>~'+Math.round(ld.dso)+' days to pay</strong>. Industry best practice is under 30 days. Consider offering 2% early-payment discounts.',href:'invoiceTracker.test.html'});
     }
   } else {
     liveHtml += mcCardGrey('Receivables Health', 'Track outstanding invoices and overdue amounts', 'Invoice Tracker');
@@ -608,12 +608,12 @@ function calculate(){
     var payDesc = 'Monthly bills are '+fmtR(ld.billsToRev,0)+'% of your revenue ('+fmt(ld.totalMonthlyBills)+'/mo in '+ld.billCategories+' bill categories)';
     liveHtml += mcCard('Payables Burden', fmtR(ld.billsToRev,0)+'% of rev', Math.max(0,100-ld.billsToRev), payDesc, payScore, 'Bill Tracker');
     if(ld.billsToRev > 55){
-      insights.push({cls:'warn',ico:'??',txt:'Your fixed monthly bills represent <strong>'+fmtR(ld.billsToRev,0)+'% of revenue</strong> ('+fmt(ld.totalMonthlyBills)+'/mo). Any revenue dip leaves little for payroll and profit. Identify bills to reduce or renegotiate.',href:'vendorBillTracker.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'Your fixed monthly bills represent <strong>'+fmtR(ld.billsToRev,0)+'% of revenue</strong> ('+fmt(ld.totalMonthlyBills)+'/mo). Any revenue dip leaves little for payroll and profit. Identify bills to reduce or renegotiate.',href:'vendorBillTracker.test.html'});
       extraRecs.push({cls:'warn', text:'Monthly bills at '+fmtR(ld.billsToRev,0)+'% of revenue — renegotiate 2—3 vendor contracts to reduce fixed costs by 10%.'});
     }
     if(ld.expiringContracts.length > 0){
       var names = ld.expiringContracts.map(function(b){ return b.vendor; }).join(', ');
-      insights.push({cls:'warn',ico:'??',txt:'<strong>'+ld.expiringContracts.length+' contract'+(ld.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review whether to renew, renegotiate, or switch vendors.',href:'vendorBillTracker.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'<strong>'+ld.expiringContracts.length+' contract'+(ld.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review whether to renew, renegotiate, or switch vendors.',href:'vendorBillTracker.test.html'});
     }
   } else {
     liveHtml += mcCardGrey('Payables Burden', 'Track monthly bills and vendor contracts', 'Bill Tracker');
@@ -630,11 +630,11 @@ function calculate(){
     var compDesc = ld.contractorTotal+' contractor'+(ld.contractorTotal>1?'s':'')+ ' — '+fmtR(ld.w9ComplianceRate,0)+'% W-9 compliance'+(ld.necRequired.length?' — '+ld.necRequired.length+' 1099s required':'');
     liveHtml += mcCard('Contractor Compliance', fmtR(ld.w9ComplianceRate,0)+'%', compPct, compDesc, compScore, 'Contractor & Payroll');
     if(ld.noW9.length > 0){
-      insights.push({cls:'bad',ico:'??',txt:'<strong>'+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s are':' is')+' missing a W-9</strong>: '+ld.noW9.map(function(c){return c.name;}).join(', ')+'. You must withhold 24% of payments without a W-9 — this is an IRS requirement.',href:'contractorPayroll.test.html'});
+      insights.push({cls:'bad',ico:'❌',txt:'<strong>'+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s are':' is')+' missing a W-9</strong>: '+ld.noW9.map(function(c){return c.name;}).join(', ')+'. You must withhold 24% of payments without a W-9 — this is an IRS requirement.',href:'contractorPayroll.test.html'});
       extraRecs.push({cls:'bad', text:'Collect W-9 forms from '+ld.noW9.length+' contractor'+(ld.noW9.length>1?'s':'')+' immediately — required before making any payment.'});
     }
     if(ld.necRequired.length > 0){
-      insights.push({cls:'warn',ico:'??',txt:'<strong>'+ld.necRequired.length+' contractor'+(ld.necRequired.length>1?'s':'')+' require 1099-NEC forms</strong> this year (paid $600+). Deadline: January 31. File early to avoid $60—$310 penalty per form.',href:'contractorPayroll.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'<strong>'+ld.necRequired.length+' contractor'+(ld.necRequired.length>1?'s':'')+' require 1099-NEC forms</strong> this year (paid $600+). Deadline: January 31. File early to avoid $60—$310 penalty per form.',href:'contractorPayroll.test.html'});
     }
   } else {
     liveHtml += mcCardGrey('Contractor Compliance', 'Track W-9s and 1099-NEC filing requirements', 'Contractor & Payroll');
@@ -646,7 +646,7 @@ function calculate(){
   if(!ld.deductionsConnected){
     liveHtml += mcCardGrey('Deduction Tracking', 'Log home office, mileage and equipment to reduce your tax bill', 'Key Deductions');
     if(annualProfit > 15000){
-      insights.push({cls:'info',ico:'??',txt:'<strong>You haven\'t logged any tax deductions.</strong> Self-employed businesses can typically deduct $5,000—$20,000+ per year in home office, mileage, and equipment costs. Every $1,000 in deductions saves roughly $220—$370 in taxes.',href:'keyDeductions.test.html'});
+      insights.push({cls:'info',ico:'💡',txt:'<strong>You haven\'t logged any tax deductions.</strong> Self-employed businesses can typically deduct $5,000—$20,000+ per year in home office, mileage, and equipment costs. Every $1,000 in deductions saves roughly $220—$370 in taxes.',href:'keyDeductions.test.html'});
     }
   } else {
     var dedRate = annualProfit > 0 ? (ld.totalDeductions/annualProfit)*100 : 0;
@@ -660,9 +660,9 @@ function calculate(){
     if(ld.s179Setup) dedDesc += ' — Equipment: '+fmt(ld.s179Deduction);
     liveHtml += mcCard('Deduction Tracking', fmt(ld.totalDeductions), Math.min(dedRate*5,100), dedDesc, dedScore, 'Key Deductions');
     if(dedRate < 3 && annualProfit > 20000){
-      insights.push({cls:'warn',ico:'??',txt:'Your tracked deductions are only '+fmtR(dedRate,1)+'% of your annual profit. Most businesses can deduct 10—25%+ of profit. Check if you\'re missing home office, mileage, or equipment write-offs.',href:'keyDeductions.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'Your tracked deductions are only '+fmtR(dedRate,1)+'% of your annual profit. Most businesses can deduct 10—25%+ of profit. Check if you\'re missing home office, mileage, or equipment write-offs.',href:'keyDeductions.test.html'});
     } else if(dedRate >= 8){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Strong deduction tracking</strong> — you\'ve logged '+fmt(ld.totalDeductions)+' which is '+fmtR(dedRate,1)+'% of your annual profit. This could save you approximately '+fmt(ld.totalDeductions*0.25)+'—'+fmt(ld.totalDeductions*0.37)+' in taxes.'});
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Strong deduction tracking</strong> — you\'ve logged '+fmt(ld.totalDeductions)+' which is '+fmtR(dedRate,1)+'% of your annual profit. This could save you approximately '+fmt(ld.totalDeductions*0.25)+'—'+fmt(ld.totalDeductions*0.37)+' in taxes.'});
     }
   }
   // Savings Goal Progress
@@ -672,10 +672,10 @@ function calculate(){
     var savDesc = ld.savingsGoalCount+' goal'+(ld.savingsGoalCount>1?'s':'')+' — '+fmt(ld.savingsTotalSaved)+' saved of '+fmt(ld.savingsTotalTarget)+' target';
     liveHtml += mcCard('Savings Progress', Math.round(ld.savingsFundedPct)+'%', Math.min(ld.savingsFundedPct,100), savDesc, savScore, 'Savings Goals');
     if(ld.savingsFundedPct < 40){
-      insights.push({cls:'warn',ico:'??',txt:'Savings goals are only <strong>'+Math.round(ld.savingsFundedPct)+'% funded</strong> — deficit of '+fmt(ld.savingsDeficit)+'. Underfunded reserves increase vulnerability to unexpected expenses.',href:'savingsGoals.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'Savings goals are only <strong>'+Math.round(ld.savingsFundedPct)+'% funded</strong> — deficit of '+fmt(ld.savingsDeficit)+'. Underfunded reserves increase vulnerability to unexpected expenses.',href:'savingsGoals.test.html'});
       extraRecs.push({cls:'warn', text:'Savings goals '+Math.round(ld.savingsFundedPct)+'% funded ('+fmt(ld.savingsDeficit)+' short) — set up an auto-transfer to close the gap.'});
     } else if(ld.savingsFundedPct >= 75){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Savings goals '+Math.round(ld.savingsFundedPct)+'% funded</strong> — '+fmt(ld.savingsTotalSaved)+' saved toward '+fmt(ld.savingsTotalTarget)+' total goal. Strong financial resilience.'});
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Savings goals '+Math.round(ld.savingsFundedPct)+'% funded</strong> — '+fmt(ld.savingsTotalSaved)+' saved toward '+fmt(ld.savingsTotalTarget)+' total goal. Strong financial resilience.'});
     }
   } else {
     liveHtml += mcCardGrey('Savings Progress', 'Track savings goals to measure financial resilience', 'Savings Goals');
@@ -688,10 +688,10 @@ function calculate(){
     var gtrDesc = ld.goalCompleted+' of '+ld.goalTotal+' goals completed — '+Math.round(ld.goalHitRate)+'% execution rate';
     liveHtml += mcCard('Goal Hit Rate', Math.round(ld.goalHitRate)+'%', Math.min(ld.goalHitRate,100), gtrDesc, gtrScore, 'Goal Tracker');
     if(ld.goalHitRate < 40){
-      insights.push({cls:'warn',ico:'??',txt:'Goal hit rate is <strong>'+Math.round(ld.goalHitRate)+'%</strong> — only '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Break goals into smaller milestones to improve execution.',href:'goalTracker.test.html'});
+      insights.push({cls:'warn',ico:'⚠️',txt:'Goal hit rate is <strong>'+Math.round(ld.goalHitRate)+'%</strong> — only '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Break goals into smaller milestones to improve execution.',href:'goalTracker.test.html'});
       extraRecs.push({cls:'warn', text:'Goal hit rate of '+Math.round(ld.goalHitRate)+'% — set smaller monthly milestones in Goal Tracker to improve execution cadence.'});
     } else if(ld.goalHitRate >= 70){
-      insights.push({cls:'good',ico:'?',txt:'<strong>Strong execution: '+Math.round(ld.goalHitRate)+'% goal hit rate</strong> — '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Consistent performance signals operational maturity.'});
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Strong execution: '+Math.round(ld.goalHitRate)+'% goal hit rate</strong> — '+ld.goalCompleted+' of '+ld.goalTotal+' goals completed. Consistent performance signals operational maturity.'});
     }
   } else {
     liveHtml += mcCardGrey('Goal Hit Rate', 'Track goal completion to measure execution health', 'Goal Tracker');
@@ -708,10 +708,10 @@ function calculate(){
     var taxDesc = 'Last payment: '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago — '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' — '+fmt(ld.taxTotalPaid)+' total';
     liveHtml += mcCard('Tax Compliance', ld.monthsSinceLastTax+' mo ago', taxBar, taxDesc, taxScore2, 'Tax Payments');
     if(ld.monthsSinceLastTax > 3){
-      insights.push({cls:'bad',ico:'??',txt:'Last estimated tax payment was <strong>'+ld.monthsSinceLastTax+' months ago</strong>. IRS estimated taxes are due quarterly (Apr 15, Jun 16, Sep 15, Jan 15). Late payments incur underpayment penalties.',href:'taxPayments.test.html'});
+      insights.push({cls:'bad',ico:'❌',txt:'Last estimated tax payment was <strong>'+ld.monthsSinceLastTax+' months ago</strong>. IRS estimated taxes are due quarterly (Apr 15, Jun 16, Sep 15, Jan 15). Late payments incur underpayment penalties.',href:'taxPayments.test.html'});
       extraRecs.push({cls:'bad', text:'Estimated tax payment overdue — last payment was '+ld.monthsSinceLastTax+' months ago. Pay this quarter to avoid IRS penalty.'});
     } else {
-      insights.push({cls:'good',ico:'?',txt:'<strong>Tax payments current</strong> — last payment '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago. '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' totaling '+fmt(ld.taxTotalPaid)+' this year.'});
+      insights.push({cls:'good',ico:'✅',txt:'<strong>Tax payments current</strong> — last payment '+ld.monthsSinceLastTax+' month'+(ld.monthsSinceLastTax!==1?'s':'')+' ago. '+ld.taxPaymentCount+' payment'+(ld.taxPaymentCount>1?'s':'')+' totaling '+fmt(ld.taxTotalPaid)+' this year.'});
     }
   } else {
     liveHtml += mcCardGrey('Tax Compliance', 'Log estimated tax payments to track compliance', 'Tax Payments');
@@ -795,7 +795,7 @@ function calculate(){
         'Debt-to-equity of '+(r.dteVal||fmtR(debtToEquity))+'x means for every $1 of owner equity there is '+(r.dteVal||fmtR(debtToEquity))+' in debt. Lenders prefer this below 2x before approving new credit'
       );
     }
-    return '<li class="'+r.cls+'"><span>'+(r.cls==='good'?'?':r.cls==='warn'?'??':'??')+'</span>'+r.text+exBlock+'</li>';
+    return '<li class="'+r.cls+'"><span>'+(r.cls==='good'?'✅':r.cls==='warn'?'⚠️':'❌')+'</span>'+r.text+exBlock+'</li>';
   }).join('');
 
   document.getElementById('resultsSection').style.display = 'block';

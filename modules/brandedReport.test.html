@@ -285,7 +285,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 /* -- Currency -- */
 var CUR_SYM=(function(){
   var s=localStorage.getItem('BizSco_currency')||'USD';
-  return s==='INR'?'?':s==='EUR'?'—':s==='GBP'?'—':'$';
+  return s==='INR'?'₹':s==='EUR'?'€':s==='GBP'?'£':'$';
 })();
 function fmt(n){return CUR_SYM+Math.round(Math.abs(n)).toLocaleString();}
 function fmtS(n){return (n<0?'-':'')+fmt(n);}
@@ -584,7 +584,7 @@ function render(){
   var npm=rev>0?net/rev*100:0,emr=rev>0?totEMI/rev*100:0,opMgn=rev>0?(rev-exp)/rev*100:0;
 
   var gcls=score>=70?'#10b981':score>=50?'#f59e0b':'#dc2626';
-  var grade=score>=70?'✅ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'? HIGH RISK — NOT ADVISED';
+  var grade=score>=70?'✅ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'❌ HIGH RISK — NOT ADVISED';
   var gradeBg=score>=70?'#dcfce7':score>=50?'#fef9c3':'#fee2e2';
   var gradeFg=score>=70?'#166534':score>=50?'#854d0e':'#991b1b';
   var dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -596,7 +596,7 @@ function render(){
   /* -- HEADER -- */
   html+='<div class="rpt-header">'
     +'<div class="rh-left">'
-    +(logoData?'<img class="rh-logo-img" src="'+logoData+'" alt="Logo"/>':'<div class="rh-icon">'+esc(WL.icon||'??')+'</div>')
+    +(logoData?'<img class="rh-logo-img" src="'+logoData+'" alt="Logo"/>':'<div class="rh-icon">'+esc(WL.icon||'🏢')+'</div>')
     +'<div>'
       +'<div class="rh-brand-name">'+esc(WL.brand)+'</div>'
       +'<div class="rh-brand-tag">'+esc(WL.tag||'Financial Advisory Services')+'</div>'
@@ -680,7 +680,7 @@ function render(){
       +'<div class="stress-item"><div class="si-lbl">Stressed Net CF</div><div class="si-val" style="color:'+(stressNet>=0?'#10b981':'#dc2626')+'">'+fmtS(stressNet)+'</div></div>'
     +'</div>'
     +'<div style="margin-top:10px;padding:9px 14px;border-radius:7px;font-size:.8rem;font-weight:700;background:'+(stressNet>=0?'#dcfce7':'#fee2e2')+';color:'+(stressNet>=0?'#166534':'#991b1b')+'">'
-      +(stressNet>=0?'? Business survives a 20% revenue shock — cash flow remains positive.':'? A 20% revenue drop would turn cash flow negative. Build reserves or reduce fixed costs before taking on debt.')
+      +(stressNet>=0?'✅ Business survives a 20% revenue shock — cash flow remains positive.':'❌ A 20% revenue drop would turn cash flow negative. Build reserves or reduce fixed costs before taking on debt.')
     +'</div></div>';
 
   /* -- RECOMMENDATION -- */

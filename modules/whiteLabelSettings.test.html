@@ -277,7 +277,7 @@ function updatePreview(){
   if(logoUrl){
     logoWrap.innerHTML = '<img src="'+logoUrl+'" style="width:28px;height:28px;border-radius:4px;object-fit:cover" onerror="this.style.display=\'none\'">';
   } else {
-    logoWrap.innerHTML = '??';
+    logoWrap.innerHTML = '🏢';
   }
 
   var footer = document.getElementById('prevFooter');
@@ -333,8 +333,8 @@ function saveSettings(){
     body: JSON.stringify(updates)
   }).then(function(r){
     if(r.ok){ status.textContent='✓ Saved! New portals will use this branding.'; setTimeout(function(){ status.textContent=''; },4000); }
-    else { status.textContent='? Save failed — try again.'; }
-  }).catch(function(){ status.textContent='? Network error.'; });
+    else { status.textContent='❌ Save failed — try again.'; }
+  }).catch(function(){ status.textContent='❌ Network error.'; });
 }
 
 window.addEventListener('load', function(){

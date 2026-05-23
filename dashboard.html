@@ -504,7 +504,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
   <!-- TOP BAR -->
   <header class="topbar">
-    <button class="tb-hamburger" id="sbHamburger" onclick="toggleSidebar()">?</button>
+    <button class="tb-hamburger" id="sbHamburger" onclick="toggleSidebar()">☰</button>
     <div class="tb-title">Dashboard</div>
     <div class="tb-spacer"></div>
     <a href="onboarding.html" onclick="localStorage.removeItem('fw_onboarded')" style="font-size:.82rem;font-weight:700;color:#374151;text-decoration:none;" title="Edit your profile" id="userName"></a>
@@ -1120,7 +1120,7 @@ function updateSidebarLocks(plan){
       if(!lk){
         lk = document.createElement('span');
         lk.className = 'sb-lock';
-        lk.textContent = '??';
+        lk.textContent = '🔒';
         el.appendChild(lk);
       }
       el.style.opacity = '.45';
@@ -1145,7 +1145,7 @@ function renderDashboard(plan){
   /* Plan card */
   document.getElementById('planTitle').textContent = pc.label;
   document.getElementById('planDesc').textContent = pc.desc;
-  var feats = pc.features.map(function(f){ return '<span class="pf-chip">? '+f+'</span>'; }).join('');
+  var feats = pc.features.map(function(f){ return '<span class="pf-chip">✓ '+f+'</span>'; }).join('');
   document.getElementById('planFeatures').innerHTML = feats;
   if(!pc.upgrade) document.getElementById('upgradeBtn').classList.add('hidden');
 
@@ -1261,29 +1261,29 @@ function renderAlerts(plan, p, runway){
     var burn=exp+emi;
     var er=rev>0?(exp+emi)/rev:1;
     if(net<0)
-      alerts.push({cls:'alert-crit',i:'📉',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer ?'});
+      alerts.push({cls:'alert-crit',i:'📉',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer →'});
     else if(er>0.85)
-      alerts.push({cls:'alert-warn',i:'??',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
+      alerts.push({cls:'alert-warn',i:'⚠️',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
 
     if(runway<=2&&burn>0)
-      alerts.push({cls:'alert-crit',i:'⏱',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool ?'});
+      alerts.push({cls:'alert-crit',i:'⏱',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
     else if(runway<=4&&burn>0)
-      alerts.push({cls:'alert-warn',i:'⏱',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway ?'});
+      alerts.push({cls:'alert-warn',i:'⏱',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway →'});
   }
 
   if(checkup){
     if(checkup.loanVerdict==='DANGEROUS')
-      alerts.push({cls:'alert-crit',i:'🏦',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score ?'});
+      alerts.push({cls:'alert-crit',i:'🏦',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score →'});
     else if(checkup.loanVerdict==='RISKY')
-      alerts.push({cls:'alert-warn',i:'🏦',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios ?'});
+      alerts.push({cls:'alert-warn',i:'🏦',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios →'});
     if(checkup.runwayStatus==='CRITICAL'&&runway>2)
-      alerts.push({cls:'alert-crit',i:'??',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup ?'});
+      alerts.push({cls:'alert-crit',i:'⚠️',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup →'});
   } else if(hasProfile){
-    alerts.push({cls:'alert-info',i:'??',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes — free.',href:'checkup.html',htext:'Start Free Checkup ?'});
+    alerts.push({cls:'alert-info',i:'💡',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes — free.',href:'checkup.html',htext:'Start Free Checkup →'});
   }
 
   if(alerts.length===0)
-    alerts.push({cls:'alert-good',i:'🏥',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup ?'});
+    alerts.push({cls:'alert-good',i:'🏥',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup →'});
 
   document.getElementById('alertsList').innerHTML=alerts.slice(0,3).map(function(a){
     var onclick = a.href==='onboarding.html' ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
@@ -1309,9 +1309,9 @@ function renderHistWidget(){
   var countEl=document.getElementById('histCount');
   if(hist.length>=2){
     var td=GO[hist[0].grade]-GO[hist[hist.length-1].grade];
-    if(td>0){trendEl.textContent='? Improving';trendEl.style.color='#15803d';}
-    else if(td<0){trendEl.textContent='? Declining';trendEl.style.color='#991b1b';}
-    else{trendEl.textContent='? Stable';trendEl.style.color='#854d0e';}
+    if(td>0){trendEl.textContent='📈 Improving';trendEl.style.color='#15803d';}
+    else if(td<0){trendEl.textContent='📉 Declining';trendEl.style.color='#991b1b';}
+    else{trendEl.textContent='➡ Stable';trendEl.style.color='#854d0e';}
   }
   countEl.textContent=hist.length+' checkup'+(hist.length===1?'':'s')+' tracked';
 
@@ -1325,9 +1325,9 @@ function renderHistWidget(){
     var delta='';
     if(i===0&&hist[1]){
       var d=GO[h.grade]-GO[hist[1].grade];
-      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'?'+h.grade+'</span>';
-      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'?'+h.grade+'</span>';
-      else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'? +':sd<0?'? ':'? ')+sd+' pts</span>';}
+      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'→'+h.grade+'</span>';
+      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'→'+h.grade+'</span>';
+      else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'▲ +':sd<0?'▼ ':'— ')+sd+' pts</span>';}
     }
     return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap">'
       +'<span style="font-size:.76rem;color:#64748b;width:50px;flex-shrink:0">'+date+'</span>'
@@ -1529,7 +1529,7 @@ function loadReferral(userId){
   document.getElementById('refCredits').textContent = credits;
   if(credits > 0){
     document.getElementById('refCreditMsg').innerHTML =
-      '<div class="ref-credit-msg">?? ' + credits + ' month' + (credits > 1 ? 's' : '') + ' free applied to your account!</div>';
+      '<div class="ref-credit-msg">🎉 ' + credits + ' month' + (credits > 1 ? 's' : '') + ' free applied to your account!</div>';
   }
 }
 
@@ -1657,12 +1657,12 @@ function copyRefLink(){
   if(navigator.clipboard){
     navigator.clipboard.writeText(input.value).then(function(){
       btn.textContent = '✓ Copied!'; btn.classList.add('copied');
-      setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
+      setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
     });
   } else {
     document.execCommand('copy');
     btn.textContent = '✓ Copied!'; btn.classList.add('copied');
-    setTimeout(function(){ btn.textContent = '?? Copy'; btn.classList.remove('copied'); }, 2000);
+    setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
   }
 }
 </script>

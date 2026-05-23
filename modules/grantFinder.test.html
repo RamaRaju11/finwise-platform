@@ -73,8 +73,8 @@ button.secondary:hover{background:#e2e8f0}
 .why-list,.docs-list{list-style:none;padding:0;margin:0}
 .why-list li,.docs-list li{padding:4px 0;font-size:.82rem;color:#374151;display:flex;gap:8px;line-height:1.4;border-bottom:1px solid #f8fafc}
 .why-list li:last-child,.docs-list li:last-child{border-bottom:none}
-.why-list li::before{content:'?';flex-shrink:0}
-.docs-list li::before{content:'??';flex-shrink:0}
+.why-list li::before{content:'✓';flex-shrink:0;color:#10b981;font-weight:700}
+.docs-list li::before{content:'📄';flex-shrink:0}
 .ca-box{background:#fafafa;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-top:12px}
 .ca-box.recommended{background:#fffbeb;border-color:#f59e0b}
 .ca-title{font-size:.8rem;font-weight:800;margin-bottom:6px}
@@ -82,7 +82,7 @@ button.secondary:hover{background:#e2e8f0}
 .ca-cost{font-size:.82rem;font-weight:700;color:#15803d;margin-bottom:8px}
 .ca-help-list{list-style:none;padding:0;margin:0}
 .ca-help-list li{padding:3px 0;font-size:.78rem;color:#64748b;display:flex;gap:6px}
-.ca-help-list li::before{content:'?';color:#f59e0b}
+.ca-help-list li::before{content:'💡';color:#f59e0b}
 .gc-footer{padding:10px 16px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fafafa}
 .gc-meta{font-size:.73rem;color:#94a3b8;display:flex;gap:16px}
 .gc-meta span{display:flex;align-items:center;gap:4px}
@@ -162,7 +162,7 @@ button.print-btn:hover{background:#e2e8f0}
 <div id="profilePanel">
 <h1>Grant &amp; Scheme Finder</h1>
 <p class="subtitle">BizSco — Find government and private funding you qualify for — USA</p>
-<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">?? <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently — always verify on the official program website before applying.</p>
+<p style="font-size:.72rem;color:#64748b;background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 12px;margin-bottom:14px;line-height:1.55">⚠️ <strong>Data last updated: Jan 2026.</strong> Grant deadlines and eligibility rules change frequently — always verify on the official program website before applying.</p>
 <div class="card">
   <h2>Your Business Profile</h2>
   <p class="desc">Fill this once. We match you to every grant and scheme you qualify for.</p>
@@ -178,9 +178,9 @@ button.print-btn:hover{background:#e2e8f0}
     <div>
       <label>Country</label>
       <select id="p_country">
-        <option value="USA">???? USA</option>
-        <option value="UK">???? UK (coming soon)</option>
-        <option value="India">???? India (coming soon)</option>
+        <option value="USA">🇺🇸 USA</option>
+        <option value="UK">🇬🇧 UK (coming soon)</option>
+        <option value="India">🇮🇳 India (coming soon)</option>
       </select>
     </div>
     <div>
@@ -413,7 +413,7 @@ function createMatchGoal(grantName, amtStr, btn){
   goals.push({id:'sg_'+Date.now(),name:goalName,target:matchAmt,saved:0,priority:'High',note:'50% match fund required for '+grantName});
   localStorage.setItem('fw_savings_goals',JSON.stringify({surplus:surplus,annualRate:annualRate,goals:goals,calculatedAt:new Date().toISOString()}));
   if(btn){ btn.textContent='➕ Goal Created!'; btn.classList.add('created'); btn.disabled=true; }
-  var openNow = confirm('? Savings goal created!\n\nName: '+goalName+'\nTarget: $'+matchAmt.toLocaleString()+'\n\nOpen Business Savings Planner to track progress?');
+  var openNow = confirm('✅ Savings goal created!\n\nName: '+goalName+'\nTarget: $'+matchAmt.toLocaleString()+'\n\nOpen Business Savings Planner to track progress?');
   if(openNow) window.open('businessSavingsPlanner.test.html','_blank');
 }
 
@@ -598,7 +598,7 @@ function renderGrantCard(result) {
     }
     html += '</div>';
   }
-  if(g.tip) html += '<div class="tip-box">?? '+g.tip+'</div>';
+  if(g.tip) html += '<div class="tip-box">💡 '+g.tip+'</div>';
   html += '</div>';
   var gKey = grantKey(g.name);
   var tracker = loadTracker();
@@ -652,7 +652,7 @@ function renderPaidResults() {
     var catDate = new Date(catalogDateStr);
     var monthsOld = (new Date().getFullYear() - catDate.getFullYear())*12 + (new Date().getMonth() - catDate.getMonth());
     var staleColor = monthsOld >= 6 ? '#dc2626' : '#64748b';
-    var staleIcon  = monthsOld >= 6 ? '??' : '??';
+    var staleIcon  = monthsOld >= 6 ? '⚠️' : '✓';
     var staleMsg   = monthsOld >= 6 ? ' — verify details before applying' : '';
     staleWarning = '<span style="font-size:.72rem;color:'+staleColor+';background:'+(monthsOld>=6?'#fee2e2':'#f1f5f9')+';border-radius:999px;padding:3px 10px;font-weight:700">'+staleIcon+' Updated: '+catalogDateStr+staleMsg+'</span>';
   }
@@ -682,7 +682,7 @@ function renderPaidResults() {
     html += '<div class="near-miss-section"><div class="nm-header">Close Matches — Almost Eligible ('+nearMiss.length+')</div>';
     nearMiss.forEach(function(r){
       html += '<div class="nm-card"><div class="nm-name">'+r.grant.name+' — '+r.grant.amount+'</div>';
-      r.fails.forEach(function(f){ html += '<span class="nm-fail">? '+f+'</span> '; });
+      r.fails.forEach(function(f){ html += '<span class="nm-fail">✗ '+f+'</span> '; });
       html += '</div>';
     });
     html += '</div>';

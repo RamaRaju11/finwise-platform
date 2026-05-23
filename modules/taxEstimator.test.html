@@ -476,7 +476,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
         </div>
       </div>
       <div style="margin-top:12px;font-size:.75rem;color:#94a3b8">
-        ?? Quarters with a loss show $0 — losses reduce annual profit and lower total tax.
+        💡 Quarters with a loss show $0 — losses reduce annual profit and lower total tax.
       </div>
     </div>
 
@@ -981,12 +981,12 @@ function renderIntegrationBanner(){
   var d=loadRevExpData(); var shown=false;
   if(d.revMonthly>0){
     _importedRev=d.revMonthly;
-    document.getElementById('revPill').textContent='?? Revenue: '+fmt(d.rev)+' paid invoices ('+d.revCount+') ? '+fmt(d.revMonthly)+'/mo avg';
+    document.getElementById('revPill').textContent='📄 Revenue: '+fmt(d.rev)+' paid invoices ('+d.revCount+') → '+fmt(d.revMonthly)+'/mo avg';
     document.getElementById('revRow').style.display='flex'; shown=true;
   }
   if(d.expMonthly>0){
     _importedExp=d.expMonthly;
-    document.getElementById('expPill').textContent='??? Expenses: '+fmt(d.expMonthly)+'/mo from Vendor Bills ('+d.expCount+' bills)';
+    document.getElementById('expPill').textContent='🧾 Expenses: '+fmt(d.expMonthly)+'/mo from Vendor Bills ('+d.expCount+' bills)';
     document.getElementById('expRow').style.display='flex'; shown=true;
   }
   if(shown) band.style.display='block';
@@ -1041,7 +1041,7 @@ function renderQBICard(annualProfit, bizType, status, yr){
       '<div class="qbi-box"><div class="qbi-lbl">QBI Deduction (20%)</div><div class="qbi-val" style="color:#16a34a">-'+fmt(qbiDed)+'</div><div class="qbi-sub">Reduces federal taxable income</div></div>'+
       '<div class="qbi-box"><div class="qbi-lbl">Est. Tax Savings</div><div class="qbi-val" style="color:#16a34a">'+fmt(savings)+'</div><div class="qbi-sub">At 22% marginal rate (illustrative)</div></div>'+
     '</div>'+
-    '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.8rem;color:#5b21b6">?? <strong>To claim:</strong> File Form 8995 (simple) or Form 8995-A (above threshold) with your annual return. Retirement contributions (SEP-IRA, Solo 401k) also reduce QBI income, amplifying this deduction.</div>';
+    '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.8rem;color:#5b21b6">💡 <strong>To claim:</strong> File Form 8995 (simple) or Form 8995-A (above threshold) with your annual return. Retirement contributions (SEP-IRA, Solo 401k) also reduce QBI income, amplifying this deduction.</div>';
   card.style.display='block';
 }
 
@@ -1207,7 +1207,7 @@ function renderConnectedBanner(){
 
   var applied = _appliedDeductions !== null;
   var warnCls  = d.unfiledSalesTax>0 ? ' warn' : '';
-  var btnLabel = applied ? '💰 Deductions Applied' : '? Apply Deductions + Payroll Data';
+  var btnLabel = applied ? '💰 Deductions Applied' : '✨ Apply Deductions + Payroll Data';
   var btnCls   = applied ? ' applied' : '';
   var desc = d.totalDed > 0
     ? 'Key Deductions found <strong>'+fmt(d.totalDed)+'</strong> in deductible expenses that reduce your taxable income.'
@@ -1230,7 +1230,7 @@ function renderConnectedBanner(){
 function applyDeductionsFromSuite(){
   _appliedDeductions = loadTaxSuiteData();
   renderConnectedBanner();
-  showToast('? Deductions applied — click Calculate to see updated estimate');
+  showToast('✅ Deductions applied — click Calculate to see updated estimate');
 }
 
 function clearDeductions(){
@@ -1438,7 +1438,7 @@ function renderStateQtrNote(state, stateName, stateTax){
         'File: <strong>'+qi.form+'</strong> with '+qi.agency+'<br/>'+
         'Due dates: '+qi.schedule+'<br/>'+
         'Estimated annual state tax: <strong>'+fmt(stateTax)+'</strong> — roughly '+fmt(Math.round(stateTax/4))+'/quarter'+
-        (d.note?'<br/><em style="font-size:.8em">? '+d.note+'</em>':'')+
+        (d.note?'<br/><em style="font-size:.8em">ℹ️ '+d.note+'</em>':'')+
       '</div>';
     } else {
       noteEl.className='state-qtr-note havetax';
@@ -1447,7 +1447,7 @@ function renderStateQtrNote(state, stateName, stateTax){
         'Most states follow the federal schedule: Apr 15, Jun 16, Sep 15, Jan 15.<br/>'+
         'Estimated annual state tax: <strong>'+fmt(stateTax)+'</strong> — roughly '+fmt(Math.round(stateTax/4))+'/quarter.<br/>'+
         'Search "<em>'+stateName+' estimated tax voucher</em>" on your state\'s revenue website.'+
-        (d.note?'<br/><em style="font-size:.8em">? '+d.note+'</em>':'')+
+        (d.note?'<br/><em style="font-size:.8em">ℹ️ '+d.note+'</em>':'')+
       '</div>';
     }
   }

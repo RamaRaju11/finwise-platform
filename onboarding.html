@@ -261,7 +261,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
 
     <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 14px;margin-top:16px;font-size:.78rem;color:#166534;line-height:1.5">
-      ?? <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
+      💡 <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
     </div>
 
     <div class="btn-row">
@@ -340,7 +340,7 @@ function goStep(n){
     var sd = document.getElementById('sd'+i);
     if(sd){
       sd.className = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
-      sd.querySelector('.dot').textContent = i < n ? '?' : i;
+      sd.querySelector('.dot').textContent = i < n ? '✓' : i;
     }
   });
   var panel = document.getElementById('step'+n);

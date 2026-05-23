@@ -234,7 +234,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="fbadge">Free</span>
       </div>
       <div class="cl-row">
-        <div class="cl-ic" style="background:#dcfce7">?</div>
+        <div class="cl-ic" style="background:#dcfce7">&#9679;</div>
         <div class="cl-bd"><div class="cl-nm">Cash Runway</div><div class="cl-ds">How many months your reserves will last if revenue stops</div></div>
         <span class="fbadge">Free</span>
       </div>
@@ -298,7 +298,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sh-h">Your Cash Runway</div>
     <div class="card">
       <div class="rc">
-        <div class="re">?</div>
+        <div class="re">&#9679;</div>
         <div id="rwBadge" class="verd v-strong">STRONG</div><br>
         <div class="bn" id="rwNum">—</div>
         <div class="bu">months of runway</div>
@@ -407,7 +407,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div style="font-size:.78rem;color:#64748b;line-height:1.55;max-width:240px">Full PDF with lender-ready summary, action plan, 12-month forecast and advisor notes</div>
         </div>
       </div>
-      <a href="pricing.html" style="display:block;text-align:center;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:9px;font-size:.88rem;font-weight:800;text-decoration:none" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">? <span data-tier-badge="pro">Upgrade to Pro — $29/mo</span> &rarr;</a>
+      <a href="pricing.html" style="display:block;text-align:center;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:9px;font-size:.88rem;font-weight:800;text-decoration:none" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">&#9679; <span data-tier-badge="pro">Upgrade to Pro — $29/mo</span> &rarr;</a>
       <p class="note" style="margin-top:8px">Includes all 40 tools — AI CFO — Priority Support</p>
     </div>
 
@@ -427,7 +427,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- SHARE MODAL -->
 <div id="shareMdl" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;padding:20px;overflow-y:auto;align-items:flex-start;justify-content:center">
   <div style="background:#fff;border-radius:16px;padding:28px;max-width:580px;width:100%;margin:40px auto;position:relative">
-    <button onclick="closeShare()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;line-height:1">?</button>
+    <button onclick="closeShare()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;line-height:1">&times;</button>
     <div style="font-size:1rem;font-weight:900;color:#0f172a;margin-bottom:4px">Your Score Card</div>
     <p style="font-size:.8rem;color:#64748b;margin-bottom:18px">Download a branded image or copy a shareable link — perfect for sending to your advisor or lender.</p>
     <canvas id="scoreCanvas" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:18px;display:block"></canvas>
@@ -565,17 +565,17 @@ function fillLoan(){
   $('ms_ncf').textContent=(r.ncf>=0?'+':'-')+'$'+fmt(Math.abs(r.ncf));
   $('ms_er').textContent=Math.round(r.er*100)+'%';
   var pts=[];
-  if(r.dscr>=1.5)pts.push({i:'?',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> — each $1 of debt is covered by $'+r.dscr.toFixed(2)+' of income. Well above the safe 1.2x threshold.'});
-  else if(r.dscr>=1.2)pts.push({i:'?',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is above the 1.2x minimum but leaves limited buffer.'});
-  else if(r.dscr>=1)pts.push({i:'??',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is just above 1.0. One slow month could put repayments at risk.'});
-  else if(D.emi===0)pts.push({i:'?',t:'No current loan repayments — zero debt burden is a positive signal for your score.'});
-  else pts.push({i:'??',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is below 1.0 — income does not fully cover loan repayments.'});
-  if(r.rmo>=6)pts.push({i:'?',t:'Cash reserve gives you <strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of runway — a strong safety buffer.'});
-  else if(r.rmo>=3)pts.push({i:'??',t:'Only <strong>'+Math.round(r.rmo)+' months</strong> of runway. Aim for 6+ months. This reduces your loan safety score.'});
-  else pts.push({i:'??',t:'Reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. An emergency could leave you unable to repay.'});
-  if(r.er<0.75)pts.push({i:'?',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — healthy cost control.'});
-  else if(r.er<0.85)pts.push({i:'??',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong>. Trimming costs by 10—15% would improve your score.'});
-  else pts.push({i:'??',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — expenses consuming nearly all revenue, leaving no buffer.'});
+  if(r.dscr>=1.5)pts.push({i:'✓',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> — each $1 of debt is covered by $'+r.dscr.toFixed(2)+' of income. Well above the safe 1.2x threshold.'});
+  else if(r.dscr>=1.2)pts.push({i:'✓',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is above the 1.2x minimum but leaves limited buffer.'});
+  else if(r.dscr>=1)pts.push({i:'⚠️',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is just above 1.0. One slow month could put repayments at risk.'});
+  else if(D.emi===0)pts.push({i:'✓',t:'No current loan repayments — zero debt burden is a positive signal for your score.'});
+  else pts.push({i:'⚠️',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is below 1.0 — income does not fully cover loan repayments.'});
+  if(r.rmo>=6)pts.push({i:'✓',t:'Cash reserve gives you <strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of runway — a strong safety buffer.'});
+  else if(r.rmo>=3)pts.push({i:'⚠️',t:'Only <strong>'+Math.round(r.rmo)+' months</strong> of runway. Aim for 6+ months. This reduces your loan safety score.'});
+  else pts.push({i:'⚠️',t:'Reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. An emergency could leave you unable to repay.'});
+  if(r.er<0.75)pts.push({i:'✓',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — healthy cost control.'});
+  else if(r.er<0.85)pts.push({i:'⚠️',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong>. Trimming costs by 10—15% would improve your score.'});
+  else pts.push({i:'⚠️',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — expenses consuming nearly all revenue, leaving no buffer.'});
   $('loanBullets').innerHTML=pts.map(function(p){return '<li><span class="bi">'+p.i+'</span><span>'+p.t+'</span></li>'}).join('');
 }
 
@@ -591,12 +591,12 @@ function fillRunway(){
     $('rwFill').className='rw-fill '+{STRONG:'mb-g',WARNING:'mb-y',CRITICAL:'mb-r'}[r.rStat];
   },200);
   var pts=[];
-  if(r.ncf>=0)pts.push({i:'?',t:'Business is <strong>cash-flow positive</strong> (+$'+fmt(r.ncf)+'/mo). Runway concern is low — income exceeds expenses.'});
-  if(r.rmo>=6)pts.push({i:'?',t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the BizSco 6-month recommended minimum.'});
-  else if(r.rmo>=3)pts.push({i:'??',t:'<strong>'+Math.round(r.rmo)+' months</strong> runway is below the 6-month target. Build reserves by $'+fmt(Math.round(Math.max(0,(6-r.rmo)*Math.max(D.exp-D.rev,500)/3)))+'/mo.'});
-  else if(r.rmo>0)pts.push({i:'??',t:'Only <strong>'+r.rDisp+' month(s)</strong> of reserves — critically low. One bad month could trigger cash flow failure.'});
-  else pts.push({i:'??',t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
-  if(r.ncf<0)pts.push({i:'??',t:'Monthly burn rate: <strong>$'+fmt(-r.ncf)+'/mo</strong>. At this pace, reserves last '+r.rDisp+' months.'});
+  if(r.ncf>=0)pts.push({i:'✓',t:'Business is <strong>cash-flow positive</strong> (+$'+fmt(r.ncf)+'/mo). Runway concern is low — income exceeds expenses.'});
+  if(r.rmo>=6)pts.push({i:'✓',t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the BizSco 6-month recommended minimum.'});
+  else if(r.rmo>=3)pts.push({i:'⚠️',t:'<strong>'+Math.round(r.rmo)+' months</strong> runway is below the 6-month target. Build reserves by $'+fmt(Math.round(Math.max(0,(6-r.rmo)*Math.max(D.exp-D.rev,500)/3)))+'/mo.'});
+  else if(r.rmo>0)pts.push({i:'⚠️',t:'Only <strong>'+r.rDisp+' month(s)</strong> of reserves — critically low. One bad month could trigger cash flow failure.'});
+  else pts.push({i:'⚠️',t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
+  if(r.ncf<0)pts.push({i:'⚠️',t:'Monthly burn rate: <strong>$'+fmt(-r.ncf)+'/mo</strong>. At this pace, reserves last '+r.rDisp+' months.'});
   $('rwBullets').innerHTML=pts.map(function(p){return '<li><span class="bi">'+p.i+'</span><span>'+p.t+'</span></li>'}).join('');
 }
 
@@ -636,15 +636,15 @@ function fillReport(){
     if(prevVal==null) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
     var d=Math.round((val-prevVal)*10)/10;
     if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">No change</div>';
-    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'?':'?';
+    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'▲':'▼';
     return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+(up?'+':'')+d+' '+unit+'</div>';
   }
   function mkGradeDelta(g,pg){
     if(!pg) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
     var d=GO[g]-GO[pg];
     if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">Same as before</div>';
-    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'?':'?';
-    return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+pg+'?'+g+'</div>';
+    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'▲':'▼';
+    return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+pg+'→'+g+'</div>';
   }
 
   var C={SAFE:'#15803d',RISKY:'#854d0e',DANGEROUS:'#991b1b',STRONG:'#15803d',WARNING:'#854d0e',CRITICAL:'#991b1b'};
@@ -655,13 +655,13 @@ function fillReport(){
   var gbo=['A','B'].includes(r.grade)?'#86efac':r.grade==='C'?'#fde68a':'#fca5a5';
 
   var cards=[
-    {ic:'??',lb:'Loan Safety',vl:r.loanScore+'/100',sb:r.loanVerdict,c:C[r.loanVerdict],bg:BG[r.loanVerdict],bo:BO[r.loanVerdict],
+    {ic:'🔒',lb:'Loan Safety',vl:r.loanScore+'/100',sb:r.loanVerdict,c:C[r.loanVerdict],bg:BG[r.loanVerdict],bo:BO[r.loanVerdict],
      delta:mkDelta(r.loanScore,'pts',prev?prev.loanScore:null)},
-    {ic:'?',lb:'Cash Runway',vl:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',sb:r.rStat,c:C[r.rStat],bg:BG[r.rStat],bo:BO[r.rStat],
+    {ic:'💰',lb:'Cash Runway',vl:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',sb:r.rStat,c:C[r.rStat],bg:BG[r.rStat],bo:BO[r.rStat],
      delta:mkDelta(r.rmo,'mo',prev?prev.runway:null)},
-    {ic:'??',lb:'Health Grade',vl:'Grade '+r.grade,sb:r.glabel,c:gc,bg:gb,bo:gbo,
+    {ic:'📊',lb:'Health Grade',vl:'Grade '+r.grade,sb:r.glabel,c:gc,bg:gb,bo:gbo,
      delta:mkGradeDelta(r.grade,prev?prev.grade:null)},
-    {ic:'??',lb:'Funding Matches',vl:r.grantCount+'+',sb:'programs found',c:'#1d4ed8',bg:'#eff6ff',bo:'#bfdbfe',delta:''}
+    {ic:'🎯',lb:'Funding Matches',vl:r.grantCount+'+',sb:'programs found',c:'#1d4ed8',bg:'#eff6ff',bo:'#bfdbfe',delta:''}
   ];
   $('repGrid').innerHTML=cards.map(function(c){
     return '<div class="rc2" style="background:'+c.bg+';border-color:'+c.bo+'"><div class="rc2-ic">'+c.ic+'</div><div class="rc2-lb">'+c.lb+'</div><div class="rc2-vl" style="color:'+c.c+'">'+c.vl+'</div><div class="rc2-sb">'+c.sb+'</div>'+c.delta+'</div>';
@@ -669,23 +669,23 @@ function fillReport(){
 
   var ins=[];
   if(r.loanVerdict==='SAFE'&&r.rStat==='STRONG')
-    ins.push({t:'ok',i:'??',m:'<strong>Strong financial position.</strong> Loan safety and cash runway are both healthy — a good time to consider growth, whether that\'s expanding inventory, hiring, or applying for a business loan on favourable terms.'});
+    ins.push({t:'ok',i:'✅',m:'<strong>Strong financial position.</strong> Loan safety and cash runway are both healthy — a good time to consider growth, whether that\'s expanding inventory, hiring, or applying for a business loan on favourable terms.'});
   if(r.loanVerdict==='DANGEROUS')
-    ins.push({t:'bad',i:'??',m:'<strong>Debt load is unsustainable.</strong> Your DSCR of '+r.dscr.toFixed(2)+'x means income doesn\'t fully cover repayments. Before taking on more debt, focus on cutting expenses or increasing revenue.'});
+    ins.push({t:'bad',i:'❌',m:'<strong>Debt load is unsustainable.</strong> Your DSCR of '+r.dscr.toFixed(2)+'x means income doesn\'t fully cover repayments. Before taking on more debt, focus on cutting expenses or increasing revenue.'});
   else if(r.loanVerdict==='RISKY')
-    ins.push({t:'warn',i:'??',m:'<strong>Loan position is borderline.</strong> DSCR of '+r.dscr.toFixed(2)+'x is below the safe 1.5x threshold. Any revenue dip could put repayments at risk.'});
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Loan position is borderline.</strong> DSCR of '+r.dscr.toFixed(2)+'x is below the safe 1.5x threshold. Any revenue dip could put repayments at risk.'});
   if(r.rStat==='CRITICAL')
-    ins.push({t:'bad',i:'??',m:'<strong>Cash reserves critically low ('+r.rDisp+' months).</strong> A single slow month or emergency could trigger a crisis. Prioritise building reserves before any new spending.'});
+    ins.push({t:'bad',i:'❌',m:'<strong>Cash reserves critically low ('+r.rDisp+' months).</strong> A single slow month or emergency could trigger a crisis. Prioritise building reserves before any new spending.'});
   else if(r.rStat==='WARNING')
-    ins.push({t:'warn',i:'??',m:'<strong>Build your cash buffer.</strong> '+Math.round(r.rmo)+' months runway is below the recommended 6. The Cash Runway tool can show exactly how much to set aside each month.'});
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Build your cash buffer.</strong> '+Math.round(r.rmo)+' months runway is below the recommended 6. The Cash Runway tool can show exactly how much to set aside each month.'});
   if(r.pm<0)
-    ins.push({t:'bad',i:'??',m:'<strong>Operating at a loss.</strong> Expenses exceed revenue by $'+fmt(-r.ncf)+'/mo. The Break-Even Analyzer can show you the exact changes needed to return to profitability.'});
+    ins.push({t:'bad',i:'❌',m:'<strong>Operating at a loss.</strong> Expenses exceed revenue by $'+fmt(-r.ncf)+'/mo. The Break-Even Analyzer can show you the exact changes needed to return to profitability.'});
   else if(r.pm<0.05&&r.pm>=0)
-    ins.push({t:'warn',i:'??',m:'<strong>Thin profit margins ('+( r.pm*100).toFixed(1)+'%).</strong> Small cost increases or revenue dips could push you into loss. Check the Break-Even Analyzer.'});
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Thin profit margins ('+( r.pm*100).toFixed(1)+'%).</strong> Small cost increases or revenue dips could push you into loss. Check the Break-Even Analyzer.'});
   if(r.grantCount>3)
-    ins.push({t:'ok',i:'??',m:'<strong>'+r.grantCount+'+ grant programs</strong> likely match your profile. Most owners leave free funding unclaimed simply because they don\'t know where to look.'});
+    ins.push({t:'ok',i:'💰',m:'<strong>'+r.grantCount+'+ grant programs</strong> likely match your profile. Most owners leave free funding unclaimed simply because they don\'t know where to look.'});
   if(ins.length===0)
-    ins.push({t:'ok',i:'?',m:'<strong>Solid overall health (Grade '+r.grade+').</strong> Fundamentals are sound. Focus on maintaining expenses below 75% of revenue and keeping 6+ months of reserves.'});
+    ins.push({t:'ok',i:'✅',m:'<strong>Solid overall health (Grade '+r.grade+').</strong> Fundamentals are sound. Focus on maintaining expenses below 75% of revenue and keeping 6+ months of reserves.'});
   $('insightsList').innerHTML=ins.slice(0,3).map(function(x){
     return '<div class="ins '+x.t+'"><div class="ins-ic">'+x.i+'</div><div>'+x.m+'</div></div>';
   }).join('');
@@ -693,27 +693,27 @@ function fillReport(){
   var steps=[];
   /* Priority 1 — fix the worst thing first */
   if(r.loanVerdict==='DANGEROUS')
-    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'??',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'DSCR below 1.0 — fix this before any loan application'});
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'🔒',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'DSCR below 1.0 — fix this before any loan application'});
   else if(r.loanVerdict==='RISKY')
-    steps.push({priority:'Fix First',badge:'#fef9c3',bc:'#854d0e',i:'??',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'Borderline DSCR — understand what it takes to reach SAFE'});
+    steps.push({priority:'Fix First',badge:'#fef9c3',bc:'#854d0e',i:'🔒',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'Borderline DSCR — understand what it takes to reach SAFE'});
   if(r.rStat==='CRITICAL')
-    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'?',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Runway under 2 months — build reserves immediately'});
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'💰',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Runway under 2 months — build reserves immediately'});
   if(r.pm<0)
-    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'??',n:'Break-Even Analyzer',h:'modules/breakEven.test.html',why:'Operating at a loss — find the minimum revenue needed'});
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'📊',n:'Break-Even Analyzer',h:'modules/breakEven.test.html',why:'Operating at a loss — find the minimum revenue needed'});
 
   /* Priority 2 — things to improve */
   if(r.rStat==='WARNING')
-    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'?',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Build from '+Math.round(r.rmo)+' to 6+ months buffer'});
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'💰',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Build from '+Math.round(r.rmo)+' to 6+ months buffer'});
   if(['C','D','F'].includes(r.grade))
-    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'??',n:'Business Health Score',h:'modules/businessHealthScore.test.html',why:'Detailed breakdown of your Grade '+r.grade+' — see each component'});
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'📊',n:'Business Health Score',h:'modules/businessHealthScore.test.html',why:'Detailed breakdown of your Grade '+r.grade+' — see each component'});
   if(r.loanVerdict!=='SAFE')
-    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'?',n:'Loan Eligibility',h:'modules/loanEligibility.test.html',why:'Check which lenders will approve you at current score'});
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'🏦',n:'Loan Eligibility',h:'modules/loanEligibility.test.html',why:'Check which lenders will approve you at current score'});
 
   /* Always include */
-  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'??',n:'What-If Scenarios',h:'whatif.html',why:'Model revenue/expense changes and see impact on your score'});
+  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'🎯',n:'What-If Scenarios',h:'whatif.html',why:'Model revenue/expense changes and see impact on your score'});
   if(r.grantCount>2)
-    steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'??',n:'Grant Finder',h:'modules/grantFinder.test.html',why:r.grantCount+'+ programs matched — free funding you may not know about'});
-  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'??',n:'Score History',h:'history.html',why:'Track your progress over time as you make improvements'});
+    steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'💰',n:'Grant Finder',h:'modules/grantFinder.test.html',why:r.grantCount+'+ programs matched — free funding you may not know about'});
+  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'📈',n:'Score History',h:'history.html',why:'Track your progress over time as you make improvements'});
 
   var seen={}, deduped=[];
   steps.forEach(function(s){if(!seen[s.h]){seen[s.h]=1;deduped.push(s);}});
@@ -768,7 +768,7 @@ function renderPeriodComparison(r, prev){
 
   var GO={A:5,B:4,C:3,D:2,F:1};
   function deltaClass(d){ return d>0?'up':d<0?'down':'flat'; }
-  function deltaArrow(d){ return d>0?'?':d<0?'?':'?'; }
+  function deltaArrow(d){ return d>0?'▲':d<0?'▼':'—'; }
 
   var rows=[
     {
@@ -799,7 +799,7 @@ function renderPeriodComparison(r, prev){
       nowSub: r.glabel,
       delta: GO[r.grade] - GO[prev.grade],
       unit: '',
-      fmtDelta: function(d){ return d===0?'Same':(d>0?'?':'?')+' '+prev.grade+' ? '+r.grade; }
+      fmtDelta: function(d){ return d===0?'Same':(d>0?'▲':'▼')+' '+prev.grade+' → '+r.grade; }
     }
   ];
 
@@ -809,7 +809,7 @@ function renderPeriodComparison(r, prev){
     html+='<tr>';
     html+='<td><div class="cmp-metric">'+row.metric+'</div></td>';
     html+='<td><span class="cmp-val">'+row.then+'</span> <span class="cmp-sub">'+row.thenSub+'</span></td>';
-    html+='<td class="cmp-arrow">?</td>';
+    html+='<td class="cmp-arrow">→</td>';
     html+='<td><span class="cmp-val">'+row.now+'</span> <span class="cmp-sub">'+row.nowSub+'</span></td>';
     html+='<td><span class="cmp-delta '+cls+'">'+(d!==0?arrow:'')+row.fmtDelta(d)+'</span></td>';
     html+='</tr>';
@@ -824,7 +824,7 @@ function goScreen(n){
   for(var i=1;i<=5;i++){
     var si=$('si'+i),sd=$('sd'+i);
     if(!si)continue;
-    if(i<n){si.className='si done';sd.textContent='?'}
+    if(i<n){si.className='si done';sd.textContent='✓'}
     else if(i===n){si.className='si active';sd.textContent=i}
     else{si.className='si';sd.textContent=i}
   }

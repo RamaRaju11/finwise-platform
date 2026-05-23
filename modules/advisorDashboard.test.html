@@ -317,7 +317,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="modal-box">
     <div class="modal-header">
       <h3 id="editModalTitle">Add New Client</h3>
-      <button class="modal-close" onclick="closeEdit()">?</button>
+      <button class="modal-close" onclick="closeEdit()">&times;</button>
     </div>
     <div class="modal-body">
       <div class="g2">
@@ -402,7 +402,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
   <div class="modal-box">
     <div class="modal-header">
       <h3>Import Clients from CSV</h3>
-      <button class="modal-close" onclick="closeImport()">?</button>
+      <button class="modal-close" onclick="closeImport()">&times;</button>
     </div>
     <div class="modal-body">
       <div id="dropZone" class="drop-zone" onclick="document.getElementById('csvFile').click()">
@@ -466,7 +466,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
       </div>
       <div>
         <label>Header Icon (emoji)</label>
-        <input type="text" id="wl_icon" placeholder="??" maxlength="4" oninput="previewWL()"/>
+        <input type="text" id="wl_icon" placeholder="🏢" maxlength="4" oninput="previewWL()"/>
       </div>
     </div>
     <div>
@@ -520,7 +520,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand)}
 
 <!-- Toolbar -->
 <div class="toolbar">
-  <input type="text" class="search-inp" id="searchInp" placeholder="?? Search clients by name or industry—" oninput="renderGrid()"/>
+  <input type="text" class="search-inp" id="searchInp" placeholder="🔍 Search clients by name or industry—" oninput="renderGrid()"/>
   <select class="sort-sel" id="sortSel" onchange="renderGrid()">
     <option value="name">Sort: Name A—Z</option>
     <option value="score_desc">Sort: Highest Score</option>
@@ -735,11 +735,11 @@ function renderAlerts(){
   // Overdue invoices >30 days
   if(k.overdue30&&k.overdue30.length){
     var amt=k.overdue30.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    alerts.push({cls:'urgent',ico:'??',
+    alerts.push({cls:'urgent',ico:'❌',
       text:'<strong>'+k.overdue30.length+' invoice'+(k.overdue30.length>1?'s are':' is')+' 30+ days overdue</strong> — '+fmt(amt)+' at serious collection risk. Send final payment notices immediately.',
       link:'invoiceTracker.test.html',linkText:'📄 Open Invoice Tracker'});
   } else if(k.overdueCount){
-    alerts.push({cls:'warn',ico:'??',
+    alerts.push({cls:'warn',ico:'⚠️',
       text:'<strong>'+k.overdueCount+' overdue invoice'+(k.overdueCount>1?'s':'')+' ('+fmt(k.overdueAmount)+')</strong> — follow up before they hit 30+ days.',
       link:'invoiceTracker.test.html',linkText:'📄 Open Invoice Tracker'});
   }
@@ -767,7 +767,7 @@ function renderAlerts(){
   // Contracts expiring
   if(k.expiringContracts&&k.expiringContracts.length){
     var names=k.expiringContracts.slice(0,2).map(function(b){return b.vendor||'Vendor';}).join(', ');
-    alerts.push({cls:'warn',ico:'??',
+    alerts.push({cls:'warn',ico:'⚠️',
       text:'<strong>'+k.expiringContracts.length+' vendor contract'+(k.expiringContracts.length>1?'s expire':' expires')+' within 60 days</strong>: '+names+'. Review renewal terms before they auto-renew.',
       link:'vendorBillTracker.test.html',linkText:'🧾 Open Bill Tracker'});
   }
@@ -811,19 +811,19 @@ function renderAlerts(){
    PINNED WIDGETS
 ------------------------------------------------ */
 var ALL_MODULES=[
-  {id:'invoiceTracker',name:'Invoice Tracker',ico:'??',file:'invoiceTracker.test.html'},
-  {id:'vendorBill',name:'Bill Tracker',ico:'??',file:'vendorBillTracker.test.html'},
-  {id:'payroll',name:'Payroll',ico:'??',file:'payrollEstimator.test.html'},
-  {id:'cashRunway',name:'Cash Runway',ico:'??',file:'cashRunway.test.html'},
-  {id:'forecast',name:'Forecast Pro',ico:'??',file:'forecastPro.test.html'},
-  {id:'aiCfo',name:'AI CFO Chat',ico:'??',file:'aiCfoChat.test.html'},
-  {id:'healthScore',name:'Health Score',ico:'??',file:'businessHealthScore.test.html'},
-  {id:'taxPayments',name:'Tax Payments',ico:'??',file:'taxPayments.test.html'},
-  {id:'goals',name:'Goal Tracker',ico:'??',file:'goalTracker.test.html'},
-  {id:'savings',name:'Savings Goals',ico:'??',file:'savingsGoals.test.html'},
-  {id:'contractors',name:'Contractors',ico:'??',file:'contractorPayroll.test.html'},
-  {id:'deductions',name:'Key Deductions',ico:'??',file:'keyDeductions.test.html'},
-  {id:'snapshot',name:'Monthly Snapshot',ico:'??',file:'monthlySnapshot.test.html'}
+  {id:'invoiceTracker',name:'Invoice Tracker',ico:'📄',file:'invoiceTracker.test.html'},
+  {id:'vendorBill',name:'Bill Tracker',ico:'🧾',file:'vendorBillTracker.test.html'},
+  {id:'payroll',name:'Payroll',ico:'💼',file:'payrollEstimator.test.html'},
+  {id:'cashRunway',name:'Cash Runway',ico:'💰',file:'cashRunway.test.html'},
+  {id:'forecast',name:'Forecast Pro',ico:'📈',file:'forecastPro.test.html'},
+  {id:'aiCfo',name:'AI CFO Chat',ico:'🤖',file:'aiCfoChat.test.html'},
+  {id:'healthScore',name:'Health Score',ico:'🏥',file:'businessHealthScore.test.html'},
+  {id:'taxPayments',name:'Tax Payments',ico:'🏦',file:'taxPayments.test.html'},
+  {id:'goals',name:'Goal Tracker',ico:'🎯',file:'goalTracker.test.html'},
+  {id:'savings',name:'Savings Goals',ico:'💰',file:'savingsGoals.test.html'},
+  {id:'contractors',name:'Contractors',ico:'👥',file:'contractorPayroll.test.html'},
+  {id:'deductions',name:'Key Deductions',ico:'💼',file:'keyDeductions.test.html'},
+  {id:'snapshot',name:'Monthly Snapshot',ico:'📊',file:'monthlySnapshot.test.html'}
 ];
 var DEFAULT_PINNED=['invoiceTracker','cashRunway','forecast','aiCfo','healthScore'];
 var pinnedWidgets=[];
@@ -837,7 +837,7 @@ function savePinnedWidgets(){ localStorage.setItem('fw_pinned_widgets',JSON.stri
 
 function toggleCustomize(){
   customizeMode=!customizeMode;
-  document.getElementById('customizeBtn').textContent=customizeMode?'? Done':'? Customize';
+  document.getElementById('customizeBtn').textContent=customizeMode?'✓ Done':'⚙ Customize';
   renderWidgets();
 }
 
@@ -858,7 +858,7 @@ function renderWidgets(){
   var html=mods.map(function(m){
     var pinned=pinnedWidgets.indexOf(m.id)>=0;
     return '<div class="widget-tile'+(pinned?' pinned':'')+'" onclick="'+(customizeMode?'togglePin(\''+m.id+'\')':'window.open(\''+m.file+'\',\'_blank\')')+'">'
-      +(customizeMode?'<button class="widget-pin-btn'+(pinned?' active':'')+'" onclick="event.stopPropagation();togglePin(\''+m.id+'\')">'+(pinned?'?':'?')+'</button>':'')
+      +(customizeMode?'<button class="widget-pin-btn'+(pinned?' active':'')+'" onclick="event.stopPropagation();togglePin(\''+m.id+'\')">'+(pinned?'★':'☆')+'</button>':'')
       +'<div class="widget-ico">'+m.ico+'</div>'
       +'<div class="widget-name">'+m.name+'</div>'
       +'</div>';
@@ -906,9 +906,9 @@ function openAdvisorReport(){
   alertItems.forEach(function(el){
     var cls=el.classList.contains('urgent')?'urgent':el.classList.contains('warn')?'warn':'good';
     var body=el.querySelector('.alert-body');
-    if(body) alertHtml+='<li class="'+cls+'"><span>'+(cls==='urgent'?'??':'??')+'</span><span>'+body.innerText+'</span></li>';
+    if(body) alertHtml+='<li class="'+cls+'"><span>'+(cls==='urgent'?'❌':'⚠️')+'</span><span>'+body.innerText+'</span></li>';
   });
-  if(!alertHtml) alertHtml='<li class="good"><span>?</span><span>No critical alerts — financials on track.</span></li>';
+  if(!alertHtml) alertHtml='<li class="good"><span>✅</span><span>No critical alerts — financials on track.</span></li>';
 
   // Monthly snapshots trend
   var snaps=sg('fw_monthly_snapshots')||{};
@@ -1005,7 +1005,7 @@ function applyWLToDOM(){
   document.documentElement.style.setProperty('--brand-text',lightness(WL.color)<0.5?'#fff':'#1e293b');
   document.getElementById('hdr_brand').textContent=WL.brand;
   document.getElementById('hdr_tag').textContent=WL.tag||'Advisor Dashboard — Client Management';
-  document.getElementById('hdr_icon').textContent=WL.icon||'??';
+  document.getElementById('hdr_icon').textContent=WL.icon||'🏢';
   document.getElementById('wlBrandLabel').textContent=WL.brand;
 }
 
@@ -1027,7 +1027,7 @@ function toggleWL(){
 function previewWL(){
   var name=document.getElementById('wl_brand').value||'BizSco';
   var tag=document.getElementById('wl_tag').value||'Advisor Dashboard';
-  var icon=document.getElementById('wl_icon').value||'??';
+  var icon=document.getElementById('wl_icon').value||'🏢';
   var color=document.getElementById('wl_color').value||'#4f46e5';
   document.getElementById('wl_prev_name').textContent=name;
   document.getElementById('wl_prev_tag').textContent=tag;
@@ -1049,10 +1049,10 @@ function applyWL(){
   WL.brand=document.getElementById('wl_brand').value.trim()||'BizSco';
   WL.tag=document.getElementById('wl_tag').value.trim()||'AI-Powered Loan Safety Platform';
   WL.email=document.getElementById('wl_email').value.trim();
-  WL.icon=document.getElementById('wl_icon').value.trim()||'??';
+  WL.icon=document.getElementById('wl_icon').value.trim()||'🏢';
   WL.color=document.getElementById('wl_color').value||'#4f46e5';
   saveWL(); applyWLToDOM();
-  showToast('? Branding applied!');
+  showToast('✅ Branding applied!');
   toggleWL();
 }
 function resetWL(){
@@ -1167,7 +1167,7 @@ function renderGrid(){
         +'<div class="cc-m"><div class="cc-m-lbl">Reserve</div><div class="cc-m-val">'+fmt(res)+'</div></div>'
         +'<div class="cc-m"><div class="cc-m-lbl">DSCR</div><div class="cc-m-val '+(dscr>=1.25||dscr>=99?'pos':dscr>=1?'':'neg')+'">'+(dscr>=99?'N/A':dscr.toFixed(2)+'x')+'</div></div>'
       +'</div>'
-      +(hasNotes?'<div class="cc-notes" style="display:block">?? '+esc(c.notes)+'</div>':'')
+      +(hasNotes?'<div class="cc-notes" style="display:block">📌 '+esc(c.notes)+'</div>':'')
       +'<div class="cc-actions">'
         +'<button class="btn btn-brand btn-sm" onclick="openScCard('+idx+')">Score Card</button>'
         +'<button class="btn btn-outline btn-sm" onclick="openBrandedReport('+idx+')">Report</button>'
@@ -1198,7 +1198,7 @@ function openAddModal(){
 function openEdit(idx){
   editIdx=idx;
   var c=clients[idx];
-  document.getElementById('editModalTitle').textContent='?? Edit Client';
+  document.getElementById('editModalTitle').textContent='✏️ Edit Client';
   document.getElementById('ec_name').value=c.name||'';
   document.getElementById('ec_ind').value=c.industry||'';
   document.getElementById('ec_rev').value=c.rev||'';
@@ -1234,7 +1234,7 @@ function saveClient(){
   if(editIdx>=0) clients[editIdx]=client;
   else clients.push(client);
   saveClients(); closeEdit(); renderGrid();
-  showToast(editIdx>=0?'? Client updated.':'? Client added.');
+  showToast(editIdx>=0?'✅ Client updated.':'✅ Client added.');
 }
 
 /* -- Delete -- */
@@ -1309,7 +1309,7 @@ function openScCard(idx){
   var maxSafe=findMaxSafe(rev,exp,emi,res,rate,ten);
   var stressNet=rev*0.8-exp-totEMI;
 
-  var grade=score>=70?'✅ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'? HIGH RISK — NOT ADVISED';
+  var grade=score>=70?'✅ SAFE — LOAN READY':score>=50?'⚠ RISKY — REVIEW NEEDED':'❌ HIGH RISK — NOT ADVISED';
   var gradeCls=score>=70?'gbl-safe':score>=50?'gbl-risky':'gbl-danger';
 
   /* Fill modal */
@@ -1355,7 +1355,7 @@ function openScCard(idx){
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     var sc2=r.ok?'ss-pass':r.warn?'ss-warn':'ss-fail';
-    var sl=r.ok?'? Pass':r.warn?'? Marginal':'? Fail';
+    var sl=r.ok?'✓ Pass':r.warn?'⚠ Marginal':'✗ Fail';
     tb+='<tr><td>'+r.l+'</td><td style="font-weight:800">'+r.v+'</td><td style="color:#94a3b8">'+r.t+'</td><td><span class="sc-status '+sc2+'">'+sl+'</span></td></tr>';
   }
   document.getElementById('scm_tbody').innerHTML=tb;
@@ -1538,14 +1538,14 @@ function processCSVText(text){
   document.getElementById('dropZone').style.display='none';
   document.getElementById('importPreview').style.display='block';
   document.getElementById('importBtn').style.display='inline-flex';
-  document.getElementById('importBtn').textContent='?? Import '+importRows.length+' Client'+(importRows.length>1?'s':'');
+  document.getElementById('importBtn').textContent='📥 Import '+importRows.length+' Client'+(importRows.length>1?'s':'');
   document.getElementById('importResetBtn').style.display='inline-flex';
 }
 
 function showImportErr(msg){
   var statusEl=document.getElementById('importStatus');
   statusEl.className='import-status err';
-  statusEl.textContent='? '+msg;
+  statusEl.textContent='❌ '+msg;
   document.getElementById('dropZone').style.display='none';
   document.getElementById('importPreview').style.display='block';
   document.getElementById('importBtn').style.display='none';

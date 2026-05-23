@@ -123,7 +123,7 @@ button.primary:hover{background:#1d4ed8}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -249,9 +249,9 @@ function checkEligibility(){
       else if(c.miss) fails.push(c.miss);
     });
     var verdict, vcls;
-    if(fails.length===0){ verdict='? Likely'; vcls='verdict-likely'; likely++; }
-    else if(fails.length===1){ verdict='?? Maybe'; vcls='verdict-maybe'; maybe++; }
-    else { verdict='? Unlikely'; vcls='verdict-unlikely'; unlikely++; }
+    if(fails.length===0){ verdict='✅ Likely'; vcls='verdict-likely'; likely++; }
+    else if(fails.length===1){ verdict='⚠️ Maybe'; vcls='verdict-maybe'; maybe++; }
+    else { verdict='❌ Unlikely'; vcls='verdict-unlikely'; unlikely++; }
 
     html += '<div class="lender-card">';
     html += '<div class="lc-head"><div class="lc-icon">'+l.icon+'</div>';

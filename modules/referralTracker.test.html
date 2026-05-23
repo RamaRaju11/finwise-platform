@@ -178,7 +178,7 @@ function renderTable(){
 /* Check advisor plan */
 (function(){
   if(!localStorage.getItem('fw_advisor')){
-    document.querySelector('.subtitle').textContent = '?? Advisor plan required. Load the Advisor demo from try.html first.';
+    document.querySelector('.subtitle').textContent = '⚠️ Advisor plan required. Load the Advisor demo from try.html first.';
   }
   loadReferrals();
   renderTable();

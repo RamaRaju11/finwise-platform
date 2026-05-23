@@ -168,7 +168,7 @@ table.fs .muted{color:#94a3b8}
       <div class="pw-feat">Profit &amp; Loss Statement</div>
       <div class="pw-feat">Balance Sheet</div>
       <div class="pw-feat">Cash Flow Statement</div>
-      <div class="pw-feat">?? 12 Key Financial Ratios</div>
+      <div class="pw-feat">📊 12 Key Financial Ratios</div>
       <div class="pw-feat">Print-ready A4 format</div>
       <div class="pw-feat">Monthly + Annual view</div>
     </div>
@@ -868,7 +868,7 @@ function fillTechBridge(){
   document.getElementById('fs_loanrate').value= 11;     /* 11% p.a. */
   document.getElementById('fs_capital').value = 50000;  /* owner's initial capital investment */
 
-  showToast('? TechBridge IT Solutions data loaded — click Generate to view statements.');
+  showToast('✅ TechBridge IT Solutions data loaded — click Generate to view statements.');
 }
 
 /* -- Export for CA -- */
@@ -1168,7 +1168,7 @@ function renderRatios(name,period,totalRev,cogs,grossProfit,netProfit,ebitda,ebi
   for(var i=0;i<ratios.length;i++){
     var r=ratios[i];
     var scls=r.ok?'rs-good':r.warn?'rs-warn':'rs-bad';
-    var slabel=r.ok?'? Good':r.warn?'? Marginal':'? Weak';
+    var slabel=r.ok?'✅ Good':r.warn?'⚠️ Marginal':'❌ Weak';
     html+='<div class="ratio-card">'
       +'<div class="ratio-label">'+r.label+'</div>'
       +'<div class="ratio-val">'+r.val+'</div>'

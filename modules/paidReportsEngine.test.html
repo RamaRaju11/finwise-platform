@@ -61,7 +61,7 @@
   .stat-cell .val { font-size: 1.1rem; font-weight: 700; color: #1e293b; }
   .stat-cell .lbl { font-size: 0.74rem; color: #64748b; margin-top: 2px; }
   .highlight-list li { font-size: 0.85rem; padding: 4px 0; list-style: none; }
-  .highlight-list li::before { content: "? "; color: #065f46; }
+  .highlight-list li::before { content: "✓ "; color: #065f46; }
   .disclaimer { background: #fafbff; border-left: 4px solid #6366f1; padding: 10px 14px;
                 font-size: 0.78rem; color: #64748b; border-radius: 0 8px 8px 0; margin-top: 16px; }
   table.data-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
@@ -316,22 +316,22 @@ function _fmt(n) { return (n||0).toLocaleString("en-US"); }
 const REPORT_CATALOG = [
   { id:"loan-risk",         name:"Loan Risk Report",
     description:"Full risk assessment for a proposed loan — DSCR, DTI, stress scenarios, and verdict.",
-    icon:"??", price:{free:null,basic:null,pro:299,enterprise:0},
+    icon:"🏦", price:{free:null,basic:null,pro:299,enterprise:0},
     requiredModules:["Loan Engine","Cash Flow","Risk & Debt"],
     pages:"3—4 pages", useCases:["Loan application support","Banker presentation","Internal risk review"] },
   { id:"business-plan",     name:"Business Financial Plan",
     description:"Investor-ready plan with revenue projections, P&L forecast, and loan viability.",
-    icon:"??", price:{free:null,basic:null,pro:499,enterprise:0},
+    icon:"📋", price:{free:null,basic:null,pro:499,enterprise:0},
     requiredModules:["Cash Flow","P&L","Forecasting"],
     pages:"5—7 pages", useCases:["Investor deck","Bank loan application","Internal business planning"] },
   { id:"financial-summary", name:"Financial Statements Summary",
     description:"Three-statement report: P&L, Balance Sheet, and Cash Flow Statement in one document.",
-    icon:"??", price:{free:null,basic:null,pro:399,enterprise:0},
+    icon:"📊", price:{free:null,basic:null,pro:399,enterprise:0},
     requiredModules:["P&L","Balance Sheet","Cash Flow Statement"],
     pages:"4—5 pages", useCases:["Year-end review","Auditor prep","Lender package"] },
   { id:"loan-viability",    name:"Loan Viability Report",
     description:"Clear yes/no verdict on whether your business can safely take a specific loan.",
-    icon:"?", price:{free:null,basic:199,pro:199,enterprise:0},
+    icon:"📄", price:{free:null,basic:199,pro:199,enterprise:0},
     requiredModules:["Affordability","Stress Test","Recommendations"],
     pages:"2—3 pages", useCases:["Quick decision making","Comparison between loan options","Business owner briefing"] },
 ];
@@ -524,7 +524,7 @@ function reportHeader(title, biz, date, generatedAt) {
 
 function verdictBox(decision, color, message) {
   const cls = color === 'green' ? 'verdict-green' : color === 'red' ? 'verdict-red' : color === 'orange' ? 'verdict-orange' : 'verdict-amber';
-  const icon = color === 'green' ? '?' : color === 'red' ? '??' : '??';
+  const icon = color === 'green' ? '✅' : color === 'red' ? '❌' : '⚠️';
   return `<div class="verdict-box ${cls}">
     <div class="decision">${icon} ${decision}</div>
     <div style="font-size:0.85rem;margin-top:6px;color:#374151">${message}</div>
@@ -633,7 +633,7 @@ function doViability() {
 
     ${report.stressResults ? `<div class="report-section"><h4>Stress Test Results</h4>
       <p style="font-size:0.85rem;color:${report.stressResults.allPassed?'#16a34a':'#dc2626'}">
-        ${report.stressResults.allPassed ? '? All stress scenarios passed.' : '? Some stress scenarios failed — proceed carefully.'}
+        ${report.stressResults.allPassed ? '✅ All stress scenarios passed.' : '❌ Some stress scenarios failed — proceed carefully.'}
       </p></div>` : ''}
 
     <div class="disclaimer">${report.disclaimer}</div>
@@ -894,7 +894,7 @@ function runTests() {
   const ul = document.getElementById('unitResults');
   const pass = results.filter(r => r.ok).length;
   ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
-    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 window.onload = () => renderCatalog();

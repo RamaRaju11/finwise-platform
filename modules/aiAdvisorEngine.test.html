@@ -46,8 +46,8 @@
   .sw-box.str h4{color:#16a34a}
   .sw-box.weak h4{color:#dc2626}
   .sw-box li{font-size:.8rem;padding:3px 0;list-style:none;color:#374151}
-  .sw-box.str li::before{content:"? ";color:#16a34a}
-  .sw-box.weak li::before{content:"? ";color:#dc2626}
+  .sw-box.str li::before{content:"✓ ";color:#16a34a}
+  .sw-box.weak li::before{content:"✗ ";color:#dc2626}
 
   /* Action plan */
   .action-item{display:flex;gap:12px;padding:12px;background:#f8fafc;border-radius:8px;margin-bottom:8px;align-items:flex-start}
@@ -84,10 +84,10 @@
   .rv-amber{background:#fffbeb;border:2px solid #fbbf24;color:#92400e}
   .rv-red{background:#fef2f2;border:2px solid #dc2626;color:#991b1b}
   .bl-list li{font-size:.83rem;padding:5px 0;list-style:none;border-bottom:1px solid #f1f5f9}
-  .bl-list .block::before{content:"?? "}
-  .bl-list .enable::before{content:"? "}
+  .bl-list .block::before{content:"❌ "}
+  .bl-list .enable::before{content:"✓ "}
   .step-list li{font-size:.83rem;padding:5px 8px;list-style:none;background:#f8fafc;border-radius:6px;margin-bottom:6px}
-  .step-list li::before{content:"? "}
+  .step-list li::before{content:"→ "}
 
   /* Advisory insight */
   .insight-box{border-radius:10px;padding:16px;margin-bottom:12px}
@@ -333,7 +333,7 @@
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -430,17 +430,17 @@ function updateAutoInsights() {
   const debtLoad = revenue > 0 ? existingEmi / revenue : 0;
   let html = '';
   if (netCF < 0) {
-    html += `<div class="auto-insight danger">?? <strong>Negative cash flow</strong> — expenses exceed revenue by ${fmt(Math.abs(netCF))}/month. A loan will make this worse.</div>`;
+    html += `<div class="auto-insight danger">❌ <strong>Negative cash flow</strong> — expenses exceed revenue by ${fmt(Math.abs(netCF))}/month. A loan will make this worse.</div>`;
     html += explainHtml(
       ['Cash flow is the #1 reason small businesses fail',
        'Negative or low cash flow means you cannot pay bills, staff, or loan EMIs reliably',
        'Even a profitable business can fail from poor cash flow timing'],
       'You are spending ' + fmt(Math.abs(netCF)) + ' more per month than you earn. Adding a loan EMI on top of this deficit makes the gap even larger and accelerates cash depletion'
     );
-  } else if (cfRatio < 0.1) html += `<div class="auto-insight warn">?? <strong>Thin cash flow margin</strong> (${(cfRatio*100).toFixed(1)}%) — very little buffer to absorb an EMI.</div>`;
-  else                    html += `<div class="auto-insight good">? <strong>Cash flow positive</strong> — ${fmt(netCF)}/month surplus before any new loan EMI.</div>`;
+  } else if (cfRatio < 0.1) html += `<div class="auto-insight warn">⚠️ <strong>Thin cash flow margin</strong> (${(cfRatio*100).toFixed(1)}%) — very little buffer to absorb an EMI.</div>`;
+  else                    html += `<div class="auto-insight good">✅ <strong>Cash flow positive</strong> — ${fmt(netCF)}/month surplus before any new loan EMI.</div>`;
   if (debtLoad > 0.4) {
-    html += `<div class="auto-insight danger">?? <strong>High existing debt load</strong> — current EMIs are ${(debtLoad*100).toFixed(1)}% of revenue. Most lenders want this below 40%.</div>`;
+    html += `<div class="auto-insight danger">❌ <strong>High existing debt load</strong> — current EMIs are ${(debtLoad*100).toFixed(1)}% of revenue. Most lenders want this below 40%.</div>`;
     html += explainHtml(
       ['Too much debt relative to income is the #2 business failure cause',
        'High debt load leaves no room for unexpected expenses or revenue dips',
@@ -493,22 +493,22 @@ function askCFO(preset) {
       const stressed    = (n.revenue * 0.8) - n.expenses - totalDebt;
 
       if (cashLeft > 0 && dscr > 1.5 && stressed > 0) {
-        answer = `? <strong>Yes — this loan looks SAFE.</strong><br><br>
+        answer = `✅ <strong>Yes — this loan looks SAFE.</strong><br><br>
           Your ${sym}${n.loanAmount.toLocaleString()} loan at ${n.rate}% for ${n.tenure} months gives an EMI of <strong>${fmt(newEMI)}/month</strong>.<br><br>
           After all payments, you'll have <strong>${fmt(cashLeft)}/month</strong> left — a comfortable buffer.<br>
-          Your DSCR will be <strong>${dscr.toFixed(2)}</strong> (needs to be > 1.25 — ? you're clear).<br>
+          Your DSCR will be <strong>${dscr.toFixed(2)}</strong> (needs to be > 1.25 — ✓ you're clear).<br>
           Even if revenue drops 20%, your business survives with <strong>${fmt(stressed)}</strong> to spare.<br><br>
-          ?? Go ahead, but keep 2 months of EMI as a cash reserve.`;
+          💡 Go ahead, but keep 2 months of EMI as a cash reserve.`;
       } else if (cashLeft > 0 && dscr > 1.0) {
-        answer = `?? <strong>Possible, but RISKY.</strong><br><br>
+        answer = `⚠️ <strong>Possible, but RISKY.</strong><br><br>
           EMI will be <strong>${fmt(newEMI)}/month</strong>. That leaves only <strong>${fmt(cashLeft)}/month</strong> — a thin buffer.<br>
           ${stressed < 0 ? `A 20% revenue drop would leave you short by <strong>${fmt(Math.abs(stressed))}/month</strong> — you'd struggle to pay. ` : ''}
           <br><br>Consider reducing the loan by 25—30% or extending the tenure to lower the EMI.`;
       } else {
-        answer = `?? <strong>No — this loan is DANGEROUS right now.</strong><br><br>
+        answer = `❌ <strong>No — this loan is DANGEROUS right now.</strong><br><br>
           EMI of <strong>${fmt(newEMI)}/month</strong> leaves <strong>${fmt(cashLeft)}/month</strong> — ${cashLeft < 0 ? 'you\'d be in deficit every month.' : 'an unsafe margin.'}<br>
           DSCR = <strong>${dscr.toFixed(2)}</strong> ${dscr < 1 ? '(below 1.0 — income cannot cover debt payments).' : '(below safe threshold of 1.25).'}<br><br>
-          ?? Use the "Max Safe Loan" tab in the Loan Decision Score Engine to find a loan size that works.`;
+          💡 Use the "Max Safe Loan" tab in the Loan Decision Score Engine to find a loan size that works.`;
       }
       break;
     }
@@ -516,20 +516,20 @@ function askCFO(preset) {
       if (needNumbers) { answer = `Fill in your monthly revenue and expenses above, then ask again.`; break; }
       const cfRatio = n.revenue > 0 ? (netCF / n.revenue * 100).toFixed(1) : 0;
       if (netCF < 0)
-        answer = `?? <strong>Your cash flow is negative</strong> — you're spending <strong>${fmt(Math.abs(netCF))}/month more than you earn.</strong><br><br>
+        answer = `❌ <strong>Your cash flow is negative</strong> — you're spending <strong>${fmt(Math.abs(netCF))}/month more than you earn.</strong><br><br>
           This is the root cause of any risk. Before any loan, fix the cash flow first.<br><br>
           <strong>Top 3 actions:</strong><br>
           1. Audit your top 5 expenses — cut anything not directly generating revenue.<br>
           2. Chase outstanding invoices — outstanding receivables are cash sitting idle.<br>
           3. Review pricing — a 5% price increase on your top service can change everything.`;
       else if (parseFloat(cfRatio) < 10)
-        answer = `?? <strong>Cash flow is positive but very thin</strong> — only ${cfRatio}% margin on ${fmt(n.revenue)} revenue.<br><br>
+        answer = `⚠️ <strong>Cash flow is positive but very thin</strong> — only ${cfRatio}% margin on ${fmt(n.revenue)} revenue.<br><br>
           You earn ${fmt(netCF)}/month after expenses. That's not enough to safely absorb a loan EMI without risk.<br><br>
-          ?? Target a cash flow margin of at least 15—20% before taking on new debt.`;
+          💡 Target a cash flow margin of at least 15—20% before taking on new debt.`;
       else
-        answer = `? <strong>Cash flow is healthy</strong> — ${fmt(netCF)}/month surplus, ${cfRatio}% margin.<br><br>
+        answer = `✅ <strong>Cash flow is healthy</strong> — ${fmt(netCF)}/month surplus, ${cfRatio}% margin.<br><br>
           This is a good base for loan eligibility. Your cash flow covers operating costs comfortably.<br><br>
-          ?? Use the Loan Check question to see how much loan you can safely layer on top of this.`;
+          💡 Use the Loan Check question to see how much loan you can safely layer on top of this.`;
       break;
     }
     case 'readiness': {
@@ -539,21 +539,21 @@ function askCFO(preset) {
       const dtiR  = n.revenue > 0 ? (n.existingEmi / n.revenue * 100) : 0;
 
       if (netCF > 0 && dscrR > 1.5 && dtiR < 35)
-        answer = `? <strong>LOAN READY.</strong><br><br>
-          — Cash flow: ${fmt(netCF)}/month positive ?<br>
-          — DSCR: ${dscrR === 99 ? 'No existing debt' : dscrR.toFixed(2)} ?<br>
-          — Debt-to-income: ${dtiR.toFixed(1)}% ?<br><br>
+        answer = `✅ <strong>LOAN READY.</strong><br><br>
+          — Cash flow: ${fmt(netCF)}/month positive ✓<br>
+          — DSCR: ${dscrR === 99 ? 'No existing debt' : dscrR.toFixed(2)} ✓<br>
+          — Debt-to-income: ${dtiR.toFixed(1)}% ✓<br><br>
           You meet all three core lender criteria. Head to the Loan Marketplace to compare offers.`;
       else if (netCF > 0)
-        answer = `?? <strong>CONDITIONALLY READY.</strong><br><br>
+        answer = `⚠️ <strong>CONDITIONALLY READY.</strong><br><br>
           You have positive cash flow (${fmt(netCF)}/month) — that's the most important signal.<br>
           ${dscrR < 1.5 ? `DSCR of ${dscrR.toFixed(2)} is below the ideal 1.5 threshold. ` : ''}
           ${dtiR > 35 ? `Existing debt load (${dtiR.toFixed(1)}% of revenue) is high. ` : ''}<br><br>
-          ?? Address the issues above to get the best rates. You may still qualify, just at higher rates.`;
+          💡 Address the issues above to get the best rates. You may still qualify, just at higher rates.`;
       else
-        answer = `?? <strong>NOT READY FOR A LOAN.</strong><br><br>
+        answer = `❌ <strong>NOT READY FOR A LOAN.</strong><br><br>
           Negative cash flow (${fmt(netCF)}/month) is a hard blocker for all lenders.<br><br>
-          ?? Focus on restoring positive cash flow first. Ask "What should I do next?" for a plan.`;
+          💡 Focus on restoring positive cash flow first. Ask "What should I do next?" for a plan.`;
       break;
     }
     case 'maxloan': {
@@ -567,14 +567,14 @@ function askCFO(preset) {
         if (cl > 0 && dscr > 1.25) { best = mid; lo = mid; } else { hi = mid; }
       }
       if (best < 1000)
-        answer = `?? Based on your current finances, your business cannot safely take any new loan. Fix cash flow first.`;
+        answer = `❌ Based on your current finances, your business cannot safely take any new loan. Fix cash flow first.`;
       else {
         const safeEMI = calcEMI(best, n.rate, n.tenure);
-        answer = `? <strong>Maximum safe loan: ${fmt(best)}</strong><br><br>
+        answer = `✅ <strong>Maximum safe loan: ${fmt(best)}</strong><br><br>
           At this amount:<br>
           — EMI = <strong>${fmt(safeEMI)}/month</strong><br>
           — Cash remaining after all payments = <strong>${fmt(netCF - n.existingEmi - safeEMI)}/month</strong><br><br>
-          ?? For a comfortable cushion, target <strong>${fmt(best * 0.85)}</strong> (85% of maximum). This gives you breathing room if revenue dips.`;
+          💡 For a comfortable cushion, target <strong>${fmt(best * 0.85)}</strong> (85% of maximum). This gives you breathing room if revenue dips.`;
       }
       break;
     }
@@ -584,12 +584,12 @@ function askCFO(preset) {
       const cashLeft2 = netCF - n.existingEmi;
       const cfPct = n.revenue > 0 ? (netCF / n.revenue * 100) : 0;
       const items = [];
-      if (netCF < 0) items.push(`?? <strong>Fix cash flow first</strong> — cut expenses by at least ${fmt(Math.abs(netCF) + 1000)}/month before anything else.`);
-      else if (cfPct < 15) items.push(`?? <strong>Increase cash flow margin</strong> — target 15—20% (${fmt(n.revenue * 0.15)}/month). Review pricing and recurring costs.`);
-      if (n.existingEmi / n.revenue > 0.35) items.push(`?? <strong>Reduce existing debt load</strong> — existing EMIs are ${(n.existingEmi/n.revenue*100).toFixed(1)}% of revenue. Prepay the highest-rate loan first.`);
-      if (cashLeft2 > 0) items.push(`? <strong>Build a 3-month cash reserve</strong> — target ${fmt(n.existingEmi * 3 || netCF * 3)} as an emergency buffer before taking new debt.`);
-      items.push(`?? <strong>Run a stress test</strong> — open the Loan Decision Score Engine, enter your numbers, and check the Stress Test tab to see your 20% revenue drop scenario.`);
-      items.push(`?? <strong>Compare your industry</strong> — open the Industry Benchmarks module to see how your margins compare to similar businesses.`);
+      if (netCF < 0) items.push(`❌ <strong>Fix cash flow first</strong> — cut expenses by at least ${fmt(Math.abs(netCF) + 1000)}/month before anything else.`);
+      else if (cfPct < 15) items.push(`⚠️ <strong>Increase cash flow margin</strong> — target 15—20% (${fmt(n.revenue * 0.15)}/month). Review pricing and recurring costs.`);
+      if (n.existingEmi / n.revenue > 0.35) items.push(`⚠️ <strong>Reduce existing debt load</strong> — existing EMIs are ${(n.existingEmi/n.revenue*100).toFixed(1)}% of revenue. Prepay the highest-rate loan first.`);
+      if (cashLeft2 > 0) items.push(`✅ <strong>Build a 3-month cash reserve</strong> — target ${fmt(n.existingEmi * 3 || netCF * 3)} as an emergency buffer before taking new debt.`);
+      items.push(`📊 <strong>Run a stress test</strong> — open the Loan Decision Score Engine, enter your numbers, and check the Stress Test tab to see your 20% revenue drop scenario.`);
+      items.push(`📊 <strong>Compare your industry</strong> — open the Industry Benchmarks module to see how your margins compare to similar businesses.`);
       answer = `<strong>Your improvement plan:</strong><br><br>` + items.map((item, i) => `${i+1}. ${item}`).join('<br><br>');
       break;
     }
@@ -1000,7 +1000,7 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // -- Init: restore currency from localStorage -------------------

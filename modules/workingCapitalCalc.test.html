@@ -203,7 +203,7 @@ button.primary:hover{background:#1d4ed8}
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -246,7 +246,7 @@ function loadIntegrations(){
     var arTotal     = outstanding.reduce(function(s,i){ return s+(parseFloat(i.amount)||0); }, 0);
     if(arTotal > 0){
       _arAmount = Math.round(arTotal);
-      document.getElementById('arPill').textContent = '?? AR: '+fmt(_arAmount)+' from Invoice Tracker ('+outstanding.length+' outstanding)';
+      document.getElementById('arPill').textContent = '📄 AR: '+fmt(_arAmount)+' from Invoice Tracker ('+outstanding.length+' outstanding)';
       document.getElementById('arRow').style.display = 'flex';
       shown = true;
     }
@@ -257,7 +257,7 @@ function loadIntegrations(){
     var apTotal = active.reduce(function(s,b){ return s+(parseFloat(b.amount)||0); }, 0);
     if(apTotal > 0){
       _apAmount = Math.round(apTotal);
-      document.getElementById('apPill').textContent = '??? AP: '+fmt(_apAmount)+'/mo from Vendor Bills ('+active.length+' bills)';
+      document.getElementById('apPill').textContent = '🧾 AP: '+fmt(_apAmount)+'/mo from Vendor Bills ('+active.length+' bills)';
       document.getElementById('apRow').style.display = 'flex';
       shown = true;
     }
@@ -323,8 +323,8 @@ function renderCCCDetail(inv, rec, pay, ccc, daily){
       '<br>'+cccStatus+
       (ccc > 0 ? ' &nbsp;—&nbsp; Capital tied up in cycle: <strong>'+fmt(tied)+'</strong>' : ' &nbsp;—&nbsp; Suppliers finance your operations — a powerful competitive advantage')+
     '</div>'+
-    (ccc <= 0 ? '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.82rem;color:#5b21b6">?? <strong>Negative CCC:</strong> You collect cash from customers before paying suppliers — the same structural advantage used by Amazon and Costco to fund growth without additional debt.</div>' : '')+
-    (ccc > 60 ? '<div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;font-size:.82rem;color:#92400e">?? <strong>Action items:</strong> Offer 2/10 net-30 early-pay discounts to reduce DSO. Negotiate net-45 supplier terms to raise DPO. Each 10-day improvement frees approximately <strong>'+fmt(daily*10)+'</strong> in working capital.</div>' : '');
+    (ccc <= 0 ? '<div style="margin-top:10px;padding:10px 14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:7px;font-size:.82rem;color:#5b21b6">💡 <strong>Negative CCC:</strong> You collect cash from customers before paying suppliers — the same structural advantage used by Amazon and Costco to fund growth without additional debt.</div>' : '')+
+    (ccc > 60 ? '<div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;font-size:.82rem;color:#92400e">⚠️ <strong>Action items:</strong> Offer 2/10 net-30 early-pay discounts to reduce DSO. Negotiate net-45 supplier terms to raise DPO. Each 10-day improvement frees approximately <strong>'+fmt(daily*10)+'</strong> in working capital.</div>' : '');
 }
 
 function saveProfile(updates){
@@ -426,7 +426,7 @@ function calculate(){
   }
   document.getElementById('gapBox').innerHTML =
     '<div class="gap-box '+(isGood?'surplus':'shortfall')+'">'+
-    '<div class="gap-icon">'+(isGood?'?':'??')+'</div>'+
+    '<div class="gap-icon">'+(isGood?'✅':'⚠️')+'</div>'+
     '<div>'+
       '<div class="gap-title" style="color:'+(isGood?'#166534':'#991b1b')+'">'+
         (isGood ? 'Surplus: '+fmt(gap) : 'Shortfall: '+fmt(Math.abs(gap)))+

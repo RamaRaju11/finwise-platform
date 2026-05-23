@@ -194,13 +194,13 @@ function analyze(){
   var recEl = document.getElementById('recBox');
   if(monthlySaving > 0 && totalInterestSaving > 0){
     recEl.className = 'rec-box';
-    recEl.textContent = '? Consolidation recommended. You save '+fmt(monthlySaving)+'/mo and '+fmt(totalInterestSaving)+' in total interest. Simplified to one payment at a lower rate.';
+    recEl.textContent = '✅ Consolidation recommended. You save '+fmt(monthlySaving)+'/mo and '+fmt(totalInterestSaving)+' in total interest. Simplified to one payment at a lower rate.';
   } else if(monthlySaving > 0 && totalInterestSaving < 0){
     recEl.className = 'rec-box warn';
-    recEl.textContent = '?? Mixed result. Your monthly payment drops by '+fmt(monthlySaving)+'/mo which helps cash flow, but the longer tenure costs '+fmt(Math.abs(totalInterestSaving))+' extra in total interest. Choose based on whether you need cash flow relief now.';
+    recEl.textContent = '⚠️ Mixed result. Your monthly payment drops by '+fmt(monthlySaving)+'/mo which helps cash flow, but the longer tenure costs '+fmt(Math.abs(totalInterestSaving))+' extra in total interest. Choose based on whether you need cash flow relief now.';
   } else {
     recEl.className = 'rec-box neutral';
-    recEl.textContent = '? Consolidation not recommended at these terms. Your new EMI ('+fmt(newEMI)+') is higher than current payments ('+fmt(totalEMI)+'). Try a lower rate or longer tenure.';
+    recEl.textContent = '❌ Consolidation not recommended at these terms. Your new EMI ('+fmt(newEMI)+') is higher than current payments ('+fmt(totalEMI)+'). Try a lower rate or longer tenure.';
   }
 
   document.getElementById('resultsSection').style.display = 'block';

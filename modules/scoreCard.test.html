@@ -190,7 +190,7 @@ canvas#gauge{display:block}
 
 <!-- View mode banner -->
 <div class="view-banner" id="viewBanner">
-  ??? <strong>View mode</strong> — This score card was shared with you via a BizSco link. Numbers are pre-loaded from the link.
+  👁 <strong>View mode</strong> — This score card was shared with you via a BizSco link. Numbers are pre-loaded from the link.
 </div>
 
 <!-- Input form (hidden in view mode) -->
@@ -576,7 +576,7 @@ function renderCard(d){
   for(var i=0;i<rows.length;i++){
     var row=rows[i];
     var stCls=row.pass?'st-pass':row.warn?'st-warn':'st-fail';
-    var stLabel=row.pass?'? Pass':row.warn?'? Marginal':'? Fail';
+    var stLabel=row.pass?'✅ Pass':row.warn?'⚠️ Marginal':'❌ Fail';
     tHtml+='<tr>'
       +'<td>'+row.label+'</td>'
       +'<td style="font-weight:800">'+row.val+'</td>'
@@ -625,7 +625,7 @@ function copyLink(){
   var url=window.location.href.split('#')[0]+'#d='+encoded;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(function(){
-      showToast('? Shareable link copied! Anyone with this link can view the score card.');
+      showToast('✅ Shareable link copied! Anyone with this link can view the score card.');
     }).catch(function(){ fallbackCopy(url); });
   } else { fallbackCopy(url); }
 }
@@ -685,7 +685,7 @@ function copyAsText(){
   var text=lines.join('\n');
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){
-      showToast('? Score card text copied — paste into WhatsApp or email.');
+      showToast('✅ Score card text copied — paste into WhatsApp or email.');
     }).catch(function(){ fallbackCopy(text); });
   } else { fallbackCopy(text); }
 }
@@ -993,7 +993,7 @@ function renderCard(d){
   for(var i=0;i<rows.length;i++){
     var row=rows[i];
     var stCls=row.pass?'st-pass':row.warn?'st-warn':'st-fail';
-    var stLabel=row.pass?'? Pass':row.warn?'? Marginal':'? Fail';
+    var stLabel=row.pass?'✅ Pass':row.warn?'⚠️ Marginal':'❌ Fail';
     tHtml+='<tr>'
       +'<td>'+row.label+'</td>'
       +'<td style="font-weight:800">'+row.val+'</td>'
@@ -1042,7 +1042,7 @@ function copyLink(){
   var url=window.location.href.split('#')[0]+'#d='+encoded;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(function(){
-      showToast('? Shareable link copied! Anyone with this link can view the score card.');
+      showToast('✅ Shareable link copied! Anyone with this link can view the score card.');
     }).catch(function(){ fallbackCopy(url); });
   } else { fallbackCopy(url); }
 }
@@ -1102,7 +1102,7 @@ function copyAsText(){
   var text=lines.join('\n');
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){
-      showToast('? Score card text copied — paste into WhatsApp or email.');
+      showToast('✅ Score card text copied — paste into WhatsApp or email.');
     }).catch(function(){ fallbackCopy(text); });
   } else { fallbackCopy(text); }
 }

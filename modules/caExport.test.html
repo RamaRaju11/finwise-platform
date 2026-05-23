@@ -315,7 +315,7 @@ function buildCover(){
   html+='<div class="cover-top">'
     +'<div class="cover-fw">Biz<span>Scale</span></div>'
     +'<div class="cover-sub">AI Financial Planning Software</div>'
-    +'<div class="cover-doc-type">?? '+ts.advisor+' Reference Document — Confidential</div>'
+    +'<div class="cover-doc-type">📄 '+ts.advisor+' Reference Document — Confidential</div>'
     +'</div>';
 
   /* Body */
@@ -357,7 +357,7 @@ function buildCover(){
     'CA Observations & Signature Block',
   ];
   incl.forEach(function(t){
-    html+='<div style="font-size:7pt;color:#166534;padding:2px 0;display:flex;gap:5px"><span>?</span><span>'+t+'</span></div>';
+    html+='<div style="font-size:7pt;color:#166534;padding:2px 0;display:flex;gap:5px"><span>✓</span><span>'+t+'</span></div>';
   });
   html+='</div>';
 
@@ -375,7 +375,7 @@ function buildCover(){
     'Audited or Certified Figures',
   ];
   excl.forEach(function(t){
-    html+='<div style="font-size:7pt;color:#991b1b;padding:2px 0;display:flex;gap:5px"><span>?</span><span>'+t+'</span></div>';
+    html+='<div style="font-size:7pt;color:#991b1b;padding:2px 0;display:flex;gap:5px"><span>✗</span><span>'+t+'</span></div>';
   });
   html+='<div style="font-size:6.5pt;color:#b91c1c;margin-top:6px;font-style:italic">CA must collect all of the above independently from actual books of accounts.</div>';
   html+='</div>';

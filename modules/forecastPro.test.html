@@ -179,7 +179,7 @@ tbody tr:hover td{background:#fafafa}
     <div class="pw-feats">
       <div class="pw-feat">Month-by-month table</div>
       <div class="pw-feat">Visual chart</div>
-      <div class="pw-feat">?? 3 scenarios</div>
+      <div class="pw-feat">📊 3 scenarios</div>
       <div class="pw-feat">Smart insights</div>
       <div class="pw-feat">Seasonal adjustments</div>
       <div class="pw-feat">Print report</div>
@@ -199,7 +199,7 @@ tbody tr:hover td{background:#fafafa}
 <div class="page-header">
   <div>
     <a href="../index.html" class="ph-back">Back to BizSco</a>
-    <h1>?? 12-Month Cash Flow Forecast</h1>
+    <h1>📊 12-Month Cash Flow Forecast</h1>
     <p>Project your revenue, expenses, and loan impact month by month</p>
   </div>
   <div class="ph-badge">Pro — $29/month</div>
@@ -333,7 +333,7 @@ tbody tr:hover td{background:#fafafa}
   </div>
 
   <div class="card">
-    <h2>?? 3-Scenario Comparison</h2>
+    <h2>📊 3-Scenario Comparison</h2>
     <p class="card-desc">Base vs Optimistic (+10% revenue) vs Pessimistic (-10% revenue) — side by side</p>
     <div class="tbl-wrap"><table class="sc-compare" id="scCompareTable"></table></div>
   </div>
@@ -371,8 +371,8 @@ function renderCalendarBanner(){
   var el=document.getElementById('calendarBanner');
   if(!d.billCount&&!d.incomeEvents){el.className='conn-band';return;}
   var pills='';
-  if(d.billCount) pills+='<span class="cb-pill">?? '+d.billCount+' committed bills — $'+Math.round(d.totalBills).toLocaleString()+'/mo</span>';
-  if(d.incomeEvents) pills+='<span class="cb-pill">?? '+d.incomeEvents+' income events — $'+Math.round(d.monthlyIncome).toLocaleString()+'/mo</span>';
+  if(d.billCount) pills+='<span class="cb-pill">📄 '+d.billCount+' committed bills — $'+Math.round(d.totalBills).toLocaleString()+'/mo</span>';
+  if(d.incomeEvents) pills+='<span class="cb-pill">💰 '+d.incomeEvents+' income events — $'+Math.round(d.monthlyIncome).toLocaleString()+'/mo</span>';
   el.className='conn-band has-data';
   el.innerHTML='<div class="cb-icon">&#9679;</div>'
     +'<div class="cb-body">'
@@ -387,7 +387,7 @@ function importFromCalendar(){
   var msg=[];
   if(d.totalBills>0){document.getElementById('f_exp').value=Math.round(d.totalBills);msg.push('Expenses = $'+Math.round(d.totalBills).toLocaleString()+' ('+d.billCount+' bills)');}
   if(d.monthlyIncome>0){document.getElementById('f_rev').value=Math.round(d.monthlyIncome);msg.push('Revenue = $'+Math.round(d.monthlyIncome).toLocaleString());}
-  showToast('? Imported: '+msg.join(', '));
+  showToast('✅ Imported: '+msg.join(', '));
 }
 
 /* --- Toast --- */
@@ -474,7 +474,7 @@ function restoreState(){
       renderAll(stored.base,'base');
     }
     var badge=document.getElementById('stateBadge');
-    if(badge){ badge.style.display=''; badge.textContent='? Restored from '+new Date(state.savedAt).toLocaleDateString(); }
+    if(badge){ badge.style.display=''; badge.textContent='✅ Restored from '+new Date(state.savedAt).toLocaleDateString(); }
     return true;
   }catch(e){ return false; }
 }
@@ -492,7 +492,7 @@ function checkSnapshotSeed(){
     avgRev = Math.round(avgRev/count);
     avgExp = Math.round(avgExp/count);
     var lastSnap = snaps[keys[keys.length-1]];
-    var pills = '<span class="seed-badge">?? '+keys.length+' months of actuals</span>';
+    var pills = '<span class="seed-badge">📊 '+keys.length+' months of actuals</span>';
     pills += ' <span class="seed-badge">Avg Rev: $'+avgRev.toLocaleString()+'/mo</span>';
     pills += ' <span class="seed-badge">Avg Exp: $'+avgExp.toLocaleString()+'/mo</span>';
     var band = document.getElementById('seedBanner');
@@ -500,7 +500,7 @@ function checkSnapshotSeed(){
     band.innerHTML = '<div style="font-size:.82rem;font-weight:700;color:#15803d">Monthly Snapshot data available — seed forecast from actuals?</div>'
       + '<div style="margin-top:4px">'+pills+'</div>'
       + '<button class="btn-seed" onclick="seedFromSnapshots('+avgRev+','+avgExp+(lastSnap&&lastSnap.revenue?','+Math.round(lastSnap.currentBalance||0):'')+')">'
-      + '?? Seed Baseline from '+keys.length+' months of actuals</button>';
+      + '📊 Seed Baseline from '+keys.length+' months of actuals</button>';
     // also store for use in seedFromSnapshots
     band._avgRev = avgRev; band._avgExp = avgExp; band._reserve = lastSnap ? (lastSnap.currentBalance||0) : 0;
   }catch(e){}
@@ -511,7 +511,7 @@ function seedFromSnapshots(avgRev, avgExp, reserve){
     document.getElementById('f_rev').value = avgRev||'';
     document.getElementById('f_exp').value = avgExp||'';
     if(reserve) document.getElementById('f_reserve').value = Math.round(reserve);
-    showToast('? Seeded from '+((avgRev?'rev '+CUR_SYM+avgRev.toLocaleString()+'/mo ':'')+(avgExp?' exp '+CUR_SYM+avgExp.toLocaleString()+'/mo':'')).trim());
+    showToast('✅ Seeded from '+((avgRev?'rev '+CUR_SYM+avgRev.toLocaleString()+'/mo ':'')+(avgExp?' exp '+CUR_SYM+avgExp.toLocaleString()+'/mo':'')).trim());
     generate();
   }catch(e){}
 }
@@ -786,7 +786,7 @@ function renderSum(data,sc){
   html+='<div class="sum-card" style="border-top-color:'+balCol+'">'
     +'<div class="sum-label">Year-End Balance</div>'
     +'<div class="sum-val" style="color:'+balCol+'">'+fmtS(finalBal)+'</div>'
-    +'<div class="sum-sub">'+(finalBal>=0?'Cash positive':'?? Cash deficit')+'</div></div>';
+    +'<div class="sum-sub">'+(finalBal>=0?'Cash positive':'⚠️ Cash deficit')+'</div></div>';
 
   document.getElementById('sumGrid').innerHTML=html;
 }
@@ -933,7 +933,7 @@ function drawChart(data){
       ctx.beginPath(); ctx.moveTo(P.l,gy2); ctx.lineTo(P.l+cW,gy2); ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle='#db2777'; ctx.font='bold 10px Arial'; ctx.textAlign='left';
-      ctx.fillText('?? '+_revGoal.name+' target', P.l+4, gy2-5);
+      ctx.fillText('🎯 '+_revGoal.name+' target', P.l+4, gy2-5);
       // Update legend
       var legEl=document.getElementById('chartLegend');
       if(legEl && !legEl.querySelector('.goal-leg')){
@@ -1006,7 +1006,7 @@ function renderInsights(data,sc){
   if(_revGoal && _revGoal.target > 0){
     var monthsOverGoal=data.filter(function(r){return r.rev>=_revGoal.target;});
     if(monthsOverGoal.length===12){
-      ins.push({t:'good',icon:'•',h:'?? Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal — consider raising the goal in Goal Tracker to keep pushing growth.'});
+      ins.push({t:'good',icon:'•',h:'🏆 Goal already exceeded every month!',b:'Your forecast revenue exceeds the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in all 12 months. Strong signal — consider raising the goal in Goal Tracker to keep pushing growth.'});
     } else if(monthsOverGoal.length>0){
       ins.push({t:'good',icon:'•',h:'Goal reachable in '+monthsOverGoal[0].mo,b:'Forecast revenue first hits the "'+_revGoal.name+'" target ('+fmt(_revGoal.target)+'/mo) in '+monthsOverGoal[0].mo+' and is exceeded in '+monthsOverGoal.length+' of 12 months. You\'re on track — the dashed pink line on the chart shows the target.'});
     } else {

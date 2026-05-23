@@ -140,7 +140,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
   <div class="prog-dots" id="progDots"></div>
   <div class="ctrl-bar">
     <button class="ctrl-btn" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">&#9679;</button>
-    <button class="ctrl-btn" onclick="restartReel()" title="Restart">?</button>
+    <button class="ctrl-btn" onclick="restartReel()" title="Restart">↻</button>
   </div>
 
   <!-- SLIDE 1 -->
@@ -152,7 +152,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
       <div class="r-row"><span>Review your books</span><span>$200</span></div>
       <div class="r-row"><span>Tell you to "spend less"</span><span>$200</span></div>
       <div class="r-row"><span>Explain what that means</span><span>$0</span></div>
-      <div class="r-total"><span>TOTAL WISDOM</span><span>$400 ??</span></div>
+      <div class="r-total"><span>TOTAL WISDOM</span><span>$400 💸</span></div>
     </div>
   </div>
 
@@ -161,10 +161,10 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
     <span class="big-emoji">&#9679;</span>
     <div class="hl-dark">The Excel Spiral—</div>
     <div class="steps">
-      <div class="step-row"><div class="s-no">1</div>Open Excel. Feel motivated. ??</div>
-      <div class="step-row"><div class="s-no">2</div>Stare at it for 20 minutes. ??</div>
-      <div class="step-row"><div class="s-no">3</div>Close it. Open Instagram. ??</div>
-      <div class="step-row"><div class="s-no">4</div>Google "am I going broke" ??</div>
+      <div class="step-row"><div class="s-no">1</div>Open Excel. Feel motivated. 💪</div>
+      <div class="step-row"><div class="s-no">2</div>Stare at it for 20 minutes. 👀</div>
+      <div class="step-row"><div class="s-no">3</div>Close it. Open Instagram. 📱</div>
+      <div class="step-row"><div class="s-no">4</div>Google "am I going broke" 🔍</div>
     </div>
   </div>
 
@@ -188,7 +188,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 
   <!-- SLIDE 4 -->
   <div class="slide s4" id="s4">
-    <div style="font-size:3.5rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">?</div>
+    <div style="font-size:3.5rem;animation:popIn .5s cubic-bezier(.34,1.7,.64,1) both;margin-bottom:18px">✨</div>
     <div class="pivot-txt">Your business<br>deserves better.</div>
     <div class="pivot-sub">Better than vibes. Better than guesswork.<br>Better than Column F in a mystery spreadsheet.</div>
   </div>
@@ -203,15 +203,15 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
       <div class="pill">Your data stays local</div>
       <div class="pill">Plain English</div>
     </div>
-    <div class="big-stat">30 Tools. Zero Invoices. ??</div>
+    <div class="big-stat">30 Tools. Zero Invoices. 🎉</div>
   </div>
 
   <!-- SLIDE 6 -->
   <div class="slide s6" id="s6">
-    <div class="feat-lbl">What it actually does ??</div>
+    <div class="feat-lbl">What it actually does ⚡</div>
     <ul class="feat-ul" id="featList">
       <li><span class="fi">&#9679;</span><strong>Loan Safety Score</strong> — will it help or bury you?</li>
-      <li><span class="fi">?</span><strong>Cash Runway</strong> — months left before lights go out</li>
+      <li><span class="fi">⏰</span><strong>Cash Runway</strong> — months left before lights go out</li>
       <li><span class="fi">&#9679;</span><strong>Grant Finder</strong> — free money you didn't know existed</li>
       <li><span class="fi">&#9679;</span><strong>AI CFO Chat</strong> — never judges. Never bills by the hour.</li>
       <li><span class="fi">&#9679;</span><strong>Business Health Score</strong> — your financial report card</li>
@@ -220,7 +220,7 @@ html,body{height:100%;background:#0a0a0a;display:flex;align-items:center;justify
 
   <!-- SLIDE 7 -->
   <div class="slide s7" id="s7">
-    <div class="cta-head">Setup: 2 minutes. ??<br>Accountant invoice: 2 weeks.</div>
+    <div class="cta-head">Setup: 2 minutes. ⚡<br>Accountant invoice: 2 weeks.</div>
     <div class="vs-row">
       <div class="vs-c vs-old">
         <div class="vs-lbl">Before BizSco</div>
@@ -376,7 +376,7 @@ function restartReel(){
 }
 function toggleMute(){
   muted=!muted;
-  document.getElementById('muteBtn').textContent=muted?'??':'??';
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
   /* restart current slide with updated volume */
   try{speechSynthesis.cancel();}catch(e){}
   if(safetyTimer){clearTimeout(safetyTimer);safetyTimer=null;}

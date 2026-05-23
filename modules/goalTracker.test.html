@@ -235,14 +235,14 @@ function getElapsedMonths(createdAt, deadline){
 
 function getStatus(g){
   var pct = getProgressPct(g)/100;
-  if(pct>=1) return {label:'?? Goal Reached!', cls:'chip-done'};
+  if(pct>=1) return {label:'🏆 Goal Reached!', cls:'chip-done'};
   var mo = getElapsedMonths(g.createdAt, g.deadline);
   var expectedPct = mo.total>0 ? mo.elapsed/mo.total : 0;
   var diff = pct - expectedPct;
-  if(diff>0.1)  return {label:'?? Ahead of pace', cls:'chip-ahead'};
-  if(diff>-0.05) return {label:'? On track',      cls:'chip-ontrack'};
-  if(diff>-0.2)  return {label:'?? Slightly behind',cls:'chip-behind'};
-  return {label:'?? Behind pace', cls:'chip-danger'};
+  if(diff>0.1)  return {label:'🚀 Ahead of pace', cls:'chip-ahead'};
+  if(diff>-0.05) return {label:'✅ On track',      cls:'chip-ontrack'};
+  if(diff>-0.2)  return {label:'⚠️ Slightly behind',cls:'chip-behind'};
+  return {label:'❌ Behind pace', cls:'chip-danger'};
 }
 
 /* -- Live data sync -- */
@@ -388,10 +388,10 @@ function renderGoals(){
     }).join('');
 
     html += '<div class="goal-card">'+
-      '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">?</button></div>'+
+      '<div class="gc-actions"><button class="gc-act gc-del" onclick="deleteGoal(\''+g.id+'\')">✕</button></div>'+
       '<span class="gc-type '+def.cls+'">'+def.icon+' '+def.label+'</span>'+
       '<div class="gc-name">'+esc(g.name)+'</div>'+
-      '<div class="gc-deadline">?? '+g.deadline+' — '+moLeft+' mo left</div>'+
+      '<div class="gc-deadline">📅 '+g.deadline+' — '+moLeft+' mo left</div>'+
       '<div class="gc-amounts">'+
         '<span style="color:#64748b">Current: <strong style="color:#1e293b">'+fmtVal(g.current||0,unit)+'</strong></span>'+
         '<span style="color:#1e293b;font-weight:700">Target: '+fmtVal(g.target||0,unit)+'</span>'+
@@ -452,7 +452,7 @@ function checkIntegration(){
   if(!sources.length) return;
   var strip = document.getElementById('intStrip');
   strip.style.display='';
-  strip.innerHTML='? Live data available from: '+sources.join(', ')+'. Hit <strong>Sync</strong> on any goal card to import current values.';
+  strip.innerHTML='✅ Live data available from: '+sources.join(', ')+'. Hit <strong>Sync</strong> on any goal card to import current values.';
 }
 
 /* -- Modal -- */

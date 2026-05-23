@@ -36,7 +36,7 @@
   .stat-pill b { color: #1e293b; }
   .highlights { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f1f5f9; }
   .highlights li { font-size: 0.78rem; color: #475569; list-style: none; padding: 2px 0; }
-  .highlights li::before { content: "? "; color: #16a34a; }
+  .highlights li::before { content: "✓ "; color: #16a34a; }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   th { background: #f8fafc; text-align: left; padding: 10px 12px; font-size: 0.78rem;
        text-transform: uppercase; letter-spacing: .05em; color: #64748b; border-bottom: 2px solid #e2e8f0; }
@@ -306,55 +306,55 @@ function _r(n) { return Math.round(n * 100) / 100; }
 
 const LENDER_CATALOG = [
   { id:"sba-7a",    name:"SBA 7(a) Business Loan",           institution:"SBA / Partner Bank Network",  type:"government",
-    icon:"???", minRate:8.5,  maxRate:11.5, minAmount:10000,   maxAmount:5000000,
+    icon:"🏛️", minRate:8.5,  maxRate:11.5, minAmount:10000,   maxAmount:5000000,
     minTenure:12, maxTenure:120, processingFee:0.5,  prepaymentPenalty:0,
     turnaroundDays:{min:30,max:90}, requiresCollateral:true,  minCreditScore:680,
     loanTypes:["business","sba"],
     highlights:["Lowest rates for small business","SBA-guaranteed up to 85%","Up to $5M / 10-year term","No prepayment penalty"] },
   { id:"wells-biz", name:"Wells Fargo Small Business Loan",  institution:"Wells Fargo Bank",            type:"public_bank",
-    icon:"??", minRate:9.0,  maxRate:14.0, minAmount:10000,   maxAmount:500000,
+    icon:"🏦", minRate:9.0,  maxRate:14.0, minAmount:10000,   maxAmount:500000,
     minTenure:12, maxTenure:60,  processingFee:1.0,  prepaymentPenalty:0,
     turnaroundDays:{min:5,max:14}, requiresCollateral:false, minCreditScore:680,
     loanTypes:["business","line_of_credit"],
     highlights:["No collateral for loans under $100K","Online application","Relationship account discounts"] },
   { id:"chase-biz", name:"Chase Business Line of Credit",    institution:"JPMorgan Chase",              type:"public_bank",
-    icon:"??", minRate:9.25, maxRate:15.5, minAmount:10000,   maxAmount:500000,
+    icon:"🏦", minRate:9.25, maxRate:15.5, minAmount:10000,   maxAmount:500000,
     minTenure:12, maxTenure:60,  processingFee:1.5,  prepaymentPenalty:0,
     turnaroundDays:{min:3,max:10}, requiresCollateral:false, minCreditScore:700,
     loanTypes:["business","line_of_credit"],
     highlights:["Revolving credit access","Dedicated business banker","Instant approval for existing customers"] },
   { id:"bofa-biz",  name:"Bank of America Business Loan",    institution:"Bank of America",             type:"public_bank",
-    icon:"??", minRate:8.75, maxRate:14.5, minAmount:25000,   maxAmount:750000,
+    icon:"🏦", minRate:8.75, maxRate:14.5, minAmount:25000,   maxAmount:750000,
     minTenure:12, maxTenure:60,  processingFee:1.0,  prepaymentPenalty:0,
     turnaroundDays:{min:5,max:14}, requiresCollateral:false, minCreditScore:700,
     loanTypes:["business"],
     highlights:["Preferred Rewards rate discount up to 0.5%","Fixed monthly payments","No origination fee"] },
   { id:"ondeck",    name:"OnDeck Business Loan",              institution:"OnDeck Capital",              type:"fintech",
-    icon:"??", minRate:18.0, maxRate:35.0, minAmount:5000,    maxAmount:250000,
+    icon:"💼", minRate:18.0, maxRate:35.0, minAmount:5000,    maxAmount:250000,
     minTenure:3,  maxTenure:24,  processingFee:2.5,  prepaymentPenalty:0,
     turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:600,
     loanTypes:["business"],
     highlights:["FICO 600+ accepted","Same-day funding available","Simple factor-rate pricing"] },
   { id:"bluevine",  name:"Bluevine Line of Credit",           institution:"Bluevine",                   type:"fintech",
-    icon:"??", minRate:15.0, maxRate:38.0, minAmount:6000,    maxAmount:250000,
+    icon:"💸", minRate:15.0, maxRate:38.0, minAmount:6000,    maxAmount:250000,
     minTenure:6,  maxTenure:12,  processingFee:0,    prepaymentPenalty:0,
     turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:625,
     loanTypes:["business","line_of_credit"],
     highlights:["No draw fees","Pay only on what you use","Weekly repayment option"] },
   { id:"kabbage",   name:"Kabbage (AmEx) Business Financing", institution:"American Express",           type:"fintech",
-    icon:"??", minRate:12.0, maxRate:35.0, minAmount:2000,    maxAmount:250000,
+    icon:"💳", minRate:12.0, maxRate:35.0, minAmount:2000,    maxAmount:250000,
     minTenure:6,  maxTenure:18,  processingFee:0,    prepaymentPenalty:0,
     turnaroundDays:{min:1,max:2},  requiresCollateral:false, minCreditScore:600,
     loanTypes:["business","line_of_credit"],
     highlights:["AmEx-backed security","Instant digital decision","No early payoff fees"] },
   { id:"fundbox",   name:"Fundbox Line of Credit",            institution:"Fundbox",                    type:"fintech",
-    icon:"??", minRate:10.0, maxRate:28.0, minAmount:1000,    maxAmount:150000,
+    icon:"📦", minRate:10.0, maxRate:28.0, minAmount:1000,    maxAmount:150000,
     minTenure:3,  maxTenure:24,  processingFee:0,    prepaymentPenalty:0,
     turnaroundDays:{min:1,max:3},  requiresCollateral:false, minCreditScore:600,
     loanTypes:["business","line_of_credit"],
     highlights:["Lowest FICO requirement (600)","No minimum revenue needed","Early repayment discounts"] },
   { id:"lendio",    name:"Lendio Business Loan Marketplace",  institution:"Lendio",                     type:"marketplace",
-    icon:"??", minRate:9.0,  maxRate:30.0, minAmount:5000,    maxAmount:5000000,
+    icon:"🛒", minRate:9.0,  maxRate:30.0, minAmount:5000,    maxAmount:5000000,
     minTenure:1,  maxTenure:120, processingFee:1.0,  prepaymentPenalty:0,
     turnaroundDays:{min:1,max:14}, requiresCollateral:false, minCreditScore:560,
     loanTypes:["business","sba","line_of_credit"],
@@ -534,8 +534,8 @@ function prefillFromModules() {
 
   if (msgs.length > 0) {
     var b = document.getElementById('intBanner');
-    b.innerHTML = '?? <strong>Auto-filled from your data:</strong> ' + msgs.join(' &nbsp;—&nbsp; ') +
-      ' &nbsp;<button onclick="this.parentNode.style.display=\'none\'" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.8rem">?</button>';
+    b.innerHTML = '✨ <strong>Auto-filled from your data:</strong> ' + msgs.join(' &nbsp;—&nbsp; ') +
+      ' &nbsp;<button onclick="this.parentNode.style.display=\'none\'" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.8rem">✕</button>';
     b.classList.add('show');
   }
 }
@@ -672,7 +672,7 @@ function showCompare() {
   var bestId = offers[0].id;
   var html = '<div class="card" id="cmpTable" style="margin-top:16px"><h3>Side-by-Side Comparison</h3>' +
     '<div style="overflow-x:auto"><table class="cmp-table"><thead><tr><th>Metric</th>' +
-    offers.map(function(o) { return '<th' + (o.id === bestId ? ' class="cmp-best-cell"' : '') + '>' + o.icon + ' ' + o.name.split(' ').slice(0,3).join(' ') + (o.id === bestId ? ' ??' : '') + '</th>'; }).join('') +
+    offers.map(function(o) { return '<th' + (o.id === bestId ? ' class="cmp-best-cell"' : '') + '>' + o.icon + ' ' + o.name.split(' ').slice(0,3).join(' ') + (o.id === bestId ? ' 🏆' : '') + '</th>'; }).join('') +
     '</tr></thead><tbody>';
 
   rows.forEach(function(row) {
@@ -681,7 +681,7 @@ function showCompare() {
   });
 
   html += '</tbody></table></div>' +
-    '<p style="font-size:0.75rem;color:#94a3b8;margin-top:8px">?? = lowest total cost for $' + fmt(amount) + ' over ' + tenure + ' months</p></div>';
+    '<p style="font-size:0.75rem;color:#94a3b8;margin-top:8px">🏆 = lowest total cost for $' + fmt(amount) + ' over ' + tenure + ' months</p></div>';
 
   // Insert before search-results or replace existing
   var prev = document.getElementById('cmpTable');
@@ -772,7 +772,7 @@ function doSearch() {
           '<span style="font-size:1rem;font-weight:900">' + e.score + '</span>/100 &nbsp;' + e.label +
         '</span></div>' +
         '<div class="elig-reasons">' +
-          e.reasons.map(function(r) { return '<div class="' + r.cls + '">' + (r.cls==='er-good'?'? ':r.cls==='er-bad'?'? ':'? ') + r.text + '</div>'; }).join('') +
+          e.reasons.map(function(r) { return '<div class="' + r.cls + '">' + (r.cls==='er-good'?'✓ ':r.cls==='er-bad'?'✗ ':'⚠ ') + r.text + '</div>'; }).join('') +
         '</div>' +
         // Action row
         '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px">' +
@@ -978,7 +978,7 @@ function runTests() {
   const ul = document.getElementById('unitResults');
   const pass = results.filter(r => r.ok).length;
   ul.innerHTML = `<li style="font-weight:600;padding:8px 0;font-size:0.9rem">${pass}/${results.length} tests passed</li>` +
-    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r => `<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // Auto-run search on load — restore filters, prefill from other modules, then search

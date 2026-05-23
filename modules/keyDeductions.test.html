@@ -183,7 +183,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
     </div>
     <div class="card" id="ho-cmp"></div>
   </div>
-  <div class="info-box">?? <strong>Exclusive &amp; Regular Use required.</strong> The space must be used only for business, every working day. Simplified method: no depreciation recapture. Regular method (Form 8829): larger deduction but requires tracking actual expenses.</div>
+  <div class="info-box">💡 <strong>Exclusive &amp; Regular Use required.</strong> The space must be used only for business, every working day. Simplified method: no depreciation recapture. Regular method (Form 8829): larger deduction but requires tracking actual expenses.</div>
 </div>
 
 <!-- -------------- MILEAGE -------------- -->
@@ -484,10 +484,10 @@ function calcHO(){
     '<div style="font-size:.82rem;font-weight:800;color:#475569;margin-bottom:12px">Method Comparison</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
     mkBox('Simplified','$5 — '+Math.min(s.off,300)+' sq ft = '+fmtD(simp),better==='simplified')+
-    mkBox('Regular Method',bizPct>0?(bizPct*100).toFixed(1)+'% — expenses = '+fmtD(reg):'Enter expenses ?',better==='regular')+
+    mkBox('Regular Method',bizPct>0?(bizPct*100).toFixed(1)+'% — expenses = '+fmtD(reg):'Enter expenses →',better==='regular')+
     '</div>'+
     '<div style="font-size:.75rem;color:#64748b;margin-top:10px">'+
-    (better==='simplified'?'? Simplified gives you a larger deduction in this scenario.':'? Regular method gives you a larger deduction — use Form 8829.')+
+    (better==='simplified'?'✅ Simplified gives you a larger deduction in this scenario.':'✅ Regular method gives you a larger deduction — use Form 8829.')+
     '</div><div style="font-size:.72rem;color:#94a3b8;margin-top:6px">* Est. tax savings based on 25% marginal rate. Actual varies by your effective rate.</div>';
 }
 
@@ -581,11 +581,11 @@ function renderMileage(){
       '<td class="r">'+t.miles+'</td>'+
       '<td class="r">'+c(t.rate)+'/mi</td>'+
       '<td class="r">'+fmtD(t.deduction)+'</td>'+
-      '<td><button class="btn-sm btn-danger" onclick="delTrip(\''+t.id+'\')">?</button></td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delTrip(\''+t.id+'\')">✕</button></td>'+
       '</tr>';
   });
   tbl+='</tbody></table></div>';
-  if(bMi>0) tbl+='<div class="info-box">?? <strong>IRS Log:</strong> This log satisfies IRS requirements — date, destination, purpose, and miles per trip. Total: '+bMi.toLocaleString()+' mi — '+c(r.biz)+'/mi = '+fmtD(bDed)+'.</div>';
+  if(bMi>0) tbl+='<div class="info-box">📄 <strong>IRS Log:</strong> This log satisfies IRS requirements — date, destination, purpose, and miles per trip. Total: '+bMi.toLocaleString()+' mi — '+c(r.biz)+'/mi = '+fmtD(bDed)+'.</div>';
   document.getElementById('ml-table').innerHTML=tbl;
 }
 
@@ -706,7 +706,7 @@ function renderS179(){
       '<td class="r">'+fmtD(c.elig)+'</td>'+
       '<td class="r" style="color:#2563eb;font-weight:800">'+fmtD(c.s179)+'</td>'+
       '<td class="r" style="color:#7c3aed;font-weight:800">'+fmtD(c.bonus)+'</td>'+
-      '<td><button class="btn-sm btn-danger" onclick="delAsset(\''+c.a.id+'\')">?</button></td>'+
+      '<td><button class="btn-sm btn-danger" onclick="delAsset(\''+c.a.id+'\')">✕</button></td>'+
       '</tr>';
   });
   tbl+='</tbody></table>';
@@ -812,18 +812,18 @@ function calcVehicle(){
     '<div class="veh-lbl">Standard Mileage Rate</div>'+
     '<div class="veh-amt">'+fmtD(stdDed)+'</div>'+
     '<div class="veh-sub">'+biz.toLocaleString()+' mi — '+c(r.biz)+'/mi</div>'+
-    '<span class="veh-badge '+(winner==='standard'?'vb-win':'vb-lose')+'">'+(winner==='standard'?'? Better':'—')+'</span>'+
+    '<span class="veh-badge '+(winner==='standard'?'vb-win':'vb-lose')+'">'+(winner==='standard'?'✅ Better':'—')+'</span>'+
     '</div>'+
     '<div class="veh-box '+(winner==='actual'?'winner':'')+'">'+
     '<div class="veh-lbl">Actual Cost Method</div>'+
     '<div class="veh-amt">'+fmtD(actualDed)+'</div>'+
     '<div class="veh-sub">'+(bizPct*100).toFixed(1)+'% — '+fmtD(totalExp)+' expenses</div>'+
-    '<span class="veh-badge '+(winner==='actual'?'vb-win':'vb-lose')+'">'+(winner==='actual'?'? Better':'—')+'</span>'+
+    '<span class="veh-badge '+(winner==='actual'?'vb-win':'vb-lose')+'">'+(winner==='actual'?'✅ Better':'—')+'</span>'+
     '</div></div>';
 
   if(diff > 0){
     html += '<div class="info-box" style="margin-top:12px">'+
-      '?? <strong>'+(winner==='standard'?'Standard mileage rate':'Actual cost method')+
+      '💡 <strong>'+(winner==='standard'?'Standard mileage rate':'Actual cost method')+
       ' saves you an extra '+fmtD(diff)+'</strong> this year. '+
       (winner==='standard'?'Just log your miles — no receipts needed for fuel or repairs.':
       'Keep receipts for gas, insurance, maintenance, registration, and depreciation. Once you choose actual cost for a vehicle, you must use it for the life of the vehicle.')+

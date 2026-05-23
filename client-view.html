@@ -171,7 +171,7 @@ function applyWhiteLabel(wl){
   }
   if(wl.tagline) document.getElementById('brandTag').textContent = wl.tagline;
   if(wl.logo_url){
-    document.getElementById('brandLogo').innerHTML = '<img src="'+esc(wl.logo_url)+'" alt="logo" onerror="this.parentElement.textContent=\'??\'">';
+    document.getElementById('brandLogo').innerHTML = '<img src="'+esc(wl.logo_url)+'" alt="logo" onerror="this.parentElement.textContent=\'🏢\'">';
   }
   if(wl.hide_BizSco) document.getElementById('poweredBy').style.display='none';
 }

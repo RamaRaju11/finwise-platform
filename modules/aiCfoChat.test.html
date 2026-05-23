@@ -187,8 +187,8 @@
       <div class="pw-feat"><span class="fi">&#9679;</span>Powered by Claude AI (Anthropic)</div>
       <div class="pw-feat"><span class="fi">&#9679;</span>Private — data stays in your browser</div>
     </div>
-    <button class="btn-stripe-pro" onclick="showToast('?? Stripe coming soon! Use FINWISE29 to demo free.');return false;">
-      ?? Subscribe Pro — $29/month
+    <button class="btn-stripe-pro" onclick="showToast('💳 Stripe coming soon! Use FINWISE29 to demo free.');return false;">
+      ⭐ Subscribe Pro — $29/month
     </button>
     <div class="pw-divider">or enter promo code</div>
     <div class="unlock-row">
@@ -209,7 +209,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
     <div class="ph-badge">Pro — $29/month</div>
-    <span id="contextBadge" style="display:none">?? 0 turns</span>
+    <span id="contextBadge" style="display:none">💬 0 turns</span>
   </div>
 </div>
 
@@ -443,7 +443,7 @@ function saveApiKey(){
   if(!key.startsWith('sk-ant')){showToast('API key should start with sk-ant...');return;}
   localStorage.setItem('fw_api_key',key);
   updateKeyStatus();
-  showToast('? API key saved.');
+  showToast('✅ API key saved.');
 }
 
 function updateKeyStatus(){
@@ -460,11 +460,11 @@ function updateKeyStatus(){
   const fromConfig = (typeof FINWISE_CONFIG !== 'undefined' && FINWISE_CONFIG.ANTHROPIC_API_KEY !== 'XXXX');
   if(key){
     el.className='api-status set';
-    el.textContent='? Key set'+(fromConfig?' (from config.js)':' ('+key.slice(0,12)+'...)');
+    el.textContent='✅ Key set'+(fromConfig?' (from config.js)':' ('+key.slice(0,12)+'...)');
     document.getElementById('apiKeyInput').value=key;
   } else {
     el.className='api-status unset';
-    el.textContent='? No key — update config.js or enter below';
+    el.textContent='⚠️ No key — update config.js or enter below';
   }
 }
 
@@ -716,7 +716,7 @@ function buildModuleDataText(d) {
     lines.push('\nESTIMATED TAX PAYMENTS (' + now2.getFullYear() + '):');
     lines.push('- ' + d.taxPayments.length + ' payment(s), total paid: ' + fmt(txTotal));
     lines.push('- Last payment: ' + lastTx.date + ' (' + moSince + ' month' + (moSince!==1?'s':'')+' ago)');
-    if(moSince>3) lines.push('- ?? OVERDUE: Quarterly estimated taxes due Apr 15 / Jun 16 / Sep 15 / Jan 15 — last payment was '+moSince+' months ago');
+    if(moSince>3) lines.push('- ⚠️ OVERDUE: Quarterly estimated taxes due Apr 15 / Jun 16 / Sep 15 / Jan 15 — last payment was '+moSince+' months ago');
   }
 
   if(d.savingsGoals.length>0){
@@ -870,7 +870,7 @@ RESPONSE FORMAT:
 - Short paragraphs + bullet points; specific numbers always
 - End with 1-2 clear action steps
 - Max 300 words unless asked for more
-- Use ? ?? ?? ?? ?? for readability
+- Use ✅ ⚠️ ❌ 💡 📊 for readability
 
 Do not invent data. If a number is missing or inconsistent, flag it. No legal or tax advice.`;
 }
@@ -920,7 +920,7 @@ function loadConversation(id){
       Object.keys(map).forEach(function(elId){var el=document.getElementById(elId);if(el)el.value=conv.context[map[elId]]||'';});
     }
     renderSavedHistory();
-    showToast('? Conversation loaded');
+    showToast('✅ Conversation loaded');
   }catch(e){showToast('Could not load conversation.');}
 }
 
@@ -935,7 +935,7 @@ function renderSavedHistory(){
       var turns=c.messages?Math.floor(c.messages.length/2):0;
       return '<div class="conv-item'+(isActive?' active':'')+'" onclick="loadConversation('+c.id+')">'+
         '<div class="conv-item-date">'+c.date+' — '+turns+' turn'+(turns!==1?'s':'')+'</div>'+
-        '<div class="conv-item-title">?? '+c.title+'</div></div>';
+        '<div class="conv-item-title">💬 '+c.title+'</div></div>';
     }).join('');
   }catch(e){list.innerHTML='<div class="no-history">No saved conversations yet.</div>';}
 }
@@ -976,7 +976,7 @@ function addMessage(role, content){
   const copyBtn=role==='ai'?`<div class="msg-actions"><button class="btn-copy-msg" onclick="copyMsgText(this)">Copy</button></div>`:'';
   const safeContent=content.replace(/"/g,'&quot;');
   div.innerHTML=`
-    <div class="msg-avatar">${role==='ai'?'??':'??'}</div>
+    <div class="msg-avatar">${role==='ai'?'🤖':'👤'}</div>
     <div>
       <div class="msg-bubble" data-raw="${safeContent}">${formatMarkdown(content)}</div>
       ${copyBtn}
@@ -991,7 +991,7 @@ function addMessage(role, content){
     if(aib) aib.style.display='';
     const turnCount=Math.floor(conversation.length/2);
     const badge=document.getElementById('contextBadge');
-    if(badge&&turnCount>0){badge.style.display='';badge.textContent='?? '+turnCount+' turn'+(turnCount!==1?'s':'')+' in context';}
+    if(badge&&turnCount>0){badge.style.display='';badge.textContent='💬 '+turnCount+' turn'+(turnCount!==1?'s':'')+' in context';}
   }
 
   updateHistory(content, role);
@@ -1030,7 +1030,7 @@ function updateHistory(content, role){
   if(noH) noH.remove();
   const item=document.createElement('div');
   item.className='history-item';
-  item.textContent='?? '+content.substring(0,45)+(content.length>45?'...':'');
+  item.textContent='💬 '+content.substring(0,45)+(content.length>45?'...':'');
   item.title=content;
   list.insertBefore(item,list.firstChild);
 }
@@ -1078,7 +1078,7 @@ async function sendMessage(){
       // Guest fallback — requires local API key
       const apiKey=getApiKey();
       if(!apiKey){
-        addMessage('ai','?? Sign in for AI CFO, or add your Anthropic API key in the sidebar.');
+        addMessage('ai','🔒 Sign in for AI CFO, or add your Anthropic API key in the sidebar.');
         setLoading(false);
         return;
       }
@@ -1114,7 +1114,7 @@ async function sendMessage(){
     if(msg.includes('401')) msg='Invalid API key or session expired. Try signing in again.';
     else if(msg.includes('429')) msg='Rate limit hit. Wait a moment and try again.';
     else if(msg.includes('Failed to fetch')) msg='Network error. Check your internet connection.';
-    addMessage('ai','?? Error: '+msg);
+    addMessage('ai','❌ Error: '+msg);
   } finally {
     setLoading(false);
   }
@@ -1170,7 +1170,7 @@ async function generateActionItems(){
   const aiExchanges=conversation.filter(function(m){return m.role==='assistant';}).length;
   if(aiExchanges<1){showToast('Have a conversation first, then generate action items.');return;}
   const actionPrompt='Based on our entire conversation, generate a numbered list of 5—7 specific, concrete action items I should take THIS WEEK to improve my business finances. Format each as: [PRIORITY: High/Med/Low] Action — specific detail or dollar amount where applicable. Be concrete, not generic.';
-  addMessage('user','?? Generate Action Items from this conversation');
+  addMessage('user','🎯 Generate Action Items from this conversation');
   const msgs=conversation.concat([{role:'user',content:actionPrompt}]);
   conversation.push({role:'user',content:'Generate action items'});
   setLoading(true);
@@ -1192,7 +1192,7 @@ async function generateActionItems(){
       reply=data.reply||'Could not generate action items.';
     } else {
       const apiKey=getApiKey();
-      if(!apiKey){showToast('?? Sign in or add your API key first.');setLoading(false);if(aib)aib.disabled=false;return;}
+      if(!apiKey){showToast('🔒 Sign in or add your API key first.');setLoading(false);if(aib)aib.disabled=false;return;}
       const resp=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
@@ -1212,7 +1212,7 @@ async function generateActionItems(){
     saveConversation();
   }catch(e){
     conversation.pop();
-    addMessage('ai','?? Error: '+e.message);
+    addMessage('ai','❌ Error: '+e.message);
   }finally{
     setLoading(false);
     if(aib){aib.disabled=false;}

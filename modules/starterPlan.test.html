@@ -230,8 +230,8 @@
   </div>
 
   <div>
-    <a class="btn-stripe" href="#" onclick="showToast('?? Stripe payment coming soon! Use code FINWISE9 to demo all features free.');return false;">
-      ?? Subscribe — $9/month
+    <a class="btn-stripe" href="#" onclick="showToast('💳 Stripe payment coming soon! Use code FINWISE9 to demo all features free.');return false;">
+      💳 Subscribe — $9/month
     </a>
     <p style="font-size:.78rem;color:#94a3b8;margin-top:.75rem">Stripe integration coming soon — Use <strong>FINWISE9</strong> to demo free</p>
   </div>
@@ -757,7 +757,7 @@ function runCompare(){
     winnerEl.innerHTML = `
       ${name ? `<div style="font-size:.78rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem">${name}</div>` : ''}
       <div style="font-size:1.1rem;font-weight:800;color:#713f12;margin-bottom:.35rem">
-        ?? Best Option: ${w.lbl}
+        🏆 Best Option: ${w.lbl}
       </div>
       <div style="font-size:.87rem;color:#78350f">
         Highest Loan Decision Score: <strong>${w.score}/100 — ${w.label}</strong>
@@ -873,7 +873,7 @@ function loadProfile(id){
   const p = getProfiles().find(x=>x.id===id);
   if(!p) return;
   applyProfile(p);
-  showToast('? ' + p.name + ' loaded into all tabs.');
+  showToast('✅ ' + p.name + ' loaded into all tabs.');
 }
 
 function deleteProfile(id){
@@ -899,7 +899,7 @@ function loadFromProfile(){
   }
   const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
   applyProfile(profiles[idx]);
-  showToast('? Profile loaded into all tabs.');
+  showToast('✅ Profile loaded into all tabs.');
 }
 
 function generateReport(){
@@ -1066,9 +1066,9 @@ function runStressTest(){
     const postEMI   = stressNet - totalEMI;
     const dscr      = totalEMI > 0 ? stressNet / totalEMI : 99;
     let cls, verdict;
-    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='? Safe'; }
-    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='?? Tight'; }
-    else { cls='fail'; verdict='?? Deficit'; }
+    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='✅ Safe'; }
+    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='⚠️ Tight'; }
+    else { cls='fail'; verdict='❌ Deficit'; }
     return {d, stressRev, stressNet, postEMI, dscr, cls, verdict};
   });
 
@@ -1342,7 +1342,7 @@ function runCompare(){
     winnerEl.innerHTML = `
       ${name ? `<div style="font-size:.78rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem">${name}</div>` : ''}
       <div style="font-size:1.1rem;font-weight:800;color:#713f12;margin-bottom:.35rem">
-        ?? Best Option: ${w.lbl}
+        🏆 Best Option: ${w.lbl}
       </div>
       <div style="font-size:.87rem;color:#78350f">
         Highest Loan Decision Score: <strong>${w.score}/100 — ${w.label}</strong>
@@ -1458,7 +1458,7 @@ function loadProfile(id){
   const p = getProfiles().find(x=>x.id===id);
   if(!p) return;
   applyProfile(p);
-  showToast('? ' + p.name + ' loaded into all tabs.');
+  showToast('✅ ' + p.name + ' loaded into all tabs.');
 }
 
 function deleteProfile(id){
@@ -1484,7 +1484,7 @@ function loadFromProfile(){
   }
   const idx=Math.min(parseInt(localStorage.getItem('fw_active_idx'))||0, profiles.length-1);
   applyProfile(profiles[idx]);
-  showToast('? Profile loaded into all tabs.');
+  showToast('✅ Profile loaded into all tabs.');
 }
 
 function generateReport(){
@@ -1651,9 +1651,9 @@ function runStressTest(){
     const postEMI   = stressNet - totalEMI;
     const dscr      = totalEMI > 0 ? stressNet / totalEMI : 99;
     let cls, verdict;
-    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='? Safe'; }
-    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='?? Tight'; }
-    else { cls='fail'; verdict='?? Deficit'; }
+    if(postEMI > 0 && dscr >= 1.25){ cls='ok'; verdict='✅ Safe'; }
+    else if(postEMI > 0 || dscr >= 1.0){ cls='warn'; verdict='⚠️ Tight'; }
+    else { cls='fail'; verdict='❌ Deficit'; }
     return {d, stressRev, stressNet, postEMI, dscr, cls, verdict};
   });
 

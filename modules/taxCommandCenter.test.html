@@ -576,11 +576,11 @@ function buildActions(d){
     qDates.forEach(function(qd){
       var past = now > qd.due;
       if(d.qPaid[qd.q]){
-        items.push({sev:'ok', ico:'?', title:'Q'+qd.q[1]+' estimated tax paid', desc:qd.label+' payment recorded.'});
+        items.push({sev:'ok', ico:'✅', title:'Q'+qd.q[1]+' estimated tax paid', desc:qd.label+' payment recorded.'});
       } else if(past){
-        items.push({sev:'urgent', ico:'??', title:'Missed Q'+qd.q[1]+' estimated tax payment', desc:'Due date ('+fmtDate(qd.due)+') has passed. Pay ASAP — IRS charges 0.5% penalty per month plus interest.', href:'taxEstimator.test.html'});
+        items.push({sev:'urgent', ico:'🚨', title:'Missed Q'+qd.q[1]+' estimated tax payment', desc:'Due date ('+fmtDate(qd.due)+') has passed. Pay ASAP — IRS charges 0.5% penalty per month plus interest.', href:'taxEstimator.test.html'});
       } else if(daysBetween(now, qd.due) <= 21){
-        items.push({sev:'warn', ico:'??', title:'Q'+qd.q[1]+' estimated tax due in '+daysBetween(now,qd.due)+' days', desc:'Payment of approximately '+fmtD(d.quarterlyEst)+' due '+fmtDate(qd.due)+'.', href:'taxEstimator.test.html'});
+        items.push({sev:'warn', ico:'⚠️', title:'Q'+qd.q[1]+' estimated tax due in '+daysBetween(now,qd.due)+' days', desc:'Payment of approximately '+fmtD(d.quarterlyEst)+' due '+fmtDate(qd.due)+'.', href:'taxEstimator.test.html'});
       }
     });
   } else {
@@ -609,7 +609,7 @@ function buildActions(d){
     items.push({sev:'urgent', ico:'📋', title:'Collect W-9 forms from '+d.noW9+' contractor'+(d.noW9>1?'s':''), desc:'Without a W-9, you\'re required to withhold 24% of every payment as "backup withholding" for the IRS.', href:'contractorPayroll.test.html'});
   }
   if(d.necApproaching.length > 0){
-    items.push({sev:'warn', ico:'??', title:d.necApproaching.length+' contractor'+(d.necApproaching.length>1?'s are':' is')+' approaching the $600 reporting threshold', desc:d.necApproaching.map(function(c){return c.name+' ('+fmtD(c.paid)+')';}).join(', ')+'. A 1099 will be required once they reach $600.', href:'contractorPayroll.test.html'});
+    items.push({sev:'warn', ico:'⚠️', title:d.necApproaching.length+' contractor'+(d.necApproaching.length>1?'s are':' is')+' approaching the $600 reporting threshold', desc:d.necApproaching.map(function(c){return c.name+' ('+fmtD(c.paid)+')';}).join(', ')+'. A 1099 will be required once they reach $600.', href:'contractorPayroll.test.html'});
   }
 
   return items;
@@ -637,7 +637,7 @@ function renderModConnStrip(d){
   ];
   var html = '<div class="mod-conn-strip">';
   modules.forEach(function(m){
-    html += '<span class="mod-conn-pill '+(m.on?'mcp-on':'mcp-off')+'">'+m.ico+' '+(m.on?'? ':'? ')+m.name+'</span>';
+    html += '<span class="mod-conn-pill '+(m.on?'mcp-on':'mcp-off')+'">'+m.ico+' '+(m.on?'✓ ':'○ ')+m.name+'</span>';
   });
   html += '</div>';
   document.getElementById('modConnStrip').innerHTML = html;
@@ -841,7 +841,7 @@ function renderDeadlines(d){
   items.sort(function(a,b){ return a.date-b.date; });
 
   var now = TODAY;
-  var typeIco = {income:'??',sales:'???',contractor:'??',payroll:'??'};
+  var typeIco = {income:'💰',sales:'🧾',contractor:'👤',payroll:'👥'};
   var html = '<div class="dl-list">';
 
   items.forEach(function(item, idx){
@@ -956,7 +956,7 @@ function renderTaxSavingsOpps(d){
   if(!d.hoSetup) opps.push({ico:'💰',title:'Home Office Deduction',desc:'If you have a dedicated workspace at home, deduct $5/sq ft (up to 300 sq ft) or actual home expenses — business-use %.',save:'Potential savings: $750 — $3,500+',href:'keyDeductions.test.html'});
   if(!d.mileageSetup) opps.push({ico:'💰',title:'Business Mileage Deduction',desc:'Every business mile is worth 70— in deductions (2025 IRS rate). Log trips in Key Deductions — takes 60 seconds each.',save:'Potential savings: $700 — $3,500+ per year',href:'keyDeductions.test.html'});
   if(!d.s179Setup && d.annualProfit > 5000) opps.push({ico:'💻',title:'Section 179 Equipment Write-Off',desc:'Computers, phones, furniture, software — deduct the full purchase price in the year you bought it. No waiting 5 years.',save:'Potential savings: $500 — $10,000+ depending on purchases',href:'keyDeductions.test.html'});
-  if(d.hasSE && d.annualProfit > 30000) opps.push({ico:'??',title:'SEP-IRA Retirement Contribution',desc:'Contribute up to 25% of net self-employment income (max $69,000 for 2025) to a SEP-IRA. 100% deductible.',save:'Potential savings: $3,000 — $15,000+',href:'taxEstimator.test.html'});
+  if(d.hasSE && d.annualProfit > 30000) opps.push({ico:'🏦',title:'SEP-IRA Retirement Contribution',desc:'Contribute up to 25% of net self-employment income (max $69,000 for 2025) to a SEP-IRA. 100% deductible.',save:'Potential savings: $3,000 — $15,000+',href:'taxEstimator.test.html'});
   if(d.hasSE) opps.push({ico:'🏥',title:'Self-Employed Health Insurance',desc:'If you pay for your own health, dental, or vision insurance, you can deduct 100% of premiums directly from gross income.',save:'Potential savings: $2,000 — $8,000+',href:'taxEstimator.test.html'});
   if(opps.length === 0){
     el.innerHTML = '<div class="opp-card"><div class="card-title">Tax Savings Opportunities</div><p style="color:#16a34a;font-size:.85rem;padding:8px 0">You\'ve set up all key deductions we track. Make sure your Tax Estimator has current income and expense figures to keep estimates accurate.</p></div>';

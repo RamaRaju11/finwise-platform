@@ -112,7 +112,7 @@ button.primary:hover{background:#1d4ed8}
 <div class="two-col">
 
   <div class="card">
-    <h2><span style="color:#dc2626">?</span> Existing Loan</h2>
+    <h2><span style="color:#dc2626">📉</span> Existing Loan</h2>
     <label>Outstanding Balance ($)</label>
     <input type="number" id="eBal" placeholder="e.g. 150000" min="0" oninput="save()"/>
     <label>Annual Interest Rate (%)</label>
@@ -124,7 +124,7 @@ button.primary:hover{background:#1d4ed8}
   </div>
 
   <div class="card">
-    <h2><span style="color:#16a34a">?</span> Refinance Offer</h2>
+    <h2><span style="color:#16a34a">📈</span> Refinance Offer</h2>
     <label>New Annual Interest Rate (%)</label>
     <input type="number" id="rRate" placeholder="e.g. 7.0" step="0.01" min="0" oninput="save()"/>
     <label>New Loan Term (months)</label>
@@ -315,14 +315,14 @@ function analyze(){
 
   /* Monthly payment comparison card (P3 UX) */
   var savColor = monthlySav > 0 ? '#16a34a' : '#dc2626';
-  var savSign  = monthlySav > 0 ? '? Saving ' : '? Costing extra ';
+  var savSign  = monthlySav > 0 ? '✅ Saving ' : '❌ Costing extra ';
   document.getElementById('payCompare').innerHTML =
     '<div class="pc-box old">'+
       '<div class="pc-lbl">You Pay Now</div>'+
       '<div class="pc-amt" style="color:#dc2626">'+fmt(Math.round(eEmi))+'</div>'+
       '<div class="pc-sub">per month</div>'+
     '</div>'+
-    '<div class="pc-arrow">?</div>'+
+    '<div class="pc-arrow">→</div>'+
     '<div class="pc-box new-r">'+
       '<div class="pc-lbl">After Refi</div>'+
       '<div class="pc-amt" style="color:#16a34a">'+fmt(Math.round(newEmi))+'</div>'+
@@ -345,7 +345,7 @@ function analyze(){
       '<div style="font-size:.72rem;color:#94a3b8">After break-even, every month saves you '+fmt(monthlySav)+'</div>';
     /* P1 Calculation: warn if break-even is beyond remaining term */
     if(breakEvenMos > eMos){
-      beHtml += '<div class="be-warn">?? <strong>Break-even warning:</strong> Refinancing does not break even within your current loan term. '+
+      beHtml += '<div class="be-warn">⚠️ <strong>Break-even warning:</strong> Refinancing does not break even within your current loan term. '+
         'You need '+Math.ceil(breakEvenMos)+' months to recover closing costs, but only '+eMos+' months remain on your existing loan. '+
         'This refinance costs you money overall unless you extend your repayment period intentionally.</div>';
     }
@@ -442,11 +442,11 @@ function printAnalysis(){
       if(parseFloat(biggest.balance) > 0){
         var banner = document.createElement('div');
         banner.style.cssText = 'background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
-        banner.innerHTML = '?? <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
+        banner.innerHTML = '💡 <strong>' + lro.loans.length + ' loan' + (lro.loans.length>1?'s':'') +
           ' found in Repayment Optimizer</strong> — largest: <strong>' + (biggest.name||'Loan') + '</strong>' +
           ' $' + Number(biggest.balance).toLocaleString() + ' @ ' + biggest.rate + '% ' +
           '&mdash; <button onclick="importFromOptimizer(this)" style="background:#2563eb;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Use as Existing Loan</button>' +
-          ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">?</button>';
+          ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">✕</button>';
         var firstCard = document.querySelector('.card');
         if(firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
       }

@@ -195,7 +195,7 @@ textarea{resize:vertical;min-height:68px}
   <div class="tab-panel active" id="tab-portals">
 
     <div class="card">
-      <div class="card-title"><span>?</span> Create Client Portal</div>
+      <div class="card-title"><span>👤</span> Create Client Portal</div>
 
       <div class="g2">
         <div>
@@ -442,7 +442,7 @@ function loadClients(){
       return '<div class="client-row">' +
         '<div class="cr-avatar">'+initials+'</div>' +
         '<div class="cr-info"><div class="cr-name">'+esc(r.client_name)+'</div><div class="cr-email">'+esc(r.client_email)+'</div></div>' +
-        '<span class="cr-views">?? '+r.view_count+' views</span>' +
+        '<span class="cr-views">👁 '+r.view_count+' views</span>' +
         '<div class="cr-meta" style="min-width:90px">'+created+'<br><span style="color:#94a3b8">'+lastViewed+'</span></div>' +
         '<div class="sched-wrap">' +
           '<label class="toggle-switch"><input type="checkbox" '+checked+' onchange="toggleSchedule(\''+r.id+'\',this.checked)"/><span class="toggle-slider"></span></label>' +
@@ -599,10 +599,10 @@ function runImport(){
   Promise.all(promises).then(function(results){
     var ok = results.filter(function(r){ return r.ok; }).length;
     var fail = results.length - ok;
-    document.getElementById('importResultTitle').textContent = '? Import complete — '+ok+' portals created';
+    document.getElementById('importResultTitle').textContent = '✅ Import complete — '+ok+' portals created';
     document.getElementById('importResultDesc').textContent = (fail>0?fail+' rows failed (duplicate email or server error). ':'')+'All clients can now access their report via their unique link.';
     document.getElementById('importResult').style.display='block';
-    btn.textContent='Import Clients ?';btn.disabled=false;
+    btn.textContent='Import Clients →';btn.disabled=false;
     loadClients();
   });
 }

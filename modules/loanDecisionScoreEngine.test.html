@@ -489,7 +489,7 @@
 function toggleExplain(btn){
   var body=btn.nextElementSibling;
   var open=body.classList.toggle('open');
-  btn.innerHTML='[Why this matters] '+(open?'?':'?');
+  btn.innerHTML='[Why this matters] '+(open?'▼':'▶');
 }
 function explainHtml(bullets,example){
   return '<div class="explain-block">'+
@@ -643,13 +643,13 @@ function computeScore(revenue, expenses, existingEmi, loanAmount, annualRate, mo
 
   let verdict, cls, message;
   if (total >= 70) {
-    verdict = '?? SAFE';          cls = 'safe';
+    verdict = '✅ SAFE';          cls = 'safe';
     message = 'Your business can comfortably take this loan. Cash flow remains healthy even under stress.';
   } else if (total >= 40) {
-    verdict = '?? RISKY';         cls = 'risky';
+    verdict = '⚠️ RISKY';         cls = 'risky';
     message = 'This loan is possible but stretches your finances. One bad month could cause problems.';
   } else {
-    verdict = '?? DANGEROUS';     cls = 'danger';
+    verdict = '❌ DANGEROUS';     cls = 'danger';
     message = 'This loan will likely damage your cash flow. Consider a smaller loan or improve finances first.';
   }
 
@@ -714,12 +714,12 @@ function runScore() {
   const creditScore = parseFloat(document.getElementById('creditScore').value) || 0;
 
   if (!revenue || !expenses || !loanAmount || !rate || !months) {
-    errEl.innerHTML = '?? Please fill in all required fields: Monthly Revenue, Expenses, Loan Amount, Interest Rate, and Tenure.';
+    errEl.innerHTML = '⚠️ Please fill in all required fields: Monthly Revenue, Expenses, Loan Amount, Interest Rate, and Tenure.';
     errEl.style.display = 'block';
     return;
   }
   if (revenue === 0) {
-    errEl.innerHTML = '?? Monthly Revenue cannot be zero — Debt Service Coverage Ratio (DSCR) requires a non-zero revenue to calculate.';
+    errEl.innerHTML = '⚠️ Monthly Revenue cannot be zero — Debt Service Coverage Ratio (DSCR) requires a non-zero revenue to calculate.';
     errEl.style.display = 'block';
     return;
   }
@@ -787,16 +787,16 @@ function renderRecs(r, revenue, expenses, existingEmi, loanAmount, rate, months)
   let html = '<div class="card"><h2>What This Means For You</h2>';
 
   if (r.cls === 'safe') {
-    html += `<div class="success-box">? <strong>Good to go.</strong> Your cash flow can absorb the new EMI of ${fmt(r.newEMI)}/month with a comfortable buffer of ${fmt(r.cashLeft)}/month remaining.</div>`;
+    html += `<div class="success-box">✅ <strong>Good to go.</strong> Your cash flow can absorb the new EMI of ${fmt(r.newEMI)}/month with a comfortable buffer of ${fmt(r.cashLeft)}/month remaining.</div>`;
     html += `<div class="rec-box">Consider a slightly shorter tenure to save on total interest — you have the cash flow headroom.</div>`;
   } else if (r.cls === 'risky') {
-    html += `<div class="warn-box">?? <strong>Proceed with caution.</strong> The loan is technically payable but your buffer is thin (${fmt(r.cashLeft)}/month). A revenue dip of even 10% could cause cash flow stress.</div>`;
-    html += `<div class="rec-box">?? <strong>Reduce the loan amount by 20—30%</strong> — this could push your score into the SAFE zone.</div>`;
-    html += `<div class="rec-box">?? <strong>Extend the tenure</strong> to lower the monthly EMI, then run the check again.</div>`;
+    html += `<div class="warn-box">⚠️ <strong>Proceed with caution.</strong> The loan is technically payable but your buffer is thin (${fmt(r.cashLeft)}/month). A revenue dip of even 10% could cause cash flow stress.</div>`;
+    html += `<div class="rec-box">💡 <strong>Reduce the loan amount by 20—30%</strong> — this could push your score into the SAFE zone.</div>`;
+    html += `<div class="rec-box">💡 <strong>Extend the tenure</strong> to lower the monthly EMI, then run the check again.</div>`;
   } else {
-    html += `<div class="danger-box">?? <strong>Do not take this loan yet.</strong> Your monthly buffer is ${fmt(r.cashLeft)} — the loan payment exceeds what your business can safely carry.</div>`;
-    html += `<div class="rec-box">?? <strong>Use the Max Safe Loan tab</strong> to find the loan size your business can actually handle right now.</div>`;
-    html += `<div class="rec-box">?? <strong>Increase revenue or reduce expenses</strong> by ${fmt(Math.abs(r.cashLeft) + 2000)}/month first, then re-check.</div>`;
+    html += `<div class="danger-box">❌ <strong>Do not take this loan yet.</strong> Your monthly buffer is ${fmt(r.cashLeft)} — the loan payment exceeds what your business can safely carry.</div>`;
+    html += `<div class="rec-box">💡 <strong>Use the Max Safe Loan tab</strong> to find the loan size your business can actually handle right now.</div>`;
+    html += `<div class="rec-box">💡 <strong>Increase revenue or reduce expenses</strong> by ${fmt(Math.abs(r.cashLeft) + 2000)}/month first, then re-check.</div>`;
   }
   html += '</div>';
   out.innerHTML = html;
@@ -819,7 +819,7 @@ function renderConsequence(r) {
     var emiPct = r.netCF > 0 ? Math.round((r.newEMI / r.netCF) * 100) : 100;
     var title = r.cls === 'risky'
       ? '⚠ RISKY — If You Take This Loan Right Now:'
-      : '?? DANGEROUS — If You Take This Loan Right Now:';
+      : '❌ DANGEROUS — If You Take This Loan Right Now:';
     var items = [];
     items.push('Your EMI will consume <strong>' + emiPct + '%</strong> of your available cash flow every month');
     items.push('Your monthly buffer drops to <strong>' + fmt(r.cashLeft) + '</strong> — leaving almost no room for emergencies');
@@ -908,7 +908,7 @@ function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, mont
     var lPct  = Math.round((lDiff / loanAmount) * 100);
     var safeEMI1 = calcEMI(safeLoan, rate, months);
     html += '<div class="rp-delta">-' + fmt(lDiff) + ' (' + lPct + '% less)</div>' +
-      '<div class="rp-change"><span>' + fmt(loanAmount) + '</span><span class="rp-arrow">?</span>' +
+      '<div class="rp-change"><span>' + fmt(loanAmount) + '</span><span class="rp-arrow">→</span>' +
       '<span style="color:#16a34a;font-weight:800">' + fmt(Math.round(safeLoan)) + '</span></div>' +
       '<div class="rp-action">New EMI would be ' + fmt(safeEMI1) + '/mo</div>';
   }
@@ -923,9 +923,9 @@ function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, mont
     var safeEMI2 = calcEMI(loanAmount, rate, safeTenure);
     var curEMI   = calcEMI(loanAmount, rate, months);
     html += '<div class="rp-delta">+' + tDiff + ' months longer</div>' +
-      '<div class="rp-change"><span>' + months + ' mo</span><span class="rp-arrow">?</span>' +
+      '<div class="rp-change"><span>' + months + ' mo</span><span class="rp-arrow">→</span>' +
       '<span style="color:#16a34a;font-weight:800">' + safeTenure + ' mo</span></div>' +
-      '<div class="rp-action">EMI drops ' + fmt(curEMI - safeEMI2) + '/mo ? ' + fmt(safeEMI2) + '/mo</div>';
+      '<div class="rp-action">EMI drops ' + fmt(curEMI - safeEMI2) + '/mo → ' + fmt(safeEMI2) + '/mo</div>';
   }
   html += '</div>';
 
@@ -937,7 +937,7 @@ function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, mont
     html += '<div class="rp-impossible">Reaching SAFE requires a ' + rPct + '% revenue jump — not realistic short-term. Reduce loan amount (Path 1) instead.</div>';
   } else {
     html += '<div class="rp-delta">+' + fmt(Math.round(rDiff)) + '/mo (+' + rPct + '%)</div>' +
-      '<div class="rp-change"><span>' + fmt(revenue) + '</span><span class="rp-arrow">?</span>' +
+      '<div class="rp-change"><span>' + fmt(revenue) + '</span><span class="rp-arrow">→</span>' +
       '<span style="color:#16a34a;font-weight:800">' + fmt(Math.round(safeRevenue)) + '/mo</span></div>' +
       '<div class="rp-action">Target: ' + fmt(Math.round(safeRevenue)) + '/mo revenue before applying</div>';
   }
@@ -953,7 +953,7 @@ function shareWhatsApp() {
   if (!lastResult) return;
   var score = lastResult.total;
   var verdict = lastResult.cls === 'safe' ? 'SAFE' : lastResult.cls === 'risky' ? 'RISKY' : 'DANGEROUS';
-  var emoji = lastResult.cls === 'safe' ? '?' : lastResult.cls === 'risky' ? '??' : '??';
+  var emoji = lastResult.cls === 'safe' ? '✅' : lastResult.cls === 'risky' ? '⚠️' : '❌';
   var text = emoji + ' My Loan Risk Score: ' + score + ' / 100 (' + verdict + ')\n\n' +
     'Checked with BizSco — Free AI Loan Decision Engine\n' +
     'Know if your business can safely take a loan in 60 seconds.\n\n' +
@@ -985,9 +985,9 @@ function updateWhatIf() {
     lastResult.loanAmount, lastResult.rate, lastResult.months, baseCreditScore);
   var delta = r2.total - lastResult.total;
   var sign = delta >= 0 ? '+' : '';
-  var verdictShort = r2.cls === 'safe' ? '✅ SAFE' : r2.cls === 'risky' ? '?? RISKY' : '?? DANGEROUS';
+  var verdictShort = r2.cls === 'safe' ? '✅ SAFE' : r2.cls === 'risky' ? '⚠️ RISKY' : '❌ DANGEROUS';
   document.getElementById('wiResult').textContent =
-    '+' + bump + ' pts ? Score: ' + r2.total + ' (' + sign + delta + ') ' + verdictShort;
+    '+' + bump + ' pts → Score: ' + r2.total + ' (' + sign + delta + ') ' + verdictShort;
 }
 
 // -- Download PDF -------------------------------------------------
@@ -1235,7 +1235,7 @@ function runTests() {
   tests.forEach(t => {
     const cls = t.pass ? 'pass' : 'fail';
     if (t.pass) pass++; else fail++;
-    html += `<div class="test-result ${cls}">${t.pass ? '?' : '?'} ${t.name} ? got: ${typeof t.actual === 'number' ? t.actual.toFixed(2) : t.actual}</div>`;
+    html += `<div class="test-result ${cls}">${t.pass ? '✅' : '❌'} ${t.name} → got: ${typeof t.actual === 'number' ? t.actual.toFixed(2) : t.actual}</div>`;
   });
   const summCls = fail === 0 ? 'all-pass' : 'has-fail';
   html += `<div class="test-summary ${summCls}">${pass} passed — ${fail} failed — ${tests.length} total</div>`;

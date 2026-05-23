@@ -177,7 +177,7 @@ input:focus{outline:none;border-color:#4f46e5}
 
   <!-- Upgrade to unlimited banner -->
   <div class="upgrade-banner" id="upgradeBanner" style="display:none">
-    <div>?</div>
+    <div>⭐</div>
     <div class="ub-text">
       <h3>Profile limit reached — Upgrade to Unlimited</h3>
       <p>Pro plan allows 3 profiles. Unlock unlimited profiles for teams managing multiple businesses.</p>
@@ -315,7 +315,7 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'?? Limit Reached':'👤 New Profile')
+    +(atLimit?'🔒 Limit Reached':'👤 New Profile')
     +'</button>';
 
   /* Update plan badge */
@@ -395,7 +395,7 @@ function escHtml(s){
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('? Profile set as active — all tools will load this profile.');
+  showToast('✅ Profile set as active — all tools will load this profile.');
 }
 
 /* -- Open create form -- */
@@ -419,7 +419,7 @@ function openEditForm(idx){
   var profiles=getProfiles();
   var p=profiles[idx];
   editIdx=idx;
-  document.getElementById('formTitle').textContent='?? Edit Profile';
+  document.getElementById('formTitle').textContent='✏️ Edit Profile';
   document.getElementById('f_name').value=p.name||'';
   document.getElementById('f_rev').value=p.rev||'';
   document.getElementById('f_exp').value=p.exp||'';
@@ -478,7 +478,7 @@ function saveProfile(){
     profile.savedAt=profiles[editIdx].savedAt||dateStr;
     profiles[editIdx]=profile;
     if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
-    showToast('? Profile updated.');
+    showToast('✅ Profile updated.');
   } else {
     profiles.push(profile);
     /* Auto-set new profile as active */
@@ -524,7 +524,7 @@ function tryUnlimited(){
   if(code==='FWUNLIMITED'){
     localStorage.setItem('fw_unlimited','1');
     document.getElementById('upgradeBanner').style.display='none';
-    showToast('?? Unlimited profiles unlocked!');
+    showToast('🚀 Unlimited profiles unlocked!');
     renderGrid();
   } else {
     showToast('Invalid code. Try FWUNLIMITED');
@@ -626,7 +626,7 @@ function renderUsageBar(profiles){
     +'<div><div class="usage-label">'+labelText+'</div>'
     +'<div class="usage-sub">'+subText+'</div></div>'
     +'<button class="btn-new" '+(atLimit?'disabled onclick="showUpgradeBanner()"':'onclick="openNewForm()"')+'>'
-    +(atLimit?'?? Limit Reached':'👤 New Profile')
+    +(atLimit?'🔒 Limit Reached':'👤 New Profile')
     +'</button>';
 
   /* Update plan badge */
@@ -706,7 +706,7 @@ function escHtml(s){
 function setActive(idx){
   setActiveIdx(idx);
   renderGrid();
-  showToast('? Profile set as active — all tools will load this profile.');
+  showToast('✅ Profile set as active — all tools will load this profile.');
 }
 
 /* -- Open create form -- */
@@ -730,7 +730,7 @@ function openEditForm(idx){
   var profiles=getProfiles();
   var p=profiles[idx];
   editIdx=idx;
-  document.getElementById('formTitle').textContent='?? Edit Profile';
+  document.getElementById('formTitle').textContent='✏️ Edit Profile';
   document.getElementById('f_name').value=p.name||'';
   document.getElementById('f_rev').value=p.rev||'';
   document.getElementById('f_exp').value=p.exp||'';
@@ -789,7 +789,7 @@ function saveProfile(){
     profile.savedAt=profiles[editIdx].savedAt||dateStr;
     profiles[editIdx]=profile;
     if(getActiveIdx(profiles)===editIdx) setActiveIdx(editIdx);
-    showToast('? Profile updated.');
+    showToast('✅ Profile updated.');
   } else {
     profiles.push(profile);
     /* Auto-set new profile as active */
@@ -835,7 +835,7 @@ function tryUnlimited(){
   if(code==='FWUNLIMITED'){
     localStorage.setItem('fw_unlimited','1');
     document.getElementById('upgradeBanner').style.display='none';
-    showToast('?? Unlimited profiles unlocked!');
+    showToast('🚀 Unlimited profiles unlocked!');
     renderGrid();
   } else {
     showToast('Invalid code. Try FWUNLIMITED');

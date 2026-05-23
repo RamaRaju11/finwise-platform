@@ -303,7 +303,7 @@ function checkIntegration(){
   }catch(e){}
   if(items.length){
     strip.style.display = '';
-    strip.innerHTML = '?? Starting point — '+items.join(' — ')+'. Enter this as "Already Saved" in your Emergency Fund goal.';
+    strip.innerHTML = '💡 Starting point — '+items.join(' — ')+'. Enter this as "Already Saved" in your Emergency Fund goal.';
   }
 }
 
@@ -349,7 +349,7 @@ function calculate(){
     var barColor = r.color === 'green' ? '#16a34a' : r.color === 'yellow' ? '#f59e0b' : '#dc2626';
     var priCls   = r.goal.priority === 'High' ? 'pri-high' : r.goal.priority === 'Medium' ? 'pri-medium' : 'pri-low';
     var monthsDisplay = r.months >= 600 ? '50+ yrs' : r.months <= 0 ? 'Done!' : r.months+' mo';
-    var trackLabel = r.trackStatus==='done' ? '✅ Complete' : r.trackStatus==='ahead' ? '?? Ahead of Schedule' : r.trackStatus==='on-track' ? '? On Track' : '?? Behind';
+    var trackLabel = r.trackStatus==='done' ? '✅ Complete' : r.trackStatus==='ahead' ? '🚀 Ahead of Schedule' : r.trackStatus==='on-track' ? '✅ On Track' : '⚠️ Behind';
     var trackCls   = r.trackStatus==='done'||r.trackStatus==='ahead' ? 'ahead' : r.trackStatus==='on-track' ? 'on-track' : 'behind';
 
     html += '<div class="results-goal-card">';

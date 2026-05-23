@@ -463,8 +463,8 @@ function renderExtraImpact(extra, loans) {
   el.classList.remove('hidden');
   el.innerHTML = '<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:12px 16px;font-size:.84rem;color:#166534;display:flex;flex-wrap:wrap;gap:14px;align-items:center">' +
     '<strong>Extra ' + fmt(extra) + '/mo saves you:</strong>' +
-    '<span>? <strong>' + (monthsSaved > 0 ? fmtMonths(monthsSaved) + ' faster' : 'same timeline') + '</strong></span>' +
-    '<span>?? <strong>' + fmt(Math.max(0, interestSaved)) + ' less interest</strong></span>' +
+    '<span>⏰ <strong>' + (monthsSaved > 0 ? fmtMonths(monthsSaved) + ' faster' : 'same timeline') + '</strong></span>' +
+    '<span>💰 <strong>' + fmt(Math.max(0, interestSaved)) + ' less interest</strong></span>' +
     '<span style="color:#94a3b8;font-size:.78rem">vs. minimums-only (Avalanche baseline)</span>' +
     '</div>';
 }
@@ -605,11 +605,11 @@ function checkMarketplaceParams() {
       : Math.round(loanAmount / tenure);
     var banner = document.createElement('div');
     banner.style.cssText = 'background:#faf5ff;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.6';
-    banner.innerHTML = '?? <strong>Loan from Marketplace/Score Engine:</strong> ' + fmt(loanAmount) +
+    banner.innerHTML = '💡 <strong>Loan from Marketplace/Score Engine:</strong> ' + fmt(loanAmount) +
       ' @ ' + rate + '% for ' + tenure + ' months (EMI ~' + fmt(emi) + '/mo) &mdash; ' +
       '<button onclick="importMarketplaceLoan(' + loanAmount + ',' + rate + ',' + tenure + ',' + emi + ',this.parentNode)" ' +
       'style="background:#7c3aed;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Add to Optimizer</button>' +
-      ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">?</button>';
+      ' <button onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.82rem;margin-left:6px">✕</button>';
     var firstCard = document.querySelector('.card');
     if (firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
   } catch(e) {}
@@ -632,7 +632,7 @@ function saveEmiToProfile(emi){
     if(arr[idx]){arr[idx].emi=Math.round(emi);localStorage.setItem('fw_profiles',JSON.stringify(arr));}
     var t=document.createElement('div');
     t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-    t.textContent='? EMI $'+Math.round(emi).toLocaleString()+'/mo saved — cashRunway, breakEven & ownersPay updated';
+    t.textContent='✅ EMI $'+Math.round(emi).toLocaleString()+'/mo saved — cashRunway, breakEven & ownersPay updated';
     document.body.appendChild(t);
     setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},4000);
   }catch(e){}
@@ -650,7 +650,7 @@ function loadFromDebtCenter() {
   });
   var t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
-  t.textContent = '? ' + saved.length + ' loan' + (saved.length>1?'s':'') + ' loaded from Debt Center';
+  t.textContent = '✅ ' + saved.length + ' loan' + (saved.length>1?'s':'') + ' loaded from Debt Center';
   document.body.appendChild(t);
   setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
 }

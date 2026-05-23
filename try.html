@@ -70,7 +70,7 @@ a{text-decoration:none;color:inherit}
 /* Features list */
 .feat-list{list-style:none;display:flex;flex-direction:column;gap:4px}
 .feat-list li{font-size:.74rem;color:#475569;display:flex;align-items:flex-start;gap:.4rem;line-height:1.45}
-.feat-list li::before{content:"?";color:#10b981;font-weight:700;flex-shrink:0;margin-top:.05rem}
+.feat-list li::before{content:"✓";color:#10b981;font-weight:700;flex-shrink:0;margin-top:.05rem}
 
 /* Access code */
 .access-row{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border-radius:7px;padding:7px 10px;margin-top:auto}
@@ -143,12 +143,12 @@ a{text-decoration:none;color:inherit}
 <div class="tools-overlay" id="toolsOverlay" onclick="overlayClick(event)">
   <div class="tools-panel" id="toolsPanel">
     <div class="tools-panel-head">
-      <div class="tp-check">?</div>
+      <div class="tp-check">✓</div>
       <div class="tp-head-text">
         <div class="tp-title" id="tpTitle">Demo loaded!</div>
         <div class="tp-subtitle" id="tpSubtitle">Choose a tool to explore:</div>
       </div>
-      <button class="tp-close" onclick="closeToolsPanel()">?</button>
+      <button class="tp-close" onclick="closeToolsPanel()">✕</button>
     </div>
     <div class="tools-grid" id="toolsGrid"></div>
     <div class="tools-panel-foot">
@@ -385,9 +385,9 @@ a{text-decoration:none;color:inherit}
     <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#166534;background:#dcfce7;border-radius:6px;padding:6px 14px;margin-bottom:10px;display:inline-block">Starter — $9/mo — Code: FINWISE9</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
       <a href="modules/starterPlan.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Starter Plan</a>
-      <a href="modules/cashRunway.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">?</span>Cash Runway</a>
+      <a href="modules/cashRunway.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Cash Runway</a>
       <a href="modules/breakEven.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Break-Even Analyzer</a>
-      <a href="modules/loanEligibility.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">?</span>Loan Eligibility Checker</a>
+      <a href="modules/loanEligibility.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Loan Eligibility Checker</a>
       <a href="modules/grantFinder.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Grant & Scheme Finder</a>
       <a href="modules/debtCommandCenter.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Debt Command Center</a>
       <a href="modules/loanRepaymentOptimizer.test.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;text-decoration:none;color:#1e293b;font-size:.84rem;font-weight:700" onmouseover="this.style.borderColor='#16a34a'" onmouseout="this.style.borderColor='#e2e8f0'"><span style="font-size:1.2rem">&#9679;</span>Loan Repayment Optimizer</a>

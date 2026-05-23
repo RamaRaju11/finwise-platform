@@ -254,13 +254,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 
   <div id="controls">
-    <button class="cbtn" onclick="prevScene()" title="Previous (?)">?</button>
+    <button class="cbtn" onclick="prevScene()" title="Previous (←)">◀</button>
     <button class="cbtn primary" id="play-btn" onclick="togglePlay()">Pause</button>
-    <button class="cbtn" onclick="nextScene()" title="Next (?)">?</button>
+    <button class="cbtn" onclick="nextScene()" title="Next (→)">▶</button>
     <span id="ctr-info">1 / 13</span>
-    <button class="cbtn" id="speed-btn" onclick="cycleSpeed()">1— speed</button>
+    <button class="cbtn" id="speed-btn" onclick="cycleSpeed()">1× speed</button>
     <button class="cbtn" id="mute-btn" onclick="toggleMute()" title="Mute / Unmute voice (M)">Voice</button>
-    <button class="cbtn" id="voice-settings-btn" onclick="toggleVoicePanel()" title="Voice settings">?</button>
+    <button class="cbtn" id="voice-settings-btn" onclick="toggleVoicePanel()" title="Voice settings">⚙️</button>
     <button class="cbtn" onclick="window.open('index.html')">Platform</button>
   </div>
 
@@ -309,7 +309,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:999px;padding:.45rem 1.2rem;font-size:.82rem;color:#f87171;font-weight:700">DANGEROUS</span>
     </div>
     <div class="a4" style="margin-top:1.25rem;display:flex;gap:1.25rem;flex-wrap:wrap;justify-content:center">
-      <span style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:999px;padding:.35rem 1rem;font-size:.75rem;color:#a5b4fc;font-weight:600">? 60-Second Verdict</span>
+      <span style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:999px;padding:.35rem 1rem;font-size:.75rem;color:#a5b4fc;font-weight:600">⚡ 60-Second Verdict</span>
       <span style="background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);border-radius:999px;padding:.35rem 1rem;font-size:.75rem;color:#7dd3fc;font-weight:600">No Server Required</span>
       <span style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:999px;padding:.35rem 1rem;font-size:.75rem;color:#6ee7b7;font-weight:600">100% Free to Start</span>
     </div>
@@ -416,7 +416,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
         <div class="mock-field"><div class="mock-lbl">Safe EMI (40% rule)</div><div class="mock-val" style="color:#34d399;font-weight:700">$8,800 / month</div></div>
       </div>
       <div class="verdict green">
-        <span style="font-size:1.3rem">?</span>
+        <span style="font-size:1.3rem">✅</span>
         <div>
           <div class="verdict-text">SAFE — Well within affordable range</div>
           <div class="verdict-sub">EMI is only 21% of the safe threshold — strong cash flow buffer</div>
@@ -448,7 +448,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       </div>
       <div style="display:flex;flex-direction:column;gap:.45rem">
         <div class="scenario-row"><span>Revenue -20% stress test</span><span class="scenario-badge sb-pass">PASS</span></div>
-        <div class="scenario-row"><span>Reserve coverage</span><span class="scenario-badge sb-pass">? 9.6 months</span></div>
+        <div class="scenario-row"><span>Reserve coverage</span><span class="scenario-badge sb-pass">✓ 9.6 months</span></div>
         <div class="scenario-row"><span>Max safe loan</span><span class="scenario-badge sb-pass">$112,000</span></div>
       </div>
     </div>
@@ -551,16 +551,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       </div>
       <div style="display:flex;flex-direction:column;gap:.55rem">
         <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:.55rem .9rem;font-size:.8rem;color:#a5b4fc">
-          ?? "Can I take a $50,000 loan right now?"
+          💬 "Can I take a $50,000 loan right now?"
         </div>
         <div style="background:#22263a;border-radius:8px;padding:.65rem .9rem;font-size:.8rem;color:#e2e8f0;line-height:1.55">
-          ?? <strong style="color:#34d399">Yes — with caution.</strong> Your net cash flow is $6,800/mo. A $50K loan at 12% for 36 months gives an EMI of $1,661/mo — that's 24% of your net cash flow. You'd stay SAFE, but your buffer drops to $5,139/mo. Your max safe loan is <strong style="color:#818cf8">$74,000</strong>.
+          🤖 <strong style="color:#34d399">Yes — with caution.</strong> Your net cash flow is $6,800/mo. A $50K loan at 12% for 36 months gives an EMI of $1,661/mo — that's 24% of your net cash flow. You'd stay SAFE, but your buffer drops to $5,139/mo. Your max safe loan is <strong style="color:#818cf8">$74,000</strong>.
         </div>
         <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:.55rem .9rem;font-size:.8rem;color:#a5b4fc">
-          ?? "What should I do next?"
+          💬 "What should I do next?"
         </div>
         <div style="background:#22263a;border-radius:8px;padding:.55rem .9rem;font-size:.8rem;color:#fbbf24;line-height:1.5">
-          ?? ?? Cut expenses by 8% to improve your score from 64 ? 76 (RISKY ? SAFE). That unlocks $23K more in safe borrowing capacity.
+          🤖 💡 Cut expenses by 8% to improve your score from 64 → 76 (RISKY → SAFE). That unlocks $23K more in safe borrowing capacity.
         </div>
       </div>
     </div>
@@ -878,7 +878,7 @@ function advanceNext() {
     showScene(cur + 1, false); // false = auto-advance, no speech cancel
   } else {
     playing = false;
-    document.getElementById('play-btn').textContent = '? Replay';
+    document.getElementById('play-btn').textContent = '↻ Replay';
     document.getElementById('progress-fill').style.width = '100%';
   }
 }
@@ -948,12 +948,12 @@ function togglePlay() {
   if (!playing && cur === scenes.length - 1) {
     // Replay from start
     playing = true;
-    document.getElementById('play-btn').textContent = '? Pause';
+    document.getElementById('play-btn').textContent = '⏸ Pause';
     showScene(0, true);
     return;
   }
   playing = !playing;
-  document.getElementById('play-btn').textContent = playing ? '? Pause' : '? Play';
+  document.getElementById('play-btn').textContent = playing ? '⏸ Pause' : '▶ Play';
   if (playing) {
     startProgressBar();
     speak(NARRATIONS[cur], advanceNext);
@@ -965,26 +965,26 @@ function togglePlay() {
 
 function nextScene() {
   playing = true;
-  document.getElementById('play-btn').textContent = '? Pause';
+  document.getElementById('play-btn').textContent = '⏸ Pause';
   if (cur < scenes.length - 1) showScene(cur + 1, true);
 }
 
 function prevScene() {
   playing = true;
-  document.getElementById('play-btn').textContent = '? Pause';
+  document.getElementById('play-btn').textContent = '⏸ Pause';
   if (cur > 0) showScene(cur - 1, true);
 }
 
 function cycleSpeed() {
   sIdx  = (sIdx + 1) % SPEEDS.length;
   speed = SPEEDS[sIdx];
-  document.getElementById('speed-btn').textContent = speed + '— speed';
+  document.getElementById('speed-btn').textContent = speed + '× speed';
 }
 
 function toggleMute() {
   muted = !muted;
   const btn = document.getElementById('mute-btn');
-  btn.textContent  = muted ? '?? Muted' : '?? Voice';
+  btn.textContent  = muted ? '🔇 Muted' : '🔊 Voice';
   btn.style.color  = muted ? '#ef4444' : '';
   setWaveState(false);
   if (muted) {
@@ -1053,7 +1053,7 @@ showScene(0, true); // display first scene (speech waits for user gesture)
 setTimeout(() => {
   if (!audioUnlocked) {
     document.getElementById('narration-text').textContent =
-      '?? Click anywhere or press Space to start voice narration.';
+      '👆 Click anywhere or press Space to start voice narration.';
   }
 }, 900);
 </script>

@@ -174,7 +174,7 @@ h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:cen
 <body>
 
 <div id="progressBar" style="width:0%"></div>
-<div id="keyHint">? ? keys or click arrows</div>
+<div id="keyHint">← → keys or click arrows</div>
 
 <div id="stage">
 
@@ -186,7 +186,7 @@ h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:cen
   <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
     <span class="pill active">Springfield, IL</span>
     <span class="pill active">Neighborhood Supermarket</span>
-    <span class="pill active">?? 12 Employees</span>
+    <span class="pill active">👥 12 Employees</span>
     <span class="pill active">Advisor Plan</span>
     <span class="pill active">$84K/mo Revenue</span>
   </div>
@@ -267,7 +267,7 @@ h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:cen
       <div class="sm-row"><span class="sm-key">DSCR (Debt Coverage)</span><span class="sm-val green">1.49x</span></div>
       <div class="sm-row"><span class="sm-key">Stress test (-20% rev)</span><span class="sm-val red">Only $9,476 CF left</span></div>
     </div>
-    <div class="verdict v-risky">?? &nbsp; RISKY — Proceed with caution</div>
+    <div class="verdict v-risky">⚠️ &nbsp; RISKY — Proceed with caution</div>
     <p style="font-size:.8rem;color:#94a3b8;text-align:center;max-width:460px">BizSco advice: Reduce loan to <strong style="color:#4ade80">$35,000</strong> or extend tenure to 60 months to bring EMI below 20% of net cash flow before the January slow season.</p>
   </div>
 </div>
@@ -478,10 +478,10 @@ h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:cen
     <div>
       <div class="bubble-label">AI CFO — BizSco</div>
       <div class="bubble ai">
-        ?? <strong>Based on your numbers — it's tight but manageable, with conditions.</strong><br/><br/>
+        🤖 <strong>Based on your numbers — it's tight but manageable, with conditions.</strong><br/><br/>
         Your net cash flow is $14,300/mo. A $50k loan at 11.5% adds <strong style="color:#fbbf24">$1,301/mo EMI</strong>, leaving $12,999 — which is 15.5% below your current buffer.<br/><br/>
         In a typical February (retail seasonal dip of ~20%), your cash flow drops to roughly <strong style="color:#f87171">$8,100/mo</strong>. With the new loan that falls to $6,800 — still positive, but only <strong>0.97— DSCR</strong>.<br/><br/>
-        ? <strong>My recommendation:</strong> Take the loan at 60 months instead of 48. EMI drops to $1,094, keeping DSCR above 1.25x even in the February dip. Also consider delaying the start to March.
+        💡 <strong>My recommendation:</strong> Take the loan at 60 months instead of 48. EMI drops to $1,094, keeping DSCR above 1.25x even in the February dip. Also consider delaying the start to March.
       </div>
     </div>
   </div>
@@ -567,7 +567,7 @@ h2.scene-title{font-size:clamp(1.1rem,3vw,1.7rem);font-weight:800;text-align:cen
     <span class="pill active">Cash Runway: 3.8 months</span>
     <span class="pill active">DSCR: 1.52x (Safe)</span>
     <span class="pill active">W-9 compliance: 100%</span>
-    <span class="pill active">? 1099-NECs filed on time</span>
+    <span class="pill active">✅ 1099-NECs filed on time</span>
     <span class="pill active">$2,800 in taxes saved</span>
   </div>
 </div>
@@ -688,7 +688,7 @@ if(window.speechSynthesis){
 var voiceBtn=document.getElementById('voiceBtn');
 voiceBtn.onclick=function(){
   voiceMuted=!voiceMuted;
-  voiceBtn.textContent=voiceMuted?'??':'??';
+  voiceBtn.textContent=voiceMuted?'🔇':'🔊';
   voiceBtn.classList.toggle('muted',voiceMuted);
   if(voiceMuted){
     window.speechSynthesis&&window.speechSynthesis.cancel();

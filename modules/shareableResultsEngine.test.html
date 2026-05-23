@@ -357,7 +357,7 @@ function generateScoreCard(){
       <div class="sc-bar-wrap">
         <div class="sc-bar-track"><div class="sc-bar-fill" style="width:${s.total}%;background:${barColor}"></div></div>
       </div>
-      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'?':s.cls==='risky'?'??':'??'} ${s.verdict}</div>
+      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'✅':s.cls==='risky'?'⚠️':'❌'} ${s.verdict}</div>
       <div class="sc-metrics">
         <div class="sc-metric">
           <div class="sc-metric-label">Revenue/mo</div>
@@ -405,7 +405,7 @@ function generateScoreCard(){
         <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
       </div>
       ${s.cls!=='safe'?`<div class="tip-box">
-        ?? <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
+        💡 <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
       </div>`:''}
     </div>
   </div>`;
@@ -433,13 +433,13 @@ function buildShareText(){
   if(!window._sc) return '';
   const {biz, s, rev, loan, maxLoan, dateStr, dscrStr} = window._sc;
   const sym = activeCurrency.symbol;
-  return `?? *Loan Decision Score Card*
+  return `📊 *Loan Decision Score Card*
 *Business:* ${biz}
 *Date:* ${dateStr}
 
-*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
+*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'⚠️ PROCEED WITH CAUTION':'❌ HIGH RISK'}*
 
-?? *Key Numbers:*
+💰 *Key Numbers:*
 — Revenue: ${fmt(rev)}/mo
 — Loan Requested: ${fmt(loan)}
 — Max Safe Loan: ${fmt(maxLoan)}
@@ -447,7 +447,7 @@ function buildShareText(){
 — Net Cash After EMI: ${fmt(s.cashLeft)}/mo
 — Debt Coverage Ratio: ${dscrStr}
 
-?? Powered by SmallBiz AI Platform`;
+🚀 Powered by SmallBiz AI Platform`;
 }
 
 function shareWhatsApp(){
@@ -495,7 +495,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
   <div class="date">${sc.dateStr}</div>
   <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
   <div class="bar-track"><div class="bar-fill"></div></div>
-  <div class="verdict">${sc.s.cls==='safe'?'?':sc.s.cls==='risky'?'??':'??'} ${sc.s.verdict}</div>
+  <div class="verdict">${sc.s.cls==='safe'?'✅':sc.s.cls==='risky'?'⚠️':'❌'} ${sc.s.verdict}</div>
   <div class="metrics">
     <div class="metric"><div class="metric-label">Revenue/mo</div><div class="metric-value">${fmt(sc.rev)}</div></div>
     <div class="metric"><div class="metric-label">Loan Requested</div><div class="metric-value">${fmt(sc.loan)}</div></div>
@@ -794,7 +794,7 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // --- Init ---------------------------------------------------------------------
@@ -917,7 +917,7 @@ function generateScoreCard(){
       <div class="sc-bar-wrap">
         <div class="sc-bar-track"><div class="sc-bar-fill" style="width:${s.total}%;background:${barColor}"></div></div>
       </div>
-      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'?':s.cls==='risky'?'??':'??'} ${s.verdict}</div>
+      <div class="sc-verdict ${s.cls}">${s.cls==='safe'?'✅':s.cls==='risky'?'⚠️':'❌'} ${s.verdict}</div>
       <div class="sc-metrics">
         <div class="sc-metric">
           <div class="sc-metric-label">Revenue/mo</div>
@@ -965,7 +965,7 @@ function generateScoreCard(){
         <div id="share-feedback" style="font-size:.8rem;color:#16a34a;margin-top:8px;display:none"></div>
       </div>
       ${s.cls!=='safe'?`<div class="tip-box">
-        ?? <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
+        💡 <b>To reach SAFE:</b> Your max safe loan is <b>${fmt(maxLoan)}</b>. Consider reducing the loan amount or extending tenure to lower EMI.
       </div>`:''}
     </div>
   </div>`;
@@ -993,13 +993,13 @@ function buildShareText(){
   if(!window._sc) return '';
   const {biz, s, rev, loan, maxLoan, dateStr, dscrStr} = window._sc;
   const sym = activeCurrency.symbol;
-  return `?? *Loan Decision Score Card*
+  return `📊 *Loan Decision Score Card*
 *Business:* ${biz}
 *Date:* ${dateStr}
 
-*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'?? PROCEED WITH CAUTION':'?? HIGH RISK'}*
+*Score: ${s.total}/100 — ${s.cls==='safe'?'✅ SAFE TO BORROW':s.cls==='risky'?'⚠️ PROCEED WITH CAUTION':'❌ HIGH RISK'}*
 
-?? *Key Numbers:*
+💰 *Key Numbers:*
 — Revenue: ${fmt(rev)}/mo
 — Loan Requested: ${fmt(loan)}
 — Max Safe Loan: ${fmt(maxLoan)}
@@ -1007,7 +1007,7 @@ function buildShareText(){
 — Net Cash After EMI: ${fmt(s.cashLeft)}/mo
 — Debt Coverage Ratio: ${dscrStr}
 
-?? Powered by SmallBiz AI Platform`;
+🚀 Powered by SmallBiz AI Platform`;
 }
 
 function shareWhatsApp(){
@@ -1055,7 +1055,7 @@ body{font-family:system-ui,sans-serif;background:#fff;display:flex;justify-conte
   <div class="date">${sc.dateStr}</div>
   <div class="score-row"><span class="score-num">${sc.s.total}</span><span class="score-denom">/ 100</span></div>
   <div class="bar-track"><div class="bar-fill"></div></div>
-  <div class="verdict">${sc.s.cls==='safe'?'?':sc.s.cls==='risky'?'??':'??'} ${sc.s.verdict}</div>
+  <div class="verdict">${sc.s.cls==='safe'?'✅':sc.s.cls==='risky'?'⚠️':'❌'} ${sc.s.verdict}</div>
   <div class="metrics">
     <div class="metric"><div class="metric-label">Revenue/mo</div><div class="metric-value">${fmt(sc.rev)}</div></div>
     <div class="metric"><div class="metric-label">Loan Requested</div><div class="metric-value">${fmt(sc.loan)}</div></div>
@@ -1354,7 +1354,7 @@ function runTests(){
   const ul=document.getElementById('unitResults');
   const pass=results.filter(r=>r.ok).length;
   ul.innerHTML=`<li style="font-weight:600;padding:8px 0;font-size:.9rem">${pass}/${results.length} tests passed</li>`+
-    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'?':'?'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
+    results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.n}${r.ok?'':' — '+r.err}</li>`).join('');
 }
 
 // --- Init ---------------------------------------------------------------------
