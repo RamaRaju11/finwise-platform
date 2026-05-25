@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BizSco — Subscribe</title>
+<meta name="theme-color" content="#4f46e5"/>
+<!-- Razorpay Checkout script — loads but won't activate until real key is set -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4f46e5;--brand-dark:#3730a3;--brand-light:#6366f1;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--gray:#64748b;--light:#f8fafc;--border:#e2e8f0;
+}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--light);color:var(--dark);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.shell{max-width:1100px;margin:0 auto;padding:32px 20px 60px}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
+.brand-row{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#38bdf8);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.brand-name{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.brand-name span{color:var(--brand)}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--gray);font-size:.86rem;font-weight:600}
+.back-link:hover{color:var(--brand)}
+
+/* header */
+.hdr{text-align:center;margin-bottom:42px}
+.hdr-eyebrow{display:inline-block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);background:#eef2ff;padding:5px 14px;border-radius:999px;margin-bottom:14px}
+.hdr h1{font-size:2.2rem;font-weight:800;letter-spacing:-.025em;line-height:1.2;margin-bottom:12px}
+.hdr h1 span{background:linear-gradient(135deg,var(--brand),var(--brand-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-sub{color:var(--gray);font-size:1rem;line-height:1.65;max-width:540px;margin:0 auto}
+
+/* billing toggle */
+.toggle-row{display:flex;justify-content:center;margin-bottom:36px}
+.toggle{background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:5px;display:inline-flex;gap:4px}
+.toggle button{padding:8px 18px;border-radius:7px;border:none;background:transparent;font-size:.84rem;font-weight:700;cursor:pointer;color:var(--gray);font-family:inherit;transition:all .15s}
+.toggle button.active{background:var(--brand);color:#fff}
+.save-chip{font-size:.66rem;font-weight:800;color:#065f46;background:#d1fae5;padding:2px 7px;border-radius:5px;margin-left:6px}
+
+/* plan grid */
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:42px}
+@media(max-width:1000px){.plans{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.plans{grid-template-columns:1fr}}
+
+.plan{background:#fff;border:2px solid var(--border);border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;position:relative;transition:all .2s}
+.plan:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.08)}
+.plan.featured{border-color:var(--brand);box-shadow:0 14px 36px rgba(79,70,229,.18)}
+.plan.featured::before{content:'MOST POPULAR';position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:4px 12px;border-radius:999px}
+
+.plan-name{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:8px}
+.plan h2{font-size:1.35rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:6px}
+.plan-price .currency{font-size:1.1rem;font-weight:700;color:var(--dark)}
+.plan-price .amount{font-size:2.5rem;font-weight:900;letter-spacing:-.04em;color:var(--dark)}
+.plan-price .period{font-size:.82rem;color:var(--gray);font-weight:600}
+.plan-tagline{font-size:.84rem;color:var(--gray);line-height:1.5;margin-bottom:20px;min-height:38px}
+
+.plan-features{list-style:none;padding:0;margin:0 0 24px;flex:1}
+.plan-features li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:.86rem;color:var(--dark);line-height:1.5}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0;margin-top:1px}
+.plan-features li.muted{color:var(--gray)}
+.plan-features li.muted::before{content:'·';color:var(--gray)}
+
+.plan-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 18px;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.plan-btn-primary{background:var(--brand);color:#fff}
+.plan-btn-primary:hover{background:var(--brand-dark)}
+.plan-btn-outline{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.plan-btn-outline:hover{background:var(--brand);color:#fff}
+.plan-btn-ghost{background:var(--light);color:var(--dark);border:1.5px solid var(--border)}
+.plan-btn-ghost:hover{background:#fff;border-color:var(--dark)}
+
+/* trust strip */
+.trust{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:24px;padding:22px 20px;background:#fff;border:1px solid var(--border);border-radius:13px;margin-bottom:36px}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--gray);font-weight:600}
+.trust-emoji{font-size:1.05rem}
+
+/* faq */
+.faq-title{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;text-align:center}
+.faq{background:#fff;border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.faq details{border-bottom:1px solid var(--border)}
+.faq details:last-child{border-bottom:none}
+.faq summary{padding:18px 22px;cursor:pointer;font-weight:700;font-size:.94rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-size:1.4rem;color:var(--gray);font-weight:300;flex-shrink:0;transition:transform .2s}
+.faq details[open] summary::after{content:'−'}
+.faq details > div{padding:0 22px 18px;color:var(--gray);font-size:.88rem;line-height:1.7}
+
+/* dev banner */
+.dev-banner{margin-bottom:30px;padding:14px 18px;background:#fef3c7;border:1px dashed #f59e0b;border-radius:10px;font-size:.84rem;color:#92400e;line-height:1.6}
+.dev-banner strong{color:#7c2d12;display:block;margin-bottom:4px;font-weight:800}
+.dev-banner code{background:#fff7ed;padding:1px 6px;border-radius:4px;font-size:.78rem}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="nav">
+    <div class="brand-row">
+      <div class="logo-icon">📊</div>
+      <div class="brand-name">Biz<span>Sco</span></div>
+    </div>
+    <a href="login.html" class="back-link">← Back to dashboard</a>
+  </div>
+
+  <div class="dev-banner" id="devBanner" style="display:none">
+    <strong>⚙️ DEV MODE — Razorpay not connected</strong>
+    Clicking Subscribe shows a mocked success modal. Real checkout activates once <code>RAZORPAY_KEY_ID</code> is set in the script below.
+  </div>
+
+  <!-- header -->
+  <div class="hdr">
+    <div class="hdr-eyebrow">Pricing for India 🇮🇳</div>
+    <h1>Choose your <span>BizSco plan</span></h1>
+    <p class="hdr-sub">Start free. Upgrade only when you're ready. All plans include WhatsApp support and cancellation anytime — no contracts.</p>
+  </div>
+
+  <!-- billing toggle -->
+  <div class="toggle-row">
+    <div class="toggle">
+      <button class="active" id="tMonthly" onclick="setBilling('monthly')">Monthly</button>
+      <button id="tAnnual" onclick="setBilling('annual')">Annual<span class="save-chip">Save 20%</span></button>
+    </div>
+  </div>
+
+  <!-- plans -->
+  <div class="plans">
+
+    <!-- FREE -->
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <h2>Get started</h2>
+      <div class="plan-price"><span class="currency">₹</span><span class="amount">0</span><span class="period">forever</span></div>
+      <p class="plan-tagline">Try every core tool. No card required.</p>
+      <ul class="plan-features">
+        <li>Loan Safety Score</li>
+        <li>Cash Runway calculator</li>
+        <li>Financial Checkup (2 min)</li>
+        <li>Grant Finder — 50+ India schemes</li>
+        <li class="muted">No advisor chat</li>
+        <li class="muted">No custom reports</li>
+      </ul>
+      <button class="plan-btn plan-btn-ghost" onclick="location.href='checkup.html'">Continue Free</button>
+    </div>
+
+    <!-- SURVIVE / STARTER -->
+    <div class="plan">
+      <div class="plan-name">Starter</div>
+      <h2>Survive</h2>
+      <div class="plan-price"><span class="currency">₹</span><span class="amount" data-price="499" data-price-annual="399">499</span><span class="period">/mo</span></div>
+      <p class="plan-tagline">For founders fighting cash flow battles every month.</p>
+      <ul class="plan-features">
+        <li>Everything in Free</li>
+        <li>12-Month Cash Forecast</li>
+        <li>Debt Command Center</li>
+        <li>GST + Tax Command Center</li>
+        <li>Scheme alerts — PMMY, MUDRA, CGTMSE</li>
+        <li class="muted">No advisor chat</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline" data-plan="starter" data-amount="499" onclick="subscribe(this)">Get Starter →</button>
+    </div>
+
+    <!-- SCALE / PRO (featured) -->
+    <div class="plan featured">
+      <div class="plan-name">Pro</div>
+      <h2>Scale</h2>
+      <div class="plan-price"><span class="currency">₹</span><span class="amount" data-price="1499" data-price-annual="1199">1,499</span><span class="period">/mo</span></div>
+      <p class="plan-tagline">For businesses ready to take on funding and grow with confidence.</p>
+      <ul class="plan-features">
+        <li>Everything in Starter</li>
+        <li>🤖 AI CA Chat advisor (GST, TDS, MSME)</li>
+        <li>Investor-ready financial reports</li>
+        <li>Industry benchmarks (your sector)</li>
+        <li>Lender match — top 5 banks/NBFCs</li>
+        <li>Priority WhatsApp support</li>
+      </ul>
+      <button class="plan-btn plan-btn-primary" data-plan="pro" data-amount="1499" onclick="subscribe(this)">Get Pro →</button>
+    </div>
+
+    <!-- ADVISE -->
+    <div class="plan">
+      <div class="plan-name">Advisor</div>
+      <h2>Advise</h2>
+      <div class="plan-price"><span class="currency">₹</span><span class="amount" data-price="3999" data-price-annual="3199">3,999</span><span class="period">/mo</span></div>
+      <p class="plan-tagline">For CAs and advisors managing multiple client books.</p>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>Up to 10 client portfolios</li>
+        <li>White-label reports with your logo</li>
+        <li>Bulk Financial Checkups</li>
+        <li>API access (when available)</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline" data-plan="advisor" data-amount="3999" onclick="subscribe(this)">Get Advisor →</button>
+    </div>
+  </div>
+
+  <!-- trust -->
+  <div class="trust">
+    <div class="trust-item"><span class="trust-emoji">🔒</span> Secure checkout via Razorpay</div>
+    <div class="trust-item"><span class="trust-emoji">💳</span> UPI / Cards / NetBanking / Wallets</div>
+    <div class="trust-item"><span class="trust-emoji">↩️</span> Cancel anytime — no contracts</div>
+    <div class="trust-item"><span class="trust-emoji">🇮🇳</span> GST invoice on email</div>
+  </div>
+
+  <!-- faq -->
+  <h2 class="faq-title">Common questions</h2>
+  <div class="faq">
+    <details>
+      <summary>Can I switch plans later?</summary>
+      <div>Yes. Upgrade or downgrade anytime from your dashboard. We pro-rate the difference automatically — no awkward conversations with a sales team.</div>
+    </details>
+    <details>
+      <summary>Is my financial data safe?</summary>
+      <div>All your numbers stay in your browser and your private dashboard. We never see your bank statements. Payment processing is handled by Razorpay (PCI-DSS Level 1 certified). We're GDPR + DPDP Act compliant.</div>
+    </details>
+    <details>
+      <summary>Do I get a GST invoice?</summary>
+      <div>Yes. Every subscription comes with a tax-compliant GST invoice emailed to your WhatsApp-linked email (or you can add an email anytime in settings).</div>
+    </details>
+    <details>
+      <summary>What happens if I cancel?</summary>
+      <div>You keep access until the end of your billing period. After that, you drop to the Free plan — your data stays intact. Re-subscribe anytime to unlock paid features again.</div>
+    </details>
+    <details>
+      <summary>Is there a free trial for Pro?</summary>
+      <div>Free has no time limit — try it as long as you want. For Pro, we offer a 7-day money-back guarantee: if it doesn't deliver value in your first week, email <strong>refunds@bizsco.in</strong> for a full refund, no questions asked.</div>
+    </details>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   RAZORPAY CHECKOUT — set RAZORPAY_KEY_ID to activate
+   When key is set, real payment flows. When empty, mock modal shown.
+══════════════════════════════════════════════════════════════════════ */
+
+const RAZORPAY_KEY_ID = '';  // TODO: paste rzp_test_... or rzp_live_... here
+const BUSINESS_NAME   = 'BizSco';
+const BUSINESS_LOGO   = 'icon-192.png';
+
+// Show dev banner if no key yet
+if (!RAZORPAY_KEY_ID) {
+  document.getElementById('devBanner').style.display = 'block';
+}
+
+let billingMode = 'monthly';
+
+function setBilling(mode){
+  billingMode = mode;
+  document.getElementById('tMonthly').classList.toggle('active', mode === 'monthly');
+  document.getElementById('tAnnual').classList.toggle('active',  mode === 'annual');
+  document.querySelectorAll('[data-price]').forEach(el => {
+    const monthly = el.getAttribute('data-price');
+    const annual  = el.getAttribute('data-price-annual');
+    const newVal  = (mode === 'annual') ? annual : monthly;
+    el.textContent = Number(newVal).toLocaleString('en-IN');
+  });
+  document.querySelectorAll('[data-amount]').forEach(btn => {
+    const baseAmount = btn.getAttribute('data-amount');
+    const planKey    = btn.getAttribute('data-plan');
+    const annualMap  = { starter: 399, pro: 1199, advisor: 3199 };
+    btn.setAttribute('data-effective-amount',
+      (mode === 'annual' ? annualMap[planKey] : baseAmount));
+  });
+}
+setBilling('monthly');
+
+function subscribe(btn){
+  const plan   = btn.getAttribute('data-plan');
+  const amount = parseInt(btn.getAttribute('data-effective-amount') || btn.getAttribute('data-amount'), 10);
+  const months = billingMode === 'annual' ? 12 : 1;
+  const totalRupees = amount * months;
+
+  if (!RAZORPAY_KEY_ID) {
+    showMockModal(plan, totalRupees, months);
+    return;
+  }
+
+  /* ── REAL RAZORPAY CHECKOUT ────────────────────────────────────
+     For subscriptions, the standard approach is:
+     1. Frontend sends {plan, billing} to Supabase Edge Function `create-razorpay-order`
+     2. Function creates a Razorpay Order (server-side, with key_secret)
+     3. Function returns order_id back to frontend
+     4. Frontend opens Razorpay checkout with that order_id
+     5. On success → another function call to verify-payment-webhook
+  ──────────────────────────────────────────────────────────────── */
+
+  const options = {
+    key: RAZORPAY_KEY_ID,
+    amount: totalRupees * 100,   // paise
+    currency: 'INR',
+    name: BUSINESS_NAME,
+    description: 'BizSco ' + plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan (' + (months === 12 ? 'annual' : 'monthly') + ')',
+    image: BUSINESS_LOGO,
+    handler: function(response){
+      // TODO: call verify-payment Edge Function with response.razorpay_payment_id
+      alert('✅ Payment captured: ' + response.razorpay_payment_id);
+      location.href = 'login.html?t=' + (new URLSearchParams(location.search).get('t') || 'subscribed');
+    },
+    prefill: { contact: getPhone() || '' },
+    theme: { color: '#4f46e5' }
+  };
+  new Razorpay(options).open();
+}
+
+function getPhone(){
+  try { return sessionStorage.getItem('bizsco_wa_phone') || ''; }
+  catch(e){ return ''; }
+}
+
+function showMockModal(plan, amount, months){
+  const planNames = { starter: 'Starter (Survive)', pro: 'Pro (Scale)', advisor: 'Advisor (Advise)' };
+  const msg = '🧪 MOCK CHECKOUT\n\n' +
+              'Plan: ' + (planNames[plan] || plan) + '\n' +
+              'Amount: ₹' + amount.toLocaleString('en-IN') + (months === 12 ? ' / year' : ' / month') + '\n\n' +
+              'Razorpay key not configured yet. In production this would open Razorpay\'s checkout (UPI/Card/NetBanking).\n\n' +
+              'Continue to mocked success?';
+  if (confirm(msg)){
+    alert('✅ Mock success! You are now on the ' + (planNames[plan] || plan) + ' plan.');
+    location.href = 'login.html?t=' + (new URLSearchParams(location.search).get('t') || 'mock_demo_user');
+  }
+}
+</script>
+
+</body>
+</html>

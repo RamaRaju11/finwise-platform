@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Your BizSco Dashboard</title>
+<meta name="theme-color" content="#4f46e5"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4f46e5;--brand-dark:#3730a3;--brand-light:#6366f1;
+  --wa:#25D366;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--gray:#64748b;--light:#f8fafc;--border:#e2e8f0;
+}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--light);color:var(--dark);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+.shell{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+
+/* ── Nav ──────────────────────────────────────────────────── */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.brand-row{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#38bdf8);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.brand-name{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.brand-name span{color:var(--brand)}
+.user-chip{display:flex;align-items:center;gap:8px;background:#fff;padding:7px 14px 7px 7px;border-radius:999px;border:1px solid var(--border);font-size:.84rem;font-weight:600;color:var(--gray)}
+.user-avatar{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),#38bdf8);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.78rem}
+
+/* ── Token-expiry banner ──────────────────────────────────── */
+.expiry-banner{display:flex;align-items:center;gap:10px;background:#fef3c7;border:1px solid #fde68a;border-radius:11px;padding:11px 16px;margin-bottom:24px;font-size:.84rem;color:#92400e;font-weight:600}
+.expiry-banner.expired{background:#fee2e2;border-color:#fecaca;color:#991b1b}
+
+/* ── Hero welcome card ────────────────────────────────────── */
+.hero-card{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:18px;padding:36px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(79,70,229,.3) 0%,transparent 70%);pointer-events:none}
+.hello-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.15);color:#86efac;padding:5px 12px;border-radius:999px;font-size:.74rem;font-weight:700;margin-bottom:14px}
+.hero-card h1{font-size:1.85rem;font-weight:800;line-height:1.25;letter-spacing:-.02em;margin-bottom:10px}
+.hero-card h1 .biz{color:#a5b4fc}
+.hero-sub{color:#cbd5e1;font-size:.95rem;line-height:1.65;max-width:540px}
+
+/* ── Profile summary card ─────────────────────────────────── */
+.section-title{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin:28px 0 12px;padding:0 4px}
+.profile-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px 28px}
+.profile-row{display:grid;grid-template-columns:140px 1fr;gap:14px 18px;align-items:start}
+.profile-label{font-size:.78rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;padding-top:3px}
+.profile-value{font-size:.95rem;font-weight:600;color:var(--dark)}
+.profile-divider{grid-column:1 / -1;height:1px;background:#f1f5f9}
+
+/* ── Recommendation card ──────────────────────────────────── */
+.rec-card{background:linear-gradient(135deg,#fef3c7,#fef9c3);border:1px solid #fde68a;border-radius:14px;padding:22px 26px;margin-top:20px}
+.rec-card .rec-eyebrow{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9a3412;margin-bottom:6px}
+.rec-card h3{font-size:1.1rem;font-weight:800;color:#7c2d12;margin-bottom:6px}
+.rec-card p{font-size:.86rem;color:#78350f;line-height:1.6}
+
+/* ── Action grid ──────────────────────────────────────────── */
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:720px){.actions{grid-template-columns:1fr}.profile-row{grid-template-columns:1fr;gap:4px 0}.profile-label{padding-top:10px}}
+.action-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:22px 20px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:flex-start;text-align:left;font-family:inherit}
+.action-card:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 10px 28px rgba(79,70,229,.12)}
+.action-card.primary{background:linear-gradient(135deg,var(--brand),var(--brand-light));border-color:var(--brand);color:#fff}
+.action-card.primary:hover{background:linear-gradient(135deg,var(--brand-dark),var(--brand))}
+.action-icon{font-size:1.7rem;margin-bottom:12px}
+.action-title{font-size:1rem;font-weight:800;margin-bottom:4px;letter-spacing:-.01em}
+.action-sub{font-size:.78rem;color:var(--gray);line-height:1.5}
+.action-card.primary .action-sub{color:#e0e7ff}
+.action-card.primary .action-title{color:#fff}
+
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+.tool-tile{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:10px;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .15s}
+.tool-tile:hover{border-color:var(--brand);background:#f5f3ff}
+.tool-emoji{font-size:1.15rem}
+
+/* ── Loading / Error states ───────────────────────────────── */
+.state-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:48px 32px;text-align:center;max-width:480px;margin:80px auto}
+.state-icon{font-size:3rem;margin-bottom:14px}
+.state-card h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;letter-spacing:-.02em}
+.state-card p{color:var(--gray);font-size:.92rem;line-height:1.6;margin-bottom:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer;border:none;font-family:inherit;text-decoration:none}
+.btn:hover{background:var(--brand-dark)}
+
+.spinner{width:42px;height:42px;border:3px solid #e0e7ff;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Dev badge */
+.dev-badge{position:fixed;bottom:14px;right:14px;background:#fef3c7;color:#92400e;border:1px dashed #f59e0b;padding:6px 12px;border-radius:8px;font-size:.72rem;font-weight:700;z-index:99}
+</style>
+</head>
+<body>
+
+<!-- ── Loading state ────────────────────────────────────────── -->
+<div class="state-card" id="loadingState">
+  <div class="spinner"></div>
+  <h2>Loading your dashboard...</h2>
+  <p>Verifying your secure link.</p>
+</div>
+
+<!-- ── Error state (invalid/expired token) ──────────────────── -->
+<div class="state-card" id="errorState" style="display:none">
+  <div class="state-icon">⏰</div>
+  <h2 id="errorTitle">Link expired</h2>
+  <p id="errorMsg">Your secure login link is only valid for 1 hour. Get a fresh one by messaging us on WhatsApp again.</p>
+  <a href="whatsapp-start.html" class="btn">📱 Get a new link</a>
+</div>
+
+<!-- ── Main dashboard (hidden until token verified) ─────────── -->
+<div class="shell" id="dashboard" style="display:none">
+
+  <!-- nav -->
+  <div class="nav">
+    <div class="brand-row">
+      <div class="logo-icon">📊</div>
+      <div class="brand-name">Biz<span>Sco</span></div>
+    </div>
+    <div class="user-chip">
+      <div class="user-avatar" id="userInitial">R</div>
+      <span id="userName">Welcome back</span>
+    </div>
+  </div>
+
+  <!-- expiry banner -->
+  <div class="expiry-banner" id="expiryBanner">
+    🔒 <span id="expiryText">Secure session — expires in <strong>59 min</strong></span>
+  </div>
+
+  <!-- hero welcome -->
+  <div class="hero-card">
+    <div class="hello-chip">✨ Personalized for you</div>
+    <h1>Welcome, <span class="biz" id="welcomeBizName">your business</span> 👋</h1>
+    <p class="hero-sub" id="welcomeSub">Here's your dashboard based on the 5 quick answers you gave on WhatsApp.</p>
+  </div>
+
+  <!-- profile summary -->
+  <div class="section-title">Your profile</div>
+  <div class="profile-card">
+    <div class="profile-row">
+      <div class="profile-label">Business name</div>
+      <div class="profile-value" id="pBizName">—</div>
+      <div class="profile-divider"></div>
+      <div class="profile-label">Industry</div>
+      <div class="profile-value" id="pIndustry">—</div>
+      <div class="profile-divider"></div>
+      <div class="profile-label">Monthly revenue</div>
+      <div class="profile-value" id="pRevenue">—</div>
+      <div class="profile-divider"></div>
+      <div class="profile-label">Biggest worry</div>
+      <div class="profile-value" id="pWorry">—</div>
+      <div class="profile-divider"></div>
+      <div class="profile-label">City</div>
+      <div class="profile-value" id="pCity">—</div>
+      <div class="profile-divider"></div>
+      <div class="profile-label">WhatsApp</div>
+      <div class="profile-value" id="pPhone">—</div>
+    </div>
+  </div>
+
+  <!-- recommendation -->
+  <div class="rec-card" id="recCard">
+    <div class="rec-eyebrow">🎯 Recommended for you</div>
+    <h3 id="recTitle">Loading recommendation...</h3>
+    <p id="recBody"></p>
+  </div>
+
+  <!-- main actions -->
+  <div class="section-title">What would you like to do?</div>
+  <div class="actions">
+    <a class="action-card primary" href="subscribe.html">
+      <div class="action-icon">⭐</div>
+      <div class="action-title">Subscribe to Pro</div>
+      <div class="action-sub">Unlock all 30 tools, advisor chat, and custom reports.</div>
+    </a>
+    <a class="action-card" href="checkup.html">
+      <div class="action-icon">🩺</div>
+      <div class="action-title">Continue Free</div>
+      <div class="action-sub">Run your full Financial Checkup with the tools we already give you.</div>
+    </a>
+    <a class="action-card" href="advisor-demo.html">
+      <div class="action-icon">💬</div>
+      <div class="action-title">Talk to Advisor</div>
+      <div class="action-sub">Get a human review of your numbers within 24 hours.</div>
+    </a>
+  </div>
+
+  <!-- recommended tools (curated by their worry) -->
+  <div class="section-title">Start with these tools</div>
+  <div class="tools-grid" id="toolsGrid"></div>
+
+</div>
+
+<div class="dev-badge" id="devBadge" style="display:none">⚙️ DEV MODE — mocked data</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   TOKEN VERIFICATION — MOCKED
+   Replace `mockVerify` with real Supabase Edge Function call:
+   GET /functions/v1/verify-token?t=XYZ
+══════════════════════════════════════════════════════════════════════ */
+
+const params = new URLSearchParams(window.location.search);
+const token = params.get('t');
+const phoneOverride = params.get('p');
+
+if (!token) {
+  showError('Missing login link', 'This page can only be opened from a personalized link sent to your WhatsApp.');
+} else {
+  // Mocked verify — in production, call:
+  // fetch('https://YOUR_PROJECT.supabase.co/functions/v1/verify-token?t=' + token)
+  //   .then(r => r.json()).then(data => data.valid ? renderDashboard(data.profile) : showError(...))
+  setTimeout(() => mockVerify(token), 600);
+}
+
+function mockVerify(t){
+  // Simulate 3 token outcomes for dev testing
+  if (t.startsWith('mock_expired')) {
+    showError('Link expired', 'This secure link was only valid for 1 hour. Get a fresh one on WhatsApp.');
+    return;
+  }
+  if (t.startsWith('mock_invalid')) {
+    showError('Invalid link', 'This link doesn\'t match any account. It may have been mistyped or revoked.');
+    return;
+  }
+  // mock_demo_user (or any other token) → render demo profile
+  const profile = {
+    phone: phoneOverride || '+91 98765 43210',
+    biz_name: 'Sharma Kirana Store',
+    industry: 'Retail',
+    industry_emoji: '🛒',
+    revenue_band: '₹1 lakh – ₹5 lakhs / month',
+    worry: 'Need a loan',
+    worry_key: 'loan',
+    city: 'Hyderabad',
+    expires_at: Date.now() + 59 * 60 * 1000  // 59 minutes from now
+  };
+  document.getElementById('devBadge').style.display = 'block';
+  renderDashboard(profile);
+}
+
+function renderDashboard(p){
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  document.getElementById('welcomeBizName').textContent = p.biz_name;
+  document.getElementById('userName').textContent = p.biz_name;
+  document.getElementById('userInitial').textContent = (p.biz_name || 'B').charAt(0).toUpperCase();
+  document.getElementById('welcomeSub').textContent =
+    `Based on your answers, we've built a financial dashboard tailored for a ${p.industry.toLowerCase()} business in ${p.city}.`;
+
+  document.getElementById('pBizName').textContent  = p.biz_name;
+  document.getElementById('pIndustry').textContent = (p.industry_emoji || '') + ' ' + p.industry;
+  document.getElementById('pRevenue').textContent  = p.revenue_band;
+  document.getElementById('pWorry').textContent    = p.worry;
+  document.getElementById('pCity').textContent     = '📍 ' + p.city;
+  document.getElementById('pPhone').textContent    = p.phone;
+
+  renderRecommendation(p);
+  renderToolsByWorry(p.worry_key);
+  startExpiryTimer(p.expires_at);
+}
+
+function renderRecommendation(p){
+  /* Map worry → recommended action */
+  const recs = {
+    'cash':     { title: 'Run your Cash Runway calculator first', body: 'Based on "Cash running out", we recommend starting with our Cash Runway tool to see exactly how many months your business has at current burn — then a 90-day forecast.', tool: 'modules/cashRunway.test.html' },
+    'loan':     { title: 'Check your Loan Safety Score', body: 'You said your biggest worry is needing a loan. Run our 60-second Loan Decision Score Engine to see if you\'ll qualify and at what rate — before any bank says no.', tool: 'modules/loanDecisionScoreEngine.test.html' },
+    'debt':     { title: 'Open the Debt Command Center', body: 'For businesses worried about debt, we built a payoff strategist that simulates avalanche vs snowball methods and shows the cheapest path to debt-free.', tool: 'modules/debtCommandCenter.test.html' },
+    'tax':      { title: 'Try the Tax Command Center', body: 'GST, advance tax, TDS — our Tax Command Center tracks every Indian SMB tax obligation with deadline alerts so you never miss a quarter.', tool: 'modules/taxCommandCenter.test.html' },
+    'exploring':{ title: 'Start with the Free Financial Checkup', body: 'Since you\'re still exploring, run our 2-minute Financial Checkup — it gives you a complete health score across cash flow, profit, and loan readiness.', tool: 'checkup.html' }
+  };
+  const r = recs[p.worry_key] || recs['exploring'];
+  document.getElementById('recTitle').textContent = r.title;
+  document.getElementById('recBody').textContent  = r.body;
+  document.getElementById('recCard').onclick = () => location.href = r.tool;
+  document.getElementById('recCard').style.cursor = 'pointer';
+}
+
+function renderToolsByWorry(worryKey){
+  const allTools = {
+    'cash':     [['cashRunway.test.html','⏰','Cash Runway'],['cashFlowCalendar.test.html','📅','Cash Flow Calendar'],['forecastingEngine.test.html','📊','12-Month Forecast'],['workingCapitalCalc.test.html','💼','Working Capital']],
+    'loan':     [['loanDecisionScoreEngine.test.html','📊','Loan Safety Score'],['loanEligibility.test.html','✅','Loan Eligibility'],['emiCalculator.test.html','🏦','EMI Calculator'],['grantFinder.test.html','💰','Grant Finder']],
+    'debt':     [['debtCommandCenter.test.html','💳','Debt Command Center'],['loanRepaymentOptimizer.test.html','⚡','Repayment Optimizer'],['debtConsolidation.test.html','🔗','Consolidation Tool'],['loanRefinanceAnalyzer.test.html','🔄','Refi Analyzer']],
+    'tax':      [['taxCommandCenter.test.html','🏦','Tax Command Center'],['taxEstimator.test.html','🧾','Tax Estimator'],['salesTaxTracker.test.html','📋','GST Tracker'],['keyDeductions.test.html','💡','Key Deductions']],
+    'exploring':[['businessHealthScore.test.html','📊','Health Score'],['profitLossEngine.test.html','📈','P&L Engine'],['breakEven.test.html','⚖️','Break-Even'],['grantFinder.test.html','💰','Grant Finder']]
+  };
+  const tools = allTools[worryKey] || allTools['exploring'];
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = tools.map(t =>
+    `<a class="tool-tile" href="modules/${t[0]}"><span class="tool-emoji">${t[1]}</span>${t[2]}</a>`
+  ).join('');
+}
+
+function startExpiryTimer(expiresAt){
+  const el = document.getElementById('expiryText');
+  const banner = document.getElementById('expiryBanner');
+  function tick(){
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0){
+      banner.classList.add('expired');
+      el.innerHTML = 'Session expired — <a href="whatsapp-start.html" style="text-decoration:underline">get a new link</a>';
+      return;
+    }
+    const mins = Math.floor(remaining / 60000);
+    el.innerHTML = mins < 1
+      ? 'Secure session — expires in <strong>under 1 min</strong>'
+      : `Secure session — expires in <strong>${mins} min</strong>`;
+    setTimeout(tick, 30000);
+  }
+  tick();
+}
+
+function showError(title, msg){
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'block';
+  document.getElementById('errorTitle').textContent = title;
+  document.getElementById('errorMsg').textContent   = msg;
+}
+</script>
+
+</body>
+</html>

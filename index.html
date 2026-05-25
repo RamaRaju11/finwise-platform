@@ -718,7 +718,8 @@ h1,h2,h3,h4{color:var(--dark)}
       <li><a href="checkup.html" style="color:#2563eb;font-weight:700">🩺 Free Checkup</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="auth.html" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="auth.html" class="btn btn-outline btn-sm" data-non-india>Sign In</a>
+      <a href="whatsapp-start.html" class="btn btn-sm" data-india-only style="display:none;background:#25D366;color:#fff;font-weight:700">💚 Continue with WhatsApp</a>
       <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-sm">⚡ Check Loan Risk Free →</a>
     </div>
     <button class="nav-toggle" id="navToggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
@@ -745,6 +746,9 @@ h1,h2,h3,h4{color:var(--dark)}
       Get a SAFE / RISKY / DANGEROUS verdict in 60 seconds — plus 29 more tools for cash flow, health score, grants, and AI-powered financial advice. Free. No sign-up.
     </p>
     <div class="hero-ctas">
+      <a href="whatsapp-start.html" class="btn btn-lg" data-india-only style="display:none;background:#25D366;color:#fff;font-weight:800;box-shadow:0 8px 28px rgba(37,211,102,.35)">
+        💚 Continue with WhatsApp
+      </a>
       <a href="modules/loanDecisionScoreEngine.test.html" class="btn btn-primary btn-lg" data-cn="hero.cta1">
         ⚡ Find Out If Your Loan Is Safe
       </a>
@@ -2337,6 +2341,37 @@ document.addEventListener('keydown',function(e){
   loadRecentModules();
   wireModuleTracking();
   initWizard();
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     INDIA WHATSAPP CTA TOGGLE
+     Listens for `countrychange` from country-switcher.js and shows/hides
+     elements tagged with [data-india-only] vs [data-non-india].
+══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  function applyIndiaCTAs(country){
+    var isIndia = (country === 'in');
+    document.querySelectorAll('[data-india-only]').forEach(function(el){
+      el.style.display = isIndia ? '' : 'none';
+    });
+    document.querySelectorAll('[data-non-india]').forEach(function(el){
+      el.style.display = isIndia ? 'none' : '';
+    });
+  }
+  window.addEventListener('countrychange', function(e){
+    applyIndiaCTAs((e.detail && e.detail.country) || '');
+  });
+  // Run once on load in case country was set before this script loaded
+  document.addEventListener('DOMContentLoaded', function(){
+    try {
+      var stored = localStorage.getItem('bizsco_country') || '';
+      var profile = JSON.parse(localStorage.getItem('bizsco_profile') || 'null');
+      var country = (profile && profile.country) || stored || '';
+      if (country) applyIndiaCTAs(country);
+    } catch(e){}
+  });
 })();
 </script>
 </body>

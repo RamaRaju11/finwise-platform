@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BizSco — Continue with WhatsApp</title>
+<meta name="theme-color" content="#25D366"/>
+<meta name="description" content="Sign up for BizSco India via WhatsApp. Answer 5 quick questions and get your personalized small business financial dashboard."/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4f46e5;--brand-dark:#3730a3;
+  --wa:#25D366;--wa-dark:#128C7E;
+  --dark:#0f172a;--gray:#64748b;--light:#f8fafc;--border:#e2e8f0;
+}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#f0fdf4 0%,#eef2ff 100%);color:var(--dark);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+.card{background:#fff;border-radius:20px;padding:40px 36px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.08);border:1px solid var(--border)}
+.brand-row{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#38bdf8);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.brand-name{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.brand-name span{color:var(--brand)}
+.flag-chip{margin-left:auto;font-size:.72rem;font-weight:700;background:#fff7ed;color:#9a3412;padding:5px 11px;border-radius:999px}
+
+h1{font-size:1.65rem;font-weight:800;line-height:1.25;letter-spacing:-.02em;margin-bottom:12px}
+.subtitle{color:var(--gray);font-size:.95rem;line-height:1.6;margin-bottom:28px}
+
+.steps{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 18px;margin-bottom:24px;font-size:.85rem;line-height:1.65;color:#166534}
+.steps-title{font-weight:700;margin-bottom:6px;color:#14532d}
+.steps ol{margin:0;padding-left:18px}
+.steps li{margin:2px 0}
+
+label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:8px}
+.phone-row{display:flex;align-items:stretch;border:2px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .15s;background:#fff}
+.phone-row:focus-within{border-color:var(--wa)}
+.phone-cc{display:flex;align-items:center;gap:6px;padding:0 14px;background:var(--light);color:var(--dark);font-weight:700;font-size:.95rem;border-right:1px solid var(--border)}
+.phone-input{flex:1;border:none;padding:14px 14px;font-size:1rem;font-family:inherit;outline:none;background:transparent;letter-spacing:.5px}
+.hint{font-size:.74rem;color:var(--gray);margin-top:8px;line-height:1.5}
+
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--wa);color:#fff;border:none;padding:15px 20px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:22px;transition:all .15s;font-family:inherit}
+.btn-wa:hover{background:var(--wa-dark);transform:translateY(-1px);box-shadow:0 10px 28px rgba(37,211,102,.34)}
+.btn-wa:disabled{background:#9ca3af;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-wa svg{width:22px;height:22px}
+
+.error{display:none;margin-top:12px;padding:10px 14px;background:#fee2e2;color:#991b1b;border-radius:9px;font-size:.84rem}
+.error.show{display:block}
+
+.foot{margin-top:24px;font-size:.74rem;color:var(--gray);text-align:center;line-height:1.6}
+.foot a{color:var(--brand);font-weight:600}
+
+/* Confirmation state */
+.confirm{display:none;text-align:center}
+.confirm.show{display:block}
+.confirm-icon{width:84px;height:84px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 20px}
+.confirm h2{font-size:1.45rem;font-weight:800;margin-bottom:10px;letter-spacing:-.02em}
+.confirm-sub{color:var(--gray);font-size:.92rem;line-height:1.65;margin-bottom:22px}
+.confirm-phone{display:inline-flex;align-items:center;gap:6px;background:var(--light);padding:7px 14px;border-radius:999px;font-weight:700;font-size:.88rem;margin-bottom:22px}
+.confirm-next{background:#eff6ff;border:1px solid #bfdbfe;border-radius:11px;padding:14px 16px;font-size:.84rem;color:#1e40af;line-height:1.6;text-align:left}
+.confirm-next strong{display:block;margin-bottom:4px}
+
+/* Dev panel */
+.dev-panel{margin-top:18px;padding:14px 16px;background:#fef3c7;border:1px dashed #f59e0b;border-radius:10px;font-size:.78rem;color:#92400e;line-height:1.6}
+.dev-panel strong{display:block;margin-bottom:6px;font-weight:800}
+.dev-panel a{display:inline-block;margin-top:6px;background:#f59e0b;color:#fff;padding:6px 13px;border-radius:7px;font-weight:700;font-size:.78rem}
+.dev-panel a:hover{background:#d97706}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--gray);font-size:.84rem;margin-bottom:20px;font-weight:600}
+.back-link:hover{color:var(--brand)}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <a href="index.html" class="back-link">← Back to BizSco</a>
+
+  <!-- ── Input state ───────────────────────────────────────── -->
+  <div id="inputState">
+    <div class="brand-row">
+      <div class="logo-icon">📊</div>
+      <div class="brand-name">Biz<span>Sco</span></div>
+      <div class="flag-chip">🇮🇳 India</div>
+    </div>
+
+    <h1>Continue with WhatsApp</h1>
+    <p class="subtitle">No password to remember. We'll send you a quick welcome message to start your free financial dashboard.</p>
+
+    <div class="steps">
+      <div class="steps-title">How it works (under 2 minutes):</div>
+      <ol>
+        <li>Enter your WhatsApp number below</li>
+        <li>We'll send 5 quick questions on WhatsApp</li>
+        <li>Reply with answers — get your personalized plan</li>
+      </ol>
+    </div>
+
+    <form id="phoneForm" onsubmit="handleSubmit(event)">
+      <label for="phone">Your WhatsApp number</label>
+      <div class="phone-row">
+        <div class="phone-cc">🇮🇳 +91</div>
+        <input id="phone" class="phone-input" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national" required/>
+      </div>
+      <div class="hint">10-digit Indian mobile number. We never share your number.</div>
+
+      <button type="submit" class="btn-wa" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.7-.9-2.9-1.5-4-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.3 0-.5s-.6-1.4-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.7 2.6 4.1 3.6 1.5.6 2.1.7 2.9.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.6.9 3.3 1.4 5.2 1.4 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.4 1 1-3.3-.2-.4C3.5 14.3 3 13.2 3 12c0-5 4-9 9-9s9 4 9 9-4 9-9 9z"/></svg>
+        <span>Continue on WhatsApp</span>
+      </button>
+      <div class="error" id="error"></div>
+    </form>
+
+    <div class="foot">
+      By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy</a>.<br/>
+      Standard WhatsApp message rates may apply.
+    </div>
+  </div>
+
+  <!-- ── Confirmation state ─────────────────────────────────── -->
+  <div class="confirm" id="confirmState">
+    <div class="confirm-icon">📱</div>
+    <h2>Check your WhatsApp</h2>
+    <div class="confirm-phone" id="confirmPhone"></div>
+    <p class="confirm-sub">We've sent the first question to your WhatsApp. Reply to it to continue.</p>
+
+    <div class="confirm-next">
+      <strong>What happens next:</strong>
+      Answer 5 quick questions on WhatsApp → receive a private 1-hour link to your dashboard. No app to install.
+    </div>
+
+    <div class="dev-panel" id="devPanel">
+      <strong>⚙️ DEV MODE (mocked — no real WhatsApp sent yet)</strong>
+      WhatsApp Business API isn't connected yet. Click below to simulate receiving the magic link:
+      <br/>
+      <a href="login.html?t=mock_demo_user" id="mockLink">→ Open simulated login link</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   MOCK FLOW — replace with real Supabase Edge Function call when ready
+   POST /functions/v1/wa-start  body: { phone: "+91XXXXXXXXXX" }
+══════════════════════════════════════════════════════════════════════ */
+
+function handleSubmit(e){
+  e.preventDefault();
+  var phone = document.getElementById('phone').value.replace(/\D/g,'');
+  var err   = document.getElementById('error');
+  err.classList.remove('show');
+
+  if(phone.length !== 10){
+    err.textContent = 'Please enter a 10-digit Indian mobile number.';
+    err.classList.add('show');
+    return;
+  }
+  if(!/^[6-9]/.test(phone)){
+    err.textContent = 'Indian mobile numbers start with 6, 7, 8, or 9.';
+    err.classList.add('show');
+    return;
+  }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Sending...';
+
+  /* ── MOCK: Replace with real fetch when wa-start function exists ── */
+  // fetch('https://YOUR_PROJECT.supabase.co/functions/v1/wa-start', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+  //   body: JSON.stringify({ phone: '+91' + phone })
+  // }).then(r => r.json()).then(data => { ... })
+
+  setTimeout(function(){
+    document.getElementById('inputState').style.display = 'none';
+    var conf = document.getElementById('confirmState');
+    conf.classList.add('show');
+    document.getElementById('confirmPhone').innerHTML = '🇮🇳 +91 ' + phone.replace(/(\d{5})(\d{5})/, '$1 $2');
+
+    // store phone for later use during dev
+    try { sessionStorage.setItem('bizsco_wa_phone', '+91' + phone); } catch(e){}
+
+    // Add phone to mock magic link for slightly more realistic dev experience
+    document.getElementById('mockLink').href = 'login.html?t=mock_demo_user&p=' + encodeURIComponent('+91' + phone);
+  }, 700);
+}
+
+/* Format the number as user types (1234 56789 → 12345 67890) */
+document.getElementById('phone').addEventListener('input', function(e){
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
+});
+</script>
+
+</body>
+</html>
