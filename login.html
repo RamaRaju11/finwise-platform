@@ -164,7 +164,7 @@ a{text-decoration:none;color:inherit}
   <!-- main actions -->
   <div class="section-title">What would you like to do?</div>
   <div class="actions">
-    <a class="action-card primary" href="subscribe.html">
+    <a class="action-card primary" id="subscribeLink" href="subscribe.html">
       <div class="action-icon">⭐</div>
       <div class="action-title">Subscribe to Pro</div>
       <div class="action-sub">Unlock all 30 tools, advisor chat, and custom reports.</div>
@@ -191,10 +191,13 @@ a{text-decoration:none;color:inherit}
 
 <script>
 /* ════════════════════════════════════════════════════════════════════
-   TOKEN VERIFICATION — MOCKED
-   Replace `mockVerify` with real Supabase Edge Function call:
-   GET /functions/v1/verify-token?t=XYZ
+   TOKEN VERIFICATION — LIVE
+   Real tokens hit Supabase verify-token function.
+   Tokens starting with "mock_" still use local mock data (dev only).
 ══════════════════════════════════════════════════════════════════════ */
+
+const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ';
 
 const params = new URLSearchParams(window.location.search);
 const token = params.get('t');
@@ -202,15 +205,40 @@ const phoneOverride = params.get('p');
 
 if (!token) {
   showError('Missing login link', 'This page can only be opened from a personalized link sent to your WhatsApp.');
-} else {
-  // Mocked verify — in production, call:
-  // fetch('https://YOUR_PROJECT.supabase.co/functions/v1/verify-token?t=' + token)
-  //   .then(r => r.json()).then(data => data.valid ? renderDashboard(data.profile) : showError(...))
+} else if (token.startsWith('mock_')) {
+  // Dev path: synthetic tokens for testing without hitting the backend
   setTimeout(() => mockVerify(token), 600);
+} else {
+  // Real path: call verify-token Edge Function
+  verifyTokenLive(token);
+}
+
+function verifyTokenLive(t){
+  fetch(SUPA_URL + '/functions/v1/verify-token?t=' + encodeURIComponent(t), {
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.valid && data.profile) {
+      renderDashboard(data.profile);
+      return;
+    }
+    const reasonMap = {
+      'expired':     ['Link expired',  'This secure link was only valid for 1 hour. Message us on WhatsApp for a fresh one.'],
+      'invalid':     ['Invalid link',  'This link doesn\'t match any account. It may have been mistyped or revoked.'],
+      'no_profile':  ['Setup incomplete', 'Your onboarding wasn\'t finished. Please restart on WhatsApp.'],
+      'server_error':['Something went wrong', 'Our servers had a hiccup. Please try again in a moment.']
+    };
+    const r = reasonMap[data.reason] || ['Could not load', 'Please try again or get a new link on WhatsApp.'];
+    showError(r[0], r[1]);
+  })
+  .catch(err => {
+    console.error('verify-token call failed:', err);
+    showError('Connection problem', 'We could not reach our servers. Check your internet and try again.');
+  });
 }
 
 function mockVerify(t){
-  // Simulate 3 token outcomes for dev testing
   if (t.startsWith('mock_expired')) {
     showError('Link expired', 'This secure link was only valid for 1 hour. Get a fresh one on WhatsApp.');
     return;
@@ -219,7 +247,7 @@ function mockVerify(t){
     showError('Invalid link', 'This link doesn\'t match any account. It may have been mistyped or revoked.');
     return;
   }
-  // mock_demo_user (or any other token) → render demo profile
+  // mock_demo_user (or any other mock_*) → render demo profile
   const profile = {
     phone: phoneOverride || '+91 98765 43210',
     biz_name: 'Sharma Kirana Store',
@@ -229,7 +257,7 @@ function mockVerify(t){
     worry: 'Need a loan',
     worry_key: 'loan',
     city: 'Hyderabad',
-    expires_at: Date.now() + 59 * 60 * 1000  // 59 minutes from now
+    expires_at: Date.now() + 59 * 60 * 1000
   };
   document.getElementById('devBadge').style.display = 'block';
   renderDashboard(profile);
@@ -238,6 +266,13 @@ function mockVerify(t){
 function renderDashboard(p){
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+
+  // Pass the magic-link token forward so subscribe.html can use it
+  // to authorize the Razorpay order-creation call.
+  if (token) {
+    const subLink = document.getElementById('subscribeLink');
+    if (subLink) subLink.href = 'subscribe.html?t=' + encodeURIComponent(token);
+  }
 
   document.getElementById('welcomeBizName').textContent = p.biz_name;
   document.getElementById('userName').textContent = p.biz_name;

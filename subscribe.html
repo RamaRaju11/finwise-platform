@@ -236,16 +236,24 @@ a{text-decoration:none;color:inherit}
 
 <script>
 /* ════════════════════════════════════════════════════════════════════
-   RAZORPAY CHECKOUT — set RAZORPAY_KEY_ID to activate
-   When key is set, real payment flows. When empty, mock modal shown.
+   RAZORPAY CHECKOUT — LIVE
+   subscribe() calls Supabase razorpay-create-order with the magic-link
+   token. The function creates a Razorpay order server-side and returns
+   {order_id, key_id, amount}. We then open Razorpay Checkout.
+   Falls back to a mock flow only when no token is in the URL.
 ══════════════════════════════════════════════════════════════════════ */
 
-const RAZORPAY_KEY_ID = '';  // TODO: paste rzp_test_... or rzp_live_... here
-const BUSINESS_NAME   = 'BizSco';
-const BUSINESS_LOGO   = 'icon-192.png';
+const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ';
 
-// Show dev banner if no key yet
-if (!RAZORPAY_KEY_ID) {
+const BUSINESS_NAME = 'BizSco';
+const BUSINESS_LOGO = 'icon-192.png';
+
+const urlParams  = new URLSearchParams(window.location.search);
+const magicToken = urlParams.get('t');
+
+// Show dev banner only when there's no token (i.e., direct visits without login flow)
+if (!magicToken) {
   document.getElementById('devBanner').style.display = 'block';
 }
 
@@ -272,41 +280,67 @@ function setBilling(mode){
 setBilling('monthly');
 
 function subscribe(btn){
-  const plan   = btn.getAttribute('data-plan');
-  const amount = parseInt(btn.getAttribute('data-effective-amount') || btn.getAttribute('data-amount'), 10);
-  const months = billingMode === 'annual' ? 12 : 1;
-  const totalRupees = amount * months;
+  const plan         = btn.getAttribute('data-plan');
+  const totalRupees  = parseInt(btn.getAttribute('data-effective-amount') || btn.getAttribute('data-amount'), 10)
+                       * (billingMode === 'annual' ? 12 : 1);
 
-  if (!RAZORPAY_KEY_ID) {
-    showMockModal(plan, totalRupees, months);
+  // Direct visit (no magic-link token) → mock checkout
+  if (!magicToken) {
+    showMockModal(plan, totalRupees, billingMode === 'annual' ? 12 : 1);
     return;
   }
 
-  /* ── REAL RAZORPAY CHECKOUT ────────────────────────────────────
-     For subscriptions, the standard approach is:
-     1. Frontend sends {plan, billing} to Supabase Edge Function `create-razorpay-order`
-     2. Function creates a Razorpay Order (server-side, with key_secret)
-     3. Function returns order_id back to frontend
-     4. Frontend opens Razorpay checkout with that order_id
-     5. On success → another function call to verify-payment-webhook
-  ──────────────────────────────────────────────────────────────── */
+  // ── Live path: ask Supabase to create a Razorpay order ──
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Loading...';
 
-  const options = {
-    key: RAZORPAY_KEY_ID,
-    amount: totalRupees * 100,   // paise
-    currency: 'INR',
-    name: BUSINESS_NAME,
-    description: 'BizSco ' + plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan (' + (months === 12 ? 'annual' : 'monthly') + ')',
-    image: BUSINESS_LOGO,
-    handler: function(response){
-      // TODO: call verify-payment Edge Function with response.razorpay_payment_id
-      alert('✅ Payment captured: ' + response.razorpay_payment_id);
-      location.href = 'login.html?t=' + (new URLSearchParams(location.search).get('t') || 'subscribed');
+  fetch(SUPA_URL + '/functions/v1/razorpay-create-order', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY
     },
-    prefill: { contact: getPhone() || '' },
-    theme: { color: '#4f46e5' }
-  };
-  new Razorpay(options).open();
+    body: JSON.stringify({ token: magicToken, plan, billing: billingMode })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.ok) {
+      // Token invalid/expired, or Razorpay not configured server-side yet
+      const msg = data.error || 'Could not start checkout. Please refresh and try again.';
+      alert('❌ ' + msg + (data.detail ? '\n\nDetails: ' + JSON.stringify(data.detail).slice(0, 200) : ''));
+      btn.disabled = false; btn.textContent = originalText;
+      return;
+    }
+
+    new Razorpay({
+      key:      data.key_id,
+      order_id: data.order_id,
+      amount:   data.amount,
+      currency: data.currency,
+      name:     BUSINESS_NAME,
+      description: 'BizSco ' + plan.charAt(0).toUpperCase() + plan.slice(1) + ' (' + billingMode + ')',
+      image:    BUSINESS_LOGO,
+      prefill:  { contact: (data.phone || '').replace(/^\+91/, '') },
+      theme:    { color: '#4f46e5' },
+      handler:  function(response){
+        // razorpay-webhook will update users_in.plan server-side.
+        // We just redirect back so login.html reloads with new plan.
+        location.href = 'login.html?t=' + encodeURIComponent(magicToken);
+      },
+      modal: {
+        ondismiss: function(){
+          btn.disabled = false; btn.textContent = originalText;
+        }
+      }
+    }).open();
+  })
+  .catch(err => {
+    console.error('create-order failed:', err);
+    alert('❌ Could not reach checkout. Please check your internet and try again.');
+    btn.disabled = false; btn.textContent = originalText;
+  });
 }
 
 function getPhone(){
