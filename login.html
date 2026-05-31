@@ -98,6 +98,19 @@ a{text-decoration:none;color:inherit}
 .spinner{width:42px;height:42px;border:3px solid #e0e7ff;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ── Refresh-link form on expired/invalid state ─────────────────── */
+.refresh-row{display:flex;align-items:stretch;border:2px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;margin-bottom:6px;transition:border-color .15s;max-width:320px;margin-left:auto;margin-right:auto}
+.refresh-row:focus-within{border-color:var(--brand)}
+.refresh-cc{display:flex;align-items:center;gap:5px;padding:0 12px;background:var(--light);color:var(--dark);font-weight:700;font-size:.9rem;border-right:1px solid var(--border)}
+.refresh-input{flex:1;border:none;padding:12px 12px;font-size:1rem;font-family:inherit;outline:none;background:transparent;letter-spacing:.5px;width:100%}
+.refresh-error{display:none;color:#991b1b;background:#fee2e2;border-radius:8px;padding:8px 12px;font-size:.82rem;margin-bottom:10px;max-width:320px;margin-left:auto;margin-right:auto}
+.refresh-error.show{display:block}
+.refresh-alt{margin-top:14px;font-size:.78rem;color:var(--gray)}
+.refresh-alt a{color:var(--brand);font-weight:600;text-decoration:none}
+.refresh-alt a:hover{text-decoration:underline}
+#refreshBtn{margin-top:8px}
+#refreshBtn:disabled{background:#9ca3af;cursor:not-allowed}
+
 /* Dev badge */
 .dev-badge{position:fixed;bottom:14px;right:14px;background:#fef3c7;color:#92400e;border:1px dashed #f59e0b;padding:6px 12px;border-radius:8px;font-size:.72rem;font-weight:700;z-index:99}
 </style>
@@ -113,10 +126,27 @@ a{text-decoration:none;color:inherit}
 
 <!-- ── Error state (invalid/expired token) ──────────────────── -->
 <div class="state-card" id="errorState" style="display:none">
-  <div class="state-icon">⏰</div>
+  <div class="state-icon" id="errorIcon">⏰</div>
   <h2 id="errorTitle">Link expired</h2>
-  <p id="errorMsg">Your secure login link is only valid for 1 hour. Get a fresh one by messaging us on WhatsApp again.</p>
-  <a href="whatsapp-start.html" class="btn">📱 Get a new link</a>
+  <p id="errorMsg">Your secure login link is only valid for 1 hour. Enter your WhatsApp number below and we'll send a fresh one.</p>
+
+  <div id="refreshForm">
+    <div class="refresh-row">
+      <div class="refresh-cc">🇮🇳 +91</div>
+      <input id="refreshPhone" class="refresh-input" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national"/>
+    </div>
+    <div class="refresh-error" id="refreshError"></div>
+    <button class="btn" onclick="requestRefresh()" id="refreshBtn">📱 Send me a new link</button>
+    <div class="refresh-alt">
+      Don't have an account yet? <a href="whatsapp-start.html">Start signup →</a>
+    </div>
+  </div>
+
+  <div id="refreshSent" style="display:none">
+    <div style="font-size:3rem;margin-bottom:14px">✅</div>
+    <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:6px">Sent!</h3>
+    <p id="refreshSentMsg" style="color:var(--gray);font-size:.9rem">Check your WhatsApp for the fresh link.</p>
+  </div>
 </div>
 
 <!-- ── Main dashboard (hidden until token verified) ─────────── -->
@@ -364,6 +394,80 @@ function showError(title, msg){
   document.getElementById('errorTitle').textContent = title;
   document.getElementById('errorMsg').textContent   = msg;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   Refresh-link form — request a new 1-hour link via SMS-less flow.
+   POSTs to magic-link-refresh Edge Function; user receives link in
+   WhatsApp.
+══════════════════════════════════════════════════════════════════════ */
+function requestRefresh(){
+  const input = document.getElementById('refreshPhone');
+  const err   = document.getElementById('refreshError');
+  const btn   = document.getElementById('refreshBtn');
+  const phone = (input.value || '').replace(/\D/g, '');
+
+  err.classList.remove('show');
+
+  if (phone.length !== 10){
+    err.textContent = 'Please enter a 10-digit Indian mobile number.';
+    err.classList.add('show');
+    return;
+  }
+  if (!/^[6-9]/.test(phone)){
+    err.textContent = 'Indian mobile numbers start with 6, 7, 8, or 9.';
+    err.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  fetch(SUPA_URL + '/functions/v1/magic-link-refresh', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY
+    },
+    body: JSON.stringify({ phone: '+91' + phone })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok){
+      // Hide form, show success
+      document.getElementById('refreshForm').style.display = 'none';
+      document.getElementById('refreshSent').style.display = 'block';
+      if (data.message) {
+        document.getElementById('refreshSentMsg').textContent = data.message;
+      }
+      return;
+    }
+    // Error from server
+    if (data.reason === 'no_account'){
+      err.innerHTML = 'No BizSco account found for that number. <a href="whatsapp-start.html" style="color:var(--brand);font-weight:700">Start signup →</a>';
+    } else if (data.reason === 'rate_limited'){
+      err.textContent = data.error || 'Too many requests. Please try again in an hour.';
+    } else {
+      err.textContent = data.error || 'Could not send. Please try again.';
+    }
+    err.classList.add('show');
+    btn.disabled = false; btn.textContent = '📱 Send me a new link';
+  })
+  .catch(e => {
+    console.error('refresh failed:', e);
+    err.textContent = 'Connection problem. Check your internet and try again.';
+    err.classList.add('show');
+    btn.disabled = false; btn.textContent = '📱 Send me a new link';
+  });
+}
+
+// Format input as digits-only
+document.addEventListener('DOMContentLoaded', () => {
+  const ri = document.getElementById('refreshPhone');
+  if (ri) ri.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
+  });
+});
 </script>
 
 </body>
