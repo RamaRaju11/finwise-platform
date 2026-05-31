@@ -76,6 +76,155 @@ serve(async (req) => {
   return new Response('ok', { status: 200 })
 })
 
+// ── Command parser ────────────────────────────────────────────────
+// Recognises HELP, RESTART, STATUS, STOP, RESEND in English + Hindi.
+// Returns a canonical command name, or null if the message is a
+// regular answer to the current question.
+function parseCommand(text: string): string | null {
+  const t = text.trim().toLowerCase().replace(/^\//, '')
+
+  // HELP variants
+  if (['help', '?', 'मदद', 'madad'].includes(t)) return 'HELP'
+
+  // RESTART variants
+  if (['restart', 'reset', 'start over', 'restartover',
+       'फिर से शुरू', 'shuru karo', 'redo'].includes(t)) return 'RESTART'
+
+  // STATUS variants
+  if (['status', 'where am i', 'progress'].includes(t)) return 'STATUS'
+
+  // STOP / opt-out variants
+  if (['stop', 'cancel', 'quit', 'unsubscribe',
+       'रोको', 'roko', 'band karo'].includes(t)) return 'STOP'
+
+  // RESEND link variants (for users who already completed)
+  if (['link', 'resend', 'send link', 'new link', 'login',
+       'open dashboard', 'फिर भेजो'].includes(t)) return 'RESEND'
+
+  return null
+}
+
+// ── Command handlers ──────────────────────────────────────────────
+async function handleCommand(
+  cmd: string,
+  phone: string,
+  session: any,
+  admin: any
+): Promise<void> {
+  const baseUrl = Deno.env.get('PUBLIC_SITE_URL') ||
+                  'https://ramaraju11.github.io/finwise-platform'
+
+  switch (cmd) {
+    case 'HELP': {
+      const stepInfo = session && session.current_step >= 1 && session.current_step <= 5
+        ? `You're on Q${session.current_step}/5.`
+        : session && session.current_step === 99
+          ? 'You finished onboarding 🎉'
+          : 'You haven\'t started signup yet.'
+
+      await sendText(phone,
+        `🆘 *BizSco Help*\n\n` +
+        `${stepInfo}\n\n` +
+        `*Commands you can send:*\n` +
+        `• *RESTART* — start over from Q1\n` +
+        `• *STATUS* — see which question you're on\n` +
+        `• *LINK* — get a fresh dashboard login link\n` +
+        `• *STOP* — cancel and clear my data\n` +
+        `• *HELP* — show this menu\n\n` +
+        `Or just reply with your answer to continue. 👇\n\n` +
+        `Need a human? Email hello@bizsco.in`
+      )
+      return
+    }
+
+    case 'RESTART': {
+      if (!session) {
+        await sendText(phone,
+          `You don't have a signup in progress. Start here:\n${baseUrl}/whatsapp-start.html`
+        )
+        return
+      }
+      // Reset the session to step 1
+      await admin.from('wa_sessions').update({
+        current_step: 1,
+        answers: {},
+        completed_at: null
+      }).eq('id', session.id)
+
+      const firstQ = QUESTIONS[0]
+      await sendText(phone,
+        `🔄 Starting over from Q1.\n\n${firstQ.prompt}`
+      )
+      return
+    }
+
+    case 'STATUS': {
+      if (!session) {
+        await sendText(phone,
+          `You haven't started signup yet. Start here:\n${baseUrl}/whatsapp-start.html`
+        )
+        return
+      }
+      if (session.current_step >= 99) {
+        await sendText(phone,
+          `✅ You completed all 5 questions. Reply *LINK* to get a fresh dashboard link.`
+        )
+        return
+      }
+      const step = session.current_step
+      const answered = Object.keys(session.answers || {}).length
+      await sendText(phone,
+        `📊 *Your progress*\n\n` +
+        `Step: Q${step}/5\n` +
+        `Answered so far: ${answered}\n\n` +
+        `Reply to the question I sent you, or send *RESTART* to begin again.`
+      )
+      return
+    }
+
+    case 'STOP': {
+      if (session) {
+        // Mark session as stopped (don't fully delete — keeps audit trail)
+        await admin.from('wa_sessions').update({
+          current_step: 0,
+          answers: {},
+          completed_at: null
+        }).eq('id', session.id)
+      }
+      await sendText(phone,
+        `👋 No worries — your signup is paused and your data has been cleared from active onboarding.\n\n` +
+        `To start fresh anytime, visit:\n${baseUrl}/whatsapp-start.html`
+      )
+      return
+    }
+
+    case 'RESEND': {
+      if (!session || session.current_step < 99) {
+        await sendText(phone,
+          `You haven't completed onboarding yet. Reply to your current question, or send *STATUS* to check progress.`
+        )
+        return
+      }
+      // Issue a fresh magic link for completed users
+      const token     = generateMagicToken()
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString()
+      await admin.from('magic_links').insert({
+        token,
+        phone,
+        session_id: session.id,
+        purpose:    'login',
+        expires_at: expiresAt
+      })
+      await sendText(phone,
+        `🔗 Here's a fresh dashboard link (valid for 1 hour):\n\n` +
+        `${baseUrl}/login.html?t=${token}\n\n` +
+        `_Tap to open. Need help? Reply HELP._`
+      )
+      return
+    }
+  }
+}
+
 // ── Main processor ────────────────────────────────────────────────
 async function processWebhookPayload(payload: any) {
   // Meta webhook envelope shape:
@@ -101,10 +250,18 @@ async function processWebhookPayload(payload: any) {
       .eq('phone', phone)
       .single()
 
+    // ── Check for commands BEFORE treating text as an answer ──────
+    const command = parseCommand(text)
+    if (command) {
+      await handleCommand(command, phone, session, admin)
+      continue
+    }
+
     if (!session || session.current_step === 0 || session.current_step >= 99) {
       // No active session — they came in cold or after completing
       await sendText(phone,
-        'Hi! 👋 To start your BizSco signup, please visit:\nhttps://ramaraju11.github.io/finwise-platform/whatsapp-start.html'
+        `Hi! 👋 To start your BizSco signup, please visit:\nhttps://ramaraju11.github.io/finwise-platform/whatsapp-start.html\n\n` +
+        `_Already completed? Reply *LINK* for a fresh dashboard URL. Reply *HELP* for more options._`
       )
       continue
     }
@@ -116,7 +273,7 @@ async function processWebhookPayload(payload: any) {
     const validation = question.validate(text)
     if (!validation.ok) {
       await sendText(phone,
-        `${validation.error}\n\n${question.prompt}`
+        `${validation.error}\n\n${question.prompt}\n\n_Stuck? Reply *HELP* anytime._`
       )
       continue
     }
@@ -165,7 +322,7 @@ async function processWebhookPayload(payload: any) {
         `🎉 All done, ${normalizedAnswers.biz_name}!\n\n` +
         `Your personalized BizSco dashboard is ready. Tap below to open it (valid for 1 hour):\n\n` +
         `${link}\n\n` +
-        `_Reply HELP anytime if you get stuck._`
+        `_If the link expires, reply *LINK* to get a fresh one. Reply *HELP* for more options._`
       )
     } else {
       // ── Advance to next question ──
