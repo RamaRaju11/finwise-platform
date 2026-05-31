@@ -46,7 +46,22 @@ a:hover{text-decoration:underline}
 .toc li{counter-increment:item;font-weight:600;color:var(--dark)}
 .toc li::before{content:counter(item) ".";color:var(--brand);font-weight:800;margin-right:8px}
 .toc a:hover{color:var(--brand)}
-@media (max-width:560px){.toc ol{grid-template-columns:1fr}}
+@media (max-width:560px){
+  .toc ol{grid-template-columns:1fr}
+  .hero{padding:40px 16px 36px}
+  .hero h1{font-size:1.8rem}
+  .hero-sub{font-size:.92rem}
+  .hero-meta{font-size:.74rem;gap:10px}
+  .container{padding:32px 18px 50px}
+  h2{font-size:1.2rem;margin:28px 0 10px}
+  h3{font-size:1rem}
+  p,li{font-size:.92rem}
+  table{font-size:.82rem}
+  th,td{padding:8px 8px}
+  .toc{padding:14px 18px}
+  .nav-links{gap:12px;font-size:.8rem}
+  .brand{font-size:1rem}
+}
 
 h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin:36px 0 12px;color:var(--dark);scroll-margin-top:80px}
 h2:first-of-type{margin-top:0}
