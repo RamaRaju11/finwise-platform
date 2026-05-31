@@ -17,7 +17,7 @@ import {
   isValidIndianMobile,
   normalizePhone
 } from "../_shared/meta-api.ts"
-import { WELCOME_TEMPLATE_NAME, WELCOME_TEMPLATE_LANG } from "../_shared/questions.ts"
+import { welcomeTemplateFor } from "../_shared/questions.ts"
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -31,12 +31,13 @@ serve(async (req) => {
   }
 
   try {
-    const { phone } = await req.json()
+    const { phone, language: rawLang } = await req.json()
 
     if (!phone || !isValidIndianMobile(phone)) {
       return json({ error: 'Invalid Indian mobile number. Must be 10 digits starting with 6/7/8/9.' }, 400)
     }
     const normalized = normalizePhone(phone)
+    const language   = rawLang === 'hi' ? 'hi' : 'en'   // only en/hi supported
 
     const admin = createClient(
       Deno.env.get('SUPABASE_URL')!,
@@ -61,28 +62,30 @@ serve(async (req) => {
         phone:        normalized,
         current_step: 1,
         answers:      {},
-        completed_at: null
+        completed_at: null,
+        language
       }, { onConflict: 'phone' })
       .select()
       .single()
     if (upsertErr) throw new Error('Failed to create session: ' + upsertErr.message)
 
-    // ── Send Q1 via approved template ──────────────────────────────
-    // The template "bizsco_welcome" embeds Q1 in its body. The {{1}}
-    // placeholder is the user's greeting name (we pass "there" until
-    // we know the business name from their first reply).
+    // ── Send Q1 via approved template (language-aware) ─────────────
+    // The template embeds Q1 in its body. The {{1}} placeholder is the
+    // user's greeting name (we pass a fallback until we know it).
+    const template = welcomeTemplateFor(language)
+    const greeting = language === 'hi' ? 'मित्र' : 'there'
     const sendResult = await sendTemplate(
       normalized,
-      WELCOME_TEMPLATE_NAME,
-      WELCOME_TEMPLATE_LANG,
-      ['there']
+      template.name,
+      template.languageCode,
+      [greeting]
     )
 
     if (!sendResult.ok) {
       // Don't fail the request — surface a friendlier message but
       // store the failure for debugging.
       await admin.from('wa_sessions').update({
-        last_template: WELCOME_TEMPLATE_NAME + ' (failed)'
+        last_template: template.name + ' (failed)'
       }).eq('id', session.id)
 
       return json({
@@ -93,7 +96,7 @@ serve(async (req) => {
 
     await admin.from('wa_sessions').update({
       last_msg_id:   sendResult.message_id,
-      last_template: WELCOME_TEMPLATE_NAME
+      last_template: template.name
     }).eq('id', session.id)
 
     return json({ ok: true, session_id: session.id })

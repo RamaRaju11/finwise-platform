@@ -69,6 +69,12 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
 .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--gray);font-size:.84rem;margin-bottom:20px;font-weight:600}
 .back-link:hover{color:var(--brand)}
 
+/* ── Language toggle ───────────────────────────────────────────── */
+.lang-toggle{display:flex;gap:6px;justify-content:center;margin:0 0 22px;background:var(--light);border-radius:999px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto;border:1px solid var(--border)}
+.lang-btn{background:transparent;border:none;padding:7px 16px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--gray);cursor:pointer;font-family:inherit;transition:all .15s}
+.lang-btn.active{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(79,70,229,.25)}
+.lang-btn:hover:not(.active){color:var(--dark)}
+
 /* ── Mobile fixes ───────────────────────────────────────────────── */
 @media(max-width:480px){
   body{padding:12px}
@@ -96,12 +102,18 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
       <div class="flag-chip">🇮🇳 India</div>
     </div>
 
-    <h1>Continue with WhatsApp</h1>
-    <p class="subtitle">No password to remember. We'll send you a quick welcome message to start your free financial dashboard.</p>
+    <!-- Language toggle -->
+    <div class="lang-toggle">
+      <button type="button" id="langEn" class="lang-btn active" onclick="setLang('en')">🇬🇧 English</button>
+      <button type="button" id="langHi" class="lang-btn" onclick="setLang('hi')">🇮🇳 हिंदी</button>
+    </div>
+
+    <h1 id="hTitle">Continue with WhatsApp</h1>
+    <p class="subtitle" id="hSubtitle">No password to remember. We'll send you a quick welcome message to start your free financial dashboard.</p>
 
     <div class="steps">
-      <div class="steps-title">How it works (under 2 minutes):</div>
-      <ol>
+      <div class="steps-title" id="stepsTitle">How it works (under 2 minutes):</div>
+      <ol id="stepsList">
         <li>Enter your WhatsApp number below</li>
         <li>We'll send 5 quick questions on WhatsApp</li>
         <li>Reply with answers — get your personalized plan</li>
@@ -109,21 +121,21 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
     </div>
 
     <form id="phoneForm" onsubmit="handleSubmit(event)">
-      <label for="phone">Your WhatsApp number</label>
+      <label for="phone" id="phoneLabel">Your WhatsApp number</label>
       <div class="phone-row">
         <div class="phone-cc">🇮🇳 +91</div>
         <input id="phone" class="phone-input" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national" required/>
       </div>
-      <div class="hint">10-digit Indian mobile number. We never share your number.</div>
+      <div class="hint" id="phoneHint">10-digit Indian mobile number. We never share your number.</div>
 
       <button type="submit" class="btn-wa" id="submitBtn">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.7-.9-2.9-1.5-4-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.3 0-.5s-.6-1.4-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.7 2.6 4.1 3.6 1.5.6 2.1.7 2.9.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.6.9 3.3 1.4 5.2 1.4 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.4 1 1-3.3-.2-.4C3.5 14.3 3 13.2 3 12c0-5 4-9 9-9s9 4 9 9-4 9-9 9z"/></svg>
-        <span>Continue on WhatsApp</span>
+        <span id="submitText">Continue on WhatsApp</span>
       </button>
       <div class="error" id="error"></div>
     </form>
 
-    <div class="foot">
+    <div class="foot" id="footText">
       By continuing, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.<br/>
       Standard WhatsApp message rates may apply.
     </div>
@@ -152,50 +164,142 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
 
 <script>
 /* ════════════════════════════════════════════════════════════════════
-   MOCK FLOW — replace with real Supabase Edge Function call when ready
-   POST /functions/v1/wa-start  body: { phone: "+91XXXXXXXXXX" }
+   Language toggle + wa-start POST
+   Selected language is passed as { phone, language } to the function.
 ══════════════════════════════════════════════════════════════════════ */
+
+const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ';
+
+let currentLang = 'en';
+
+const STRINGS = {
+  en: {
+    hTitle:      'Continue with WhatsApp',
+    hSubtitle:   "No password to remember. We'll send you a quick welcome message to start your free financial dashboard.",
+    stepsTitle:  'How it works (under 2 minutes):',
+    steps:       ['Enter your WhatsApp number below',
+                  "We'll send 5 quick questions on WhatsApp",
+                  'Reply with answers — get your personalized plan'],
+    phoneLabel:  'Your WhatsApp number',
+    phoneHint:   '10-digit Indian mobile number. We never share your number.',
+    submit:      'Continue on WhatsApp',
+    sending:     'Sending...',
+    foot:        'By continuing, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.<br/>Standard WhatsApp message rates may apply.',
+    errBad10:    'Please enter a 10-digit Indian mobile number.',
+    errBad69:    'Indian mobile numbers start with 6, 7, 8, or 9.',
+    confirmH:    'Check your WhatsApp',
+    confirmSub:  "We've sent the first question to your WhatsApp. Reply to it to continue.",
+    confirmNextT:'What happens next:',
+    confirmNext: 'Answer 5 quick questions on WhatsApp → receive a private 1-hour link to your dashboard. No app to install.'
+  },
+  hi: {
+    hTitle:      'WhatsApp से जारी रखें',
+    hSubtitle:   'कोई पासवर्ड याद रखने की ज़रूरत नहीं। हम आपके मुफ्त वित्तीय डैशबोर्ड के लिए स्वागत संदेश भेजेंगे।',
+    stepsTitle:  'यह कैसे काम करता है (2 मिनट से कम):',
+    steps:       ['नीचे अपना WhatsApp नंबर दर्ज करें',
+                  'हम WhatsApp पर 5 त्वरित प्रश्न भेजेंगे',
+                  'उत्तर दें — अपना व्यक्तिगत प्लान पाएं'],
+    phoneLabel:  'आपका WhatsApp नंबर',
+    phoneHint:   '10 अंकों का भारतीय मोबाइल नंबर। हम आपका नंबर साझा नहीं करते।',
+    submit:      'WhatsApp पर जारी रखें',
+    sending:     'भेज रहे हैं...',
+    foot:        'जारी रखकर, आप हमारी <a href="terms.html">शर्तें</a> और <a href="privacy.html">गोपनीयता</a> से सहमत हैं।<br/>मानक WhatsApp संदेश दरें लागू हो सकती हैं।',
+    errBad10:    'कृपया 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें।',
+    errBad69:    'भारतीय मोबाइल नंबर 6, 7, 8, या 9 से शुरू होते हैं।',
+    confirmH:    'अपना WhatsApp देखें',
+    confirmSub:  'हमने पहला प्रश्न आपके WhatsApp पर भेज दिया है। उत्तर देकर जारी रखें।',
+    confirmNextT:'आगे क्या होगा:',
+    confirmNext: 'WhatsApp पर 5 त्वरित प्रश्नों के उत्तर दें → अपने डैशबोर्ड के लिए 1 घंटे का निजी लिंक पाएं। कोई ऐप इंस्टॉल नहीं करना है।'
+  }
+};
+
+function setLang(lang){
+  currentLang = lang;
+  const t = STRINGS[lang];
+  document.getElementById('langEn').classList.toggle('active', lang === 'en');
+  document.getElementById('langHi').classList.toggle('active', lang === 'hi');
+  document.getElementById('hTitle').textContent      = t.hTitle;
+  document.getElementById('hSubtitle').textContent   = t.hSubtitle;
+  document.getElementById('stepsTitle').textContent  = t.stepsTitle;
+  document.getElementById('stepsList').innerHTML     = t.steps.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('phoneLabel').textContent  = t.phoneLabel;
+  document.getElementById('phoneHint').textContent   = t.phoneHint;
+  document.getElementById('submitText').textContent  = t.submit;
+  document.getElementById('footText').innerHTML      = t.foot;
+}
 
 function handleSubmit(e){
   e.preventDefault();
   var phone = document.getElementById('phone').value.replace(/\D/g,'');
   var err   = document.getElementById('error');
+  var t     = STRINGS[currentLang];
   err.classList.remove('show');
 
   if(phone.length !== 10){
-    err.textContent = 'Please enter a 10-digit Indian mobile number.';
+    err.textContent = t.errBad10;
     err.classList.add('show');
     return;
   }
   if(!/^[6-9]/.test(phone)){
-    err.textContent = 'Indian mobile numbers start with 6, 7, 8, or 9.';
+    err.textContent = t.errBad69;
     err.classList.add('show');
     return;
   }
 
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Sending...';
+  btn.querySelector('span').textContent = t.sending;
+  try { sessionStorage.setItem('bizsco_wa_phone', '+91' + phone); } catch(e){}
 
-  /* ── MOCK: Replace with real fetch when wa-start function exists ── */
-  // fetch('https://YOUR_PROJECT.supabase.co/functions/v1/wa-start', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
-  //   body: JSON.stringify({ phone: '+91' + phone })
-  // }).then(r => r.json()).then(data => { ... })
+  // Call real wa-start with selected language. Falls back to mock UI
+  // if the call errors (template not approved yet, network issue).
+  fetch(SUPA_URL + '/functions/v1/wa-start', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY
+    },
+    body: JSON.stringify({ phone: '+91' + phone, language: currentLang })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      showConfirmation(phone, false);
+    } else {
+      // Surface friendly error but still show mock dev panel
+      var msg = data.error || 'Could not send. Please try again.';
+      if (data.debug) console.warn('wa-start debug:', data.debug);
+      err.textContent = msg;
+      err.classList.add('show');
+      showConfirmation(phone, true);  // dev mode visible
+    }
+  })
+  .catch(e => {
+    console.error('wa-start network error:', e);
+    showConfirmation(phone, true);  // fallback to dev mode
+  });
+}
 
-  setTimeout(function(){
-    document.getElementById('inputState').style.display = 'none';
-    var conf = document.getElementById('confirmState');
-    conf.classList.add('show');
-    document.getElementById('confirmPhone').innerHTML = '🇮🇳 +91 ' + phone.replace(/(\d{5})(\d{5})/, '$1 $2');
+function showConfirmation(phone, devMode){
+  var t = STRINGS[currentLang];
+  document.getElementById('inputState').style.display = 'none';
+  var conf = document.getElementById('confirmState');
+  conf.classList.add('show');
+  document.getElementById('confirmPhone').innerHTML = '🇮🇳 +91 ' + phone.replace(/(\d{5})(\d{5})/, '$1 $2');
 
-    // store phone for later use during dev
-    try { sessionStorage.setItem('bizsco_wa_phone', '+91' + phone); } catch(e){}
+  // Localize confirmation
+  document.querySelector('#confirmState h2').textContent = t.confirmH;
+  document.querySelector('#confirmState .confirm-sub').textContent = t.confirmSub;
+  document.querySelector('#confirmState .confirm-next strong').textContent = t.confirmNextT;
+  var nextDiv = document.querySelector('#confirmState .confirm-next');
+  // The "next" text is the second text node after the <strong>
+  nextDiv.childNodes[2] && (nextDiv.childNodes[2].nodeValue = '\n' + t.confirmNext);
 
-    // Add phone to mock magic link for slightly more realistic dev experience
-    document.getElementById('mockLink').href = 'login.html?t=mock_demo_user&p=' + encodeURIComponent('+91' + phone);
-  }, 700);
+  // Hide dev panel when real send succeeded
+  document.getElementById('devPanel').style.display = devMode ? 'block' : 'none';
+  document.getElementById('mockLink').href = 'login.html?t=mock_demo_user&p=' + encodeURIComponent('+91' + phone);
 }
 
 /* Format the number as user types (1234 56789 → 12345 67890) */

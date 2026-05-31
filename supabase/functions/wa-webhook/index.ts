@@ -28,7 +28,7 @@ import {
   verifyWebhookSignature,
   generateMagicToken
 } from "../_shared/meta-api.ts"
-import { QUESTIONS } from "../_shared/questions.ts"
+import { getQuestions, s } from "../_shared/questions.ts"
 
 serve(async (req) => {
   const url = new URL(req.url)
@@ -113,99 +113,76 @@ async function handleCommand(
 ): Promise<void> {
   const baseUrl = Deno.env.get('PUBLIC_SITE_URL') ||
                   'https://ramaraju11.github.io/finwise-platform'
+  const lang = session?.language || 'en'
+  const signupUrl = `${baseUrl}/whatsapp-start.html`
 
   switch (cmd) {
     case 'HELP': {
       const stepInfo = session && session.current_step >= 1 && session.current_step <= 5
-        ? `You're on Q${session.current_step}/5.`
+        ? s(lang, 'helpOnStep', { step: session.current_step })
         : session && session.current_step === 99
-          ? 'You finished onboarding 🎉'
-          : 'You haven\'t started signup yet.'
+          ? s(lang, 'helpAfterDone')
+          : s(lang, 'helpNoSession')
 
       await sendText(phone,
-        `🆘 *BizSco Help*\n\n` +
+        `${s(lang, 'helpHeader')}\n\n` +
         `${stepInfo}\n\n` +
-        `*Commands you can send:*\n` +
-        `• *RESTART* — start over from Q1\n` +
-        `• *STATUS* — see which question you're on\n` +
-        `• *LINK* — get a fresh dashboard login link\n` +
-        `• *STOP* — cancel and clear my data\n` +
-        `• *HELP* — show this menu\n\n` +
-        `Or just reply with your answer to continue. 👇\n\n` +
-        `Need a human? Email hello@bizsco.in`
+        s(lang, 'helpCommands')
       )
       return
     }
 
     case 'RESTART': {
       if (!session) {
-        await sendText(phone,
-          `You don't have a signup in progress. Start here:\n${baseUrl}/whatsapp-start.html`
-        )
+        await sendText(phone, s(lang, 'noSessionToRestart', { url: signupUrl }))
         return
       }
-      // Reset the session to step 1
+      // Reset the session to step 1 (keep language preference)
       await admin.from('wa_sessions').update({
         current_step: 1,
         answers: {},
         completed_at: null
       }).eq('id', session.id)
 
-      const firstQ = QUESTIONS[0]
-      await sendText(phone,
-        `🔄 Starting over from Q1.\n\n${firstQ.prompt}`
-      )
+      const firstQ = getQuestions(lang)[0]
+      await sendText(phone, s(lang, 'restartedMsg') + firstQ.prompt)
       return
     }
 
     case 'STATUS': {
       if (!session) {
-        await sendText(phone,
-          `You haven't started signup yet. Start here:\n${baseUrl}/whatsapp-start.html`
-        )
+        await sendText(phone, s(lang, 'statusNoSession', { url: signupUrl }))
         return
       }
       if (session.current_step >= 99) {
-        await sendText(phone,
-          `✅ You completed all 5 questions. Reply *LINK* to get a fresh dashboard link.`
-        )
+        await sendText(phone, s(lang, 'statusCompleted'))
         return
       }
-      const step = session.current_step
       const answered = Object.keys(session.answers || {}).length
       await sendText(phone,
-        `📊 *Your progress*\n\n` +
-        `Step: Q${step}/5\n` +
-        `Answered so far: ${answered}\n\n` +
-        `Reply to the question I sent you, or send *RESTART* to begin again.`
+        `${s(lang, 'statusHeader')}\n\n` +
+        s(lang, 'statusBody', { step: session.current_step, answered })
       )
       return
     }
 
     case 'STOP': {
       if (session) {
-        // Mark session as stopped (don't fully delete — keeps audit trail)
         await admin.from('wa_sessions').update({
           current_step: 0,
           answers: {},
           completed_at: null
         }).eq('id', session.id)
       }
-      await sendText(phone,
-        `👋 No worries — your signup is paused and your data has been cleared from active onboarding.\n\n` +
-        `To start fresh anytime, visit:\n${baseUrl}/whatsapp-start.html`
-      )
+      await sendText(phone, s(lang, 'stoppedMsg', { url: signupUrl }))
       return
     }
 
     case 'RESEND': {
       if (!session || session.current_step < 99) {
-        await sendText(phone,
-          `You haven't completed onboarding yet. Reply to your current question, or send *STATUS* to check progress.`
-        )
+        await sendText(phone, s(lang, 'resendNotYetDone'))
         return
       }
-      // Issue a fresh magic link for completed users
       const token     = generateMagicToken()
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString()
       await admin.from('magic_links').insert({
@@ -215,11 +192,8 @@ async function handleCommand(
         purpose:    'login',
         expires_at: expiresAt
       })
-      await sendText(phone,
-        `🔗 Here's a fresh dashboard link (valid for 1 hour):\n\n` +
-        `${baseUrl}/login.html?t=${token}\n\n` +
-        `_Tap to open. Need help? Reply HELP._`
-      )
+      const link = `${baseUrl}/login.html?t=${token}`
+      await sendText(phone, s(lang, 'resendSentMsg', { link }))
       return
     }
   }
@@ -259,28 +233,30 @@ async function processWebhookPayload(payload: any) {
 
     if (!session || session.current_step === 0 || session.current_step >= 99) {
       // No active session — they came in cold or after completing
-      await sendText(phone,
-        `Hi! 👋 To start your BizSco signup, please visit:\nhttps://ramaraju11.github.io/finwise-platform/whatsapp-start.html\n\n` +
-        `_Already completed? Reply *LINK* for a fresh dashboard URL. Reply *HELP* for more options._`
-      )
+      const lang = session?.language || 'en'
+      const baseUrl = Deno.env.get('PUBLIC_SITE_URL') ||
+                      'https://ramaraju11.github.io/finwise-platform'
+      await sendText(phone, s(lang, 'coldStart', { url: `${baseUrl}/whatsapp-start.html` }))
       continue
     }
 
+    const lang = session.language || 'en'
+    const questions = getQuestions(lang)
     const stepIdx = session.current_step - 1
-    const question = QUESTIONS[stepIdx]
+    const question = questions[stepIdx]
     if (!question) continue  // shouldn't happen, but defensive
 
     const validation = question.validate(text)
     if (!validation.ok) {
       await sendText(phone,
-        `${validation.error}\n\n${question.prompt}\n\n_Stuck? Reply *HELP* anytime._`
+        `${validation.error}\n\n${question.prompt}\n\n${s(lang, 'stuckHint')}`
       )
       continue
     }
 
     // Save the answer
     const normalizedAnswers = { ...session.answers, ...question.normalize(text) }
-    const isLastQuestion = session.current_step === QUESTIONS.length
+    const isLastQuestion = session.current_step === questions.length
 
     if (isLastQuestion) {
       // ── Final step: complete the session, create user, issue magic link ──
@@ -318,16 +294,14 @@ async function processWebhookPayload(payload: any) {
                       'https://ramaraju11.github.io/finwise-platform'
       const link = `${baseUrl}/login.html?t=${token}`
 
-      await sendText(phone,
-        `🎉 All done, ${normalizedAnswers.biz_name}!\n\n` +
-        `Your personalized BizSco dashboard is ready. Tap below to open it (valid for 1 hour):\n\n` +
-        `${link}\n\n` +
-        `_If the link expires, reply *LINK* to get a fresh one. Reply *HELP* for more options._`
-      )
+      await sendText(phone, s(lang, 'completion', {
+        biz_name: normalizedAnswers.biz_name,
+        link
+      }))
     } else {
       // ── Advance to next question ──
       const nextStep = session.current_step + 1
-      const nextQuestion = QUESTIONS[nextStep - 1]
+      const nextQuestion = questions[nextStep - 1]
 
       await admin.from('wa_sessions').update({
         answers:      normalizedAnswers,
