@@ -274,15 +274,18 @@ export function s(lang: Language | string, key: string, vars: Record<string, str
 }
 
 // ── Initial template (Q1 inside an approved Meta template) ─────────
-// English template (already approved): bizsco_welcome
-// Hindi template (needs separate submission): bizsco_welcome_hi
-export const WELCOME_TEMPLATE_NAME_EN = 'bizsco_welcome'
+// English template (UTILITY, _v2 because original was approved under Marketing
+// which silently fails delivery in test mode): bizsco_welcome_v2
+// Hindi template (needs separate submission, should also be UTILITY): bizsco_welcome_hi
+export const WELCOME_TEMPLATE_NAME_EN = 'bizsco_welcome_v2'
 export const WELCOME_TEMPLATE_NAME_HI = 'bizsco_welcome_hi'
 
 export function welcomeTemplateFor(lang: Language | string): { name: string; languageCode: string } {
   if (lang === 'hi') {
     return { name: WELCOME_TEMPLATE_NAME_HI, languageCode: 'hi' }
   }
+  // bizsco_welcome was approved under language code 'en' (verified via Meta
+  // 132001 error when trying en_US). Don't change unless template re-approved.
   return { name: WELCOME_TEMPLATE_NAME_EN, languageCode: 'en' }
 }
 
