@@ -14,7 +14,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import {
   sendTemplate,
-  isValidIndianMobile,
+  isValidPhone,
   normalizePhone
 } from "../_shared/meta-api.ts"
 import { welcomeTemplateFor } from "../_shared/questions.ts"
@@ -31,12 +31,19 @@ serve(async (req) => {
   }
 
   try {
-    const { phone, language: rawLang } = await req.json()
+    const { phone, language: rawLang, country: rawCountry } = await req.json()
 
-    if (!phone || !isValidIndianMobile(phone)) {
-      return json({ error: 'Invalid Indian mobile number. Must be 10 digits starting with 6/7/8/9.' }, 400)
+    // Country hint: 'in' (default) for India, 'us' for USA testing
+    const country = rawCountry === 'us' ? 'us' : 'in'
+
+    if (!phone || !isValidPhone(phone, country)) {
+      return json({
+        error: country === 'us'
+          ? 'Invalid US mobile number. Must be 10 digits (area code 2-9).'
+          : 'Invalid Indian mobile number. Must be 10 digits starting with 6/7/8/9.'
+      }, 400)
     }
-    const normalized = normalizePhone(phone)
+    const normalized = normalizePhone(phone, country)
     const language   = rawLang === 'hi' ? 'hi' : 'en'   // only en/hi supported
 
     const admin = createClient(

@@ -133,12 +133,22 @@ export function generateMagicToken(): string {
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
-export function normalizePhone(phone: string): string {
-  // Accepts: +919876543210, 919876543210, 9876543210 → returns +919876543210
+export function normalizePhone(phone: string, country: string = 'in'): string {
+  // Accepts loose formats and returns "+CCXXXXXXXXXX".
+  // country='in' (default): treats bare 10-digit as Indian; country='us': treats bare 10-digit as US.
   const digits = phone.replace(/\D/g, '')
-  if (digits.length === 10) return '+91' + digits
+
+  // Already has country code prefix
   if (digits.length === 12 && digits.startsWith('91')) return '+' + digits
+  if (digits.length === 11 && digits.startsWith('1'))  return '+' + digits  // US/Canada
   if (digits.length === 13 && digits.startsWith('091')) return '+' + digits.slice(1)
+  if (digits.length === 12 && digits.startsWith('011')) return '+1' + digits.slice(2)
+
+  // Bare 10-digit — use the `country` hint
+  if (digits.length === 10) {
+    return country === 'us' ? '+1' + digits : '+91' + digits
+  }
+
   return '+' + digits  // last-resort; caller should validate
 }
 
@@ -150,4 +160,23 @@ export function isValidIndianMobile(phone: string): boolean {
   }
   if (digits.length === 10) return /^[6-9]/.test(digits)
   return false
+}
+
+// US phone validation: 10 digits, area code can't start with 0 or 1.
+// Either as bare 10 digits or 1XXXXXXXXXX format.
+export function isValidUSPhone(phone: string): boolean {
+  const digits = phone.replace(/\D/g, '')
+  if (digits.length === 11 && digits.startsWith('1')) {
+    return /^[2-9]/.test(digits.slice(1))
+  }
+  if (digits.length === 10) return /^[2-9]/.test(digits)
+  return false
+}
+
+// Accept either India or USA mobile (used during dev/testing).
+// `country` param indicates which validation to use; 'auto' tries both.
+export function isValidPhone(phone: string, country: string = 'auto'): boolean {
+  if (country === 'in') return isValidIndianMobile(phone)
+  if (country === 'us') return isValidUSPhone(phone)
+  return isValidIndianMobile(phone) || isValidUSPhone(phone)
 }

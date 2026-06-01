@@ -22,7 +22,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import {
   sendText,
-  isValidIndianMobile,
+  isValidPhone,
   normalizePhone,
   generateMagicToken
 } from "../_shared/meta-api.ts"
@@ -39,12 +39,17 @@ serve(async (req) => {
   }
 
   try {
-    const { phone } = await req.json()
+    const { phone, country: rawCountry } = await req.json()
+    const country = rawCountry === 'us' ? 'us' : 'in'
 
-    if (!phone || !isValidIndianMobile(phone)) {
-      return json({ error: 'Please enter a valid Indian WhatsApp number.' }, 400)
+    if (!phone || !isValidPhone(phone, country)) {
+      return json({
+        error: country === 'us'
+          ? 'Please enter a valid US WhatsApp number.'
+          : 'Please enter a valid Indian WhatsApp number.'
+      }, 400)
     }
-    const normalized = normalizePhone(phone)
+    const normalized = normalizePhone(phone, country)
 
     const admin = createClient(
       Deno.env.get('SUPABASE_URL')!,

@@ -36,7 +36,10 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
 .phone-row{display:flex;align-items:stretch;border:2px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .15s;background:#fff}
 .phone-row:focus-within{border-color:var(--wa)}
 .phone-cc{display:flex;align-items:center;gap:6px;padding:0 14px;background:var(--light);color:var(--dark);font-weight:700;font-size:.95rem;border-right:1px solid var(--border)}
-.phone-input{flex:1;border:none;padding:14px 14px;font-size:1rem;font-family:inherit;outline:none;background:transparent;letter-spacing:.5px}
+.phone-cc-select{padding:0 8px 0 14px;background:var(--light);color:var(--dark);font-weight:700;font-size:.95rem;border:none;border-right:1px solid var(--border);font-family:inherit;cursor:pointer;outline:none;appearance:menulist}
+.phone-cc-select:hover{background:#eef2ff}
+.phone-cc-select:focus{outline:2px solid var(--brand);outline-offset:-2px}
+.phone-input{flex:1;border:none;padding:14px 14px;font-size:1rem;font-family:inherit;outline:none;background:transparent;letter-spacing:.5px;min-width:0}
 .hint{font-size:.74rem;color:var(--gray);margin-top:8px;line-height:1.5}
 
 .btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--wa);color:#fff;border:none;padding:15px 20px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:22px;transition:all .15s;font-family:inherit}
@@ -123,7 +126,10 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
     <form id="phoneForm" onsubmit="handleSubmit(event)">
       <label for="phone" id="phoneLabel">Your WhatsApp number</label>
       <div class="phone-row">
-        <div class="phone-cc">🇮🇳 +91</div>
+        <select id="countrySelect" class="phone-cc-select" onchange="onCountryChange()">
+          <option value="in" selected>🇮🇳 +91</option>
+          <option value="us">🇺🇸 +1</option>
+        </select>
         <input id="phone" class="phone-input" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national" required/>
       </div>
       <div class="hint" id="phoneHint">10-digit Indian mobile number. We never share your number.</div>
@@ -172,6 +178,22 @@ const SUPA_URL = 'https://ugtfdtdbegdjqrdtplkg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVndGZkdGRiZWdkanFyZHRwbGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4OTM4MDUsImV4cCI6MjA2MTQ2OTgwNX0.XT5GBj5bCnNQ-OfMvvmRFT06qV5V5NQHBiTLsUqlQYQ';
 
 let currentLang = 'en';
+let currentCountry = 'in';   // 'in' or 'us' — switched via the dropdown
+
+const COUNTRY_CONFIG = {
+  in: { dial: '+91', placeholder: '98765 43210', startsWith: /^[6-9]/, hint: '10-digit Indian mobile number. We never share your number.', errStart: 'Indian mobile numbers start with 6, 7, 8, or 9.' },
+  us: { dial: '+1',  placeholder: '415 555 0142', startsWith: /^[2-9]/, hint: '10-digit US mobile number (for dev testing). We never share your number.', errStart: 'US area codes start with 2-9.' }
+};
+
+function onCountryChange(){
+  currentCountry = document.getElementById('countrySelect').value;
+  const cfg = COUNTRY_CONFIG[currentCountry];
+  document.getElementById('phone').placeholder = cfg.placeholder;
+  // Hint text in current language only updates the EN hint; the HI hint stays
+  if (currentLang === 'en'){
+    document.getElementById('phoneHint').textContent = cfg.hint;
+  }
+}
 
 const STRINGS = {
   en: {
@@ -234,6 +256,7 @@ function handleSubmit(e){
   var phone = document.getElementById('phone').value.replace(/\D/g,'');
   var err   = document.getElementById('error');
   var t     = STRINGS[currentLang];
+  var cfg   = COUNTRY_CONFIG[currentCountry];
   err.classList.remove('show');
 
   if(phone.length !== 10){
@@ -241,19 +264,20 @@ function handleSubmit(e){
     err.classList.add('show');
     return;
   }
-  if(!/^[6-9]/.test(phone)){
-    err.textContent = t.errBad69;
+  if(!cfg.startsWith.test(phone)){
+    err.textContent = cfg.errStart;
     err.classList.add('show');
     return;
   }
 
+  var fullPhone = cfg.dial + phone;
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.querySelector('span').textContent = t.sending;
-  try { sessionStorage.setItem('bizsco_wa_phone', '+91' + phone); } catch(e){}
+  try { sessionStorage.setItem('bizsco_wa_phone', fullPhone); } catch(e){}
 
-  // Call real wa-start with selected language. Falls back to mock UI
-  // if the call errors (template not approved yet, network issue).
+  // Call real wa-start with selected language + country. Falls back to mock
+  // UI if the call errors (template not approved yet, network issue, etc.)
   fetch(SUPA_URL + '/functions/v1/wa-start', {
     method: 'POST',
     headers: {
@@ -261,7 +285,7 @@ function handleSubmit(e){
       'apikey':        SUPA_KEY,
       'Authorization': 'Bearer ' + SUPA_KEY
     },
-    body: JSON.stringify({ phone: '+91' + phone, language: currentLang })
+    body: JSON.stringify({ phone: fullPhone, language: currentLang, country: currentCountry })
   })
   .then(r => r.json())
   .then(data => {
@@ -284,10 +308,16 @@ function handleSubmit(e){
 
 function showConfirmation(phone, devMode){
   var t = STRINGS[currentLang];
+  var cfg = COUNTRY_CONFIG[currentCountry];
   document.getElementById('inputState').style.display = 'none';
   var conf = document.getElementById('confirmState');
   conf.classList.add('show');
-  document.getElementById('confirmPhone').innerHTML = '🇮🇳 +91 ' + phone.replace(/(\d{5})(\d{5})/, '$1 $2');
+  var flag = currentCountry === 'us' ? '🇺🇸' : '🇮🇳';
+  // Format as XXX XXX XXXX (US) or XXXXX XXXXX (IN)
+  var formatted = currentCountry === 'us'
+    ? phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')
+    : phone.replace(/(\d{5})(\d{5})/, '$1 $2');
+  document.getElementById('confirmPhone').innerHTML = flag + ' ' + cfg.dial + ' ' + formatted;
 
   // Localize confirmation
   document.querySelector('#confirmState h2').textContent = t.confirmH;
@@ -299,7 +329,7 @@ function showConfirmation(phone, devMode){
 
   // Hide dev panel when real send succeeded
   document.getElementById('devPanel').style.display = devMode ? 'block' : 'none';
-  document.getElementById('mockLink').href = 'login.html?t=mock_demo_user&p=' + encodeURIComponent('+91' + phone);
+  document.getElementById('mockLink').href = 'login.html?t=mock_demo_user&p=' + encodeURIComponent(cfg.dial + phone);
 }
 
 /* Format the number as user types (1234 56789 → 12345 67890) */

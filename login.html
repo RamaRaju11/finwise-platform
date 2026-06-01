@@ -102,6 +102,7 @@ a{text-decoration:none;color:inherit}
 .refresh-row{display:flex;align-items:stretch;border:2px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;margin-bottom:6px;transition:border-color .15s;max-width:320px;margin-left:auto;margin-right:auto}
 .refresh-row:focus-within{border-color:var(--brand)}
 .refresh-cc{display:flex;align-items:center;gap:5px;padding:0 12px;background:var(--light);color:var(--dark);font-weight:700;font-size:.9rem;border-right:1px solid var(--border)}
+.refresh-cc-select{padding:0 6px 0 10px;background:var(--light);color:var(--dark);font-weight:700;font-size:.88rem;border:none;border-right:1px solid var(--border);font-family:inherit;cursor:pointer;outline:none;appearance:menulist}
 .refresh-input{flex:1;border:none;padding:12px 12px;font-size:1rem;font-family:inherit;outline:none;background:transparent;letter-spacing:.5px;width:100%}
 .refresh-error{display:none;color:#991b1b;background:#fee2e2;border-radius:8px;padding:8px 12px;font-size:.82rem;margin-bottom:10px;max-width:320px;margin-left:auto;margin-right:auto}
 .refresh-error.show{display:block}
@@ -132,7 +133,10 @@ a{text-decoration:none;color:inherit}
 
   <div id="refreshForm">
     <div class="refresh-row">
-      <div class="refresh-cc">🇮🇳 +91</div>
+      <select id="refreshCountry" class="refresh-cc-select">
+        <option value="in" selected>🇮🇳 +91</option>
+        <option value="us">🇺🇸 +1</option>
+      </select>
       <input id="refreshPhone" class="refresh-input" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national"/>
     </div>
     <div class="refresh-error" id="refreshError"></div>
@@ -401,24 +405,29 @@ function showError(title, msg){
    WhatsApp.
 ══════════════════════════════════════════════════════════════════════ */
 function requestRefresh(){
-  const input = document.getElementById('refreshPhone');
-  const err   = document.getElementById('refreshError');
-  const btn   = document.getElementById('refreshBtn');
-  const phone = (input.value || '').replace(/\D/g, '');
+  const input   = document.getElementById('refreshPhone');
+  const err     = document.getElementById('refreshError');
+  const btn     = document.getElementById('refreshBtn');
+  const country = document.getElementById('refreshCountry').value || 'in';
+  const phone   = (input.value || '').replace(/\D/g, '');
 
   err.classList.remove('show');
 
   if (phone.length !== 10){
-    err.textContent = 'Please enter a 10-digit Indian mobile number.';
+    err.textContent = 'Please enter a 10-digit mobile number.';
     err.classList.add('show');
     return;
   }
-  if (!/^[6-9]/.test(phone)){
-    err.textContent = 'Indian mobile numbers start with 6, 7, 8, or 9.';
+  const startRule = country === 'us' ? /^[2-9]/ : /^[6-9]/;
+  if (!startRule.test(phone)){
+    err.textContent = country === 'us'
+      ? 'US area codes start with 2-9.'
+      : 'Indian mobile numbers start with 6, 7, 8, or 9.';
     err.classList.add('show');
     return;
   }
 
+  const dial = country === 'us' ? '+1' : '+91';
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
@@ -429,7 +438,7 @@ function requestRefresh(){
       'apikey':        SUPA_KEY,
       'Authorization': 'Bearer ' + SUPA_KEY
     },
-    body: JSON.stringify({ phone: '+91' + phone })
+    body: JSON.stringify({ phone: dial + phone, country })
   })
   .then(r => r.json())
   .then(data => {
