@@ -52,12 +52,14 @@ serve(async (req) => {
   }
 
   const rawBody  = await req.text()
-  const sigOk    = await verifyWebhookSignature(
-    rawBody,
-    req.headers.get('x-hub-signature-256')
-  )
+  const sigHeader = req.headers.get('x-hub-signature-256')
+
+  // Real Meta webhooks always include X-Hub-Signature-256. We reject any
+  // request without a valid signature. (Note: Meta dashboard "Test" buttons
+  // send unsigned events, but they're optional for our flow.)
+  const sigOk = await verifyWebhookSignature(rawBody, sigHeader)
   if (!sigOk) {
-    console.warn('[wa-webhook] signature verification failed')
+    console.warn('[wa-webhook] signature verification failed — rejecting')
     return new Response('Forbidden', { status: 403 })
   }
 
