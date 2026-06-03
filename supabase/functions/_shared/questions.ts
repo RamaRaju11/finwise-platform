@@ -1,7 +1,7 @@
 // ════════════════════════════════════════════════════════════════════
 // 5-question onboarding flow for India WhatsApp signup.
-// Supports English (en) and Hindi (hi). Selection happens at signup
-// via the `language` column on wa_sessions.
+// Supports English (en), Hindi (hi), and Telugu (te). Selection happens
+// at signup via the `language` column on wa_sessions.
 //
 // Each question has: prompt text, validator, and normalizer.
 // The validator/normalizer is shared across languages (works on the
@@ -9,7 +9,7 @@
 // the PROMPT text changes between languages.
 // ════════════════════════════════════════════════════════════════════
 
-export type Language = 'en' | 'hi'
+export type Language = 'en' | 'hi' | 'te'
 
 export interface Question {
   key: string                                          // stored in answers JSONB
@@ -62,6 +62,22 @@ const WORRIES_HI = [
   'बहुत अधिक कर्ज है',
   'कर भ्रम',
   'बस खोज रहे हैं'
+]
+
+const INDUSTRIES_TE = ['చిల్లర వ్యాపారం (Retail)', 'రెస్టారెంట్ (Restaurant)', 'సేవలు (Services)', 'తయారీ (Manufacturing)', 'ఇతరములు (Other)']
+const REVENUE_BANDS_TE = [
+  '₹1 లక్ష కంటే తక్కువ / నెల',
+  '₹1 లక్ష – ₹5 లక్షలు / నెల',
+  '₹5 లక్షలు – ₹25 లక్షలు / నెల',
+  '₹25 లక్షలు – ₹1 కోటి / నెల',
+  '₹1 కోటి+ / నెల'
+]
+const WORRIES_TE = [
+  'నగదు అయిపోతోంది',
+  'రుణం అవసరం',
+  'చాలా అప్పులు ఉన్నాయి',
+  'పన్ను గందరగోళం',
+  'కేవలం పరిశీలిస్తున్నాను'
 ]
 
 function pickFromList(reply: string, list: string[]): string | null {
@@ -213,9 +229,81 @@ const QUESTIONS_HI: Question[] = [
   }
 ]
 
+// ════════════════════════════════════════════════════════════════════
+// TELUGU question set
+// ════════════════════════════════════════════════════════════════════
+const QUESTIONS_TE: Question[] = [
+  {
+    key: 'biz_name',
+    prompt: "ప్రశ్న 1/5: మీ వ్యాపారం పేరు ఏమిటి?\n\n(దయచేసి మీ సమాధానం టైప్ చేయండి 👇)",
+    validate: (r) => {
+      const v = r.trim()
+      if (v.length < 2) return { ok: false, error: 'దయచేసి మీ వ్యాపారం పేరు రాయండి (కనీసం 2 అక్షరాలు).' }
+      if (v.length > 80) return { ok: false, error: 'కొంచెం పొడవుగా ఉంది — 80 అక్షరాల కంటే తక్కువగా ఉంచండి.' }
+      return { ok: true }
+    },
+    normalize: (r) => ({ biz_name: r.trim() })
+  },
+  {
+    key: 'industry',
+    prompt:
+      "ప్రశ్న 2/5: మీ పరిశ్రమ ఏది?\n\n" +
+      INDUSTRIES_TE.map((v, i) => `${i + 1}. ${v}`).join('\n') +
+      "\n\n(సంఖ్యతో సమాధానం ఇవ్వండి — 1, 2, 3, 4 లేదా 5)",
+    validate: (r) => {
+      const v = pickFromList(r, INDUSTRIES)
+      return v ? { ok: true } : { ok: false, error: 'దయచేసి 1 నుండి 5 మధ్య సంఖ్యను పంపండి.' }
+    },
+    normalize: (r) => {
+      const v = pickFromList(r, INDUSTRIES)!
+      return { industry: v, industry_emoji: INDUSTRY_EMOJI[v] || '🏢' }
+    }
+  },
+  {
+    key: 'revenue_band',
+    prompt:
+      "ప్రశ్న 3/5: నెలవారీ ఆదాయం (₹) ఎంత?\n\n" +
+      REVENUE_BANDS_TE.map((v, i) => `${i + 1}. ${v}`).join('\n') +
+      "\n\n(సంఖ్యతో సమాధానం ఇవ్వండి)",
+    validate: (r) => {
+      const v = pickFromList(r, REVENUE_BANDS)
+      return v ? { ok: true } : { ok: false, error: 'దయచేసి 1 నుండి 5 మధ్య సంఖ్యను పంపండి.' }
+    },
+    normalize: (r) => ({ revenue_band: pickFromList(r, REVENUE_BANDS)! })
+  },
+  {
+    key: 'worry',
+    prompt:
+      "ప్రశ్న 4/5: ఇప్పుడు మీ అతిపెద్ద ఆందోళన ఏమిటి?\n\n" +
+      WORRIES_TE.map((v, i) => `${i + 1}. ${v}`).join('\n') +
+      "\n\n(సంఖ్యతో సమాధానం ఇవ్వండి — మీ డాష్‌బోర్డ్‌ను దీని ప్రకారం రూపొందిస్తాము)",
+    validate: (r) => {
+      const v = pickFromList(r, WORRIES)
+      return v ? { ok: true } : { ok: false, error: 'దయచేసి 1 నుండి 5 మధ్య సంఖ్యను పంపండి.' }
+    },
+    normalize: (r) => {
+      const v = pickFromList(r, WORRIES)!
+      return { worry: v, worry_key: WORRY_KEYS[v] || 'exploring' }
+    }
+  },
+  {
+    key: 'city',
+    prompt: "ప్రశ్న 5/5: మీరు ఏ నగరంలో ఉన్నారు? 📍\n\n(మీ రాష్ట్రం ప్రకారం గ్రాంట్లు మరియు పథకాలను కనుగొంటాము.)",
+    validate: (r) => {
+      const v = r.trim()
+      if (v.length < 2) return { ok: false, error: 'దయచేసి నగరం పేరు రాయండి.' }
+      if (v.length > 60) return { ok: false, error: 'చాలా పొడవుగా ఉంది — చిన్న పేరు రాయండి.' }
+      return { ok: true }
+    },
+    normalize: (r) => ({ city: r.trim() })
+  }
+]
+
 // ── Public API ─────────────────────────────────────────────────────
 export function getQuestions(lang: Language | string = 'en'): Question[] {
-  return lang === 'hi' ? QUESTIONS_HI : QUESTIONS_EN
+  if (lang === 'hi') return QUESTIONS_HI
+  if (lang === 'te') return QUESTIONS_TE
+  return QUESTIONS_EN
 }
 
 // Backward-compat: existing code that imports QUESTIONS keeps working.
@@ -261,11 +349,30 @@ export const STRINGS: Record<Language, Record<string, string>> = {
     resendSentMsg:    "🔗 यह रहा आपका नया डैशबोर्ड लिंक (1 घंटे के लिए मान्य):\n\n{link}\n\n_खोलने के लिए टैप करें। मदद के लिए HELP भेजें।_",
     completion:       "🎉 बहुत बढ़िया, {biz_name}!\n\nआपका व्यक्तिगत BizSco डैशबोर्ड तैयार है। 1 घंटे के लिए मान्य:\n\n{link}\n\n_अगर लिंक समाप्त हो जाए, *LINK* भेजकर नया लिंक पाएं। *HELP* से और विकल्प देखें।_",
     stuckHint:        "_अटक गए? कभी भी *HELP* भेजें।_"
+  },
+  te: {
+    coldStart:        "నమస్తే! 👋 BizSco సైనప్ ప్రారంభించడానికి, దయచేసి వెళ్లండి:\n{url}\n\n_ఇప్పటికే పూర్తి చేశారా? *LINK* పంపి కొత్త డాష్‌బోర్డ్ లింక్ పొందండి. *HELP* కోసం మరిన్ని ఎంపికలు._",
+    helpHeader:       "🆘 *BizSco సహాయం*",
+    helpOnStep:       "మీరు ప్రశ్న {step}/5 వద్ద ఉన్నారు.",
+    helpAfterDone:    "మీరు ఆన్‌బోర్డింగ్ పూర్తి చేశారు 🎉",
+    helpNoSession:    "మీరు ఇంకా సైనప్ ప్రారంభించలేదు.",
+    helpCommands:     "*మీరు ఈ కమాండ్‌లు పంపగలరు:*\n• *RESTART* — Q1 నుండి మళ్లీ ప్రారంభించండి\n• *STATUS* — మీరు ఏ ప్రశ్నపై ఉన్నారో చూడండి\n• *LINK* — కొత్త డాష్‌బోర్డ్ లింక్ పొందండి\n• *STOP* — రద్దు చేయండి మరియు డేటాను తీసివేయండి\n• *HELP* — ఈ మెనూ చూడండి\n\nలేదా కేవలం మీ సమాధానం పంపండి. 👇\n\nమనిషితో మాట్లాడాలా? hello@bizsco.in కి ఇమెయిల్ చేయండి.",
+    restartedMsg:     "🔄 Q1 నుండి మళ్లీ ప్రారంభిస్తున్నాము.\n\n",
+    noSessionToRestart: "మీకు సైనప్ జరగడం లేదు. ఇక్కడ నుండి ప్రారంభించండి:\n{url}",
+    statusHeader:     "📊 *మీ ప్రగతి*",
+    statusBody:       "దశ: ప్రశ్న {step}/5\nఇప్పటివరకు సమాధానాలు: {answered}\n\nనేను పంపిన ప్రశ్నకు సమాధానం ఇవ్వండి, లేదా *RESTART* ని పంపండి.",
+    statusCompleted:  "✅ మీరు అన్ని 5 ప్రశ్నలను పూర్తి చేశారు. కొత్త లింక్ కోసం *LINK* పంపండి.",
+    statusNoSession:  "మీరు ఇంకా సైనప్ ప్రారంభించలేదు. ఇక్కడ నుండి ప్రారంభించండి:\n{url}",
+    stoppedMsg:       "👋 ఫరవాలేదు — మీ సైనప్ ఆపివేయబడింది మరియు డేటా తొలగించబడింది.\n\nమళ్లీ ప్రారంభించడానికి ఎప్పుడైనా వెళ్లండి:\n{url}",
+    resendNotYetDone: "మీరు ఇంకా ఆన్‌బోర్డింగ్ పూర్తి చేయలేదు. మీ ప్రస్తుత ప్రశ్నకు సమాధానం ఇవ్వండి, లేదా *STATUS* పంపండి.",
+    resendSentMsg:    "🔗 ఇదిగో మీ కొత్త డాష్‌బోర్డ్ లింక్ (1 గంట చెల్లుబాటు):\n\n{link}\n\n_తెరవడానికి టాప్ చేయండి. సహాయం కోసం HELP పంపండి._",
+    completion:       "🎉 బాగుంది, {biz_name}!\n\nమీ వ్యక్తిగత BizSco డాష్‌బోర్డ్ సిద్ధంగా ఉంది. 1 గంట చెల్లుబాటు:\n\n{link}\n\n_లింక్ ముగిసిపోతే, *LINK* పంపి కొత్త లింక్ పొందండి. *HELP* కోసం మరిన్ని ఎంపికలు._",
+    stuckHint:        "_చిక్కుబడి ఉన్నారా? ఎప్పుడైనా *HELP* పంపండి._"
   }
 }
 
 export function s(lang: Language | string, key: string, vars: Record<string, string | number> = {}): string {
-  const lang2 = (lang === 'hi' ? 'hi' : 'en') as Language
+  const lang2: Language = (lang === 'hi' || lang === 'te') ? lang : 'en'
   let txt = STRINGS[lang2][key] || STRINGS.en[key] || key
   for (const [k, v] of Object.entries(vars)) {
     txt = txt.replace(new RegExp('\\{' + k + '\\}', 'g'), String(v))
@@ -274,18 +381,19 @@ export function s(lang: Language | string, key: string, vars: Record<string, str
 }
 
 // ── Initial template (Q1 inside an approved Meta template) ─────────
-// English template (UTILITY category — original bizsco_welcome was auto-
-// classified as Marketing by Meta, which silently fails delivery in test
-// mode). The transactional wording in bizsco_utility passes UTILITY review.
-// Hindi template (needs separate submission, also UTILITY): bizsco_welcome_hi
+// All UTILITY category (original bizsco_welcome was auto-classified as
+// Marketing by Meta and silently failed delivery in test mode). The
+// transactional wording in bizsco_utility passes UTILITY review.
+// Hindi + Telugu need separate submissions — see _shared/HINDI_TEMPLATE.md
+// and _shared/TELUGU_TEMPLATE.md for the exact bodies.
 export const WELCOME_TEMPLATE_NAME_EN = 'bizsco_utility'
-export const WELCOME_TEMPLATE_NAME_HI = 'bizsco_welcome_hi'
+export const WELCOME_TEMPLATE_NAME_HI = 'bizsco_utility_hi'
+export const WELCOME_TEMPLATE_NAME_TE = 'bizsco_utility_te'
 
 export function welcomeTemplateFor(lang: Language | string): { name: string; languageCode: string } {
-  if (lang === 'hi') {
-    return { name: WELCOME_TEMPLATE_NAME_HI, languageCode: 'hi' }
-  }
-  // bizsco_welcome was approved under language code 'en' (verified via Meta
+  if (lang === 'hi') return { name: WELCOME_TEMPLATE_NAME_HI, languageCode: 'hi' }
+  if (lang === 'te') return { name: WELCOME_TEMPLATE_NAME_TE, languageCode: 'te' }
+  // bizsco_utility was approved under language code 'en' (verified via Meta
   // 132001 error when trying en_US). Don't change unless template re-approved.
   return { name: WELCOME_TEMPLATE_NAME_EN, languageCode: 'en' }
 }

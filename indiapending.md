@@ -1,7 +1,29 @@
 # India WhatsApp Login — Pending Items
 
-_Last updated: 2026-05-26_
+_Last updated: 2026-06-03_
 _Project ref: `ugtfdtdbegdjqrdtplkg` (SmallBiz Supabase)_
+
+---
+
+## 🐛 ISSUES FOUND DURING END-TO-END TEST (2026-06-03)
+
+End-to-end WhatsApp flow validated working with US test phone +1 646 427 5578 on 2026-06-03. User noticed a few issues during the walkthrough — to be detailed and triaged here.
+
+### Issue tracker
+
+| # | Where | What | Severity | Status |
+|---|---|---|---|---|
+| 1 | _TBD_ | _User will document details after detailed test_ | _TBD_ | 🔍 To investigate |
+| 2 | _TBD_ | _User will document details after detailed test_ | _TBD_ | 🔍 To investigate |
+| _add rows as found_ | | | | |
+
+**Action**: User to capture concrete details (screenshot, exact step, expected vs actual) for each issue. Then I prioritize and fix.
+
+### Test reference (last successful flow)
+- Web form: https://ramaraju11.github.io/finwise-platform/whatsapp-start.html
+- Test phone (must be in Meta test recipients): +1 646 427 5578 (or any verified test number)
+- Country dropdown: 🇺🇸 +1 for dev testing
+- Expected: Q1 → Q5 in WhatsApp → magic link → personalized dashboard (no orange dev badge)
 
 ---
 

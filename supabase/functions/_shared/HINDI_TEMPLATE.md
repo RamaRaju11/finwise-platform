@@ -1,8 +1,8 @@
-# Hindi Meta Template to Submit
+# Hindi Meta Template — `bizsco_utility_hi`
 
-Submit this in Meta Business Suite → WhatsApp → Message Templates → Create Template.
+Submit at: https://developers.facebook.com/apps/1352144620104656/whatsapp-business/wa-manager/message-templates/
 
-**Why a separate template**: Meta requires each language as a distinct approved template. Even though we have `bizsco_welcome` (English) approved, Hindi needs its own. Submit this AFTER the English one is approved so you have a working version while waiting (~24 hr).
+**Why this version**: Original wording ("Welcome to BizSco — India's free SMB financial platform") got auto-classified as Marketing by Meta's AI, which silently fails delivery in test mode. This rewrite uses transactional UTILITY-safe language (same pattern as approved English `bizsco_utility`).
 
 ---
 
@@ -10,23 +10,25 @@ Submit this in Meta Business Suite → WhatsApp → Message Templates → Create
 
 | Field | Value |
 |---|---|
-| **Template name** | `bizsco_welcome_hi` |
-| **Category** | UTILITY |
+| **Template name** | `bizsco_utility_hi` |
+| **Category** | **UTILITY** ← MUST be Utility, NOT Marketing |
 | **Language** | Hindi (`hi`) |
-| **Header** | None |
-| **Footer** | (optional) `Powered by BizSco` |
-| **Buttons** | None |
+| **Header** | (skip) |
+| **Footer** | (skip, or `Bizsco`) |
+| **Buttons** | (skip) |
 
 ## Body (paste exactly)
 
 ```
-नमस्ते {{1}}! 👋 BizSco में आपका स्वागत है — भारत के SMB के लिए मुफ्त वित्तीय प्लेटफ़ॉर्म।
+नमस्ते {{1}},
 
-आपका डैशबोर्ड व्यक्तिगत बनाने के लिए 5 त्वरित प्रश्न:
+आपका BizSco खाता सेटअप शुरू हो गया है।
+
+सेटअप पूरा करने के लिए कृपया 5 छोटे प्रश्नों के उत्तर दें।
 
 प्रश्न 1/5: आपके व्यवसाय का नाम क्या है?
 
-(कृपया अपना उत्तर टाइप करें 👇)
+जारी रखने के लिए अपना उत्तर भेजें।
 ```
 
 ## Sample value for {{1}}
@@ -35,23 +37,43 @@ Submit this in Meta Business Suite → WhatsApp → Message Templates → Create
 मित्र
 ```
 
-(Translates as "friend" — this is the generic greeting wa-start passes for Hindi users.)
+(Translates as "friend" — generic greeting wa-start passes for Hindi users.)
+
+## English meaning of the body
+
+> Hello {{1}},
+>
+> Your BizSco account setup has been initiated.
+>
+> Please answer 5 short questions to complete setup.
+>
+> Question 1/5: What is your business name?
+>
+> Reply with your answer to continue.
 
 ---
 
-## After approval
+## After Meta approves
 
-Once status changes from **In review** → **Approved**:
+No code changes needed. `wa-start` already routes Hindi sessions to `bizsco_utility_hi`. Verify approval status changes to **Active** before testing — if you click Send Message on Meta dashboard and the template isn't in the dropdown, it's not yet active.
 
-1. No code changes needed — `wa-start` already routes Hindi sessions to `bizsco_welcome_hi`
-2. Test on whatsapp-start.html — switch to हिंदी toggle, submit your test number
-3. You'll receive the welcome message in Hindi instead of English
+## If Meta auto-classifies as Marketing again
 
-## If Meta rejects
+Look at the popup warning before submission. If Meta says "this template contains marketing content", DO NOT proceed. Instead, simplify the body further. Marketing-trigger words to avoid:
+- "Welcome to", "platform", "free", "offer"
+- Brand promotional phrases
+- Emojis in headline (👋 is risky)
 
-Common rejection reasons:
-- Marketing-like language → fix: keep it informational, no "Get!" or "Click!"
-- Missing variable sample → fix: ensure {{1}} sample value is filled
-- Banned phrases → fix: avoid "free money", "guaranteed", or anything financial-promotional
+If still rejected, fall back to:
 
-Resubmit with adjustments — usually approved on second try within 24 hr.
+```
+नमस्ते {{1}},
+
+आपका खाता सेटअप ప్రారంభమైంది.
+
+प्रश्न 1/5: आपके व्यवसाय का नाम क्या है?
+
+उत्तर देकर जारी रखें।
+```
+
+(More terse, more clearly transactional.)

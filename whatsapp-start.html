@@ -109,6 +109,7 @@ label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bo
     <div class="lang-toggle">
       <button type="button" id="langEn" class="lang-btn active" onclick="setLang('en')">🇬🇧 English</button>
       <button type="button" id="langHi" class="lang-btn" onclick="setLang('hi')">🇮🇳 हिंदी</button>
+      <button type="button" id="langTe" class="lang-btn" onclick="setLang('te')">🇮🇳 తెలుగు</button>
     </div>
 
     <h1 id="hTitle">Continue with WhatsApp</h1>
@@ -233,6 +234,25 @@ const STRINGS = {
     confirmSub:  'हमने पहला प्रश्न आपके WhatsApp पर भेज दिया है। उत्तर देकर जारी रखें।',
     confirmNextT:'आगे क्या होगा:',
     confirmNext: 'WhatsApp पर 5 त्वरित प्रश्नों के उत्तर दें → अपने डैशबोर्ड के लिए 1 घंटे का निजी लिंक पाएं। कोई ऐप इंस्टॉल नहीं करना है।'
+  },
+  te: {
+    hTitle:      'WhatsApp తో కొనసాగండి',
+    hSubtitle:   'పాస్‌వర్డ్ గుర్తు ఉంచుకోనవసరం లేదు. మీ ఉచిత ఆర్థిక డాష్‌బోర్డ్ కోసం స్వాగత సందేశం పంపుతాము.',
+    stepsTitle:  'ఇది ఎలా పనిచేస్తుంది (2 నిమిషాల కంటే తక్కువ):',
+    steps:       ['క్రింద మీ WhatsApp నంబర్ నమోదు చేయండి',
+                  'WhatsApp లో 5 త్వరిత ప్రశ్నలు పంపుతాము',
+                  'సమాధానాలతో — మీ వ్యక్తిగత ప్లాన్ పొందండి'],
+    phoneLabel:  'మీ WhatsApp నంబర్',
+    phoneHint:   '10 అంకెల భారతీయ మొబైల్ నంబర్. మీ నంబర్‌ను ఎవరితోనూ పంచుకోము.',
+    submit:      'WhatsApp లో కొనసాగండి',
+    sending:     'పంపుతున్నాము...',
+    foot:        'కొనసాగించడం ద్వారా, మీరు మా <a href="terms.html">నిబంధనలు</a> మరియు <a href="privacy.html">గోప్యత</a> కు అంగీకరిస్తారు.<br/>ప్రామాణిక WhatsApp సందేశ ఛార్జీలు వర్తించవచ్చు.',
+    errBad10:    'దయచేసి 10 అంకెల భారతీయ మొబైల్ నంబర్ నమోదు చేయండి.',
+    errBad69:    'భారతీయ మొబైల్ నంబర్‌లు 6, 7, 8, లేదా 9 తో ప్రారంభమవుతాయి.',
+    confirmH:    'మీ WhatsApp చూడండి',
+    confirmSub:  'మేము మీ WhatsApp కి మొదటి ప్రశ్న పంపాము. సమాధానం ఇచ్చి కొనసాగించండి.',
+    confirmNextT:'తర్వాత ఏం జరుగుతుంది:',
+    confirmNext: 'WhatsApp లో 5 త్వరిత ప్రశ్నలకు సమాధానం ఇవ్వండి → మీ డాష్‌బోర్డ్ కోసం 1 గంట ప్రైవేట్ లింక్ పొందండి. యాప్ ఇన్‌స్టాల్ చేయాల్సిన అవసరం లేదు.'
   }
 };
 
@@ -241,6 +261,7 @@ function setLang(lang){
   const t = STRINGS[lang];
   document.getElementById('langEn').classList.toggle('active', lang === 'en');
   document.getElementById('langHi').classList.toggle('active', lang === 'hi');
+  document.getElementById('langTe').classList.toggle('active', lang === 'te');
   document.getElementById('hTitle').textContent      = t.hTitle;
   document.getElementById('hSubtitle').textContent   = t.hSubtitle;
   document.getElementById('stepsTitle').textContent  = t.stepsTitle;

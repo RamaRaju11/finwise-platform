@@ -44,7 +44,8 @@ serve(async (req) => {
       }, 400)
     }
     const normalized = normalizePhone(phone, country)
-    const language   = rawLang === 'hi' ? 'hi' : 'en'   // only en/hi supported
+    // Supported languages: en (English), hi (Hindi), te (Telugu). Anything else → en.
+    const language = (rawLang === 'hi' || rawLang === 'te') ? rawLang : 'en'
 
     const admin = createClient(
       Deno.env.get('SUPABASE_URL')!,
@@ -80,7 +81,9 @@ serve(async (req) => {
     // The template embeds Q1 in its body. The {{1}} placeholder is the
     // user's greeting name (we pass a fallback until we know it).
     const template = welcomeTemplateFor(language)
-    const greeting = language === 'hi' ? 'मित्र' : 'there'
+    const greeting = language === 'hi' ? 'मित्र'
+                   : language === 'te' ? 'మిత్రమా'
+                   : 'there'
     const sendResult = await sendTemplate(
       normalized,
       template.name,
