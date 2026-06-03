@@ -274,10 +274,11 @@ export function s(lang: Language | string, key: string, vars: Record<string, str
 }
 
 // ── Initial template (Q1 inside an approved Meta template) ─────────
-// English template (UTILITY, _v2 because original was approved under Marketing
-// which silently fails delivery in test mode): bizsco_welcome_v2
-// Hindi template (needs separate submission, should also be UTILITY): bizsco_welcome_hi
-export const WELCOME_TEMPLATE_NAME_EN = 'bizsco_welcome_v2'
+// English template (UTILITY category — original bizsco_welcome was auto-
+// classified as Marketing by Meta, which silently fails delivery in test
+// mode). The transactional wording in bizsco_utility passes UTILITY review.
+// Hindi template (needs separate submission, also UTILITY): bizsco_welcome_hi
+export const WELCOME_TEMPLATE_NAME_EN = 'bizsco_utility'
 export const WELCOME_TEMPLATE_NAME_HI = 'bizsco_welcome_hi'
 
 export function welcomeTemplateFor(lang: Language | string): { name: string; languageCode: string } {
