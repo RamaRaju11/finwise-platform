@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BizSco — Strategy Deck</title>
+<meta name="theme-color" content="#4f46e5"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4f46e5;--brand-dark:#3730a3;--brand-light:#6366f1;
+  --sky:#38bdf8;--green:#10b981;--amber:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--dark2:#1e293b;
+  --gray:#64748b;--gray-light:#94a3b8;
+  --light:#f8fafc;--border:#e2e8f0;
+}
+html,body{height:100%;background:#1e293b;overflow:hidden;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+body{display:flex;align-items:center;justify-content:center}
+
+/* ─── Slide container (16:9, fixed aspect like real PPT) ─── */
+.deck{
+  width:min(1280px, 95vw);
+  aspect-ratio:16/9;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  position:relative;
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;inset:0;
+  padding:50px 60px;
+  display:none;
+  flex-direction:column;
+  background:#fff;
+  color:var(--dark);
+  overflow:auto;
+}
+.slide.active{display:flex}
+
+/* Slide-level visual treatments */
+.slide.dark{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff}
+.slide.dark .title-eyebrow{color:#a5b4fc}
+.slide.dark h1, .slide.dark h2{color:#fff}
+.slide.dark p{color:#cbd5e1}
+
+.slide.indigo{background:linear-gradient(135deg,var(--brand),#6366f1);color:#fff}
+.slide.indigo h1, .slide.indigo h2{color:#fff}
+.slide.indigo p{color:#e0e7ff}
+.slide.indigo .title-eyebrow{color:#c7d2fe}
+
+/* ─── Typography ─── */
+.title-eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);margin-bottom:14px}
+.slide h1{font-size:2.8rem;font-weight:800;letter-spacing:-.025em;line-height:1.1;margin-bottom:14px}
+.slide h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;color:var(--dark)}
+.slide h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
+.slide p{font-size:1rem;line-height:1.65;color:#475569;margin-bottom:10px}
+.lede{font-size:1.2rem;line-height:1.6;color:var(--gray);margin-bottom:24px;max-width:780px}
+
+/* ─── Title slide (slide 1) ─── */
+.s-title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.s-title-logo{display:flex;align-items:center;gap:14px;margin-bottom:38px}
+.s-title-logo .icon{width:56px;height:56px;background:linear-gradient(135deg,var(--brand),var(--sky));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.s-title-logo .name{font-size:2rem;font-weight:800;letter-spacing:-.03em}
+.s-title-logo .name span{color:#a5b4fc}
+.s-title-h{font-size:4.5rem;font-weight:900;letter-spacing:-.04em;line-height:1.0;margin-bottom:18px}
+.s-title-h .grad{background:linear-gradient(135deg,#a5b4fc,#7dd3fc,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-title-sub{font-size:1.4rem;font-weight:600;color:#cbd5e1;max-width:760px;line-height:1.5}
+.s-title-tags{margin-top:34px;display:flex;gap:10px;flex-wrap:wrap}
+.s-title-tag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:999px;font-size:.86rem;font-weight:700;color:#e0e7ff}
+
+/* ─── Generic content layouts ─── */
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:flex-start;flex:1}
+.cols-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;flex:1}
+.cols-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;flex:1}
+
+/* Stat box */
+.stat{padding:22px 24px;background:var(--light);border-radius:14px;border-left:5px solid var(--brand)}
+.stat-num{font-size:2.6rem;font-weight:900;letter-spacing:-.03em;color:var(--brand);line-height:1}
+.stat-label{font-size:.86rem;color:var(--gray);font-weight:600;line-height:1.45;margin-top:6px}
+
+/* Feature card */
+.fcard{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.fcard.featured{border-color:var(--brand);background:linear-gradient(135deg,#eef2ff,#fff)}
+.fcard.dark{background:#1e293b;color:#fff;border-color:#334155}
+.fcard.dark h3{color:#fff}
+.fcard.dark p, .fcard.dark li{color:#cbd5e1}
+.fcard .ico{font-size:1.7rem;line-height:1}
+.fcard h3{font-size:1rem;font-weight:800;letter-spacing:-.01em}
+.fcard p{font-size:.84rem;line-height:1.5;color:var(--gray)}
+.fcard ul{list-style:none;padding:0;margin-top:6px;font-size:.82rem}
+.fcard ul li{padding:3px 0;color:var(--dark)}
+.fcard ul li::before{content:'✓ ';color:var(--green);font-weight:700}
+.fcard ul li.cross::before{content:'✗ ';color:#cbd5e1}
+.fcard ul li.cross{color:var(--gray)}
+
+/* Pricing grid (slide 5) */
+.tier{background:#fff;border:2px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column}
+.tier.featured{border-color:var(--brand);box-shadow:0 8px 24px rgba(79,70,229,.18)}
+.tier .tier-name{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:6px}
+.tier .tier-price{font-size:1.7rem;font-weight:900;letter-spacing:-.02em;color:var(--dark);line-height:1}
+.tier .tier-price small{font-size:.7rem;font-weight:600;color:var(--gray);letter-spacing:0}
+.tier .tier-tagline{font-size:.78rem;color:var(--gray);margin:6px 0 12px;line-height:1.45;min-height:30px}
+.tier ul{list-style:none;padding:0;font-size:.78rem;line-height:1.65}
+.tier ul li{padding:3px 0;color:var(--dark)}
+.tier ul li::before{content:'✓ ';color:var(--green);font-weight:700}
+.tier.featured::before{content:'POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.1em}
+.tier{position:relative}
+
+/* User journey diagram (slide 4) */
+.journey{display:flex;align-items:stretch;gap:8px;flex:1;margin-top:14px}
+.j-step{flex:1;background:linear-gradient(135deg,#eef2ff,#fff);border-radius:12px;padding:18px 14px;text-align:center;border:1.5px solid var(--border);position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.j-step .j-num{width:34px;height:34px;background:var(--brand);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;margin-bottom:6px}
+.j-step .j-ico{font-size:2rem;margin-bottom:4px}
+.j-step h4{font-size:.92rem;font-weight:800;letter-spacing:-.01em}
+.j-step p{font-size:.74rem;color:var(--gray);line-height:1.4;margin:0}
+.j-arrow{display:flex;align-items:center;color:var(--brand);font-size:1.5rem;font-weight:900}
+
+/* Trust badges (slide 7) */
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex:1}
+.trust-item{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.trust-item .ico{font-size:1.7rem}
+.trust-item h4{font-size:.92rem;font-weight:800;color:#166534}
+.trust-item p{font-size:.78rem;color:#15803d;line-height:1.45}
+
+/* Status: covered vs pending (slide 9) */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;flex:1}
+.status-col{padding:24px;border-radius:14px;display:flex;flex-direction:column;gap:8px}
+.status-col.done{background:linear-gradient(135deg,#f0fdf4,#fff);border:1.5px solid #bbf7d0}
+.status-col.todo{background:linear-gradient(135deg,#fef9c3,#fff);border:1.5px solid #fde047}
+.status-col h3{font-size:1.1rem;font-weight:800;margin-bottom:8px}
+.status-col.done h3{color:#166534}
+.status-col.todo h3{color:#92400e}
+.status-col ul{list-style:none;padding:0;font-size:.84rem;line-height:1.7}
+.status-col.done ul li::before{content:'✅ '}
+.status-col.todo ul li::before{content:'⏳ '}
+
+/* Roadmap timeline (slide 10) */
+.timeline{position:relative;padding:16px 0;flex:1;display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.tl-item{display:flex;gap:18px;align-items:flex-start}
+.tl-time{flex-shrink:0;width:130px;font-size:.78rem;font-weight:800;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;padding-top:3px}
+.tl-body{flex:1;background:var(--light);border-radius:10px;padding:12px 16px;border-left:4px solid var(--brand)}
+.tl-body h4{font-size:.95rem;font-weight:800;margin-bottom:3px}
+.tl-body p{font-size:.78rem;color:var(--gray);line-height:1.4;margin:0}
+
+/* ─── Phone mockup for mobile-first slide ─── */
+.phone-mockup{width:230px;aspect-ratio:9/16;background:linear-gradient(160deg,#075E54,#128C7E);border-radius:24px;border:6px solid #1e293b;padding:14px;display:flex;flex-direction:column;gap:10px;align-self:center;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.phone-mockup .pm-bar{background:rgba(255,255,255,.18);height:30px;border-radius:6px}
+.phone-mockup .pm-msg{background:#fff;border-radius:8px;padding:7px 10px;font-size:.62rem;line-height:1.35;color:#111}
+.phone-mockup .pm-msg.out{background:#DCF8C6;align-self:flex-end;max-width:75%}
+.phone-mockup .pm-msg b{font-weight:700}
+
+/* ─── Footer / page nav ─── */
+.deck-footer{position:absolute;bottom:18px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:.74rem;color:var(--gray);font-weight:600;pointer-events:none}
+.deck-footer.dark-text, .slide.dark .deck-footer, .slide.indigo .deck-footer{color:rgba(255,255,255,.6)}
+.brand-mark{display:flex;align-items:center;gap:6px;font-weight:800}
+.brand-mark .dot{width:18px;height:18px;background:linear-gradient(135deg,var(--brand),var(--sky));border-radius:5px}
+.slide.dark .brand-mark, .slide.indigo .brand-mark{color:#fff}
+
+.page-num{font-size:.74rem;font-weight:700;letter-spacing:.1em}
+
+/* ─── Nav controls ─── */
+.nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);padding:8px 12px;border-radius:999px;z-index:99;border:1px solid #334155}
+.nav button{background:transparent;border:none;color:#cbd5e1;font-size:.86rem;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer;font-family:inherit}
+.nav button:hover{background:#334155;color:#fff}
+.nav button:disabled{opacity:.3;cursor:not-allowed}
+.nav .progress{color:#94a3b8;font-size:.78rem;font-weight:700;padding:6px 10px}
+
+/* Keyboard hint */
+.hint{position:fixed;top:14px;right:18px;background:rgba(15,23,42,.6);color:#cbd5e1;padding:5px 12px;border-radius:6px;font-size:.7rem;font-weight:600}
+.hint kbd{background:#334155;padding:1px 6px;border-radius:3px;font-family:monospace;font-size:.66rem;margin:0 1px}
+
+@media print {
+  body{background:#fff}
+  .deck{box-shadow:none;border-radius:0;width:100%;height:100vh}
+  .slide{display:flex !important;page-break-after:always}
+  .nav,.hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="hint">
+  <kbd>←</kbd><kbd>→</kbd> navigate · <kbd>F</kbd> fullscreen · <kbd>P</kbd> print
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- ════════════════════ SLIDE 1 — TITLE ════════════════════ -->
+  <div class="slide dark active" data-slide="1">
+    <div class="s-title-wrap">
+      <div class="s-title-logo">
+        <div class="icon">📊</div>
+        <div class="name">Biz<span>Sco</span></div>
+      </div>
+      <div class="s-title-h">
+        Financial power for<br/>
+        <span class="grad">India's 60M small businesses.</span>
+      </div>
+      <div class="s-title-sub">
+        A CA in your WhatsApp. Free. No app to install. Works on any phone.<br/>
+        Built for the 95% of Indian SMBs who run their business from their phone, not a laptop.
+      </div>
+      <div class="s-title-tags">
+        <span class="s-title-tag">🇮🇳 Made in India</span>
+        <span class="s-title-tag">💬 WhatsApp-first</span>
+        <span class="s-title-tag">🔒 DPDP-compliant</span>
+        <span class="s-title-tag">🆓 Free tier forever</span>
+      </div>
+    </div>
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco Strategy Deck</div>
+      <div class="page-num">01 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 2 — THE PROBLEM ════════════════════ -->
+  <div class="slide" data-slide="2">
+    <div class="title-eyebrow">The Problem</div>
+    <h1>Indian SMBs are flying blind.</h1>
+    <p class="lede">63 million small businesses run India's economy. Most can't tell you their cash position, loan eligibility, or grant availability. They need a CA but can't afford ₹15,000/month. They have a phone but no time for laptops.</p>
+
+    <div class="cols-4" style="margin-top:10px">
+      <div class="stat">
+        <div class="stat-num">47%</div>
+        <div class="stat-label">Don't track monthly cash flow</div>
+      </div>
+      <div class="stat" style="border-left-color:var(--amber)">
+        <div class="stat-num">73%</div>
+        <div class="stat-label">Rejected for their first business loan</div>
+      </div>
+      <div class="stat" style="border-left-color:var(--red)">
+        <div class="stat-num">₹2L+</div>
+        <div class="stat-label">Lost annually to cash flow gaps (median SMB)</div>
+      </div>
+      <div class="stat" style="border-left-color:var(--green)">
+        <div class="stat-num">95%</div>
+        <div class="stat-label">Run business entirely from their phone</div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">02 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 3 — THE SOLUTION ════════════════════ -->
+  <div class="slide" data-slide="3">
+    <div class="title-eyebrow">Our Solution</div>
+    <h1>A CA in your WhatsApp.</h1>
+    <p class="lede">Skip the spreadsheets. Skip the apps. Skip the sign-up forms. BizSco lives in WhatsApp — the only app every Indian SMB already uses.</p>
+
+    <div class="cols-3" style="margin-top:8px">
+      <div class="fcard featured">
+        <div class="ico">💬</div>
+        <h3>Onboard in WhatsApp</h3>
+        <p>5 questions on the world's most-used app. Under 2 minutes. No download, no password, no email.</p>
+      </div>
+      <div class="fcard featured">
+        <div class="ico">📊</div>
+        <h3>Personalized Dashboard</h3>
+        <p>30+ financial tools tuned to your industry, revenue, and biggest worry. From loan safety score to grant finder.</p>
+      </div>
+      <div class="fcard featured">
+        <div class="ico">🆓</div>
+        <h3>Free Tier Forever</h3>
+        <p>Core tools cost nothing. Upgrade only when you need AI advisor chat, lender match, or investor reports.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;padding:14px 20px;background:linear-gradient(135deg,#eef2ff,#fff);border-radius:12px;border-left:4px solid var(--brand)">
+      <p style="font-size:.92rem;color:var(--dark);margin:0">
+        <strong>Why WhatsApp wins in India:</strong> 500M+ users · No data plan needed for messaging · Available on ₹5,000 smartphones · Familiar to every SMB owner regardless of age, language, or tech literacy.
+      </p>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">03 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 4 — USER JOURNEY ════════════════════ -->
+  <div class="slide" data-slide="4">
+    <div class="title-eyebrow">The User Journey</div>
+    <h1>From discovery to dashboard in 90 seconds.</h1>
+    <p class="lede">Every step happens on the phone. No laptop, no app store, no friction.</p>
+
+    <div class="journey">
+      <div class="j-step">
+        <div class="j-num">1</div>
+        <div class="j-ico">🔗</div>
+        <h4>Discover</h4>
+        <p>Click a WhatsApp share, see a Reel, scan a QR at their CA's office</p>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">2</div>
+        <div class="j-ico">📞</div>
+        <h4>Enter phone</h4>
+        <p>Just 10 digits + country flag. No email, no password.</p>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">3</div>
+        <div class="j-ico">💬</div>
+        <h4>5 Questions</h4>
+        <p>Business name, industry, revenue, worry, city — all in WhatsApp.</p>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">4</div>
+        <div class="j-ico">📊</div>
+        <h4>Dashboard</h4>
+        <p>Tap a 1-hour magic link. See tools curated for them.</p>
+      </div>
+      <div class="j-arrow">→</div>
+      <div class="j-step">
+        <div class="j-num">5</div>
+        <div class="j-ico">📈</div>
+        <h4>Grow</h4>
+        <p>Use 25+ free tools. Upgrade only when ready.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+      <div style="flex:1;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px 16px">
+        <p style="font-size:.84rem;color:#166534;margin:0"><strong>Zero install friction.</strong> Every other fintech asks the user to download an app. We meet them where they already are.</p>
+      </div>
+      <div style="flex:1;background:#fef9c3;border:1.5px solid #fde047;border-radius:10px;padding:12px 16px">
+        <p style="font-size:.84rem;color:#713f12;margin:0"><strong>Zero passwords.</strong> Magic links delete in 1 hour. Nothing to lose, nothing for hackers to steal.</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">04 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 5 — FREE vs PAID ════════════════════ -->
+  <div class="slide" data-slide="5">
+    <div class="title-eyebrow">Pricing</div>
+    <h1>Free does most of it. Paid does the rest.</h1>
+    <p class="lede" style="margin-bottom:18px">Free tier is genuinely useful — not a teaser. Paid tiers unlock automation, AI advice, and white-labeling for advisors.</p>
+
+    <div class="cols-4">
+      <div class="tier">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">₹0<small> / forever</small></div>
+        <div class="tier-tagline">For founders just exploring or running cash-tight operations.</div>
+        <ul>
+          <li>Loan Safety Score</li>
+          <li>Cash Runway Calc</li>
+          <li>Financial Checkup (2 min)</li>
+          <li>Grant Finder (50+ schemes)</li>
+          <li>Break-Even Analyzer</li>
+          <li>EMI Calculator</li>
+          <li>25+ more tools</li>
+        </ul>
+      </div>
+
+      <div class="tier">
+        <div class="tier-name">Starter</div>
+        <div class="tier-price">₹499<small> / month</small></div>
+        <div class="tier-tagline">For founders fighting cash flow every month.</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>12-Month Cash Forecast</li>
+          <li>Debt Command Center</li>
+          <li>GST + Tax Center</li>
+          <li>PMMY / MUDRA alerts</li>
+          <li>Scheme Deadline Tracker</li>
+        </ul>
+      </div>
+
+      <div class="tier featured">
+        <div class="tier-name">Pro</div>
+        <div class="tier-price">₹1,499<small> / month</small></div>
+        <div class="tier-tagline">For businesses ready to take funding and grow.</div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>🤖 AI CA Chat advisor</li>
+          <li>Investor-ready reports</li>
+          <li>Industry benchmarks</li>
+          <li>Top-5 lender match</li>
+          <li>Priority WhatsApp support</li>
+        </ul>
+      </div>
+
+      <div class="tier">
+        <div class="tier-name">Advisor</div>
+        <div class="tier-price">₹3,999<small> / month</small></div>
+        <div class="tier-tagline">For CAs and consultants managing 10+ clients.</div>
+        <ul>
+          <li>Everything in Pro</li>
+          <li>10 client portfolios</li>
+          <li>White-label reports</li>
+          <li>Bulk Financial Checkups</li>
+          <li>Dedicated account mgr</li>
+          <li>API access (planned)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">05 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 6 — ACQUISITION ════════════════════ -->
+  <div class="slide" data-slide="6">
+    <div class="title-eyebrow">User Acquisition</div>
+    <h1>How Indian SMBs find us.</h1>
+    <p class="lede">8 channels, ranked by cost-effectiveness for Tier 2/3 Indian cities. Most are free or under ₹500/day.</p>
+
+    <div class="cols-3" style="margin-top:6px">
+      <div class="fcard">
+        <div class="ico">📱</div>
+        <h3>WhatsApp groups</h3>
+        <p>SMB-focused WhatsApp groups (local trade, GST consultants). Share the demo link — viral via word of mouth.</p>
+        <p style="font-size:.72rem;color:var(--green);font-weight:700">FREE · Highest signal</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🎬</div>
+        <h3>YouTube Shorts + Reels</h3>
+        <p>Daily 18-sec ads (we built reel-ad-cashflow.html). Hindi/Telugu/Tamil micro-stories about cash flow.</p>
+        <p style="font-size:.72rem;color:var(--green);font-weight:700">FREE to post · Algorithm scales</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🤝</div>
+        <h3>CA partnership</h3>
+        <p>Indian CAs serve millions of SMBs. Offer "Advisor" tier free for 6 months in exchange for client onboarding.</p>
+        <p style="font-size:.72rem;color:var(--green);font-weight:700">FREE · Highest conversion</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">👥</div>
+        <h3>Referral program</h3>
+        <p>"Invite 3 friends, unlock Pro for 30 days." Existing users do acquisition for us.</p>
+        <p style="font-size:.72rem;color:var(--green);font-weight:700">Low cost · Self-amplifying</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🎓</div>
+        <h3>Free workshops</h3>
+        <p>"GST & Loans 101" in regional language at local SMB associations. Trust-builder.</p>
+        <p style="font-size:.72rem;color:var(--amber);font-weight:700">~₹2K per event</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">📰</div>
+        <h3>Local newspapers</h3>
+        <p>Quarter-page ad in regional papers (Eenadu, Dinamalar, Sakal). Tier 2/3 trust signal.</p>
+        <p style="font-size:.72rem;color:var(--amber);font-weight:700">₹5K-₹15K per region</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🔍</div>
+        <h3>Google Ads</h3>
+        <p>"small business loan", "MUDRA eligibility", "GST help" — high commercial intent.</p>
+        <p style="font-size:.72rem;color:var(--red);font-weight:700">₹500/day budget</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🏘️</div>
+        <h3>Trade associations</h3>
+        <p>CII, FICCI, local Vyapari Sangams. One pitch = 100+ SMB intros.</p>
+        <p style="font-size:.72rem;color:var(--amber);font-weight:700">Time-intensive · High quality</p>
+      </div>
+      <div class="fcard">
+        <div class="ico">🗣️</div>
+        <h3>Influencer partners</h3>
+        <p>Regional YouTubers covering small business (in Hindi/Telugu/Tamil). 1 mention = thousands.</p>
+        <p style="font-size:.72rem;color:var(--amber);font-weight:700">₹5K-₹50K per video</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">06 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 7 — TRUST & ANTI-SCAM ════════════════════ -->
+  <div class="slide" data-slide="7">
+    <div class="title-eyebrow">Trust &amp; Security</div>
+    <h1>Why users can trust BizSco.</h1>
+    <p class="lede">Indian SMB owners are wary — scams cost the sector ₹1,200 crore annually. We're built so we couldn't scam them even if we wanted to.</p>
+
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="ico">📵</div>
+        <h4>No app to install</h4>
+        <p>No malware risk. No background tracking. Browser-only.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">🔑</div>
+        <h4>No passwords</h4>
+        <p>Magic links expire in 1 hour. Nothing for hackers to phish.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">💳</div>
+        <h4>Payments via Razorpay</h4>
+        <p>PCI-DSS Level 1 certified. We never see your card number.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">🛡️</div>
+        <h4>AES-256 encrypted</h4>
+        <p>All data encrypted at rest. RLS at the database level.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">📜</div>
+        <h4>DPDP Act 2023</h4>
+        <p>Compliant with India's data protection law. Full user rights.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">↩️</div>
+        <h4>7-day refund</h4>
+        <p>Money-back on any paid plan. No questions, no fine print.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">🚫</div>
+        <h4>Reply STOP anytime</h4>
+        <p>Wipes your data from active onboarding immediately.</p>
+      </div>
+      <div class="trust-item">
+        <div class="ico">🇮🇳</div>
+        <h4>Indian Pvt Ltd</h4>
+        <p>Registered in India. GST invoice. Indian jurisdiction.</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">07 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 8 — MOBILE FIRST ════════════════════ -->
+  <div class="slide indigo" data-slide="8">
+    <div class="title-eyebrow">Mobile-First Reality</div>
+    <h1 style="color:#fff">India runs on phones. We do too.</h1>
+    <p style="color:#e0e7ff;font-size:1.15rem;max-width:780px;margin-bottom:24px">95% of Indian SMB owners have never used a laptop for business. Every UX decision flows from this single fact.</p>
+
+    <div class="cols-2" style="gap:34px;align-items:center">
+      <div>
+        <h3 style="color:#fff;font-size:1.3rem;margin-bottom:14px">Mobile-first choices we made</h3>
+        <ul style="list-style:none;padding:0;color:#e0e7ff;font-size:.95rem;line-height:2">
+          <li>✅ <strong>WhatsApp inside the product</strong> — onboarding lives in the app they already have</li>
+          <li>✅ <strong>Vertical 9:16 layouts</strong> — designed for thumb-scrolling, not desktop clicking</li>
+          <li>✅ <strong>Large tap targets (44px+)</strong> — works with sweaty fingers in summer humidity</li>
+          <li>✅ <strong>Hindi · Telugu · Tamil · Marathi</strong> — UI auto-localizes (Hindi/Telugu live, Tamil/Marathi next)</li>
+          <li>✅ <strong>16px input font</strong> — prevents iOS auto-zoom on tap (small but critical)</li>
+          <li>✅ <strong>Works on 2G/3G</strong> — pages under 100KB, no heavy frameworks</li>
+          <li>✅ <strong>PWA-ready</strong> — installable as a home-screen icon, like an app</li>
+        </ul>
+        <div style="margin-top:18px;background:rgba(239,68,68,.2);border:1px solid rgba(252,165,165,.4);border-radius:10px;padding:12px 16px;color:#fecaca">
+          <strong>⚠ Open issue (reported 2026-06-03)</strong>: some screens still too small on phones. Mobile audit pass-2 scheduled — see issue log in indiapending.md.
+        </div>
+      </div>
+
+      <div class="phone-mockup">
+        <div class="pm-bar"></div>
+        <div class="pm-msg"><b>BizSco ✓</b><br/>Hi there! Your account setup has been initiated. Question 1/5: What is your business name?</div>
+        <div class="pm-msg out">Jyothi Labs</div>
+        <div class="pm-msg"><b>BizSco ✓</b><br/>Q2/5: Which industry? 1.Retail 2.Restaurant 3.Services 4.Manufacturing 5.Other</div>
+        <div class="pm-msg out">3</div>
+        <div class="pm-msg"><b>BizSco ✓</b><br/>Q3/5: Monthly revenue (₹)?...</div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">08 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 9 — COVERED vs PENDING ════════════════════ -->
+  <div class="slide" data-slide="9">
+    <div class="title-eyebrow">Status Today</div>
+    <h1>What's built. What's next.</h1>
+    <p class="lede">Test mode is live and validated end-to-end as of June 2026. Production launch unblocked by Indian Pvt Ltd registration.</p>
+
+    <div class="status-grid">
+      <div class="status-col done">
+        <h3>✅ COVERED today (live)</h3>
+        <ul>
+          <li>30+ browser-based financial tools</li>
+          <li>WhatsApp 5-Q onboarding (E2E validated)</li>
+          <li>Magic-link login system</li>
+          <li>English live · Hindi + Telugu in Meta review</li>
+          <li>Mobile-responsive design</li>
+          <li>Privacy + Terms (DPDP-compliant)</li>
+          <li>Razorpay integration code (test-ready)</li>
+          <li>Supabase backend (DB + Edge Functions)</li>
+          <li>HELP/STATUS/RESTART/STOP commands</li>
+          <li>Strict webhook signature verification</li>
+        </ul>
+      </div>
+      <div class="status-col todo">
+        <h3>⏳ PENDING (next sprints)</h3>
+        <ul>
+          <li>Real customer payments (needs Pvt Ltd + Razorpay KYC)</li>
+          <li>Tamil + Marathi templates (same Hindi/Telugu pattern)</li>
+          <li>Admin dashboard for tracking signups</li>
+          <li>Production WABA upgrade (off Meta test number)</li>
+          <li>GST invoice PDF generation</li>
+          <li>Recurring subscription billing</li>
+          <li>Mobile screen visibility fixes (audit pass-2)</li>
+          <li>Voice-based onboarding</li>
+          <li>Email/SMS fallback</li>
+          <li>Offline support</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco</div>
+      <div class="page-num">09 / 10</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ SLIDE 10 — ROADMAP ════════════════════ -->
+  <div class="slide" data-slide="10">
+    <div class="title-eyebrow">Roadmap</div>
+    <h1>Path to revenue.</h1>
+    <p class="lede">Test mode → real customers → recurring revenue. Pvt Ltd is the unlock.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">Now</div>
+        <div class="tl-body">
+          <h4>Hindi + Telugu templates in Meta review · Test issues triaged</h4>
+          <p>Awaiting ~24hr UTILITY approval. Mobile pass-2 fixes in flight.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Week 1-2</div>
+        <div class="tl-body">
+          <h4>Indian Pvt Ltd registration kicked off</h4>
+          <p>CA filing, MoA/AoA, PAN, GST, current account. ~₹15K all-in.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Week 3-4</div>
+        <div class="tl-body">
+          <h4>Admin dashboard · Tamil + Marathi templates · Production WABA setup begins</h4>
+          <p>Build internal tools; submit 2 more language templates; start Meta business verification with Pvt Ltd CIN.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Week 5-6</div>
+        <div class="tl-body">
+          <h4>Razorpay KYC submitted · WABA approved · Real Indian number connected</h4>
+          <p>3-5 days for Razorpay; same for Meta verification. Display name approval.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Week 7-8</div>
+        <div class="tl-body">
+          <h4>🚀 Live launch · First real Indian customers · First paid subscription</h4>
+          <p>Soft launch to CA partner network. Track first cohort conversion.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Month 3+</div>
+        <div class="tl-body">
+          <h4>GST invoices · Recurring subscriptions · 4-language UI · Voice onboarding</h4>
+          <p>Iterate based on first-100-customer feedback. Expand regional reach.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <div class="brand-mark"><div class="dot"></div>BizSco · bizsco.in</div>
+      <div class="page-num">10 / 10</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button onclick="go(-1)" id="prevBtn">← Prev</button>
+  <div class="progress" id="progress">1 / 10</div>
+  <button onclick="go(1)" id="nextBtn">Next →</button>
+  <button onclick="window.print()" title="Print to PDF">🖨️ PDF</button>
+  <button onclick="toggleFs()" title="Fullscreen">⛶</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let idx = 0;
+
+function show(i){
+  idx = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, n) => s.classList.toggle('active', n === idx));
+  document.getElementById('progress').textContent = (idx + 1) + ' / ' + slides.length;
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === slides.length - 1;
+}
+
+function go(d){ show(idx + d); }
+
+function toggleFs(){
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft')                    { e.preventDefault(); go(-1); }
+  if (e.key === 'Home')                         { e.preventDefault(); show(0); }
+  if (e.key === 'End')                          { e.preventDefault(); show(slides.length - 1); }
+  if (e.key === 'f' || e.key === 'F')           { toggleFs(); }
+  if (e.key === 'p' || e.key === 'P')           { window.print(); }
+});
+
+show(0);
+</script>
+
+</body>
+</html>

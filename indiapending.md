@@ -136,9 +136,58 @@ WABA does NOT exist yet (user has only the consumer WA Business app). Must be cr
 
 ---
 
+## 📋 NEXT-WAVE PENDING (user-requested 2026-06-03)
+
+To be tackled after Hindi + Telugu templates approve (~24hr) and test issues are triaged. Listed in suggested priority order.
+
+### 1. Build admin dashboard for tracking signups
+- New page `admin/india-users.html`
+- Shows `users_in` table (all signups with answers)
+- Drop-off funnel: how many got to Q1, Q2, Q3, Q4, Q5, magic-link-tapped
+- Plan conversion: free vs starter/pro/advisor
+- Latest activity feed
+- Protected by Supabase Auth (admin-only role)
+- ~2 hours
+
+### 2. Add Tamil + Marathi language templates
+- Extend the Hindi/Telugu pattern in `_shared/questions.ts`
+- Tamil = `ta`, Marathi = `mr`
+- Add to STRINGS table, QUESTIONS arrays, welcomeTemplateFor()
+- Submit `bizsco_utility_ta` and `bizsco_utility_mr` to Meta as UTILITY
+- Update whatsapp-start.html with 2 more language buttons (5 total: en/hi/te/ta/mr)
+- ~30 min code + 24hr Meta review per template
+
+### 3. Document test issues found during end-to-end walkthrough
+- User noted "couple of issues" on 2026-06-03 during validated flow
+- Mobile screen visibility specifically called out
+- Fill in the placeholder rows in the "Issues found during end-to-end test" section at the top of this file
+- I prioritize fixes once details land
+
+### 4. Write Production WABA upgrade playbook
+- Currently on Meta test number `+1-555-649-6047` (5 verified recipients, can't scale)
+- Production needs: Indian Pvt Ltd → Meta Business Verification → real business phone → Display Name approval → connect real WABA to existing app
+- Step-by-step `.md` playbook so when Pvt Ltd is ready, swap takes hours not weeks
+- ~1 hour to write
+
+---
+
 ## 🔴 BLOCKED ON COMPANY REGISTRATION — H1B + Razorpay
 
 User is on H1B visa, company not yet registered (neither US nor India).
+
+### Razorpay phased plan (added 2026-06-03)
+
+| Phase | What | When | Cost |
+|---|---|---|---|
+| **Phase 1 — Test mode** | Sign up Razorpay with placeholder details, get test keys (`rzp_test_*`), set 3 Supabase secrets, configure webhook, test full subscribe flow with card `4111 1111 1111 1111` | Any time (no Pvt Ltd needed) | Free |
+| **Phase 2 — Live mode** | Submit KYC docs (PAN, GST cert, bank account, CoI, address proof), wait 3-5 business days for Razorpay approval, regenerate live keys (`rzp_live_*`), swap Supabase secrets, take real money | After Pvt Ltd registered | ~2% transaction fee + GST |
+| **Phase 3 — Subscriptions** | Switch from one-time orders to Razorpay Subscriptions API for auto-renewing monthly/annual plans, handle renewal/cancel webhooks | After initial paying customers prove demand | +0.3% on top of normal fee |
+
+**Why we can't use Stripe instead**: Stripe India is restricted (most accounts limited to USD international payments, not domestic INR). Razorpay is the standard for Indian SaaS.
+
+**Why nothing to do today**: Account creation requires Indian business KYC (PAN, GST, bank account) — all need the Pvt Ltd to exist first. Test mode keys are available pre-KYC but won't accept real customer money.
+
+---
 
 ### Open decision: Where to incorporate?
 
