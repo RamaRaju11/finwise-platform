@@ -767,11 +767,11 @@ function runScore() {
   // -- Share + paywall teaser --
   document.getElementById('sharePaywall').style.display = 'block';
 
-  // -- What-if slider --
+  // -- What-if slider (reset on each new score check) --
   var wiBox = document.getElementById('whatifBox');
   wiBox.classList.add('show');
   document.getElementById('wiSlider').value = 0;
-  document.getElementById('wiResult').textContent = '+0 pts ? Score stays ' + r.total;
+  document.getElementById('wiResult').innerHTML = '<span style="color:#94a3b8">← Drag right to preview impact</span>';
 
   // -- Print date --
   document.getElementById('printDate').textContent = new Date().toLocaleDateString();
@@ -985,15 +985,50 @@ function copyScoreLink() {
 function updateWhatIf() {
   if (!lastResult) return;
   var bump = parseInt(document.getElementById('wiSlider').value) || 0;
-  var baseCreditScore = (lastResult.creditScore || 580) + bump;
-  baseCreditScore = Math.min(850, baseCreditScore);
+  var origCredit = lastResult.creditScore || 580;
+  var newCredit  = Math.min(850, origCredit + bump);
+  var actualBump = newCredit - origCredit;  // could be less if capped at 850
+
+  // Recompute with new credit (everything else unchanged)
   var r2 = computeScore(lastResult.revenue, lastResult.expenses, lastResult.existingEmi,
-    lastResult.loanAmount, lastResult.rate, lastResult.months, baseCreditScore);
+    lastResult.loanAmount, lastResult.rate, lastResult.months, newCredit);
   var delta = r2.total - lastResult.total;
-  var sign = delta >= 0 ? '+' : '';
-  var verdictShort = r2.cls === 'safe' ? '✅ SAFE' : r2.cls === 'risky' ? '⚠️ RISKY' : '❌ DANGEROUS';
-  document.getElementById('wiResult').textContent =
-    '+' + bump + ' pts → Score: ' + r2.total + ' (' + sign + delta + ') ' + verdictShort;
+  var sign  = delta > 0 ? '+' : (delta < 0 ? '' : '±');
+  var verdictEmoji = r2.cls === 'safe' ? '✅' : r2.cls === 'risky' ? '⚠️' : '❌';
+  var verdictTxt   = r2.cls === 'safe' ? 'SAFE' : r2.cls === 'risky' ? 'RISKY' : 'DANGEROUS';
+
+  // Build a clear before/after message
+  var resultEl = document.getElementById('wiResult');
+  if (bump === 0) {
+    resultEl.innerHTML = '<span style="color:#94a3b8">← Drag right to preview impact</span>';
+  } else if (actualBump === 0) {
+    resultEl.innerHTML = '<span style="color:#94a3b8">Already at max credit (' + origCredit + ') — capped at 850</span>';
+  } else {
+    resultEl.innerHTML =
+      '<span style="color:#64748b">Credit ' + origCredit + ' → <strong>' + newCredit + '</strong></span> · ' +
+      '<span style="color:' + (delta > 0 ? '#16a34a' : delta < 0 ? '#dc2626' : '#64748b') + ';font-weight:800">' +
+      'Score ' + lastResult.total + ' → ' + r2.total + ' (' + sign + Math.abs(delta) + ')' +
+      '</span> ' + verdictEmoji + ' ' + verdictTxt;
+  }
+
+  // Also preview the change in the main score ring so user SEES the change.
+  // When slider > 0 we show what-if values; when back to 0 we restore the real score.
+  var snEl = document.getElementById('scoreNumber');
+  var svEl = document.getElementById('scoreVerdict');
+  var shEl = document.getElementById('scoreHeader');
+  if (bump === 0) {
+    snEl.textContent = lastResult.total;
+    snEl.className   = 'score-number ' + lastResult.cls;
+    svEl.textContent = lastResult.verdict;
+    svEl.className   = 'score-verdict ' + lastResult.cls;
+    shEl.className   = 'score-header ' + lastResult.cls;
+  } else {
+    snEl.textContent = r2.total;
+    snEl.className   = 'score-number ' + r2.cls;
+    svEl.textContent = r2.verdict + ' (if credit ' + newCredit + ')';
+    svEl.className   = 'score-verdict ' + r2.cls;
+    shEl.className   = 'score-header ' + r2.cls;
+  }
 }
 
 // -- Download PDF -------------------------------------------------
