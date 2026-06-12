@@ -1330,9 +1330,11 @@ function applyProfileFill() {
   if(!isNaN(revN)  && revEl)  revEl.value  = revN;
   if(!isNaN(expN)  && expEl)  expEl.value  = expN;
   if(!isNaN(emiN)  && emiEl)  emiEl.value  = emiN;
-  if(loanEl) loanEl.value = prof.loan || ph.loan;
-  if(rateEl) rateEl.value = ph.rate;
-  if(tenEl)  tenEl.value  = ph.tenure;
+  // Loan amount / rate / tenure are loan-specific (not business profile) — leave
+  // them EMPTY by default. Pre-filling example values as actual field values
+  // caused users to ignore them and run the score against placeholder rate/tenure
+  // instead of their real loan terms. Only restore from prior LDSE save in Step 2.
+  if(parseFloat(prof.loan) > 0 && loanEl) loanEl.value = prof.loan;
 
   /* Step 2 — overlay with tool-specific saved values */
   var ldse = null;
@@ -1350,10 +1352,12 @@ function applyProfileFill() {
     }
   }
 
+  // Mirror Max Safe Loan tab fields only from main inputs if user has filled them.
+  // Don't fall back to placeholders here either (same bug pattern).
   var mlRateEl   = document.getElementById('mlRate');
   var mlTenureEl = document.getElementById('mlTenure');
-  if(mlRateEl)   mlRateEl.value   = (rateEl && rateEl.value) || ph.rate;
-  if(mlTenureEl) mlTenureEl.value = (tenEl  && tenEl.value)  || ph.tenure;
+  if(mlRateEl   && rateEl && rateEl.value)  mlRateEl.value   = rateEl.value;
+  if(mlTenureEl && tenEl  && tenEl.value)   mlTenureEl.value = tenEl.value;
 }
 
 /* Expose so nav.js can call it after Supabase profile restore */
