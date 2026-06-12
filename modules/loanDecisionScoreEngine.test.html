@@ -759,7 +759,7 @@ function runScore() {
   renderConsequence(r);
 
   // -- Improvement Roadmap (RISKY/DANGEROUS only) --
-  renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, months);
+  renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, months, creditScore);
 
   // -- Break-even impact (RISKY/DANGEROUS only) --
   renderBreakEvenInline(r);
@@ -865,25 +865,31 @@ function renderConsequence(r) {
 }
 
 // -- Improvement Roadmap ------------------------------------------
-function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, months) {
+function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, months, creditScore) {
   var el = document.getElementById('roadmapOutput');
   if (r.cls === 'safe') { el.style.display = 'none'; return; }
 
   var TARGET = 70;
+  // Use the same credit-score input the main score uses, so the roadmap's
+  // SAFE threshold matches what the user sees in their score number.
+  // Without this, a user with low credit (negative bonus) would see roadmap
+  // suggest 0% changes needed even when their displayed score is RISKY.
+  var cs = creditScore || null;
 
   // Path 1: binary search for max safe loan amount
   var safeLoan = 0;
   var lo = 0, hi = loanAmount;
   for (var i = 0; i < 50; i++) {
     var mid = (lo + hi) / 2;
-    if (computeScore(revenue, expenses, existingEmi, mid, rate, months).total >= TARGET) { safeLoan = mid; lo = mid; }
+    if (computeScore(revenue, expenses, existingEmi, mid, rate, months, cs).total >= TARGET) { safeLoan = mid; lo = mid; }
     else { hi = mid; }
   }
 
-  // Path 2: find min tenure that reaches SAFE
+  // Path 2: find min tenure that reaches SAFE — must START AFTER current tenure
+  // so the "0 months longer" result can never appear (was a bug previously)
   var safeTenure = 0;
-  for (var t = months; t <= 360; t += 1) {
-    if (computeScore(revenue, expenses, existingEmi, loanAmount, rate, t).total >= TARGET) { safeTenure = t; break; }
+  for (var t = months + 1; t <= 360; t += 1) {
+    if (computeScore(revenue, expenses, existingEmi, loanAmount, rate, t, cs).total >= TARGET) { safeTenure = t; break; }
   }
 
   // Path 3: binary search for min revenue that reaches SAFE
@@ -891,7 +897,7 @@ function renderRoadmap(r, revenue, expenses, existingEmi, loanAmount, rate, mont
   var rlo = revenue, rhi = revenue * 6;
   for (var j = 0; j < 50; j++) {
     var rmid = (rlo + rhi) / 2;
-    if (computeScore(rmid, expenses, existingEmi, loanAmount, rate, months).total >= TARGET) { safeRevenue = rmid; rhi = rmid; }
+    if (computeScore(rmid, expenses, existingEmi, loanAmount, rate, months, cs).total >= TARGET) { safeRevenue = rmid; rhi = rmid; }
     else { rlo = rmid; }
   }
 
