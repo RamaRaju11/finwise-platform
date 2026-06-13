@@ -299,12 +299,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="screen" id="screen3">
     <div class="sh-eye">Step 3 of 5 — Cash Runway</div>
     <div class="sh-h">Your Cash Runway</div>
+    <p style="font-size:.86rem;color:#64748b;line-height:1.55;margin:-6px 0 14px;max-width:640px">
+      How many months your reserves would last <strong>if revenue stopped tomorrow</strong>. If your business is profitable, treat this as your <em>emergency-fund buffer</em>, not your survival timeline.
+    </p>
     <div class="card">
       <div class="rc">
         <div class="re">&#9679;</div>
         <div id="rwBadge" class="verd v-strong">STRONG</div><br>
         <div class="bn" id="rwNum">—</div>
-        <div class="bu">months of runway</div>
+        <div class="bu">months of reserves</div>
       </div>
       <div class="rw-wrap">
         <div class="rw-track">
@@ -539,7 +542,20 @@ function compute(){
   var lv=ls>=70?'SAFE':ls>=45?'RISKY':'DANGEROUS';
 
   var rDisp=rmo>=24?'24+':(Math.round(rmo*10)/10).toString();
-  var rStat=rmo>=6?'STRONG':rmo>=3?'WARNING':'CRITICAL';
+  // Runway verdict considers WHETHER the business is profitable. A
+  // profitable business with a thin reserve has a BUFFER concern, not a
+  // survival crisis — reserve labels reflect that nuance.
+  // ncf = net cash flow per month (rev - exp, before debt service)
+  // (Use cashLeft = ncf - emi for true bottom-line surplus.)
+  var cashLeft = ncf - emi;  // monthly surplus after debt service
+  var rStat;
+  if (cashLeft >= 0) {
+    // Profitable — assess as emergency-fund buffer only
+    rStat = rmo >= 6 ? 'STRONG' : rmo >= 3 ? 'ADEQUATE' : 'BUFFER LOW';
+  } else {
+    // Losing money — true survival runway
+    rStat = rmo >= 6 ? 'STRONG' : rmo >= 3 ? 'WARNING' : 'CRITICAL';
+  }
 
   var hs=0;
   hs+=pm>0.2?25:pm>0.1?18:pm>0.05?12:pm>0?6:0;
@@ -574,7 +590,8 @@ function fillLoan(){
   else if(D.emi===0)pts.push({i:'✓',t:'No current loan repayments — zero debt burden is a positive signal for your score.'});
   else pts.push({i:'⚠️',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is below 1.0 — income does not fully cover loan repayments.'});
   if(r.rmo>=6)pts.push({i:'✓',t:'Cash reserve gives you <strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of runway — a strong safety buffer.'});
-  else if(r.rmo>=3)pts.push({i:'⚠️',t:'Only <strong>'+Math.round(r.rmo)+' months</strong> of runway. Aim for 6+ months. This reduces your loan safety score.'});
+  else if(r.rmo>=3)pts.push({i:'⚠️',t:'<strong>'+Math.round(r.rmo)+' months</strong> of reserves — below the 6-month target. Aim to build it up; this currently shaves points off your loan safety score.'});
+  else if(r.ncf>=D.emi)pts.push({i:'⚠️',t:'Emergency reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. Your cash flow is healthy, but lenders prefer 6+ months as a safety cushion.'});
   else pts.push({i:'⚠️',t:'Reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. An emergency could leave you unable to repay.'});
   if(r.er<0.75)pts.push({i:'✓',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — healthy cost control.'});
   else if(r.er<0.85)pts.push({i:'⚠️',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong>. Trimming costs by 10—15% would improve your score.'});
@@ -587,19 +604,60 @@ function fillRunway(){
   $('rwNum').textContent=r.rDisp;
   var b=$('rwBadge');
   b.textContent=r.rStat;
-  b.className='verd '+{STRONG:'v-strong',WARNING:'v-warning',CRITICAL:'v-critical'}[r.rStat];
+  // Map verdict label → badge color class. ADEQUATE / BUFFER LOW use amber
+  // (warning), not red, because the business itself is healthy when those
+  // appear — only CRITICAL truly means crisis.
+  var badgeCls = {
+    'STRONG':     'v-strong',
+    'ADEQUATE':   'v-warning',
+    'BUFFER LOW': 'v-warning',
+    'WARNING':    'v-warning',
+    'CRITICAL':   'v-critical'
+  };
+  b.className='verd '+(badgeCls[r.rStat] || 'v-warning');
+
   var pct=clamp((Math.min(r.rmo,12)/12)*100,0,100);
+  var barCls = {
+    'STRONG':     'mb-g',
+    'ADEQUATE':   'mb-y',
+    'BUFFER LOW': 'mb-y',
+    'WARNING':    'mb-y',
+    'CRITICAL':   'mb-r'
+  };
   setTimeout(function(){
     $('rwFill').style.width=pct+'%';
-    $('rwFill').className='rw-fill '+{STRONG:'mb-g',WARNING:'mb-y',CRITICAL:'mb-r'}[r.rStat];
+    $('rwFill').className='rw-fill '+(barCls[r.rStat] || 'mb-y');
   },200);
+
+  // Bullets — differentiate profitable vs losing money. Avoids the
+  // contradictory "cash-flow positive" + "one bad month = failure" combo.
   var pts=[];
-  if(r.ncf>=0)pts.push({i:'✓',t:'Business is <strong>cash-flow positive</strong> (+$'+fmt(r.ncf)+'/mo). Runway concern is low — income exceeds expenses.'});
-  if(r.rmo>=6)pts.push({i:'✓',t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the BizSco 6-month recommended minimum.'});
-  else if(r.rmo>=3)pts.push({i:'⚠️',t:'<strong>'+Math.round(r.rmo)+' months</strong> runway is below the 6-month target. Build reserves by $'+fmt(Math.round(Math.max(0,(6-r.rmo)*Math.max(D.exp-D.rev,500)/3)))+'/mo.'});
-  else if(r.rmo>0)pts.push({i:'⚠️',t:'Only <strong>'+r.rDisp+' month(s)</strong> of reserves — critically low. One bad month could trigger cash flow failure.'});
-  else pts.push({i:'⚠️',t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
-  if(r.ncf<0)pts.push({i:'⚠️',t:'Monthly burn rate: <strong>$'+fmt(-r.ncf)+'/mo</strong>. At this pace, reserves last '+r.rDisp+' months.'});
+  var cashLeft = r.ncf - D.emi;  // surplus after debt service
+
+  if (cashLeft >= 0) {
+    // PROFITABLE PATH
+    pts.push({i:'✓', t:'Business is <strong>cash-flow positive</strong> (surplus +$'+fmt(cashLeft)+'/mo after EMIs). Reserves are growing, not shrinking.'});
+    if (r.rmo >= 6) {
+      pts.push({i:'✓', t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the 6-month emergency-fund minimum. Solid safety position.'});
+    } else if (r.rmo >= 3) {
+      pts.push({i:'⚠️', t:'Reserves cover <strong>'+Math.round(r.rmo)+' months</strong> if revenue stopped. This is your <em>emergency buffer</em>, not your runway — you\'re profitable, so reserves keep growing. Target: build to 6 months for full safety.'});
+    } else {
+      var monthsToTarget = Math.max(1, Math.ceil(((D.res>0?6*D.exp:0) - D.res) / cashLeft));
+      pts.push({i:'⚠️', t:'Emergency buffer is thin: <strong>'+r.rDisp+' month(s)</strong> if revenue stopped. <strong>Not a crisis</strong> — you\'re cash-flow positive — but build to 6 months for safety. At your current +$'+fmt(cashLeft)+'/mo surplus, you\'ll reach a 6-month buffer in ~<strong>'+monthsToTarget+' months</strong> if you save the surplus.'});
+    }
+  } else {
+    // LOSING MONEY PATH — true survival runway
+    pts.push({i:'⚠️', t:'Business is <strong>losing $'+fmt(-cashLeft)+'/mo</strong> after EMIs. Reserves are shrinking each month.'});
+    if (r.rmo >= 6) {
+      pts.push({i:'⚠️', t:'<strong>'+Math.round(r.rmo)+' months</strong> of runway at current burn rate. Use this window to fix profitability (cut expenses or grow revenue).'});
+    } else if (r.rmo >= 3) {
+      pts.push({i:'⚠️', t:'Only <strong>'+Math.round(r.rmo)+' months</strong> of runway. Take action this quarter — cut expenses or boost revenue.'});
+    } else if (r.rmo > 0) {
+      pts.push({i:'⚠️', t:'<strong>'+r.rDisp+' month(s)</strong> until reserves run out. Immediate action required: reduce expenses, defer non-essential payments, accelerate receivables.'});
+    } else {
+      pts.push({i:'⚠️', t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
+    }
+  }
   $('rwBullets').innerHTML=pts.map(function(p){return '<li><span class="bi">'+p.i+'</span><span>'+p.t+'</span></li>'}).join('');
 }
 
