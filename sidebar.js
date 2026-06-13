@@ -305,11 +305,16 @@
     /* ── Scroll-zone: fade + arrow at bottom (and top) that auto-scrolls nav ── */
     var scrollStyle = document.createElement('style');
     scrollStyle.textContent =
-      '.fw-scroll-zone{position:absolute;left:0;right:0;height:44px;z-index:10;pointer-events:auto;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;cursor:pointer}'+
+      /* Default: pointer-events NONE so the zone doesn't block clicks on
+         sidebar links underneath when it's invisible (no scroll needed). */
+      '.fw-scroll-zone{position:absolute;left:0;right:0;height:28px;z-index:10;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;cursor:pointer}'+
       '.fw-scroll-zone.bottom{bottom:52px;background:linear-gradient(to top,#0f172a 30%,transparent)}'+
       '.fw-scroll-zone.top{top:0;background:linear-gradient(to bottom,#0f172a 30%,transparent)}'+
       '.fw-scroll-zone .fw-sz-arrow{font-size:.75rem;color:#64748b;line-height:1;user-select:none}'+
-      '.fw-scroll-zone.visible{opacity:1}';
+      /* Only enable pointer-events when the zone is actually shown
+         (there is more content to scroll to). Prevents the zone from
+         blocking clicks on bottom sidebar items like Cash Runway. */
+      '.fw-scroll-zone.visible{opacity:1;pointer-events:auto}';
     document.head.appendChild(scrollStyle);
 
     aside.style.position = 'relative'; /* needed for absolute children */
