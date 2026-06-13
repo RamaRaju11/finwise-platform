@@ -505,6 +505,29 @@ function startCheckup(){
   goScreen(1);
 }
 
+/* Reload Checkup inputs when user switches months on the as-of-month toggle.
+   If a snapshot exists for the chosen month → fill the 4 inputs from it.
+   If not → clear inputs so they can enter that month's numbers fresh. */
+window.addEventListener('bizsco:monthchange', function(e){
+  var month = e.detail && e.detail.month;
+  if (!month) return;
+  var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){ snaps = {}; }
+  var s = snaps[month];
+  if (s) {
+    $('ck_rev').value = s.rev     != null ? s.rev     : '';
+    $('ck_exp').value = s.exp     != null ? s.exp     : '';
+    $('ck_emi').value = s.emi     != null ? s.emi     : '';
+    $('ck_res').value = s.reserve != null ? s.reserve : '';
+  } else {
+    $('ck_rev').value = '';
+    $('ck_exp').value = '';
+    $('ck_emi').value = '';
+    $('ck_res').value = '';
+  }
+  // Refresh the cash-flow pill since inputs changed
+  if (typeof refreshCF === 'function') refreshCF();
+});
+
 function runCheckup(){
   D.rev=parseFloat($('ck_rev').value)||0;
   D.exp=parseFloat($('ck_exp').value)||0;

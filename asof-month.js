@@ -100,12 +100,25 @@
           _asOfMonth = monthOffsetFromNow(parseInt(offset, 10));
           customInp.style.display = 'none';
         }
+        fireMonthChange();
       });
     });
 
     customInp.addEventListener('change', function () {
-      if (customInp.value) _asOfMonth = customInp.value;
+      if (customInp.value) {
+        _asOfMonth = customInp.value;
+        fireMonthChange();
+      }
     });
+  }
+
+  // Notify any page-level listeners that the user picked a different month.
+  // Pages should respond by loading that month's saved numbers into the
+  // input form (or clearing the form if no snapshot exists yet).
+  function fireMonthChange() {
+    window.dispatchEvent(new CustomEvent('bizsco:monthchange', {
+      detail: { month: _asOfMonth }
+    }));
   }
 
   // ── Auto-mount all <div data-asof-month> on page load ─────────────

@@ -429,6 +429,31 @@ function selectTool(el){
   selectedHref = el.getAttribute('data-href');
 }
 
+/* Reload onboarding's monthly numbers when user switches months on the
+   as-of-month toggle. If a snapshot exists for the chosen month → fill the
+   inputs from it. If not → clear inputs for fresh entry. */
+window.addEventListener('bizsco:monthchange', function(e){
+  var month = e.detail && e.detail.month;
+  if (!month) return;
+  var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){ snaps = {}; }
+  var s = snaps[month];
+  var fields = [
+    ['revenue', 'rev'],
+    ['expenses', 'exp'],
+    ['emi', 'emi'],
+    ['reserve', 'reserve']
+  ];
+  fields.forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (!el) return;
+    if (s && s[pair[1]] != null && !isNaN(s[pair[1]])) {
+      el.value = s[pair[1]];
+    } else {
+      el.value = '';
+    }
+  });
+});
+
 function saveProfile(){
   // Pick the month these numbers represent (from the shared as-of-month tagger).
   // Falls back to current month if the helper hasn't loaded for any reason.

@@ -520,6 +520,41 @@ function mcCardGrey(name, desc, source){
 }
 
 /* ------------------------------------------------------
+   Reload inputs when the user switches months on the as-of-month toggle.
+   If the chosen month has saved data → fill all fields from it.
+   If not → clear all fields so the user can enter that month's data fresh.
+------------------------------------------------------ */
+window.addEventListener('bizsco:monthchange', function(e){
+  var month = e.detail && e.detail.month;
+  if (!month) return;
+  var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){ snaps = {}; }
+  var s = snaps[month];
+  var fields = ['rev','exp','emi','reserve','assets','liabilities'];
+  // Keys in the snapshot use the same names as the input IDs except 'liabilities'
+  var snapKeyMap = { rev:'rev', exp:'exp', emi:'emi', reserve:'reserve', assets:'assets', liabilities:'liabilities' };
+
+  if (s) {
+    fields.forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      var v = s[snapKeyMap[id]];
+      el.value = (v != null && !isNaN(v)) ? v : '';
+    });
+    // Hide stale results since the inputs changed
+    var rs = document.getElementById('resultsSection');
+    if (rs) rs.style.display = 'none';
+  } else {
+    // No saved snapshot for this month — clear fields for fresh entry
+    fields.forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    var rs2 = document.getElementById('resultsSection');
+    if (rs2) rs2.style.display = 'none';
+  }
+});
+
+/* ------------------------------------------------------
    MAIN CALCULATE
    Note: getAsOfMonth() and monthLabel() are provided by ../asof-month.js
 ------------------------------------------------------ */
