@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BizSco — Storage Debug</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;line-height:1.5;min-height:100vh}
+h1{color:#fff;margin-bottom:8px}
+.subtitle{color:#94a3b8;margin-bottom:24px;font-size:.9rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:18px 22px;margin-bottom:14px}
+.card h2{font-size:1rem;color:#a5b4fc;margin-bottom:10px}
+.row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #334155;font-size:.86rem}
+.row:last-child{border-bottom:none}
+.row .lbl{flex:0 0 200px;color:#94a3b8;font-family:monospace}
+.row .val{flex:1;color:#e2e8f0;font-family:monospace;word-break:break-all}
+.ok{color:#4ade80;font-weight:700}
+.warn{color:#fbbf24;font-weight:700}
+.err{color:#f87171;font-weight:700}
+pre{background:#0f172a;border-radius:6px;padding:10px;font-size:.78rem;color:#cbd5e1;overflow-x:auto;max-height:300px}
+.actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+button{padding:9px 16px;border:none;border-radius:7px;font-size:.86rem;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-primary{background:#4f46e5;color:#fff}
+.btn-primary:hover{background:#6366f1}
+.btn-danger{background:#dc2626;color:#fff}
+.btn-danger:hover{background:#ef4444}
+.btn-secondary{background:#475569;color:#fff}
+.btn-secondary:hover{background:#64748b}
+.diag{margin-top:10px;padding:10px 14px;border-radius:7px;font-size:.84rem;font-weight:600;line-height:1.5}
+.diag.green{background:#052e16;border:1px solid #16a34a;color:#86efac}
+.diag.amber{background:#1c1a0c;border:1px solid #ca8a04;color:#fde047}
+.diag.red  {background:#1a0a0a;border:1px solid #dc2626;color:#fca5a5}
+.copy-area{width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:10px;color:#cbd5e1;font-family:monospace;font-size:.76rem;min-height:160px;resize:vertical;margin-top:8px}
+</style>
+</head>
+<body>
+
+<h1>🔍 BizSco Storage Debug</h1>
+<p class="subtitle">Shows what's actually in localStorage on this device. Paste the bottom "Diagnostic Summary" text back to Claude.</p>
+
+<div class="card">
+  <h2>Profile Data</h2>
+  <div class="row"><div class="lbl">fw_profile</div><div class="val" id="fw_profile">—</div></div>
+  <div class="row"><div class="lbl">fw_profiles (array)</div><div class="val" id="fw_profiles">—</div></div>
+  <div class="row"><div class="lbl">fw_active_idx</div><div class="val" id="fw_active_idx">—</div></div>
+  <div class="row"><div class="lbl">fw_biz_profile</div><div class="val" id="fw_biz_profile">—</div></div>
+  <div class="row"><div class="lbl">fw_onboarded</div><div class="val" id="fw_onboarded">—</div></div>
+</div>
+
+<div class="card">
+  <h2>Monthly Snapshots (for As-Of-Month + History)</h2>
+  <div class="row"><div class="lbl">fw_monthly_snapshots</div><div class="val" id="fw_monthly_snapshots">—</div></div>
+  <pre id="snapshotsDetail">—</pre>
+</div>
+
+<div class="card">
+  <h2>Authentication</h2>
+  <div class="row"><div class="lbl">fw_uid</div><div class="val" id="fw_uid">—</div></div>
+  <div class="row"><div class="lbl">fw_email</div><div class="val" id="fw_email">—</div></div>
+  <div class="row"><div class="lbl">Supabase auth token (sb-*)</div><div class="val" id="supabase_auth">—</div></div>
+</div>
+
+<div class="card">
+  <h2>All localStorage Keys (<span id="keyCount">0</span>)</h2>
+  <pre id="allKeys">—</pre>
+</div>
+
+<div class="card">
+  <h2>📊 Diagnostic Summary</h2>
+  <div id="diagnosis"></div>
+  <p style="color:#94a3b8;font-size:.82rem;margin-top:12px">Copy the text below and paste back to Claude:</p>
+  <textarea id="copyArea" class="copy-area" readonly></textarea>
+  <div class="actions">
+    <button class="btn-primary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+    <button class="btn-secondary" onclick="location.reload()">🔄 Refresh</button>
+    <button class="btn-secondary" onclick="manualSet()">✏ Manually Set Profile (test)</button>
+    <button class="btn-danger" onclick="clearAll()">🗑 Clear All Storage</button>
+  </div>
+</div>
+
+<script>
+function get(key){
+  try { return JSON.parse(localStorage.getItem(key) || 'null'); }
+  catch(e){ return localStorage.getItem(key); }
+}
+function show(id, val, isJSON){
+  var el = document.getElementById(id);
+  if (val === null || val === undefined || val === '') {
+    el.innerHTML = '<span class="err">EMPTY / MISSING</span>';
+  } else {
+    el.innerHTML = '<span class="ok">' + (isJSON ? JSON.stringify(val).slice(0,200) : String(val).slice(0,200)) + '</span>';
+  }
+}
+
+// Profile data
+var p   = get('fw_profile');
+var ps  = get('fw_profiles');
+var idx = localStorage.getItem('fw_active_idx');
+var bp  = get('fw_biz_profile');
+var ob  = localStorage.getItem('fw_onboarded');
+show('fw_profile', p, true);
+show('fw_profiles', ps, true);
+show('fw_active_idx', idx, false);
+show('fw_biz_profile', bp, true);
+show('fw_onboarded', ob, false);
+
+// Snapshots
+var snaps = get('fw_monthly_snapshots');
+show('fw_monthly_snapshots', snaps ? Object.keys(snaps).length + ' months saved' : null, false);
+document.getElementById('snapshotsDetail').textContent =
+  snaps ? JSON.stringify(snaps, null, 2) : '(no monthly snapshots saved)';
+
+// Auth
+var uid = localStorage.getItem('fw_uid');
+var em  = localStorage.getItem('fw_email');
+show('fw_uid', uid, false);
+show('fw_email', em, false);
+
+// Supabase auth token
+var sbKey = Object.keys(localStorage).find(function(k){ return k.startsWith('sb-') && k.endsWith('-auth-token'); });
+if (sbKey) {
+  try {
+    var sbData = JSON.parse(localStorage.getItem(sbKey));
+    var user = sbData && sbData.user;
+    var info = user ? (user.email + ' (id: ' + user.id.slice(0,8) + '...)') : 'token exists but no user';
+    document.getElementById('supabase_auth').innerHTML = '<span class="ok">' + info + '</span>';
+  } catch(e){
+    document.getElementById('supabase_auth').innerHTML = '<span class="warn">parse error</span>';
+  }
+} else {
+  document.getElementById('supabase_auth').innerHTML = '<span class="err">NOT LOGGED IN — no Supabase token</span>';
+}
+
+// All keys
+var keys = Object.keys(localStorage).sort();
+document.getElementById('keyCount').textContent = keys.length;
+document.getElementById('allKeys').textContent = keys.length ? keys.join('\n') : '(empty)';
+
+// Diagnosis
+var diag = document.getElementById('diagnosis');
+var issues = [];
+var ok = [];
+if (!p || !p.rev) issues.push('❌ fw_profile.rev is empty — dashboard will show $15,000 sample');
+else ok.push('✓ fw_profile.rev = ' + p.rev);
+if (!p || !p.exp) issues.push('❌ fw_profile.exp is empty');
+else ok.push('✓ fw_profile.exp = ' + p.exp);
+if (!snaps || !Object.keys(snaps).length) issues.push('⚠ No monthly snapshots saved');
+else ok.push('✓ Monthly snapshots: ' + Object.keys(snaps).join(', '));
+if (!sbKey) issues.push('❌ Not logged in to Supabase');
+else ok.push('✓ Logged in to Supabase');
+
+if (issues.length) {
+  diag.innerHTML = '<div class="diag red"><strong>Problems found:</strong><br>' + issues.join('<br>') + '</div>';
+  if (ok.length) diag.innerHTML += '<div class="diag green">' + ok.join('<br>') + '</div>';
+} else {
+  diag.innerHTML = '<div class="diag green"><strong>All good!</strong><br>' + ok.join('<br>') + '</div>';
+}
+
+// Copy-paste summary
+var summary = [
+  '=== BizSco Storage Debug ===',
+  'URL: ' + location.href,
+  'Time: ' + new Date().toISOString(),
+  '',
+  'fw_profile: ' + (p ? JSON.stringify(p) : 'EMPTY'),
+  'fw_profiles[' + (idx||'?') + ']: ' + (ps && idx != null ? JSON.stringify(ps[parseInt(idx)]) : 'EMPTY'),
+  'fw_onboarded: ' + (ob || 'no'),
+  'fw_uid: ' + (uid || 'EMPTY'),
+  'fw_email: ' + (em || 'EMPTY'),
+  'Supabase token: ' + (sbKey ? 'PRESENT' : 'MISSING'),
+  '',
+  'Monthly snapshots (' + (snaps ? Object.keys(snaps).length : 0) + '): ' + (snaps ? JSON.stringify(snaps) : 'EMPTY'),
+  '',
+  'All keys (' + keys.length + '): ' + keys.join(', '),
+  '',
+  '--- Issues ---',
+  (issues.length ? issues.join('\n') : 'None'),
+  '=== End ==='
+].join('\n');
+document.getElementById('copyArea').value = summary;
+
+function copyToClipboard(){
+  var t = document.getElementById('copyArea');
+  t.select();
+  document.execCommand('copy');
+  alert('Copied to clipboard. Paste into chat.');
+}
+
+function manualSet(){
+  var sample = {
+    bizName: 'Test Business',
+    rev: 25000,
+    exp: 14000,
+    emi: 1800,
+    reserve: 40000,
+    loan: 75000,
+    industry: 'Retail',
+    state: 'CA',
+    employees: '5'
+  };
+  localStorage.setItem('fw_profile', JSON.stringify(sample));
+  localStorage.setItem('fw_profiles', JSON.stringify([Object.assign({id:'p1',name:'Test Business'},sample)]));
+  localStorage.setItem('fw_active_idx', '0');
+  localStorage.setItem('fw_onboarded', '1');
+  alert('Sample profile set. Now open dashboard.html in another tab to test — it should show $25,000 revenue instead of $15,000 sample.');
+}
+
+function clearAll(){
+  if(confirm('Clear ALL localStorage? This logs you out and wipes all your saved numbers.')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+</script>
+
+</body>
+</html>
