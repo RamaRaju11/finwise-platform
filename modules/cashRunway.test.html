@@ -562,14 +562,43 @@ function importCashBalance(amount){
 (function(){
   try{
     var saved = JSON.parse(localStorage.getItem(CR_KEY)||'null');
+    // ── Pre-fill strategy ──────────────────────────────────────────
+    // Global fields (revenue, cashReserve, emiTotal) ALWAYS reflect the
+    // current-month snapshot when one exists — those are cross-cutting
+    // business numbers that should stay in sync with BHS / Checkup / etc.
+    // CR-specific fields (fixedCosts, varCosts, ownerPay) stay from this
+    // module's own saved inputs, because they're calculator-local choices
+    // (e.g., user's 70/30 split between fixed and variable).
+    var currentMonth = new Date().toISOString().substring(0,7);
+    var snaps = {}; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){}
+    var cs = snaps[currentMonth];
+
+    // CR-specific fields: prefer this module's own saved values
     if(saved){
-      document.getElementById('fixedCosts').value  = saved.fixedCosts ||'';
-      document.getElementById('varCosts').value    = saved.varCosts   ||'';
-      document.getElementById('emiTotal').value    = saved.emiTotal   ||'';
-      document.getElementById('cashReserve').value = saved.cashReserve||'';
-      document.getElementById('revenue').value     = saved.revenue    ||'';
-      document.getElementById('ownerPay').value    = saved.ownerPay   ||'';
+      document.getElementById('fixedCosts').value = saved.fixedCosts || '';
+      document.getElementById('varCosts').value   = saved.varCosts   || '';
+      document.getElementById('ownerPay').value   = saved.ownerPay   || '';
     }
+
+    // Global fields: prefer current-month snapshot (live source of truth)
+    if (cs && cs.rev     != null) document.getElementById('revenue').value     = cs.rev;
+    else if (saved && saved.revenue)     document.getElementById('revenue').value     = saved.revenue;
+
+    if (cs && cs.emi     != null) document.getElementById('emiTotal').value    = cs.emi;
+    else if (saved && saved.emiTotal)    document.getElementById('emiTotal').value    = saved.emiTotal;
+
+    if (cs && cs.reserve != null) document.getElementById('cashReserve').value = cs.reserve;
+    else if (saved && saved.cashReserve) document.getElementById('cashReserve').value = saved.cashReserve;
+
+    // If fixed/var costs are still blank, derive from current-month exp (65/35 split)
+    if (cs && cs.exp != null) {
+      if(!document.getElementById('fixedCosts').value)
+        document.getElementById('fixedCosts').value = Math.round(cs.exp * 0.65) || '';
+      if(!document.getElementById('varCosts').value)
+        document.getElementById('varCosts').value   = Math.round(cs.exp * 0.35) || '';
+    }
+
+    // Final fallback: fw_profile (onboarding numbers) for any field still blank
     var idx = parseInt(localStorage.getItem('fw_active_idx')||'0');
     var p = JSON.parse(localStorage.getItem('fw_profiles')||'[]')[idx];
     if(!p){ p = JSON.parse(localStorage.getItem('fw_profile')||'null'); }
