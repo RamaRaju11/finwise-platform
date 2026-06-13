@@ -515,6 +515,19 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   <!-- PAGE CONTENT -->
   <div class="page-content">
 
+    <!-- Missing-month banner (Piece 4 of Monthly Capture Habit).
+         Auto-shown when user hasn't logged data for current month yet.
+         Hidden if all caught up or no history exists. -->
+    <div id="missingMonthBanner" style="display:none;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:12px;padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-size:1.8rem;line-height:1">📅</span>
+      <div style="flex:1;min-width:200px">
+        <div id="mmbTitle" style="font-weight:800;color:#1e293b;font-size:.95rem;margin-bottom:2px">Log this month's numbers</div>
+        <div id="mmbBody" style="color:#64748b;font-size:.82rem;line-height:1.5">Takes about 60 seconds — keeps your trend chart accurate.</div>
+      </div>
+      <a href="modules/businessHealthScore.test.html" style="background:#4f46e5;color:#fff;padding:9px 18px;border-radius:7px;font-weight:700;font-size:.84rem;text-decoration:none">Log now →</a>
+      <a href="monthlyHistory.html" style="font-size:.78rem;color:#475569;font-weight:600;text-decoration:none">See history →</a>
+    </div>
+
     <!-- Page header -->
     <div class="page-header">
       <div class="ph-text">
@@ -524,6 +537,62 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <div class="ph-spacer"></div>
       <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
+
+    <script>
+    // Missing-month banner controller — detect calendar gaps in fw_monthly_snapshots
+    (function(){
+      function monthOffsetFromNow(offset){
+        var d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);
+        return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      }
+      function monthLabel(ym){
+        var p=ym.split('-');
+        var d=new Date(parseInt(p[0]),parseInt(p[1])-1,1);
+        return d.toLocaleString('default',{month:'long',year:'numeric'});
+      }
+      function checkAndShow(){
+        var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(e){ snaps = {}; }
+        var keys = Object.keys(snaps).filter(function(k){return snaps[k]&&typeof snaps[k].healthScore==='number';}).sort();
+        if (keys.length === 0) return;  // No history yet — let onboarding handle it
+
+        var current = monthOffsetFromNow(0);
+        var lastMonth = monthOffsetFromNow(-1);
+        var banner = document.getElementById('missingMonthBanner');
+        var title = document.getElementById('mmbTitle');
+        var body = document.getElementById('mmbBody');
+        if (!banner) return;
+
+        // Case 1: current month not logged yet
+        if (!keys.includes(current)) {
+          title.textContent = 'Log ' + monthLabel(current) + ' numbers';
+          body.innerHTML = 'You haven\'t saved data for ' + monthLabel(current) + ' yet. <strong>60 seconds</strong> keeps your trend accurate.';
+          banner.style.display = 'flex';
+          return;
+        }
+
+        // Case 2: Current done, but earlier month is missing (gap in history)
+        var earliest = keys[0];
+        var [y,m] = earliest.split('-').map(Number);
+        while (true) {
+          var key = y+'-'+String(m).padStart(2,'0');
+          if (!keys.includes(key) && key !== current) {
+            title.textContent = 'Missing data for ' + monthLabel(key);
+            body.innerHTML = 'Your trend is more accurate when filled in. <a href="modules/businessHealthScore.test.html" style="color:#4f46e5;font-weight:700">Backfill ' + monthLabel(key) + ' →</a>';
+            banner.style.display = 'flex';
+            return;
+          }
+          if (key === current) break;
+          m++; if (m > 12) { m = 1; y++; }
+        }
+        // All caught up — banner stays hidden
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkAndShow);
+      } else {
+        checkAndShow();
+      }
+    })();
+    </script>
 
     <!-- TRIAL BANNER -->
     <div class="trial-banner" id="trialBanner" style="display:none">
