@@ -269,7 +269,6 @@
   <button class="tab" onclick="showTab('breakdown')">Score Breakdown</button>
   <button class="tab" onclick="showTab('maxloan')">Max Safe Loan</button>
   <button class="tab" onclick="showTab('stress')">Stress Test</button>
-  <button class="tab" onclick="showTab('tests')">Unit Tests</button>
 </div>
 
 <!-- ----------------------------------------------------------
@@ -472,17 +471,9 @@
   </div>
 </div>
 
-<!-- ----------------------------------------------------------
-     TAB 5 — UNIT TESTS
----------------------------------------------------------- -->
-<div id="tests" class="panel">
-  <div class="card">
-    <h2>Automated Unit Tests</h2>
-    <p class="desc">Validates all scoring logic, component calculations, EMI formula, and edge cases.</p>
-    <button class="primary" onclick="runTests()">Run All Tests</button>
-    <div id="testOutput" style="margin-top:16px"></div>
-  </div>
-</div>
+<!-- Unit Tests tab removed from UI — internal dev test runner only,
+     not for end users. The runTests() function still exists in JS
+     for developers to call from the browser console if needed. -->
 
 <script>
 // -- Plain-English Explain Helpers --------------------------------

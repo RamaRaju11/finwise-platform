@@ -75,11 +75,18 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
 .delta-eq{background:#f1f5f9;color:#64748b}
 
 /* COMPARISON BAR */
-.cmp-bar-wrap{margin:14px 0 6px}
-.cmp-bar-lbl{display:flex;justify-content:space-between;font-size:.72rem;font-weight:600;color:#64748b;margin-bottom:5px}
-.cmp-track{height:12px;background:#f1f5f9;border-radius:6px;overflow:hidden;position:relative}
-.cmp-current{height:100%;border-radius:6px;transition:width .5s ease;opacity:.45}
-.cmp-projected{height:100%;border-radius:6px;position:absolute;top:0;left:0;transition:width .5s ease}
+.cmp-bar-wrap{margin:18px 0 6px}
+.cmp-bar-title{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#475569;margin-bottom:10px}
+.cmp-bar-row{display:grid;grid-template-columns:120px 1fr 70px;align-items:center;gap:12px;margin-bottom:10px;font-size:.82rem}
+@media(max-width:600px){.cmp-bar-row{grid-template-columns:90px 1fr 60px;gap:8px;font-size:.78rem}}
+.cmp-bar-row .cmp-lbl{font-weight:700;color:#475569}
+.cmp-bar-row .cmp-val{text-align:right;font-weight:900;color:#1e293b;font-variant-numeric:tabular-nums}
+.cmp-bar-row .cmp-track{height:14px;background:#f1f5f9;border-radius:7px;overflow:hidden;position:relative}
+.cmp-bar-row .cmp-fill{height:100%;border-radius:7px;transition:width .6s ease;background:#94a3b8}
+.cmp-bar-row.proj .cmp-fill{background:#16a34a}
+.cmp-delta-pill{display:inline-flex;align-items:center;gap:4px;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:999px;font-size:.74rem;font-weight:800;margin-top:4px}
+.cmp-delta-pill.down{background:#fee2e2;color:#991b1b}
+.cmp-delta-pill.flat{background:#f1f5f9;color:#64748b}
 
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .btn-primary{padding:12px 24px;background:#2563eb;color:#fff;border:none;border-radius:9px;font-size:.88rem;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;transition:background .15s}
@@ -219,10 +226,22 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
     <div id="deltaRows"></div>
 
     <div class="cmp-bar-wrap">
-      <div class="cmp-bar-lbl"><span>Current Score</span><span>Projected Score</span></div>
-      <div class="cmp-track">
-        <div class="cmp-projected" id="projBar" style="background:#2563eb;width:0%"></div>
-        <div class="cmp-current" id="curBar" style="background:#94a3b8;width:0%"></div>
+      <div class="cmp-bar-title">Loan Score Comparison (out of 100)</div>
+
+      <div class="cmp-bar-row">
+        <div class="cmp-lbl">Current</div>
+        <div class="cmp-track"><div class="cmp-fill" id="curBar" style="width:0%"></div></div>
+        <div class="cmp-val" id="curVal">0/100</div>
+      </div>
+
+      <div class="cmp-bar-row proj">
+        <div class="cmp-lbl">Projected</div>
+        <div class="cmp-track"><div class="cmp-fill" id="projBar" style="width:0%"></div></div>
+        <div class="cmp-val" id="projVal">0/100</div>
+      </div>
+
+      <div style="text-align:center;margin-top:6px">
+        <span class="cmp-delta-pill flat" id="cmpDeltaPill">No change</span>
       </div>
     </div>
   </div>
@@ -384,13 +403,28 @@ function recalc(){
       +'</div>';
   }).join('');
 
-  /* bars */
+  /* bars — two stacked rows, each with its own label + value + fill */
   document.getElementById('curBar').style.width=cur.ls+'%';
   document.getElementById('curBar').style.background=colorScore(cur.ls);
+  document.getElementById('curVal').textContent=cur.ls+'/100';
+
   document.getElementById('projBar').style.width=proj.ls+'%';
   document.getElementById('projBar').style.background=colorScore(proj.ls);
-  document.getElementById('projBar').style.opacity=1;
-  document.getElementById('curBar').style.opacity=0.35;
+  document.getElementById('projVal').textContent=proj.ls+'/100';
+
+  /* delta pill — clearly shows change direction */
+  var d=proj.ls-cur.ls;
+  var pill=document.getElementById('cmpDeltaPill');
+  if(d>0){
+    pill.className='cmp-delta-pill';
+    pill.textContent='▲ +'+d+' pts improvement';
+  } else if(d<0){
+    pill.className='cmp-delta-pill down';
+    pill.textContent='▼ '+d+' pts (worse)';
+  } else {
+    pill.className='cmp-delta-pill flat';
+    pill.textContent='— No change yet — drag the sliders above';
+  }
 
   /* delta rows */
   var deltas=[
