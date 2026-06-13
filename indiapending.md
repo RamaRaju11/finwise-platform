@@ -1,7 +1,58 @@
 # India WhatsApp Login — Pending Items
 
-_Last updated: 2026-06-03_
+_Last updated: 2026-06-10_
 _Project ref: `ugtfdtdbegdjqrdtplkg` (SmallBiz Supabase)_
+
+---
+
+## 📅 PLANNED INITIATIVE — Monthly Capture Habit (decided 2026-06-10)
+
+Goal: turn the platform from a one-time calculator into a **financial habit tracker** by capturing monthly profile data, sending reminder emails, and building a multi-month history view.
+
+### Decisions locked in
+
+| Decision | Choice |
+|---|---|
+| **"As of" month tagging** | Hybrid — default to current month, small toggle "this is for last month?" lets user override without friction |
+| **Email reminder cadence** | Monthly on the 3rd of each month at 10am IST — matches month-end accounting close, low spam risk |
+| **Data storage** | Hybrid — `localStorage` for everyone (anonymous users keep working) + Supabase mirror for logged-in users (cross-device sync + email reminders) |
+
+### 4 pieces to build (priority order)
+
+**Piece 1 — Tag every profile update with `asOfMonth` (~2 hrs)**
+- All save buttons (profile, Health Score, etc.) prompt: "Numbers for which month?" with current-month default and a small "last month" toggle.
+- Store `asOfMonth: "2026-06"` field on every snapshot.
+- `fw_monthly_snapshots` already supports per-month keying — just need explicit user awareness of which month they're recording.
+
+**Piece 2 — Rich history dashboard `monthlyHistory.html` (~4 hrs)**
+- Table of all monthly entries: revenue · expenses · EMI · score per month.
+- 12-month trend chart.
+- "Missing month" rows with [Log it now] button to backfill.
+- Auto-detected insights ("Revenue up 22% in 6 months", "Your score has improved 24 points since Feb").
+
+**Piece 3 — Monthly email reminder (~3 hrs backend + 1 hr template)**
+- New Supabase Edge Function `monthly-capture-reminder` (cron-triggered).
+- Runs 3rd of each month at 10am IST.
+- Email subject: "Your {LastMonth} numbers are ready — 60 seconds to log them"
+- Body: 4-number ask + CTA button → opens `login.html?t=...&month=2026-05` pre-pointed at the right month.
+- Default opt-in for new users; manage via settings link.
+
+**Piece 4 — Missing-month prompts on dashboard (~1 hr)**
+- When user opens dashboard, detect calendar gaps in their snapshots.
+- Show banner: "⚠️ Looks like you skipped April. [Log it now] [Skip — paused]"
+- Prevents misleading trends from missing data.
+
+### Privacy tiers (auto-applied)
+
+| Tier | Where data lives | Reminders | Cross-device |
+|---|---|---|---|
+| Anonymous | localStorage only | ❌ | ❌ |
+| Email-only signup | localStorage + Supabase user record | ✅ monthly | ❌ |
+| Full account (WhatsApp or email login) | localStorage + Supabase sync | ✅ + drop alerts | ✅ |
+
+### Implementation status
+- ⏳ Awaiting user confirmation to start Piece 1
+- All four pieces independent — can ship one at a time
 
 ---
 
