@@ -516,9 +516,9 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
   <div class="page-content">
 
     <!-- Missing-month banner (Piece 4 of Monthly Capture Habit).
-         Auto-shown when user hasn't logged data for current month yet.
-         Hidden if all caught up or no history exists. -->
-    <div id="missingMonthBanner" style="display:none;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:12px;padding:14px 20px;margin-bottom:16px;display:none;align-items:center;gap:14px;flex-wrap:wrap">
+         Auto-shown when user hasn't logged data for current month yet,
+         OR when user has never logged any month (first-time prompt). -->
+    <div id="missingMonthBanner" style="display:none;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:12px;padding:14px 20px;margin-bottom:16px;align-items:center;gap:14px;flex-wrap:wrap">
       <span style="font-size:1.8rem;line-height:1">📅</span>
       <div style="flex:1;min-width:200px">
         <div id="mmbTitle" style="font-weight:800;color:#1e293b;font-size:.95rem;margin-bottom:2px">Log this month's numbers</div>
@@ -551,16 +551,28 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
         return d.toLocaleString('default',{month:'long',year:'numeric'});
       }
       function checkAndShow(){
+        var banner = document.getElementById('missingMonthBanner');
+        var title  = document.getElementById('mmbTitle');
+        var body   = document.getElementById('mmbBody');
+        if (!banner || !title || !body) return;
+
         var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(e){ snaps = {}; }
-        var keys = Object.keys(snaps).filter(function(k){return snaps[k]&&typeof snaps[k].healthScore==='number';}).sort();
-        if (keys.length === 0) return;  // No history yet — let onboarding handle it
+        // Accept ANY entry (with healthScore OR with rev/exp data) — we want to
+        // show the banner for users who saved profile but haven't run a score.
+        var keys = Object.keys(snaps).filter(function(k){
+          var s = snaps[k]; if (!s) return false;
+          return typeof s.healthScore === 'number' || typeof s.rev === 'number';
+        }).sort();
 
         var current = monthOffsetFromNow(0);
-        var lastMonth = monthOffsetFromNow(-1);
-        var banner = document.getElementById('missingMonthBanner');
-        var title = document.getElementById('mmbTitle');
-        var body = document.getElementById('mmbBody');
-        if (!banner) return;
+
+        // First-time user: nothing saved → banner that invites them to log their first month
+        if (keys.length === 0) {
+          title.textContent = 'Get your first Health Score';
+          body.innerHTML = 'Once you log this month\'s numbers, BizSco starts tracking your financial trend.';
+          banner.style.display = 'flex';
+          return;
+        }
 
         // Case 1: current month not logged yet
         if (!keys.includes(current)) {
@@ -572,7 +584,8 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 
         // Case 2: Current done, but earlier month is missing (gap in history)
         var earliest = keys[0];
-        var [y,m] = earliest.split('-').map(Number);
+        var parts = earliest.split('-').map(Number);
+        var y = parts[0]; var m = parts[1];
         while (true) {
           var key = y+'-'+String(m).padStart(2,'0');
           if (!keys.includes(key) && key !== current) {
