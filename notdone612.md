@@ -30,27 +30,29 @@ Should show one row with the schedule `30 4 3 * *`.
 
 ---
 
-## 2. Other save flows don't yet write `asOfMonth`
+## 2. Other save flows don't yet write `asOfMonth` ✅ MOSTLY RESOLVED 2026-06-12
 
-**What**: Only `modules/businessHealthScore.test.html` currently uses the new `asOfMonth` tagger. Other places where the user enters monthly numbers still save without a month tag.
+**Status**: Shared helper built and propagated to the 3 main save points.
 
-**Files affected**:
-- `onboarding.html` (`saveProfile()` at line ~427) — saves `fw_profile` but no `asOfMonth`
-- `checkup.html` (Financial Checkup module) — likely saves financials, no tag
-- `modules/cashRunway.test.html`
+**What's done now**:
+- New shared script: `/asof-month.js` exposes `window.getAsOfMonth()`, `monthLabel()`, `monthOffsetFromNow()`, and auto-mounts the toggle UI into any `<div data-asof-month></div>` placeholder.
+- `modules/businessHealthScore.test.html` — refactored to use shared helper (removed inline copy)
+- `onboarding.html` — toggle added below the "Loan Amount You Need" field; `saveProfile()` writes `fw_profile.asOfMonth` + mirrors numbers to `fw_monthly_snapshots[asOfMonth]`
+- `checkup.html` — toggle added below the 4 monthly inputs; checkup run writes `fw_score_history` entries with `asOfMonth` + mirrors to `fw_monthly_snapshots[asOfMonth]` with healthScore + grade
+
+**Still pending** (smaller, lower priority):
+- `modules/cashRunway.test.html` — uses monthly inputs but rarely saves; would be nice for completeness
 - `modules/profitMarginAnalyzer.test.html`
 - `modules/cashFlowEngine.test.html`
-- Possibly others — needs audit
+- Any other module that calls `localStorage.setItem('fw_monthly_snapshots', ...)` directly
 
-**Why deferred**: Each file needs its own UI insertion + JS hookup. Doing them all at once would have been ~6 edits with bigger surface area for bugs. Better to validate the tagger UX on one module first (Business Health Score) before propagating.
+**Why these are lower priority**: they're calculators that read/compute on the fly, not primary save points. Users mostly enter their monthly profile through onboarding or checkup. Health Score / Score History pages stay accurate.
 
-**Recommended approach when picking up**:
-1. Extract the asOfMonth tagger into a small **shared helper script** (`asof-month.js`) — single source of truth for the UI HTML, CSS, and JS
-2. Include via `<script src="../asof-month.js"></script>` in each module
-3. Call `getAsOfMonth()` wherever a save touches monthly data
-4. Snapshot writes target `fw_monthly_snapshots[asOfMonth]` for consistency
-
-**Risk of skipping**: users may save numbers in one module (e.g., onboarding in June) but the score history thinks it's the wrong month. Less impactful for static profile data, more impactful for live tools.
+**How to add to any remaining module**:
+1. Add `<script src="../asof-month.js"></script>` to the `<head>`
+2. Add `<div data-asof-month></div>` somewhere near the financial inputs
+3. In the save handler, call `window.getAsOfMonth()` to get the chosen `'YYYY-MM'`
+4. Write to `fw_monthly_snapshots[selectedMonth]` (upsert pattern — `if(!snaps[key]) snaps[key] = {}`)
 
 ---
 

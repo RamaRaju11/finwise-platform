@@ -98,6 +98,7 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 <!-- Multi-country localization -->
 <script src="country-data.js"></script>
 <script src="country-switcher.js" defer></script>
+<script src="asof-month.js"></script>
 </head>
 <body>
 <script src="modules/fw-auth.js"></script>
@@ -259,6 +260,10 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
 
     <label>Loan Amount You Need ($) <span style="font-size:.72rem;font-weight:400;color:#94a3b8">if any</span></label>
     <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
+
+    <!-- As-of month tagger — lets user say which month these numbers represent.
+         Powered by shared /asof-month.js (auto-mounted). Default = current. -->
+    <div data-asof-month></div>
 
     <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 14px;margin-top:16px;font-size:.78rem;color:#166534;line-height:1.5">
       💡 <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
@@ -425,6 +430,12 @@ function selectTool(el){
 }
 
 function saveProfile(){
+  // Pick the month these numbers represent (from the shared as-of-month tagger).
+  // Falls back to current month if the helper hasn't loaded for any reason.
+  var asOfMonth = (typeof window.getAsOfMonth === 'function')
+    ? window.getAsOfMonth()
+    : new Date().toISOString().substring(0,7);
+
   var p = {
     bizName    : document.getElementById('bizName').value.trim(),
     ownerName  : document.getElementById('ownerName').value.trim(),
@@ -437,11 +448,29 @@ function saveProfile(){
     emi        : parseFloat(document.getElementById('emi').value)||0,
     reserve    : parseFloat(document.getElementById('reserve').value)||0,
     loan       : parseFloat(document.getElementById('loanNeed').value)||0,
+    asOfMonth  : asOfMonth,
+    asOfSavedAt: new Date().toISOString(),
     ownerCategory: Array.from(document.querySelectorAll('.owner-cats input[type=checkbox]:checked')).map(function(cb){return cb.value;})
   };
   /* Add `name` alias for cross-module compatibility */
   p.name = p.bizName;
   localStorage.setItem('fw_profile', JSON.stringify(p));
+
+  /* Mirror the numbers into the monthly snapshot store so history builds even
+     from the onboarding step. Existing healthScore values aren't overwritten —
+     we only set rev/exp/emi/reserve and let Business Health Score add the
+     score later when the user calculates. */
+  try {
+    var snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots') || '{}');
+    if (!snaps[asOfMonth]) snaps[asOfMonth] = {};
+    snaps[asOfMonth].rev     = p.rev;
+    snaps[asOfMonth].exp     = p.exp;
+    snaps[asOfMonth].emi     = p.emi;
+    snaps[asOfMonth].reserve = p.reserve;
+    snaps[asOfMonth].asOfMonth = asOfMonth;
+    snaps[asOfMonth].savedAt = new Date().toISOString();
+    localStorage.setItem('fw_monthly_snapshots', JSON.stringify(snaps));
+  } catch (e) { /* localStorage full or disabled — ignore */ }
 
   var profiles = [{
     id:'p1', name:p.bizName||'My Business', bizName:p.bizName, industry:p.industry,

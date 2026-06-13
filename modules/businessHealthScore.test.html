@@ -116,16 +116,7 @@ canvas#sparkCanvas{display:block;max-width:100%}
 .spark-right{text-align:center;min-width:70px}
 .spark-cur{font-size:2rem;font-weight:900;color:#2563eb;line-height:1}
 .spark-cur-lbl{font-size:.65rem;color:#94a3b8;margin-top:2px}
-
-/* As-of-month tagger (Piece 1) */
-.asof-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin:14px 0 16px}
-.asof-icon{font-size:1.05rem;line-height:1}
-.asof-lbl{font-size:.82rem;font-weight:700;color:#475569}
-.asof-toggle{display:inline-flex;gap:4px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:3px}
-.asof-btn{background:transparent;border:none;padding:6px 12px;font-size:.78rem;font-weight:700;color:#64748b;cursor:pointer;border-radius:5px;font-family:inherit}
-.asof-btn:hover{background:#f1f5f9;color:#1e293b}
-.asof-btn.active{background:#2563eb;color:#fff}
-.asof-custom-input{padding:5px 10px;font-size:.82rem;border:1px solid #e2e8f0;border-radius:6px;font-family:inherit}
+/* As-of-month tagger CSS is now in /asof-month.js (auto-injected) */
 
 /* live auto badge */
 .live-auto-badge{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;padding:5px 13px;border-radius:999px;font-size:.75rem;font-weight:700;margin-bottom:12px}
@@ -179,6 +170,7 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 <!-- Multi-country localization -->
 <script src="../country-data.js"></script>
 <script src="../country-switcher.js" defer></script>
+<script src="../asof-month.js"></script>
 </head>
 <body>
 <div id="fwSidebar"></div>
@@ -220,17 +212,8 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
     <div><label>Total Business Liabilities ($) <span class="field-hint">all outstanding loans</span></label><input type="number" id="liabilities" placeholder="e.g. 45000"/></div>
   </div>
 
-  <!-- As-of month tagger — Piece 1: tag every save with which month the data belongs to -->
-  <div class="asof-row" id="asofRow">
-    <span class="asof-icon">📅</span>
-    <span class="asof-lbl">These numbers are for:</span>
-    <div class="asof-toggle">
-      <button type="button" class="asof-btn active" data-offset="0" onclick="setAsOf(0,this)">— loading —</button>
-      <button type="button" class="asof-btn" data-offset="-1" onclick="setAsOf(-1,this)">— last month —</button>
-      <button type="button" class="asof-btn" data-offset="custom" onclick="pickCustomMonth(this)">Earlier ▾</button>
-    </div>
-    <input type="month" id="asofCustom" class="asof-custom-input" style="display:none" onchange="onCustomMonthChange()" />
-  </div>
+  <!-- As-of month tagger — uses shared asof-month.js helper (auto-mounted) -->
+  <div data-asof-month></div>
 
   <button class="btn-calc" onclick="calculate()">&#127942; Generate Health Score &rarr;</button>
 </div>
@@ -537,69 +520,8 @@ function mcCardGrey(name, desc, source){
 }
 
 /* ------------------------------------------------------
-   AS-OF MONTH TAGGER (Piece 1)
-   Lets the user tag this score with the correct calendar month. Defaults to
-   current; one-click toggle to last month; "Earlier" opens a month picker.
-   The selected value (YYYY-MM) is read by the save logic and written to
-   fw_monthly_snapshots[selectedMonth] so history accumulates correctly.
------------------------------------------------------- */
-var _asOfMonth = null;  // 'YYYY-MM' string, null = not yet initialized
-
-function monthOffsetFromNow(offset){
-  // offset: 0 = current month, -1 = last month, -2 = two months ago, etc.
-  var d = new Date();
-  d.setDate(1);  // avoid edge-of-month rollover quirks
-  d.setMonth(d.getMonth() + offset);
-  var y = d.getFullYear();
-  var m = String(d.getMonth() + 1).padStart(2, '0');
-  return y + '-' + m;
-}
-function monthLabel(ym){
-  // 'YYYY-MM' → 'June 2026'
-  var parts = ym.split('-');
-  var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
-  return d.toLocaleString('default', { month: 'long', year: 'numeric' });
-}
-function initAsOfButtons(){
-  var btns = document.querySelectorAll('.asof-btn[data-offset]');
-  btns[0].textContent = monthLabel(monthOffsetFromNow(0)) + ' (current)';
-  btns[1].textContent = monthLabel(monthOffsetFromNow(-1)) + ' (last month)';
-  _asOfMonth = monthOffsetFromNow(0);
-}
-function setAsOf(offset, btnEl){
-  if (offset === 'custom') return;  // handled by pickCustomMonth
-  _asOfMonth = monthOffsetFromNow(offset);
-  document.querySelectorAll('.asof-btn').forEach(function(b){ b.classList.remove('active'); });
-  btnEl.classList.add('active');
-  document.getElementById('asofCustom').style.display = 'none';
-}
-function pickCustomMonth(btnEl){
-  document.querySelectorAll('.asof-btn').forEach(function(b){ b.classList.remove('active'); });
-  btnEl.classList.add('active');
-  var inp = document.getElementById('asofCustom');
-  // Default to 2 months back if not previously set
-  if (!inp.value) inp.value = monthOffsetFromNow(-2);
-  inp.style.display = 'inline-block';
-  _asOfMonth = inp.value;
-  setTimeout(function(){ inp.focus(); inp.showPicker && inp.showPicker(); }, 50);
-}
-function onCustomMonthChange(){
-  var inp = document.getElementById('asofCustom');
-  if (inp.value) _asOfMonth = inp.value;
-}
-function getAsOfMonth(){
-  if (!_asOfMonth) initAsOfButtons();
-  return _asOfMonth;
-}
-// Initialize button labels on page load (once DOM is ready)
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAsOfButtons);
-} else {
-  initAsOfButtons();
-}
-
-/* ------------------------------------------------------
    MAIN CALCULATE
+   Note: getAsOfMonth() and monthLabel() are provided by ../asof-month.js
 ------------------------------------------------------ */
 function calculate(){
   var rev  = parseFloat(document.getElementById('rev').value)||0;
