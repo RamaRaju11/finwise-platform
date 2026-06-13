@@ -29,8 +29,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* SCORE DISPLAY */
 .score-big{text-align:center;padding:14px 0 10px}
+.sb-mini-lbl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#475569;margin-bottom:6px}
 .sb-num{font-size:3rem;font-weight:900;line-height:1}
-.sb-lbl{font-size:.75rem;color:#64748b;margin-top:4px;font-weight:600}
+.sb-lbl{font-size:.72rem;color:#64748b;margin-top:4px;font-weight:600;line-height:1.4}
+
+/* Health-grade block (distinct from loan-risk score so user sees them as separate metrics) */
+.grade-block{margin-top:14px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center}
+.grade-block-lbl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#475569;margin-bottom:4px}
+.grade-block .grade-sub{font-size:.84rem;color:#1e293b;font-weight:700;margin-top:2px}
+.grade-block .grade-foot{font-size:.7rem;color:#94a3b8;margin-top:3px;font-weight:600}
+
+/* Explainer note between the two metrics — appears below the side-by-side cards */
+.metric-explainer{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin:18px 0 4px;font-size:.82rem;color:#475569;line-height:1.55}
+.metric-explainer b{color:#1e293b}
+.metric-explainer .mx-row{display:flex;gap:10px;align-items:flex-start;margin-top:6px}
+.metric-explainer .mx-row .mx-icon{flex-shrink:0;font-size:1rem;line-height:1.4}
 .verdict{display:inline-block;font-size:.82rem;font-weight:800;letter-spacing:.08em;padding:5px 16px;border-radius:30px;text-transform:uppercase;margin-top:8px}
 .v-safe{background:#dcfce7;color:#15803d}
 .v-risky{background:#fef9c3;color:#854d0e}
@@ -186,8 +199,9 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
     <div class="panel">
       <div class="panel-title">Current — Baseline</div>
       <div class="score-big">
+        <div class="sb-mini-lbl">📊 Loan Risk Score</div>
         <div class="sb-num" id="curScore" style="color:#0f172a">—</div>
-        <div class="sb-lbl">Loan Score / 100</div>
+        <div class="sb-lbl">out of 100 — can you safely take this loan?</div>
         <div id="curVerdict"></div>
       </div>
       <div class="metric-row">
@@ -195,15 +209,21 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
         <div class="m-item"><div class="m-val" id="curDSCR">—</div><div class="m-lbl">DSCR</div></div>
         <div class="m-item"><div class="m-val" id="curNet">—</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="curGrade">—</div><div style="font-size:.74rem;color:#64748b" id="curGlabel">—</div></div>
+      <div class="grade-block">
+        <div class="grade-block-lbl">🩺 Business Health Grade</div>
+        <div class="grade-circ" id="curGrade">—</div>
+        <div class="grade-sub" id="curGlabel">—</div>
+        <div class="grade-foot">Overall financial fitness</div>
+      </div>
     </div>
 
     <!-- PROJECTED -->
     <div class="panel" style="border-color:#2563eb;background:linear-gradient(135deg,#f8faff 0%,#f0fdf4 100%)">
       <div class="panel-title" style="color:#2563eb">Projected — With Changes</div>
       <div class="score-big">
+        <div class="sb-mini-lbl">📊 Loan Risk Score</div>
         <div class="sb-num" id="projScore" style="color:#0f172a">—</div>
-        <div class="sb-lbl">Loan Score / 100</div>
+        <div class="sb-lbl">out of 100 — can you safely take this loan?</div>
         <div id="projVerdict"></div>
       </div>
       <div class="metric-row">
@@ -211,13 +231,26 @@ input[type=range]{width:100%;accent-color:#2563eb;height:6px;cursor:pointer}
         <div class="m-item"><div class="m-val" id="projDSCR">—</div><div class="m-lbl">DSCR</div></div>
         <div class="m-item"><div class="m-val" id="projNet">—</div><div class="m-lbl">Net/mo</div></div>
       </div>
-      <div style="text-align:center"><div class="grade-circ" id="projGrade">—</div><div style="font-size:.74rem;color:#64748b" id="projGlabel">—</div></div>
+      <div class="grade-block">
+        <div class="grade-block-lbl">🩺 Business Health Grade</div>
+        <div class="grade-circ" id="projGrade">—</div>
+        <div class="grade-sub" id="projGlabel">—</div>
+        <div class="grade-foot">Overall financial fitness</div>
+      </div>
       <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
         <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px">Projected Numbers</div>
         <div id="projNumbers"></div>
       </div>
     </div>
 
+  </div>
+
+  <!-- Explanatory note — clarifies that Loan Risk and Health Grade measure different things -->
+  <div class="metric-explainer">
+    <b>Why both numbers?</b> They look at your business from two different angles:
+    <div class="mx-row"><span class="mx-icon">📊</span><div><b>Loan Risk Score</b> answers: <em>"If I add this loan, can my cash flow safely handle it?"</em> Drops when DSCR or runway gets thin.</div></div>
+    <div class="mx-row"><span class="mx-icon">🩺</span><div><b>Business Health Grade</b> answers: <em>"How healthy is my business overall?"</em> Stays steadier because it also considers profit margin — a single loan rarely tanks overall health.</div></div>
+    <div class="mx-row" style="margin-top:8px;color:#0f172a"><span class="mx-icon">💡</span><div>A business can be <b>healthy overall (Grade B)</b> but a <b>specific loan can still be risky</b> — like a fit person making a risky decision. Both can be true at the same time.</div></div>
   </div>
 
   <!-- DELTA SUMMARY -->
