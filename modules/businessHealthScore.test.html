@@ -185,10 +185,11 @@ html.dark .pm-actions li{border-bottom-color:#1e293b!important;color:#cbd5e1!imp
 
 <!-- historical sparkline -->
 <div class="sparkline-wrap" id="sparkWrap" style="display:none">
-  <div class="spark-left">
-    <div class="spark-title">&#128200; Health Score — Last 6 Months</div>
+  <div class="spark-left" style="flex:1">
+    <div class="spark-title" id="sparkTitle">&#128200; Score History</div>
     <canvas id="sparkCanvas" height="50"></canvas>
     <div class="spark-months" id="sparkMonths"></div>
+    <div id="sparkNote" style="font-size:.72rem;color:#94a3b8;margin-top:6px;line-height:1.45"></div>
   </div>
   <div class="spark-right">
     <div class="spark-cur" id="sparkCurScore">—</div>
@@ -805,8 +806,23 @@ function calculate(){
   try{
     var curMo3=new Date().toISOString().substring(0,7);
     localStorage.setItem('fw_health_score',JSON.stringify({score:pctScore,grade:grade,coreScore:coreScore,coreMax:coreMax,liveScore:liveScore,liveMax:liveMax,savedAt:new Date().toISOString()}));
+
+    // UPSERT the monthly snapshot — if this month has no row yet, create
+    // one. Previously this only updated EXISTING rows (created by the
+    // Monthly Snapshot module), so users who only generated health
+    // scores here never built up history.
     var snaps3=JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}');
-    if(snaps3[curMo3]){snaps3[curMo3].healthScore=pctScore;snaps3[curMo3].grade=grade;localStorage.setItem('fw_monthly_snapshots',JSON.stringify(snaps3));}
+    if(!snaps3[curMo3]) snaps3[curMo3] = {};
+    snaps3[curMo3].healthScore = pctScore;
+    snaps3[curMo3].grade       = grade;
+    snaps3[curMo3].savedAt     = new Date().toISOString();
+    // Preserve the input snapshot for use elsewhere
+    snaps3[curMo3].rev     = rev;
+    snaps3[curMo3].exp     = exp;
+    snaps3[curMo3].emi     = emi;
+    snaps3[curMo3].reserve = res;
+    localStorage.setItem('fw_monthly_snapshots',JSON.stringify(snaps3));
+
     document.getElementById('shareBanner').style.display='flex';
   }catch(e2){}
 
@@ -920,11 +936,28 @@ function renderActionPlan(grade, f, ld){
 ------------------------------------------------------ */
 function renderSparkline(){
   var snaps; try{snaps=JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{};}catch(e){snaps={};}
-  var keys=Object.keys(snaps).sort().slice(-6);
-  var scores=keys.map(function(k){return snaps[k].healthScore||0;});
+  // Keep only entries that actually have a healthScore — empty snapshot
+  // rows from other modules shouldn't show up as data points.
+  var keys=Object.keys(snaps).filter(function(k){return snaps[k] && typeof snaps[k].healthScore === 'number';}).sort().slice(-6);
+  var scores=keys.map(function(k){return snaps[k].healthScore;});
   var wrap=document.getElementById('sparkWrap');
   if(keys.length<1){wrap.style.display='none';return;}
   wrap.style.display='flex';
+
+  // Title + explanatory note reflect actual data available, not a fixed "6 months"
+  var titleEl=document.getElementById('sparkTitle');
+  var noteEl =document.getElementById('sparkNote');
+  if(keys.length===1){
+    titleEl.innerHTML='&#128200; Score History — This Month';
+    noteEl.textContent='This is your first saved score. Calculate again next month to start tracking your trend.';
+  } else if(keys.length<6){
+    titleEl.innerHTML='&#128200; Score History — Last '+keys.length+' Months';
+    noteEl.textContent='Keep calculating monthly to build a full 6-month history.';
+  } else {
+    titleEl.innerHTML='&#128200; Score History — Last 6 Months';
+    noteEl.textContent='';
+  }
+
   var latestScore=scores[scores.length-1];
   document.getElementById('sparkCurScore').textContent=latestScore;
   if(keys.length<2) return;
