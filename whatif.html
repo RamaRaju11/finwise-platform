@@ -327,6 +327,60 @@ function loadBase(){
   } else {
     BASE.rev=15000; BASE.exp=9000; BASE.emi=800; BASE.res=18000;
   }
+  // Slider ranges adapt to baseline — defaults were sized for $10K/mo businesses
+  // and didn't move the needle for larger ones. Now they're proportional to scale.
+  scaleSliders();
+}
+
+// Resize the dollar-amount sliders (EMI, reserves) to match user's baseline.
+// Percentages sliders (rev, exp) don't need scaling.
+function scaleSliders(){
+  function roundNice(n){
+    // Round to a "human friendly" step (1, 5, 10, 25, 50, 100, ...)
+    var pow = Math.pow(10, Math.max(0, Math.floor(Math.log10(n)) - 1));
+    return Math.max(1, Math.round(n / pow) * pow);
+  }
+
+  // New-EMI slider: model new loan EMIs up to ~30% of monthly revenue.
+  // Floor at $5k so small businesses still get a meaningful range.
+  var emiMax  = Math.max(5000, Math.round((BASE.rev * 0.3) / 100) * 100);
+  var emiStep = roundNice(emiMax / 50);  // ~50 steps across the range
+  var emiEl   = document.getElementById('newEmiSlider');
+  if (emiEl) { emiEl.max = emiMax; emiEl.step = emiStep; }
+
+  // Reserves slider: -50% of baseline to +200% of baseline. Floor +$50k
+  // so users without saved reserves still see a useful range.
+  var resPos  = Math.max(50000, Math.round(BASE.res * 2));
+  var resNeg  = -Math.round(BASE.res * 0.5);
+  var resStep = roundNice(resPos / 40);
+  var resEl   = document.getElementById('resSlider');
+  if (resEl) { resEl.min = resNeg; resEl.max = resPos; resEl.step = resStep; }
+
+  // Update the static tick labels to reflect the new range
+  function fmtK(n){
+    var s = n < 0 ? '-' : (n > 0 ? '+' : '');
+    var abs = Math.abs(n);
+    if (abs >= 1000000) return s + '$' + (abs/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+    if (abs >= 1000)    return s + '$' + Math.round(abs/1000) + 'K';
+    return s + '$' + abs;
+  }
+  var emiTicks = document.querySelector('#newEmiSlider + .sl-ticks');
+  if (emiTicks) {
+    emiTicks.innerHTML =
+      '<span>$0</span>' +
+      '<span>' + fmtK(emiMax * 0.25) + '</span>' +
+      '<span>' + fmtK(emiMax * 0.5)  + '</span>' +
+      '<span>' + fmtK(emiMax * 0.75) + '</span>' +
+      '<span>' + fmtK(emiMax)        + '</span>';
+  }
+  var resTicks = document.querySelector('#resSlider + .sl-ticks');
+  if (resTicks) {
+    resTicks.innerHTML =
+      '<span>' + fmtK(resNeg)        + '</span>' +
+      '<span>$0</span>' +
+      '<span>' + fmtK(resPos * 0.5)  + '</span>' +
+      '<span>' + fmtK(resPos)        + '</span>';
+  }
 }
 
 function compute(rev,exp,emi,res){
