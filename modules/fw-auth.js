@@ -95,15 +95,16 @@
               }
             }
           }
-          /* Restore business profile from Supabase if localStorage is empty */
-          if(r.data && r.data.biz_profile && !localStorage.getItem('fw_profile')){
+          /* Supabase is the source of truth — overwrite localStorage on every
+             login so stale cached values can't drift from the backend. */
+          if(r.data && r.data.biz_profile){
             try{
               var bp = JSON.parse(r.data.biz_profile);
               localStorage.setItem('fw_profile', r.data.biz_profile);
               localStorage.setItem('fw_biz_profile', JSON.stringify({
                 businessName: bp.bizName, state: bp.state, industry: bp.industry,
                 employees: bp.employees, businessAge: parseFloat(bp.yearsInBusiness)||0,
-                country:'USA', annualRevenue:(bp.rev||0)*12,
+                country: bp.country || 'USA', annualRevenue:(bp.rev||0)*12,
                 specialCategories:(bp.ownerCategory||[]).map(function(c){return c.replace('-owned','');}),
                 savedAt: new Date().toISOString()
               }));
@@ -114,6 +115,10 @@
                 state:bp.state, rate:10, tenure:36
               }]));
               localStorage.setItem('fw_active_idx','0');
+              localStorage.setItem('fw_onboarded','1');
+              localStorage.setItem('fw_setup_done','1');
+              if(bp.country === 'India') localStorage.setItem('BizSco_currency','INR');
+              else localStorage.setItem('BizSco_currency','USD');
             }catch(e){}
           }
 
