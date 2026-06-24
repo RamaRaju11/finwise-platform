@@ -15,7 +15,16 @@ prof AS (
   JOIN target t ON t.email = p.email
 ),
 fin AS (
-  SELECT fd.snapshot_date, fd.as_of_month, fd.revenue, fd.expenses, fd.emi
+  -- as_of_month / emi columns may be missing in older schemas; derive defensively
+  SELECT
+    fd.snapshot_date,
+    to_char(fd.snapshot_date,'YYYY-MM')             AS as_of_month,
+    fd.revenue,
+    fd.expenses,
+    COALESCE(
+      (to_jsonb(fd)->>'emi')::numeric,
+      0
+    )                                                AS emi
   FROM public.financial_data fd
   JOIN prof ON prof.id = fd.user_id
   WHERE fd.snapshot_date >= (CURRENT_DATE - INTERVAL '3 months')
