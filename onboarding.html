@@ -545,11 +545,11 @@ window.addEventListener('load', function(){
   if(!window.fwAuth) return;
   window.fwAuth.init(function(){
     var auth = window.fwAuth;
-    /* If already onboarded AND authenticated, go to dashboard */
-    if(localStorage.getItem('fw_onboarded') && auth.user){
-      window.location.href = 'dashboard.html';
-      return;
-    }
+
+    /* Do NOT auto-redirect to dashboard when fw_onboarded is set.
+       The user explicitly navigated to onboarding.html — they want
+       to edit their profile. Auto-redirect created a bounce loop
+       when fw-auth.js re-set fw_onboarded from Supabase. */
 
     /* Load existing profile data into form */
     var p = {};
