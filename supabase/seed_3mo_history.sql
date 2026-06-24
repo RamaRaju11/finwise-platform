@@ -18,9 +18,36 @@
 -- ════════════════════════════════════════════════════════════════════
 
 -- ───────────────────────── PASS 1: SCHEMA REPAIR ─────────────────────
+-- Create financial_data if it doesn't exist at all
+CREATE TABLE IF NOT EXISTS public.financial_data (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id       uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  snapshot_date date NOT NULL DEFAULT CURRENT_DATE
+);
+
+-- Ensure every column the app writes to actually exists
+ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS revenue      numeric DEFAULT 0;
+ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS expenses     numeric DEFAULT 0;
 ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS emi          numeric DEFAULT 0;
+ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS snapshot_date date    DEFAULT CURRENT_DATE;
 ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS as_of_month  text;
 ALTER TABLE public.financial_data ADD COLUMN IF NOT EXISTS created_at   timestamptz DEFAULT now();
+
+ALTER TABLE public.financial_data ENABLE ROW LEVEL SECURITY;
+
+DO $polf$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname='public' AND tablename='financial_data'
+      AND policyname='Users manage own financial data'
+  ) THEN
+    CREATE POLICY "Users manage own financial data" ON public.financial_data
+      USING (auth.uid() = user_id)
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END
+$polf$;
 
 CREATE INDEX IF NOT EXISTS financial_data_user_date_idx
   ON public.financial_data (user_id, snapshot_date DESC);
