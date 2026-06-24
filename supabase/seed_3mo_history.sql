@@ -56,12 +56,19 @@ CREATE INDEX IF NOT EXISTS financial_data_user_date_idx
 CREATE TABLE IF NOT EXISTS public.health_scores (
   id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id        uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
-  overall_score  numeric NOT NULL,
-  score_date     date NOT NULL DEFAULT CURRENT_DATE,
-  dimension_data jsonb,
-  created_at     timestamptz DEFAULT now(),
-  UNIQUE (user_id, score_date)
+  score_date     date NOT NULL DEFAULT CURRENT_DATE
 );
+
+-- Ensure every column we touch actually exists (defensive against
+-- prior schemas where the table was created with fewer columns)
+ALTER TABLE public.health_scores ADD COLUMN IF NOT EXISTS overall_score  numeric;
+ALTER TABLE public.health_scores ADD COLUMN IF NOT EXISTS score_date     date DEFAULT CURRENT_DATE;
+ALTER TABLE public.health_scores ADD COLUMN IF NOT EXISTS dimension_data jsonb;
+ALTER TABLE public.health_scores ADD COLUMN IF NOT EXISTS created_at     timestamptz DEFAULT now();
+
+-- ON CONFLICT (user_id, score_date) needs a unique index
+CREATE UNIQUE INDEX IF NOT EXISTS health_scores_user_date_uniq
+  ON public.health_scores (user_id, score_date);
 
 ALTER TABLE public.health_scores ENABLE ROW LEVEL SECURITY;
 
