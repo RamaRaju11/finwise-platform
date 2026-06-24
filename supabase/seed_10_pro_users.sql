@@ -34,6 +34,12 @@
 -- Make sure crypt() / gen_salt() are available
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+-- Ensure the columns this script writes to actually exist.
+-- biz_profile is used by edge functions (profile-save, health-calculate, etc.)
+-- but was never added to the base schema in this project — add it here.
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS biz_profile text;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS full_name   text;
+
 DO $$
 DECLARE
   USERS jsonb;
