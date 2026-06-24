@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -297,7 +297,7 @@ function pageFrame(stmtName, pgLabel, content){
     +'<div class="disc-banner"><strong>IMPORTANT NOTICE:</strong> These statements are prepared from estimates and inputs provided by the business owner using BizSco financial planning software. They are <strong>NOT audited</strong>, <strong>NOT verified</strong>, and <strong>NOT suitable for statutory filing, tax returns, or regulatory submissions</strong>. For official purposes, all figures must be independently verified and certified by a qualified Chartered Accountant using actual books of accounts.</div>'
     +'<div class="page-hdr">'
     +'<div class="page-hdr-left"><div class="phdr-company">'+D.name+'</div><div class="phdr-stmt">'+stmtName+'</div><div class="phdr-period">'+(stmtName.indexOf('Balance')>=0?D.asPeriod:D.period)+'</div></div>'
-    +'<div class="page-hdr-right"><div class="phdr-logo">Biz<span style="color:#818cf8">Scale</span></div><div class="phdr-sub">Financial Planning Software</div><div class="phdr-pg">'+pgLabel+'</div></div>'
+    +'<div class="page-hdr-right"><div class="phdr-logo"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span style="color:#818cf8">Sco</span></b></div><div class="phdr-sub">Financial Planning Software</div><div class="phdr-pg">'+pgLabel+'</div></div>'
     +'</div>'
     +content
     +'</div>';
@@ -313,7 +313,7 @@ function buildCover(){
 
   /* Top gradient */
   html+='<div class="cover-top">'
-    +'<div class="cover-fw">Biz<span>Scale</span></div>'
+    +'<div class="cover-fw"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></div>'
     +'<div class="cover-sub">AI Financial Planning Software</div>'
     +'<div class="cover-doc-type">📄 '+ts.advisor+' Reference Document — Confidential</div>'
     +'</div>';
