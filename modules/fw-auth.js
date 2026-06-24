@@ -115,10 +115,11 @@
                 state:bp.state, rate:10, tenure:36
               }]));
               localStorage.setItem('fw_active_idx','0');
-              localStorage.setItem('fw_onboarded','1');
-              localStorage.setItem('fw_setup_done','1');
               if(bp.country === 'India') localStorage.setItem('BizSco_currency','INR');
               else localStorage.setItem('BizSco_currency','USD');
+              /* NOTE: do not touch fw_onboarded / fw_setup_done here — those
+                 are user-flow flags. Edit-Profile links rely on being able
+                 to clear them before navigating to onboarding.html. */
             }catch(e){}
           }
 
