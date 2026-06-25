@@ -131,28 +131,32 @@
           localStorage.setItem('fw_uid', self.user.id);
 
           /* Sync last 12 months of financial_data → fw_monthly_snapshots so
-             the as-of-month picker auto-populates without re-running checkup. */
+             the as-of-month picker auto-populates without re-running checkup.
+             Replace, do not merge — Supabase is the source of truth, so old
+             months left over from test-profiles.html etc. must not leak through. */
           self.client.from('financial_data')
             .select('snapshot_date, as_of_month, revenue, expenses, emi')
             .eq('user_id', self.user.id)
             .order('snapshot_date', { ascending: false })
             .limit(12)
             .then(function(res){
-              if(!res || !res.data || res.data.length === 0) return;
               try {
-                var snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}') || {};
+                var snaps = {};
                 var prof  = {}; try { prof = JSON.parse(localStorage.getItem('fw_profile')||'{}') || {}; } catch(_e){}
-                res.data.forEach(function(row){
-                  var ym = row.as_of_month || (row.snapshot_date ? String(row.snapshot_date).substring(0,7) : null);
-                  if(!ym) return;
-                  snaps[ym] = snaps[ym] || {};
-                  snaps[ym].rev       = row.revenue;
-                  snaps[ym].exp       = row.expenses;
-                  snaps[ym].emi       = row.emi;
-                  snaps[ym].reserve   = (prof.reserve != null) ? prof.reserve : (snaps[ym].reserve || 0);
-                  snaps[ym].asOfMonth = ym;
-                  snaps[ym].savedAt   = row.snapshot_date;
-                });
+                if(res && res.data){
+                  res.data.forEach(function(row){
+                    var ym = row.as_of_month || (row.snapshot_date ? String(row.snapshot_date).substring(0,7) : null);
+                    if(!ym) return;
+                    snaps[ym] = {
+                      rev:       row.revenue,
+                      exp:       row.expenses,
+                      emi:       row.emi,
+                      reserve:   (prof.reserve != null) ? prof.reserve : 0,
+                      asOfMonth: ym,
+                      savedAt:   row.snapshot_date
+                    };
+                  });
+                }
                 localStorage.setItem('fw_monthly_snapshots', JSON.stringify(snaps));
               } catch(_e){}
             });
@@ -182,11 +186,13 @@
                   };
                 });
                 localStorage.setItem('fw_score_history', JSON.stringify(hist));
-                /* Mirror healthScore/grade into fw_monthly_snapshots */
+                /* Mirror healthScore/grade onto snapshots that exist. We do
+                   NOT add brand-new month keys here — financial_data is the
+                   authoritative list of months a user has. */
                 var snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}') || {};
                 res.data.forEach(function(row){
                   var ym = String(row.score_date).substring(0,7);
-                  snaps[ym] = snaps[ym] || { asOfMonth: ym };
+                  if(!snaps[ym]) return;
                   snaps[ym].healthScore = row.overall_score;
                   if(row.dimension_data && row.dimension_data.grade) snaps[ym].grade = row.dimension_data.grade;
                 });
