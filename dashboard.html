@@ -4,6 +4,31 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Dashboard — BizSco</title>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   V2 DEMO-AESTHETIC overrides for dashboard.
+   This file is dashboard-v2.html — original dashboard.html unchanged.
+   ════════════════════════════════════════════════════════════════ */
+.v2-banner{position:sticky;top:0;z-index:99;background:linear-gradient(90deg,#15803d,#14532d);color:#fff;font-size:.74rem;font-weight:700;padding:6px 22px;text-align:center;letter-spacing:.03em}
+.v2-banner a{color:#fef9c3;text-decoration:underline}
+
+.v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:14px}
+.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start}
+.v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
+.v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
+.v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
+.v2-tile.info{border-left:4px solid #2563eb;background:#eff6ff}
+.v2-tile-ic{font-size:1.4rem;flex-shrink:0;line-height:1}
+.v2-tile-bd{flex:1;min-width:0}
+.v2-tile-lbl{font-size:.62rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.v2-tile-val{font-size:1.15rem;font-weight:900;color:#0f172a;line-height:1.1}
+.v2-tile-sub{font-size:.7rem;color:#475569;margin-top:2px;line-height:1.3}
+.v2-tile-badge{display:inline-block;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:5px;margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+.v2-bg-safe{background:#dcfce7;color:#15803d}
+.v2-bg-warn{background:#fef9c3;color:#854d0e}
+.v2-bg-bad{background:#fee2e2;color:#991b1b}
+.v2-bg-info{background:#dbeafe;color:#1e40af}
+</style>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -337,6 +362,7 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
 <script src="country-data.js"></script>
 <script src="country-switcher.js" defer></script>
 <link rel="stylesheet" href="fit-screen.css"/>
+<script defer src="plan-banner.js"></script>
 </head>
 <body>
 <script src="modules/fw-auth.js"></script>
@@ -536,9 +562,56 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
         <p id="dashSubtitle">Your financial snapshot — updated in real time</p>
       </div>
       <div class="ph-spacer"></div>
-      <a href="dashboard-v2.html" style="font-size:.7rem;font-weight:700;color:#7c3aed;text-decoration:none;border:1px dashed #c4b5fd;padding:5px 10px;border-radius:5px;align-self:center;margin-right:8px">✨ Try v2 demo style</a>
       <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
+
+    <!-- V2 demo summary tile grid (auto-populates from fw_profile + fw_score_history) -->
+    <div class="v2-summary-grid" id="v2DashGrid"></div>
+    <script>
+    (function(){
+      function $$(id){return document.getElementById(id);}
+      function fmtN(n){if(n==null||isNaN(n))return '—';return n.toLocaleString('en-US',{maximumFractionDigits:0});}
+      var p={};try{p=JSON.parse(localStorage.getItem('fw_profile')||'{}')}catch(_e){}
+      var hist=[];try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]')}catch(_e){}
+      var latest=hist[0]||{};
+      var sym=(p.country==='India'||localStorage.getItem('BizSco_currency')==='INR')?'₹':'$';
+      var rev=Number(p.rev)||0, exp=Number(p.exp)||0, emi=Number(p.emi)||0, res=Number(p.reserve)||0;
+      var ncf=rev-exp;
+      var pm=rev>0?(ncf/rev*100):0;
+      var dscr=emi>0?(ncf/emi):99;
+      var rmo=res>0&&(exp+emi)>0?Math.min(res/(exp+emi),24):0;
+      var tone=function(v,a,b,c){return v>=a?'good':v>=b?'warn':c||'bad';};
+      var tiles=[
+        {ic:'🔒',lb:'Loan Score',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:latest.loanVerdict||'Run a checkup',
+         t:latest.loanScore>=70?'good':latest.loanScore>=45?'warn':latest.loanScore!=null?'bad':'info',
+         badge:latest.loanVerdict||null,bcls:latest.loanVerdict==='SAFE'?'v2-bg-safe':latest.loanVerdict==='RISKY'?'v2-bg-warn':latest.loanVerdict==='DANGEROUS'?'v2-bg-bad':null},
+        {ic:'💰',lb:'Cash Runway',val:(rmo>=24?'24+':rmo.toFixed(1))+' mo',sub:'Reserves last if revenue stops',
+         t:rmo>=6?'good':rmo>=3?'warn':'bad'},
+        {ic:'📊',lb:'Health Grade',val:(latest.grade?'Grade '+latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
+         t:['A','B'].includes(latest.grade)?'good':latest.grade==='C'?'warn':latest.grade?'bad':'info'},
+        {ic:'📈',lb:'DSCR',val:(dscr>=99?'∞':dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',
+         t:dscr>=1.5?'good':dscr>=1.2?'warn':'bad'},
+        {ic:'💵',lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtN(Math.abs(ncf)),sub:'Monthly surplus before debt',
+         t:ncf>=0?'good':'bad'},
+        {ic:'📉',lb:'Profit Margin',val:pm.toFixed(1)+'%',sub:'After all monthly expenses',
+         t:pm>15?'good':pm>5?'warn':'bad'},
+        {ic:'💳',lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',t:'info'},
+        {ic:'🏦',lb:'Cash Reserves',val:sym+fmtN(res),sub:'Emergency / opportunity fund',
+         t:rmo>=6?'good':rmo>=3?'warn':'bad'}
+      ];
+      var el=$$('v2DashGrid');
+      if(el) el.innerHTML=tiles.map(function(c){
+        return '<div class="v2-tile '+c.t+'">'+
+          '<div class="v2-tile-ic">'+c.ic+'</div>'+
+          '<div class="v2-tile-bd">'+
+            '<div class="v2-tile-lbl">'+c.lb+'</div>'+
+            '<div class="v2-tile-val">'+c.val+'</div>'+
+            '<div class="v2-tile-sub">'+c.sub+'</div>'+
+            (c.badge?'<span class="v2-tile-badge '+(c.bcls||'v2-bg-info')+'">'+c.badge+'</span>':'')+
+          '</div></div>';
+      }).join('');
+    })();
+    </script>
 
     <script>
     // Missing-month banner controller — detect calendar gaps in fw_monthly_snapshots

@@ -4,6 +4,51 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Free Financial Checkup — BizSco</title>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   V2 DEMO-AESTHETIC overrides for Step 5 Report.
+   This file is checkup-v2.html — the original checkup.html is unchanged.
+   ════════════════════════════════════════════════════════════════ */
+.v2-banner{position:sticky;top:0;z-index:99;background:linear-gradient(90deg,#15803d,#14532d);color:#fff;font-size:.74rem;font-weight:700;padding:6px 22px;text-align:center;letter-spacing:.03em}
+.v2-banner a{color:#fef9c3;text-decoration:underline}
+
+#screen5 .v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:14px;display:flex;gap:11px;align-items:flex-start;transition:transform .15s,box-shadow .15s}
+.v2-tile:hover{transform:translateY(-2px);box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
+.v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
+.v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
+.v2-tile.info{border-left:4px solid #2563eb;background:#eff6ff}
+.v2-tile-ic{font-size:1.5rem;flex-shrink:0;line-height:1}
+.v2-tile-bd{flex:1;min-width:0}
+.v2-tile-lbl{font-size:.65rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.v2-tile-val{font-size:1.1rem;font-weight:900;color:#0f172a;line-height:1.15}
+.v2-tile-sub{font-size:.72rem;color:#475569;margin-top:2px;line-height:1.35}
+.v2-tile-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:5px;margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+.v2-bg-safe{background:#dcfce7;color:#15803d}
+.v2-bg-warn{background:#fef9c3;color:#854d0e}
+.v2-bg-bad{background:#fee2e2;color:#991b1b}
+.v2-bg-info{background:#dbeafe;color:#1e40af}
+
+.v2-totals{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:14px;padding:18px 22px;margin-bottom:12px;border:1px solid #1e3a5f}
+.v2-totals-lbl{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px}
+.v2-totals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.v2-tt{background:rgba(255,255,255,.05);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,255,255,.08)}
+.v2-tt-val{font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1}
+.v2-tt-lbl{font-size:.68rem;color:#cbd5e1;margin-top:2px;font-weight:600}
+
+.v2-ins-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:700px){.v2-ins-grid{grid-template-columns:1fr}}
+.v2-ins-card{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px 15px}
+.v2-ins-title{font-size:.85rem;font-weight:900;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+.v2-hero-strip{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
+.v2-hero-strip h1{font-size:1.15rem;font-weight:900;color:#0f172a;margin:0}
+.v2-hero-strip .v2-sub{font-size:.74rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+
+/* Hide the legacy V1 layout inside screen5 only — v2 panels live in #v2Report */
+#v1Report{display:none}
+</style>
 <link rel="manifest" href="manifest.json">
 <script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});</script>
@@ -223,6 +268,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script src="country-switcher.js" defer></script>
 <script src="asof-month.js"></script>
 <link rel="stylesheet" href="fit-screen.css"/>
+<script defer src="plan-banner.js"></script>
 </head>
 <body>
 <div id="fwToast" class="fw-toast" role="alert" aria-live="assertive"></div>
@@ -365,34 +411,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- STEP 5: FULL REPORT -->
+  <!-- STEP 5: FULL REPORT (v2 demo style) -->
   <div class="screen" id="screen5">
-    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px">
-      <div class="sh-h" style="margin:0">Your Financial Health Report</div>
-      <div class="sh-eye" id="repDate" style="margin:0"></div>
-      <a href="checkup-v2.html" style="margin-left:auto;font-size:.7rem;font-weight:700;color:#7c3aed;text-decoration:none;border:1px dashed #c4b5fd;padding:3px 9px;border-radius:5px">✨ Try v2 demo style</a>
+    <!-- V2 banner -->
+    <!-- V2 HERO STRIP -->
+    <div class="v2-hero-strip">
+      <h1>Your Financial Health Report</h1>
+      <div class="v2-sub" id="repDate"></div>
     </div>
 
-    <div class="rg" id="repGrid"></div>
+    <!-- V2 SUMMARY GRID: 4 result cards (auto-fill, min 220px) -->
+    <div class="v2-summary-grid" id="v2SummaryGrid"></div>
 
-    <!-- 3-column body: Period Comparison · Insights · Action Plan -->
-    <div class="report-body">
+    <!-- V2 INSIGHTS + ACTION grid -->
+    <div class="v2-ins-grid">
+      <div class="v2-ins-card">
+        <div class="v2-ins-title">⚡ Personalised Insights</div>
+        <div id="insightsList"></div>
+      </div>
+      <div class="v2-ins-card">
+        <div class="v2-ins-title">🎯 Action Plan</div>
+        <div id="nextTools"></div>
+      </div>
+    </div>
+
+    <!-- V2 TOTAL FINDINGS BANNER -->
+    <div class="v2-totals">
+      <div class="v2-totals-lbl">Total findings — this checkup</div>
+      <div class="v2-totals-grid" id="v2TotalsGrid"></div>
+    </div>
+
+    <!-- LEGACY V1 BLOCKS — kept for JS targets but hidden visually -->
+    <div id="v1Report">
+      <div class="rg" id="repGrid"></div>
       <div class="card" id="periodCmpCard" style="display:none">
         <div class="ct">Period Comparison</div>
         <div class="cs" id="cmpSubtitle" style="margin-bottom:6px"></div>
         <div id="periodCmpBody"></div>
-      </div>
-
-      <div class="card">
-        <div class="ct">Personalised Insights</div>
-        <div class="cs">What to focus on first.</div>
-        <div id="insightsList"></div>
-      </div>
-
-      <div class="card">
-        <div class="ct">Action Plan</div>
-        <div class="cs">Recommended tools — in priority.</div>
-        <div id="nextTools"></div>
       </div>
     </div>
 
@@ -751,6 +806,70 @@ function fillReport(){
   $('repGrid').innerHTML=cards.map(function(c){
     return '<div class="rc2" style="background:'+c.bg+';border-color:'+c.bo+'"><div class="rc2-ic">'+c.ic+'</div><div class="rc2-lb">'+c.lb+'</div><div class="rc2-vl" style="color:'+c.c+'">'+c.vl+'</div><div class="rc2-sb">'+c.sb+'</div>'+c.delta+'</div>';
   }).join('');
+
+  /* ── V2 DEMO LAYOUT RENDERING ── */
+  if(document.getElementById('v2SummaryGrid')){
+    var v2Tones = {SAFE:'good',STRONG:'good',ADEQUATE:'info',
+                   RISKY:'warn','BUFFER LOW':'warn',WARNING:'warn',
+                   DANGEROUS:'bad',CRITICAL:'bad'};
+    var v2Badges= {SAFE:'v2-bg-safe',STRONG:'v2-bg-safe',ADEQUATE:'v2-bg-info',
+                   RISKY:'v2-bg-warn','BUFFER LOW':'v2-bg-warn',WARNING:'v2-bg-warn',
+                   DANGEROUS:'v2-bg-bad',CRITICAL:'v2-bg-bad'};
+    var gradeTone = {A:'good',B:'good',C:'warn',D:'bad',F:'bad'}[r.grade] || 'info';
+    var gradeBadge= {A:'v2-bg-safe',B:'v2-bg-safe',C:'v2-bg-warn',D:'v2-bg-bad',F:'v2-bg-bad'}[r.grade] || 'v2-bg-info';
+
+    var v2 = [
+      {ic:'🔒', lb:'Loan Safety',     vl:r.loanScore+'/100',
+       sub:'Bank lending probability', tone:v2Tones[r.loanVerdict]||'info',
+       badge:r.loanVerdict, bcls:v2Badges[r.loanVerdict]||'v2-bg-info'},
+      {ic:'💰', lb:'Cash Runway',     vl:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',
+       sub:'Months reserves last if revenue stops', tone:v2Tones[r.rStat]||'info',
+       badge:r.rStat, bcls:v2Badges[r.rStat]||'v2-bg-info'},
+      {ic:'📊', lb:'Health Grade',    vl:'Grade '+r.grade,
+       sub:'Overall business strength', tone:gradeTone,
+       badge:r.glabel, bcls:gradeBadge},
+      {ic:'🎯', lb:'Funding Matches', vl:r.grantCount+'+',
+       sub:'Grants matching your profile', tone:'info',
+       badge:'EXPLORE', bcls:'v2-bg-info'},
+      {ic:'📈', lb:'DSCR',            vl:(r.dscr>=99?'∞':r.dscr.toFixed(2)+'x'),
+       sub:'Income vs. debt coverage', tone:r.dscr>=1.5?'good':r.dscr>=1.2?'warn':'bad',
+       badge:r.dscr>=1.5?'STRONG':r.dscr>=1.2?'WATCH':'WEAK',
+       bcls:r.dscr>=1.5?'v2-bg-safe':r.dscr>=1.2?'v2-bg-warn':'v2-bg-bad'},
+      {ic:'📉', lb:'Expense Ratio',   vl:Math.round(r.er*100)+'%',
+       sub:'Expenses as share of revenue', tone:r.er<0.75?'good':r.er<0.9?'warn':'bad',
+       badge:r.er<0.75?'HEALTHY':r.er<0.9?'TIGHT':'HIGH',
+       bcls:r.er<0.75?'v2-bg-safe':r.er<0.9?'v2-bg-warn':'v2-bg-bad'},
+      {ic:'💵', lb:'Net Cash Flow',   vl:(r.ncf>=0?'+':'-')+'$'+fmt(Math.abs(r.ncf)),
+       sub:'Monthly operating surplus', tone:r.ncf>=0?'good':'bad',
+       badge:r.ncf>=0?'POSITIVE':'NEGATIVE',
+       bcls:r.ncf>=0?'v2-bg-safe':'v2-bg-bad'},
+      {ic:'📅', lb:'Profit Margin',   vl:Math.round(r.pm*100)+'%',
+       sub:'Margin after expenses', tone:r.pm>0.15?'good':r.pm>0.05?'warn':'bad',
+       badge:r.pm>0.15?'STRONG':r.pm>0.05?'OK':'THIN',
+       bcls:r.pm>0.15?'v2-bg-safe':r.pm>0.05?'v2-bg-warn':'v2-bg-bad'}
+    ];
+    $('v2SummaryGrid').innerHTML = v2.map(function(c){
+      return '<div class="v2-tile '+c.tone+'">'+
+        '<div class="v2-tile-ic">'+c.ic+'</div>'+
+        '<div class="v2-tile-bd">'+
+          '<div class="v2-tile-lbl">'+c.lb+'</div>'+
+          '<div class="v2-tile-val">'+c.vl+'</div>'+
+          '<div class="v2-tile-sub">'+c.sub+'</div>'+
+          (c.badge?'<span class="v2-tile-badge '+c.bcls+'">'+c.badge+'</span>':'')+
+        '</div></div>';
+    }).join('');
+
+    /* Bottom totals banner — surface 4 key headline numbers */
+    var totals = [
+      {v:r.loanScore+'/100',                          l:'Loan Safety Score'},
+      {v:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo', l:'Cash Runway'},
+      {v:r.hs+'/100',                                 l:'Health Score (Grade '+r.grade+')'},
+      {v:'$'+fmt(Math.abs(r.ncf))+'/mo',              l:r.ncf>=0?'Net Cash Flow':'Monthly Shortfall'}
+    ];
+    $('v2TotalsGrid').innerHTML = totals.map(function(t){
+      return '<div class="v2-tt"><div class="v2-tt-val">'+t.v+'</div><div class="v2-tt-lbl">'+t.l+'</div></div>';
+    }).join('');
+  }
 
   var ins=[];
   if(r.loanVerdict==='SAFE'&&r.rStat==='STRONG')

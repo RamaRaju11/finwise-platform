@@ -3,46 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>What-If Scenarios (v2 — demo style) — BizSco</title>
-<style>
-/* ════════════════════════════════════════════════════════════════
-   V2 DEMO-AESTHETIC overrides for the What-If page.
-   This file is whatif-v2.html — the original whatif.html is unchanged.
-   ════════════════════════════════════════════════════════════════ */
-.v2-banner{position:sticky;top:0;z-index:99;background:linear-gradient(90deg,#15803d,#14532d);color:#fff;font-size:.74rem;font-weight:700;padding:6px 22px;text-align:center;letter-spacing:.03em}
-.v2-banner a{color:#fef9c3;text-decoration:underline}
-
-.v2-section{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 18px;margin-bottom:12px}
-.v2-section-title{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:10px}
-
-/* Summary tiles (mirrors checkup-v2) */
-.v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:12px}
-.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:12px 14px;display:flex;gap:11px;align-items:flex-start}
-.v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
-.v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
-.v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
-.v2-tile.info{border-left:4px solid #2563eb;background:#eff6ff}
-.v2-tile-ic{font-size:1.4rem;flex-shrink:0;line-height:1}
-.v2-tile-bd{flex:1;min-width:0}
-.v2-tile-lbl{font-size:.62rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.v2-tile-val{font-size:1.1rem;font-weight:900;color:#0f172a;line-height:1.1}
-.v2-tile-sub{font-size:.7rem;color:#475569;margin-top:2px;line-height:1.3}
-
-/* Bottom dark totals banner */
-.v2-totals{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:12px;border:1px solid #1e3a5f}
-.v2-totals-lbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px}
-.v2-totals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
-.v2-tt{background:rgba(255,255,255,.05);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,255,255,.08)}
-.v2-tt-val{font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1}
-.v2-tt-lbl{font-size:.66rem;color:#cbd5e1;margin-top:2px;font-weight:600}
-
-.v2-hero-strip{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
-.v2-hero-strip h1{font-size:1.2rem;font-weight:900;color:#0f172a;margin:0}
-.v2-hero-strip .v2-sub{font-size:.74rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
-
-/* Hide legacy V1 hero + score-card + cmp-bar-wrap in v2 */
-#v2Whatif .hero,#v2Whatif > .hero{display:none}
-</style>
+<title>What-If Scenarios — BizSco</title>
 <meta name="description" content="Model revenue, expense, and loan changes with BizSco's free What-If Scenario Planner — see instantly how your loan score and cash runway would change."/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -176,18 +137,12 @@ input[type=range]{width:100%;accent-color:#2563eb;height:5px;cursor:pointer}
   <a href="dashboard.html" class="back">Dashboard</a>
 </header>
 
-<div class="v2-banner">✨ You're previewing the v2 demo layout · <a href="whatif.html">switch to v1 →</a></div>
+<div class="hero">
+  <h1>What-If Scenario Planner</h1>
+  <p>Adjust revenue, expenses, and loan details to instantly see how changes affect your loan score, runway, and health grade.</p>
+</div>
 
 <div class="main">
-  <div class="v2-hero-strip">
-    <h1>What-If Scenario Planner</h1>
-    <div class="v2-sub" id="v2Date"></div>
-  </div>
-  <script>document.getElementById('v2Date').textContent = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});</script>
-
-  <!-- V2 projection summary (auto-populates after sliders move) -->
-  <div class="v2-summary-grid" id="v2WhatifGrid"></div>
-
 
   <!-- SLIDERS -->
   <div class="sliders-card">
@@ -515,36 +470,6 @@ function recalc(){
 
   renderPanel('cur',cur);
   renderPanel('proj',proj);
-
-  /* ── V2 DEMO TILES (auto-fill grid + bottom totals) ── */
-  var v2Grid=document.getElementById('v2WhatifGrid');
-  if(v2Grid){
-    function tone(now,was,better){
-      if(now===was) return 'info';
-      var up = now>was;
-      var goodDirection = (better==='up'&&up)||(better==='down'&&!up);
-      return goodDirection?'good':'bad';
-    }
-    var tiles=[
-      {ic:'🔒',lb:'Loan Score',val:proj.ls+'/100',sub:'Was '+cur.ls+' → '+(proj.ls-cur.ls>=0?'+':'')+(proj.ls-cur.ls)+' pts',t:tone(proj.ls,cur.ls,'up')},
-      {ic:'💰',lb:'Cash Runway',val:(proj.rmo>=24?'24+':proj.rmo.toFixed(1))+' mo',sub:'Was '+(cur.rmo>=24?'24+':cur.rmo.toFixed(1))+' mo',t:tone(proj.rmo,cur.rmo,'up')},
-      {ic:'📊',lb:'Health Grade',val:'Grade '+proj.grade,sub:'Was '+cur.grade+' · '+proj.hs+'/100',t:tone(proj.hs,cur.hs,'up')},
-      {ic:'📈',lb:'DSCR',val:(proj.dscr>=99?'∞':proj.dscr.toFixed(2)+'x'),sub:'Was '+(cur.dscr>=99?'∞':cur.dscr.toFixed(2)+'x'),t:tone(proj.dscr,cur.dscr,'up')},
-      {ic:'💵',lb:'Net Cash Flow',val:(proj.ncf>=0?'+':'-')+'$'+fmt(Math.abs(proj.ncf)),sub:'Was '+(cur.ncf>=0?'+$':'-$')+fmt(Math.abs(cur.ncf)),t:tone(proj.ncf,cur.ncf,'up')},
-      {ic:'📉',lb:'Expense Ratio',val:Math.round(proj.er*100)+'%',sub:'Was '+Math.round(cur.er*100)+'%',t:tone(proj.er,cur.er,'down')},
-      {ic:'📅',lb:'Profit Margin',val:Math.round(proj.pm*100)+'%',sub:'Was '+Math.round(cur.pm*100)+'%',t:tone(proj.pm,cur.pm,'up')},
-      {ic:'🎯',lb:'Verdict',val:proj.lv,sub:'Was '+cur.lv,t:proj.lv==='SAFE'?'good':proj.lv==='RISKY'?'warn':'bad'}
-    ];
-    v2Grid.innerHTML=tiles.map(function(c){
-      return '<div class="v2-tile '+c.t+'">'+
-        '<div class="v2-tile-ic">'+c.ic+'</div>'+
-        '<div class="v2-tile-bd">'+
-          '<div class="v2-tile-lbl">'+c.lb+'</div>'+
-          '<div class="v2-tile-val">'+c.val+'</div>'+
-          '<div class="v2-tile-sub">'+c.sub+'</div>'+
-        '</div></div>';
-    }).join('');
-  }
 
   /* projected raw numbers row */
   var pnRows=[
