@@ -18,8 +18,32 @@
 .v2-tile-action{position:absolute;top:8px;right:10px;font-size:.62rem;font-weight:800;color:#2563eb;opacity:.65;letter-spacing:.04em}
 .v2-tile:hover .v2-tile-action{opacity:1}
 
+/* Locked tile overlay (plan-gated) */
+.v2-tile.locked{position:relative;opacity:.85;cursor:not-allowed}
+.v2-tile.locked::after{content:'';position:absolute;inset:0;background:rgba(248,250,252,.45);border-radius:11px;pointer-events:none}
+.v2-tile.locked .v2-tile-action{color:#7c3aed;opacity:1;background:#f3e8ff;padding:2px 7px;border-radius:4px}
+.v2-qa.locked{background:#475569;opacity:.78;position:relative}
+.v2-qa.locked::after{content:'🔒';position:absolute;top:6px;right:8px;font-size:.85rem}
+.v2-qa.locked:hover{transform:none}
+
+/* Skeleton (loading state) */
+@keyframes v2-shimmer{0%{background-position:-180px 0}100%{background-position:180px 0}}
+.v2-tile.skel{pointer-events:none}
+.v2-tile.skel .v2-tile-ic,.v2-tile.skel .v2-tile-bd > *{background:linear-gradient(90deg,#e2e8f0 0%,#f1f5f9 50%,#e2e8f0 100%);background-size:200% 100%;animation:v2-shimmer 1.2s linear infinite;color:transparent;border-radius:4px}
+.v2-tile.skel .v2-tile-ic{width:24px;height:24px}
+.v2-tile.skel .v2-tile-lbl{height:8px;width:60%;margin-bottom:4px}
+.v2-tile.skel .v2-tile-val{height:14px;width:80%;margin-bottom:3px}
+.v2-tile.skel .v2-tile-sub{height:8px;width:90%}
+
+/* Empty state hero (no profile data yet) */
+.v2-empty-hero{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:2px dashed #c4b5fd;border-radius:14px;padding:24px;text-align:center;margin-bottom:14px}
+.v2-empty-hero h2{font-size:1.05rem;font-weight:900;color:#4c1d95;margin-bottom:5px}
+.v2-empty-hero p{font-size:.82rem;color:#5b21b6;margin-bottom:14px;line-height:1.5}
+.v2-empty-hero a{display:inline-block;padding:10px 22px;background:#7c3aed;color:#fff;border-radius:8px;font-size:.84rem;font-weight:800;text-decoration:none}
+.v2-empty-hero a:hover{background:#6d28d9}
+
 /* Quick actions strip */
-.v2-quick-title{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin:6px 0 8px}
+.v2-quick-title{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#475569;text-transform:uppercase;margin:8px 0 8px;padding-left:8px;border-left:3px solid #6366f1}
 .v2-quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
 .v2-qa{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;text-decoration:none;font-family:inherit;cursor:pointer;border:1.5px solid transparent;transition:transform .14s,box-shadow .14s;color:#fff}
 .v2-qa:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(0,0,0,.1)}
@@ -59,7 +83,7 @@
 <meta name="description" content="Your BizSco financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;min-height:100vh;display:flex}
+body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gradient(ellipse at top right,#eef0f9 0%,#f5f6fb 38%,#f8f9fc 100%);color:#1e293b;font-size:14px;min-height:100vh;display:flex}
 
 /* -------------------------------
    SIDEBAR
@@ -584,7 +608,14 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
 
-    <!-- V2 demo summary tile grid (clickable — each tile links to the relevant tool) -->
+    <!-- Empty state shown when user has no profile data yet -->
+    <div class="v2-empty-hero" id="v2EmptyHero" style="display:none">
+      <h2>👋 Run your first checkup to unlock your dashboard</h2>
+      <p>We need your monthly numbers — revenue, expenses, EMI, reserves — to compute your loan score, cash runway, and health grade. Takes 2 minutes.</p>
+      <a href="onboarding.html" onclick="localStorage.removeItem('fw_onboarded')">Set up profile →</a>
+    </div>
+
+    <!-- V2 demo summary tile grid -->
     <div class="v2-summary-grid" id="v2DashGrid"></div>
 
     <!-- V2 quick actions: change data / apply loan / apply grant / etc. -->
@@ -595,72 +626,130 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
     (function(){
       function $$(id){return document.getElementById(id);}
       function fmtN(n){if(n==null||isNaN(n))return '—';return n.toLocaleString('en-US',{maximumFractionDigits:0});}
-      var p={};try{p=JSON.parse(localStorage.getItem('fw_profile')||'{}')}catch(_e){}
-      var hist=[];try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]')}catch(_e){}
-      var latest=hist[0]||{};
-      var sym=(p.country==='India'||localStorage.getItem('BizSco_currency')==='INR')?'₹':'$';
-      var rev=Number(p.rev)||0, exp=Number(p.exp)||0, emi=Number(p.emi)||0, res=Number(p.reserve)||0;
-      var ncf=rev-exp;
-      var pm=rev>0?(ncf/rev*100):0;
-      var dscr=emi>0?(ncf/emi):99;
-      var rmo=res>0&&(exp+emi)>0?Math.min(res/(exp+emi),24):0;
+      function esc(s){var d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
 
-      /* Each tile carries an `href` so the user can click straight to the
-         action that improves or recomputes that metric. */
-      var tiles=[
-        {ic:'🔒',lb:'Loan Score',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:latest.loanVerdict||'Run a checkup',
-         t:latest.loanScore>=70?'good':latest.loanScore>=45?'warn':latest.loanScore!=null?'bad':'info',
-         badge:latest.loanVerdict||null,bcls:latest.loanVerdict==='SAFE'?'v2-bg-safe':latest.loanVerdict==='RISKY'?'v2-bg-warn':latest.loanVerdict==='DANGEROUS'?'v2-bg-bad':null,
-         href:'modules/loanDecisionScoreEngine.test.html', cta:'recompute'},
-        {ic:'💰',lb:'Cash Runway',val:(rmo>=24?'24+':rmo.toFixed(1))+' mo',sub:'Reserves last if revenue stops',
-         t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'modules/cashRunway.test.html', cta:'open tool'},
-        {ic:'📊',lb:'Health Grade',val:(latest.grade?'Grade '+latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
-         t:['A','B'].includes(latest.grade)?'good':latest.grade==='C'?'warn':latest.grade?'bad':'info',
-         href:'checkup.html', cta:'run checkup'},
-        {ic:'📈',lb:'DSCR',val:(dscr>=99?'∞':dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',
-         t:dscr>=1.5?'good':dscr>=1.2?'warn':'bad', href:'modules/debtCommandCenter.test.html', cta:'open tool'},
-        {ic:'💵',lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtN(Math.abs(ncf)),sub:'Monthly surplus before debt',
-         t:ncf>=0?'good':'bad', href:'onboarding.html', cta:'edit data'},
-        {ic:'📉',lb:'Profit Margin',val:pm.toFixed(1)+'%',sub:'After all monthly expenses',
-         t:pm>15?'good':pm>5?'warn':'bad', href:'modules/profitMarginAnalyzer.test.html', cta:'open tool'},
-        {ic:'💳',lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',
-         t:'info', href:'modules/debtCommandCenter.test.html', cta:'manage debt'},
-        {ic:'🏦',lb:'Cash Reserves',val:sym+fmtN(res),sub:'Emergency / opportunity fund',
-         t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'onboarding.html', cta:'edit data'}
-      ];
-      var el=$$('v2DashGrid');
-      if(el) el.innerHTML=tiles.map(function(c){
-        var clearOnboarding = c.href==='onboarding.html'
-          ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
-        return '<a class="v2-tile '+c.t+'" href="'+c.href+'"'+clearOnboarding+'>'+
-          '<div class="v2-tile-action">'+c.cta+' →</div>'+
-          '<div class="v2-tile-ic">'+c.ic+'</div>'+
-          '<div class="v2-tile-bd">'+
-            '<div class="v2-tile-lbl">'+c.lb+'</div>'+
-            '<div class="v2-tile-val">'+c.val+'</div>'+
-            '<div class="v2-tile-sub">'+c.sub+'</div>'+
-            (c.badge?'<span class="v2-tile-badge '+(c.bcls||'v2-bg-info')+'">'+c.badge+'</span>':'')+
-          '</div></a>';
-      }).join('');
+      var PLAN_RANK = {free:0, starter:1, pro:2, advisor:3};
+      function ge(planA, planB){return PLAN_RANK[planA||'free'] >= PLAN_RANK[planB||'free'];}
 
-      /* ── Quick Actions strip: change data, apply for loan/grant, etc. ── */
-      var qaEl=$$('v2QuickActions');
-      if(qaEl){
-        var actions=[
-          {ic:'📝', t:'Edit Profile',  s:'Update financials',     href:'onboarding.html', cls:'v2-qa-edit', clearFlag:true},
-          {ic:'🩺', t:'Run Checkup',   s:'Recompute scores',      href:'checkup.html',    cls:'v2-qa-check'},
-          {ic:'💵', t:'Apply for Loan',s:'See lender matches',    href:'modules/loanEligibility.test.html', cls:'v2-qa-loan'},
-          {ic:'🎯', t:'Find Grants',   s:'No-payback funding',    href:'modules/grantFinder.test.html',     cls:'v2-qa-grant'},
-          {ic:'🔮', t:'What-If',       s:'Model scenarios',       href:'whatif.html',     cls:'v2-qa-whatif'},
-          {ic:'💳', t:'Debt Center',   s:'Manage existing loans', href:'modules/debtCommandCenter.test.html', cls:'v2-qa-debt'}
-        ];
-        qaEl.innerHTML=actions.map(function(a){
-          var click = a.clearFlag ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
-          return '<a class="v2-qa '+a.cls+'" href="'+a.href+'"'+click+'>'+
-            '<div class="qa-ic">'+a.ic+'</div>'+
-            '<div class="qa-tx"><b>'+a.t+'</b><div class="qa-sm">'+a.s+'</div></div>'+
-          '</a>';
+      /* Render skeleton tiles immediately so the page never looks empty */
+      var grid = $$('v2DashGrid');
+      if (grid) {
+        grid.innerHTML = Array(8).fill(0).map(function(){
+          return '<div class="v2-tile skel info"><div class="v2-tile-ic"></div><div class="v2-tile-bd"><div class="v2-tile-lbl"></div><div class="v2-tile-val"></div><div class="v2-tile-sub"></div></div></div>';
         }).join('');
+      }
+
+      function paint(){
+        var userPlan = (window.fwAuth && window.fwAuth.plan) || 'free';
+
+        var p={};try{p=JSON.parse(localStorage.getItem('fw_profile')||'{}')}catch(_e){}
+        var hist=[];try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]')}catch(_e){}
+        var latest=hist[0]||{};
+        var sym=(p.country==='India'||localStorage.getItem('BizSco_currency')==='INR')?'₹':'$';
+        var rev=Number(p.rev)||0, exp=Number(p.exp)||0, emi=Number(p.emi)||0, res=Number(p.reserve)||0;
+        var ncf=rev-exp;
+        var pm=rev>0?(ncf/rev*100):0;
+        var dscr=emi>0?(ncf/emi):99;
+        var rmo=res>0&&(exp+emi)>0?Math.min(res/(exp+emi),24):0;
+
+        /* ── EMPTY STATE: no profile data yet ── */
+        var hero = $$('v2EmptyHero');
+        if (!rev && !exp && hist.length === 0) {
+          if (hero) hero.style.display = 'block';
+          if (grid) grid.style.display = 'none';
+          return;
+        } else {
+          if (hero) hero.style.display = 'none';
+          if (grid) grid.style.display = '';
+        }
+
+        /* Each tile: requires plan, tooltip explanation, target tool */
+        var tiles=[
+          {ic:'🔒',lb:'Loan Score',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:latest.loanVerdict||'Run a checkup',
+           t:latest.loanScore>=70?'good':latest.loanScore>=45?'warn':latest.loanScore!=null?'bad':'info',
+           badge:latest.loanVerdict||null,bcls:latest.loanVerdict==='SAFE'?'v2-bg-safe':latest.loanVerdict==='RISKY'?'v2-bg-warn':latest.loanVerdict==='DANGEROUS'?'v2-bg-bad':null,
+           href:'modules/loanDecisionScoreEngine.test.html', cta:'recompute', requires:'free',
+           tip:'Lender-approval likelihood 0-100. ≥70 SAFE, 45-69 RISKY, <45 DANGEROUS. Computed from DSCR, expense ratio, runway.'},
+          {ic:'💰',lb:'Cash Runway',val:(rmo>=24?'24+':rmo.toFixed(1))+' mo',sub:'Reserves last if revenue stops',
+           t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'modules/cashRunway.test.html', cta:'open tool', requires:'free',
+           tip:'Months your reserves cover total monthly burn (expenses + EMI). ≥6 STRONG, 3-5 ADEQUATE, <3 BUFFER LOW.'},
+          {ic:'📊',lb:'Health Grade',val:(latest.grade?'Grade '+latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
+           t:['A','B'].includes(latest.grade)?'good':latest.grade==='C'?'warn':latest.grade?'bad':'info',
+           href:'checkup.html', cta:'run checkup', requires:'starter',
+           tip:'Overall business health 0-100. Combines profit margin, DSCR, runway, expense control. A 85+, B 70-84, C 52-69, D 36-51, F <36.'},
+          {ic:'📈',lb:'DSCR',val:(dscr>=99?'∞':dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',
+           t:dscr>=1.5?'good':dscr>=1.2?'warn':'bad', href:'modules/debtCommandCenter.test.html', cta:'open tool', requires:'free',
+           tip:'Debt Service Coverage Ratio = (revenue − expenses) ÷ monthly EMI. Banks want ≥1.5x. Below 1.0 means income cannot cover debt.'},
+          {ic:'💵',lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtN(Math.abs(ncf)),sub:'Monthly surplus before debt',
+           t:ncf>=0?'good':'bad', href:'onboarding.html', cta:'edit data', requires:'free',
+           tip:'Revenue minus operating expenses. This is your monthly profit BEFORE debt service. Negative = burning cash.'},
+          {ic:'📉',lb:'Profit Margin',val:pm.toFixed(1)+'%',sub:'After all monthly expenses',
+           t:pm>15?'good':pm>5?'warn':'bad', href:'modules/profitMarginAnalyzer.test.html', cta:'open tool', requires:'starter',
+           tip:'Profit as percentage of revenue. Retail 5-10%, IT services 15-25%, restaurants 3-9%. Higher = more financial flexibility.'},
+          {ic:'💳',lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',
+           t:'info', href:'modules/debtCommandCenter.test.html', cta:'manage debt', requires:'pro',
+           tip:'Total monthly loan repayments across all your debts. Saved in your profile. Affects DSCR and runway.'},
+          {ic:'🏦',lb:'Cash Reserves',val:sym+fmtN(res),sub:'Emergency / opportunity fund',
+           t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'onboarding.html', cta:'edit data', requires:'free',
+           tip:'Your current cash on hand. Lenders prefer to see 3-6 months of expenses in reserve. Updates when you edit your profile.'}
+        ];
+
+        if(grid) grid.innerHTML=tiles.map(function(c){
+          var locked = !ge(userPlan, c.requires);
+          var href = locked ? 'pricing.html' : c.href;
+          var clearOnboarding = (!locked && c.href==='onboarding.html')
+            ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
+          var actionLabel = locked ? '🔒 '+c.requires : c.cta+' →';
+          var tipAttr = ' title="'+esc(c.tip + (locked ? '  •  Requires '+c.requires+' plan' : ''))+'"';
+          return '<a class="v2-tile '+c.t+(locked?' locked':'')+'" href="'+href+'"'+clearOnboarding+tipAttr+'>'+
+            '<div class="v2-tile-action">'+actionLabel+'</div>'+
+            '<div class="v2-tile-ic">'+c.ic+'</div>'+
+            '<div class="v2-tile-bd">'+
+              '<div class="v2-tile-lbl">'+c.lb+'</div>'+
+              '<div class="v2-tile-val">'+c.val+'</div>'+
+              '<div class="v2-tile-sub">'+c.sub+'</div>'+
+              (c.badge?'<span class="v2-tile-badge '+(c.bcls||'v2-bg-info')+'">'+c.badge+'</span>':'')+
+            '</div></a>';
+        }).join('');
+
+        /* ── Quick Actions strip: change data, apply for loan/grant, etc. ── */
+        var qaEl=$$('v2QuickActions');
+        if(qaEl){
+          var actions=[
+            {ic:'📝', t:'Edit Profile',  s:'Update financials',     href:'onboarding.html', cls:'v2-qa-edit',  requires:'free',    clearFlag:true,
+             tip:'Update revenue, expenses, EMI, reserves. Re-fills every tool on the platform.'},
+            {ic:'🩺', t:'Run Checkup',   s:'Recompute scores',      href:'checkup.html',    cls:'v2-qa-check', requires:'free',
+             tip:'5-step checkup that recomputes loan score, cash runway, and health grade with this month\'s numbers.'},
+            {ic:'💵', t:'Apply for Loan',s:'See lender matches',    href:'modules/loanEligibility.test.html', cls:'v2-qa-loan',  requires:'starter',
+             tip:'Eligibility checker matched to SBA / community lenders for USA, MUDRA / CGTMSE for India.'},
+            {ic:'🎯', t:'Find Grants',   s:'No-payback funding',    href:'modules/grantFinder.test.html',     cls:'v2-qa-grant', requires:'starter',
+             tip:'Matches your profile against state, federal, and minority-owned grant programs.'},
+            {ic:'🔮', t:'What-If',       s:'Model scenarios',       href:'whatif.html',     cls:'v2-qa-whatif',requires:'starter',
+             tip:'Drag sliders to see how revenue / expense changes would affect your loan score and runway.'},
+            {ic:'💳', t:'Debt Center',   s:'Manage existing loans', href:'modules/debtCommandCenter.test.html', cls:'v2-qa-debt',requires:'pro',
+             tip:'Track all loans, compare refinance options, build a payoff plan.'}
+          ];
+          qaEl.innerHTML=actions.map(function(a){
+            var locked = !ge(userPlan, a.requires);
+            var href = locked ? 'pricing.html' : a.href;
+            var click = (!locked && a.clearFlag) ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
+            var tipAttr = ' title="'+esc(a.tip + (locked ? '  •  Requires '+a.requires+' plan' : ''))+'"';
+            return '<a class="v2-qa '+a.cls+(locked?' locked':'')+'" href="'+href+'"'+click+tipAttr+'>'+
+              '<div class="qa-ic">'+a.ic+'</div>'+
+              '<div class="qa-tx"><b>'+a.t+'</b><div class="qa-sm">'+(locked?'Requires '+a.requires:a.s)+'</div></div>'+
+            '</a>';
+          }).join('');
+        }
+      }
+
+      /* Wait for fwAuth to know the plan, then paint. Falls back to
+         free plan after 2s if auth never resolves (e.g. user is offline). */
+      function go(){ try{ paint(); }catch(e){console.warn('dash paint failed',e);} }
+      if (window.fwAuth && window.fwAuth.init) {
+        window.fwAuth.init(go);
+        setTimeout(function(){ if(!window.fwAuth.ready) go(); }, 2000);
+      } else {
+        go();
       }
     })();
     </script>
