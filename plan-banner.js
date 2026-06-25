@@ -78,9 +78,22 @@
       : '<span style="font-size:.68rem;font-weight:700;opacity:.7">You have everything ✓</span>';
 
     bar.innerHTML = badge + summary + cta;
-    /* Insert AT THE TOP of <body>. If a sticky header exists, the
-       browser stacks them sensibly (banner sticks above header). */
-    document.body.insertBefore(bar, document.body.firstChild);
+
+    /* Find a SAFE insertion target. body may be display:flex (dashboard
+       uses sidebar+main-wrap flex layout). Putting the banner at body
+       level there would shrink the main-wrap to a narrow column.
+
+       Order of preference for the host element (anything that scrolls
+       with the page content, NOT a flex sibling of the sidebar):
+         1. .page-content (dashboard)
+         2. .main          (checkup, whatif, most pages)
+         3. main           (semantic main)
+         4. fallback: prepend to body anyway */
+    var host = document.querySelector('.page-content')
+            || document.querySelector('.main')
+            || document.querySelector('main')
+            || document.body;
+    host.insertBefore(bar, host.firstChild);
   }
 
   function tryRender(){
