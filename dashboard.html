@@ -13,7 +13,26 @@
 .v2-banner a{color:#fef9c3;text-decoration:underline}
 
 .v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:14px}
-.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start}
+.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start;text-decoration:none;color:inherit;transition:transform .14s,box-shadow .14s;position:relative}
+.v2-tile:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08);text-decoration:none}
+.v2-tile-action{position:absolute;top:8px;right:10px;font-size:.62rem;font-weight:800;color:#2563eb;opacity:.65;letter-spacing:.04em}
+.v2-tile:hover .v2-tile-action{opacity:1}
+
+/* Quick actions strip */
+.v2-quick-title{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin:6px 0 8px}
+.v2-quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.v2-qa{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;text-decoration:none;font-family:inherit;cursor:pointer;border:1.5px solid transparent;transition:transform .14s,box-shadow .14s;color:#fff}
+.v2-qa:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(0,0,0,.1)}
+.v2-qa .qa-ic{font-size:1.35rem;flex-shrink:0;line-height:1}
+.v2-qa .qa-tx{font-size:.78rem;line-height:1.25}
+.v2-qa .qa-tx b{font-weight:800;display:block;font-size:.82rem;margin-bottom:1px}
+.v2-qa .qa-sm{font-size:.66rem;opacity:.88}
+.v2-qa-edit  {background:#2563eb}.v2-qa-edit:hover  {background:#1d4ed8}
+.v2-qa-loan  {background:#16a34a}.v2-qa-loan:hover  {background:#15803d}
+.v2-qa-grant {background:#0891b2}.v2-qa-grant:hover {background:#0e7490}
+.v2-qa-check {background:#7c3aed}.v2-qa-check:hover {background:#6d28d9}
+.v2-qa-whatif{background:#be185d}.v2-qa-whatif:hover{background:#9d174d}
+.v2-qa-debt  {background:#475569}.v2-qa-debt:hover  {background:#334155}
 .v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
 .v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
 .v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
@@ -565,8 +584,13 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
 
-    <!-- V2 demo summary tile grid (auto-populates from fw_profile + fw_score_history) -->
+    <!-- V2 demo summary tile grid (clickable — each tile links to the relevant tool) -->
     <div class="v2-summary-grid" id="v2DashGrid"></div>
+
+    <!-- V2 quick actions: change data / apply loan / apply grant / etc. -->
+    <div class="v2-quick-title">Quick Actions</div>
+    <div class="v2-quick-grid" id="v2QuickActions"></div>
+
     <script>
     (function(){
       function $$(id){return document.getElementById(id);}
@@ -580,36 +604,64 @@ body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14p
       var pm=rev>0?(ncf/rev*100):0;
       var dscr=emi>0?(ncf/emi):99;
       var rmo=res>0&&(exp+emi)>0?Math.min(res/(exp+emi),24):0;
-      var tone=function(v,a,b,c){return v>=a?'good':v>=b?'warn':c||'bad';};
+
+      /* Each tile carries an `href` so the user can click straight to the
+         action that improves or recomputes that metric. */
       var tiles=[
         {ic:'🔒',lb:'Loan Score',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:latest.loanVerdict||'Run a checkup',
          t:latest.loanScore>=70?'good':latest.loanScore>=45?'warn':latest.loanScore!=null?'bad':'info',
-         badge:latest.loanVerdict||null,bcls:latest.loanVerdict==='SAFE'?'v2-bg-safe':latest.loanVerdict==='RISKY'?'v2-bg-warn':latest.loanVerdict==='DANGEROUS'?'v2-bg-bad':null},
+         badge:latest.loanVerdict||null,bcls:latest.loanVerdict==='SAFE'?'v2-bg-safe':latest.loanVerdict==='RISKY'?'v2-bg-warn':latest.loanVerdict==='DANGEROUS'?'v2-bg-bad':null,
+         href:'modules/loanDecisionScoreEngine.test.html', cta:'recompute'},
         {ic:'💰',lb:'Cash Runway',val:(rmo>=24?'24+':rmo.toFixed(1))+' mo',sub:'Reserves last if revenue stops',
-         t:rmo>=6?'good':rmo>=3?'warn':'bad'},
+         t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'modules/cashRunway.test.html', cta:'open tool'},
         {ic:'📊',lb:'Health Grade',val:(latest.grade?'Grade '+latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
-         t:['A','B'].includes(latest.grade)?'good':latest.grade==='C'?'warn':latest.grade?'bad':'info'},
+         t:['A','B'].includes(latest.grade)?'good':latest.grade==='C'?'warn':latest.grade?'bad':'info',
+         href:'checkup.html', cta:'run checkup'},
         {ic:'📈',lb:'DSCR',val:(dscr>=99?'∞':dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',
-         t:dscr>=1.5?'good':dscr>=1.2?'warn':'bad'},
+         t:dscr>=1.5?'good':dscr>=1.2?'warn':'bad', href:'modules/debtCommandCenter.test.html', cta:'open tool'},
         {ic:'💵',lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtN(Math.abs(ncf)),sub:'Monthly surplus before debt',
-         t:ncf>=0?'good':'bad'},
+         t:ncf>=0?'good':'bad', href:'onboarding.html', cta:'edit data'},
         {ic:'📉',lb:'Profit Margin',val:pm.toFixed(1)+'%',sub:'After all monthly expenses',
-         t:pm>15?'good':pm>5?'warn':'bad'},
-        {ic:'💳',lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',t:'info'},
+         t:pm>15?'good':pm>5?'warn':'bad', href:'modules/profitMarginAnalyzer.test.html', cta:'open tool'},
+        {ic:'💳',lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',
+         t:'info', href:'modules/debtCommandCenter.test.html', cta:'manage debt'},
         {ic:'🏦',lb:'Cash Reserves',val:sym+fmtN(res),sub:'Emergency / opportunity fund',
-         t:rmo>=6?'good':rmo>=3?'warn':'bad'}
+         t:rmo>=6?'good':rmo>=3?'warn':'bad', href:'onboarding.html', cta:'edit data'}
       ];
       var el=$$('v2DashGrid');
       if(el) el.innerHTML=tiles.map(function(c){
-        return '<div class="v2-tile '+c.t+'">'+
+        var clearOnboarding = c.href==='onboarding.html'
+          ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
+        return '<a class="v2-tile '+c.t+'" href="'+c.href+'"'+clearOnboarding+'>'+
+          '<div class="v2-tile-action">'+c.cta+' →</div>'+
           '<div class="v2-tile-ic">'+c.ic+'</div>'+
           '<div class="v2-tile-bd">'+
             '<div class="v2-tile-lbl">'+c.lb+'</div>'+
             '<div class="v2-tile-val">'+c.val+'</div>'+
             '<div class="v2-tile-sub">'+c.sub+'</div>'+
             (c.badge?'<span class="v2-tile-badge '+(c.bcls||'v2-bg-info')+'">'+c.badge+'</span>':'')+
-          '</div></div>';
+          '</div></a>';
       }).join('');
+
+      /* ── Quick Actions strip: change data, apply for loan/grant, etc. ── */
+      var qaEl=$$('v2QuickActions');
+      if(qaEl){
+        var actions=[
+          {ic:'📝', t:'Edit Profile',  s:'Update financials',     href:'onboarding.html', cls:'v2-qa-edit', clearFlag:true},
+          {ic:'🩺', t:'Run Checkup',   s:'Recompute scores',      href:'checkup.html',    cls:'v2-qa-check'},
+          {ic:'💵', t:'Apply for Loan',s:'See lender matches',    href:'modules/loanEligibility.test.html', cls:'v2-qa-loan'},
+          {ic:'🎯', t:'Find Grants',   s:'No-payback funding',    href:'modules/grantFinder.test.html',     cls:'v2-qa-grant'},
+          {ic:'🔮', t:'What-If',       s:'Model scenarios',       href:'whatif.html',     cls:'v2-qa-whatif'},
+          {ic:'💳', t:'Debt Center',   s:'Manage existing loans', href:'modules/debtCommandCenter.test.html', cls:'v2-qa-debt'}
+        ];
+        qaEl.innerHTML=actions.map(function(a){
+          var click = a.clearFlag ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
+          return '<a class="v2-qa '+a.cls+'" href="'+a.href+'"'+click+'>'+
+            '<div class="qa-ic">'+a.ic+'</div>'+
+            '<div class="qa-tx"><b>'+a.t+'</b><div class="qa-sm">'+a.s+'</div></div>'+
+          '</a>';
+        }).join('');
+      }
     })();
     </script>
 
