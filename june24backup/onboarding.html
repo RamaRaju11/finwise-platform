@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Welcome to BizSco — Quick Setup</title>
+<meta name="description" content="Set up your BizSco profile in 2 minutes — enter your business details and financials to instantly unlock your loan score, cash runway, and 30 free tools."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
+.wizard{background:#fff;border-radius:16px;width:100%;max-width:560px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.35)}
+
+/* Progress bar */
+.progress-bar{height:5px;background:#e2e8f0}
+.progress-fill{height:5px;background:linear-gradient(90deg,#2563eb,#7c3aed);transition:width .4s ease}
+
+/* Steps indicator */
+.steps-row{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 32px 0}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.step-dot:not(:last-child)::after{content:'';position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:#e2e8f0}
+.step-dot.done::after{background:#2563eb}
+.dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;border:2px solid #e2e8f0;background:#fff;color:#94a3b8;z-index:1;transition:all .3s}
+.step-dot.active .dot{border-color:#2563eb;background:#2563eb;color:#fff}
+.step-dot.done .dot{border-color:#16a34a;background:#16a34a;color:#fff}
+.dot-label{font-size:.62rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.step-dot.active .dot-label{color:#2563eb}
+.step-dot.done .dot-label{color:#16a34a}
+
+/* Panel */
+.panel{padding:28px 32px 32px;display:none}
+.panel.active{display:block}
+
+.panel-icon{font-size:2.4rem;margin-bottom:12px}
+.panel h2{font-size:1.25rem;font-weight:900;color:#1e293b;margin-bottom:6px}
+.panel p{font-size:.85rem;color:#64748b;line-height:1.55;margin-bottom:22px}
+
+label{display:block;font-size:.8rem;font-weight:700;color:#475569;margin-bottom:4px;margin-top:14px}
+input[type=text],input[type=number],select{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.88rem;color:#1e293b;font-family:Arial,sans-serif;transition:border-color .15s}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:480px){.input-row{grid-template-columns:1fr}}
+
+/* Tool cards - step 3 */
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.tool-card{border:2px solid #e2e8f0;border-radius:10px;padding:14px;cursor:pointer;transition:all .15s;text-decoration:none;display:block}
+.tool-card:hover,.tool-card.selected{border-color:#2563eb;background:#eff6ff}
+.tc-icon{font-size:1.5rem;margin-bottom:6px}
+.tc-name{font-size:.82rem;font-weight:800;color:#1e293b;margin-bottom:2px}
+.tc-desc{font-size:.7rem;color:#64748b;line-height:1.4}
+
+/* Nav buttons */
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn-next{flex:1;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.92rem;font-weight:800;cursor:pointer;transition:background .15s;font-family:Arial,sans-serif}
+.btn-next:hover{background:#1d4ed8}
+.btn-next.green{background:#16a34a}
+.btn-next.green:hover{background:#15803d}
+.btn-back{padding:12px 20px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.btn-back:hover{background:#e2e8f0}
+.btn-skip{width:100%;padding:8px;background:none;border:none;color:#94a3b8;font-size:.78rem;cursor:pointer;margin-top:8px;font-family:Arial,sans-serif}
+.btn-skip:hover{color:#64748b}
+
+/* Error */
+.field-error{display:none;color:#dc2626;font-size:.72rem;margin-top:3px;font-weight:600}
+
+/* Step 3 plan pills */
+.plan-row{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.plan-pill{padding:8px 16px;border-radius:999px;border:2px solid #e2e8f0;font-size:.78rem;font-weight:800;cursor:pointer;transition:all .15s;background:#fff}
+.plan-pill.free{color:#475569}
+.plan-pill.starter{color:#0891b2}
+.plan-pill.pro{color:#7c3aed}
+.plan-pill.advisor{color:#be185d}
+.plan-pill.active{border-width:2px}
+.plan-pill.free.active{border-color:#475569;background:#f1f5f9}
+.plan-pill.starter.active{border-color:#0891b2;background:#e0f7fa}
+.plan-pill.pro.active{border-color:#7c3aed;background:#f3e8ff}
+.plan-pill.advisor.active{border-color:#be185d;background:#fce7f3}
+
+/* Owner category checkboxes */
+.owner-cats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.oc-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;transition:all .15s;user-select:none}
+.oc-item:hover{border-color:#2563eb;background:#f8faff}
+.oc-item input[type=checkbox]{width:16px;height:16px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
+.oc-item.checked{border-color:#2563eb;background:#eff6ff}
+.oc-label{font-size:.82rem;font-weight:700;color:#374151}
+.oc-sub{font-size:.68rem;color:#94a3b8;font-weight:400}
+.oc-optional{font-size:.72rem;color:#94a3b8;font-weight:400;margin-top:2px;display:block}
+
+/* Completion screen */
+.complete-screen{text-align:center;padding:48px 32px}
+.complete-icon{font-size:3.5rem;margin-bottom:16px}
+.complete-screen h2{font-size:1.4rem;font-weight:900;color:#1e293b;margin-bottom:8px}
+.complete-screen p{font-size:.88rem;color:#64748b;margin-bottom:28px;line-height:1.6}
+.go-btn{display:inline-block;padding:13px 36px;background:#2563eb;color:#fff;border-radius:8px;font-size:.95rem;font-weight:800;text-decoration:none;border:none;cursor:pointer;font-family:Arial,sans-serif}
+.go-btn:hover{background:#1d4ed8}
+</style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
+<script src="asof-month.js"></script>
+<link rel="stylesheet" href="fit-screen.css"/>
+</head>
+<body>
+<script src="modules/fw-auth.js"></script>
+
+<div class="wizard" id="wizard">
+
+  <!-- Brand header -->
+  <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:-.02em"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span style="color:#818cf8">Sco</span></b></div>
+    <div style="font-size:.6rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em">Analyze — Fund — Grow</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+
+  <!-- Steps indicator -->
+  <div class="steps-row" id="stepsRow">
+    <div class="step-dot active" id="sd1"><div class="dot">1</div><div class="dot-label">Business</div></div>
+    <div class="step-dot" id="sd2"><div class="dot">2</div><div class="dot-label">Financials</div></div>
+    <div class="step-dot" id="sd3"><div class="dot">3</div><div class="dot-label">Tools</div></div>
+    <div class="step-dot" id="sd4"><div class="dot">4</div><div class="dot-label">Picks</div></div>
+  </div>
+
+  <!-- -- STEP 1: Business info -- -->
+  <div class="panel active" id="step1">
+    <div class="panel-icon">👋</div>
+    <h2>Welcome! Let's set up your business</h2>
+    <p>This takes 2 minutes. Your details pre-fill all 40 tools — you never enter them again.</p>
+
+    <label>Business Name <span style="color:#ef4444">*</span></label>
+    <input type="text" id="bizName" placeholder="e.g. Sarah's Boutique"/>
+    <div class="field-error" id="errBiz">Please enter your business name</div>
+
+    <label>Your Name</label>
+    <input type="text" id="ownerName" placeholder="e.g. Sarah Mitchell"/>
+
+    <div class="input-row">
+      <div>
+        <label>Industry</label>
+        <select id="industry">
+          <option value="">-- Select --</option>
+          <option>Retail / E-commerce</option>
+          <option>Food & Restaurant</option>
+          <option>Health & Wellness</option>
+          <option>Professional Services</option>
+          <option>Construction & Trades</option>
+          <option>Technology / Software</option>
+          <option>Education & Training</option>
+          <option>Beauty & Personal Care</option>
+          <option>Transportation & Logistics</option>
+          <option>Manufacturing</option>
+          <option>Real Estate</option>
+          <option>Financial Services</option>
+          <option>Agriculture / Farming</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Years in Business</label>
+        <select id="yearsInBiz">
+          <option value="">-- Select --</option>
+          <option>Less than 1 year</option>
+          <option>1—2 years</option>
+          <option>2—5 years</option>
+          <option>5—10 years</option>
+          <option>10+ years</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div>
+        <label>State</label>
+        <select id="bizState">
+          <option value="">-- Select --</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+          <option>Wisconsin</option><option>Wyoming</option>
+        </select>
+      </div>
+      <div>
+        <label>Employees</label>
+        <select id="employees">
+          <option value="">-- Select --</option>
+          <option>Just me (Solo)</option>
+          <option>2—5</option>
+          <option>6—20</option>
+          <option>21—50</option>
+          <option>51—100</option>
+          <option>100+</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <label style="font-size:.82rem;font-weight:700;color:#374151;margin-bottom:8px;display:block">Business Owner Category <span class="oc-optional" style="display:inline">(optional — helps match targeted funding)</span></label>
+      <div class="owner-cats">
+        <label class="oc-item" id="oc-women">
+          <input type="checkbox" id="cat-women" value="women-owned" onchange="toggleOC(this)">
+          <div><div class="oc-label">Women-Owned</div><div class="oc-sub">51%+ women-owned</div></div>
+        </label>
+        <label class="oc-item" id="oc-minority">
+          <input type="checkbox" id="cat-minority" value="minority-owned" onchange="toggleOC(this)">
+          <div><div class="oc-label">Minority-Owned</div><div class="oc-sub">51%+ minority-owned</div></div>
+        </label>
+        <label class="oc-item" id="oc-veteran">
+          <input type="checkbox" id="cat-veteran" value="veteran-owned" onchange="toggleOC(this)">
+          <div><div class="oc-label">Veteran-Owned</div><div class="oc-sub">Veteran or service member</div></div>
+        </label>
+        <label class="oc-item" id="oc-disability">
+          <input type="checkbox" id="cat-disability" value="disability-owned" onchange="toggleOC(this)">
+          <div><div class="oc-label">Disability-Owned</div><div class="oc-sub">Owner has a disability</div></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="goStep2()">Next: Financial Numbers &rarr;</button>
+    </div>
+    <button class="btn-skip" onclick="skipOnboarding()">Skip for now — I'll set this up later</button>
+  </div>
+
+  <!-- -- STEP 2: Financials -- -->
+  <div class="panel" id="step2">
+    <div class="panel-icon">💰</div>
+    <h2>Your monthly numbers</h2>
+    <p>Rough estimates are fine. These power your Loan Score, Cash Flow, and Pay Optimizer instantly.</p>
+
+    <div class="input-row">
+      <div>
+        <label>Monthly Revenue ($)</label>
+        <input type="number" id="revenue" placeholder="e.g. 22000"/>
+      </div>
+      <div>
+        <label>Monthly Expenses ($)</label>
+        <input type="number" id="expenses" placeholder="e.g. 14500"/>
+      </div>
+    </div>
+    <div class="input-row">
+      <div>
+        <label>Monthly Loan / EMI ($)</label>
+        <input type="number" id="emi" placeholder="e.g. 1500"/>
+      </div>
+      <div>
+        <label>Cash Reserve ($)</label>
+        <input type="number" id="reserve" placeholder="e.g. 32000"/>
+      </div>
+    </div>
+
+    <label>Loan Amount You Need ($) <span style="font-size:.72rem;font-weight:400;color:#94a3b8">if any</span></label>
+    <input type="number" id="loanNeed" placeholder="e.g. 75000"/>
+
+    <!-- As-of month tagger — lets user say which month these numbers represent.
+         Powered by shared /asof-month.js (auto-mounted). Default = current. -->
+    <div data-asof-month></div>
+
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 14px;margin-top:16px;font-size:.78rem;color:#166534;line-height:1.5">
+      💡 <strong>Tip:</strong> These numbers pre-fill all 40 tools. You can update them anytime from the Profile button in the top nav.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(1)">Back</button>
+      <button class="btn-next" onclick="goStep3()">Next: Pick Your First Tool &rarr;</button>
+    </div>
+    <button class="btn-skip" onclick="saveAndSkip()">Save &amp; skip tool selection</button>
+  </div>
+
+  <!-- -- STEP 3: First tool -- -->
+  <div class="panel" id="step3">
+    <div class="panel-icon">🛠</div>
+    <h2>Pick your first tool</h2>
+    <p>Where do you want to start? We'll take you straight there after setup.</p>
+
+    <div class="tool-grid" id="toolGrid">
+      <div class="tool-card" data-href="modules/loanDecisionScoreEngine.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">🏦</div>
+        <div class="tc-name">Loan Safety Score</div>
+        <div class="tc-desc">Is my loan safe? Get a verdict in 60 seconds</div>
+      </div>
+      <div class="tool-card" data-href="modules/cashRunway.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">⏱</div>
+        <div class="tc-name">Cash Runway</div>
+        <div class="tc-desc">How long can my business survive a slow month?</div>
+      </div>
+      <div class="tool-card" data-href="modules/ownersPay.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">💰</div>
+        <div class="tc-name">Owner's Pay</div>
+        <div class="tc-desc">How much can I safely pay myself?</div>
+      </div>
+      <div class="tool-card" data-href="modules/loanEligibility.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">✅</div>
+        <div class="tc-name">Loan Eligibility</div>
+        <div class="tc-desc">Which lenders will approve me?</div>
+      </div>
+      <div class="tool-card" data-href="modules/breakEven.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">⚖</div>
+        <div class="tc-name">Break-Even</div>
+        <div class="tc-desc">Extra revenue needed to afford a new loan</div>
+      </div>
+      <div class="tool-card" data-href="modules/forecastPro.test.html" onclick="selectTool(this)">
+        <div class="tc-icon">📈</div>
+        <div class="tc-name">Revenue Forecast</div>
+        <div class="tc-desc">Predict my next 12 months of revenue</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(2)">Back</button>
+      <button class="btn-next" onclick="goStep4()">See Recommended Tools &rarr;</button>
+    </div>
+  </div>
+
+  <!-- -- STEP 4: Recommended modules -- -->
+  <div class="panel" id="step4">
+    <div class="panel-icon">🎯</div>
+    <h2>Your recommended starting tools</h2>
+    <p>Based on your industry and answers, here are the 3 best tools to start with.</p>
+    <div id="recGrid" style="margin-bottom:8px"></div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(3)">Back</button>
+      <button class="btn-next green" id="finishBtn" onclick="finish()">Finish &amp; Open First Tool &rarr;</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var selectedHref = 'modules/loanDecisionScoreEngine.test.html';
+
+function goStep(n){
+  [1,2,3,4].forEach(function(i){
+    var panel = document.getElementById('step'+i);
+    if(panel) panel.classList.remove('active');
+    var sd = document.getElementById('sd'+i);
+    if(sd){
+      sd.className = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+      sd.querySelector('.dot').textContent = i < n ? '✓' : i;
+    }
+  });
+  var panel = document.getElementById('step'+n);
+  if(panel) panel.classList.add('active');
+  var pct = {1:25, 2:50, 3:75, 4:100}[n] || 25;
+  document.getElementById('progressFill').style.width = pct+'%';
+}
+
+function goStep2(){
+  var biz = document.getElementById('bizName').value.trim();
+  if(!biz){
+    document.getElementById('errBiz').style.display = 'block';
+    document.getElementById('bizName').focus();
+    return;
+  }
+  document.getElementById('errBiz').style.display = 'none';
+  goStep(2);
+}
+
+function goStep3(){
+  saveProfile();
+  goStep(3);
+}
+
+function goStep4(){
+  saveProfile();
+  buildRecommendations();
+  goStep(4);
+}
+
+var INDUSTRY_RECS = {
+  'Food & Restaurant':      [{icon:'💵',name:'Cash Flow Tracker',   desc:'Track daily cash and monthly runway',                href:'modules/cashFlowTracker.test.html'},
+                              {icon:'💸',name:'Payroll Estimator',     desc:'Know exactly what staff you can afford',             href:'modules/payrollEstimator.test.html'},
+                              {icon:'💼',name:'Tax Command Center',    desc:'Sales tax, income tax & deductions in one place',    href:'modules/taxCommandCenter.test.html'}],
+  'Retail / E-commerce':    [{icon:'📄',name:'Invoice Tracker',        desc:'Track unpaid invoices & follow-up reminders',        href:'modules/invoiceTracker.test.html'},
+                              {icon:'⚖',name:'Break-Even Analyzer',   desc:'Find the revenue needed to cover all costs',         href:'modules/breakEven.test.html'},
+                              {icon:'📊',name:'Benchmark Pro',          desc:'Compare margins to other retailers',                 href:'modules/benchmarkPro.test.html'}],
+  'Health & Wellness':       [{icon:'🏦',name:'Loan Safety Score',      desc:'Know if a loan is safe before applying',             href:'modules/loanDecisionScoreEngine.test.html'},
+                              {icon:'💰',name:"Owner's Pay Optimizer",  desc:'How much can you safely pay yourself?',              href:'modules/ownersPay.test.html'},
+                              {icon:'🎯',name:'Grant Finder',            desc:'Health & wellness specific grants & SBA funds',      href:'modules/grantFinder.test.html'}],
+  'Professional Services':   [{icon:'📈',name:'Forecast Pro',           desc:'Project your next 12 months of revenue',             href:'modules/forecastPro.test.html'},
+                              {icon:'🧾',name:'Vendor Bill Tracker',    desc:'Track recurring vendor payments & contracts',        href:'modules/vendorBillTracker.test.html'},
+                              {icon:'💼',name:'Tax Command Center',    desc:'Quarterly estimates & key deductions',               href:'modules/taxCommandCenter.test.html'}],
+  'Construction & Trades':  [{icon:'💸',name:'Debt Command Center',    desc:'Manage all loans & equipment financing',             href:'modules/debtCommandCenter.test.html'},
+                              {icon:'💰',name:"Owner's Pay Optimizer",  desc:'Set safe owner salary based on cash flow',           href:'modules/ownersPay.test.html'},
+                              {icon:'💵',name:'Cash Flow Tracker',      desc:'Track project-to-project cash in & out',             href:'modules/cashFlowTracker.test.html'}],
+  'Technology / Software':  [{icon:'📈',name:'Forecast Pro',           desc:'Model growth scenarios & burn rate',                 href:'modules/forecastPro.test.html'},
+                              {icon:'🤖',name:'AI CFO Advisor',          desc:'Ask a CFO AI about funding & strategy',             href:'modules/aiCfoChat.test.html'},
+                              {icon:'📊',name:'Benchmark Pro',           desc:'Compare SaaS metrics to industry peers',            href:'modules/benchmarkPro.test.html'}],
+};
+
+var DEFAULT_RECS = [{icon:'🏦',name:'Loan Safety Score', desc:'SAFE/RISKY/DANGEROUS verdict on any loan', href:'modules/loanDecisionScoreEngine.test.html'},
+                    {icon:'💵',name:'Cash Flow Tracker',  desc:'Track monthly cash in/out and runway',    href:'modules/cashFlowTracker.test.html'},
+                    {icon:'🏥',name:'Business Health Score', desc:'Overall A—F grade for your finances', href:'modules/businessHealthScore.test.html'}];
+
+function buildRecommendations(){
+  var industry = document.getElementById('industry').value;
+  var recs = INDUSTRY_RECS[industry] || DEFAULT_RECS;
+  var grid = document.getElementById('recGrid');
+  if(!grid) return;
+  grid.innerHTML = recs.map(function(r){
+    return '<div class="tool-card" data-href="'+r.href+'" onclick="selectTool(this)" style="margin-bottom:8px">'
+      +'<div class="tc-icon">'+r.icon+'</div>'
+      +'<div class="tc-name">'+r.name+'</div>'
+      +'<div class="tc-desc">'+r.desc+'</div>'
+      +'</div>';
+  }).join('');
+  /* Pre-select first recommendation */
+  var first = grid.querySelector('.tool-card');
+  if(first){ first.classList.add('selected'); selectedHref = first.getAttribute('data-href'); }
+}
+
+function toggleOC(cb){
+  var wrap = document.getElementById('oc-'+cb.value.replace('-owned',''));
+  if(wrap) wrap.classList.toggle('checked', cb.checked);
+}
+
+function selectTool(el){
+  document.querySelectorAll('.tool-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedHref = el.getAttribute('data-href');
+}
+
+/* Reload onboarding's monthly numbers when user switches months on the
+   as-of-month toggle. If a snapshot exists for the chosen month → fill the
+   inputs from it. If not → clear inputs for fresh entry. */
+window.addEventListener('bizsco:monthchange', function(e){
+  var month = e.detail && e.detail.month;
+  if (!month) return;
+  var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){ snaps = {}; }
+  var s = snaps[month];
+  var fields = [
+    ['revenue', 'rev'],
+    ['expenses', 'exp'],
+    ['emi', 'emi'],
+    ['reserve', 'reserve']
+  ];
+  fields.forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (!el) return;
+    if (s && s[pair[1]] != null && !isNaN(s[pair[1]])) {
+      el.value = s[pair[1]];
+    } else {
+      el.value = '';
+    }
+  });
+});
+
+function saveProfile(){
+  // Pick the month these numbers represent (from the shared as-of-month tagger).
+  // Falls back to current month if the helper hasn't loaded for any reason.
+  var asOfMonth = (typeof window.getAsOfMonth === 'function')
+    ? window.getAsOfMonth()
+    : new Date().toISOString().substring(0,7);
+
+  var p = {
+    bizName    : document.getElementById('bizName').value.trim(),
+    ownerName  : document.getElementById('ownerName').value.trim(),
+    industry   : document.getElementById('industry').value,
+    yearsInBusiness: document.getElementById('yearsInBiz').value,
+    state      : document.getElementById('bizState').value,
+    employees  : document.getElementById('employees').value,
+    rev        : parseFloat(document.getElementById('revenue').value)||0,
+    exp        : parseFloat(document.getElementById('expenses').value)||0,
+    emi        : parseFloat(document.getElementById('emi').value)||0,
+    reserve    : parseFloat(document.getElementById('reserve').value)||0,
+    loan       : parseFloat(document.getElementById('loanNeed').value)||0,
+    asOfMonth  : asOfMonth,
+    asOfSavedAt: new Date().toISOString(),
+    ownerCategory: Array.from(document.querySelectorAll('.owner-cats input[type=checkbox]:checked')).map(function(cb){return cb.value;})
+  };
+  /* Add `name` alias for cross-module compatibility */
+  p.name = p.bizName;
+  localStorage.setItem('fw_profile', JSON.stringify(p));
+
+  /* Mirror the numbers into the monthly snapshot store so history builds even
+     from the onboarding step. Existing healthScore values aren't overwritten —
+     we only set rev/exp/emi/reserve and let Business Health Score add the
+     score later when the user calculates. */
+  try {
+    var snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots') || '{}');
+    if (!snaps[asOfMonth]) snaps[asOfMonth] = {};
+    snaps[asOfMonth].rev     = p.rev;
+    snaps[asOfMonth].exp     = p.exp;
+    snaps[asOfMonth].emi     = p.emi;
+    snaps[asOfMonth].reserve = p.reserve;
+    snaps[asOfMonth].asOfMonth = asOfMonth;
+    snaps[asOfMonth].savedAt = new Date().toISOString();
+    localStorage.setItem('fw_monthly_snapshots', JSON.stringify(snaps));
+  } catch (e) { /* localStorage full or disabled — ignore */ }
+
+  var profiles = [{
+    id:'p1', name:p.bizName||'My Business', bizName:p.bizName, industry:p.industry,
+    rev:p.rev, exp:p.exp, emi:p.emi, reserve:p.reserve, loan:p.loan,
+    entityType: p.entityType||'', employees:p.employees, state:p.state,
+    rate:10, tenure:36
+  }];
+  localStorage.setItem('fw_profiles', JSON.stringify(profiles));
+  localStorage.setItem('fw_active_idx', '0');
+  localStorage.setItem('fw_biz_profile', JSON.stringify({
+    businessName:p.bizName, state:p.state, industry:p.industry,
+    employees:p.employees,
+    businessAge: parseFloat(p.yearsInBusiness)||0,
+    country:'USA',
+    annualRevenue:(p.rev||0)*12,
+    specialCategories:(p.ownerCategory||[]).map(function(c){return c.replace('-owned','');}),
+    savedAt: new Date().toISOString()
+  }));
+  localStorage.setItem('fw_onboarded','1');
+  localStorage.setItem('fw_setup_done','1');
+
+  /* Backup profile to Supabase so it survives localStorage clears */
+  if(window.fwAuth && window.fwAuth.client && window.fwAuth.user){
+    window.fwAuth.client.from('profiles')
+      .upsert({ id: window.fwAuth.user.id, biz_profile: JSON.stringify(p) })
+      .then(function(){}).catch(function(){});
+  }
+}
+
+function finish(){
+  saveProfile();
+  window.location.href = selectedHref;
+}
+
+function saveAndSkip(){
+  saveProfile();
+  window.location.href = 'dashboard.html';
+}
+
+function skipOnboarding(){
+  localStorage.setItem('fw_onboarded','1');
+  window.location.href = 'try.html';
+}
+
+/* Pre-fill form from saved profile and auth */
+window.addEventListener('load', function(){
+  if(!window.fwAuth) return;
+  window.fwAuth.init(function(){
+    var auth = window.fwAuth;
+
+    /* Do NOT auto-redirect to dashboard when fw_onboarded is set.
+       The user explicitly navigated to onboarding.html — they want
+       to edit their profile. Auto-redirect created a bounce loop
+       when fw-auth.js re-set fw_onboarded from Supabase. */
+
+    /* Load existing profile data into form */
+    var p = {};
+    try{ p = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+    var hasProfile = p.bizName || p.rev || p.exp;
+
+    if(hasProfile){
+      /* Switch heading to "Edit" mode */
+      var h2 = document.querySelector('.panel h2');
+      var ph = document.querySelector('.panel p');
+      if(h2) h2.textContent = 'Edit your business profile';
+      if(ph) ph.textContent = 'Update any details below — all tools will re-fill automatically.';
+
+      /* Step 1 — Business fields */
+      var set = function(id, val){ var el=document.getElementById(id); if(el && val) el.value = val; };
+      set('bizName',   p.bizName);
+      set('ownerName', p.ownerName);
+      set('industry',  p.industry);
+      set('yearsInBiz',p.yearsInBusiness);
+      set('bizState',  p.state);
+      set('employees', p.employees);
+
+      /* Step 2 — Financials */
+      set('revenue',  p.rev  || '');
+      set('expenses', p.exp  || '');
+      set('emi',      p.emi  || '');
+      set('reserve',  p.reserve || '');
+      set('loanNeed', p.loan || '');
+
+      /* Owner category checkboxes */
+      if(p.ownerCategory && p.ownerCategory.length){
+        p.ownerCategory.forEach(function(cat){
+          var cb = document.querySelector('.owner-cats input[value="'+cat+'"]');
+          if(cb){ cb.checked = true; toggleOC(cb); }
+        });
+      }
+    } else if(auth.user){
+      /* New user — just pre-fill name */
+      var name = auth.displayName();
+      if(name) { var el=document.getElementById('ownerName'); if(el) el.value=name; }
+    }
+  });
+});
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

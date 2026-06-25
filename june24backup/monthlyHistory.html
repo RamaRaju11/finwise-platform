@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BizSco — Score History</title>
+<meta name="theme-color" content="#4f46e5"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#4f46e5;--brand-dark:#3730a3;
+  --green:#16a34a;--amber:#d97706;--red:#dc2626;
+  --dark:#0f172a;--gray:#64748b;--gray-light:#94a3b8;
+  --light:#f8fafc;--border:#e2e8f0;
+}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--light);color:var(--dark);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.shell{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+
+/* Top nav row */
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.brand span{color:var(--brand)}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),#38bdf8);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.top-nav{display:flex;gap:14px;font-size:.85rem;font-weight:600;color:var(--gray)}
+.top-nav a:hover{color:var(--brand);text-decoration:none}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--dark),#1e293b);color:#fff;border-radius:16px;padding:28px 30px;margin-bottom:22px}
+.hero h1{font-size:1.85rem;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px}
+.hero p{font-size:.95rem;color:#cbd5e1;max-width:560px}
+
+/* Insights row */
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:680px){.insights{grid-template-columns:1fr}}
+.ins-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.ins-card .ic-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-light);margin-bottom:6px}
+.ins-card .ic-val{font-size:1.5rem;font-weight:900;color:var(--dark);line-height:1}
+.ins-card .ic-sub{font-size:.78rem;color:var(--gray);margin-top:5px;line-height:1.4}
+.ins-card.green .ic-val{color:var(--green)}
+.ins-card.amber .ic-val{color:var(--amber)}
+.ins-card.red .ic-val{color:var(--red)}
+
+/* Chart */
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:22px}
+.chart-card h2{font-size:1rem;font-weight:800;color:var(--dark);margin-bottom:12px}
+.chart-wrap{position:relative;width:100%;height:220px}
+#trendCanvas{display:block;width:100%;height:100%}
+.chart-meta{font-size:.78rem;color:var(--gray);margin-top:8px}
+
+/* Table */
+.history-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:22px}
+.history-card h2{font-size:1rem;font-weight:800;color:var(--dark);padding:18px 22px 12px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+thead{background:var(--light)}
+th{text-align:left;padding:10px 16px;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);font-weight:800;border-bottom:1px solid var(--border)}
+th:not(:first-child),td:not(:first-child){text-align:right}
+td{padding:12px 16px;border-bottom:1px solid #f1f5f9;font-weight:600}
+tr:last-child td{border-bottom:none}
+tr.missing{background:#fef9c3}
+tr.missing td{color:#854d0e;font-weight:600}
+tr.missing td:last-child{text-align:right}
+.score-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:800}
+.score-badge.green{background:#dcfce7;color:#166534}
+.score-badge.amber{background:#fef3c7;color:#92400e}
+.score-badge.red{background:#fee2e2;color:#991b1b}
+.backfill-link{display:inline-block;font-size:.74rem;background:var(--brand);color:#fff;padding:5px 12px;border-radius:6px;font-weight:700;text-decoration:none}
+.backfill-link:hover{background:var(--brand-dark);text-decoration:none}
+
+/* Empty state */
+.empty{background:#fff;border:1px dashed var(--border);border-radius:12px;padding:42px 24px;text-align:center;color:var(--gray)}
+.empty .ei{font-size:2.5rem;margin-bottom:12px}
+.empty h3{font-size:1.05rem;color:var(--dark);font-weight:800;margin-bottom:6px}
+.empty p{font-size:.88rem;margin-bottom:16px}
+.empty .btn{display:inline-block;background:var(--brand);color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none}
+.empty .btn:hover{background:var(--brand-dark);text-decoration:none}
+
+/* Reminder CTA */
+.reminder-card{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:12px;padding:16px 20px;margin-bottom:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.reminder-card .rc-icon{font-size:1.8rem}
+.reminder-card .rc-text{flex:1;min-width:200px}
+.reminder-card .rc-text strong{display:block;color:#1e293b;font-size:.95rem;margin-bottom:3px}
+.reminder-card .rc-text span{color:var(--gray);font-size:.82rem;line-height:1.5}
+.reminder-card .rc-btn{background:#fff;color:var(--brand);border:1.5px solid var(--brand);padding:8px 16px;border-radius:7px;font-weight:700;font-size:.84rem;text-decoration:none}
+.reminder-card .rc-btn:hover{background:var(--brand);color:#fff;text-decoration:none}
+</style>
+<link rel="stylesheet" href="fit-screen.css"/>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="top">
+    <a class="brand" href="dashboard.html"><span class="logo-icon">📊</span><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></a>
+    <div class="top-nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="modules/businessHealthScore.test.html">Health Score</a>
+      <a href="checkup.html">Full Checkup</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Your financial history</h1>
+    <p>One row per month. Score trend, key numbers, and any gaps to fill. Capturing monthly turns one-off scores into a real picture of your business over time.</p>
+  </div>
+
+  <div id="content"></div>
+
+</div>
+
+<script>
+function fmtMoney(n){return '$' + Math.round(n||0).toLocaleString('en-US')}
+function gradeFromScore(s){return s>=85?'A':s>=70?'B':s>=52?'C':s>=36?'D':'F'}
+function scoreColor(s){return s>=70?'green':s>=40?'amber':'red'}
+function monthLabel(ym){
+  if(!ym) return '—';
+  var p=ym.split('-');
+  var d=new Date(parseInt(p[0]),parseInt(p[1])-1,1);
+  return d.toLocaleString('default',{month:'long',year:'numeric'});
+}
+function monthShort(ym){
+  if(!ym) return '—';
+  var p=ym.split('-');
+  var d=new Date(parseInt(p[0]),parseInt(p[1])-1,1);
+  return d.toLocaleString('default',{month:'short'}) + ' ' + p[0].slice(2);
+}
+function monthOffsetFromNow(offset){
+  var d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+}
+
+function loadSnapshots(){
+  try{return JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{};}catch(e){return{};}
+}
+
+function detectGaps(snapKeys){
+  // Find calendar months between earliest and current that have no snapshot.
+  if(snapKeys.length<1) return [];
+  var sorted=snapKeys.slice().sort();
+  var earliest=sorted[0];
+  var current=monthOffsetFromNow(0);
+  var gaps=[];
+  var [y,m]=earliest.split('-').map(Number);
+  while(true){
+    var key=y+'-'+String(m).padStart(2,'0');
+    if(!snapKeys.includes(key)) gaps.push(key);
+    if(key===current) break;
+    m++;
+    if(m>12){m=1;y++;}
+    // Safety: stop if we somehow exceed 24 months
+    if(gaps.length>24) break;
+  }
+  return gaps;
+}
+
+function render(){
+  var snaps = loadSnapshots();
+  var keys = Object.keys(snaps).filter(function(k){return snaps[k] && typeof snaps[k].healthScore === 'number';}).sort();
+  var content = document.getElementById('content');
+
+  if (keys.length === 0) {
+    content.innerHTML =
+      '<div class="empty">' +
+        '<div class="ei">📈</div>' +
+        '<h3>No history yet</h3>' +
+        '<p>Generate your first health score to start building your monthly trend.</p>' +
+        '<a class="btn" href="modules/businessHealthScore.test.html">Generate Health Score →</a>' +
+      '</div>';
+    return;
+  }
+
+  // ─── Insights ────────────────────────────────────────────────────
+  var latest    = snaps[keys[keys.length-1]];
+  var earliest  = snaps[keys[0]];
+  var monthsCovered = keys.length;
+  var scoreChange   = monthsCovered>1 ? (latest.healthScore - earliest.healthScore) : 0;
+  var revChange     = monthsCovered>1 && earliest.rev ? Math.round((latest.rev - earliest.rev)/earliest.rev*100) : 0;
+  var gaps = detectGaps(keys);
+
+  var insightsHtml = '<div class="insights">' +
+    '<div class="ins-card '+scoreColor(latest.healthScore)+'">' +
+      '<div class="ic-label">Latest Score</div>' +
+      '<div class="ic-val">' + latest.healthScore + '</div>' +
+      '<div class="ic-sub">' + monthLabel(keys[keys.length-1]) + ' · Grade ' + gradeFromScore(latest.healthScore) + '</div>' +
+    '</div>' +
+    '<div class="ins-card ' + (scoreChange>=0?'green':'red') + '">' +
+      '<div class="ic-label">Score Change</div>' +
+      '<div class="ic-val">' + (scoreChange>=0?'+':'') + scoreChange + '</div>' +
+      '<div class="ic-sub">' + (monthsCovered>1 ? 'since ' + monthLabel(keys[0]) : 'first month — keep tracking') + '</div>' +
+    '</div>' +
+    '<div class="ins-card ' + (revChange>=0?'green':'red') + '">' +
+      '<div class="ic-label">Revenue Trend</div>' +
+      '<div class="ic-val">' + (revChange>=0?'+':'') + revChange + '%</div>' +
+      '<div class="ic-sub">' + (monthsCovered>1 ? 'across ' + monthsCovered + ' months' : 'set baseline this month') + '</div>' +
+    '</div>' +
+  '</div>';
+
+  // ─── Reminder CTA (only if it's a new month and they haven't logged yet) ──
+  var currentMonth = monthOffsetFromNow(0);
+  var reminderHtml = '';
+  if (!keys.includes(currentMonth)) {
+    reminderHtml =
+      '<div class="reminder-card">' +
+        '<div class="rc-icon">⏰</div>' +
+        '<div class="rc-text">' +
+          '<strong>Log this month\'s numbers (' + monthLabel(currentMonth) + ')</strong>' +
+          '<span>Takes about 60 seconds — keeps your trend accurate.</span>' +
+        '</div>' +
+        '<a class="rc-btn" href="modules/businessHealthScore.test.html">Log now →</a>' +
+      '</div>';
+  }
+
+  // ─── Trend chart ────────────────────────────────────────────────
+  var chartHtml =
+    '<div class="chart-card">' +
+      '<h2>📊 Score trend</h2>' +
+      '<div class="chart-wrap"><canvas id="trendCanvas"></canvas></div>' +
+      '<div class="chart-meta">Each point is one month\'s snapshot. Higher score (closer to 100) = better financial health.</div>' +
+    '</div>';
+
+  // ─── History table ──────────────────────────────────────────────
+  var rowsHtml = '';
+  // Combine snapshots + missing months, sort newest first
+  var allMonths = keys.slice().concat(gaps).sort().reverse();
+  allMonths.forEach(function(k){
+    if (gaps.includes(k)) {
+      rowsHtml +=
+        '<tr class="missing">' +
+          '<td>' + monthLabel(k) + '</td>' +
+          '<td colspan="4">— not captured —</td>' +
+          '<td><a class="backfill-link" href="modules/businessHealthScore.test.html">Log it</a></td>' +
+        '</tr>';
+    } else {
+      var s = snaps[k];
+      var color = scoreColor(s.healthScore);
+      rowsHtml +=
+        '<tr>' +
+          '<td>' + monthLabel(k) + '</td>' +
+          '<td>' + (s.rev != null ? fmtMoney(s.rev) : '—') + '</td>' +
+          '<td>' + (s.exp != null ? fmtMoney(s.exp) : '—') + '</td>' +
+          '<td>' + (s.emi != null ? fmtMoney(s.emi) : '—') + '</td>' +
+          '<td>' + (s.reserve != null ? fmtMoney(s.reserve) : '—') + '</td>' +
+          '<td><span class="score-badge ' + color + '">' + s.healthScore + ' · ' + gradeFromScore(s.healthScore) + '</span></td>' +
+        '</tr>';
+    }
+  });
+
+  var tableHtml =
+    '<div class="history-card">' +
+      '<h2>📋 Monthly snapshots</h2>' +
+      '<table>' +
+        '<thead><tr>' +
+          '<th>Month</th><th>Revenue</th><th>Expenses</th><th>EMI</th><th>Reserve</th><th>Score</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rowsHtml + '</tbody>' +
+      '</table>' +
+    '</div>';
+
+  content.innerHTML = reminderHtml + insightsHtml + chartHtml + tableHtml;
+
+  drawTrend(keys, snaps);
+}
+
+function drawTrend(keys, snaps){
+  var canvas = document.getElementById('trendCanvas');
+  if (!canvas) return;
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  var W = rect.width, H = rect.height;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  if (keys.length < 1) return;
+  var scores = keys.map(function(k){ return snaps[k].healthScore; });
+  var padL = 30, padR = 10, padT = 18, padB = 28;
+  var chartW = W - padL - padR;
+  var chartH = H - padT - padB;
+
+  // gridlines
+  ctx.strokeStyle = '#f1f5f9';
+  ctx.lineWidth = 1;
+  [0, 25, 50, 75, 100].forEach(function(v){
+    var y = padT + chartH * (1 - v / 100);
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText(v, padL - 4, y + 3);
+  });
+
+  function tx(i){ return keys.length > 1 ? padL + (i / (keys.length - 1)) * chartW : padL + chartW / 2; }
+  function ty(v){ return padT + chartH * (1 - v / 100); }
+
+  // gradient fill
+  var grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+  grad.addColorStop(0, 'rgba(79,70,229,.22)');
+  grad.addColorStop(1, 'rgba(79,70,229,0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(tx(0), ty(scores[0]));
+  for (var i = 1; i < scores.length; i++) ctx.lineTo(tx(i), ty(scores[i]));
+  ctx.lineTo(tx(scores.length - 1), padT + chartH);
+  ctx.lineTo(tx(0), padT + chartH);
+  ctx.closePath();
+  ctx.fill();
+
+  // line
+  ctx.strokeStyle = '#4f46e5';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(tx(0), ty(scores[0]));
+  for (var i = 1; i < scores.length; i++) ctx.lineTo(tx(i), ty(scores[i]));
+  ctx.stroke();
+
+  // dots + labels
+  for (var i = 0; i < scores.length; i++) {
+    var s = scores[i];
+    ctx.beginPath();
+    ctx.arc(tx(i), ty(s), 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = s >= 70 ? '#16a34a' : s >= 40 ? '#d97706' : '#dc2626';
+    ctx.fill();
+    ctx.fillStyle = '#475569';
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(s, tx(i), ty(s) - 8);
+    // x-axis month label
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px Arial';
+    ctx.fillText(monthShort(keys[i]), tx(i), padT + chartH + 16);
+  }
+}
+
+window.addEventListener('load', render);
+window.addEventListener('resize', function(){
+  var snaps = loadSnapshots();
+  var keys = Object.keys(snaps).filter(function(k){return snaps[k] && typeof snaps[k].healthScore === 'number';}).sort();
+  drawTrend(keys, snaps);
+});
+</script>
+
+</body>
+</html>

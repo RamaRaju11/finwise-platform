@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard — BizSco</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BizSco">
+<meta name="theme-color" content="#0f172a">
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script src="pwa.js" defer></script>
+<meta name="description" content="Your BizSco financial dashboard — track your loan score, cash runway, health grade, and access all 30 free tools for small business owners."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;min-height:100vh;display:flex}
+
+/* -------------------------------
+   SIDEBAR
+------------------------------- */
+.sidebar{
+  width:220px;min-width:220px;
+  background:#0f172a;
+  height:100vh;position:fixed;top:0;left:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;z-index:1000;
+  transition:transform .25s ease;
+}
+.sb-nav{flex:1;overflow-y:auto;padding:0 0 8px;scrollbar-width:none}
+.sb-nav::-webkit-scrollbar{display:none}
+
+.sb-logo{padding:18px 16px 10px;display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.sb-logo-text{font-size:1.05rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.sb-logo-text span{color:#818cf8}
+
+.sb-biz{padding:0 16px 14px;font-size:.72rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.sb-plan-chip{margin:0 16px 16px;display:inline-block;font-size:.6rem;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
+.badge-free{background:#334155;color:#94a3b8}
+.badge-starter{background:#0891b2;color:#fff}
+.badge-pro{background:#7c3aed;color:#fff}
+.badge-advisor{background:#be185d;color:#fff}
+
+.sb-section{padding:14px 16px 4px;font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569}
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:.8rem;font-weight:600;color:#94a3b8;text-decoration:none;transition:background .12s,color .12s;white-space:nowrap}
+.sb-link:hover{background:rgba(255,255,255,.06);color:#e2e8f0}
+.sb-link.active{background:rgba(99,102,241,.18);color:#a5b4fc;border-right:3px solid #6366f1}
+.sb-link .sb-ic{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}
+.sb-link .sb-lock{font-size:.58rem;margin-left:auto;background:#1e293b;color:#475569;padding:2px 5px;border-radius:3px;font-weight:700}
+
+.sb-divider{margin:8px 16px;border:none;border-top:1px solid #1e293b}
+
+.sb-footer{padding:12px 16px 20px;flex-shrink:0;border-top:1px solid #1e293b}
+.sb-upgrade{display:block;text-align:center;background:#4f46e5;color:#fff;padding:9px 12px;border-radius:8px;font-size:.78rem;font-weight:800;text-decoration:none;margin-bottom:8px;transition:background .15s}
+.sb-upgrade:hover{background:#4338ca}
+.sb-upgrade.hidden{display:none}
+.sb-signout{width:100%;background:transparent;border:1px solid #334155;color:#64748b;padding:7px;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;transition:all .15s}
+.sb-signout:hover{border-color:#475569;color:#94a3b8}
+
+/* -- Accordion menu groups -- */
+.sb-group{margin-bottom:2px}
+.sb-gtoggle{display:flex;align-items:center;gap:9px;padding:7px 16px;font-size:.72rem;font-weight:800;color:#64748b;cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:.07em;transition:color .12s;width:100%}
+.sb-gtoggle:hover{color:#94a3b8}
+.sb-gtoggle .sb-arrow{margin-left:auto;font-size:.6rem;transition:transform .2s;display:inline-block}
+.sb-group.open .sb-arrow{transform:rotate(90deg)}
+.sb-group-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
+.sb-group.open .sb-group-body{max-height:800px}
+
+/* -------------------------------
+   MOBILE OVERLAY
+------------------------------- */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}
+.sb-overlay.open{display:block}
+
+/* -------------------------------
+   MAIN WRAP
+------------------------------- */
+.main-wrap{flex:1;margin-left:220px;min-height:100vh;display:flex;flex-direction:column;min-width:0}
+
+/* -------------------------------
+   TOP BAR
+------------------------------- */
+.topbar{height:52px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100;display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
+.tb-hamburger{display:none;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#475569;padding:4px 6px;border-radius:6px}
+.tb-hamburger:hover{background:#f1f5f9}
+.tb-title{font-size:.9rem;font-weight:800;color:#0f172a}
+.tb-spacer{flex:1}
+.tb-user{font-size:.78rem;color:#64748b;white-space:nowrap}
+.tb-upgrade{padding:6px 14px;background:#2563eb;color:#fff;border-radius:6px;font-size:.75rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:background .15s}
+.tb-upgrade:hover{background:#1d4ed8}
+.tb-upgrade.hidden{display:none}
+
+/* -------------------------------
+   PAGE CONTENT
+------------------------------- */
+.page-content{flex:1;padding:24px;max-width:1020px;width:100%}
+
+/* Page header */
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.ph-text h1{font-size:1.2rem;font-weight:900;color:#0f172a}
+.ph-text p{font-size:.78rem;color:#64748b;margin-top:2px}
+.ph-spacer{flex:1}
+
+/* -- Metric cards -- */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:700px){.metrics-row{grid-template-columns:1fr 1fr}}
+.metric-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.mc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:6px}
+.mc-value{font-size:1.4rem;font-weight:900;line-height:1;margin-bottom:3px}
+.mc-value.green{color:#16a34a}
+.mc-value.blue{color:#2563eb}
+.mc-value.amber{color:#d97706}
+.mc-value.red{color:#dc2626}
+.mc-sub{font-size:.68rem;color:#94a3b8}
+
+/* -- Score gauges -- */
+.gauges-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+@media(max-width:600px){.gauges-row{grid-template-columns:1fr}}
+.gauge-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);padding:20px 16px 14px;text-align:center}
+.gc-title{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px}
+.gc-num{font-size:2rem;font-weight:900;line-height:1;margin:2px 0 6px}
+.gc-verdict{font-size:.72rem;font-weight:800;padding:3px 12px;border-radius:999px;display:inline-block;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+.verdict-safe{background:#dcfce7;color:#15803d}
+.verdict-caution{background:#fef9c3;color:#854d0e}
+.verdict-risky{background:#fed7aa;color:#9a3412}
+.verdict-dangerous{background:#fee2e2;color:#991b1b}
+.verdict-none{background:#f1f5f9;color:#64748b}
+.gc-cta{font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none;display:inline-block}
+.gc-cta:hover{text-decoration:underline}
+.gc-no-data{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:154px;color:#94a3b8;font-size:.8rem;gap:8px;line-height:1.5;text-align:center}
+
+/* -- Section title -- */
+.sec-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:12px;margin-top:4px}
+
+/* -- Tools grid -- */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:24px}
+.tool-card{background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;padding:14px;text-decoration:none;color:#1e293b;transition:all .15s;display:block;position:relative}
+.tool-card:hover{border-color:#2563eb;box-shadow:0 4px 14px rgba(37,99,235,.12);transform:translateY(-2px)}
+.tool-card.locked{opacity:.5;cursor:not-allowed;pointer-events:none}
+.tc-icon{font-size:1.4rem;margin-bottom:6px}
+.tc-name{font-size:.8rem;font-weight:800;color:#1e293b;margin-bottom:2px}
+.tc-desc{font-size:.68rem;color:#64748b;line-height:1.4}
+.tc-lock{position:absolute;top:10px;right:10px;font-size:.6rem;background:#f1f5f9;color:#94a3b8;padding:2px 6px;border-radius:4px;font-weight:700}
+
+/* -- Plan status card -- */
+.plan-card{background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;padding:20px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.pc-left h3{font-size:1rem;font-weight:900;margin-bottom:4px}
+.pc-left p{font-size:.78rem;color:#64748b;line-height:1.5;max-width:420px}
+.plan-features{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pf-chip{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#475569}
+.pc-right{margin-left:auto}
+.upgrade-btn{padding:10px 22px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.upgrade-btn:hover{background:#1d4ed8}
+.upgrade-btn.hidden{display:none}
+
+/* -- Two col -- */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+/* -- Recent activity -- */
+.activity-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:16px}
+.activity-card h3{font-size:.85rem;font-weight:800;margin-bottom:12px;color:#1e293b}
+.act-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc;font-size:.8rem}
+.act-item:last-child{border-bottom:none}
+.act-icon{font-size:1.1rem;flex-shrink:0}
+.act-name{font-weight:700;color:#1e293b;flex:1}
+.act-time{font-size:.7rem;color:#94a3b8;white-space:nowrap}
+.act-empty{font-size:.8rem;color:#94a3b8;text-align:center;padding:16px 0}
+
+/* -- Profile summary -- */
+.profile-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:16px}
+.profile-card h3{font-size:.85rem;font-weight:800;margin-bottom:12px;color:#1e293b}
+.prof-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f8fafc;font-size:.8rem}
+.prof-row:last-child{border-bottom:none}
+.prof-label{color:#94a3b8;font-weight:600}
+.prof-value{font-weight:700;color:#1e293b;text-align:right;max-width:60%}
+.edit-profile{display:block;margin-top:12px;text-align:center;font-size:.75rem;color:#2563eb;text-decoration:none;font-weight:700}
+.edit-profile:hover{text-decoration:underline}
+
+/* -- Trial banner -- */
+.trial-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tb-icon{font-size:1.5rem;flex-shrink:0}
+.tb-text{flex:1;font-size:.84rem;color:#92400e;line-height:1.5}
+.tb-text strong{display:block;font-size:.9rem;margin-bottom:2px}
+.tb-days{background:#f59e0b;color:#fff;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.tb-btn{padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:7px;font-size:.8rem;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+.tb-btn:hover{background:#b45309}
+
+/* -- No profile banner -- */
+.setup-banner{background:#fef9c3;border:1px solid #fde68a;border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.sb-text{flex:1;font-size:.82rem;color:#92400e;line-height:1.5}
+.sb-btn{padding:8px 18px;background:#d97706;color:#fff;border:none;border-radius:7px;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+
+/* -- Start Here card (empty state) -- */
+.start-here{background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:24px 28px;margin-bottom:20px}
+.sh-title{font-size:1rem;font-weight:800;color:#0f172a;margin-bottom:6px}
+.sh-sub{font-size:.8rem;color:#64748b;margin-bottom:20px}
+.sh-steps{display:flex;gap:16px;flex-wrap:wrap}
+.sh-step{flex:1;min-width:160px;background:#f8faff;border:1.5px solid #bfdbfe;border-radius:10px;padding:16px;text-align:center;text-decoration:none}
+.sh-step:hover{border-color:#2563eb;background:#eff6ff}
+.sh-num{width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;font-size:.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.sh-icon{font-size:1.4rem;margin-bottom:6px}
+.sh-sname{font-size:.8rem;font-weight:800;color:#0f172a}
+.sh-sdesc{font-size:.72rem;color:#64748b;margin-top:3px}
+
+/* -- Smart Alerts -- */
+.alerts-widget{margin-bottom:20px}
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-radius:9px;margin-bottom:8px;font-size:.82rem;line-height:1.5}
+.alert-item:last-child{margin-bottom:0}
+.alert-crit{background:#fee2e2;border:1px solid #fca5a5}
+.alert-warn{background:#fef9c3;border:1px solid #fde68a}
+.alert-good{background:#f0fdf4;border:1px solid #86efac}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe}
+.al-ic{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.al-msg{flex:1;color:#1e293b}
+.al-msg strong{display:block;font-weight:800;margin-bottom:1px}
+.al-lnk{font-size:.76rem;font-weight:700;color:#2563eb;text-decoration:none;display:inline-block;margin-top:4px}
+.al-lnk:hover{text-decoration:underline}
+
+/* -- Priority cards -- */
+.pri-card{border-radius:11px;padding:14px 16px;border-left:4px solid}
+.pri-urgent{background:#fff1f2;border-color:#dc2626}
+.pri-high{background:#fff7ed;border-color:#f97316}
+.pri-medium{background:#fefce8;border-color:#eab308}
+.pri-low{background:#f0fdf4;border-color:#22c55e}
+.pri-title{font-size:.84rem;font-weight:800;color:#0f172a;margin-bottom:4px}
+.pri-desc{font-size:.76rem;color:#475569;line-height:1.5;margin-bottom:8px}
+.pri-action{font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none}
+.pri-action:hover{text-decoration:underline}
+.dim-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.dim-label{font-size:.7rem;color:#94a3b8;width:100px;flex-shrink:0}
+.dim-track{flex:1;height:6px;background:#1e293b;border-radius:999px;overflow:hidden}
+.dim-fill{height:100%;border-radius:999px;transition:width 1s ease}
+.dim-score{font-size:.7rem;color:#e2e8f0;width:32px;text-align:right;flex-shrink:0}
+
+/* -- Referral card -- */
+.referral-card{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.ref-left{flex:1;min-width:260px}
+.ref-title{font-size:.95rem;font-weight:900;color:#fff;margin-bottom:6px}
+.ref-desc{font-size:.78rem;color:#c7d2fe;line-height:1.5;margin-bottom:14px}
+.ref-link-row{display:flex;gap:8px;margin-bottom:10px}
+.ref-link-input{flex:1;padding:8px 12px;border:1.5px solid rgba(255,255,255,.2);border-radius:7px;font-size:.75rem;background:rgba(255,255,255,.1);color:#e0e7ff;font-family:monospace}
+.ref-copy-btn{padding:8px 14px;background:#4f46e5;color:#fff;border:none;border-radius:7px;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .2s}
+.ref-copy-btn:hover{background:#4338ca}
+.ref-copy-btn.copied{background:#16a34a}
+.ref-share-row{display:flex;gap:8px;flex-wrap:wrap}
+.ref-share-btn{padding:6px 14px;border-radius:7px;font-size:.75rem;font-weight:700;text-decoration:none;display:inline-block;transition:opacity .2s}
+.ref-share-btn:hover{opacity:.85}
+.ref-share-btn.wa{background:#25D366;color:#fff}
+.ref-share-btn.em{background:rgba(255,255,255,.15);color:#e0e7ff;border:1px solid rgba(255,255,255,.2)}
+.ref-share-btn.tw{background:#1DA1F2;color:#fff}
+.ref-stats{display:flex;gap:20px;align-items:center;flex-shrink:0}
+.ref-stat{text-align:center;min-width:70px}
+.rs-num{font-size:2.2rem;font-weight:900;color:#fff;line-height:1}
+.rs-label{font-size:.65rem;font-weight:700;color:#c7d2fe;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.ref-credit-msg{background:#fbbf24;color:#1e293b;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;margin-top:10px;display:inline-block}
+
+/* -------------------------------
+   RESPONSIVE — collapse sidebar
+------------------------------- */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-220px)}
+  .sidebar.open{transform:translateX(0);box-shadow:4px 0 30px rgba(0,0,0,.35)}
+  .main-wrap{margin-left:0}
+  .tb-hamburger{display:flex;align-items:center;justify-content:center}
+}
+@media(max-width:520px){
+  .page-content{padding:16px}
+  .metrics-row{grid-template-columns:1fr 1fr}
+}
+
+/* -- Invoice Widget -- */
+.inv-widget{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:20px}
+.inv-widget-header{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f1f5f9}
+.inv-widget-title{font-size:.82rem;font-weight:800;color:#0f172a}
+.inv-widget-link{font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none}
+.inv-widget-link:hover{text-decoration:underline}
+.inv-stat-row{display:flex;gap:0}
+.inv-stat{flex:1;padding:12px 16px;text-align:center;border-right:1px solid #f1f5f9}
+.inv-stat:last-child{border-right:none}
+.inv-stat-val{font-size:1.25rem;font-weight:900;color:#0f172a;line-height:1}
+.inv-stat-val.red{color:#dc2626}
+.inv-stat-val.amber{color:#d97706}
+.inv-stat-val.green{color:#16a34a}
+.inv-stat-val.blue{color:#2563eb}
+.inv-stat-lbl{font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+
+/* -- Action Items -- */
+.ai-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:0}
+.ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f1f5f9}
+.ai-title{font-size:.82rem;font-weight:800;color:#0f172a}
+.ai-count{font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:999px}
+.ai-count.has-urgent{background:#fee2e2;color:#dc2626}
+.ai-count.all-clear{background:#dcfce7;color:#15803d}
+.ai-item{display:flex;align-items:flex-start;gap:11px;padding:10px 16px;border-bottom:1px solid #f8fafc;cursor:pointer;transition:background .1s}
+.ai-item:last-child{border-bottom:none}
+.ai-item:hover{background:#f8fafc}
+.ai-prio{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ai-prio.high{background:#dc2626}
+.ai-prio.med{background:#f59e0b}
+.ai-prio.low{background:#10b981}
+.ai-text{flex:1;font-size:.8rem}
+.ai-text strong{display:block;font-weight:800;color:#1e293b;margin-bottom:1px}
+.ai-text span{color:#64748b;font-size:.75rem}
+.ai-lnk{font-size:.72rem;font-weight:700;color:#2563eb;text-decoration:none;flex-shrink:0}
+.ai-empty{padding:18px 16px;text-align:center;color:#94a3b8;font-size:.8rem}
+
+/* -- Date range -- */
+.dr-row{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.dr-btn{padding:4px 11px;border-radius:999px;font-size:.7rem;font-weight:700;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;transition:all .12s;font-family:Arial,sans-serif}
+.dr-btn:hover{border-color:#2563eb;color:#2563eb}
+.dr-btn.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
+.dr-source{font-size:.66rem;color:#94a3b8;margin-left:auto;font-style:italic}
+
+/* -- Export -- */
+.export-btn{padding:6px 13px;background:#f8fafc;color:#475569;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;font-family:Arial,sans-serif;text-decoration:none}
+.export-btn:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+
+/* -- Live data badge -- */
+.live-src{font-size:.65rem;font-weight:700;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;margin-left:6px}
+.live-src .ldot{width:5px;height:5px;border-radius:50%;background:#10b981;flex-shrink:0}
+
+/* -- Print -- */
+@media print{
+  .sidebar,.topbar,.trial-banner,.setup-banner,.start-here,.alerts-widget,.action-items,.plan-card,.referral-card,.tools-grid,#histWidget,.two-col,.export-btn,.sb-overlay,.tb-upgrade,.dr-row{display:none!important}
+  .main-wrap{margin-left:0!important}
+  .page-content{padding:0!important;max-width:100%!important}
+  .metrics-row,.gauges-row{grid-template-columns:repeat(2,1fr)!important}
+  body{background:#fff}
+  .page-header p::after{content:" — Printed " attr(data-date)}
+}
+</style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
+<link rel="stylesheet" href="fit-screen.css"/>
+</head>
+<body>
+<script src="modules/fw-auth.js"></script>
+
+<!-- ---------------------------------------
+     SIDEBAR
+---------------------------------------- -->
+<aside class="sidebar" id="sidebar">
+  <a href="dashboard.html" class="sb-logo">
+    <div class="sb-logo-text">&#128200; <b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></div>
+  </a>
+  <div style="font-size:.58rem;color:#475569;padding:0 16px 8px;margin-top:-4px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze — Fund — Grow</div>
+  <div class="sb-biz" id="heroBiz">Your dashboard</div>
+  <span class="sb-plan-chip badge-free" id="planBadge">Free Plan</span>
+
+  <nav class="sb-nav">
+
+    <div class="sb-section">Overview</div>
+    <a href="dashboard.html" class="sb-link active"><span class="sb-ic">&#127968;</span>Dashboard</a>
+    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')" style="color:#f59e0b;font-weight:700"><span class="sb-ic">&#9999;</span>Edit My Profile</a>
+    <a href="checkup.html" class="sb-link"><span class="sb-ic">&#129514;</span>Financial Checkup</a>
+    <a href="history.html" class="sb-link"><span class="sb-ic">&#128202;</span>Score History</a>
+    <a href="whatif.html" class="sb-link"><span class="sb-ic">&#128302;</span>What-If Scenarios</a>
+    <a href="alltools.html" class="sb-link"><span class="sb-ic">&#128295;</span>All Tools Directory</a>
+    <a href="free-demo.html" class="sb-link"><span class="sb-ic">&#127916;</span>Free Interactive Demo</a>
+    <a href="starter-demo.html" class="sb-link"><span class="sb-ic">&#127916;</span>Starter Interactive Demo</a>
+    <a href="pro-demo.html" class="sb-link"><span class="sb-ic">&#127916;</span>Pro Interactive Demo</a>
+    <a href="advisor-demo.html" class="sb-link"><span class="sb-ic">&#127916;</span>Advisor Interactive Demo</a>
+
+    <hr class="sb-divider"/>
+
+    <!-- CORE ENGINES -->
+    <div class="sb-group open" id="grp-core">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-core')">&#9881; Core Engines<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/loanDecisionScoreEngine.test.html" class="sb-link"><span class="sb-ic">&#127974;</span>Loan Safety Score</a>
+        <a href="modules/loanEngine.test.html" class="sb-link"><span class="sb-ic">&#127974;</span>Loan Engine</a>
+        <a href="modules/loanAffordabilityEngine.test.html" class="sb-link"><span class="sb-ic">&#128176;</span>Loan Affordability</a>
+        <a href="modules/riskDebtEngine.test.html" class="sb-link"><span class="sb-ic">&#9888;</span>Risk &amp; Debt</a>
+        <a href="modules/stressTestEngine.test.html" class="sb-link"><span class="sb-ic">&#129514;</span>Stress Test</a>
+        <a href="modules/multiLoanManager.test.html" class="sb-link"><span class="sb-ic">&#128203;</span>Multi-Loan Manager</a>
+        <a href="modules/recommendationEngine.test.html" class="sb-link"><span class="sb-ic">&#128161;</span>Recommendations</a>
+        <a href="modules/emiCalculator.test.html" class="sb-link"><span class="sb-ic">&#129518;</span>EMI Calculator</a>
+        <a href="modules/loanEligibility.test.html" class="sb-link" id="nav-eligibility"><span class="sb-ic">&#9989;</span>Loan Eligibility</a>
+        <a href="modules/loanRepaymentOptimizer.test.html" class="sb-link"><span class="sb-ic">&#128257;</span>Repayment Optimizer</a>
+        <a href="modules/loanRefinanceAnalyzer.test.html" class="sb-link"><span class="sb-ic">&#128260;</span>Refinance Analyzer</a>
+        <a href="modules/debtCommandCenter.test.html" class="sb-link"><span class="sb-ic">&#128184;</span>Debt Command Center</a>
+        <a href="modules/debtConsolidation.test.html" class="sb-link"><span class="sb-ic">&#128256;</span>Debt Consolidation</a>
+        <a href="modules/lenderMarketplace.html" class="sb-link"><span class="sb-ic">&#127963;</span>Lender Marketplace</a>
+        <a href="modules/loanMarketplaceEngine.test.html" class="sb-link"><span class="sb-ic">&#127963;</span>Loan Marketplace</a>
+        <a href="modules/grantFinder.test.html" class="sb-link" id="nav-grants"><span class="sb-ic">&#127919;</span>Grant Finder</a>
+      </div>
+    </div>
+
+    <!-- FINANCIAL STATEMENTS -->
+    <div class="sb-group" id="grp-fin">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-fin')">&#128202; Financial Statements<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/profitLossEngine.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>P&amp;L Engine</a>
+        <a href="modules/balanceSheetEngine.test.html" class="sb-link"><span class="sb-ic">&#128203;</span>Balance Sheet</a>
+        <a href="modules/cashFlowStatementEngine.test.html" class="sb-link"><span class="sb-ic">&#128181;</span>Cash Flow Statement</a>
+        <a href="modules/accountingMappingEngine.test.html" class="sb-link"><span class="sb-ic">&#128205;</span>Accounting Mapping</a>
+        <a href="modules/forecastingEngine.test.html" class="sb-link"><span class="sb-ic">&#128200;</span>Forecasting Engine</a>
+        <a href="modules/financialStatements.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>Financial Statements</a>
+        <a href="modules/forecastPro.test.html" class="sb-link" id="nav-forecast"><span class="sb-ic">&#128200;</span>Forecast Pro</a>
+        <a href="modules/profitMarginAnalyzer.test.html" class="sb-link"><span class="sb-ic">&#128201;</span>Profit Margin Analyzer</a>
+        <a href="modules/cashFlowEngine.test.html" class="sb-link"><span class="sb-ic">&#128181;</span>Cash Flow Engine</a>
+      </div>
+    </div>
+
+    <!-- TAX & PAYROLL -->
+    <div class="sb-group" id="grp-tax">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-tax')">&#128188; Tax &amp; Payroll<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/taxCommandCenter.test.html" class="sb-link"><span class="sb-ic">&#129534;</span>Tax Command Center</a>
+        <a href="modules/taxEstimator.test.html" class="sb-link" id="nav-tax"><span class="sb-ic">&#129535;</span>Tax Estimator</a>
+        <a href="modules/salesTaxTracker.test.html" class="sb-link"><span class="sb-ic">&#127991;</span>Sales Tax Tracker</a>
+        <a href="modules/keyDeductions.test.html" class="sb-link"><span class="sb-ic">&#128188;</span>Key Deductions</a>
+        <a href="modules/contractorPayroll.test.html" class="sb-link"><span class="sb-ic">&#128101;</span>Contractor/Payroll</a>
+        <a href="modules/payrollEstimator.test.html" class="sb-link"><span class="sb-ic">&#128176;</span>Payroll Estimator</a>
+        <a href="modules/payrollImpactSim.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>Payroll Impact Sim</a>
+        <a href="modules/caExport.test.html" class="sb-link"><span class="sb-ic">&#128230;</span>CA Export Pack</a>
+      </div>
+    </div>
+
+    <!-- BUSINESS PLANNING -->
+    <div class="sb-group" id="grp-biz">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-biz')">&#128202; Business Planning<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/cashRunway.test.html" class="sb-link"><span class="sb-ic">&#9201;</span>Cash Runway</a>
+        <a href="modules/cashFlowTracker.test.html" class="sb-link"><span class="sb-ic">&#128181;</span>Cash Flow Tracker</a>
+        <a href="modules/breakEven.test.html" class="sb-link"><span class="sb-ic">&#9878;</span>Break-Even</a>
+        <a href="modules/workingCapitalCalc.test.html" class="sb-link"><span class="sb-ic">&#128188;</span>Working Capital</a>
+        <a href="modules/ownersPay.test.html" class="sb-link" id="nav-owners"><span class="sb-ic">&#128176;</span>Owner's Pay</a>
+        <a href="modules/businessSavingsPlanner.test.html" class="sb-link"><span class="sb-ic">&#127919;</span>Savings Planner</a>
+        <a href="modules/goalTracker.test.html" class="sb-link"><span class="sb-ic">&#127919;</span>Goal Tracker</a>
+        <a href="modules/budgetActualTracker.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>Budget vs Actual</a>
+        <a href="modules/monthlySnapshot.test.html" class="sb-link"><span class="sb-ic">&#128247;</span>Monthly Snapshot</a>
+        <a href="modules/scoreCard.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>Score Card</a>
+        <a href="modules/businessHealthScore.test.html" class="sb-link" id="nav-health"><span class="sb-ic">&#127942;</span>Health Score</a>
+        <a href="modules/starterPlan.test.html" class="sb-link"><span class="sb-ic">&#127793;</span>Starter Plan</a>
+      </div>
+    </div>
+
+    <!-- BANKING & TRACKING -->
+    <div class="sb-group" id="grp-bank">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-bank')">&#127974; Banking &amp; Tracking<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/bankStatementUpload.test.html" class="sb-link"><span class="sb-ic">&#128228;</span>Bank Statement Upload</a>
+        <a href="modules/cashFlowCalendar.test.html" class="sb-link"><span class="sb-ic">&#128197;</span>Cash Flow Calendar</a>
+        <a href="modules/invoiceTracker.test.html" class="sb-link"><span class="sb-ic">&#128221;</span>Invoice Tracker</a>
+        <a href="modules/vendorBillTracker.test.html" class="sb-link"><span class="sb-ic">&#129534;</span>Vendor Bill Tracker</a>
+        <a href="modules/businessProfiles.test.html" class="sb-link"><span class="sb-ic">&#128100;</span>Business Profiles</a>
+      </div>
+    </div>
+
+    <!-- INTELLIGENCE & AI -->
+    <div class="sb-group" id="grp-ai">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-ai')">&#129302; Intelligence &amp; AI<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/aiCfoChat.test.html" class="sb-link" id="nav-ai"><span class="sb-ic">&#129302;</span>AI CFO Advisor</a>
+        <a href="modules/aiAdvisorEngine.test.html" class="sb-link"><span class="sb-ic">&#129302;</span>AI Advisor Engine</a>
+        <a href="modules/benchmarkPro.test.html" class="sb-link" id="nav-bench"><span class="sb-ic">&#128202;</span>Benchmark Pro</a>
+        <a href="modules/industryBenchmarksEngine.test.html" class="sb-link"><span class="sb-ic">&#128202;</span>Industry Benchmarks</a>
+        <a href="modules/paidReportsEngine.test.html" class="sb-link"><span class="sb-ic">&#128221;</span>Paid Reports</a>
+        <a href="modules/shareableResultsEngine.test.html" class="sb-link"><span class="sb-ic">&#128279;</span>Shareable Results</a>
+        <a href="modules/seoToolsEngine.test.html" class="sb-link"><span class="sb-ic">&#128269;</span>SEO Tools</a>
+      </div>
+    </div>
+
+    <!-- ADVISOR -->
+    <div class="sb-group" id="grp-adv">
+      <div class="sb-gtoggle" onclick="toggleGrp('grp-adv')">&#127891; Advisor Platform<span class="sb-arrow">&#9662;</span></div>
+      <div class="sb-group-body">
+        <a href="modules/advisorDashboard.test.html" class="sb-link" id="nav-adv"><span class="sb-ic">&#128104;&#8205;&#128188;</span>Advisor Dashboard</a>
+        <a href="modules/clientPortal.test.html" class="sb-link" id="nav-cp"><span class="sb-ic">&#128101;</span>Client Portal</a>
+        <a href="modules/brandedReport.test.html" class="sb-link" id="nav-br"><span class="sb-ic">&#128196;</span>Branded Reports</a>
+        <a href="modules/clientRiskEmail.test.html" class="sb-link"><span class="sb-ic">&#128231;</span>Client Risk Email</a>
+        <a href="modules/referralTracker.test.html" class="sb-link"><span class="sb-ic">&#128184;</span>Referral Tracker</a>
+        <a href="modules/whiteLabelSettings.test.html" class="sb-link"><span class="sb-ic">&#9881;</span>White-Label Settings</a>
+        <a href="modules/subscriptionEngine.test.html" class="sb-link"><span class="sb-ic">&#128179;</span>Subscription System</a>
+      </div>
+    </div>
+
+    <hr class="sb-divider"/>
+
+    <a href="alltools.html" class="sb-link"><span class="sb-ic">&#128295;</span>All 63 Tools &rarr;</a>
+    <a href="pricing.html" class="sb-link"><span class="sb-ic">&#128179;</span>Plans &amp; Pricing</a>
+    <a href="onboarding.html" class="sb-link" onclick="localStorage.removeItem('fw_onboarded')"><span class="sb-ic">&#9881;</span>Edit Profile</a>
+
+  </nav>
+
+  <div class="sb-footer">
+    <a href="pricing.html" class="sb-upgrade" id="sbUpgrade">&#9889; Upgrade Plan</a>
+    <button class="sb-signout" id="signOutBtn" onclick="doSignOut()">Sign Out</button>
+  </div>
+</aside>
+
+<!-- mobile overlay -->
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+
+<!-- ---------------------------------------
+     MAIN WRAP
+---------------------------------------- -->
+<div class="main-wrap">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="tb-hamburger" id="sbHamburger" onclick="toggleSidebar()">☰</button>
+    <div class="tb-title">Dashboard</div>
+    <div class="tb-spacer"></div>
+    <a href="onboarding.html" onclick="localStorage.removeItem('fw_onboarded')" style="font-size:.82rem;font-weight:700;color:#374151;text-decoration:none;" title="Edit your profile" id="userName"></a>
+    <a href="pricing.html" class="tb-upgrade" id="heroUpgrade">Upgrade</a>
+    <button onclick="doSignOut()" style="padding:5px 12px;background:transparent;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;font-weight:700;color:#64748b;cursor:pointer;" title="Sign Out">Sign Out</button>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <div class="page-content">
+
+    <!-- Missing-month banner (Piece 4 of Monthly Capture Habit).
+         Auto-shown when user hasn't logged data for current month yet,
+         OR when user has never logged any month (first-time prompt). -->
+    <div id="missingMonthBanner" style="display:none;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:12px;padding:14px 20px;margin-bottom:16px;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-size:1.8rem;line-height:1">📅</span>
+      <div style="flex:1;min-width:200px">
+        <div id="mmbTitle" style="font-weight:800;color:#1e293b;font-size:.95rem;margin-bottom:2px">Log this month's numbers</div>
+        <div id="mmbBody" style="color:#64748b;font-size:.82rem;line-height:1.5">Takes about 60 seconds — keeps your trend chart accurate.</div>
+      </div>
+      <a href="modules/businessHealthScore.test.html" style="background:#4f46e5;color:#fff;padding:9px 18px;border-radius:7px;font-weight:700;font-size:.84rem;text-decoration:none">Log now →</a>
+      <a href="monthlyHistory.html" style="font-size:.78rem;color:#475569;font-weight:600;text-decoration:none">See history →</a>
+    </div>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="ph-text">
+        <h1 id="heroGreeting">Welcome back!</h1>
+        <p id="dashSubtitle">Your financial snapshot — updated in real time</p>
+      </div>
+      <div class="ph-spacer"></div>
+      <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
+    </div>
+
+    <script>
+    // Missing-month banner controller — detect calendar gaps in fw_monthly_snapshots
+    (function(){
+      function monthOffsetFromNow(offset){
+        var d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);
+        return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      }
+      function monthLabel(ym){
+        var p=ym.split('-');
+        var d=new Date(parseInt(p[0]),parseInt(p[1])-1,1);
+        return d.toLocaleString('default',{month:'long',year:'numeric'});
+      }
+      function checkAndShow(){
+        var banner = document.getElementById('missingMonthBanner');
+        var title  = document.getElementById('mmbTitle');
+        var body   = document.getElementById('mmbBody');
+        if (!banner || !title || !body) return;
+
+        var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(e){ snaps = {}; }
+        // Accept ANY entry (with healthScore OR with rev/exp data) — we want to
+        // show the banner for users who saved profile but haven't run a score.
+        var keys = Object.keys(snaps).filter(function(k){
+          var s = snaps[k]; if (!s) return false;
+          return typeof s.healthScore === 'number' || typeof s.rev === 'number';
+        }).sort();
+
+        var current = monthOffsetFromNow(0);
+
+        // First-time user: nothing saved → banner that invites them to log their first month
+        if (keys.length === 0) {
+          title.textContent = 'Get your first Health Score';
+          body.innerHTML = 'Once you log this month\'s numbers, BizSco starts tracking your financial trend.';
+          banner.style.display = 'flex';
+          return;
+        }
+
+        // Case 1: current month not logged yet
+        if (!keys.includes(current)) {
+          title.textContent = 'Log ' + monthLabel(current) + ' numbers';
+          body.innerHTML = 'You haven\'t saved data for ' + monthLabel(current) + ' yet. <strong>60 seconds</strong> keeps your trend accurate.';
+          banner.style.display = 'flex';
+          return;
+        }
+
+        // Case 2: Current done, but earlier month is missing (gap in history)
+        var earliest = keys[0];
+        var parts = earliest.split('-').map(Number);
+        var y = parts[0]; var m = parts[1];
+        while (true) {
+          var key = y+'-'+String(m).padStart(2,'0');
+          if (!keys.includes(key) && key !== current) {
+            title.textContent = 'Missing data for ' + monthLabel(key);
+            body.innerHTML = 'Your trend is more accurate when filled in. <a href="modules/businessHealthScore.test.html" style="color:#4f46e5;font-weight:700">Backfill ' + monthLabel(key) + ' →</a>';
+            banner.style.display = 'flex';
+            return;
+          }
+          if (key === current) break;
+          m++; if (m > 12) { m = 1; y++; }
+        }
+        // All caught up — banner stays hidden
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkAndShow);
+      } else {
+        checkAndShow();
+      }
+    })();
+    </script>
+
+    <!-- TRIAL BANNER -->
+    <div class="trial-banner" id="trialBanner" style="display:none">
+      <div class="tb-icon">💰</div>
+      <div class="tb-text">
+        <strong>You're on a 7-day free trial of Starter Plan</strong>
+        Enjoy Loan Eligibility, Owner's Pay, Business Health Score and more. Upgrade before your trial ends to keep access.
+      </div>
+      <span class="tb-days" id="trialDaysLeft"></span>
+      <a href="pricing.html" class="tb-btn">Upgrade Now &rarr;</a>
+    </div>
+
+    <!-- SETUP BANNER (shown if no profile) -->
+    <div class="setup-banner" id="setupBanner" style="display:none">
+      <div>&#9679;</div>
+      <div class="sb-text"><strong>Complete your business profile</strong> — takes 2 minutes. Pre-fills all 40 tools automatically.</div>
+      <a href="onboarding.html" class="sb-btn" onclick="localStorage.removeItem('fw_onboarded')">Set Up Now &rarr;</a>
+    </div>
+
+    <!-- -- DAILY BRIEFING -- -->
+    <div id="dailyBriefing" style="display:none;margin-bottom:24px">
+
+      <!-- Score ring + dimensions -->
+      <div style="background:#0f172a;border-radius:16px;padding:24px;margin-bottom:14px;display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+        <!-- Ring -->
+        <div style="flex-shrink:0;text-align:center">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="12"/>
+            <circle id="scoreRing" cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="12"
+              stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+              transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.2s ease,stroke .5s"/>
+            <text x="60" y="56" text-anchor="middle" fill="#fff" font-size="22" font-weight="900" font-family="Arial" id="scoreNum">--</text>
+            <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">/100</text>
+          </svg>
+          <div id="scoreLabel" style="font-size:.72rem;font-weight:800;padding:3px 14px;border-radius:999px;display:inline-block;margin-top:4px;background:#1e293b;color:#94a3b8">Loading—</div>
+        </div>
+
+        <!-- Dimensions -->
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:12px">Health Breakdown</div>
+          <div id="dimensionBars"></div>
+        </div>
+
+        <!-- Recalculate -->
+        <div style="flex-shrink:0;text-align:center">
+          <button onclick="calcHealth()" style="padding:9px 18px;background:#6366f1;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:Arial,sans-serif">Recalculate</button>
+          <div id="lastCalcTime" style="font-size:.66rem;color:#475569;margin-top:6px"></div>
+        </div>
+      </div>
+
+      <!-- Priority cards -->
+      <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:10px">Today's Priorities</div>
+      <div id="priorityCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+    </div>
+
+    <!-- START HERE CARD (new users) -->
+    <div class="start-here" id="startHereCard" style="display:none">
+      <div class="sh-title">Welcome to BizSco — here's how to get started</div>
+      <div class="sh-sub">Three quick steps to unlock your personalized financial picture</div>
+      <div class="sh-steps">
+        <a href="onboarding.html" class="sh-step" onclick="localStorage.removeItem('fw_onboarded')">
+          <div class="sh-num">1</div>
+          <div class="sh-icon">&#9679;</div>
+          <div class="sh-sname">Set Up Profile</div>
+          <div class="sh-sdesc">Business details &amp; financials — 2 min</div>
+        </a>
+        <a href="checkup.html" class="sh-step">
+          <div class="sh-num">2</div>
+          <div class="sh-icon">&#9679;</div>
+          <div class="sh-sname">Run Checkup</div>
+          <div class="sh-sdesc">Get your loan score &amp; health grade</div>
+        </a>
+        <a href="try.html" class="sh-step">
+          <div class="sh-num">3</div>
+          <div class="sh-icon">&#9679;</div>
+          <div class="sh-sname">Explore 40 Tools</div>
+          <div class="sh-sdesc">EMI, grants, forecasting &amp; more</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- SMART ALERTS -->
+    <div class="alerts-widget" id="alertsWidget" style="display:none">
+      <div class="sec-title">Smart Alerts</div>
+      <div id="alertsList"></div>
+    </div>
+
+    <!-- VENDOR BILLS WIDGET -->
+    <div class="inv-widget" id="billsWidget" style="display:none">
+      <div class="inv-widget-header">
+        <span class="inv-widget-title">Monthly Bills</span>
+        <a class="inv-widget-link" href="modules/vendorBillTracker.test.html">View All &rarr;</a>
+      </div>
+      <div class="inv-stat-row" id="billsStatRow"></div>
+    </div>
+
+    <!-- INVOICE WIDGET -->
+    <div class="inv-widget" id="invoiceWidget" style="display:none">
+      <div class="inv-widget-header">
+        <span class="inv-widget-title">Invoice Summary</span>
+        <a class="inv-widget-link" href="modules/invoiceTracker.test.html">View All &rarr;</a>
+      </div>
+      <div class="inv-stat-row" id="invStatRow"></div>
+    </div>
+
+    <!-- ACTION ITEMS -->
+    <div class="action-items" id="actionItemsWidget" style="display:none;margin-bottom:20px">
+      <div class="sec-title">Action Items</div>
+      <div class="ai-card">
+        <div class="ai-header">
+          <span class="ai-title">Tasks requiring attention</span>
+          <span class="ai-count" id="aiCount"></span>
+        </div>
+        <div id="aiList"><div class="ai-empty">Calculating—</div></div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div class="sec-title" style="margin-bottom:0">Your Business Snapshot</div>
+      <span id="liveDataBadge" style="display:none" class="live-src"><span class="ldot"></span>Live data</span>
+    </div>
+    <div class="dr-row">
+      <button class="dr-btn active" onclick="setDateRange('month',this)">This Month</button>
+      <button class="dr-btn" onclick="setDateRange('30',this)">Last 30 Days</button>
+      <button class="dr-btn" onclick="setDateRange('ytd',this)">YTD</button>
+      <button class="dr-btn" onclick="setDateRange('year',this)">Last Year</button>
+      <span class="dr-source" id="drSource"></span>
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="mc-label">💰 Monthly Revenue</div>
+        <div class="mc-value green" id="m_rev" data-cn-usd="15000" data-cn-usd-suffix="">$15,000</div>
+        <div class="mc-sub">sample — set up profile for real data</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">💸 Monthly Expenses</div>
+        <div class="mc-value red" id="m_exp" data-cn-usd="8500" data-cn-usd-suffix="">$8,500</div>
+        <div class="mc-sub">incl. loan EMI</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">📈 Net Profit</div>
+        <div class="mc-value blue" id="m_net" data-cn-usd="6500" data-cn-usd-suffix="">$6,500</div>
+        <div class="mc-sub">rev minus expenses</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">⏱ Cash Runway</div>
+        <div class="mc-value amber" id="m_runway">3.5 mo</div>
+        <div class="mc-sub">months at current burn</div>
+      </div>
+    </div>
+
+    <!-- SCORE GAUGES -->
+    <div class="sec-title">Live Score Gauges</div>
+    <div class="gauges-row">
+      <div class="gauge-card">
+        <div class="gc-title">Loan Safety Score</div>
+        <div id="loanGaugeWrap">
+          <div class="gc-no-data">🏦<span>Run your Financial Checkup<br>to see your loan score</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup &rarr;</a></div>
+        </div>
+      </div>
+      <div class="gauge-card">
+        <div class="gc-title">Business Health Grade</div>
+        <div id="healthGaugeWrap">
+          <div class="gc-no-data">🏥<span>Run your Financial Checkup<br>to see your health grade</span><a href="checkup.html" class="gc-cta" style="margin-top:4px">Run Free Checkup &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN STATUS -->
+    <div class="sec-title">Your Plan</div>
+    <div class="plan-card" id="planCard">
+      <div class="pc-left">
+        <h3 id="planTitle">Free Plan</h3>
+        <p id="planDesc">Access to 9 free tools — no sign-up needed. Upgrade to unlock all 40 tools.</p>
+        <div class="plan-features" id="planFeatures"></div>
+      </div>
+      <div class="pc-right">
+        <a href="pricing.html" class="upgrade-btn" id="upgradeBtn">Upgrade &rarr;</a>
+      </div>
+    </div>
+
+    <!-- REFERRAL -->
+    <div class="sec-title">Refer a Friend</div>
+    <div class="referral-card" id="referralCard" style="display:none">
+      <div class="ref-left">
+        <div class="ref-title">Invite a Friend ? Get 1 Month Free</div>
+        <div class="ref-desc">Share your personal link. When a friend signs up and pays for any plan, you automatically get 1 month free added to your account.</div>
+        <div class="ref-link-row">
+          <input type="text" id="refLink" class="ref-link-input" readonly/>
+          <button class="ref-copy-btn" onclick="copyRefLink()">Copy</button>
+        </div>
+        <div class="ref-share-row">
+          <a id="refWhatsapp" class="ref-share-btn wa" href="#" target="_blank">WhatsApp</a>
+          <a id="refEmail" class="ref-share-btn em" href="#">Email</a>
+          <a id="refTwitter" class="ref-share-btn tw" href="#" target="_blank">Twitter</a>
+        </div>
+        <div id="refCreditMsg"></div>
+      </div>
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <div class="rs-num" id="refCount">0</div>
+          <div class="rs-label">Friends Joined</div>
+        </div>
+        <div class="ref-stat">
+          <div class="rs-num" id="refCredits">0</div>
+          <div class="rs-label">Months Free</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="sec-title">Your Tools</div>
+    <div class="tools-grid" id="toolsGrid"></div>
+
+    <!-- SCORE HISTORY WIDGET -->
+    <div id="histWidget" style="display:none;margin-bottom:24px">
+      <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span>Score History</span>
+        <a href="history.html" style="font-size:.74rem;font-weight:700;color:#2563eb;text-decoration:none">View Full History &rarr;</a>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px">
+        <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:14px">
+          <div style="flex:1;min-width:180px">
+            <canvas id="sparkCanvas" height="60" style="width:100%;display:block"></canvas>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div id="histTrend" style="font-size:.85rem;font-weight:800"></div>
+            <div id="histCount" style="font-size:.72rem;color:#94a3b8;margin-top:2px"></div>
+          </div>
+        </div>
+        <div id="histRows"></div>
+      </div>
+    </div>
+
+    <!-- TWO COL: Recent + Profile -->
+    <div class="two-col">
+      <div class="activity-card">
+        <h3>Recent Activity</h3>
+        <div id="activityList"><div class="act-empty">No activity yet — open a tool to get started</div></div>
+      </div>
+      <div class="profile-card">
+        <h3>Business Profile</h3>
+        <div id="profileSummary"></div>
+        <a href="onboarding.html" class="edit-profile" onclick="localStorage.removeItem('fw_onboarded')">Edit Profile</a>
+      </div>
+    </div>
+
+  </div><!-- /page-content -->
+</div><!-- /main-wrap -->
+
+<script>
+function fmt(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function sg(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+
+/* -- Live data from modules -- */
+var _DR = 'month'; // current date range selection
+
+function getLiveMetrics(){
+  var p = sg('fw_profile')||{};
+  var rev = parseFloat(p.rev)||0;
+  var exp = parseFloat(p.exp)||0;
+  var emi = parseFloat(p.emi)||0;
+  var res = parseFloat(p.reserve)||0;
+  var sources = [];
+
+  /* Revenue: fw_invoice_revenue */
+  var invD = sg('fw_invoice_revenue');
+  if(invD && invD.byMonth){
+    var curMo = new Date().toISOString().slice(0,7);
+    var months = Object.keys(invD.byMonth).sort();
+    var lRev = null;
+    if(_DR === 'month'){
+      lRev = invD.byMonth[curMo] || (months.length ? invD.byMonth[months[months.length-1]] : null);
+    } else if(_DR === 'ytd'){
+      var yr = new Date().getFullYear()+'';
+      var ytdMos = months.filter(function(m){return m.startsWith(yr);});
+      if(ytdMos.length) lRev = ytdMos.reduce(function(s,m){return s+(invD.byMonth[m]||0);},0) / ytdMos.length;
+    } else if(_DR === 'year'){
+      var lastYr = (new Date().getFullYear()-1)+'';
+      var lyMos = months.filter(function(m){return m.startsWith(lastYr);});
+      if(lyMos.length) lRev = lyMos.reduce(function(s,m){return s+(invD.byMonth[m]||0);},0) / lyMos.length;
+    } else {
+      lRev = months.length ? invD.byMonth[months[months.length-1]] : null;
+    }
+    if(lRev){ rev = lRev; sources.push('Invoice Revenue'); }
+  }
+
+  /* Expenses: fw_expense_by_category */
+  var expD = sg('fw_expense_by_category');
+  if(expD && expD.totalMonthly){ exp = expD.totalMonthly; sources.push('Expense Tracker'); }
+
+  /* Cash + runway: fw_cash_runway */
+  var cashD = sg('fw_cash_runway');
+  if(cashD){
+    if(cashD.currentBalance){ res = cashD.currentBalance; sources.push('Cash Tracker'); }
+    if(cashD.monthlyBurn && !expD){ exp = cashD.monthlyBurn; }
+  }
+
+  /* Loans EMI: fw_loans */
+  var loans = sg('fw_loans');
+  if(loans && Array.isArray(loans)){
+    var totalEmi = loans.reduce(function(s,l){return s+(parseFloat(l.emi)||parseFloat(l.monthlyPayment)||0);},0);
+    if(totalEmi){ emi = totalEmi; }
+  }
+
+  return {rev:rev, exp:exp, emi:emi, res:res, sources:sources};
+}
+
+/* -- Action Items -- */
+function renderBillsWidget(){
+  var bills = sg('fw_bills') || [];
+  if(!bills.length){ document.getElementById('billsWidget').style.display='none'; return; }
+  var today = new Date();
+  var todayDay = today.getDate();
+  var totalMonthly = bills.reduce(function(s,b){ return s+parseFloat(b.amount||0); },0);
+  var overdue = bills.filter(function(b){ return b.dueDay < todayDay; });
+  var dueThisWeek = bills.filter(function(b){ return b.dueDay>=todayDay && b.dueDay<=todayDay+6; });
+  var autoPay = bills.filter(function(b){ return b.autoPay; }).length;
+
+  var html = '';
+  html += '<div class="inv-stat"><div class="inv-stat-val">'+(bills.length)+'</div><div class="inv-stat-lbl">Bills</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(overdue.length?'red':'green')+'">'+overdue.length+'</div><div class="inv-stat-lbl">Overdue</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(dueThisWeek.length?'amber':'green')+'">'+dueThisWeek.length+'</div><div class="inv-stat-lbl">Due This Week</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val blue">'+fmt(totalMonthly)+'</div><div class="inv-stat-lbl">Monthly Total</div></div>';
+  document.getElementById('billsStatRow').innerHTML = html;
+  document.getElementById('billsWidget').style.display = '';
+}
+
+function renderInvoiceWidget(){
+  var invs = sg('fw_invoices') || sg('fw_invoice_list') || [];
+  if(!invs.length){ document.getElementById('invoiceWidget').style.display='none'; return; }
+  var today = new Date(); today.setHours(0,0,0,0);
+  var pending = invs.filter(function(i){ return i.status==='pending'||i.status==='unpaid'; });
+  var overdue = pending.filter(function(i){
+    var d = new Date(i.dueDate||i.due_date); d.setHours(0,0,0,0); return d<today;
+  });
+  var totalOut = pending.reduce(function(s,i){ return s+parseFloat(i.amount||0); },0);
+  var paid30 = invs.filter(function(i){
+    if(i.status!=='paid') return false;
+    var d = new Date(i.paidDate||i.paid_date||0);
+    return (today-d)<30*86400000;
+  }).reduce(function(s,i){ return s+parseFloat(i.amount||0); },0);
+
+  var html = '';
+  html += '<div class="inv-stat"><div class="inv-stat-val '+(overdue.length?'red':'green')+'">'+overdue.length+'</div><div class="inv-stat-lbl">Overdue</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val amber">'+pending.length+'</div><div class="inv-stat-lbl">Pending</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val red">'+fmt(totalOut)+'</div><div class="inv-stat-lbl">Outstanding</div></div>';
+  html += '<div class="inv-stat"><div class="inv-stat-val green">'+fmt(paid30)+'</div><div class="inv-stat-lbl">Paid (30d)</div></div>';
+  document.getElementById('invStatRow').innerHTML = html;
+  document.getElementById('invoiceWidget').style.display = '';
+}
+
+function renderActionItems(){
+  var items = [];
+  var today = new Date(); today.setHours(0,0,0,0);
+
+  /* Check cash runway */
+  var cashD = sg('fw_cash_runway');
+  if(cashD && cashD.runway !== undefined){
+    var rw = parseFloat(cashD.runway)||0;
+    if(rw < 2) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw*10)/10+' months remaining — immediate action needed', href:'modules/cashFlowTracker.test.html'});
+    else if(rw < 4) items.push({prio:'med', text:'Cash runway below safe threshold', sub:Math.round(rw*10)/10+' months — goal is 6 months', href:'modules/cashFlowTracker.test.html'});
+  } else {
+    var lm = getLiveMetrics();
+    var burn = lm.exp + lm.emi;
+    var rw2 = burn > 0 ? lm.res/burn : 0;
+    if(rw2 > 0 && rw2 < 3) items.push({prio:'high', text:'Cash runway critically low', sub:Math.round(rw2)+' months at current burn', href:'modules/cashFlowTracker.test.html'});
+  }
+
+  /* Overdue invoices */
+  var invoices = sg('fw_invoices')||sg('fw_invoice_list');
+  if(invoices && Array.isArray(invoices)){
+    var overdue = invoices.filter(function(inv){
+      if(inv.status === 'paid' || inv.status === 'Paid') return false;
+      var due = inv.dueDate ? new Date(inv.dueDate) : null;
+      return due && due < today;
+    });
+    if(overdue.length) items.push({prio:'high', text:overdue.length+' overdue invoice'+(overdue.length>1?'s':''), sub:'Total outstanding: '+fmt(overdue.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0)), href:'modules/invoiceTracker.test.html'});
+  }
+
+  /* Upcoming vendor bills (next 7 days) */
+  var vendors = sg('fw_vendors');
+  if(vendors && Array.isArray(vendors)){
+    var soon = vendors.filter(function(v){
+      var due = v.dueDate||v.nextDue;
+      if(!due) return false;
+      var d = new Date(due); d.setHours(0,0,0,0);
+      var diff = (d - today)/(1000*60*60*24);
+      return diff >= 0 && diff <= 7;
+    });
+    if(soon.length) items.push({prio:'med', text:soon.length+' vendor bill'+(soon.length>1?'s':'')+' due within 7 days', sub:'Total: '+fmt(soon.reduce(function(s,v){return s+(parseFloat(v.amount)||0);},0)), href:'modules/vendorBillTracker.test.html'});
+  }
+
+  /* Net loss check */
+  var lm2 = getLiveMetrics();
+  var net = lm2.rev - lm2.exp - lm2.emi;
+  if(lm2.rev > 0 && net < 0) items.push({prio:'high', text:'Operating at a net loss this month', sub:'Revenue covers '+(Math.round((lm2.rev/(lm2.exp+lm2.emi))*100))+'% of expenses', href:'modules/breakEven.test.html'});
+
+  /* Tax: check if quarterly estimate coming up */
+  var taxD = sg('fw_tax_inputs');
+  if(taxD){
+    var mo = today.getMonth()+1;
+    var isEstimateMonth = [1,4,6,9].indexOf(mo) > -1;
+    if(isEstimateMonth) items.push({prio:'med', text:'Quarterly tax estimate due this month', sub:'Check your estimated payment in Tax Command Center', href:'modules/taxCommandCenter.test.html'});
+  }
+
+  /* Render */
+  var widget = document.getElementById('actionItemsWidget');
+  var listEl = document.getElementById('aiList');
+  var countEl = document.getElementById('aiCount');
+  if(!widget || !listEl) return;
+
+  widget.style.display = 'block';
+  var urgent = items.filter(function(i){return i.prio==='high';}).length;
+  countEl.textContent = urgent ? urgent+' urgent' : 'All clear';
+  countEl.className = 'ai-count '+(urgent ? 'has-urgent' : 'all-clear');
+
+  if(!items.length){
+    listEl.innerHTML = '<div class="ai-empty">No urgent action items — finances look on track.</div>';
+    return;
+  }
+  listEl.innerHTML = items.slice(0,4).map(function(it){
+    return '<div class="ai-item" onclick="location.href=\''+it.href+'\'">'
+      +'<div class="ai-prio '+it.prio+'"></div>'
+      +'<div class="ai-text"><strong>'+it.text+'</strong><span>'+it.sub+'</span></div>'
+      +'<a class="ai-lnk" href="'+it.href+'">Fix &rarr;</a>'
+      +'</div>';
+  }).join('');
+}
+
+/* -- Date range selector -- */
+function setDateRange(range, btn){
+  _DR = range;
+  document.querySelectorAll('.dr-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  var labels = {month:'Showing: current month',  '30':'Showing: last 30 days', ytd:'Showing: year to date', year:'Showing: last full year'};
+  var src = document.getElementById('drSource');
+  if(src) src.textContent = labels[range]||'';
+  /* Re-render the metrics block */
+  refreshMetrics();
+}
+
+function refreshMetrics(){
+  var m = getLiveMetrics();
+  var rev = m.rev, exp = m.exp, emi = m.emi, res = m.res;
+  var net = rev - exp - emi;
+  var burn = exp + emi;
+  var runway = burn > 0 ? Math.floor(res/burn) : 0;
+  if(rev){
+    // Strip data-cn-usd so country-switcher.js can't overwrite back to sample
+    ['m_rev','m_exp','m_net','m_runway'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) { el.removeAttribute('data-cn-usd'); el.removeAttribute('data-cn-usd-suffix'); }
+    });
+    document.getElementById('m_rev').textContent = fmt(rev);
+    document.getElementById('m_exp').textContent = fmt(exp+emi);
+    var netEl = document.getElementById('m_net');
+    netEl.textContent = fmt(net);
+    netEl.className = 'mc-value '+(net>=0?'blue':'red');
+    document.getElementById('m_runway').textContent = runway > 0 ? runway+' mo' : '—';
+  }
+  if(m.sources.length){
+    var badge = document.getElementById('liveDataBadge');
+    if(badge){badge.style.display='inline-flex'; badge.title='Data from: '+m.sources.join(', ');}
+  }
+}
+
+/* -- Export PDF -- */
+function exportDashboard(){
+  var sub = document.getElementById('dashSubtitle');
+  if(sub) sub.setAttribute('data-date', new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+  window.print();
+}
+
+/* -- Sidebar toggle (mobile) -- */
+function toggleSidebar(){
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sbOverlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('open');
+}
+function toggleGrp(id){
+  var g = document.getElementById(id);
+  g.classList.toggle('open');
+  try{ localStorage.setItem('fw_sb_'+id, g.classList.contains('open')?'1':'0'); }catch(e){}
+}
+(function(){
+  ['grp-core','grp-fin','grp-tax','grp-biz','grp-bank','grp-ai','grp-adv'].forEach(function(id){
+    var g = document.getElementById(id);
+    if(!g) return;
+    try{ if(localStorage.getItem('fw_sb_'+id)==='0') g.classList.remove('open'); }catch(e){}
+  });
+})();
+/* Close sidebar when a nav link is clicked on mobile */
+document.querySelectorAll('.sb-link').forEach(function(a){
+  a.addEventListener('click', function(){
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+var PLAN_CONFIG = {
+  free:    { label:'Free Plan',    badge:'badge-free',    desc:'Access to 10 free tools — no sign-up needed. Upgrade to unlock all 40 tools.', features:['Financial Checkup','Loan Safety Score','EMI Calculator','Cash Runway','Break-Even','Lender Marketplace','Score History','What-If Scenarios','Goal Tracker','Monthly Snapshot'], upgrade:true },
+  starter: { label:'Starter Plan', badge:'badge-starter', desc:'Great start! Access to all starter tools — grants, invoices, tax tracker, savings milestones, vendor bills & more.', features:['All Free Tools','Grant Finder + Deadline Calendar','Invoice Tracker + Email Templates','Tax Payment Tracker','Savings Goal Milestones','Vendor Bill & Contract Expiry','Loan Repayment Optimizer'], upgrade:true },
+  pro:     { label:'Pro Plan',     badge:'badge-pro',     desc:'Full access — AI CFO, forecasting, P&L, benchmarks and more. You\'re using BizSco at full power!', features:['All Starter Tools','AI CFO Chat','Revenue Forecast','P&L Statement','Industry Benchmarks','Stress Test'], upgrade:false },
+  advisor: { label:'Advisor Plan', badge:'badge-advisor', desc:'Full advisor suite — manage clients, branded reports, referral tracking and more.', features:['All Pro Tools','Advisor Dashboard','Client Portal','Branded Reports','Referral Tracker','CA Export'], upgrade:false }
+};
+
+var ALL_TOOLS = [
+  {icon:'🩺', name:'Financial Checkup',   desc:'4-point health check in 2 min',        href:'checkup.html',                               tier:'free'},
+  {icon:'📊', name:'Score History',       desc:'Track your health score over time',     href:'history.html',                               tier:'free'},
+  {icon:'🔮', name:'What-If Scenarios',  desc:'Model revenue & expense changes',       href:'whatif.html',                                tier:'free'},
+  {icon:'🏦', name:'Loan Safety Score',   desc:'SAFE/RISKY verdict in 60 sec',        href:'modules/loanDecisionScoreEngine.test.html', tier:'free'},
+  {icon:'🧮', name:'EMI Calculator',       desc:'Monthly payment & total cost',         href:'modules/emiCalculator.test.html',            tier:'free'},
+  {icon:'⏱',  name:'Cash Runway',          desc:'Expense-cut scenarios & runway',        href:'modules/cashRunway.test.html',               tier:'free'},
+  {icon:'⚖',  name:'Break-Even',           desc:'Revenue needed for new loan',          href:'modules/breakEven.test.html',                tier:'free'},
+  {icon:'🏪',  name:'Lender Marketplace',  desc:'SBA, BlueVine, OnDeck & more',         href:'modules/lenderMarketplace.html',             tier:'free'},
+  {icon:'📸', name:'Monthly Snapshot',    desc:'One-page visual — download or share',   href:'modules/monthlySnapshot.test.html',          tier:'free'},
+  {icon:'✅', name:'Loan Eligibility',      desc:'Which lenders will approve you?',      href:'modules/loanEligibility.test.html',          tier:'starter'},
+  {icon:'💰', name:"Owner's Pay",           desc:'How much can you pay yourself?',       href:'modules/ownersPay.test.html',                tier:'starter'},
+  {icon:'🏥', name:'Business Health Score', desc:'Overall A—F grade for finances',       href:'modules/businessHealthScore.test.html',      tier:'starter'},
+  {icon:'🎯', name:'Grant Finder',          desc:'Grants + deadline calendar',           href:'modules/grantFinder.test.html',              tier:'starter'},
+  {icon:'•', name:'Revenue Forecast',      desc:'Predict next 12 months',               href:'modules/forecastPro.test.html',              tier:'pro'},
+  {icon:'🤖', name:'AI CFO Advisor',        desc:'Ask financial questions',              href:'modules/aiCfoChat.test.html',                tier:'pro'},
+  {icon:'📊', name:'Industry Benchmarks',   desc:'Compare to your industry',             href:'modules/benchmarkPro.test.html',             tier:'pro'},
+  {icon:'📑', name:'Financial Statements',  desc:'P&L, Balance Sheet, Cash Flow',        href:'modules/financialStatements.test.html',      tier:'pro'},
+  {icon:'🔀', name:'Debt Consolidation',    desc:'Lower monthly payments',               href:'modules/debtConsolidation.test.html',        tier:'pro'},
+  {icon:'🧪', name:'Stress Test Engine',  desc:'Finances under worst-case shocks',      href:'modules/stressTestEngine.test.html',         tier:'pro'},
+  {icon:'📋', name:'Multi-Loan Manager',  desc:'All your loans in one dashboard',        href:'modules/multiLoanManager.test.html',         tier:'pro'},
+  {icon:'💼', name:'Tax Command Center',      desc:'All 4 tax modules: income, deductions, sales tax, contractors — one dashboard', href:'modules/taxCommandCenter.test.html', tier:'starter'},
+  {icon:'🧮', name:'Tax Estimator',          desc:'Quarterly estimates + payment tracker', href:'modules/taxEstimator.test.html',             tier:'starter'},
+  {icon:'🛒', name:'Sales Tax Tracker',     desc:'Track collected tax + nexus all 50 states', href:'modules/salesTaxTracker.test.html',        tier:'starter'},
+  {icon:'💰', name:'Key Deductions',         desc:'Home office, mileage log + Section 179',    href:'modules/keyDeductions.test.html',            tier:'starter'},
+  {icon:'•', name:'Contractor & Payroll',  desc:'1099-NEC tracking + FUTA/SUTA estimates',   href:'modules/contractorPayroll.test.html',         tier:'starter'},
+  {icon:'📄', name:'Invoice Tracker',        desc:'Overdue invoices + follow-up emails',   href:'modules/invoiceTracker.test.html',            tier:'starter'},
+  {icon:'💸', name:'Payroll Estimator',      desc:'What can you afford to pay staff?',    href:'modules/payrollEstimator.test.html',          tier:'starter'},
+  {icon:'📤', name:'Bank Statement Upload',  desc:'Upload CSV ? auto-fill cash flow',     href:'modules/bankStatementUpload.test.html',       tier:'starter'},
+  {icon:'🧾', name:'Vendor Bill Tracker',   desc:'Bills, autopay & contract expiry',     href:'modules/vendorBillTracker.test.html',          tier:'starter'},
+  {icon:'📊', name:'Profit Margin Analyzer',desc:'Margins + price-raise simulator',       href:'modules/profitMarginAnalyzer.test.html',       tier:'starter'},
+  {icon:'🐷', name:'Savings Planner',        desc:'Goals with 25/50/75% milestones',      href:'modules/businessSavingsPlanner.test.html',     tier:'starter'},
+  {icon:'💸', name:'Debt Command Center',      desc:'All loans in one view — track & eliminate debt faster',href:'modules/debtCommandCenter.test.html', tier:'starter'},
+  {icon:'•', name:'Loan Repayment Optimizer',desc:'Snowball vs avalanche + payoff calendar',href:'modules/loanRepaymentOptimizer.test.html',  tier:'starter'},
+  {icon:'💼', name:'Working Capital Calc',   desc:'30/60/90-day coverage + CCC gap analysis', href:'modules/workingCapitalCalc.test.html',    tier:'starter'},
+  {icon:'•', name:'Budget vs. Actual',      desc:'Monthly variance + 6-month trend',     href:'modules/budgetActualTracker.test.html',       tier:'starter'},
+  {icon:'📊', name:'Payroll Impact Sim',     desc:'Model new hires: runway & break-even', href:'modules/payrollImpactSim.test.html',          tier:'starter'},
+  {icon:'•', name:'Loan Refinance Analyzer',desc:'Monthly savings, break-even & net benefit', href:'modules/loanRefinanceAnalyzer.test.html', tier:'starter'},
+  {icon:'📅', name:'Cash Flow Calendar',  desc:'Visual monthly bill & income calendar',  href:'modules/cashFlowCalendar.test.html',         tier:'starter'},
+  {icon:'🎯', name:'Goal Tracker',           desc:'Set targets, track monthly progress',  href:'modules/goalTracker.test.html',               tier:'free'},
+  {icon:'🎓', name:'Advisor Dashboard',     desc:'Manage all clients in one view',       href:'modules/advisorDashboard.test.html',         tier:'advisor'},
+  {icon:'📄', name:'Branded Reports',       desc:'White-label PDF for clients',          href:'modules/brandedReport.test.html',            tier:'advisor'},
+  {icon:'📧', name:'Client Risk Email',     desc:'One-click risk summary to clients',    href:'modules/clientRiskEmail.test.html',          tier:'advisor'},
+  {icon:'💸', name:'Referral Tracker',      desc:'Track referrals & commissions',        href:'modules/referralTracker.test.html',          tier:'advisor'},
+  {icon:'👥', name:'Client Portal',         desc:'Share secure reports with clients',     href:'modules/clientPortal.test.html',              tier:'advisor'},
+  {icon:'⚙', name:'White-Label Settings', desc:'Your brand, colors & domain on reports', href:'modules/whiteLabelSettings.test.html',        tier:'advisor'}
+];
+
+var TIER_ORDER = ['free','starter','pro','advisor'];
+
+function tierUnlocked(toolTier, userPlan){
+  return TIER_ORDER.indexOf(userPlan) >= TIER_ORDER.indexOf(toolTier);
+}
+
+function trackActivity(name, icon, href){
+  var recent = [];
+  try{ recent = JSON.parse(localStorage.getItem('fw_recent')||'[]'); }catch(e){}
+  recent = recent.filter(function(r){ return r.href !== href; });
+  recent.unshift({name:name, icon:icon, href:href, time:Date.now()});
+  recent = recent.slice(0,6);
+  localStorage.setItem('fw_recent', JSON.stringify(recent));
+}
+
+function timeAgo(ts){
+  var diff = Math.floor((Date.now()-ts)/1000);
+  if(diff<60) return 'just now';
+  if(diff<3600) return Math.floor(diff/60)+'m ago';
+  if(diff<86400) return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+
+/* Mark sidebar items locked based on plan */
+function updateSidebarLocks(plan){
+  var locks = {
+    'nav-eligibility':'starter','nav-grants':'starter',
+    'nav-owners':'starter','nav-tax':'starter',
+    'nav-health':'starter',
+    'nav-forecast':'pro','nav-ai':'pro','nav-bench':'pro',
+    'nav-adv':'advisor','nav-cp':'advisor','nav-br':'advisor'
+  };
+  Object.keys(locks).forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var required = locks[id];
+    if(!tierUnlocked(required, plan)){
+      var lk = el.querySelector('.sb-lock');
+      if(!lk){
+        lk = document.createElement('span');
+        lk.className = 'sb-lock';
+        lk.textContent = '🔒';
+        el.appendChild(lk);
+      }
+      el.style.opacity = '.45';
+    }
+  });
+}
+
+function renderDashboard(plan){
+  var pc = PLAN_CONFIG[plan] || PLAN_CONFIG.free;
+
+  /* Plan badge (sidebar) */
+  var badge = document.getElementById('planBadge');
+  badge.textContent = pc.label;
+  badge.className = 'sb-plan-chip ' + pc.badge;
+
+  /* Topbar + sidebar upgrade buttons */
+  if(!pc.upgrade){
+    document.getElementById('heroUpgrade').classList.add('hidden');
+    document.getElementById('sbUpgrade').classList.add('hidden');
+  }
+
+  /* Plan card */
+  document.getElementById('planTitle').textContent = pc.label;
+  document.getElementById('planDesc').textContent = pc.desc;
+  var feats = pc.features.map(function(f){ return '<span class="pf-chip">✓ '+f+'</span>'; }).join('');
+  document.getElementById('planFeatures').innerHTML = feats;
+  if(!pc.upgrade) document.getElementById('upgradeBtn').classList.add('hidden');
+
+  /* Sidebar locks */
+  updateSidebarLocks(plan);
+
+  /* Tools grid — show plan's tools + 2 locked previews */
+  var html = '';
+  var shown = 0;
+  ALL_TOOLS.forEach(function(t){
+    var unlocked = tierUnlocked(t.tier, plan);
+    if(unlocked && shown < 9){
+      html += '<a href="'+t.href+'" class="tool-card" onclick="trackActivity(\''+t.name+'\',\''+t.icon+'\',\''+t.href+'\')">' +
+        '<div class="tc-icon">'+t.icon+'</div>' +
+        '<div class="tc-name">'+t.name+'</div>' +
+        '<div class="tc-desc">'+t.desc+'</div></a>';
+      shown++;
+    } else if(!unlocked && shown < 11){
+      html += '<div class="tool-card locked">' +
+        '<div class="tc-lock">Upgrade</div>' +
+        '<div class="tc-icon">'+t.icon+'</div>' +
+        '<div class="tc-name">'+t.name+'</div>' +
+        '<div class="tc-desc">'+t.desc+'</div></div>';
+      shown++;
+    }
+  });
+  document.getElementById('toolsGrid').innerHTML = html;
+
+  /* Metrics — live module data with profile fallback */
+  var p = sg('fw_profile')||{};
+  var m = getLiveMetrics();
+  var rev = m.rev, exp = m.exp, emi = m.emi, res = m.res;
+  var net = rev - exp - emi;
+  var burn = exp + emi;
+  var runway = burn > 0 ? Math.floor(res/burn) : 0;
+
+  if(rev || exp){
+    // Helper: set a metric's textContent AND strip data-cn-usd so
+    // country-switcher.js doesn't overwrite our value with its sample.
+    function setMetric(id, txt){
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.removeAttribute('data-cn-usd');
+      el.removeAttribute('data-cn-usd-suffix');
+      el.textContent = txt;
+    }
+    setMetric('m_rev', fmt(rev));
+    setMetric('m_exp', fmt(exp+emi));
+    setMetric('m_net', fmt(net));
+    document.getElementById('m_net').className = 'mc-value '+(net>=0?'blue':'red');
+    setMetric('m_runway', runway > 0 ? runway+' mo' : '—');
+
+    // Replace the "sample — set up profile for real data" sub-labels
+    // with accurate labels (this month / monthly burn / etc.)
+    var subEls = document.querySelectorAll('.metric-card .mc-sub');
+    if (subEls[0]) subEls[0].textContent = 'this month';
+    // subEls[1-3] are already accurate (incl. loan EMI / rev minus expenses / months at current burn)
+
+    if(m.sources.length){
+      var ldb = document.getElementById('liveDataBadge');
+      if(ldb){ ldb.style.display='inline-flex'; ldb.title='Live from: '+m.sources.join(', '); }
+    }
+  } else {
+    document.getElementById('setupBanner').style.display = 'flex';
+    document.getElementById('startHereCard').style.display = 'block';
+  }
+
+  renderBillsWidget();
+  renderInvoiceWidget();
+  renderActionItems();
+
+  /* Profile summary */
+  var profHtml = '';
+  if(p.bizName||p.name){
+    var bizName = p.bizName||p.name||'—';
+    var rows = [
+      ['Business', bizName],
+      ['Industry', p.industry||'—'],
+      ['Entity', p.entityType||p.entity||'—'],
+      ['Revenue', m.rev ? fmt(m.rev)+'/mo' : '—'],
+      ['Expenses', m.exp ? fmt(m.exp)+'/mo' : '—'],
+      ['EMI', m.emi ? fmt(m.emi)+'/mo' : '—']
+    ];
+    rows.forEach(function(r){
+      profHtml += '<div class="prof-row"><span class="prof-label">'+r[0]+'</span><span class="prof-value">'+r[1]+'</span></div>';
+    });
+  } else {
+    profHtml = '<div class="act-empty">No profile yet</div>';
+  }
+  document.getElementById('profileSummary').innerHTML = profHtml;
+
+  /* Recent activity */
+  var recent = [];
+  try{ recent = JSON.parse(localStorage.getItem('fw_recent')||'[]'); }catch(e){}
+  if(recent.length){
+    var ahtml = recent.map(function(r){
+      return '<div class="act-item"><span class="act-icon">'+r.icon+'</span>' +
+        '<span class="act-name">'+r.name+'</span>' +
+        '<span class="act-time">'+timeAgo(r.time)+'</span></div>';
+    }).join('');
+    document.getElementById('activityList').innerHTML = ahtml;
+  }
+
+  renderHistWidget();
+  renderAlerts(plan, p, runway);
+  /* Date range source label */
+  var src = document.getElementById('drSource');
+  if(src) src.textContent = m.sources.length ? 'Data from: '+m.sources.join(', ') : 'From profile';
+  renderGauges();
+}
+
+/* -- SMART ALERTS -- */
+function renderAlerts(plan, p, runway){
+  var checkup=null;
+  try{
+    checkup=JSON.parse(localStorage.getItem('fw_last_checkup')||'null');
+    /* consistency guard: if history was cleared, discard orphaned last_checkup */
+    var hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]');
+    if(!hist.length){ checkup=null; localStorage.removeItem('fw_last_checkup'); }
+  }catch(e){ checkup=null; }
+  var alerts=[];
+  var rev=parseFloat(p.rev)||0, exp=parseFloat(p.exp)||0, emi=parseFloat(p.emi)||0, res=parseFloat(p.reserve)||0;
+  var hasProfile=rev>0||exp>0;
+
+  if(!hasProfile){
+    alerts.push({cls:'alert-info',i:'👤',title:'Set up your business profile',msg:'Pre-fills all 40 tools automatically and unlocks personalised alerts.',href:'onboarding.html',htext:'Set Up Profile ?'});
+  } else {
+    var net=rev-exp-emi;
+    var burn=exp+emi;
+    var er=rev>0?(exp+emi)/rev:1;
+    if(net<0)
+      alerts.push({cls:'alert-crit',i:'📉',title:'Operating at a loss — -$'+Math.round(-net).toLocaleString()+'/mo',msg:'Expenses exceed revenue. Use Break-Even Analyzer to find the exact cuts needed.',href:'modules/breakEven.test.html',htext:'Break-Even Analyzer →'});
+    else if(er>0.85)
+      alerts.push({cls:'alert-warn',i:'⚠️',title:'High burn rate ('+Math.round(er*100)+'% of revenue)',msg:'Expenses consume most revenue — thin margin. Goal: below 80% to be loan-ready.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
+
+    if(runway<=2&&burn>0)
+      alerts.push({cls:'alert-crit',i:'⏱',title:'Cash runway critically low — '+runway+' month'+(runway===1?'':'s'),msg:'Reserves will run out very soon. Immediate action needed to build cash buffer.',href:'modules/cashRunway.test.html',htext:'Cash Runway Tool →'});
+    else if(runway<=4&&burn>0)
+      alerts.push({cls:'alert-warn',i:'⏱',title:'Low cash runway — '+runway+' months',msg:'Below the recommended 6-month safety buffer. Start building reserves now.',href:'modules/cashRunway.test.html',htext:'See Cash Runway →'});
+  }
+
+  if(checkup){
+    if(checkup.loanVerdict==='DANGEROUS')
+      alerts.push({cls:'alert-crit',i:'🏦',title:'Loan score DANGEROUS — '+checkup.loanScore+'/100',msg:'Income does not cover debt repayments. Fix DSCR before applying for any new loan.',href:'modules/loanDecisionScoreEngine.test.html',htext:'Improve Loan Score →'});
+    else if(checkup.loanVerdict==='RISKY')
+      alerts.push({cls:'alert-warn',i:'🏦',title:'Loan score RISKY — '+checkup.loanScore+'/100',msg:'Borderline — any revenue dip could impact repayments. Run What-If scenarios to find fixes.',href:'whatif.html',htext:'Try What-If Scenarios →'});
+    if(checkup.runwayStatus==='CRITICAL'&&runway>2)
+      alerts.push({cls:'alert-crit',i:'⚠️',title:'Checkup flagged CRITICAL runway',msg:'Your last checkup showed runway in the danger zone. Verify current reserves.',href:'checkup.html',htext:'Re-run Checkup →'});
+  } else if(hasProfile){
+    alerts.push({cls:'alert-info',i:'💡',title:'Run your first Financial Checkup',msg:'Get your loan score, cash runway, and health grade in 2 minutes — free.',href:'checkup.html',htext:'Start Free Checkup →'});
+  }
+
+  if(alerts.length===0)
+    alerts.push({cls:'alert-good',i:'🏥',title:'All clear — finances look healthy',msg:'Expenses below 85%, runway above 4 months, loan score safe. Keep it up.',href:'checkup.html',htext:'Run Full Checkup →'});
+
+  document.getElementById('alertsList').innerHTML=alerts.slice(0,3).map(function(a){
+    var onclick = a.href==='onboarding.html' ? ' onclick="localStorage.removeItem(\'fw_onboarded\')"' : '';
+    return '<div class="alert-item '+a.cls+'"><div class="al-ic">'+a.i+'</div>'+
+      '<div class="al-msg"><strong>'+a.title+'</strong>'+a.msg+
+      (a.href?'<br><a href="'+a.href+'"'+onclick+' class="al-lnk">'+a.htext+'</a>':'')+
+      '</div></div>';
+  }).join('');
+  document.getElementById('alertsWidget').style.display='block';
+}
+
+/* -- SCORE HISTORY WIDGET -- */
+function renderHistWidget(){
+  var hist=[]; try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){}
+  var w=document.getElementById('histWidget');
+  if(!w||hist.length<2) return;
+  w.style.display='block';
+
+  var GO={A:5,B:4,C:3,D:2,F:1};
+  var latest=hist[0];
+
+  var trendEl=document.getElementById('histTrend');
+  var countEl=document.getElementById('histCount');
+  if(hist.length>=2){
+    var td=GO[hist[0].grade]-GO[hist[hist.length-1].grade];
+    if(td>0){trendEl.textContent='📈 Improving';trendEl.style.color='#15803d';}
+    else if(td<0){trendEl.textContent='📉 Declining';trendEl.style.color='#991b1b';}
+    else{trendEl.textContent='➡ Stable';trendEl.style.color='#854d0e';}
+  }
+  countEl.textContent=hist.length+' checkup'+(hist.length===1?'':'s')+' tracked';
+
+  drawSparkline(hist);
+
+  var GC={A:'#15803d',B:'#065f46',C:'#854d0e',D:'#9a3412',F:'#991b1b'};
+  var GB={A:'#dcfce7',B:'#d1fae5',C:'#fef9c3',D:'#fed7aa',F:'#fee2e2'};
+  document.getElementById('histRows').innerHTML=hist.slice(0,3).map(function(h,i){
+    var date=new Date(h.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    var rw=h.runway>=24?'24+':Math.round(h.runway*10)/10;
+    var delta='';
+    if(i===0&&hist[1]){
+      var d=GO[h.grade]-GO[hist[1].grade];
+      if(d>0) delta='<span style="color:#15803d;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'→'+h.grade+'</span>';
+      else if(d<0) delta='<span style="color:#991b1b;font-weight:700;font-size:.72rem">Grade '+hist[1].grade+'→'+h.grade+'</span>';
+      else{var sd=h.loanScore-hist[1].loanScore;delta='<span style="color:'+(sd>0?'#15803d':sd<0?'#991b1b':'#64748b')+';font-weight:700;font-size:.72rem">'+(sd>0?'▲ +':sd<0?'▼ ':'— ')+sd+' pts</span>';}
+    }
+    return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap">'
+      +'<span style="font-size:.76rem;color:#64748b;width:50px;flex-shrink:0">'+date+'</span>'
+      +'<span style="background:'+GB[h.grade]+';color:'+GC[h.grade]+';font-size:.74rem;font-weight:900;padding:2px 9px;border-radius:20px;flex-shrink:0">Grade '+h.grade+'</span>'
+      +'<span style="font-size:.76rem;color:#475569;flex:1">'+h.loanScore+'/100 — '+rw+' mo runway</span>'
+      +delta+'</div>';
+  }).join('');
+}
+
+function drawSparkline(hist){
+  var cv=document.getElementById('sparkCanvas');
+  if(!cv) return;
+  var W=cv.offsetWidth||300; cv.width=W; cv.height=60;
+  var ctx=cv.getContext('2d');
+  var data=hist.slice(0,8).reverse();
+  var n=data.length; if(n<2) return;
+  var scores=data.map(function(h){return h.healthScore||50;});
+  var lo=Math.max(0,Math.min.apply(null,scores)-10), hi=Math.min(100,Math.max.apply(null,scores)+10);
+  if(hi-lo<20){lo=Math.max(0,lo-5);hi=Math.min(100,hi+5);}
+  var pl=8,pr=8,pt=8,pb=8;
+  function px(i){return pl+(i/(n-1))*(W-pl-pr);}
+  function py(s){return pt+(1-(s-lo)/(hi-lo))*(60-pt-pb);}
+  var latestG=hist[0].grade;
+  var lc=['A','B'].includes(latestG)?'#22c55e':latestG==='C'?'#f59e0b':'#ef4444';
+  var ac=['A','B'].includes(latestG)?'rgba(34,197,94,.12)':latestG==='C'?'rgba(245,158,11,.12)':'rgba(239,68,68,.12)';
+  ctx.beginPath();
+  ctx.moveTo(px(0),py(scores[0]));
+  for(var i=1;i<n;i++) ctx.lineTo(px(i),py(scores[i]));
+  ctx.lineTo(px(n-1),60-pb); ctx.lineTo(px(0),60-pb); ctx.closePath();
+  ctx.fillStyle=ac; ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(px(0),py(scores[0]));
+  for(var i=1;i<n;i++) ctx.lineTo(px(i),py(scores[i]));
+  ctx.strokeStyle=lc; ctx.lineWidth=2; ctx.stroke();
+  for(var i=0;i<n;i++){
+    ctx.beginPath(); ctx.arc(px(i),py(scores[i]),i===n-1?4.5:3,0,Math.PI*2);
+    ctx.fillStyle=i===n-1?lc:'#fff'; ctx.strokeStyle=lc; ctx.lineWidth=1.5; ctx.fill(); ctx.stroke();
+  }
+}
+
+/* -- Auth init -- */
+window.addEventListener('load', function(){
+  if(!window.fwAuth){ renderDashboard('free'); return; }
+  window.fwAuth.init(function(){
+    var auth = window.fwAuth;
+    if(!auth.user){
+      window.location.href = 'auth.html';
+      return;
+    }
+    /* Greeting */
+    var name = auth.displayName();
+    document.getElementById('userName').textContent = name;
+    document.getElementById('heroGreeting').textContent = 'Welcome back, '+name+' 👋';
+
+    /* Plan — always use authoritative value from auth server */
+    var plan = auth.plan || 'free';
+
+    /* Business name in sidebar */
+    var p = {};
+    try{ p = JSON.parse(localStorage.getItem('fw_profile')||'{}'); }catch(e){}
+    if(p.bizName) document.getElementById('heroBiz').textContent = p.bizName;
+
+    renderDashboard(plan);
+    loadReferral(auth.user.id);
+    loadHealthBriefing(auth);
+
+    /* Trial banner */
+    if(auth.onTrial){
+      var days = auth.trialDaysLeft();
+      document.getElementById('trialDaysLeft').textContent = days + ' day' + (days !== 1 ? 's' : '') + ' left';
+      document.getElementById('trialBanner').style.display = 'flex';
+    }
+  });
+});
+
+/* -- Daily Briefing -- */
+var _authRef = null;
+
+function loadHealthBriefing(auth){
+  _authRef = auth;
+  auth.client.auth.getSession().then(function(res){
+    var token = res&&res.data&&res.data.session&&res.data.session.access_token;
+    if(!token) return;
+    fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/health-get',{
+      headers:{ 'Authorization':'Bearer '+token }
+    }).then(function(r){ return r.json(); }).then(function(data){
+      /* Accept a cached row only if it has the 6 dimension scores the
+         dashboard renders. Rows from our SQL seed (or any older format)
+         have overall_score but no dimensions → fall through to recalc
+         so the user sees correct bars on first load. */
+      var s = data && data.score;
+      var hasDims = s && (
+        (s.cash_flow_score   != null && s.cash_flow_score   > 0) ||
+        (s.liquidity_score   != null && s.liquidity_score   > 0) ||
+        (s.debt_burden_score != null && s.debt_burden_score > 0)
+      );
+      if(hasDims){
+        localStorage.setItem('fw_health_score', String(Math.round(s.overall_score || 0)));
+        renderBriefing(data);
+      } else {
+        calcHealth();
+      }
+    }).catch(function(){ calcHealth(); });
+  });
+}
+
+function calcHealth(){
+  if(!_authRef) return;
+  var btn = document.querySelector('[onclick="calcHealth()"]');
+  if(btn) btn.textContent = 'Calculating—';
+  _authRef.client.auth.getSession().then(function(res){
+    var token = res&&res.data&&res.data.session&&res.data.session.access_token;
+    if(!token) return;
+    fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/health-calculate',{
+      method:'POST',
+      headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if(btn) btn.textContent = 'Recalculate';
+      if(data && data.scores) {
+        localStorage.setItem('fw_health_score', String(Math.round(data.score || 0)));
+        renderBriefing({ score:{ overall_score:data.score, ...data.scores, score_date:new Date().toISOString().split('T')[0] }, priorities:data.priorities||[], history:[] });
+      }
+    }).catch(function(){ if(btn) btn.textContent = 'Recalculate'; });
+  });
+}
+
+function renderBriefing(data){
+  var s = data.score;
+  document.getElementById('dailyBriefing').style.display = 'block';
+
+  // Score ring
+  var score = Math.round(s.overall_score || 0);
+  var ring = document.getElementById('scoreRing');
+  var circumference = 314;
+  var offset = circumference - (score / 100) * circumference;
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = score >= 70 ? '#22c55e' : score >= 45 ? '#eab308' : '#ef4444';
+  document.getElementById('scoreNum').textContent = score;
+
+  var lbl = document.getElementById('scoreLabel');
+  if(score >= 70){ lbl.style.background='#166534'; lbl.style.color='#dcfce7'; lbl.textContent='Healthy'; }
+  else if(score >= 45){ lbl.style.background='#854d0e'; lbl.style.color='#fef9c3'; lbl.textContent='Caution'; }
+  else { lbl.style.background='#991b1b'; lbl.style.color='#fee2e2'; lbl.textContent='At Risk'; }
+
+  // Dimension bars
+  var dims = [
+    {label:'Cash Flow',   val:s.cash_flow_score,         color:'#6366f1'},
+    {label:'Liquidity',   val:s.liquidity_score,         color:'#0891b2'},
+    {label:'Debt Burden', val:s.debt_burden_score,       color:'#8b5cf6'},
+    {label:'Stability',   val:s.revenue_stability_score, color:'#f59e0b'},
+    {label:'Credit',      val:s.credit_health_score,     color:'#10b981'},
+    {label:'Growth',      val:s.growth_score,            color:'#3b82f6'},
+  ];
+  var barsHtml = dims.map(function(d){
+    var v = Math.round(d.val||0);
+    return '<div class="dim-bar-row">'+
+      '<div class="dim-label">'+d.label+'</div>'+
+      '<div class="dim-track"><div class="dim-fill" style="width:'+v+'%;background:'+d.color+'"></div></div>'+
+      '<div class="dim-score">'+v+'</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('dimensionBars').innerHTML = barsHtml;
+
+  var dt = document.getElementById('lastCalcTime');
+  if(dt && s.score_date) dt.textContent = 'As of '+s.score_date;
+
+  // Priority cards
+  var urgencyMap = { urgent:'pri-urgent', high:'pri-high', medium:'pri-medium', low:'pri-low' };
+  var urgencyEmoji = { urgent:'🚨', high:'⚠️', medium:'💡', low:'ℹ️' };
+  var pHtml = (data.priorities||[]).map(function(p){
+    var cls = urgencyMap[p.urgency]||'pri-medium';
+    var em  = urgencyEmoji[p.urgency]||'💡';
+    return '<div class="pri-card '+cls+'">'+
+      '<div class="pri-title">'+em+' '+p.title+'</div>'+
+      '<div class="pri-desc">'+p.description+'</div>'+
+      (p.action_url ? '<a href="'+p.action_url+'" class="pri-action">Take action &rarr;</a>' : '')+
+    '</div>';
+  }).join('');
+  document.getElementById('priorityCards').innerHTML = pHtml || '<div style="font-size:.8rem;color:#94a3b8">No priorities generated yet — click Recalculate.</div>';
+}
+
+function doSignOut(){
+  if(window.fwAuth) window.fwAuth.signOut();
+  else window.location.href = 'auth.html';
+}
+
+function loadReferral(userId){
+  var code = userId.substring(0, 8);
+  var base = window.location.href.replace('dashboard.html','').replace(/\?.*$/,'');
+  var link = base + 'auth.html?ref=' + code;
+
+  document.getElementById('refLink').value = link;
+  document.getElementById('referralCard').style.display = 'flex';
+
+  var msg = 'Join me on BizSco — 20 free financial tools for your small business! Use my link: ' + link;
+  document.getElementById('refWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('refEmail').href = 'mailto:?subject=Try BizSco — free financial tools for small business&body=' + encodeURIComponent(msg);
+  document.getElementById('refTwitter').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Try BizSco — 20 free financial tools for small businesses! ' + link);
+
+  if(!window.fwAuth || !window.fwAuth.client) return;
+
+  window.fwAuth.client.from('profiles').select('id', {count:'exact', head:true})
+    .eq('referred_by', code)
+    .then(function(r){
+      document.getElementById('refCount').textContent = r.count || 0;
+    });
+
+  var credits = (window.fwAuth.profile && window.fwAuth.profile.referral_credits) || 0;
+  document.getElementById('refCredits').textContent = credits;
+  if(credits > 0){
+    document.getElementById('refCreditMsg').innerHTML =
+      '<div class="ref-credit-msg">🎉 ' + credits + ' month' + (credits > 1 ? 's' : '') + ' free applied to your account!</div>';
+  }
+}
+
+/* -- SCORE GAUGES -- */
+function drawSemiGauge(ctx, W, H, value, max, zones){
+  ctx.clearRect(0,0,W,H);
+  var cx=W/2, cy=H-8;
+  var R=Math.min(W/2-10, H-12);
+  var thick=Math.round(R*0.28);
+  var r=R-thick;
+
+  /* background ring */
+  ctx.beginPath();
+  ctx.arc(cx,cy,R,Math.PI,0,false);
+  ctx.arc(cx,cy,r,0,Math.PI,true);
+  ctx.fillStyle='#f1f5f9';
+  ctx.fill();
+
+  /* color zones: value 0=left(p), max=right(2p); angle=p+(v/max)*p */
+  zones.forEach(function(z){
+    var a1=Math.PI+(z.from/max)*Math.PI;
+    var a2=Math.PI+(z.to/max)*Math.PI;
+    ctx.beginPath();
+    ctx.arc(cx,cy,R,a1,a2,false);
+    ctx.arc(cx,cy,r,a2,a1,true);
+    ctx.fillStyle=z.color;
+    ctx.fill();
+  });
+
+  /* gap lines between zones */
+  zones.forEach(function(z,i){
+    if(i===0) return;
+    var a=Math.PI+(z.from/max)*Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx+r*Math.cos(a), cy+r*Math.sin(a));
+    ctx.lineTo(cx+R*Math.cos(a), cy+R*Math.sin(a));
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+    ctx.stroke();
+  });
+
+  /* needle */
+  var vAngle=Math.PI+(Math.min(value,max)/max)*Math.PI;
+  var nl=r-5;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+nl*Math.cos(vAngle), cy+nl*Math.sin(vAngle));
+  ctx.strokeStyle='#0f172a';
+  ctx.lineWidth=3;
+  ctx.lineCap='round';
+  ctx.stroke();
+  ctx.restore();
+
+  /* center dot */
+  ctx.beginPath(); ctx.arc(cx,cy,6,0,Math.PI*2);
+  ctx.fillStyle='#0f172a'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+
+  /* endpoint labels */
+  ctx.font='bold 10px Arial';
+  ctx.fillStyle='#94a3b8';
+  ctx.textAlign='left';
+  ctx.fillText('0', cx-R+3, cy-2);
+  ctx.textAlign='right';
+  ctx.fillText(max, cx+R-3, cy-2);
+}
+
+function renderGauges(){
+  var checkup=null;
+  try{checkup=JSON.parse(localStorage.getItem('fw_last_checkup')||'null');}catch(e){}
+  if(!checkup) return;
+
+  /* Loan score gauge */
+  var lWrap=document.getElementById('loanGaugeWrap');
+  if(lWrap){
+    var ls=checkup.loanScore||0;
+    var lv=checkup.loanVerdict||'RISKY';
+    var lColor=ls>=80?'#16a34a':ls>=65?'#22c55e':ls>=40?'#d97706':'#dc2626';
+    var vCls={SAFE:'verdict-safe',CAUTION:'verdict-caution',RISKY:'verdict-risky',DANGEROUS:'verdict-dangerous'}[lv]||'verdict-none';
+    var vLabel={SAFE:'Safe to Borrow',CAUTION:'Proceed with Caution',RISKY:'High Risk',DANGEROUS:'Do Not Borrow'}[lv]||lv;
+    lWrap.innerHTML=
+      '<canvas id="lGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
+      '<div class="gc-num" style="color:'+lColor+'">'+ls+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8">/100</span></div>'+
+      '<div class="gc-verdict '+vCls+'">'+vLabel+'</div>'+
+      '<a href="modules/loanDecisionScoreEngine.test.html" class="gc-cta">Full Loan Analysis &rarr;</a>';
+    var lcv=document.getElementById('lGc');
+    drawSemiGauge(lcv.getContext('2d'),220,124,ls,100,[
+      {from:0, to:40, color:'#fca5a5'},
+      {from:40,to:65, color:'#fde68a'},
+      {from:65,to:80, color:'#86efac'},
+      {from:80,to:100,color:'#4ade80'}
+    ]);
+  }
+
+  /* Health grade gauge */
+  var hWrap=document.getElementById('healthGaugeWrap');
+  if(hWrap){
+    var hs=checkup.healthScore||50;
+    var hg=checkup.grade||'—';
+    var gradeVal={A:90,B:72,C:55,D:35,F:15}[hg]||hs||50;
+    var hColor={A:'#16a34a',B:'#22c55e',C:'#d97706',D:'#ea580c',F:'#dc2626'}[hg]||'#64748b';
+    var hBg={A:'#dcfce7',B:'#dcfce7',C:'#fef9c3',D:'#fed7aa',F:'#fee2e2'}[hg]||'#f1f5f9';
+    var hLabel={A:'Excellent',B:'Good',C:'Fair',D:'At Risk',F:'Critical'}[hg]||'Unknown';
+    hWrap.innerHTML=
+      '<canvas id="hGc" width="220" height="124" style="width:100%;max-width:220px;display:block;margin:0 auto"></canvas>'+
+      '<div class="gc-num" style="color:'+hColor+'">'+hg+'<span style="font-size:.85rem;font-weight:600;color:#94a3b8"> grade</span></div>'+
+      '<div class="gc-verdict" style="background:'+hBg+';color:'+hColor+'">'+hLabel+'</div>'+
+      '<a href="checkup.html" class="gc-cta">Run New Checkup &rarr;</a>';
+    var hcv=document.getElementById('hGc');
+    drawSemiGauge(hcv.getContext('2d'),220,124,gradeVal,100,[
+      {from:0, to:30, color:'#fca5a5'},
+      {from:30,to:50, color:'#fde68a'},
+      {from:50,to:70, color:'#86efac'},
+      {from:70,to:100,color:'#4ade80'}
+    ]);
+  }
+}
+
+function copyRefLink(){
+  var input = document.getElementById('refLink');
+  input.select();
+  var btn = document.querySelector('.ref-copy-btn');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(input.value).then(function(){
+      btn.textContent = '✓ Copied!'; btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  } else {
+    document.execCommand('copy');
+    btn.textContent = '✓ Copied!'; btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+  }
+}
+</script>
+<script src="onboarding-tour.js"></script>
+</body>
+</html>

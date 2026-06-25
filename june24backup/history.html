@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Score History — BizSco</title>
+<meta name="description" content="Track your small business financial progress over time — view loan score, health grade, and cash runway history with BizSco's free score tracker."/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
+
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:.95rem;font-weight:900;color:#1e293b;text-decoration:none}
+.logo span{color:#2563eb}
+.back{font-size:.82rem;color:#64748b;text-decoration:none}
+.back:hover{color:#2563eb}
+
+.main{max-width:960px;margin:0;padding:28px 24px 72px}
+
+/* HERO */
+.hero{margin-bottom:28px}
+.hero-eye{font-size:.68rem;font-weight:800;color:#2563eb;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.hero-h{font-size:1.5rem;font-weight:900;color:#0f172a;margin-bottom:6px}
+.hero-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px}
+.hm-item{display:flex;align-items:center;gap:6px;font-size:.82rem;color:#475569}
+.hm-val{font-weight:800;color:#0f172a}
+
+/* TREND BANNER */
+.trend-banner{border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tb-icon{font-size:1.6rem;flex-shrink:0}
+.tb-body{flex:1}
+.tb-title{font-size:.92rem;font-weight:800;color:#0f172a;margin-bottom:2px}
+.tb-sub{font-size:.78rem;line-height:1.5}
+.trend-up  {background:#dcfce7;border:1.5px solid #86efac}
+.trend-down{background:#fee2e2;border:1.5px solid #fca5a5}
+.trend-flat{background:#fef9c3;border:1.5px solid #fde68a}
+
+/* CARD */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:20px}
+.card-hdr{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:16px}
+
+/* CHART */
+.chart-wrap{position:relative;user-select:none}
+.chart-wrap canvas{display:block;width:100%}
+.tooltip{position:absolute;background:#1e293b;color:#fff;padding:10px 13px;border-radius:8px;font-size:.78rem;line-height:1.6;pointer-events:none;white-space:nowrap;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1e293b}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.lg-item{display:flex;align-items:center;gap:5px;font-size:.72rem;color:#64748b}
+.lg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* TABLE */
+.hist-table{width:100%;border-collapse:collapse}
+.hist-table th{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;padding:0 10px 10px;text-align:left;border-bottom:2px solid #f1f5f9}
+.hist-table td{padding:12px 10px;border-bottom:1px solid #f8fafc;font-size:.82rem;color:#1e293b;vertical-align:middle}
+.hist-table tr:last-child td{border-bottom:none}
+.hist-table tr:hover td{background:#f8fafc}
+.grade-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:800}
+.verdict-chip{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+
+/* DELTA */
+.delta-up  {color:#15803d;font-weight:700}
+.delta-down{color:#991b1b;font-weight:700}
+.delta-flat{color:#64748b}
+.delta-first{color:#94a3b8;font-style:italic}
+
+/* NO DATA */
+.empty{text-align:center;padding:40px 20px;color:#94a3b8}
+.empty-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-title{font-size:1rem;font-weight:700;color:#475569;margin-bottom:6px}
+.empty-sub{font-size:.82rem;line-height:1.6}
+
+/* CTA */
+.cta-row{text-align:center;padding-top:8px}
+.btn-primary{display:inline-block;background:#2563eb;color:#fff;border:none;padding:13px 28px;border-radius:9px;font-size:.9rem;font-weight:800;cursor:pointer;text-decoration:none;transition:background .15s}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{display:inline-block;background:#fff;color:#475569;border:1.5px solid #e2e8f0;padding:11px 22px;border-radius:9px;font-size:.88rem;font-weight:700;text-decoration:none;margin-left:10px;transition:all .15s}
+.btn-secondary:hover{border-color:#2563eb;color:#2563eb}
+
+/* GRADE COLORS */
+.gA{background:#dcfce7;color:#15803d}.gB{background:#d1fae5;color:#065f46}
+.gC{background:#fef9c3;color:#854d0e}.gD{background:#fed7aa;color:#9a3412}
+.gF{background:#fee2e2;color:#991b1b}
+.vSAFE{background:#dcfce7;color:#15803d}.vRISKY{background:#fef9c3;color:#854d0e}
+.vDANGEROUS{background:#fee2e2;color:#991b1b}
+.vSTRONG{background:#dcfce7;color:#15803d}.vWARNING{background:#fef9c3;color:#854d0e}
+.vCRITICAL{background:#fee2e2;color:#991b1b}
+
+/* CONFIRM MODAL */
+.fw-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.fw-modal{background:#fff;border-radius:14px;padding:28px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.fw-modal h3{font-size:1rem;font-weight:900;color:#0f172a;margin-bottom:8px}
+.fw-modal p{font-size:.85rem;color:#64748b;line-height:1.55;margin-bottom:22px}
+.fw-modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.fw-modal-cancel{padding:10px 20px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer}
+.fw-modal-confirm{padding:10px 20px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer}
+.fw-modal-confirm:hover{background:#b91c1c}
+
+/* TOAST */
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-ok{background:#16a34a}
+</style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
+<link rel="stylesheet" href="fit-screen.css"/>
+</head>
+<body>
+
+<div id="fwToast" class="fw-toast" role="alert" aria-live="assertive"></div>
+
+<!-- CLEAR CONFIRM MODAL -->
+<div id="clearModal" class="fw-modal-bg" style="display:none" onclick="if(event.target===this)closeClearModal()">
+  <div class="fw-modal">
+    <h3>Clear all checkup history?</h3>
+    <p>This will permanently delete all <span id="clearCount">your</span> checkup records. Your business profile will not be affected.</p>
+    <div class="fw-modal-btns">
+      <button class="fw-modal-cancel" onclick="closeClearModal()">Cancel</button>
+      <button class="fw-modal-confirm" onclick="confirmClear()">Yes, Clear All</button>
+    </div>
+  </div>
+</div>
+
+<script src="sidebar.js"></script>
+<header class="hdr">
+  <a href="index.html" class="logo"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></a>
+  <a href="dashboard.html" class="back">Dashboard</a>
+</header>
+
+<div class="main">
+
+  <div class="hero" id="heroBlock">
+    <div class="hero-eye">Score History</div>
+    <div class="hero-h">Your Financial Health Over Time</div>
+    <div class="hero-meta" id="heroMeta"></div>
+  </div>
+
+  <div id="trendBanner"></div>
+
+  <!-- CHART -->
+  <div class="card" id="chartCard">
+    <div class="card-hdr">Health Score Trend</div>
+    <div class="chart-wrap" id="chartWrap">
+      <canvas id="histChart" height="220"></canvas>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="legend">
+      <div class="lg-item"><div class="lg-dot" style="background:#dcfce7;border:2px solid #22c55e"></div>Grade A—B (70+)</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#fef9c3;border:2px solid #f59e0b"></div>Grade C (52—69)</div>
+      <div class="lg-item"><div class="lg-dot" style="background:#fee2e2;border:2px solid #ef4444"></div>Grade D—F (below 52)</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card" id="tableCard">
+    <div class="card-hdr" style="display:flex;align-items:center;justify-content:space-between">
+      <span>All Checkups</span>
+      <button onclick="clearHistory()" style="background:none;border:none;font-size:.74rem;color:#94a3b8;cursor:pointer;text-decoration:underline">Clear history</button>
+    </div>
+    <div id="histTable"></div>
+  </div>
+
+  <!-- NO DATA -->
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="empty-icon">&#9679;</div>
+    <div class="empty-title">No history yet</div>
+    <div class="empty-sub">Run your first Financial Checkup to start tracking your score over time. Each checkup is saved automatically.</div>
+  </div>
+
+  <div class="cta-row">
+    <a href="checkup.html" class="btn-primary">Run New Checkup &rarr;</a>
+    <a href="dashboard.html" class="btn-secondary">Dashboard</a>
+  </div>
+
+</div>
+
+<script>
+var GO={A:5,B:4,C:3,D:2,F:1};
+var GRADE_LABEL={A:'Excellent',B:'Good',C:'Fair',D:'Needs Work',F:'Critical'};
+
+function loadHistory(){
+  try{return JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){return [];}
+}
+
+function render(){
+  var hist=loadHistory();
+
+  if(hist.length===0){
+    document.getElementById('chartCard').style.display='none';
+    document.getElementById('tableCard').style.display='none';
+    document.getElementById('emptyState').style.display='block';
+    document.getElementById('heroBlock').querySelector('.hero-h').textContent='No checkups yet';
+    return;
+  }
+
+  var latest=hist[0];
+  var oldest=hist[hist.length-1];
+  var d1=new Date(oldest.date).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  var d2=new Date(latest.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  /* hero meta */
+  document.getElementById('heroMeta').innerHTML=
+    '<div class="hm-item">Runs: <span class="hm-val">'+hist.length+'</span></div>'+
+    '<div class="hm-item">Since: <span class="hm-val">'+d1+'</span></div>'+
+    '<div class="hm-item">Latest: <span class="hm-val">'+d2+'</span></div>'+
+    '<div class="hm-item">Current grade: <span class="hm-val">'+latest.grade+' — '+GRADE_LABEL[latest.grade]+'</span></div>';
+
+  /* trend banner */
+  if(hist.length>=2){
+    var first=hist[hist.length-1], last=hist[0];
+    var td=GO[last.grade]-GO[first.grade];
+    var lsDiff=last.loanScore-first.loanScore;
+    var banner=document.getElementById('trendBanner');
+    if(td>0){
+      banner.innerHTML='<div class="trend-banner trend-up"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Your health is improving</div><div class="tb-sub" style="color:#166534">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong> — Loan score '+( lsDiff>=0?'+':'')+lsDiff+' pts since you started tracking</div></div></div>';
+    } else if(td<0){
+      banner.innerHTML='<div class="trend-banner trend-down"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Health has declined — action needed</div><div class="tb-sub" style="color:#991b1b">Health grade moved from <strong>'+first.grade+'</strong> to <strong>'+last.grade+'</strong>. Review the insights in your latest checkup.</div></div></div>';
+    } else {
+      banner.innerHTML='<div class="trend-banner trend-flat"><div class="tb-icon">&#9679;</div><div class="tb-body"><div class="tb-title">Score is holding steady</div><div class="tb-sub" style="color:#854d0e">Grade <strong>'+last.grade+'</strong> across your last '+hist.length+' checkups. Focus on the recommendations to push into the next grade.</div></div></div>';
+    }
+  }
+
+  /* chart */
+  drawChart(hist);
+
+  /* table */
+  drawTable(hist);
+}
+
+/* -- CHART -- */
+function drawChart(hist){
+  var canvas=document.getElementById('histChart');
+  var wrap=document.getElementById('chartWrap');
+  var W=wrap.offsetWidth||700;
+  canvas.width=W; canvas.height=220;
+  var ctx=canvas.getContext('2d');
+
+  var data=hist.slice().reverse(); // oldest ? newest
+  var n=data.length;
+  var scores=data.map(function(h){return h.healthScore||50;});
+
+  var pad={l:42,r:20,t:20,b:44};
+  var pw=W-pad.l-pad.r, ph=220-pad.t-pad.b; // plot width/height
+
+  /* grade zone bands */
+  var zones=[
+    {min:85,max:100,color:'rgba(220,252,231,.4)'},
+    {min:70,max:85, color:'rgba(209,250,229,.3)'},
+    {min:52,max:70, color:'rgba(254,249,195,.4)'},
+    {min:36,max:52, color:'rgba(254,215,170,.3)'},
+    {min:0, max:36, color:'rgba(254,226,226,.4)'}
+  ];
+  zones.forEach(function(z){
+    ctx.fillStyle=z.color;
+    ctx.fillRect(pad.l, pad.t+(1-z.max/100)*ph, pw, (z.max-z.min)/100*ph);
+  });
+
+  /* grid lines at 0,25,50,75,100 */
+  [0,25,50,75,100].forEach(function(v){
+    var y=pad.t+(1-v/100)*ph;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+pw,y);
+    ctx.strokeStyle='rgba(226,232,240,.6)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.font='10px system-ui,sans-serif'; ctx.fillStyle='#94a3b8'; ctx.textAlign='right';
+    ctx.fillText(v,pad.l-6,y+4);
+  });
+  ctx.textAlign='left';
+
+  /* x positions */
+  function px(i){return n===1?pad.l+pw/2:pad.l+(i/(n-1))*pw;}
+  function py(s){return pad.t+(1-s/100)*ph;}
+
+  if(n>=2){
+    /* area fill - segmented by grade */
+    for(var i=0;i<n-1;i++){
+      var midScore=(scores[i]+scores[i+1])/2;
+      var fillColor=midScore>=70?'rgba(34,197,94,.1)':midScore>=52?'rgba(245,158,11,.1)':'rgba(239,68,68,.1)';
+      ctx.beginPath();
+      ctx.moveTo(px(i),py(scores[i]));
+      ctx.lineTo(px(i+1),py(scores[i+1]));
+      ctx.lineTo(px(i+1),pad.t+ph);
+      ctx.lineTo(px(i),pad.t+ph);
+      ctx.closePath();
+      ctx.fillStyle=fillColor; ctx.fill();
+    }
+
+    /* line - segmented by grade color */
+    for(var i=0;i<n-1;i++){
+      var segScore=(scores[i]+scores[i+1])/2;
+      var lc=segScore>=70?'#22c55e':segScore>=52?'#f59e0b':'#ef4444';
+      ctx.beginPath();
+      ctx.moveTo(px(i),py(scores[i]));
+      ctx.lineTo(px(i+1),py(scores[i+1]));
+      ctx.strokeStyle=lc; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+    }
+  }
+
+  /* dots */
+  for(var i=0;i<n;i++){
+    var s=scores[i];
+    var dotColor=s>=70?'#22c55e':s>=52?'#f59e0b':'#ef4444';
+    ctx.beginPath();
+    ctx.arc(px(i),py(s),i===n-1?5.5:4,0,Math.PI*2);
+    ctx.fillStyle=i===n-1?dotColor:'#fff';
+    ctx.strokeStyle=dotColor; ctx.lineWidth=2; ctx.fill(); ctx.stroke();
+  }
+
+  /* x labels */
+  ctx.font='10px system-ui,sans-serif'; ctx.fillStyle='#94a3b8'; ctx.textAlign='center';
+  var labelStep=n>8?Math.ceil(n/8):1;
+  for(var i=0;i<n;i+=labelStep){
+    var d=new Date(data[i].date);
+    var lbl=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    ctx.fillText(lbl,px(i),pad.t+ph+16);
+  }
+  if((n-1)%labelStep!==0){
+    var d=new Date(data[n-1].date);
+    ctx.fillText(d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),px(n-1),pad.t+ph+16);
+  }
+
+  /* grade labels on dots */
+  ctx.font='bold 10px system-ui,sans-serif';
+  for(var i=0;i<n;i++){
+    var s=scores[i];
+    var dc=s>=70?'#15803d':s>=52?'#854d0e':'#991b1b';
+    ctx.fillStyle=dc; ctx.textAlign='center';
+    ctx.fillText(data[i].grade,px(i),py(s)-10);
+  }
+
+  /* hover tooltip */
+  wrap.onmousemove=function(e){
+    var rect=canvas.getBoundingClientRect();
+    var mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+    if(n===0) return;
+    var best=0, bestDist=Infinity;
+    for(var i=0;i<n;i++){var d=Math.abs(mx-px(i));if(d<bestDist){bestDist=d;best=i;}}
+    if(bestDist>30){document.getElementById('tooltip').style.display='none';return;}
+    var h=data[best];
+    var tip=document.getElementById('tooltip');
+    var dateStr=new Date(h.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    tip.innerHTML='<strong>'+dateStr+'</strong><br>Health: '+( h.healthScore||'—')+'/100 — Grade '+h.grade+'<br>Loan: '+h.loanScore+'/100 ('+h.loanVerdict+')<br>Runway: '+(h.runway>=24?'24+':Math.round(h.runway*10)/10)+' mo ('+h.runwayStatus+')';
+    var tipX=px(best)-40, tipY=py(scores[best])-80;
+    if(tipX<0)tipX=4; if(tipX+180>W)tipX=W-184;
+    if(tipY<0)tipY=4;
+    tip.style.left=tipX+'px'; tip.style.top=tipY+'px'; tip.style.display='block';
+  };
+  wrap.onmouseleave=function(){document.getElementById('tooltip').style.display='none';};
+}
+
+/* -- TABLE -- */
+function drawTable(hist){
+  var rows=hist.map(function(h,i){
+    var prev=hist[i+1]||null;
+    var date=new Date(h.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var rw=h.runway>=24?'24+':Math.round(h.runway*10)/10;
+
+    /* delta vs previous */
+    var deltaHtml='<span class="delta-first">First run</span>';
+    if(prev){
+      var scoreDiff=h.loanScore-prev.loanScore;
+      var gradeDiff=GO[h.grade]-GO[prev.grade];
+      if(gradeDiff>0) deltaHtml='<span class="delta-up">Grade '+prev.grade+'?'+h.grade+'</span>';
+      else if(gradeDiff<0) deltaHtml='<span class="delta-down">Grade '+prev.grade+'?'+h.grade+'</span>';
+      else{
+        if(scoreDiff>0) deltaHtml='<span class="delta-up">? +'+scoreDiff+' pts</span>';
+        else if(scoreDiff<0) deltaHtml='<span class="delta-down">? '+scoreDiff+' pts</span>';
+        else deltaHtml='<span class="delta-flat">No change</span>';
+      }
+    }
+
+    return '<tr>'
+      +'<td>'+date+(i===0?'<br><span style="font-size:.68rem;background:#dbeafe;color:#1d4ed8;padding:2px 6px;border-radius:4px;font-weight:700">Latest</span>':'')+'</td>'
+      +'<td><span class="verdict-chip v'+h.loanVerdict+'">'+h.loanScore+'/100</span><br><span style="font-size:.7rem;color:#94a3b8">'+h.loanVerdict+'</span></td>'
+      +'<td>'+rw+' mo<br><span style="font-size:.7rem;color:#94a3b8">'+h.runwayStatus+'</span></td>'
+      +'<td><span class="grade-pill g'+h.grade+'">'+h.grade+'</span><br><span style="font-size:.7rem;color:#94a3b8">'+GRADE_LABEL[h.grade]+'</span></td>'
+      +'<td>'+deltaHtml+'</td>'
+      +'</tr>';
+  }).join('');
+
+  document.getElementById('histTable').innerHTML=
+    '<table class="hist-table"><thead><tr><th>Date</th><th>Loan Safety</th><th>Runway</th><th>Health</th><th>vs Previous</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function clearHistory(){
+  var hist=loadHistory();
+  var el=document.getElementById('clearCount');
+  if(el) el.textContent=hist.length+' checkup'+(hist.length===1?'':'s');
+  document.getElementById('clearModal').style.display='flex';
+}
+function closeClearModal(){
+  document.getElementById('clearModal').style.display='none';
+}
+function confirmClear(){
+  localStorage.removeItem('fw_score_history');
+  localStorage.removeItem('fw_last_checkup');
+  closeClearModal();
+  var t=document.getElementById('fwToast');
+  if(t){t.textContent='? History cleared';t.className='fw-toast toast-ok show';setTimeout(function(){t.classList.remove('show');location.reload();},1500);}
+  else location.reload();
+}
+
+/* -- COMPUTE FROM RAW NUMBERS (same formula as checkup.html) -- */
+function computeFromData(rev,exp,emi,res){
+  res=res||0;
+  var burn=exp+emi, ncf=rev-exp;
+  var dscr=emi>0?ncf/emi:99;
+  var er=rev>0?exp/rev:1, pm=rev>0?ncf/rev:0;
+  var deficit=Math.max(0,burn-rev);
+  var rmo=deficit>0?(res>0?Math.min(res/deficit,24):0):(burn>0?Math.min(res/burn,24):24);
+  var ls=50;
+  if(dscr>=2)ls+=25;else if(dscr>=1.5)ls+=18;else if(dscr>=1.2)ls+=10;else if(dscr>=1)ls+=2;else if(emi>0)ls-=18;
+  if(rmo>=6)ls+=15;else if(rmo>=3)ls+=5;else ls-=8;
+  if(er<0.65)ls+=10;else if(er<0.75)ls+=4;else if(er>=1)ls-=12;
+  ls=Math.max(5,Math.min(100,Math.round(ls)));
+  var lv=ls>=70?'SAFE':ls>=45?'RISKY':'DANGEROUS';
+  var rStat=rmo>=6?'STRONG':rmo>=3?'WARNING':'CRITICAL';
+  var hs=0;
+  hs+=pm>0.2?25:pm>0.1?18:pm>0.05?12:pm>0?6:0;
+  hs+=(dscr===99||dscr>=1.5)?25:dscr>=1.2?18:dscr>=1?10:0;
+  hs+=rmo>=6?25:rmo>=3?15:rmo>=1?6:0;
+  hs+=er<0.65?25:er<0.75?18:er<0.85?12:er<1?5:0;
+  hs=Math.max(0,Math.min(100,hs));
+  var grade=hs>=85?'A':hs>=70?'B':hs>=52?'C':hs>=36?'D':'F';
+  return {loanScore:ls,loanVerdict:lv,runway:rmo,runwayStatus:rStat,grade:grade,healthScore:hs,grantCount:3};
+}
+
+/* -- MERGE SUPABASE financial_data + localStorage -- */
+function mergeHistory(local,remote){
+  var map={};
+  remote.forEach(function(r){
+    var key=r.date.slice(0,10);
+    if(!map[key]) map[key]=r;
+  });
+  local.forEach(function(r){
+    var key=new Date(r.date).toISOString().slice(0,10);
+    map[key]=r; // localStorage wins (more complete)
+  });
+  return Object.values(map).sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+}
+
+function initAndRender(){
+  if(window.fwAuth){
+    fwAuth.init(function(){
+      if(fwAuth.user&&fwAuth.client){
+        fwAuth.client.from('financial_data').select('revenue,expenses,emi,snapshot_date').eq('user_id',fwAuth.user.id).order('snapshot_date',{ascending:false}).limit(24).then(function(res){
+          var remote=[];
+          if(res.data){
+            remote=res.data.map(function(r){
+              var c=computeFromData(r.revenue||0,r.expenses||0,r.emi||0,0);
+              return Object.assign({date:r.snapshot_date},c);
+            });
+          }
+          var local=loadHistory();
+          var merged=mergeHistory(local,remote);
+          if(merged.length>0) localStorage.setItem('fw_score_history',JSON.stringify(merged.slice(0,12)));
+          render();
+        }).catch(render);
+      } else { render(); }
+    });
+  } else { render(); }
+}
+
+window.addEventListener('load', initAndRender);
+window.addEventListener('resize', function(){
+  var hist=loadHistory();
+  if(hist.length>0) drawChart(hist);
+});
+</script>
+<script src="modules/fw-auth.js"></script>
+</body>
+</html>
