@@ -147,6 +147,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ntl a{display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 12px;font-size:.78rem;font-weight:700;color:#475569;text-decoration:none;transition:all .15s}
 .ntl a:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
 
+/* COMPACT BOTTOM STRIP (Share + PDF + Upgrade) */
+.bottom-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+@media(max-width:600px){.bottom-strip{grid-template-columns:1fr}}
+.bs-tile{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;text-decoration:none;font-family:inherit;cursor:pointer;border:none;text-align:left;transition:transform .12s,box-shadow .12s}
+.bs-tile:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.bs-tile .bs-ic{font-size:1.4rem;flex-shrink:0}
+.bs-tile .bs-tx{font-size:.74rem;line-height:1.3;color:inherit}
+.bs-tile .bs-tx b{font-size:.84rem;font-weight:800}
+.bs-tile .bs-sm{color:rgba(255,255,255,.85);font-weight:500}
+.bs-share{background:#2563eb;color:#fff}.bs-share:hover{background:#1d4ed8}
+.bs-pdf  {background:#7c3aed;color:#fff}.bs-pdf:hover  {background:#6d28d9}
+.bs-up   {background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#fff}
+
 /* UPGRADE */
 .upg{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:12px;padding:16px 18px;color:#fff;margin-bottom:12px}
 .upg-t{font-size:.95rem;font-weight:900;margin-bottom:3px}
@@ -370,64 +383,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="nextTools"></div>
     </div>
 
-    <!-- HISTORY CROSS-LINK -->
-    <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:16px;flex-wrap:wrap">
-      <span style="font-size:1.4rem">&#9679;</span>
-      <div style="flex:1;min-width:160px">
-        <div style="font-size:.85rem;font-weight:800;color:#0f172a">Track your progress over time</div>
-        <div style="font-size:.74rem;color:#64748b;margin-top:2px">Score History shows how your numbers change each checkup</div>
-      </div>
-      <a href="history.html" style="font-size:.8rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;border:1.5px solid #bfdbfe;padding:7px 14px;border-radius:7px;background:#eff6ff">View History &rarr;</a>
-      <a href="whatif.html" style="font-size:.8rem;font-weight:800;color:#7c3aed;text-decoration:none;flex-shrink:0;border:1.5px solid #ddd6fe;padding:7px 14px;border-radius:7px;background:#f5f3ff">What-If &rarr;</a>
+    <!-- HISTORY CROSS-LINK (compact) -->
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:8px">
+      <a href="history.html" style="font-size:.74rem;font-weight:800;color:#2563eb;text-decoration:none;border:1px solid #bfdbfe;padding:5px 11px;border-radius:6px;background:#eff6ff">📊 History</a>
+      <a href="whatif.html" style="font-size:.74rem;font-weight:800;color:#7c3aed;text-decoration:none;border:1px solid #ddd6fe;padding:5px 11px;border-radius:6px;background:#f5f3ff">🔮 What-If</a>
     </div>
 
-    <!-- SHARE CARD -->
-    <div class="card" style="text-align:center;padding:24px 28px">
-      <div style="font-size:1.5rem;margin-bottom:8px">&#9679;</div>
-      <div class="ct">Share Your Score Card</div>
-      <div class="cs">Download a branded image or copy a link to share with your advisor, lender, or team.</div>
-      <button onclick="openShare()" style="background:#2563eb;color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:.9rem;font-weight:800;cursor:pointer;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Share Your Results &rarr;</button>
+    <!-- COMPACT BOTTOM STRIP: Share + PDF Gate + Upgrade -->
+    <div class="bottom-strip">
+      <button class="bs-tile bs-share" onclick="openShare()">
+        <span class="bs-ic">🔗</span>
+        <span class="bs-tx"><b>Share Score Card</b><br><span class="bs-sm">Image or link</span></span>
+      </button>
+      <a href="pricing.html" class="bs-tile bs-pdf">
+        <span class="bs-ic">📄</span>
+        <span class="bs-tx"><b data-tier-badge="pro">Full PDF — Pro</b><br><span class="bs-sm">12-page lender report</span></span>
+      </a>
+      <a href="dashboard.html" class="bs-tile bs-up">
+        <span class="bs-ic">🚀</span>
+        <span class="bs-tx"><b>Unlock 40+ tools</b><br><span class="bs-sm">All Pro features</span></span>
+      </a>
     </div>
 
-    <!-- BLURRED PDF GATE -->
-    <div class="card" style="padding:24px 28px">
-      <div style="font-size:1.5rem;margin-bottom:8px">&#9679;</div>
-      <div class="ct">Full Financial Report — PDF</div>
-      <div class="cs">12-page lender-ready report: charts, action plan, 12-month forecast, and advisor summary.</div>
-      <div style="position:relative;border-radius:10px;overflow:hidden;margin-bottom:18px;border:1px solid #e2e8f0">
-        <div style="filter:blur(4px);pointer-events:none;background:#f8fafc;padding:20px 22px;user-select:none">
-          <div style="height:11px;background:#dbeafe;border-radius:6px;width:55%;margin-bottom:11px"></div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:92%;margin-bottom:8px"></div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:78%;margin-bottom:8px"></div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:86%;margin-bottom:14px"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
-            <div style="height:52px;background:#dcfce7;border-radius:7px"></div>
-            <div style="height:52px;background:#dbeafe;border-radius:7px"></div>
-            <div style="height:52px;background:#fef9c3;border-radius:7px"></div>
-          </div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:80%;margin-bottom:8px"></div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:62%;margin-bottom:8px"></div>
-          <div style="height:7px;background:#e2e8f0;border-radius:4px;width:74%;"></div>
-        </div>
-        <div style="position:absolute;inset:0;background:rgba(248,250,252,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;text-align:center">
-          <div style="font-size:2rem">&#9679;</div>
-          <div style="font-weight:900;color:#0f172a;font-size:.95rem">Pro Feature</div>
-          <div style="font-size:.78rem;color:#64748b;line-height:1.55;max-width:240px">Full PDF with lender-ready summary, action plan, 12-month forecast and advisor notes</div>
-        </div>
+    <!-- DETAILS-EXPANDED tool list (hidden by default) -->
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-size:.78rem;color:#64748b;font-weight:700">More recommendations →</summary>
+      <div class="upg" style="margin-top:8px">
+        <div class="upg-t">Unlock deeper analysis</div>
+        <div class="upg-s">Tools matched to areas your checkup flagged.</div>
+        <div class="upg-g" id="upgItems"></div>
       </div>
-      <a href="pricing.html" style="display:block;text-align:center;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:9px;font-size:.88rem;font-weight:800;text-decoration:none" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">&#9679; <span data-tier-badge="pro">Upgrade to Pro — $29/mo</span> &rarr;</a>
-      <p class="note" style="margin-top:8px">Includes all 40 tools — AI CFO — Priority Support</p>
-    </div>
-
-    <div class="upg">
-      <div class="upg-t">Unlock deeper analysis</div>
-      <div class="upg-s">Your checkup identified areas where more detailed tools can help you take action.</div>
-      <div class="upg-g" id="upgItems"></div>
-      <div class="upg-btns">
-        <a href="dashboard.html" class="upg-p">Unlock Full Suite &rarr;</a>
-        <a href="try.html" class="upg-q">Explore All 30 Tools</a>
-      </div>
-    </div>
+    </details>
   </div>
 
 </div>
