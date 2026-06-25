@@ -1517,8 +1517,18 @@ function loadHealthBriefing(auth){
     fetch('https://ugtfdtdbegdjqrdtplkg.supabase.co/functions/v1/health-get',{
       headers:{ 'Authorization':'Bearer '+token }
     }).then(function(r){ return r.json(); }).then(function(data){
-      if(data && data.score){
-        localStorage.setItem('fw_health_score', String(Math.round(data.score.overall_score || 0)));
+      /* Accept a cached row only if it has the 6 dimension scores the
+         dashboard renders. Rows from our SQL seed (or any older format)
+         have overall_score but no dimensions → fall through to recalc
+         so the user sees correct bars on first load. */
+      var s = data && data.score;
+      var hasDims = s && (
+        (s.cash_flow_score   != null && s.cash_flow_score   > 0) ||
+        (s.liquidity_score   != null && s.liquidity_score   > 0) ||
+        (s.debt_burden_score != null && s.debt_burden_score > 0)
+      );
+      if(hasDims){
+        localStorage.setItem('fw_health_score', String(Math.round(s.overall_score || 0)));
         renderBriefing(data);
       } else {
         calcHealth();
