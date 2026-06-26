@@ -444,6 +444,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div id="repDate" style="font-size:13px;color:#94a3b8;font-weight:500"></div>
     </div>
 
+    <!-- V3 Step 6: Free-user upsell card — appears when verdict is RISKY or DANGEROUS.
+         Populated by JS after the report computes. -->
+    <div id="freeRiskyUpsell" style="display:none;background:linear-gradient(135deg,#f5f3ff,#fef3c7);border:1.5px solid #c4b5fd;border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-size:1.8rem;line-height:1;flex-shrink:0">💡</span>
+      <div style="flex:1;min-width:240px">
+        <div style="font-size:.92rem;font-weight:800;color:#4c1d95;margin-bottom:4px" id="freeRiskyTitle">Your loan readiness needs work</div>
+        <div style="font-size:.8rem;color:#5b21b6;line-height:1.5" id="freeRiskyBody"></div>
+      </div>
+      <a href="pricing.html" style="background:#7c3aed;color:#fff;padding:9px 18px;border-radius:7px;font-size:.82rem;font-weight:700;text-decoration:none;flex-shrink:0">Try Pro free for 7 days →</a>
+    </div>
+
     <!-- V3 PRIMARY KPIs — 4 large cards -->
     <h2 class="v3-section">Financial health</h2>
     <div class="v3-primary" id="v3RepPrimary"></div>
@@ -870,6 +881,24 @@ function fillReport(){
         + '<div class="v3-sub">'+c.sub+'</div>'
         + '</div>';
     }).join('');
+
+    /* V3 Step 6: value-led upsell card for FREE users with risky/dangerous verdict */
+    var plan = (window.fwAuth && window.fwAuth.plan) || 'free';
+    var upEl = document.getElementById('freeRiskyUpsell');
+    if (upEl && plan === 'free' && (r.loanVerdict === 'RISKY' || r.loanVerdict === 'DANGEROUS')) {
+      var titleEl = document.getElementById('freeRiskyTitle');
+      var bodyEl = document.getElementById('freeRiskyBody');
+      if (titleEl && bodyEl) {
+        if (r.loanVerdict === 'DANGEROUS') {
+          titleEl.textContent = 'Your DSCR is ' + r.dscr.toFixed(2) + 'x — most lenders will decline';
+          bodyEl.innerHTML = 'Itemise your loans to see <b>exactly which loan to refinance first</b>, get an AI CFO action plan, and apply only to lenders likely to approve. <b>Pro members save ~$X,XXX/year</b> on interest by knowing where to focus.';
+        } else {
+          titleEl.textContent = 'Your DSCR is ' + r.dscr.toFixed(2) + 'x — borderline';
+          bodyEl.innerHTML = 'Itemise your loans to see <b>which loan is hurting your DSCR most</b> + get a personalised payoff plan. Pro unlocks the Repayment Optimizer, Refinance Analyzer, and AI CFO — the three tools that turn a risky borrower into a safe one.';
+        }
+        upEl.style.display = 'flex';
+      }
+    }
   }
 
   /* ── V2 DEMO LAYOUT RENDERING ── */

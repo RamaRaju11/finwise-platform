@@ -626,6 +626,53 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
       <button class="export-btn" onclick="exportDashboard()">Export PDF</button>
     </div>
 
+    <!-- V3 Step 7: State-B banner (Pro user with profile.emi > 0 but empty Debt Center).
+         Auto-hides for 7 days after dismiss; re-appears if still un-itemised. -->
+    <div id="v3StateBbanner" style="display:none;background:linear-gradient(135deg,#f5f3ff,#eef2ff);border:1px solid #c4b5fd;border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="font-size:1.5rem;line-height:1">📋</span>
+      <div style="flex:1;min-width:240px;font-size:.86rem;color:#4c1d95;line-height:1.5">
+        You're tracking <b id="v3StateBemi">$0/mo</b> in EMIs as one entry. Itemise each loan → unlocks Payoff Optimizer + Refinance Ideas + accurate DSCR.
+      </div>
+      <a href="modules/debtCommandCenter.test.html" style="background:#7c3aed;color:#fff;padding:7px 14px;border-radius:6px;font-size:.78rem;font-weight:700;text-decoration:none">Add loans</a>
+      <button onclick="dismissStateBbanner()" style="background:transparent;border:none;color:#7c3aed;font-size:.74rem;font-weight:600;cursor:pointer;padding:5px 10px">Dismiss 7d</button>
+    </div>
+    <script>
+    /* V3 Step 7 — Show banner only when:
+         (a) user is Pro/Advisor (paid tier, can use Debt Center)
+         (b) profile.emi > 0 (they typed an aggregate)
+         (c) fw_loans has zero active loans
+         (d) banner not dismissed in last 7 days
+       Pre-injects so we can show it as soon as fwAuth resolves. */
+    function dismissStateBbanner(){
+      try { localStorage.setItem('fw_statebbanner_dismissed_until', String(Date.now() + 7*24*3600*1000)); } catch(_e){}
+      var el = document.getElementById('v3StateBbanner');
+      if (el) el.style.display = 'none';
+    }
+    (function showStateBifApplicable(){
+      function check(){
+        try {
+          var until = parseInt(localStorage.getItem('fw_statebbanner_dismissed_until')||'0',10);
+          if (until > Date.now()) return;
+          var plan = (window.fwAuth && window.fwAuth.plan) || 'free';
+          if (plan !== 'pro' && plan !== 'advisor') return;
+          var prof = JSON.parse(localStorage.getItem('fw_profile')||'{}');
+          var loans = JSON.parse(localStorage.getItem('fw_loans')||'[]');
+          var activeCount = loans.filter(function(L){return L.status==='active'||!L.status;}).length;
+          var emi = parseFloat(prof.emi)||0;
+          if (emi > 0 && activeCount === 0) {
+            var sym = (prof.country==='India'||localStorage.getItem('BizSco_currency')==='INR') ? '₹' : '$';
+            var emiEl = document.getElementById('v3StateBemi');
+            var bannerEl = document.getElementById('v3StateBbanner');
+            if (emiEl) emiEl.textContent = sym + emi.toLocaleString('en-US') + '/mo';
+            if (bannerEl) bannerEl.style.display = 'flex';
+          }
+        } catch(_e){}
+      }
+      if (window.fwAuth && window.fwAuth.init) window.fwAuth.init(check);
+      else setTimeout(check, 200);
+    })();
+    </script>
+
     <!-- V3 Empty state (no profile data yet) -->
     <div class="v3-empty" id="v3Empty" style="display:none">
       <h2>Run your first checkup</h2>
@@ -756,9 +803,10 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
           {lb:'Profit Margin',val:pm.toFixed(1)+'%',sub:'After all monthly expenses',
            state:stateNum(pm,15,5), href:'modules/profitMarginAnalyzer.test.html', requires:'starter',
            tip:'Profit as % of revenue. Retail 5–10%, services 15–25%.'},
-          {lb:'Monthly EMI',val:sym+fmtN(emi),sub:'Current debt service',
+          {lb:'Monthly EMI',val:sym+fmtN(emi),
+           sub:(userPlan==='pro'||userPlan==='advisor') ? 'Current debt service' : 'Aggregate · Itemise → Pro',
            state:'', href:'modules/debtCommandCenter.test.html', requires:'pro',
-           tip:'Total monthly loan repayments across all debts.'},
+           tip:'Total monthly loan repayments across all your debts. Free / Starter users see only the aggregate; Pro unlocks itemised tracking, payoff optimizer, and refinance ideas.'},
           {lb:'Cash Reserves',val:sym+fmtN(res),sub:'Emergency / opportunity fund',
            state:stateRmo(rmo), href:'onboarding.html', requires:'free', clearFlag:true,
            tip:'Cash on hand. Lenders prefer to see 3–6 months of expenses in reserve.'}

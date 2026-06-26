@@ -569,15 +569,42 @@ function renderDashboard() {
   var el = document.getElementById('dashboard-content');
 
   if(allLoans.length === 0) {
+    /* V3 Step 7: detect state B — user has profile.emi > 0 but no
+       itemised loans. Show reconciliation banner instead of plain empty state. */
+    var prof = {};
+    try { prof = JSON.parse(localStorage.getItem('fw_profile') || '{}'); } catch(_e) {}
+    var profileEmi = parseFloat(prof.emi) || 0;
+    var sym = (prof.country === 'India' || localStorage.getItem('BizSco_currency') === 'INR') ? '₹' : '$';
+
+    if (profileEmi > 0) {
+      el.innerHTML =
+        '<div class="card" style="background:linear-gradient(135deg,#f5f3ff,#eef2ff);border:1px solid #c4b5fd">' +
+          '<div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">' +
+            '<div style="font-size:2rem;flex-shrink:0">📋</div>' +
+            '<div style="flex:1;min-width:240px">' +
+              '<div style="font-size:1.1rem;font-weight:800;color:#4c1d95;margin-bottom:4px">You\'re tracking <span style="background:#fff;padding:2px 8px;border-radius:5px">'+sym+profileEmi.toLocaleString('en-US')+'/mo</span> in EMIs as one entry</div>' +
+              '<p style="font-size:.85rem;color:#5b21b6;margin-bottom:14px;line-height:1.5">Itemise each loan to unlock the <b>Repayment Optimizer</b>, <b>Refinance Ideas</b>, and accurate <b>DSCR breakdown</b>. Takes 2 minutes.</p>' +
+              '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+                '<button onclick="goToTab(\'loans\')" style="background:#7c3aed;color:#fff;border:none;padding:9px 18px;border-radius:7px;font-size:.84rem;font-weight:700;cursor:pointer">Add manually (2 min)</button>' +
+                '<button onclick="createEstimatedLoan()" style="background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;padding:9px 18px;border-radius:7px;font-size:.84rem;font-weight:700;cursor:pointer">Use one estimated loan</button>' +
+                '<a href="../dashboard.html" style="padding:9px 14px;font-size:.78rem;color:#64748b;text-decoration:none;font-weight:600;align-self:center">Skip for now</a>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      return;
+    }
+
+    /* True empty state — no profile EMI, no loans */
     el.innerHTML =
       '<div class="conn-strip">' +
-        '<a href="loanDecisionScoreEngine.test.html" class="conn-pill conn-loan-check">&#127974; Loan Safety Score</a>' +
+        '<a href="loanDecisionScoreEngine.test.html" class="conn-pill conn-loan-check">&#127974; New Loan Stress Test</a>' +
         '<a href="loanRepaymentOptimizer.test.html"  class="conn-pill conn-optimizer">&#10054; Repayment Optimizer</a>' +
       '</div>' +
       '<div class="card"><div class="empty-state">' +
         '<div class="es-icon">&#128184;</div>' +
-        '<p>No loans saved yet.<br>Add your first loan in the <strong>My Loans</strong> tab to see your debt dashboard.</p>' +
-        '<button class="btn-primary" style="margin-top:0" onclick="goToTab(\'loans\')">+ Add Your First Loan</button>' +
+        '<p>No debt yet — that\'s great!<br>Add a loan here if you take one, or stress-test a loan you\'re considering.</p>' +
+        '<button class="btn-primary" style="margin-top:0" onclick="goToTab(\'loans\')">+ Add a Loan</button>' +
       '</div></div>';
     return;
   }
@@ -917,6 +944,51 @@ function deleteLoan(id) {
   }
   renderDebtFreeChip();
   showToast('Loan removed');
+}
+
+/* V3 Step 7 — Create ONE estimated active loan from profile.emi.
+   Used by the reconciliation banner when Debt Center is empty but
+   the user has typed an aggregate EMI in their profile.
+   Defaults: balance = EMI x 24, rate = 10% (USA) or 12% (India). */
+function createEstimatedLoan() {
+  var prof = {};
+  try { prof = JSON.parse(localStorage.getItem('fw_profile') || '{}'); } catch(_e){}
+  var emi = parseFloat(prof.emi) || 0;
+  if (emi <= 0) { showToast('No profile EMI to estimate from'); return; }
+
+  var isIndia = (prof.country === 'India' || localStorage.getItem('BizSco_currency') === 'INR');
+  var defaultRate = isIndia ? 12 : 10;
+  var tenureMonths = 24;
+
+  /* Reverse-PMT: balance = EMI * (1 - (1+r)^-n) / r */
+  var r = defaultRate / 100 / 12;
+  var estBalance = Math.round(emi * (1 - Math.pow(1+r, -tenureMonths)) / r);
+
+  var loans = loadLoans();
+  loans.push({
+    id: 'loan_' + Date.now(),
+    name: 'Existing debt (pending review)',
+    type: 'business',
+    balance: estBalance,
+    originalBalance: estBalance,
+    rate: defaultRate,
+    minPay: emi,
+    lender: '',
+    notes: 'Estimate — please confirm balance and rate when you have time.',
+    addedDate: new Date().toISOString().split('T')[0],
+    status: 'active'
+  });
+  saveLoans(loans);
+
+  /* Keep profile.emi in sync (it should match — we just created from it) */
+  try {
+    prof.emiSource = 'debt_center';
+    localStorage.setItem('fw_profile', JSON.stringify(prof));
+  } catch(_e){}
+
+  showToast('Added one estimated loan — please review balance and rate');
+  renderDashboard();
+  if (document.getElementById('tab-loans').classList.contains('active')) renderLoansList();
 }
 
 /* V3 — change a loan's status. Triggers re-render and a one-line toast. */
