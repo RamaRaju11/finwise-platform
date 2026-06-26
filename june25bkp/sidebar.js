@@ -32,7 +32,7 @@
 
     /* sidebar — include emoji-capable fonts so icons render on Windows */
     '.fw-sidebar,.fw-sidebar *,.fw-topbar,.fw-topbar *{font-family:"Inter","Segoe UI","Segoe UI Emoji","Segoe UI Symbol","Apple Color Emoji","Noto Color Emoji",system-ui,sans-serif!important}',
-    '.fw-sidebar{width:220px;background:#1e293b;background-image:linear-gradient(180deg,#1e293b 0%,#273548 100%);height:100vh;position:fixed!important;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none;border-right:1px solid #334155}',
+    '.fw-sidebar{width:220px;background:#0f172a;height:100vh;position:fixed!important;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:1000;transition:transform .25s ease;scrollbar-width:none}',
     '.fw-sidebar::-webkit-scrollbar{display:none}',
 
     /* topbar */
@@ -51,8 +51,8 @@
     /* logo */
     '.fw-sb-logo{padding:18px 16px 10px;display:flex;align-items:center;text-decoration:none;flex-shrink:0}',
     '.fw-sb-logo-text{font-size:1.05rem;font-weight:900;color:#fff;letter-spacing:-.02em}',
-    '.fw-sb-logo-text span{color:#a78bfa}',
-    '.fw-sb-biz{padding:0 16px 12px;font-size:.7rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.fw-sb-logo-text span{color:#818cf8}',
+    '.fw-sb-biz{padding:0 16px 12px;font-size:.7rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
     '.fw-sb-plan-chip{margin:0 16px 14px;display:inline-block;font-size:.6rem;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;background:#334155;color:#94a3b8}',
     '.fw-sb-plan-chip.badge-starter{background:#0891b2;color:#fff}',
     '.fw-sb-plan-chip.badge-pro{background:#7c3aed;color:#fff}',
@@ -60,17 +60,17 @@
 
     /* nav */
     '.fw-sb-nav{flex:1;padding:0 0 8px}',
-    '.fw-sb-section{padding:14px 16px 4px;font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#64748b}',
-    '.fw-sb-link{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:.8rem;font-weight:600;color:#cbd5e1;text-decoration:none;transition:background .12s,color .12s;white-space:nowrap}',
-    '.fw-sb-link:hover{background:rgba(124,58,237,.14);color:#fff}',
-    '.fw-sb-link.active{background:rgba(124,58,237,.22);color:#fff;border-right:3px solid #7c3aed}',
+    '.fw-sb-section{padding:14px 16px 4px;font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569}',
+    '.fw-sb-link{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:.8rem;font-weight:600;color:#94a3b8;text-decoration:none;transition:background .12s,color .12s;white-space:nowrap}',
+    '.fw-sb-link:hover{background:rgba(255,255,255,.06);color:#e2e8f0}',
+    '.fw-sb-link.active{background:rgba(99,102,241,.18);color:#a5b4fc;border-right:3px solid #6366f1}',
     '.fw-sb-ic{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}',
     '.fw-sb-divider{margin:8px 16px;border:none;border-top:1px solid #1e293b}',
 
     /* footer */
     '.fw-sb-footer{padding:12px 16px 20px;flex-shrink:0;border-top:1px solid #1e293b}',
-    '.fw-sb-upgrade{display:block;text-align:center;background:#7c3aed;color:#fff;padding:9px 12px;border-radius:8px;font-size:.78rem;font-weight:700;text-decoration:none;transition:background .15s}',
-    '.fw-sb-upgrade:hover{background:#6d28d9}',
+    '.fw-sb-upgrade{display:block;text-align:center;background:#4f46e5;color:#fff;padding:9px 12px;border-radius:8px;font-size:.78rem;font-weight:800;text-decoration:none;transition:background .15s}',
+    '.fw-sb-upgrade:hover{background:#4338ca}',
     '.fw-sb-upgrade.hidden{display:none}',
 
     /* mobile */

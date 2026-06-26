@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>What-If Scenarios — BizSco</title>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   V2 DEMO-AESTHETIC overrides for the What-If page.
+   This file is whatif-v2.html — the original whatif.html is unchanged.
+   ════════════════════════════════════════════════════════════════ */
+.v2-banner{position:sticky;top:0;z-index:99;background:linear-gradient(90deg,#15803d,#14532d);color:#fff;font-size:.74rem;font-weight:700;padding:6px 22px;text-align:center;letter-spacing:.03em}
+.v2-banner a{color:#fef9c3;text-decoration:underline}
+
+.v2-section{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 18px;margin-bottom:12px}
+.v2-section-title{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:10px}
+
+/* Summary tiles (mirrors checkup-v2) */
+.v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:12px 14px;display:flex;gap:11px;align-items:flex-start}
+.v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
+.v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
+.v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
+.v2-tile.info{border-left:4px solid #2563eb;background:#eff6ff}
+.v2-tile-ic{font-size:1.4rem;flex-shrink:0;line-height:1}
+.v2-tile-bd{flex:1;min-width:0}
+.v2-tile-lbl{font-size:.62rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.v2-tile-val{font-size:1.1rem;font-weight:900;color:#0f172a;line-height:1.1}
+.v2-tile-sub{font-size:.7rem;color:#475569;margin-top:2px;line-height:1.3}
+
+/* Bottom dark totals banner */
+.v2-totals{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:12px;border:1px solid #1e3a5f}
+.v2-totals-lbl{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px}
+.v2-totals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.v2-tt{background:rgba(255,255,255,.05);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,255,255,.08)}
+.v2-tt-val{font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1}
+.v2-tt-lbl{font-size:.66rem;color:#cbd5e1;margin-top:2px;font-weight:600}
+
+.v2-hero-strip{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.v2-hero-strip h1{font-size:1.2rem;font-weight:900;color:#0f172a;margin:0}
+.v2-hero-strip .v2-sub{font-size:.74rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+
+/* Hide legacy V1 hero + score-card + cmp-bar-wrap in v2 */
+#v2Whatif .hero,#v2Whatif > .hero{display:none}
+</style>
+<meta name="description" content="Model revenue, expense, and loan changes with BizSco's free What-If Scenario Planner — see instantly how your loan score and cash runway would change."/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6fb;background-image:radial-gradient(ellipse at top right,#eef0f9 0%,#f5f6fb 38%,#f8f9fc 100%);color:#1e293b;min-height:100vh}
+
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:.95rem;font-weight:900;color:#1e293b;text-decoration:none}
+.logo span{color:#2563eb}
+.back{font-size:.78rem;color:#64748b;text-decoration:none}
+.back:hover{color:#2563eb}
+
+.hero{background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 100%);padding:12px 24px 12px;color:#fff;text-align:center}
+.hero h1{font-size:1.2rem;font-weight:900;margin-bottom:2px}
+.hero p{font-size:.78rem;color:#94a3b8;max-width:560px;margin:0 auto;line-height:1.4}
+
+.main{max-width:1100px;margin:0;padding:12px 22px 24px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:680px){.cols{grid-template-columns:1fr}}
+
+.panel{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px}
+.panel-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px}
+
+/* SCORE DISPLAY */
+.score-big{text-align:center;padding:6px 0 4px}
+.sb-mini-lbl{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:3px}
+.sb-num{font-size:2.2rem;font-weight:900;line-height:1}
+.sb-lbl{font-size:.66rem;color:#64748b;margin-top:2px;font-weight:600;line-height:1.3}
+
+/* Health-grade block (distinct from loan-risk score so user sees them as separate metrics) */
+.grade-block{margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;text-align:center}
+.grade-block-lbl{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:2px}
+.grade-block .grade-sub{font-size:.78rem;color:#1e293b;font-weight:700;margin-top:1px}
+.grade-block .grade-foot{font-size:.66rem;color:#94a3b8;margin-top:2px;font-weight:600}
+
+/* Explainer note between the two metrics — appears below the side-by-side cards */
+.metric-explainer{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:8px 12px;margin:10px 0 2px;font-size:.74rem;color:#475569;line-height:1.4}
+.metric-explainer b{color:#1e293b}
+.metric-explainer .mx-row{display:flex;gap:10px;align-items:flex-start;margin-top:6px}
+.metric-explainer .mx-row .mx-icon{flex-shrink:0;font-size:1rem;line-height:1.4}
+.verdict{display:inline-block;font-size:.82rem;font-weight:800;letter-spacing:.08em;padding:5px 16px;border-radius:30px;text-transform:uppercase;margin-top:8px}
+.v-safe{background:#dcfce7;color:#15803d}
+.v-risky{background:#fef9c3;color:#854d0e}
+.v-danger{background:#fee2e2;color:#991b1b}
+.v-strong{background:#dcfce7;color:#15803d}
+.v-warning{background:#fef9c3;color:#854d0e}
+.v-critical{background:#fee2e2;color:#991b1b}
+
+.metric-row{display:flex;justify-content:space-around;gap:6px;margin:8px 0;flex-wrap:wrap}
+.m-item{text-align:center;flex:1;min-width:70px}
+.m-val{font-size:.95rem;font-weight:900;color:#0f172a}
+.m-lbl{font-size:.6rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+
+/* GRADE */
+.grade-circ{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:900;margin:4px auto}
+.gA{background:#dcfce7;color:#15803d}
+.gB{background:#d1fae5;color:#065f46}
+.gC{background:#fef9c3;color:#854d0e}
+.gD{background:#fed7aa;color:#9a3412}
+.gF{background:#fee2e2;color:#991b1b}
+
+/* SLIDERS */
+.sliders-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:12px}
+.sl-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px}
+.sl-group{margin-bottom:10px}
+.sl-group:last-child{margin-bottom:0}
+.sl-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.sl-name{font-size:.78rem;font-weight:700;color:#1e293b}
+.sl-val{font-size:.82rem;font-weight:900;color:#2563eb;min-width:70px;text-align:right}
+input[type=range]{width:100%;accent-color:#2563eb;height:5px;cursor:pointer}
+.sl-ticks{display:flex;justify-content:space-between;font-size:.6rem;color:#94a3b8;margin-top:2px}
+
+.sl-impact{font-size:.68rem;padding:3px 8px;border-radius:5px;margin-top:4px;display:inline-block;font-weight:700}
+.impact-pos{background:#dcfce7;color:#15803d}
+.impact-neg{background:#fee2e2;color:#991b1b}
+.impact-neu{background:#f1f5f9;color:#64748b}
+
+/* DELTA BADGE */
+.delta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:20px}
+.delta-up{background:#dcfce7;color:#15803d}
+.delta-dn{background:#fee2e2;color:#991b1b}
+.delta-eq{background:#f1f5f9;color:#64748b}
+
+/* COMPARISON BAR */
+.cmp-bar-wrap{margin:8px 0 4px}
+.cmp-bar-title{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:5px}
+.cmp-bar-row{display:grid;grid-template-columns:120px 1fr 70px;align-items:center;gap:10px;margin-bottom:5px;font-size:.76rem}
+@media(max-width:600px){.cmp-bar-row{grid-template-columns:90px 1fr 60px;gap:6px;font-size:.72rem}}
+.cmp-bar-row .cmp-lbl{font-weight:700;color:#475569}
+.cmp-bar-row .cmp-val{text-align:right;font-weight:900;color:#1e293b;font-variant-numeric:tabular-nums}
+.cmp-bar-row .cmp-track{height:10px;background:#f1f5f9;border-radius:5px;overflow:hidden;position:relative}
+.cmp-bar-row .cmp-fill{height:100%;border-radius:7px;transition:width .6s ease;background:#94a3b8}
+.cmp-bar-row.proj .cmp-fill{background:#16a34a}
+.cmp-delta-pill{display:inline-flex;align-items:center;gap:4px;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:999px;font-size:.74rem;font-weight:800;margin-top:4px}
+.cmp-delta-pill.down{background:#fee2e2;color:#991b1b}
+.cmp-delta-pill.flat{background:#f1f5f9;color:#64748b}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn-primary{padding:8px 18px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;transition:background .15s}
+.btn-primary:hover{background:#1d4ed8}
+.btn-outline{padding:7px 16px;background:#fff;color:#1e293b;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;transition:all .15s}
+.btn-outline:hover{border-color:#2563eb;color:#2563eb}
+
+.note-tip{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:7px 12px;font-size:.74rem;color:#1d4ed8;line-height:1.4;margin-top:8px}
+
+/* apply scenario */
+.apply-row{background:linear-gradient(135deg,#eff6ff 0%,#f0fdf4 100%);border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.ar-text{flex:1;min-width:200px}
+.ar-text strong{display:block;font-size:.84rem;margin-bottom:2px}
+.ar-text span{font-size:.72rem;color:#64748b;line-height:1.4}
+
+/* TOAST */
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-ok{background:#16a34a}
+.fw-toast.toast-err{background:#dc2626}
+.fw-toast.toast-info{background:#2563eb}
+</style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
+<link rel="stylesheet" href="fit-screen.css"/>
+<script defer src="plan-banner.js"></script>
+</head>
+<body>
+<div id="fwToast" class="fw-toast" role="alert" aria-live="assertive"></div>
+
+<script src="sidebar.js"></script>
+<header class="hdr">
+  <a href="index.html" class="logo"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></a>
+  <a href="dashboard.html" class="back">Dashboard</a>
+</header>
+
+<div class="main">
+  <div class="v2-hero-strip">
+    <h1>What-If Scenario Planner</h1>
+    <div class="v2-sub" id="v2Date"></div>
+  </div>
+  <script>document.getElementById('v2Date').textContent = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});</script>
+
+  <!-- V2 projection summary (auto-populates after sliders move) -->
+  <div class="v2-summary-grid" id="v2WhatifGrid"></div>
+
+
+  <!-- SLIDERS -->
+  <div class="sliders-card">
+    <div class="sl-title">Adjust Your Scenario</div>
+
+    <div class="sl-group">
+      <div class="sl-header">
+        <span class="sl-name">Revenue change</span>
+        <span class="sl-val" id="revLabel">+0%</span>
+      </div>
+      <input type="range" id="revSlider" min="-50" max="100" step="5" value="0" oninput="recalc()">
+      <div class="sl-ticks"><span>-50%</span><span>0%</span><span>+50%</span><span>+100%</span></div>
+      <div id="revImpact" class="sl-impact impact-neu">No change from baseline</div>
+    </div>
+
+    <div class="sl-group">
+      <div class="sl-header">
+        <span class="sl-name">Expense change</span>
+        <span class="sl-val" id="expLabel">+0%</span>
+      </div>
+      <input type="range" id="expSlider" min="-50" max="50" step="5" value="0" oninput="recalc()">
+      <div class="sl-ticks"><span>-50%</span><span>-25%</span><span>0%</span><span>+25%</span><span>+50%</span></div>
+      <div id="expImpact" class="sl-impact impact-neu">No change from baseline</div>
+    </div>
+
+    <div class="sl-group">
+      <div class="sl-header">
+        <span class="sl-name">Add new loan EMI</span>
+        <span class="sl-val" id="newEmiLabel">$0/mo</span>
+      </div>
+      <input type="range" id="newEmiSlider" min="0" max="5000" step="100" value="0" oninput="recalc()">
+      <div class="sl-ticks"><span>$0</span><span>$1,250</span><span>$2,500</span><span>$3,750</span><span>$5,000</span></div>
+      <div id="emiImpact" class="sl-impact impact-neu">No additional loan</div>
+    </div>
+
+    <div class="sl-group">
+      <div class="sl-header">
+        <span class="sl-name">Add to cash reserves</span>
+        <span class="sl-val" id="resLabel">+$0</span>
+      </div>
+      <input type="range" id="resSlider" min="-20000" max="50000" step="1000" value="0" oninput="recalc()">
+      <div class="sl-ticks"><span>-$20k</span><span>$0</span><span>+$25k</span><span>+$50k</span></div>
+      <div id="resImpact" class="sl-impact impact-neu">No change to reserves</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-outline" onclick="resetSliders()">Reset to Baseline</button>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="cols">
+
+    <!-- CURRENT -->
+    <div class="panel">
+      <div class="panel-title">Current — Baseline</div>
+      <div class="score-big">
+        <div class="sb-mini-lbl">📊 Loan Risk Score</div>
+        <div class="sb-num" id="curScore" style="color:#0f172a">—</div>
+        <div class="sb-lbl">out of 100 — can you safely take this loan?</div>
+        <div id="curVerdict"></div>
+      </div>
+      <div class="metric-row">
+        <div class="m-item"><div class="m-val" id="curRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="curDSCR">—</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="curNet">—</div><div class="m-lbl">Net/mo</div></div>
+      </div>
+      <div class="grade-block">
+        <div class="grade-block-lbl">🩺 Business Health Grade</div>
+        <div class="grade-circ" id="curGrade">—</div>
+        <div class="grade-sub" id="curGlabel">—</div>
+        <div class="grade-foot">Overall financial fitness</div>
+      </div>
+    </div>
+
+    <!-- PROJECTED -->
+    <div class="panel" style="border-color:#2563eb;background:linear-gradient(135deg,#f8faff 0%,#f0fdf4 100%)">
+      <div class="panel-title" style="color:#2563eb">Projected — With Changes</div>
+      <div class="score-big">
+        <div class="sb-mini-lbl">📊 Loan Risk Score</div>
+        <div class="sb-num" id="projScore" style="color:#0f172a">—</div>
+        <div class="sb-lbl">out of 100 — can you safely take this loan?</div>
+        <div id="projVerdict"></div>
+      </div>
+      <div class="metric-row">
+        <div class="m-item"><div class="m-val" id="projRunway">—</div><div class="m-lbl">Runway (mo)</div></div>
+        <div class="m-item"><div class="m-val" id="projDSCR">—</div><div class="m-lbl">DSCR</div></div>
+        <div class="m-item"><div class="m-val" id="projNet">—</div><div class="m-lbl">Net/mo</div></div>
+      </div>
+      <div class="grade-block">
+        <div class="grade-block-lbl">🩺 Business Health Grade</div>
+        <div class="grade-circ" id="projGrade">—</div>
+        <div class="grade-sub" id="projGlabel">—</div>
+        <div class="grade-foot">Overall financial fitness</div>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:8px">Projected Numbers</div>
+        <div id="projNumbers"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Explanatory note — clarifies that Loan Risk and Health Grade measure different things -->
+  <div class="metric-explainer">
+    <b>Why both numbers?</b> They look at your business from two different angles:
+    <div class="mx-row"><span class="mx-icon">📊</span><div><b>Loan Risk Score</b> answers: <em>"If I add this loan, can my cash flow safely handle it?"</em> Drops when DSCR or runway gets thin.</div></div>
+    <div class="mx-row"><span class="mx-icon">🩺</span><div><b>Business Health Grade</b> answers: <em>"How healthy is my business overall?"</em> Stays steadier because it also considers profit margin — a single loan rarely tanks overall health.</div></div>
+    <div class="mx-row" style="margin-top:8px;color:#0f172a"><span class="mx-icon">💡</span><div>A business can be <b>healthy overall (Grade B)</b> but a <b>specific loan can still be risky</b> — like a fit person making a risky decision. Both can be true at the same time.</div></div>
+  </div>
+
+  <!-- DELTA SUMMARY -->
+  <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:24px">
+    <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:16px">Impact of Your Changes</div>
+    <div id="deltaRows"></div>
+
+    <div class="cmp-bar-wrap">
+      <div class="cmp-bar-title">Loan Score Comparison (out of 100)</div>
+
+      <div class="cmp-bar-row">
+        <div class="cmp-lbl">Current</div>
+        <div class="cmp-track"><div class="cmp-fill" id="curBar" style="width:0%"></div></div>
+        <div class="cmp-val" id="curVal">0/100</div>
+      </div>
+
+      <div class="cmp-bar-row proj">
+        <div class="cmp-lbl">Projected</div>
+        <div class="cmp-track"><div class="cmp-fill" id="projBar" style="width:0%"></div></div>
+        <div class="cmp-val" id="projVal">0/100</div>
+      </div>
+
+      <div style="text-align:center;margin-top:6px">
+        <span class="cmp-delta-pill flat" id="cmpDeltaPill">No change</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTE + APPLY -->
+  <div class="note-tip">
+    💡 <strong>How to use this:</strong> Drag the sliders above to model changes — cutting expenses, growing revenue, adding reserves, or taking on a new loan. The projected column updates instantly. When you find a scenario you like, click "Apply to Profile" to save those numbers for all 30 tools.
+  </div>
+
+  <div class="apply-row" id="applyRow" style="display:none">
+    <div class="ar-text">
+      <strong>Save this scenario as your profile</strong>
+      <span>Updates the numbers pre-filled across all 30 BizSco tools so you can explore this scenario in full detail.</span>
+    </div>
+    <button class="btn-primary" onclick="applyScenario()">Save Scenario &rarr;</button>
+    <a href="checkup.html" class="btn-outline">Run Full Checkup &rarr;</a>
+    <a href="history.html" class="btn-outline">Score History &rarr;</a>
+  </div>
+
+</div>
+
+<script>
+var BASE={rev:0,exp:0,emi:0,res:0};
+
+function fmt(n){return '$'+Math.round(Math.abs(n)).toLocaleString();}
+function fmtS(n){return (n>=0?'+':'-')+'$'+Math.round(Math.abs(n)).toLocaleString();}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+
+var _tt=null;
+function showToast(msg,type,dur){
+  var t=document.getElementById('fwToast');
+  if(!t)return;
+  t.textContent=msg;
+  t.className='fw-toast toast-'+(type||'info');
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt=setTimeout(function(){t.classList.remove('show');},dur||3000);
+}
+
+function loadBase(){
+  var p=null; try{p=JSON.parse(localStorage.getItem('fw_profile')||'null');}catch(e){}
+  if(!p&&window.fwAuth&&fwAuth.profile&&fwAuth.profile.biz_profile){
+    try{var biz=JSON.parse(fwAuth.profile.biz_profile||'{}');if(biz.rev||biz.exp)p={rev:biz.rev,exp:biz.exp,emi:biz.emi,reserve:0};}catch(e){}
+  }
+  if(p){
+    BASE.rev=parseFloat(p.rev)||0;
+    BASE.exp=parseFloat(p.exp)||0;
+    BASE.emi=parseFloat(p.emi)||0;
+    BASE.res=parseFloat(p.reserve)||0;
+  } else {
+    BASE.rev=15000; BASE.exp=9000; BASE.emi=800; BASE.res=18000;
+  }
+  // Slider ranges adapt to baseline — defaults were sized for $10K/mo businesses
+  // and didn't move the needle for larger ones. Now they're proportional to scale.
+  scaleSliders();
+}
+
+// Resize the dollar-amount sliders (EMI, reserves) to match user's baseline.
+// Percentages sliders (rev, exp) don't need scaling.
+function scaleSliders(){
+  function roundNice(n){
+    // Round to a "human friendly" step (1, 5, 10, 25, 50, 100, ...)
+    var pow = Math.pow(10, Math.max(0, Math.floor(Math.log10(n)) - 1));
+    return Math.max(1, Math.round(n / pow) * pow);
+  }
+
+  // New-EMI slider: model new loan EMIs up to ~30% of monthly revenue.
+  // Floor at $5k so small businesses still get a meaningful range.
+  var emiMax  = Math.max(5000, Math.round((BASE.rev * 0.3) / 100) * 100);
+  var emiStep = roundNice(emiMax / 50);  // ~50 steps across the range
+  var emiEl   = document.getElementById('newEmiSlider');
+  if (emiEl) { emiEl.max = emiMax; emiEl.step = emiStep; }
+
+  // Reserves slider: -50% of baseline to +200% of baseline. Floor +$50k
+  // so users without saved reserves still see a useful range.
+  var resPos  = Math.max(50000, Math.round(BASE.res * 2));
+  var resNeg  = -Math.round(BASE.res * 0.5);
+  var resStep = roundNice(resPos / 40);
+  var resEl   = document.getElementById('resSlider');
+  if (resEl) { resEl.min = resNeg; resEl.max = resPos; resEl.step = resStep; }
+
+  // Update the static tick labels to reflect the new range
+  function fmtK(n){
+    var s = n < 0 ? '-' : (n > 0 ? '+' : '');
+    var abs = Math.abs(n);
+    if (abs >= 1000000) return s + '$' + (abs/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+    if (abs >= 1000)    return s + '$' + Math.round(abs/1000) + 'K';
+    return s + '$' + abs;
+  }
+  var emiTicks = document.querySelector('#newEmiSlider + .sl-ticks');
+  if (emiTicks) {
+    emiTicks.innerHTML =
+      '<span>$0</span>' +
+      '<span>' + fmtK(emiMax * 0.25) + '</span>' +
+      '<span>' + fmtK(emiMax * 0.5)  + '</span>' +
+      '<span>' + fmtK(emiMax * 0.75) + '</span>' +
+      '<span>' + fmtK(emiMax)        + '</span>';
+  }
+  var resTicks = document.querySelector('#resSlider + .sl-ticks');
+  if (resTicks) {
+    resTicks.innerHTML =
+      '<span>' + fmtK(resNeg)        + '</span>' +
+      '<span>$0</span>' +
+      '<span>' + fmtK(resPos * 0.5)  + '</span>' +
+      '<span>' + fmtK(resPos)        + '</span>';
+  }
+}
+
+function compute(rev,exp,emi,res){
+  var ncf=rev-exp;
+  var dscr=emi>0?ncf/emi:99;
+  var er=rev>0?exp/rev:1;
+  var pm=rev>0?ncf/rev:0;
+  var burn=exp+emi;
+  /* B2 fix: real runway formula, capped at 24 */
+  var deficit=Math.max(0,burn-rev);
+  var rmo=deficit>0?(res>0?Math.min(res/deficit,24):0):(burn>0?Math.min(res/burn,24):24);
+
+  var ls=50;
+  if(dscr>=2)ls+=25;else if(dscr>=1.5)ls+=18;else if(dscr>=1.2)ls+=10;else if(dscr>=1)ls+=2;else if(emi>0)ls-=18;
+  if(rmo>=6)ls+=15;else if(rmo>=3)ls+=5;else ls-=8;
+  /* B6 fix: unified thresholds */
+  if(er<0.65)ls+=10;else if(er<0.75)ls+=4;else if(er>=1)ls-=12;
+  ls=clamp(Math.round(ls),5,100);
+  var lv=ls>=70?'SAFE':ls>=45?'RISKY':'DANGEROUS';
+
+  var hs=0;
+  hs+=pm>0.2?25:pm>0.1?18:pm>0.05?12:pm>0?6:0;
+  hs+=(dscr===99||dscr>=1.5)?25:dscr>=1.2?18:dscr>=1?10:0;
+  var rmoC=Math.min(rmo,24);
+  hs+=rmoC>=6?25:rmoC>=3?15:rmoC>=1?7:0;
+  hs+=er<0.65?25:er<0.75?18:er<0.85?12:er<1?5:0;
+  hs=Math.round(clamp(hs,0,100));
+  var grade=hs>=85?'A':hs>=70?'B':hs>=52?'C':hs>=36?'D':'F';
+  var GLABELS={A:'Excellent',B:'Good',C:'Fair',D:'Needs Work',F:'Critical'};
+
+  return{ls:ls,lv:lv,rmo:rmo,dscr:dscr===99?99:Math.round(dscr*100)/100,ncf:ncf,er:er,hs:hs,grade:grade,glabel:GLABELS[grade]};
+}
+
+function colorScore(ls){return ls>=70?'#15803d':ls>=45?'#854d0e':'#991b1b';}
+function verdictClass(v){return v==='SAFE'?'v-safe':v==='RISKY'?'v-risky':'v-danger';}
+function gradeClass(g){return 'g'+g;}
+
+function renderPanel(pfx,r){
+  var sc=document.getElementById(pfx+'Score');
+  sc.textContent=r.ls; sc.style.color=colorScore(r.ls);
+  document.getElementById(pfx+'Verdict').innerHTML='<span class="verdict '+verdictClass(r.lv)+'">'+r.lv+'</span>';
+  var rw=r.rmo>=24?'24+':Math.round(r.rmo*10)/10;
+  document.getElementById(pfx+'Runway').textContent=rw;
+  document.getElementById(pfx+'DSCR').textContent=r.dscr===99?'N/A':r.dscr+'x';
+  document.getElementById(pfx+'Net').textContent=(r.ncf>=0?'':'-')+fmt(r.ncf);
+  document.getElementById(pfx+'Net').style.color=r.ncf>=0?'#16a34a':'#dc2626';
+  var gc=document.getElementById(pfx+'Grade');
+  gc.textContent=r.grade; gc.className='grade-circ '+gradeClass(r.grade);
+  document.getElementById(pfx+'Glabel').textContent=r.glabel;
+}
+
+function recalc(){
+  var revPct=parseFloat(document.getElementById('revSlider').value)||0;
+  var expPct=parseFloat(document.getElementById('expSlider').value)||0;
+  var newEmi=parseFloat(document.getElementById('newEmiSlider').value)||0;
+  var resAdj=parseFloat(document.getElementById('resSlider').value)||0;
+
+  document.getElementById('revLabel').textContent=(revPct>=0?'+':'')+revPct+'%';
+  document.getElementById('expLabel').textContent=(expPct>=0?'+':'')+expPct+'%';
+  document.getElementById('newEmiLabel').textContent='$'+newEmi.toLocaleString()+'/mo';
+  document.getElementById('resLabel').textContent=fmtS(resAdj);
+
+  /* impacts */
+  var revDelta=Math.round(BASE.rev*revPct/100);
+  var expDelta=Math.round(BASE.exp*expPct/100);
+  document.getElementById('revImpact').textContent=revPct===0?'No change from baseline':
+    (revPct>0?'Revenue increases by +':  'Revenue decreases by ')+fmt(Math.abs(revDelta))+'/mo';
+  document.getElementById('revImpact').className='sl-impact '+(revPct>0?'impact-pos':revPct<0?'impact-neg':'impact-neu');
+  document.getElementById('expImpact').textContent=expPct===0?'No change from baseline':
+    (expPct<0?'Expenses drop by -':expPct>0?'Expenses rise by +':'')+fmt(Math.abs(expDelta))+'/mo';
+  document.getElementById('expImpact').className='sl-impact '+(expPct<0?'impact-pos':expPct>0?'impact-neg':'impact-neu');
+  document.getElementById('emiImpact').textContent=newEmi===0?'No additional loan':
+    'Additional $'+newEmi.toLocaleString()+'/mo in loan repayments';
+  document.getElementById('emiImpact').className='sl-impact '+(newEmi===0?'impact-neu':'impact-neg');
+  document.getElementById('resImpact').textContent=resAdj===0?'No change to reserves':
+    (resAdj>0?'Reserves increase by +':  'Reserves drop by ')+fmt(Math.abs(resAdj));
+  document.getElementById('resImpact').className='sl-impact '+(resAdj>0?'impact-pos':resAdj<0?'impact-neg':'impact-neu');
+
+  var pRev=Math.max(0,BASE.rev*(1+revPct/100));
+  var pExp=Math.max(0,BASE.exp*(1+expPct/100));
+  var pEmi=BASE.emi+newEmi;
+  var pRes=Math.max(0,BASE.res+resAdj);
+
+  var cur=compute(BASE.rev,BASE.exp,BASE.emi,BASE.res);
+  var proj=compute(pRev,pExp,pEmi,pRes);
+
+  renderPanel('cur',cur);
+  renderPanel('proj',proj);
+
+  /* ── V2 DEMO TILES (auto-fill grid + bottom totals) ── */
+  var v2Grid=document.getElementById('v2WhatifGrid');
+  if(v2Grid){
+    function tone(now,was,better){
+      if(now===was) return 'info';
+      var up = now>was;
+      var goodDirection = (better==='up'&&up)||(better==='down'&&!up);
+      return goodDirection?'good':'bad';
+    }
+    var tiles=[
+      {ic:'🔒',lb:'Loan Score',val:proj.ls+'/100',sub:'Was '+cur.ls+' → '+(proj.ls-cur.ls>=0?'+':'')+(proj.ls-cur.ls)+' pts',t:tone(proj.ls,cur.ls,'up')},
+      {ic:'💰',lb:'Cash Runway',val:(proj.rmo>=24?'24+':proj.rmo.toFixed(1))+' mo',sub:'Was '+(cur.rmo>=24?'24+':cur.rmo.toFixed(1))+' mo',t:tone(proj.rmo,cur.rmo,'up')},
+      {ic:'📊',lb:'Health Grade',val:'Grade '+proj.grade,sub:'Was '+cur.grade+' · '+proj.hs+'/100',t:tone(proj.hs,cur.hs,'up')},
+      {ic:'📈',lb:'DSCR',val:(proj.dscr>=99?'∞':proj.dscr.toFixed(2)+'x'),sub:'Was '+(cur.dscr>=99?'∞':cur.dscr.toFixed(2)+'x'),t:tone(proj.dscr,cur.dscr,'up')},
+      {ic:'💵',lb:'Net Cash Flow',val:(proj.ncf>=0?'+':'-')+'$'+fmt(Math.abs(proj.ncf)),sub:'Was '+(cur.ncf>=0?'+$':'-$')+fmt(Math.abs(cur.ncf)),t:tone(proj.ncf,cur.ncf,'up')},
+      {ic:'📉',lb:'Expense Ratio',val:Math.round(proj.er*100)+'%',sub:'Was '+Math.round(cur.er*100)+'%',t:tone(proj.er,cur.er,'down')},
+      {ic:'📅',lb:'Profit Margin',val:Math.round(proj.pm*100)+'%',sub:'Was '+Math.round(cur.pm*100)+'%',t:tone(proj.pm,cur.pm,'up')},
+      {ic:'🎯',lb:'Verdict',val:proj.lv,sub:'Was '+cur.lv,t:proj.lv==='SAFE'?'good':proj.lv==='RISKY'?'warn':'bad'}
+    ];
+    v2Grid.innerHTML=tiles.map(function(c){
+      return '<div class="v2-tile '+c.t+'">'+
+        '<div class="v2-tile-ic">'+c.ic+'</div>'+
+        '<div class="v2-tile-bd">'+
+          '<div class="v2-tile-lbl">'+c.lb+'</div>'+
+          '<div class="v2-tile-val">'+c.val+'</div>'+
+          '<div class="v2-tile-sub">'+c.sub+'</div>'+
+        '</div></div>';
+    }).join('');
+  }
+
+  /* projected raw numbers row */
+  var pnRows=[
+    {lbl:'Revenue',cur:BASE.rev,proj:pRev,better:'up'},
+    {lbl:'Expenses',cur:BASE.exp,proj:pExp,better:'down'},
+    {lbl:'Loan EMI',cur:BASE.emi,proj:pEmi,better:'down'},
+    {lbl:'Reserves',cur:BASE.res,proj:pRes,better:'up'}
+  ];
+  document.getElementById('projNumbers').innerHTML=pnRows.map(function(r){
+    var changed=Math.round(r.cur)!==Math.round(r.proj);
+    var improved=(r.better==='up'&&r.proj>r.cur)||(r.better==='down'&&r.proj<r.cur);
+    var worsened=(r.better==='up'&&r.proj<r.cur)||(r.better==='down'&&r.proj>r.cur);
+    var valStyle=changed?(improved?'color:#16a34a;font-weight:900':worsened?'color:#dc2626;font-weight:900':'color:#2563eb;font-weight:900'):'color:#94a3b8;font-weight:700';
+    var arrow=changed?(improved?'▲ ':'▼ '):'';
+    var suffix=r.lbl==='Reserves'?'':'/mo';
+    return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:.78rem">'
+      +'<span style="color:#64748b;font-weight:600">'+r.lbl+'</span>'
+      +'<span style="'+valStyle+'">'+arrow+fmt(r.proj)+suffix+'</span>'
+      +'</div>';
+  }).join('');
+
+  /* bars — two stacked rows, each with its own label + value + fill */
+  document.getElementById('curBar').style.width=cur.ls+'%';
+  document.getElementById('curBar').style.background=colorScore(cur.ls);
+  document.getElementById('curVal').textContent=cur.ls+'/100';
+
+  document.getElementById('projBar').style.width=proj.ls+'%';
+  document.getElementById('projBar').style.background=colorScore(proj.ls);
+  document.getElementById('projVal').textContent=proj.ls+'/100';
+
+  /* delta pill — clearly shows change direction */
+  var d=proj.ls-cur.ls;
+  var pill=document.getElementById('cmpDeltaPill');
+  if(d>0){
+    pill.className='cmp-delta-pill';
+    pill.textContent='▲ +'+d+' pts improvement';
+  } else if(d<0){
+    pill.className='cmp-delta-pill down';
+    pill.textContent='▼ '+d+' pts (worse)';
+  } else {
+    pill.className='cmp-delta-pill flat';
+    pill.textContent='— No change yet — drag the sliders above';
+  }
+
+  /* delta rows */
+  var deltas=[
+    {lbl:'Loan Score',cur:cur.ls+'/100',proj:proj.ls+'/100',d:proj.ls-cur.ls,unit:'pts'},
+    {lbl:'Cash Runway',cur:(cur.rmo>=24?'24+':Math.round(cur.rmo*10)/10)+' mo',proj:(proj.rmo>=24?'24+':Math.round(proj.rmo*10)/10)+' mo',d:Math.round((proj.rmo-cur.rmo)*10)/10,unit:'mo'},
+    {lbl:'Health Grade',cur:'Grade '+cur.grade,proj:'Grade '+proj.grade,d:({A:5,B:4,C:3,D:2,F:1}[proj.grade])-({A:5,B:4,C:3,D:2,F:1}[cur.grade]),unit:''},
+    {lbl:'Net Cash Flow',cur:(cur.ncf>=0?'+':'')+fmt(cur.ncf)+'/mo',proj:(proj.ncf>=0?'+':'')+fmt(proj.ncf)+'/mo',d:proj.ncf-cur.ncf,unit:''}
+  ];
+  document.getElementById('deltaRows').innerHTML=deltas.map(function(d){
+    var dc=d.d>0?'delta-up':d.d<0?'delta-dn':'delta-eq';
+    var sym=d.d>0?'▲ +':d.d<0?'▼ ':'— ';
+    var dtext=d.unit==='pts'?sym+Math.abs(d.d)+' pts':d.unit==='mo'?sym+Math.abs(d.d)+' mo':d.d!==0?sym+'change':'= same';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap">'
+      +'<span style="font-size:.8rem;font-weight:700;color:#1e293b;flex:1;min-width:100px">'+d.lbl+'</span>'
+      +'<span style="font-size:.78rem;color:#94a3b8;min-width:80px">'+d.cur+'</span>'
+      +'<span style="font-size:.8rem;font-weight:800;color:#1e293b;min-width:80px">'+d.proj+'</span>'
+      +'<span class="delta '+dc+'">'+dtext+'</span>'
+      +'</div>';
+  }).join('');
+
+  /* show apply row if any slider moved */
+  var changed=revPct!==0||expPct!==0||newEmi!==0||resAdj!==0;
+  document.getElementById('applyRow').style.display=changed?'flex':'none';
+  window._scenarioProj={rev:pRev,exp:pExp,emi:pEmi,res:pRes};
+}
+
+function resetSliders(){
+  ['revSlider','expSlider','newEmiSlider','resSlider'].forEach(function(id){
+    document.getElementById(id).value=0;
+  });
+  recalc();
+}
+
+function applyScenario(){
+  var s=window._scenarioProj;
+  if(!s) return;
+  var p={};
+  try{p=JSON.parse(localStorage.getItem('fw_profile')||'{}');}catch(e){}
+  p.rev=Math.round(s.rev);
+  p.exp=Math.round(s.exp);
+  p.emi=Math.round(s.emi);
+  p.reserve=Math.round(s.res);
+  localStorage.setItem('fw_profile',JSON.stringify(p));
+  showToast('✅ Scenario saved — all 30 tools will now use these numbers','ok',4000);
+}
+
+window.addEventListener('load',function(){
+  if(window.fwAuth){fwAuth.init(function(){loadBase();recalc();});}
+  else{loadBase();recalc();}
+});
+</script>
+<script src="modules/fw-auth.js"></script>
+</body>
+</html>

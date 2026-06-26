@@ -1,0 +1,69 @@
+/* ════════════════════════════════════════════════════════════════════
+   fit-screen.css — universal compactness for BizSco pages
+   ────────────────────────────────────────────────────────────────────
+   Lightweight overrides that reduce padding / font sizes globally so
+   each page tends to fit a 1080p laptop without scrolling.
+
+   Targets generic patterns (header bars, hero blocks, cards, sections,
+   form inputs, headings). Page-specific class names are left alone.
+   Include AFTER the page's own <style> block to win specificity.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---- top header bars used across pages ---- */
+.hdr,.header,.top-nav,.nav,.fw-topbar{
+  padding:8px 22px !important;
+}
+
+/* ---- generic hero / banner blocks ---- */
+.hero,.banner,.page-hero{
+  padding:14px 24px !important;
+}
+.hero h1,.banner h1,.page-hero h1{
+  font-size:1.2rem !important;
+  margin-bottom:3px !important;
+}
+.hero p,.banner p,.page-hero p{
+  font-size:.78rem !important;
+  line-height:1.4 !important;
+}
+
+/* ---- main content area ---- */
+main,.main,.container,.page,.content,.wrap{
+  padding-top:14px !important;
+  padding-bottom:24px !important;
+}
+
+/* ---- generic card / panel / section padding ---- */
+.card,.panel,.section,.box,.tile,.block,.bx{
+  padding:14px 16px !important;
+  margin-bottom:10px !important;
+}
+
+/* ---- typography compression ---- */
+h1{font-size:1.25rem !important;margin-bottom:6px !important}
+h2{font-size:1.05rem !important;margin-bottom:4px !important}
+h3{font-size:.92rem !important;margin-bottom:3px !important}
+h4{font-size:.84rem !important;margin-bottom:2px !important}
+
+/* ---- form inputs ---- */
+input[type=text],input[type=number],input[type=email],input[type=tel],input[type=password],select,textarea{
+  padding:7px 11px !important;
+  font-size:.86rem !important;
+}
+label{font-size:.74rem !important}
+
+/* ---- buttons ---- */
+button,.btn,.button{
+  padding-top:8px !important;
+  padding-bottom:8px !important;
+}
+
+/* ---- common spacing classes ---- */
+.mb-lg,.my-lg,.section-gap{margin-bottom:12px !important}
+.pad-lg{padding:14px !important}
+
+/* ---- legacy "big number" tiles ---- */
+.big-num,.score-num,.score-big-num,.metric-big{
+  font-size:2rem !important;
+  line-height:1.05 !important;
+}

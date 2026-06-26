@@ -15,21 +15,27 @@
   if (window.__planBannerInjected) return;
   window.__planBannerInjected = true;
 
-  /* ---- CSS (V3 — neutral, single brand accent only) ---- */
+  /* ---- CSS (injected once) ---- */
   var css = document.createElement('style');
   css.textContent = ''
-    /* Banner is no longer sticky and no longer competes with KPIs — flat neutral row */
-    + '.fw-plan-banner{display:flex;align-items:center;gap:12px;padding:10px 16px;font-size:14px;font-weight:500;border:1px solid #e2e8f0;background:#fff;border-radius:8px;margin:0 0 14px;flex-wrap:wrap}'
-    + '.fw-pb-badge{font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;text-transform:uppercase;flex-shrink:0;background:#f1f5f9;color:#475569}'
-    + '.fw-pb-summary{flex:1;min-width:200px;color:#475569}'
-    + '.fw-pb-summary b{font-weight:600;color:#0f172a}'
-    + '.fw-pb-cta{font-size:13px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;white-space:nowrap;border:1px solid #e2e8f0;color:#7c3aed;background:transparent;transition:background .15s,border-color .15s}'
-    + '.fw-pb-cta:hover{background:#f5f3ff;border-color:#7c3aed}'
-    /* Brand badge accents — single source of color */
-    + '.fw-pb-starter .fw-pb-badge{background:#dcfce7;color:#15803d}'
-    + '.fw-pb-pro     .fw-pb-badge{background:#f5f3ff;color:#7c3aed}'
-    + '.fw-pb-advisor .fw-pb-badge{background:#fef3c7;color:#92400e}'
-    + '.fw-pb-trial-tag{background:#fef3c7;color:#92400e;font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;margin-left:6px;text-transform:uppercase;letter-spacing:.05em}'
+    + '.fw-plan-banner{position:sticky;top:0;z-index:98;display:flex;align-items:center;gap:12px;padding:7px 18px;font-size:.76rem;font-weight:600;border-bottom:1px solid rgba(0,0,0,.06);flex-wrap:wrap}'
+    + '.fw-pb-badge{font-size:.62rem;font-weight:900;letter-spacing:.08em;padding:3px 10px;border-radius:5px;text-transform:uppercase;flex-shrink:0}'
+    + '.fw-pb-summary{flex:1;min-width:200px;color:inherit;opacity:.92}'
+    + '.fw-pb-summary b{font-weight:800}'
+    + '.fw-pb-cta{font-size:.7rem;font-weight:800;padding:5px 12px;border-radius:6px;text-decoration:none;border:1.5px solid transparent;transition:all .15s;white-space:nowrap}'
+    + '.fw-pb-cta:hover{transform:translateY(-1px)}'
+    + '.fw-pb-free{background:linear-gradient(90deg,#f1f5f9,#e2e8f0);color:#1e293b}'
+    + '.fw-pb-free .fw-pb-badge{background:#64748b;color:#fff}'
+    + '.fw-pb-free .fw-pb-cta{background:#2563eb;color:#fff}.fw-pb-free .fw-pb-cta:hover{background:#1d4ed8}'
+    + '.fw-pb-starter{background:linear-gradient(90deg,#cffafe,#a5f3fc);color:#0e4a5e}'
+    + '.fw-pb-starter .fw-pb-badge{background:#0891b2;color:#fff}'
+    + '.fw-pb-starter .fw-pb-cta{background:#7c3aed;color:#fff}.fw-pb-starter .fw-pb-cta:hover{background:#6d28d9}'
+    + '.fw-pb-pro{background:linear-gradient(90deg,#f3e8ff,#e9d5ff);color:#4c1d95}'
+    + '.fw-pb-pro .fw-pb-badge{background:#7c3aed;color:#fff}'
+    + '.fw-pb-pro .fw-pb-cta{background:#be185d;color:#fff}.fw-pb-pro .fw-pb-cta:hover{background:#9d174d}'
+    + '.fw-pb-advisor{background:linear-gradient(90deg,#fce7f3,#fbcfe8);color:#831843}'
+    + '.fw-pb-advisor .fw-pb-badge{background:#be185d;color:#fff}'
+    + '.fw-pb-trial-tag{background:#fef3c7;color:#92400e;font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;margin-left:6px}'
   ;
   document.head.appendChild(css);
 
@@ -73,16 +79,16 @@
 
     bar.innerHTML = badge + summary + cta;
 
-    /* V3 placement rule (uxfixes #6): the plan banner should NOT compete
-       with KPIs for attention. If the page declares a #planBannerSlot
-       container, render the banner inside it (typically after primary
-       KPIs). Otherwise fall back to inserting near the top of the page
-       content, but as a flat neutral row (not a sticky colored bar). */
-    var slot = document.getElementById('planBannerSlot');
-    if (slot) {
-      slot.appendChild(bar);
-      return;
-    }
+    /* Find a SAFE insertion target. body may be display:flex (dashboard
+       uses sidebar+main-wrap flex layout). Putting the banner at body
+       level there would shrink the main-wrap to a narrow column.
+
+       Order of preference for the host element (anything that scrolls
+       with the page content, NOT a flex sibling of the sidebar):
+         1. .page-content (dashboard)
+         2. .main          (checkup, whatif, most pages)
+         3. main           (semantic main)
+         4. fallback: prepend to body anyway */
     var host = document.querySelector('.page-content')
             || document.querySelector('.main')
             || document.querySelector('main')
