@@ -113,6 +113,13 @@ button.primary:hover{background:#6d28d9}
 
   <div class="card">
     <h2><span style="color:#dc2626">📉</span> Existing Loan</h2>
+    <!-- V3 Step 8: pick from active loans in Debt Center -->
+    <div id="existingLoanPicker" style="display:none;margin-bottom:14px;padding:10px 12px;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:8px">
+      <label style="font-size:.74rem;font-weight:700;color:#5b21b6;margin-bottom:4px">Refinance which loan from Debt Center?</label>
+      <select id="existingLoanSelect" onchange="loadExistingFromDebtCenter()" style="width:100%;padding:7px 10px;border:1px solid #c4b5fd;border-radius:6px;font-size:.86rem;background:#fff">
+        <option value="">— Type below or pick a tracked loan —</option>
+      </select>
+    </div>
     <label>Outstanding Balance ($)</label>
     <input type="number" id="eBal" placeholder="e.g. 150000" min="0" oninput="save()"/>
     <label>Annual Interest Rate (%)</label>
@@ -393,7 +400,115 @@ function analyze(){
 
   document.getElementById('results').style.display = 'block';
   document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+
+  /* V3 Step 8: stash the analysis so the "Save as Refinance Target" button can use it */
+  window.__refiLastResult = {
+    eBal: eBal, eRate: eRate, eEmi: eEmi, eMos: eMos,
+    rRate: rRate, rTerm: rTerm, rFees: rFees,
+    newEmi: newEmi, monthlySav: monthlySav, netBenefit: netBenefit
+  };
+  renderSaveRefinanceButton();
 }
+
+/* V3 Step 8 — load active loans from Debt Center into the picker */
+function refreshExistingLoanPicker(){
+  var sel = document.getElementById('existingLoanSelect');
+  var wrap = document.getElementById('existingLoanPicker');
+  if (!sel || !wrap) return;
+  try {
+    var loans = JSON.parse(localStorage.getItem('fw_loans') || '[]');
+    var active = loans.filter(function(L){ return L.status === 'active' || !L.status; });
+    if (active.length === 0) { wrap.style.display = 'none'; return; }
+    sel.innerHTML = '<option value="">— Pick a loan to refinance —</option>' +
+      active.map(function(L){
+        return '<option value="'+L.id+'">'+(L.name||'Loan')+
+               ' · $'+(L.balance||0).toLocaleString('en-US')+
+               ' @ '+(L.rate||0)+'%</option>';
+      }).join('');
+    wrap.style.display = 'block';
+  } catch(_e){}
+}
+
+/* V3 Step 8 — when user picks an existing loan, pre-fill the form */
+function loadExistingFromDebtCenter(){
+  var sel = document.getElementById('existingLoanSelect');
+  var id = sel ? sel.value : '';
+  if (!id) return;
+  try {
+    var loans = JSON.parse(localStorage.getItem('fw_loans') || '[]');
+    var L = loans.find(function(x){ return x.id === id; });
+    if (!L) return;
+    document.getElementById('eBal').value  = L.balance || '';
+    document.getElementById('eRate').value = L.rate || '';
+    document.getElementById('eEmi').value  = L.minPay || '';
+    /* If we have rate + balance + minPay, derive remaining months via PMT inverse */
+    var r = (L.rate || 0) / 100 / 12;
+    var mos = '';
+    if (L.minPay > 0 && r > 0 && L.balance > 0) {
+      /* months = ln(EMI / (EMI - bal*r)) / ln(1+r) */
+      var denom = L.minPay - (L.balance * r);
+      if (denom > 0) mos = Math.round(Math.log(L.minPay / denom) / Math.log(1 + r));
+    }
+    document.getElementById('eMos').value = mos || '';
+    save();
+    /* Stash which loan this refi will replace */
+    window.__refiReplaceLoanId = id;
+    window.__refiReplaceLoanName = L.name || 'Existing loan';
+  } catch(_e){}
+}
+
+/* V3 Step 8 — render the "Save as Refinance Target" button under the verdict */
+function renderSaveRefinanceButton(){
+  /* Only show if user picked an existing loan from Debt Center */
+  if (!window.__refiReplaceLoanId) return;
+  var verdictEl = document.getElementById('verdict');
+  if (!verdictEl) return;
+  /* Skip if already present (re-running analysis) */
+  if (document.getElementById('refiSaveBtnWrap')) return;
+  var wrap = document.createElement('div');
+  wrap.id = 'refiSaveBtnWrap';
+  wrap.style.cssText = 'margin-top:14px;padding:14px 18px;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:9px;display:flex;align-items:center;gap:12px;flex-wrap:wrap';
+  wrap.innerHTML =
+    '<div style="flex:1;min-width:200px;font-size:.85rem;color:#4c1d95">' +
+      'Save this analysis as a <b>Refinance Target</b> in Debt Center. It would replace <b>' + window.__refiReplaceLoanName + '</b>.' +
+    '</div>' +
+    '<button onclick="saveRefinanceTarget()" style="background:#7c3aed;color:#fff;border:none;padding:9px 18px;border-radius:7px;font-size:.84rem;font-weight:700;cursor:pointer">💸 Save as Refinance Target</button>';
+  verdictEl.parentNode.insertBefore(wrap, verdictEl.nextSibling);
+}
+
+/* V3 Step 8 — save the refinance analysis as a refinance_target loan */
+function saveRefinanceTarget(){
+  var r = window.__refiLastResult;
+  var replaceId = window.__refiReplaceLoanId;
+  if (!r || !replaceId) return;
+  var loans = [];
+  try { loans = JSON.parse(localStorage.getItem('fw_loans') || '[]'); } catch(_e){}
+  loans.push({
+    id: 'loan_' + Date.now(),
+    name: 'Refinance: ' + (window.__refiReplaceLoanName || 'existing loan'),
+    type: 'business',
+    balance: r.eBal,
+    originalBalance: r.eBal,
+    rate: r.rRate,
+    minPay: Math.round(r.newEmi),
+    lender: '',
+    notes: 'Refinance analysis on ' + new Date().toISOString().split('T')[0] +
+           ' — saves $' + Math.round(Math.abs(r.monthlySav)) + '/mo over current loan.',
+    addedDate: new Date().toISOString().split('T')[0],
+    status: 'refinance_target',
+    replacesLoanId: replaceId
+  });
+  localStorage.setItem('fw_loans', JSON.stringify(loans));
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:12px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:340px;line-height:1.45';
+  t.innerHTML = '✓ Saved as <b>Refinance Target</b>. Use the "After refinance" toggle in Debt Center to model the swap.<br><a href="debtCommandCenter.test.html" style="color:#a78bfa">View Debt Center →</a>';
+  document.body.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+}
+
+/* Populate picker on load + when localStorage changes */
+document.addEventListener('DOMContentLoaded', refreshExistingLoanPicker);
+window.addEventListener('storage', function(e){ if (e.key === 'fw_loans') refreshExistingLoanPicker(); });
 
 function printAnalysis(){
   document.getElementById('printDate').textContent = new Date().toLocaleDateString();

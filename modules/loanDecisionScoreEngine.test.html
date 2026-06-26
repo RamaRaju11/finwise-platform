@@ -306,6 +306,13 @@
   <div class="card">
     <h2>Loan You Want to Take</h2>
     <p class="desc">Tell us the loan you are considering. We calculate the EMI and test if your business can carry it.</p>
+    <!-- V3 Step 8: pick from planned loans in Debt Center -->
+    <div id="plannedLoanPicker" style="display:none;margin-bottom:14px;padding:10px 12px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px">
+      <label style="font-size:.74rem;font-weight:700;color:#92400e;margin-bottom:4px">Load a planned loan from Debt Center?</label>
+      <select id="plannedLoanSelect" onchange="loadPlannedFromDebtCenter()" style="width:100%;padding:7px 10px;border:1px solid #fde68a;border-radius:6px;font-size:.86rem;background:#fff">
+        <option value="">— Type below or pick a planned loan —</option>
+      </select>
+    </div>
     <div class="input-grid">
       <div>
         <label>Loan Amount</label>
@@ -1411,6 +1418,56 @@ function applyProfileFill() {
 
 /* Expose so nav.js can call it after Supabase profile restore */
 window.fwToolAutoFill = applyProfileFill;
+
+/* V3 Step 8 — populate "planned loans" picker from Debt Center */
+function refreshPlannedLoanPicker(){
+  var sel = document.getElementById('plannedLoanSelect');
+  var wrap = document.getElementById('plannedLoanPicker');
+  if (!sel || !wrap) return;
+  try {
+    var loans = JSON.parse(localStorage.getItem('fw_loans') || '[]');
+    var planned = loans.filter(function(L){ return L.status === 'planned'; });
+    if (planned.length === 0) { wrap.style.display = 'none'; return; }
+    sel.innerHTML = '<option value="">— Pick a planned loan to stress-test —</option>' +
+      planned.map(function(L){
+        return '<option value="'+L.id+'">'+(L.name||'Planned loan')+
+               ' · $'+(L.balance||0).toLocaleString('en-US')+
+               ' @ '+(L.rate||0)+'%</option>';
+      }).join('');
+    wrap.style.display = 'block';
+  } catch(_e){}
+}
+
+/* V3 Step 8 — pre-fill stress test form from a planned loan */
+function loadPlannedFromDebtCenter(){
+  var sel = document.getElementById('plannedLoanSelect');
+  var id = sel ? sel.value : '';
+  if (!id) return;
+  try {
+    var loans = JSON.parse(localStorage.getItem('fw_loans') || '[]');
+    var L = loans.find(function(x){ return x.id === id; });
+    if (!L) return;
+    var amt  = document.getElementById('loanAmount');
+    var rate = document.getElementById('interestRate');
+    var ten  = document.getElementById('tenure');
+    if (amt)  amt.value  = L.balance || '';
+    if (rate) rate.value = L.rate || '';
+    /* Tenure: reverse PMT if minPay known */
+    if (ten) {
+      var r = (L.rate || 0) / 100 / 12;
+      var t = '';
+      if (L.minPay > 0 && r > 0 && L.balance > 0) {
+        var denom = L.minPay - (L.balance * r);
+        if (denom > 0) t = Math.round(Math.log(L.minPay / denom) / Math.log(1 + r));
+      }
+      ten.value = t || '';
+    }
+    if (typeof saveInputs === 'function') saveInputs();
+  } catch(_e){}
+}
+
+document.addEventListener('DOMContentLoaded', refreshPlannedLoanPicker);
+window.addEventListener('storage', function(e){ if (e.key === 'fw_loans') refreshPlannedLoanPicker(); });
 
 document.addEventListener('DOMContentLoaded', () => {
   // Restore currency from localStorage (set by any module)

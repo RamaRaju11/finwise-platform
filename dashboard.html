@@ -737,6 +737,21 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
         var dscr=emi>0?(ncf/emi):99;
         var rmo=res>0&&(exp+emi)>0?Math.min(res/(exp+emi),24):0;
 
+        /* V3 Step 9 — summarise tracked loans so we can show "Based on N loans"
+           and a math breakdown in tooltips */
+        var loansSummary = {activeCount:0, plannedCount:0, activeEmi:0};
+        try {
+          var allLoans = JSON.parse(localStorage.getItem('fw_loans')||'[]');
+          allLoans.forEach(function(L){
+            if (L.status === 'active' || !L.status) {
+              loansSummary.activeCount++;
+              loansSummary.activeEmi += parseFloat(L.minPay) || 0;
+            } else if (L.status === 'planned') {
+              loansSummary.plannedCount++;
+            }
+          });
+        } catch(_e){}
+
         /* ── EMPTY STATE: no profile data yet ── */
         var empty = $$('v3Empty');
         var pHead = $$('v3PrimaryHead'), sHead = $$('v3SecondaryHead'), acts = $$('v3Actions');
@@ -769,9 +784,13 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
 
         /* PRIMARY KPIs — 4 cards user cares about most */
         var primary=[
-          {ic:'🔒',lb:'Loan Readiness',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:(latest.loanVerdict?latest.loanVerdict+' · ':'')+'Based on current finances',
+          {ic:'🔒',lb:'Loan Readiness',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),
+           sub:(latest.loanVerdict?latest.loanVerdict+' · ':'')+
+              (loansSummary.activeCount>0
+                ? 'Based on '+loansSummary.activeCount+' tracked loan'+(loansSummary.activeCount===1?'':'s')
+                : 'Based on current finances'),
            state:stateLoan(latest.loanScore), href:'modules/loanDecisionScoreEngine.test.html', requires:'free',
-           tip:'How ready your business is to borrow, based on current finances (revenue, expenses, existing debt, reserves). To stress-test a SPECIFIC loan offer, use New Loan Stress Test in the sidebar.'},
+           tip:'How ready your business is to borrow, based on current finances (revenue $'+fmtN(rev)+', expenses $'+fmtN(exp)+', active EMIs $'+fmtN(loansSummary.activeEmi||emi)+', reserves $'+fmtN(res)+'). To stress-test a SPECIFIC loan offer, use New Loan Stress Test in the sidebar.'},
           {ic:'📊',lb:'Health Grade',val:(latest.grade?latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
            state:stateGrade(latest.grade), href:'checkup.html', requires:'starter',
            tip:'Overall business health (0–100). A 85+, B 70–84, C 52–69, D 36–51, F <36.'},
@@ -780,7 +799,7 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
            tip:'Months your reserves cover monthly burn. ≥6 strong, 3–5 adequate, <3 buffer low.'},
           {ic:'📈',lb:'DSCR',val:(dscr>=99?'∞':dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',
            state:stateDscr(dscr), href:'modules/debtCommandCenter.test.html', requires:'free',
-           tip:'Debt Service Coverage Ratio. Banks want ≥1.5x.'}
+           tip:'DSCR = (revenue '+sym+fmtN(rev)+' − expenses '+sym+fmtN(exp)+') ÷ active EMI '+sym+fmtN(emi)+' = '+(dscr>=99?'∞':dscr.toFixed(2))+'x. Banks want ≥1.5x.'+(loansSummary.plannedCount>0?' • '+loansSummary.plannedCount+' planned loan(s) NOT in this ratio.':'')}
         ];
         if(pGrid) pGrid.innerHTML=primary.map(function(c){
           var locked = !ge(userPlan, c.requires);
