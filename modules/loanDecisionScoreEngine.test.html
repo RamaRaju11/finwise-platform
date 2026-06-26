@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Loan Decision Score Engine — BizSco</title>
+  <title>New Loan Stress Test — BizSco</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f5f6fb; background-image: radial-gradient(ellipse at top right, #eef0f9 0%, #f5f6fb 38%, #f8f9fc 100%); color: #222; padding: 24px; }
@@ -245,8 +245,8 @@
 <script src="fw-auth.js"></script>
 <script src="help.js"></script>
 
-<h1>Will this loan help or destroy your business?</h1>
-<p class="subtitle">BizSco — Get a clear YES / NO answer in 60 seconds — free</p>
+<h1>New Loan Stress Test</h1>
+<p class="subtitle">Will THIS specific loan help or destroy your business? — Score 0–100 in 60 seconds, free.<br><span style="font-size:.74rem;color:#94a3b8">Different from your dashboard's <b>Loan Readiness</b> score: this one factors in the new loan you're considering.</span></p>
 
 <div class="checkup-banner" id="checkupBanner">
   <div class="ch-icon">&#9679;</div>
@@ -1329,7 +1329,7 @@ function saveApprovedLoanToDebtCenter() {
     originalBalance: lastResult.loanAmount,
     rate: lastResult.rate,
     minPay: Math.round(lastResult.newEMI),
-    lender: '', notes: 'Saved from Loan Safety Score (score: '+lastResult.total+')',
+    lender: '', notes: 'Saved from New Loan Stress Test (score: '+lastResult.total+')',
     addedDate: new Date().toISOString().split('T')[0]
   });
   localStorage.setItem('fw_loans', JSON.stringify(loans));

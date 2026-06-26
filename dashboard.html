@@ -722,9 +722,9 @@ body{font-family:Arial,sans-serif;background:#f5f6fb;background-image:radial-gra
 
         /* PRIMARY KPIs — 4 cards user cares about most */
         var primary=[
-          {ic:'🔒',lb:'Loan Score',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:latest.loanVerdict||'Run a checkup',
+          {ic:'🔒',lb:'Loan Readiness',val:(latest.loanScore!=null?latest.loanScore+'/100':'—'),sub:(latest.loanVerdict?latest.loanVerdict+' · ':'')+'Based on current finances',
            state:stateLoan(latest.loanScore), href:'modules/loanDecisionScoreEngine.test.html', requires:'free',
-           tip:'Lender-approval likelihood (0–100). ≥70 SAFE, 45–69 RISKY, <45 DANGEROUS.'},
+           tip:'How ready your business is to borrow, based on current finances (revenue, expenses, existing debt, reserves). To stress-test a SPECIFIC loan offer, use New Loan Stress Test in the sidebar.'},
           {ic:'📊',lb:'Health Grade',val:(latest.grade?latest.grade:'—'),sub:latest.healthScore!=null?latest.healthScore+'/100':'Pending',
            state:stateGrade(latest.grade), href:'checkup.html', requires:'starter',
            tip:'Overall business health (0–100). A 85+, B 70–84, C 52–69, D 36–51, F <36.'},

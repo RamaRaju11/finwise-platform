@@ -153,7 +153,7 @@
       'vendorBillTracker.test.html':'Vendor & Bill Tracker',
       'monthlySnapshot.test.html':'Monthly Snapshot',
       'debtCommandCenter.test.html':'Debt Command Center',
-      'loanDecisionScoreEngine.test.html':'Loan Safety Score',
+      'loanDecisionScoreEngine.test.html':'New Loan Stress Test',
       'loanEligibility.test.html':'Loan Eligibility',
       'lenderMarketplace.html':'Lender Marketplace',
       'grantFinder.test.html':'Grant Finder',
@@ -218,7 +218,7 @@
 
         /* 4. Loans — anything to do with borrowing */
         '<div class="fw-sb-section">Loans</div>'+
-        lnk(M+'loanDecisionScoreEngine.test.html', '&#127974;', 'Loan Safety Score',    'loanDecisionScoreEngine.test.html')+
+        lnk(M+'loanDecisionScoreEngine.test.html', '&#127974;', 'New Loan Stress Test', 'loanDecisionScoreEngine.test.html')+
         lnk(M+'loanEligibility.test.html',         '&#9989;',   'Loan Eligibility',     'loanEligibility.test.html')+
         lnk(M+'lenderMarketplace.html',            '&#127963;', 'Lender Marketplace',   'lenderMarketplace.html')+
         lnk(M+'debtCommandCenter.test.html',       '&#128184;', 'Debt Command Center',  'debtCommandCenter.test.html')+
