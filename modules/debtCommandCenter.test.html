@@ -31,7 +31,24 @@ h1{font-size:1.4rem;margin-bottom:4px}
 /* Per-loan cards */
 .loan-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:640px){.loan-cards-grid{grid-template-columns:1fr}}
-.loan-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0}
+.loan-card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0;position:relative}
+.loan-card.status-planned{background:#fffbeb;border-color:#fde68a}
+.loan-card.status-refinance_target{background:#f5f3ff;border-color:#ddd6fe}
+.loan-card.status-paid_off{background:#f8fafc;border-color:#e2e8f0;opacity:.7}
+
+/* V3 status badges */
+.lc-status{display:inline-block;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.lc-status.active{background:#dcfce7;color:#166534}
+.lc-status.planned{background:#fef3c7;color:#92400e}
+.lc-status.refinance_target{background:#ede9fe;color:#6d28d9}
+.lc-status.paid_off{background:#e2e8f0;color:#475569}
+
+/* V3 scenario toggle */
+.scenario-toggle{display:inline-flex;background:#f1f5f9;border-radius:8px;padding:3px;margin-bottom:12px;gap:2px}
+.scenario-toggle button{background:transparent;border:none;padding:7px 14px;font-size:.78rem;font-weight:600;color:#475569;cursor:pointer;border-radius:6px;transition:background .15s,color .15s}
+.scenario-toggle button.active{background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.scenario-toggle button:hover:not(.active){color:#0f172a}
+.scenario-meta{font-size:.74rem;color:#64748b;margin-left:10px}
 .lc-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
 .lc-name{font-weight:800;font-size:.95rem;flex:1;line-height:1.3}
 .lc-type{font-size:.66rem;padding:3px 9px;border-radius:999px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0}
@@ -500,11 +517,58 @@ function showToast(msg) {
 // ----------------------------------------------------------------
 // TAB 1: DASHBOARD
 // ----------------------------------------------------------------
+/* V3 scenario state — which loans are counted in totals */
+var CURRENT_SCENARIO = 'current';   // 'current' | 'planned' | 'refinance'
+
+function setScenario(s, btn) {
+  CURRENT_SCENARIO = s;
+  if (btn) {
+    document.querySelectorAll('.scenario-toggle button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  renderDashboard();
+}
+
+/* Apply the active scenario to the loan list, returning the filtered set
+   used for header totals.  Per-loan cards are still rendered from ALL
+   loans (so the user can see planned/paid-off too) but with badges that
+   make their status explicit. */
+function applyScenario(loans) {
+  if (CURRENT_SCENARIO === 'current') {
+    return loans.filter(function(L){ return L.status === 'active' || !L.status; });
+  }
+  if (CURRENT_SCENARIO === 'planned') {
+    return loans.filter(function(L){
+      return L.status === 'active' || L.status === 'planned' || !L.status;
+    });
+  }
+  if (CURRENT_SCENARIO === 'refinance') {
+    /* swap in refinance_target loans for the active loans they replace */
+    var replacedIds = new Set();
+    loans.forEach(function(L){
+      if (L.status === 'refinance_target' && L.replacesLoanId) replacedIds.add(L.replacesLoanId);
+    });
+    return loans.filter(function(L){
+      if (L.status === 'active' && replacedIds.has(L.id)) return false;
+      return L.status === 'active' || L.status === 'refinance_target' || !L.status;
+    });
+  }
+  return loans;
+}
+
+var STATUS_LABEL = {
+  active: 'Active',
+  planned: 'Planned · not yet taken',
+  refinance_target: 'Refinance target',
+  paid_off: 'Paid off'
+};
+
 function renderDashboard() {
-  var loans = loadLoans();
+  var allLoans = loadLoans();
+  var loans = applyScenario(allLoans);
   var el = document.getElementById('dashboard-content');
 
-  if(loans.length === 0) {
+  if(allLoans.length === 0) {
     el.innerHTML =
       '<div class="conn-strip">' +
         '<a href="loanDecisionScoreEngine.test.html" class="conn-pill conn-loan-check">&#127974; Loan Safety Score</a>' +
@@ -518,44 +582,80 @@ function renderDashboard() {
     return;
   }
 
-  // Summary metrics
+  // Summary metrics — scoped to the active scenario
   var totalDebt    = loans.reduce(function(s,l){ return s + l.balance; }, 0);
   var totalMinPay  = loans.reduce(function(s,l){ return s + l.minPay; }, 0);
   var weightedRate = loans.reduce(function(s,l){ return s + (l.rate * l.balance); }, 0) / (totalDebt || 1);
   var estMonths    = estimatePayoffMonths(loans, 0);
 
-  var summaryHtml =
+  /* V3 scenario toggle counts per status — surface them so user knows
+     why the totals jump when they switch */
+  var nActive  = allLoans.filter(function(L){return L.status==='active'||!L.status;}).length;
+  var nPlanned = allLoans.filter(function(L){return L.status==='planned';}).length;
+  var nReplace = allLoans.filter(function(L){return L.status==='refinance_target';}).length;
+  var scenarioMeta =
+    'Showing ' + loans.length + ' loan' + (loans.length===1?'':'s') +
+    ' · ' + nActive + ' active · ' + nPlanned + ' planned · ' + nReplace + ' refinance target' + (nReplace===1?'':'s');
+
+  var scenarioToggleHtml =
+    '<div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:10px">' +
+      '<div class="scenario-toggle">' +
+        '<button class="' + (CURRENT_SCENARIO==='current'?'active':'') + '" onclick="setScenario(\'current\',this)">Current debt only</button>' +
+        '<button class="' + (CURRENT_SCENARIO==='planned'?'active':'') + '" onclick="setScenario(\'planned\',this)">Including planned</button>' +
+        '<button class="' + (CURRENT_SCENARIO==='refinance'?'active':'') + '" onclick="setScenario(\'refinance\',this)">After refinance</button>' +
+      '</div>' +
+      '<span class="scenario-meta">' + scenarioMeta + '</span>' +
+    '</div>';
+
+  var summaryHtml = scenarioToggleHtml +
     '<div class="summary-row">' +
-      sumCard(fmt(totalDebt),         'Total Debt',         loans.length+' loan'+(loans.length>1?'s':'')) +
+      sumCard(fmt(totalDebt),         'Total Debt',         loans.length+' loan'+(loans.length===1?'':'s')) +
       sumCard(fmt(totalMinPay)+'/mo', 'Monthly Minimums',   'required payments') +
       sumCard(weightedRate.toFixed(1)+'%', 'Avg Interest Rate', 'weighted by balance') +
       sumCard(fmtMonths(estMonths),   'Payoff Estimate',    'at minimums only') +
     '</div>';
 
-  // Per-loan cards
+  // Per-loan cards — render ALL loans (so user sees planned + paid_off
+  // entries too) but each card shows its status badge.
+  var loansForCards = allLoans;
   var loansHtml = '<div class="card"><h2>Loan Breakdown</h2><div class="loan-cards-grid">';
-  loans.forEach(function(l) {
+  loansForCards.forEach(function(l) {
     var origBal  = l.originalBalance && l.originalBalance >= l.balance ? l.originalBalance : l.balance;
     var paidPct  = origBal > l.balance ? Math.round((1 - l.balance/origBal)*100) : 0;
     var barColor = l.rate > 15 ? '#dc2626' : l.rate > 8 ? '#d97706' : '#16a34a';
     var monthsLeft = estimatePayoffMonths([l], 0);
+    var status = l.status || 'active';
+
+    /* V3 status-change menu items */
+    var statusActions = '';
+    if (status === 'planned') {
+      statusActions += '<button class="lc-menu-item" onclick="changeLoanStatus(\''+l.id+'\',\'active\')">✓ Mark as taken</button>';
+    } else if (status === 'active') {
+      statusActions += '<button class="lc-menu-item" onclick="changeLoanStatus(\''+l.id+'\',\'paid_off\')">🏁 Mark as paid off</button>';
+      statusActions += '<button class="lc-menu-item" onclick="changeLoanStatus(\''+l.id+'\',\'planned\')">↺ Convert to planned</button>';
+    } else if (status === 'paid_off') {
+      statusActions += '<button class="lc-menu-item" onclick="changeLoanStatus(\''+l.id+'\',\'active\')">↺ Reactivate</button>';
+    }
+
     loansHtml +=
-      '<div class="loan-card">' +
+      '<div class="loan-card status-'+status+'">' +
         '<div class="lc-header">' +
           '<div style="flex:1;min-width:0">' +
             '<div class="lc-name">'+escHtml(l.name)+'</div>' +
             (l.lender ? '<div style="font-size:.73rem;color:#94a3b8;margin-top:2px">'+escHtml(l.lender)+'</div>' : '') +
+            '<span class="lc-status '+status+'" title="'+STATUS_LABEL[status]+'">'+STATUS_LABEL[status]+'</span>' +
           '</div>' +
           '<span class="lc-type type-'+(l.type||'other')+'">'+(TYPE_LABEL[l.type]||'Other')+'</span>' +
           '<div class="lc-menu">' +
             '<button class="lc-menu-btn" onclick="toggleLoanMenu(this);event.stopPropagation()" title="Loan actions" aria-label="Loan actions">&#8942;</button>' +
             '<div class="lc-menu-popup">' +
               '<button class="lc-menu-item" onclick="editLoan(\''+l.id+'\')">&#9998; Edit</button>' +
+              statusActions +
               '<button class="lc-menu-item danger" onclick="deleteLoan(\''+l.id+'\')">&#128465; Delete</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div style="font-size:1.35rem;font-weight:900;color:#dc2626;margin-bottom:10px">'+fmt(l.balance)+'</div>' +
+        '<div style="font-size:1.35rem;font-weight:900;color:'+(status==='paid_off'?'#94a3b8':'#dc2626')+';margin-bottom:10px">'+fmt(l.balance)+'</div>' +
         '<div class="lc-stats">' +
           '<div><div class="lc-stat-label">Rate</div><div class="lc-stat-val" style="color:'+barColor+'">'+l.rate+'% p.a.</div></div>' +
           '<div><div class="lc-stat-label">Min/mo</div><div class="lc-stat-val">'+fmt(l.minPay)+'</div></div>' +
@@ -817,6 +917,43 @@ function deleteLoan(id) {
   }
   renderDebtFreeChip();
   showToast('Loan removed');
+}
+
+/* V3 — change a loan's status. Triggers re-render and a one-line toast. */
+function changeLoanStatus(id, newStatus) {
+  var loans = loadLoans();
+  var l = loans.find(function(x){ return x.id === id; });
+  if (!l) return;
+  var oldStatus = l.status || 'active';
+  if (oldStatus === newStatus) return;
+
+  /* Going planned -> active: ask user to confirm the actual EMI/rate
+     since lenders rarely match the stress-test inputs exactly. */
+  if (oldStatus === 'planned' && newStatus === 'active') {
+    var actualEmi = prompt('Confirm actual monthly EMI for this loan (lenders rarely match stress-test exactly):', l.minPay);
+    if (actualEmi === null) return;          /* user cancelled */
+    var v = parseFloat(actualEmi);
+    if (!isNaN(v) && v > 0) l.minPay = v;
+  }
+  l.status = newStatus;
+  saveLoans(loans);
+
+  /* Profile.emi changes whenever active loans change — recompute now */
+  try {
+    var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
+    var activeSum = loans.filter(function(L){return L.status==='active'||!L.status;})
+                         .reduce(function(s,L){return s + (parseFloat(L.minPay)||0);},0);
+    if (activeSum > 0 && prof.bizName) {
+      prof.emi = activeSum;
+      prof.emiSource = 'debt_center';
+      localStorage.setItem('fw_profile', JSON.stringify(prof));
+    }
+  } catch(_e){}
+
+  renderDashboard();
+  if (document.getElementById('tab-loans').classList.contains('active')) renderLoansList();
+  renderDebtFreeChip();
+  showToast('Status: ' + (STATUS_LABEL[newStatus]||newStatus));
 }
 
 function cancelEdit() {
