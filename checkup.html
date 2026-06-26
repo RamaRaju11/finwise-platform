@@ -57,6 +57,31 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6fb;background-image:radial-gradient(ellipse at top right,#eef0f9 0%,#f5f6fb 38%,#f8f9fc 100%);color:#1e293b;min-height:100vh}
 
+/* ════ V3 KPI styles — mirrors dashboard ════ */
+.v3-section{font-size:14px;font-weight:600;color:#0f172a;margin:0 0 10px;letter-spacing:-.01em;text-transform:uppercase;letter-spacing:.06em;color:#475569;font-size:12px}
+.v3-primary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:900px){.v3-primary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.v3-primary{grid-template-columns:1fr}}
+.v3-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;display:block;text-decoration:none;color:inherit;transition:border-color .14s,box-shadow .14s;position:relative}
+.v3-card:hover{border-color:#7c3aed;box-shadow:0 4px 14px rgba(124,58,237,.07);text-decoration:none}
+.v3-card .v3-ic{font-size:16px;line-height:1;color:#64748b;margin-bottom:8px;display:block}
+.v3-card .v3-lbl{font-size:13px;font-weight:500;color:#64748b;margin-bottom:4px}
+.v3-card .v3-val{font-size:28px;font-weight:700;color:#0f172a;line-height:1.05;letter-spacing:-.02em}
+.v3-card .v3-sub{font-size:12px;color:#64748b;margin-top:4px;line-height:1.4}
+.v3-card.is-good .v3-val{color:#16a34a}
+.v3-card.is-warn .v3-val{color:#ea580c}
+.v3-card.is-crit .v3-val{color:#dc2626}
+
+.v3-secondary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:900px){.v3-secondary{grid-template-columns:repeat(2,1fr)}}
+.v3-mini{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px}
+.v3-mini .v3-lbl{font-size:11px;font-weight:500;color:#64748b;margin-bottom:3px}
+.v3-mini .v3-val{font-size:18px;font-weight:700;color:#0f172a;line-height:1.05}
+.v3-mini .v3-sub{font-size:11px;color:#94a3b8;margin-top:2px}
+.v3-mini.is-good .v3-val{color:#16a34a}
+.v3-mini.is-warn .v3-val{color:#ea580c}
+.v3-mini.is-crit .v3-val{color:#dc2626}
+
 /* HEADER */
 .hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-size:.95rem;font-weight:900;color:#1e293b;text-decoration:none}
@@ -413,37 +438,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- STEP 5: FULL REPORT (v2 demo style) -->
   <div class="screen" id="screen5">
-    <!-- V2 banner -->
-    <!-- V2 HERO STRIP -->
-    <div class="v2-hero-strip">
-      <h1>Your Financial Health Report</h1>
-      <div class="v2-sub" id="repDate"></div>
+    <!-- V3 hero strip — matches dashboard typography scale -->
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+      <h1 style="font-size:24px;font-weight:600;color:#0f172a;margin:0;letter-spacing:-.01em">Your Financial Health Report</h1>
+      <div id="repDate" style="font-size:13px;color:#94a3b8;font-weight:500"></div>
     </div>
 
-    <!-- V2 SUMMARY GRID: 4 result cards (auto-fill, min 220px) -->
-    <div class="v2-summary-grid" id="v2SummaryGrid"></div>
+    <!-- V3 PRIMARY KPIs — 4 large cards -->
+    <h2 class="v3-section">Financial health</h2>
+    <div class="v3-primary" id="v3RepPrimary"></div>
 
-    <!-- V2 INSIGHTS + ACTION grid -->
-    <div class="v2-ins-grid">
-      <div class="v2-ins-card">
-        <div class="v2-ins-title">⚡ Personalised Insights</div>
+    <!-- V3 SECONDARY KPIs — 4 small supporting metrics -->
+    <h2 class="v3-section">Supporting metrics</h2>
+    <div class="v3-secondary" id="v3RepSecondary"></div>
+
+    <!-- Insights + Action plan -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px">
+        <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:10px">Personalised insights</div>
         <div id="insightsList"></div>
       </div>
-      <div class="v2-ins-card">
-        <div class="v2-ins-title">🎯 Action Plan</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px">
+        <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:10px">Recommended next steps</div>
         <div id="nextTools"></div>
       </div>
     </div>
 
-    <!-- V2 TOTAL FINDINGS BANNER -->
-    <div class="v2-totals">
-      <div class="v2-totals-lbl">Total findings — this checkup</div>
-      <div class="v2-totals-grid" id="v2TotalsGrid"></div>
-    </div>
-
-    <!-- LEGACY V1 BLOCKS — kept for JS targets but hidden visually -->
-    <div id="v1Report">
+    <!-- LEGACY V1/V2 BLOCKS — kept for JS targets but hidden visually -->
+    <div id="v1Report" style="display:none">
       <div class="rg" id="repGrid"></div>
+      <div class="v2-summary-grid" id="v2SummaryGrid"></div>
+      <div class="v2-totals"><div class="v2-totals-grid" id="v2TotalsGrid"></div></div>
       <div class="card" id="periodCmpCard" style="display:none">
         <div class="ct">Period Comparison</div>
         <div class="cs" id="cmpSubtitle" style="margin-bottom:6px"></div>
@@ -806,6 +831,46 @@ function fillReport(){
   $('repGrid').innerHTML=cards.map(function(c){
     return '<div class="rc2" style="background:'+c.bg+';border-color:'+c.bo+'"><div class="rc2-ic">'+c.ic+'</div><div class="rc2-lb">'+c.lb+'</div><div class="rc2-vl" style="color:'+c.c+'">'+c.vl+'</div><div class="rc2-sb">'+c.sb+'</div>'+c.delta+'</div>';
   }).join('');
+
+  /* ── V3 DASHBOARD-STYLE REPORT (replaces visual layout, JS targets above remain in #v1Report for downstream code) ── */
+  var v3P = document.getElementById('v3RepPrimary');
+  var v3S = document.getElementById('v3RepSecondary');
+  if (v3P && v3S) {
+    function stateLoan(s){return s>=70?'is-good':s>=45?'is-warn':'is-crit';}
+    function stateRmo(m){return m>=6?'is-good':m>=3?'is-warn':'is-crit';}
+    function stateGrade(g){return ['A','B'].includes(g)?'is-good':g==='C'?'is-warn':g?'is-crit':'';}
+    function stateDscr(d){return d>=1.5?'is-good':d>=1.2?'is-warn':'is-crit';}
+    var primary=[
+      {ic:'🔒',lb:'Loan Score',val:r.loanScore+'/100',sub:r.loanVerdict,state:stateLoan(r.loanScore)},
+      {ic:'📊',lb:'Health Grade',val:r.grade,sub:r.hs+'/100 · '+(r.glabel||''),state:stateGrade(r.grade)},
+      {ic:'💰',lb:'Cash Runway',val:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',sub:r.rStat,state:stateRmo(r.rmo)},
+      {ic:'📈',lb:'DSCR',val:(r.dscr>=99?'∞':r.dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',state:stateDscr(r.dscr)}
+    ];
+    v3P.innerHTML = primary.map(function(c){
+      return '<div class="v3-card '+c.state+'">'
+        + '<span class="v3-ic">'+c.ic+'</span>'
+        + '<div class="v3-lbl">'+c.lb+'</div>'
+        + '<div class="v3-val">'+c.val+'</div>'
+        + '<div class="v3-sub">'+c.sub+'</div>'
+        + '</div>';
+    }).join('');
+    var ncf = r.ncf||0;
+    var sym = (function(){try{var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');return p.country==='India'?'₹':'$';}catch(_e){return '$';}})();
+    var fmtV = function(n){return n.toLocaleString('en-US',{maximumFractionDigits:0});};
+    var secondary=[
+      {lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtV(Math.abs(ncf)),sub:'Monthly surplus before debt',state:ncf>=0?'is-good':'is-crit'},
+      {lb:'Expense Ratio',val:Math.round(r.er*100)+'%',sub:r.er<0.75?'Healthy':r.er<0.9?'Tight':'High',state:r.er<0.75?'is-good':r.er<0.9?'is-warn':'is-crit'},
+      {lb:'Profit Margin',val:Math.round(r.pm*100)+'%',sub:r.pm>0.15?'Strong':r.pm>0.05?'OK':'Thin',state:r.pm>0.15?'is-good':r.pm>0.05?'is-warn':'is-crit'},
+      {lb:'Funding Matches',val:r.grantCount+'+',sub:'programs found',state:''}
+    ];
+    v3S.innerHTML = secondary.map(function(c){
+      return '<div class="v3-mini '+c.state+'">'
+        + '<div class="v3-lbl">'+c.lb+'</div>'
+        + '<div class="v3-val">'+c.val+'</div>'
+        + '<div class="v3-sub">'+c.sub+'</div>'
+        + '</div>';
+    }).join('');
+  }
 
   /* ── V2 DEMO LAYOUT RENDERING ── */
   if(document.getElementById('v2SummaryGrid')){

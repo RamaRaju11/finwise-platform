@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -13,7 +13,7 @@
     /* -- Tabs -- */
     .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
     .tab  { padding: 8px 20px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: #fff; font-size: 0.9rem; }
-    .tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+    .tab.active { background: #7c3aed; color: #fff; border-color: #2563eb; }
     .panel { display: none; }
     .panel.active { display: block; }
 
@@ -31,8 +31,8 @@
     @media(max-width:600px){ .input-grid { grid-template-columns: 1fr; } }
 
     /* -- Buttons -- */
-    button.primary { margin-top: 16px; padding: 10px 28px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; }
-    button.primary:hover { background: #1d4ed8; }
+    button.primary { margin-top: 16px; padding: 10px 28px; background: #7c3aed; color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; }
+    button.primary:hover { background: #6d28d9; }
     button.secondary { margin-top: 16px; padding: 10px 24px; background: #16a34a; color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; margin-left: 8px; }
     button.secondary:hover { background: #15803d; }
 
@@ -120,7 +120,7 @@
     .cb-pills { display: flex; gap: 6px; flex-wrap: wrap; }
     .cb-pill { padding: 5px 14px; border: 2px solid #e2e8f0; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; background: #fff; color: #64748b; transition: all .15s; }
     .cb-pill:hover { border-color: #2563eb; color: #2563eb; }
-    .cb-pill.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .cb-pill.active { background: #7c3aed; border-color: #2563eb; color: #fff; }
     .cb-region { font-size: 0.75rem; color: #94a3b8; margin-left: 4px; }
 
     /* -- Consequence panel -- */
@@ -163,8 +163,8 @@
     .pw-items li { padding: 7px 0; font-size: 0.88rem; color: #94a3b8; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,.06); }
     .pw-items li:last-child { border-bottom: none; }
     .pw-lock { flex-shrink: 0; }
-    .paywall-cta { display: inline-block; padding: 10px 22px; background: #2563eb; color: #fff; border-radius: 6px; font-size: 0.9rem; font-weight: 700; text-decoration: none; }
-    .paywall-cta:hover { background: #1d4ed8; }
+    .paywall-cta { display: inline-block; padding: 10px 22px; background: #7c3aed; color: #fff; border-radius: 6px; font-size: 0.9rem; font-weight: 700; text-decoration: none; }
+    .paywall-cta:hover { background: #6d28d9; }
     .paywall-guarantee { font-size: 0.75rem; color: #64748b; margin-top: 10px; }
 
     /* -- Tooltip -- */
@@ -803,7 +803,7 @@ function renderConsequence(r) {
       '<div class="cq-title" style="color:#15803d">Your Business Is Ready — Consider Applying</div>' +
       '<p style="font-size:0.9rem;color:#166534;margin-bottom:12px">Your cash flow can absorb this loan comfortably. A buffer of ' + fmt(r.cashLeft) + '/month remains after all EMIs. Now is a good time to explore lenders.</p>' +
       '<a href="lenderMarketplace.html" style="display:inline-block;padding:9px 20px;background:#16a34a;color:#fff;border-radius:6px;font-size:0.88rem;font-weight:700;text-decoration:none">Explore Lenders &rarr;</a>' +
-      '<button onclick="saveApprovedLoanToDebtCenter()" style="margin-left:10px;padding:9px 18px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit">&#128184; Save to Debt Center</button>' +
+      '<button onclick="saveApprovedLoanToDebtCenter()" style="margin-left:10px;padding:9px 18px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit">&#128184; Save to Debt Center</button>' +
       '</div>';
 
   } else {

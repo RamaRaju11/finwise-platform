@@ -16,8 +16,8 @@ input[type=number],input[type=text]{width:100%;padding:8px 10px;border:1px solid
 input:focus{outline:none;border-color:#2563eb}
 .back-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:#2563eb;text-decoration:none;margin-bottom:18px;font-weight:600}
 .back-link:hover{text-decoration:underline}
-button.primary{margin-top:16px;padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
-button.primary:hover{background:#1d4ed8}
+button.primary{margin-top:16px;padding:10px 28px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:.92rem;cursor:pointer;font-weight:700}
+button.primary:hover{background:#6d28d9}
 button.add-btn{margin-top:14px;padding:8px 20px;background:#eff6ff;color:#2563eb;border:1px solid #93c5fd;border-radius:6px;font-size:.88rem;cursor:pointer;font-weight:700}
 button.add-btn:hover{background:#dbeafe}
 button.remove-btn{padding:5px 12px;background:#fff;color:#dc2626;border:1px solid #fca5a5;border-radius:5px;font-size:.8rem;cursor:pointer;font-weight:700;margin-top:8px}
@@ -315,7 +315,7 @@ function renderResults(snowball, avalanche, originalLoans, extra) {
   saveWrap.style.marginBottom = '10px';
   saveWrap.innerHTML = '<button onclick="saveToDebtCenter()" style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:9px 18px;cursor:pointer;font-size:.85rem;font-weight:700;font-family:inherit">&#128184; Save these loans to Debt Center</button>' +
     '<a href="debtCommandCenter.test.html" style="margin-left:10px;font-size:.82rem;color:#2563eb;text-decoration:none;font-weight:700">&#8594; Open Debt Center</a>' +
-    (totalMin>0?' &ensp;<button onclick="saveEmiToProfile('+Math.round(totalMin)+')" style="background:#2563eb;color:#fff;border:none;border-radius:6px;padding:9px 18px;cursor:pointer;font-size:.85rem;font-weight:700;font-family:inherit;margin-left:8px">&#128190; Save $'+Math.round(totalMin).toLocaleString()+'/mo EMI to Profile</button>':'');
+    (totalMin>0?' &ensp;<button onclick="saveEmiToProfile('+Math.round(totalMin)+')" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:9px 18px;cursor:pointer;font-size:.85rem;font-weight:700;font-family:inherit;margin-left:8px">&#128190; Save $'+Math.round(totalMin).toLocaleString()+'/mo EMI to Profile</button>':'');
   document.getElementById('results').insertBefore(saveWrap, document.getElementById('winner-banner'));
 
   // Winner determination
@@ -709,7 +709,7 @@ function init() {
     var banner = document.createElement('div');
     banner.style.cssText = 'background:#f0f9ff;border-left:4px solid #38bdf8;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:.88rem;line-height:1.5';
     banner.innerHTML = '&#128184; <strong>' + savedLoans.length + ' loan' + (savedLoans.length>1?'s':'') + ' saved in Debt Center</strong> &mdash; ' +
-      '<button onclick="loadFromDebtCenter()" style="background:#2563eb;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Load into Optimizer</button>';
+      '<button onclick="loadFromDebtCenter()" style="background:#7c3aed;color:#fff;border:none;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit">Load into Optimizer</button>';
     var firstCard = document.querySelector('.card');
     if(firstCard) firstCard.parentNode.insertBefore(banner, firstCard);
   }
