@@ -10,7 +10,11 @@
     'fw_recent','fw_onboarded','fw_biz_profile',
     'fw_starter','fw_pro','fw_advisor','fw_ref',
     'fw_checkup','fw_score_history','fw_tax_payments_'+new Date().getFullYear(),
-    'fw_grant_tracker','fw_bills','fw_savings_goals','fw_invoices'
+    'fw_grant_tracker','fw_bills','fw_savings_goals','fw_invoices',
+    /* Tool-specific saved inputs — stale entries from a previous user
+       must NOT bleed into the next user's session */
+    'fw_ldse','fw_cash_runway','fw_breakeven','fw_emi_calc','fw_whatif',
+    'fw_monthly_snapshots','fw_last_checkup','fw_loan_refinance','fw_debt_center'
   ];
   function _clearUserData(){
     USER_KEYS.forEach(function(k){ localStorage.removeItem(k); });

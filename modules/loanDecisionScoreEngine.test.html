@@ -1368,13 +1368,25 @@ function applyProfileFill() {
   // instead of their real loan terms. Only restore from prior LDSE save in Step 2.
   if(parseFloat(prof.loan) > 0 && loanEl) loanEl.value = prof.loan;
 
-  /* Step 2 — overlay with tool-specific saved values */
+  /* Step 2 — overlay with tool-specific saved values.
+     IMPORTANT: revenue / expenses / existingEmi are PROFILE fields, not
+     tool fields. We must NOT overlay them from LDSE — if we do, a stale
+     fw_ldse entry from a previous user session (or a different profile)
+     will overwrite the correct profile values. Profile wins for these.
+     Only loan-specific fields (amount, rate, tenure, credit score) are
+     restored from LDSE. */
   var ldse = null;
   try { ldse = JSON.parse(localStorage.getItem(LDSE_KEY) || 'null'); } catch(e) {}
   if(ldse) {
-    if(ldse.revenue    !== undefined && ldse.revenue    !== '' && revEl)  revEl.value  = ldse.revenue;
-    if(ldse.expenses   !== undefined && ldse.expenses   !== '' && expEl)  expEl.value  = ldse.expenses;
-    if(ldse.existingEmi!== undefined && ldse.existingEmi!== '' && emiEl)  emiEl.value  = ldse.existingEmi;
+    /* If the saved LDSE revenue clearly doesn't match the current
+       profile, the entry is stale (e.g. previous user). Wipe it. */
+    if(!isNaN(revN) && ldse.revenue !== undefined && ldse.revenue !== '' &&
+       Math.abs(parseFloat(ldse.revenue) - revN) > 1) {
+      try { localStorage.removeItem(LDSE_KEY); } catch(_e){}
+      ldse = null;
+    }
+  }
+  if(ldse) {
     if(parseFloat(ldse.loanAmount) > 0 && loanEl) loanEl.value = ldse.loanAmount;
     if(parseFloat(ldse.rate)       > 0 && rateEl) rateEl.value = ldse.rate;
     if(parseFloat(ldse.tenure)     > 0 && tenEl)  tenEl.value  = ldse.tenure;
