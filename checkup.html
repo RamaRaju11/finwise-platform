@@ -69,10 +69,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .steps-row{display:flex;align-items:center;max-width:600px;margin:0;gap:6px}
 .si{display:flex;flex-direction:row;align-items:center;gap:5px;flex:1;position:relative}
 .si:not(:last-child)::after{content:'';position:absolute;top:50%;left:calc(100% - 3px);right:-6px;height:2px;background:#e2e8f0;z-index:0;transition:background .3s}
-.si.done:not(:last-child)::after{background:#2563eb}
+.si.done:not(:last-child)::after{background:#7c3aed}
 .sd{width:20px;height:20px;border-radius:50%;border:2px solid #e2e8f0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:#94a3b8;position:relative;z-index:1;transition:all .25s;flex-shrink:0}
-.si.active .sd{border-color:#2563eb;background:#2563eb;color:#fff}
-.si.done .sd{border-color:#2563eb;background:#2563eb;color:#fff}
+.si.active .sd{border-color:#2563eb;background:#7c3aed;color:#fff}
+.si.done .sd{border-color:#2563eb;background:#7c3aed;color:#fff}
 .sl{font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .si.active .sl,.si.done .sl{color:#2563eb}
 
@@ -209,7 +209,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bs-tile .bs-tx{font-size:.74rem;line-height:1.3;color:inherit}
 .bs-tile .bs-tx b{font-size:.84rem;font-weight:800}
 .bs-tile .bs-sm{color:rgba(255,255,255,.85);font-weight:500}
-.bs-share{background:#2563eb;color:#fff}.bs-share:hover{background:#1d4ed8}
+.bs-share{background:#7c3aed;color:#fff}.bs-share:hover{background:#6d28d9}
 .bs-pdf  {background:#7c3aed;color:#fff}.bs-pdf:hover  {background:#6d28d9}
 .bs-up   {background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#fff}
 
@@ -223,16 +223,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .upg-i{background:rgba(255,255,255,.07);border-radius:7px;padding:7px 10px;font-size:.72rem;color:#e2e8f0;line-height:1.35}
 .upg-tier{display:block;font-size:.65rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
 .upg-btns{display:flex;gap:10px;flex-wrap:wrap}
-.upg-p{background:#2563eb;color:#fff;border:none;padding:11px 22px;border-radius:8px;font-size:.86rem;font-weight:800;text-decoration:none;display:inline-block;transition:background .15s}
-.upg-p:hover{background:#1d4ed8}
+.upg-p{background:#7c3aed;color:#fff;border:none;padding:11px 22px;border-radius:8px;font-size:.86rem;font-weight:800;text-decoration:none;display:inline-block;transition:background .15s}
+.upg-p:hover{background:#6d28d9}
 .upg-q{background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2);padding:10px 20px;border-radius:8px;font-size:.86rem;font-weight:700;text-decoration:none;display:inline-block;transition:all .15s}
 .upg-q:hover{background:rgba(255,255,255,.18)}
 
 /* BUTTONS */
-.btn-full{width:100%;background:#2563eb;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;transition:background .15s}
-.btn-full:hover{background:#1d4ed8}
-.btn-cont{background:#2563eb;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;margin:12px auto 0;transition:background .15s}
-.btn-cont:hover{background:#1d4ed8}
+.btn-full{width:100%;background:#7c3aed;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;transition:background .15s}
+.btn-full:hover{background:#6d28d9}
+.btn-cont{background:#7c3aed;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;margin:12px auto 0;transition:background .15s}
+.btn-cont:hover{background:#6d28d9}
 .ct{font-size:.92rem;font-weight:900;color:#0f172a;margin-bottom:3px}
 .cs{font-size:.74rem;color:#64748b;margin-bottom:10px;line-height:1.4}
 .note{font-size:.7rem;color:#94a3b8;text-align:center;margin-top:6px}
@@ -494,7 +494,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <p style="font-size:.8rem;color:#64748b;margin-bottom:18px">Download a branded image or copy a shareable link — perfect for sending to your advisor or lender.</p>
     <canvas id="scoreCanvas" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:18px;display:block"></canvas>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-      <button onclick="downloadCard()" style="flex:1;background:#2563eb;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;min-width:140px">Download PNG</button>
+      <button onclick="downloadCard()" style="flex:1;background:#7c3aed;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;min-width:140px">Download PNG</button>
       <button id="copyBtn" onclick="copyShareLink()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:700;cursor:pointer;min-width:140px;transition:all .2s">Copy Link</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">

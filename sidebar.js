@@ -65,7 +65,15 @@
     '.fw-sb-link:hover{background:rgba(124,58,237,.14);color:#fff}',
     '.fw-sb-link.active{background:rgba(124,58,237,.22);color:#fff;border-right:3px solid #7c3aed}',
     '.fw-sb-ic{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}',
-    '.fw-sb-divider{margin:8px 16px;border:none;border-top:1px solid #1e293b}',
+    '.fw-sb-divider{margin:8px 16px;border:none;border-top:1px solid #334155}',
+    /* V3 collapsible "More tools" drawer */
+    '.fw-sb-details{border:none}',
+    '.fw-sb-details > summary{list-style:none;color:#94a3b8;font-weight:500}',
+    '.fw-sb-details > summary::-webkit-details-marker{display:none}',
+    '.fw-sb-details > summary::after{content:"▾";margin-left:auto;font-size:.7rem;color:#475569;transition:transform .2s}',
+    '.fw-sb-details[open] > summary::after{transform:rotate(180deg)}',
+    '.fw-sb-details > summary:hover{color:#fff;background:rgba(124,58,237,.14)}',
+    '.fw-sb-details > .fw-sb-link{padding-left:36px;font-size:.74rem}',
 
     /* footer */
     '.fw-sb-footer{padding:12px 16px 20px;flex-shrink:0;border-top:1px solid #1e293b}',
@@ -184,54 +192,70 @@
     var aside = document.createElement('aside');
     aside.className = 'fw-sidebar';
     aside.id = 'fwSidebar';
+    /* V3 nav: 6 top-level groups per uxfixes #5/#15.
+       Less-used tools collapse behind a <details> drawer so the
+       sidebar is not overwhelming. */
     aside.innerHTML =
       '<a href="'+B+'dashboard.html" class="fw-sb-logo"><div class="fw-sb-logo-text">&#128200; Biz<span>Sco</span></div></a>'+
-      '<div style="font-size:.58rem;color:#475569;padding:0 16px 10px;margin-top:-6px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>'+
+      '<div style="font-size:.58rem;color:#64748b;padding:0 16px 10px;margin-top:-6px;letter-spacing:.07em;font-weight:700;text-transform:uppercase">Analyze · Fund · Grow</div>'+
       '<div class="fw-sb-biz" id="fwSbBiz">Your dashboard</div>'+
       '<span class="fw-sb-plan-chip" id="fwSbPlan">Free Plan</span>'+
       '<nav class="fw-sb-nav">'+
-        '<div class="fw-sb-section">Overview</div>'+
-        lnk(B+'dashboard.html',  '&#127968;', 'Dashboard',          'dashboard.html')+
-        lnk(B+'checkup.html',    '&#129514;', 'Financial Checkup',  'checkup.html')+
-        lnk(B+'history.html',    '&#128202;', 'Score History',      'history.html')+
-        lnk(B+'whatif.html',     '&#128302;', 'What-If Scenarios',  'whatif.html')+
-        '<hr class="fw-sb-divider"/>'+
-        '<div class="fw-sb-section">Funding</div>'+
-        lnk(M+'debtCommandCenter.test.html',        '&#128184;', 'Debt Command Center','debtCommandCenter.test.html')+
-        lnk(M+'loanDecisionScoreEngine.test.html', '&#127974;', 'Loan Safety Score',  'loanDecisionScoreEngine.test.html')+
-        lnk(M+'loanEligibility.test.html',         '&#9989;',   'Loan Eligibility',   'loanEligibility.test.html')+
-        lnk(M+'lenderMarketplace.html',            '&#127963;', 'Lender Marketplace', 'lenderMarketplace.html')+
-        lnk(M+'grantFinder.test.html',             '&#127919;', 'Grant Finder',       'grantFinder.test.html')+
-        '<hr class="fw-sb-divider"/>'+
-        '<div class="fw-sb-section">Finance</div>'+
-        lnk(M+'emiCalculator.test.html',   '&#129518;', 'EMI Calculator', 'emiCalculator.test.html')+
-        lnk(M+'cashRunway.test.html',      '&#9201;',   'Cash Runway',    'cashRunway.test.html')+
-        lnk(M+'breakEven.test.html',       '&#9878;',   'Break-Even',     'breakEven.test.html')+
-        lnk(M+'ownersPay.test.html',       '&#128184;', "Owner's Pay",    'ownersPay.test.html')+
-        lnk(M+'taxCommandCenter.test.html', '&#129534;', 'Tax Hub',         'taxCommandCenter.test.html')+
-        lnk(M+'taxEstimator.test.html',    '&#129535;', 'Tax Estimator',   'taxEstimator.test.html')+
-        lnk(M+'salesTaxTracker.test.html', '&#127991;', 'Sales Tax',      'salesTaxTracker.test.html')+
-        lnk(M+'keyDeductions.test.html',   '&#128188;', 'Key Deductions',   'keyDeductions.test.html')+
-        lnk(M+'contractorPayroll.test.html','&#128203;', 'Contractor/Payroll','contractorPayroll.test.html')+
-        lnk(M+'goalTracker.test.html',     '&#127919;', 'Goal Tracker',   'goalTracker.test.html')+
-        '<hr class="fw-sb-divider"/>'+
-        '<div class="fw-sb-section">New Tools</div>'+
-        lnk(M+'loanRepaymentOptimizer.test.html', '&#10054;',  'Repayment Optimizer',  'loanRepaymentOptimizer.test.html')+
-        lnk(M+'profitMarginAnalyzer.test.html',   '&#128185;', 'Profit Margins',        'profitMarginAnalyzer.test.html')+
-        lnk(M+'cashFlowCalendar.test.html',       '&#128197;', 'Cash Flow Calendar',    'cashFlowCalendar.test.html')+
-        lnk(M+'businessSavingsPlanner.test.html', '&#127919;', 'Savings Planner',       'businessSavingsPlanner.test.html')+
-        lnk(M+'vendorBillTracker.test.html',      '&#128203;', 'Bill Tracker',          'vendorBillTracker.test.html')+
-        '<hr class="fw-sb-divider"/>'+
-        '<div class="fw-sb-section">Insights</div>'+
-        lnk(M+'businessHealthScore.test.html', '&#127942;', 'Health Score',         'businessHealthScore.test.html')+
-        lnk(M+'forecastPro.test.html',         '&#128200;', 'Revenue Forecast',     'forecastPro.test.html')+
-        lnk(M+'aiCfoChat.test.html',           '&#129302;', 'AI CFO Advisor',       'aiCfoChat.test.html')+
-        lnk(M+'benchmarkPro.test.html',        '&#128202;', 'Industry Benchmarks',  'benchmarkPro.test.html')+
-        lnk(M+'monthlySnapshot.test.html',     '&#128247;', 'Monthly Snapshot',     'monthlySnapshot.test.html')+
-        '<hr class="fw-sb-divider"/>'+
-        lnk(B+'try.html',         '&#128295;', 'All 30 Tools',     'try.html')+
-        lnk(B+'pricing.html',     '&#128179;', 'Plans &amp; Pricing', 'pricing.html')+
-        lnk(B+'onboarding.html',  '&#9881;',   'Edit Profile',     'onboarding.html')+
+        /* 1. Dashboard */
+        lnk(B+'dashboard.html', '&#127968;', 'Dashboard', 'dashboard.html')+
+
+        /* 2. Profile */
+        '<div class="fw-sb-section">Profile</div>'+
+        lnk(B+'onboarding.html', '&#128100;', 'Edit Profile', 'onboarding.html')+
+
+        /* 3. Reports — things you look at */
+        '<div class="fw-sb-section">Reports</div>'+
+        lnk(B+'checkup.html',                '&#129514;', 'Financial Checkup',  'checkup.html')+
+        lnk(B+'history.html',                '&#128202;', 'Score History',      'history.html')+
+        lnk(B+'monthlyHistory.html',         '&#128197;', 'Monthly Snapshots',  'monthlyHistory.html')+
+        lnk(B+'whatif.html',                 '&#128302;', 'What-If Scenarios',  'whatif.html')+
+        lnk(M+'monthlySnapshot.test.html',   '&#128247;', 'Snapshot Tool',      'monthlySnapshot.test.html')+
+
+        /* 4. Loans — anything to do with borrowing */
+        '<div class="fw-sb-section">Loans</div>'+
+        lnk(M+'loanDecisionScoreEngine.test.html', '&#127974;', 'Loan Safety Score',    'loanDecisionScoreEngine.test.html')+
+        lnk(M+'loanEligibility.test.html',         '&#9989;',   'Loan Eligibility',     'loanEligibility.test.html')+
+        lnk(M+'lenderMarketplace.html',            '&#127963;', 'Lender Marketplace',   'lenderMarketplace.html')+
+        lnk(M+'debtCommandCenter.test.html',       '&#128184;', 'Debt Command Center',  'debtCommandCenter.test.html')+
+        lnk(M+'loanRepaymentOptimizer.test.html',  '&#10054;',  'Repayment Optimizer',  'loanRepaymentOptimizer.test.html')+
+        lnk(M+'grantFinder.test.html',             '&#127919;', 'Grant Finder',         'grantFinder.test.html')+
+
+        /* 5. Tools — collapsible list; only top 5 shown by default */
+        '<div class="fw-sb-section">Tools</div>'+
+        lnk(M+'cashRunway.test.html',          '&#9201;',   'Cash Runway',       'cashRunway.test.html')+
+        lnk(M+'profitMarginAnalyzer.test.html','&#128185;', 'Profit Margins',    'profitMarginAnalyzer.test.html')+
+        lnk(M+'emiCalculator.test.html',       '&#129518;', 'EMI Calculator',    'emiCalculator.test.html')+
+        lnk(M+'aiCfoChat.test.html',           '&#129302;', 'AI CFO Advisor',    'aiCfoChat.test.html')+
+        lnk(B+'try.html',                      '&#128295;', 'All Tools →',  'try.html')+
+
+        '<details class="fw-sb-details">'+
+          '<summary class="fw-sb-link" style="cursor:pointer">'+
+            '<span class="fw-sb-ic">&#9776;</span>More tools'+
+          '</summary>'+
+          lnk(M+'breakEven.test.html',              '&#9878;',   'Break-Even',          'breakEven.test.html')+
+          lnk(M+'businessHealthScore.test.html',    '&#127942;', 'Health Score',        'businessHealthScore.test.html')+
+          lnk(M+'forecastPro.test.html',            '&#128200;', 'Revenue Forecast',    'forecastPro.test.html')+
+          lnk(M+'benchmarkPro.test.html',           '&#128202;', 'Industry Benchmarks', 'benchmarkPro.test.html')+
+          lnk(M+'cashFlowCalendar.test.html',       '&#128197;', 'Cash Flow Calendar',  'cashFlowCalendar.test.html')+
+          lnk(M+'businessSavingsPlanner.test.html', '&#127919;', 'Savings Planner',     'businessSavingsPlanner.test.html')+
+          lnk(M+'vendorBillTracker.test.html',      '&#128203;', 'Bill Tracker',        'vendorBillTracker.test.html')+
+          lnk(M+'goalTracker.test.html',            '&#127919;', 'Goal Tracker',        'goalTracker.test.html')+
+          lnk(M+'ownersPay.test.html',              '&#128184;', "Owner's Pay",         'ownersPay.test.html')+
+          lnk(M+'taxCommandCenter.test.html',       '&#129534;', 'Tax Hub',             'taxCommandCenter.test.html')+
+          lnk(M+'taxEstimator.test.html',           '&#129535;', 'Tax Estimator',       'taxEstimator.test.html')+
+          lnk(M+'salesTaxTracker.test.html',        '&#127991;', 'Sales Tax',           'salesTaxTracker.test.html')+
+          lnk(M+'keyDeductions.test.html',          '&#128188;', 'Key Deductions',      'keyDeductions.test.html')+
+          lnk(M+'contractorPayroll.test.html',      '&#128203;', 'Contractor/Payroll',  'contractorPayroll.test.html')+
+        '</details>'+
+
+        /* 6. Settings */
+        '<div class="fw-sb-section">Settings</div>'+
+        lnk(B+'pricing.html', '&#128179;', 'Plans & Pricing', 'pricing.html')+
       '</nav>'+
       '<div class="fw-sb-footer">'+
         '<button class="fw-dark-btn" id="fwDarkBtn" onclick="fwToggleDark()"><span class="fw-dark-ic">&#9790;</span><span id="fwDarkLabel">Dark Mode</span></button>'+
