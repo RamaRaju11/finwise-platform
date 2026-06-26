@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Free Financial Checkup — BizSco</title>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   V2 DEMO-AESTHETIC overrides for Step 5 Report.
+   This file is checkup-v2.html — the original checkup.html is unchanged.
+   ════════════════════════════════════════════════════════════════ */
+.v2-banner{position:sticky;top:0;z-index:99;background:linear-gradient(90deg,#15803d,#14532d);color:#fff;font-size:.74rem;font-weight:700;padding:6px 22px;text-align:center;letter-spacing:.03em}
+.v2-banner a{color:#fef9c3;text-decoration:underline}
+
+#screen5 .v2-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.v2-tile{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:14px;display:flex;gap:11px;align-items:flex-start;transition:transform .15s,box-shadow .15s}
+.v2-tile:hover{transform:translateY(-2px);box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.v2-tile.warn{border-left:4px solid #f59e0b;background:#fffbeb}
+.v2-tile.good{border-left:4px solid #15803d;background:#f0fdf4}
+.v2-tile.bad{border-left:4px solid #dc2626;background:#fef2f2}
+.v2-tile.info{border-left:4px solid #2563eb;background:#eff6ff}
+.v2-tile-ic{font-size:1.5rem;flex-shrink:0;line-height:1}
+.v2-tile-bd{flex:1;min-width:0}
+.v2-tile-lbl{font-size:.65rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.v2-tile-val{font-size:1.1rem;font-weight:900;color:#0f172a;line-height:1.15}
+.v2-tile-sub{font-size:.72rem;color:#475569;margin-top:2px;line-height:1.35}
+.v2-tile-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:5px;margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+.v2-bg-safe{background:#dcfce7;color:#15803d}
+.v2-bg-warn{background:#fef9c3;color:#854d0e}
+.v2-bg-bad{background:#fee2e2;color:#991b1b}
+.v2-bg-info{background:#dbeafe;color:#1e40af}
+
+.v2-totals{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:14px;padding:18px 22px;margin-bottom:12px;border:1px solid #1e3a5f}
+.v2-totals-lbl{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px}
+.v2-totals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.v2-tt{background:rgba(255,255,255,.05);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,255,255,.08)}
+.v2-tt-val{font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1}
+.v2-tt-lbl{font-size:.68rem;color:#cbd5e1;margin-top:2px;font-weight:600}
+
+.v2-ins-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:700px){.v2-ins-grid{grid-template-columns:1fr}}
+.v2-ins-card{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px 15px}
+.v2-ins-title{font-size:.85rem;font-weight:900;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+.v2-hero-strip{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
+.v2-hero-strip h1{font-size:1.15rem;font-weight:900;color:#0f172a;margin:0}
+.v2-hero-strip .v2-sub{font-size:.74rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+
+/* Hide the legacy V1 layout inside screen5 only — v2 panels live in #v2Report */
+#v1Report{display:none}
+</style>
+<link rel="manifest" href="manifest.json">
+<script>if(localStorage.getItem('fw_dark')==='1')document.documentElement.classList.add('dark');</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});</script>
+<meta name="description" content="Get your free small business financial checkup in 2 minutes — loan safety score, cash runway, health grade, and personalized funding matches. No sign-up needed."/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6fb;background-image:radial-gradient(ellipse at top right,#eef0f9 0%,#f5f6fb 38%,#f8f9fc 100%);color:#1e293b;min-height:100vh}
+
+/* ════ V3 KPI styles — mirrors dashboard ════ */
+.v3-section{font-size:14px;font-weight:600;color:#0f172a;margin:0 0 10px;letter-spacing:-.01em;text-transform:uppercase;letter-spacing:.06em;color:#475569;font-size:12px}
+.v3-primary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:900px){.v3-primary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.v3-primary{grid-template-columns:1fr}}
+.v3-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;display:block;text-decoration:none;color:inherit;transition:border-color .14s,box-shadow .14s;position:relative}
+.v3-card:hover{border-color:#7c3aed;box-shadow:0 4px 14px rgba(124,58,237,.07);text-decoration:none}
+.v3-card .v3-ic{font-size:16px;line-height:1;color:#64748b;margin-bottom:8px;display:block}
+.v3-card .v3-lbl{font-size:13px;font-weight:500;color:#64748b;margin-bottom:4px}
+.v3-card .v3-val{font-size:28px;font-weight:700;color:#0f172a;line-height:1.05;letter-spacing:-.02em}
+.v3-card .v3-sub{font-size:12px;color:#64748b;margin-top:4px;line-height:1.4}
+.v3-card.is-good .v3-val{color:#16a34a}
+.v3-card.is-warn .v3-val{color:#ea580c}
+.v3-card.is-crit .v3-val{color:#dc2626}
+
+.v3-secondary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:900px){.v3-secondary{grid-template-columns:repeat(2,1fr)}}
+.v3-mini{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px}
+.v3-mini .v3-lbl{font-size:11px;font-weight:500;color:#64748b;margin-bottom:3px}
+.v3-mini .v3-val{font-size:18px;font-weight:700;color:#0f172a;line-height:1.05}
+.v3-mini .v3-sub{font-size:11px;color:#94a3b8;margin-top:2px}
+.v3-mini.is-good .v3-val{color:#16a34a}
+.v3-mini.is-warn .v3-val{color:#ea580c}
+.v3-mini.is-crit .v3-val{color:#dc2626}
+
+/* HEADER */
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:.95rem;font-weight:900;color:#1e293b;text-decoration:none}
+.logo span{color:#2563eb}
+.back{font-size:.82rem;color:#64748b;text-decoration:none}
+.back:hover{color:#2563eb}
+
+/* PROGRESS */
+.prog-wrap{background:#fff;border-bottom:1px solid #e2e8f0;padding:5px 22px}
+.steps-row{display:flex;align-items:center;max-width:600px;margin:0;gap:6px}
+.si{display:flex;flex-direction:row;align-items:center;gap:5px;flex:1;position:relative}
+.si:not(:last-child)::after{content:'';position:absolute;top:50%;left:calc(100% - 3px);right:-6px;height:2px;background:#e2e8f0;z-index:0;transition:background .3s}
+.si.done:not(:last-child)::after{background:#7c3aed}
+.sd{width:20px;height:20px;border-radius:50%;border:2px solid #e2e8f0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:#94a3b8;position:relative;z-index:1;transition:all .25s;flex-shrink:0}
+.si.active .sd{border-color:#2563eb;background:#7c3aed;color:#fff}
+.si.done .sd{border-color:#2563eb;background:#7c3aed;color:#fff}
+.sl{font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.si.active .sl,.si.done .sl{color:#2563eb}
+
+/* MAIN */
+.main{max-width:1100px;margin:0;padding:16px 22px 32px}
+.screen{display:none;animation:fi .22s ease}
+.screen.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* WELCOME */
+.w-hero{text-align:center;padding:4px 0 14px}
+.w-emoji{font-size:2.1rem;margin-bottom:6px}
+.w-title{font-size:1.3rem;font-weight:900;color:#0f172a;margin-bottom:4px}
+.w-sub{font-size:.83rem;color:#64748b;line-height:1.55}
+.clist{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:14px}
+.cl-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #f1f5f9}
+.cl-row:last-child{border-bottom:none}
+.cl-ic{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.cl-bd{flex:1}
+.cl-nm{font-size:.88rem;font-weight:800;color:#1e293b}
+.cl-ds{font-size:.75rem;color:#64748b;margin-top:2px}
+.fbadge{background:#dcfce7;color:#15803d;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+
+/* CARD */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:12px}
+
+/* STEP HEADER */
+.sh-eye{font-size:.64rem;font-weight:800;color:#2563eb;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.sh-h{font-size:1.08rem;font-weight:900;color:#0f172a}
+.sh-s{font-size:.76rem;color:#64748b;margin-top:2px;line-height:1.45;margin-bottom:12px}
+
+/* FORM */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:500px){.ig{grid-template-columns:1fr}}
+.fl label{display:block;font-size:.68rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.fl input{width:100%;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:.88rem;color:#1e293b;outline:none;transition:border-color .15s}
+.fl input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.cf{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:18px;font-size:.74rem;font-weight:700;margin-bottom:10px}
+.cf-pos{background:#dcfce7;color:#15803d}
+.cf-neg{background:#fee2e2;color:#991b1b}
+.cf-neu{background:#f1f5f9;color:#64748b}
+.pn{display:flex;align-items:center;gap:6px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:6px 11px;font-size:.74rem;color:#1d4ed8;margin-bottom:10px}
+
+/* RESULT SCREENS */
+.rc{text-align:center;padding:10px 0 8px}
+.re{font-size:1.7rem;margin-bottom:4px}
+.verd{display:inline-block;font-size:.92rem;font-weight:900;letter-spacing:.08em;padding:5px 16px;border-radius:30px;text-transform:uppercase;margin-bottom:8px}
+.v-safe{background:#dcfce7;color:#15803d}
+.v-risky{background:#fef9c3;color:#854d0e}
+.v-danger{background:#fee2e2;color:#991b1b}
+.v-strong{background:#dcfce7;color:#15803d}
+.v-warning{background:#fef9c3;color:#854d0e}
+.v-critical{background:#fee2e2;color:#991b1b}
+.v-good{background:#dcfce7;color:#15803d}
+.v-fair{background:#fef9c3;color:#854d0e}
+.v-poor{background:#fee2e2;color:#991b1b}
+.bn{font-size:2.7rem;font-weight:900;color:#0f172a;line-height:1}
+.bu{font-size:.76rem;color:#64748b;font-weight:600;margin-top:2px}
+
+/* MINI STATS */
+.mr{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.ms{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 12px;text-align:center;min-width:72px}
+.msv{font-size:.86rem;font-weight:900;color:#0f172a}
+.msl{font-size:.58rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+
+/* BULLETS */
+.buls{list-style:none;margin:0 0 10px}
+.buls li{display:flex;gap:8px;font-size:.78rem;color:#475569;padding:6px 0;border-bottom:1px solid #f1f5f9;line-height:1.45}
+.buls li:last-child{border-bottom:none}
+.bi{flex-shrink:0;width:18px;font-size:.92rem}
+
+/* RUNWAY BAR */
+.rw-wrap{margin:4px 0 18px}
+.rw-track{height:14px;background:#f1f5f9;border-radius:7px;overflow:visible;position:relative;margin-bottom:6px}
+.rw-fill{height:100%;border-radius:7px;transition:width 1s ease;overflow:hidden}
+.rw-tgt{position:absolute;top:-4px;bottom:-4px;left:50%;width:2px;background:#cbd5e1;border-radius:1px;pointer-events:none}
+.rw-tgt-l{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#94a3b8;white-space:nowrap}
+.rw-ticks{display:flex;justify-content:space-between;font-size:.62rem;color:#94a3b8}
+
+/* GRADE */
+.gc{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.95rem;font-weight:900;margin:0 auto 8px}
+.gA{background:#dcfce7;color:#15803d}
+.gB{background:#d1fae5;color:#065f46}
+.gC{background:#fef9c3;color:#854d0e}
+.gD{background:#fed7aa;color:#9a3412}
+.gF{background:#fee2e2;color:#991b1b}
+
+/* METRIC BARS */
+.mb-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.mb-lbl{font-size:.74rem;font-weight:600;color:#475569;width:108px;flex-shrink:0}
+.mb-trk{flex:1;height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden}
+.mb-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.mb-g{background:#22c55e}
+.mb-y{background:#f59e0b}
+.mb-r{background:#ef4444}
+.mb-val{font-size:.74rem;font-weight:700;color:#1e293b;width:56px;text-align:right;flex-shrink:0}
+
+/* REPORT */
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:900px){.rg{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.rg{grid-template-columns:1fr}}
+.rc2{border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 10px;text-align:center}
+.rc2-ic{font-size:1.05rem;margin-bottom:2px}
+.rc2-lb{font-size:.6rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.rc2-vl{font-size:1.05rem;font-weight:900;line-height:1.15}
+.rc2-sb{font-size:.66rem;color:#64748b;margin-top:2px}
+
+/* INSIGHTS */
+.ins{display:flex;gap:9px;background:#f8fafc;border-left:3px solid #e2e8f0;border-radius:0 8px 8px 0;padding:8px 12px;margin-bottom:6px;font-size:.76rem;color:#334155;line-height:1.45}
+.ins.ok{border-left-color:#22c55e}
+.ins.warn{border-left-color:#f59e0b}
+.ins.bad{border-left-color:#ef4444}
+.ins-ic{flex-shrink:0;font-size:1.1rem}
+
+/* NEXT TOOLS */
+.ntl{display:flex;flex-direction:column;gap:4px}
+.ntl a{display:flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px 9px;font-size:.72rem;font-weight:700;color:#475569;text-decoration:none;transition:all .15s}
+.ntl a:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+
+/* 3-COLUMN REPORT BODY (Period Comparison · Insights · Action Plan) */
+.report-body{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;margin-bottom:10px;align-items:start}
+@media(max-width:900px){.report-body{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.report-body{grid-template-columns:1fr}}
+.report-body .card{margin-bottom:0;padding:12px 14px}
+.report-body .ct{font-size:.84rem;margin-bottom:2px}
+.report-body .cs{font-size:.7rem;margin-bottom:6px}
+
+/* COMPACT BOTTOM STRIP (Share + PDF + Upgrade) */
+.bottom-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+@media(max-width:600px){.bottom-strip{grid-template-columns:1fr}}
+.bs-tile{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;text-decoration:none;font-family:inherit;cursor:pointer;border:none;text-align:left;transition:transform .12s,box-shadow .12s}
+.bs-tile:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.bs-tile .bs-ic{font-size:1.4rem;flex-shrink:0}
+.bs-tile .bs-tx{font-size:.74rem;line-height:1.3;color:inherit}
+.bs-tile .bs-tx b{font-size:.84rem;font-weight:800}
+.bs-tile .bs-sm{color:rgba(255,255,255,.85);font-weight:500}
+.bs-share{background:#7c3aed;color:#fff}.bs-share:hover{background:#6d28d9}
+.bs-pdf  {background:#7c3aed;color:#fff}.bs-pdf:hover  {background:#6d28d9}
+.bs-up   {background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#fff}
+
+/* UPGRADE */
+.upg{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:12px;padding:16px 18px;color:#fff;margin-bottom:12px}
+.upg-t{font-size:.95rem;font-weight:900;margin-bottom:3px}
+.upg-s{font-size:.74rem;color:#94a3b8;line-height:1.45;margin-bottom:10px}
+.upg-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+@media(max-width:900px){.upg-g{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.upg-g{grid-template-columns:1fr}}
+.upg-i{background:rgba(255,255,255,.07);border-radius:7px;padding:7px 10px;font-size:.72rem;color:#e2e8f0;line-height:1.35}
+.upg-tier{display:block;font-size:.65rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.upg-btns{display:flex;gap:10px;flex-wrap:wrap}
+.upg-p{background:#7c3aed;color:#fff;border:none;padding:11px 22px;border-radius:8px;font-size:.86rem;font-weight:800;text-decoration:none;display:inline-block;transition:background .15s}
+.upg-p:hover{background:#6d28d9}
+.upg-q{background:rgba(255,255,255,.1);color:#e2e8f0;border:1.5px solid rgba(255,255,255,.2);padding:10px 20px;border-radius:8px;font-size:.86rem;font-weight:700;text-decoration:none;display:inline-block;transition:all .15s}
+.upg-q:hover{background:rgba(255,255,255,.18)}
+
+/* BUTTONS */
+.btn-full{width:100%;background:#7c3aed;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;transition:background .15s}
+.btn-full:hover{background:#6d28d9}
+.btn-cont{background:#7c3aed;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:.84rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;margin:12px auto 0;transition:background .15s}
+.btn-cont:hover{background:#6d28d9}
+.ct{font-size:.92rem;font-weight:900;color:#0f172a;margin-bottom:3px}
+.cs{font-size:.74rem;color:#64748b;margin-bottom:10px;line-height:1.4}
+.note{font-size:.7rem;color:#94a3b8;text-align:center;margin-top:6px}
+
+/* PERIOD COMPARISON */
+.cmp-table{width:100%;border-collapse:collapse;margin-top:2px}
+.cmp-table th{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;padding:4px 8px;text-align:left;border-bottom:1.5px solid #e2e8f0}
+.cmp-table td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-size:.76rem;vertical-align:middle}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-metric{font-size:.66rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.03em}
+.cmp-val{font-weight:900;color:#0f172a}
+.cmp-sub{font-size:.64rem;color:#94a3b8;font-weight:400}
+.cmp-arrow{color:#cbd5e1;font-size:.78rem;font-weight:900;text-align:center}
+.cmp-delta.up{color:#15803d;font-weight:800}
+.cmp-delta.down{color:#991b1b;font-weight:800}
+.cmp-delta.flat{color:#64748b;font-weight:600}
+.cmp-no-history{color:#94a3b8;font-size:.82rem;font-style:italic}
+
+/* TOAST */
+.fw-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:10px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.fw-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.fw-toast.toast-err{background:#dc2626}
+.fw-toast.toast-ok{background:#16a34a}
+.fw-toast.toast-info{background:#2563eb}
+
+/* INLINE FIELD ERROR */
+.field-err{font-size:.74rem;color:#dc2626;font-weight:700;margin-top:4px;display:none}
+.fl input.err{border-color:#dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.1)!important}
+</style>
+
+<!-- Multi-country localization -->
+<script src="country-data.js"></script>
+<script src="country-switcher.js" defer></script>
+<script src="asof-month.js"></script>
+<link rel="stylesheet" href="fit-screen.css"/>
+<script defer src="plan-banner.js"></script>
+</head>
+<body>
+<div id="fwToast" class="fw-toast" role="alert" aria-live="assertive"></div>
+
+<script src="sidebar.js"></script>
+<header class="hdr">
+  <a href="index.html" class="logo"><b class="bz-brand" style="font-weight:inherit;color:inherit">Biz<span>Sco</span></b></a>
+  <a href="dashboard.html" class="back">Dashboard</a>
+</header>
+
+<div class="prog-wrap" id="progWrap" style="display:none">
+  <div class="steps-row">
+    <div class="si" id="si1"><div class="sd" id="sd1">1</div><div class="sl">Numbers</div></div>
+    <div class="si" id="si2"><div class="sd" id="sd2">2</div><div class="sl">Loan Safety</div></div>
+    <div class="si" id="si3"><div class="sd" id="sd3">3</div><div class="sl">Cash Runway</div></div>
+    <div class="si" id="si4"><div class="sd" id="sd4">4</div><div class="sl">Health Grade</div></div>
+    <div class="si" id="si5"><div class="sd" id="sd5">5</div><div class="sl">Report</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- WELCOME -->
+  <div class="screen active" id="screen0">
+    <div class="w-hero">
+      <div class="w-emoji">&#9679;</div>
+      <div class="w-title">Free Financial Checkup</div>
+      <div class="w-sub">4 checks — 2 minutes — No sign-up needed<br>Find out exactly where your business stands financially.</div>
+    </div>
+    <div class="clist">
+      <div class="cl-row">
+        <div class="cl-ic" style="background:#dbeafe">&#9679;</div>
+        <div class="cl-bd"><div class="cl-nm">Loan Safety Score</div><div class="cl-ds">SAFE / RISKY / DANGEROUS verdict based on your cash flow and debt ratio</div></div>
+        <span class="fbadge">Free</span>
+      </div>
+      <div class="cl-row">
+        <div class="cl-ic" style="background:#dcfce7">&#9679;</div>
+        <div class="cl-bd"><div class="cl-nm">Cash Runway</div><div class="cl-ds">How many months your reserves will last if revenue stops</div></div>
+        <span class="fbadge">Free</span>
+      </div>
+      <div class="cl-row">
+        <div class="cl-ic" style="background:#fef9c3">&#9679;</div>
+        <div class="cl-bd"><div class="cl-nm">Business Health Grade</div><div class="cl-ds">Overall financial health across 4 metrics — Grade A through F</div></div>
+        <span class="fbadge">Free</span>
+      </div>
+      <div class="cl-row">
+        <div class="cl-ic" style="background:#f3e8ff">&#9679;</div>
+        <div class="cl-bd"><div class="cl-nm">Funding Opportunities</div><div class="cl-ds">Grants and lenders matched to your business profile</div></div>
+        <span class="fbadge">Free</span>
+      </div>
+    </div>
+    <button class="btn-full" onclick="startCheckup()">Start My Free Checkup &rarr;</button>
+    <p class="note">No account needed — Data stays in your browser</p>
+  </div>
+
+  <!-- STEP 1: NUMBERS -->
+  <div class="screen" id="screen1">
+    <div class="sh-eye">Step 1 of 5</div>
+    <div class="sh-h">Confirm your numbers</div>
+    <div class="sh-s">We run all 4 checks from these 4 figures. Pre-filled from your profile if saved.</div>
+    <div class="card">
+      <div class="pn" id="profNotice" style="display:none"><span>✓</span> Pre-filled from your saved profile — edit any value below.</div>
+      <div class="ig">
+        <div class="fl"><label>Monthly Revenue ($)</label><input type="number" id="ck_rev" placeholder="e.g. 15000" oninput="refreshCF();clearErr('ck_rev')"><div class="field-err" id="err_rev">Please enter your monthly revenue</div></div>
+        <div class="fl"><label>Monthly Expenses ($)</label><input type="number" id="ck_exp" placeholder="e.g. 11000" oninput="refreshCF();clearErr('ck_exp')"><div class="field-err" id="err_exp">Please enter your monthly expenses</div></div>
+        <div class="fl"><label>Monthly Loan Repayments ($)</label><input type="number" id="ck_emi" placeholder="e.g. 1500 (or 0)"></div>
+        <div class="fl"><label>Cash Reserve / Savings ($)</label><input type="number" id="ck_res" placeholder="e.g. 25000"></div>
+      </div>
+      <!-- As-of month tagger (powered by /asof-month.js) -->
+      <div data-asof-month></div>
+      <div id="cfPill" class="cf cf-neu">— Enter revenue &amp; expenses above</div>
+      <button class="btn-full" onclick="runCheckup()">Run My Checkup &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: LOAN SAFETY -->
+  <div class="screen" id="screen2">
+    <div class="sh-eye">Step 2 of 5 — Loan Safety</div>
+    <div class="sh-h">Your Loan Safety Score</div>
+    <div class="card">
+      <div class="rc">
+        <div class="re">&#9679;</div>
+        <div id="loanBadge" class="verd v-safe">SAFE</div><br>
+        <div class="bn" id="loanNum">0</div>
+        <div class="bu">out of 100</div>
+      </div>
+      <div class="mr">
+        <div class="ms"><div class="msv" id="ms_dscr">—</div><div class="msl">DSCR</div></div>
+        <div class="ms"><div class="msv" id="ms_ncf">—</div><div class="msl">Net Cash Flow</div></div>
+        <div class="ms"><div class="msv" id="ms_er">—</div><div class="msl">Expense Ratio</div></div>
+      </div>
+      <ul class="buls" id="loanBullets"></ul>
+      <button class="btn-cont" onclick="goScreen(3)">Continue → Cash Runway</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: CASH RUNWAY -->
+  <div class="screen" id="screen3">
+    <div class="sh-eye">Step 3 of 5 — Cash Runway</div>
+    <div class="sh-h">Your Cash Runway</div>
+    <p style="font-size:.86rem;color:#64748b;line-height:1.55;margin:-6px 0 14px;max-width:640px">
+      How many months your reserves would last <strong>if revenue stopped tomorrow</strong>. If your business is profitable, treat this as your <em>emergency-fund buffer</em>, not your survival timeline.
+    </p>
+    <div class="card">
+      <div class="rc">
+        <div class="re">&#9679;</div>
+        <div id="rwBadge" class="verd v-strong">STRONG</div><br>
+        <div class="bn" id="rwNum">—</div>
+        <div class="bu">months of reserves</div>
+      </div>
+      <div class="rw-wrap">
+        <div class="rw-track">
+          <div class="rw-fill mb-g" id="rwFill" style="width:0%"></div>
+          <div class="rw-tgt"><div class="rw-tgt-l">6 mo target</div></div>
+        </div>
+        <div class="rw-ticks"><span>0</span><span>3 mo</span><span>6 mo</span><span>9 mo</span><span>12+ mo</span></div>
+      </div>
+      <ul class="buls" id="rwBullets"></ul>
+      <button class="btn-cont" onclick="goScreen(4)">Continue → Business Health</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: HEALTH GRADE -->
+  <div class="screen" id="screen4">
+    <div class="sh-eye">Step 4 of 5 — Business Health</div>
+    <div class="sh-h">Your Business Health Grade</div>
+    <div class="card">
+      <div class="rc">
+        <div class="re">&#9679;</div>
+        <div id="gradeCircle" class="gc gB">B</div>
+        <div id="gradeBadge" class="verd v-good">GOOD HEALTH</div>
+      </div>
+      <div style="margin:18px 0">
+        <div class="mb-row"><div class="mb-lbl">Profit Margin</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_pm" style="width:0%"></div></div><div class="mb-val" id="val_pm">—</div></div>
+        <div class="mb-row"><div class="mb-lbl">Debt Coverage</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_dc" style="width:0%"></div></div><div class="mb-val" id="val_dc">—</div></div>
+        <div class="mb-row"><div class="mb-lbl">Cash Runway</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_rw" style="width:0%"></div></div><div class="mb-val" id="val_rw">—</div></div>
+        <div class="mb-row"><div class="mb-lbl">Cost Efficiency</div><div class="mb-trk"><div class="mb-fill mb-g" id="bar_ce" style="width:0%"></div></div><div class="mb-val" id="val_ce">—</div></div>
+      </div>
+      <button class="btn-cont" onclick="goScreen(5)">See My Full Report &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: FULL REPORT (v2 demo style) -->
+  <div class="screen" id="screen5">
+    <!-- V3 hero strip — matches dashboard typography scale -->
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+      <h1 style="font-size:24px;font-weight:600;color:#0f172a;margin:0;letter-spacing:-.01em">Your Financial Health Report</h1>
+      <div id="repDate" style="font-size:13px;color:#94a3b8;font-weight:500"></div>
+    </div>
+
+    <!-- V3 PRIMARY KPIs — 4 large cards -->
+    <h2 class="v3-section">Financial health</h2>
+    <div class="v3-primary" id="v3RepPrimary"></div>
+
+    <!-- V3 SECONDARY KPIs — 4 small supporting metrics -->
+    <h2 class="v3-section">Supporting metrics</h2>
+    <div class="v3-secondary" id="v3RepSecondary"></div>
+
+    <!-- Insights + Action plan -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px">
+        <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:10px">Personalised insights</div>
+        <div id="insightsList"></div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px">
+        <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:10px">Recommended next steps</div>
+        <div id="nextTools"></div>
+      </div>
+    </div>
+
+    <!-- LEGACY V1/V2 BLOCKS — kept for JS targets but hidden visually -->
+    <div id="v1Report" style="display:none">
+      <div class="rg" id="repGrid"></div>
+      <div class="v2-summary-grid" id="v2SummaryGrid"></div>
+      <div class="v2-totals"><div class="v2-totals-grid" id="v2TotalsGrid"></div></div>
+      <div class="card" id="periodCmpCard" style="display:none">
+        <div class="ct">Period Comparison</div>
+        <div class="cs" id="cmpSubtitle" style="margin-bottom:6px"></div>
+        <div id="periodCmpBody"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY CROSS-LINK (compact) -->
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:8px">
+      <a href="history.html" style="font-size:.74rem;font-weight:800;color:#2563eb;text-decoration:none;border:1px solid #bfdbfe;padding:5px 11px;border-radius:6px;background:#eff6ff">📊 History</a>
+      <a href="whatif.html" style="font-size:.74rem;font-weight:800;color:#7c3aed;text-decoration:none;border:1px solid #ddd6fe;padding:5px 11px;border-radius:6px;background:#f5f3ff">🔮 What-If</a>
+    </div>
+
+    <!-- COMPACT BOTTOM STRIP: Share + PDF Gate + Upgrade -->
+    <div class="bottom-strip">
+      <button class="bs-tile bs-share" onclick="openShare()">
+        <span class="bs-ic">🔗</span>
+        <span class="bs-tx"><b>Share Score Card</b><br><span class="bs-sm">Image or link</span></span>
+      </button>
+      <a href="pricing.html" class="bs-tile bs-pdf">
+        <span class="bs-ic">📄</span>
+        <span class="bs-tx"><b data-tier-badge="pro">Full PDF — Pro</b><br><span class="bs-sm">12-page lender report</span></span>
+      </a>
+      <a href="dashboard.html" class="bs-tile bs-up">
+        <span class="bs-ic">🚀</span>
+        <span class="bs-tx"><b>Unlock 40+ tools</b><br><span class="bs-sm">All Pro features</span></span>
+      </a>
+    </div>
+
+    <!-- DETAILS-EXPANDED tool list (hidden by default) -->
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-size:.78rem;color:#64748b;font-weight:700">More recommendations →</summary>
+      <div class="upg" style="margin-top:8px">
+        <div class="upg-t">Unlock deeper analysis</div>
+        <div class="upg-s">Tools matched to areas your checkup flagged.</div>
+        <div class="upg-g" id="upgItems"></div>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+<!-- SHARE MODAL -->
+<div id="shareMdl" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;padding:20px;overflow-y:auto;align-items:flex-start;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:28px;max-width:580px;width:100%;margin:40px auto;position:relative">
+    <button onclick="closeShare()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94a3b8;line-height:1">&times;</button>
+    <div style="font-size:1rem;font-weight:900;color:#0f172a;margin-bottom:4px">Your Score Card</div>
+    <p style="font-size:.8rem;color:#64748b;margin-bottom:18px">Download a branded image or copy a shareable link — perfect for sending to your advisor or lender.</p>
+    <canvas id="scoreCanvas" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:18px;display:block"></canvas>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <button onclick="downloadCard()" style="flex:1;background:#7c3aed;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;min-width:140px">Download PNG</button>
+      <button id="copyBtn" onclick="copyShareLink()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:11px 16px;border-radius:8px;font-size:.86rem;font-weight:700;cursor:pointer;min-width:140px;transition:all .2s">Copy Link</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="shareWA()" style="flex:1;background:#25d366;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">WhatsApp</button>
+      <button onclick="shareLI()" style="flex:1;background:#0077b5;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">in LinkedIn</button>
+      <button onclick="shareEmail()" style="flex:1;background:#f8fafc;color:#1e293b;border:1.5px solid #e2e8f0;padding:10px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;min-width:110px">Email</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var D={}, R={};
+function $(id){return document.getElementById(id)}
+function fmt(n){return Math.round(n).toLocaleString('en-US')}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+
+var _toastTimer=null;
+function showToast(msg,type,dur){
+  var t=$('fwToast');
+  if(!t)return;
+  t.textContent=msg;
+  t.className='fw-toast toast-'+(type||'info');
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(function(){t.classList.remove('show');},dur||3000);
+}
+function showErr(inputId,errId){
+  var inp=$(inputId),err=$(errId);
+  if(inp)inp.classList.add('err');
+  if(err)err.style.display='block';
+}
+function clearErr(inputId){
+  var inp=$(inputId);
+  if(!inp)return;
+  inp.classList.remove('err');
+  var errId='err_'+inputId.replace('ck_','');
+  var err=$(errId);
+  if(err)err.style.display='none';
+}
+
+function refreshCF(){
+  var rev=parseFloat($('ck_rev').value)||0, exp=parseFloat($('ck_exp').value)||0, net=rev-exp;
+  var p=$('cfPill');
+  if(!rev&&!exp){p.className='cf cf-neu';p.innerHTML='— Enter revenue &amp; expenses above';return}
+  if(net>0){p.className='cf cf-pos';p.textContent='✅ Cash-flow positive — +$'+fmt(net)+'/mo'}
+  else if(net===0){p.className='cf cf-neu';p.textContent='⚖ Breaking even — $0 net'}
+  else{p.className='cf cf-neg';p.textContent='⚠ Cash-flow negative — -$'+fmt(-net)+'/mo'}
+}
+
+function startCheckup(){
+  var p=null; try{p=JSON.parse(localStorage.getItem('fw_profile')||'null')}catch(e){}
+  if(!p&&window.fwAuth&&fwAuth.profile&&fwAuth.profile.biz_profile){
+    try{var biz=JSON.parse(fwAuth.profile.biz_profile||'{}');if(biz.rev||biz.exp)p={rev:biz.rev,exp:biz.exp,emi:biz.emi,reserve:0};}catch(e){}
+  }
+  if(p){
+    if(p.rev) $('ck_rev').value=p.rev;
+    if(p.exp) $('ck_exp').value=p.exp;
+    if(p.emi) $('ck_emi').value=p.emi;
+    if(p.reserve) $('ck_res').value=p.reserve;
+    if(p.rev||p.exp) $('profNotice').style.display='flex';
+    refreshCF();
+  }
+  $('progWrap').style.display='block';
+  goScreen(1);
+}
+
+/* Reload Checkup inputs when user switches months on the as-of-month toggle.
+   If a snapshot exists for the chosen month → fill the 4 inputs from it.
+   If not → clear inputs so they can enter that month's numbers fresh. */
+window.addEventListener('bizsco:monthchange', function(e){
+  var month = e.detail && e.detail.month;
+  if (!month) return;
+  var snaps; try { snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots')||'{}')||{}; } catch(_e){ snaps = {}; }
+  var s = snaps[month];
+  if (s) {
+    $('ck_rev').value = s.rev     != null ? s.rev     : '';
+    $('ck_exp').value = s.exp     != null ? s.exp     : '';
+    $('ck_emi').value = s.emi     != null ? s.emi     : '';
+    $('ck_res').value = s.reserve != null ? s.reserve : '';
+  } else {
+    $('ck_rev').value = '';
+    $('ck_exp').value = '';
+    $('ck_emi').value = '';
+    $('ck_res').value = '';
+  }
+  // Refresh the cash-flow pill since inputs changed
+  if (typeof refreshCF === 'function') refreshCF();
+});
+
+function runCheckup(){
+  D.rev=parseFloat($('ck_rev').value)||0;
+  D.exp=parseFloat($('ck_exp').value)||0;
+  D.emi=parseFloat($('ck_emi').value)||0;
+  D.res=parseFloat($('ck_res').value)||0;
+  if(!D.rev&&!D.exp){
+    showErr('ck_rev','err_rev'); showErr('ck_exp','err_exp');
+    showToast('Please enter your monthly revenue and expenses','err');
+    return;
+  }
+  if(!D.rev){showErr('ck_rev','err_rev');showToast('Please enter your monthly revenue','err');return;}
+  if(!D.exp){showErr('ck_exp','err_exp');showToast('Please enter your monthly expenses','err');return;}
+  compute(); fillLoan(); fillRunway(); fillHealth(); fillReport();
+  goScreen(2);
+  animNum('loanNum',0,R.loanScore,900);
+}
+
+function compute(){
+  var rev=D.rev,exp=D.exp,emi=D.emi,res=D.res;
+  var burn=exp+emi;                          // total monthly outflow incl. debt service
+  var ncf=rev-exp;                           // operating net (used for DSCR)
+  var dscr=emi>0?ncf/emi:99;
+  var er=rev>0?exp/rev:1;
+  var pm=rev>0?ncf/rev:0;
+  var deficit=Math.max(0,burn-rev);          // monthly shortfall (0 if profitable)
+  var rmo=deficit>0
+    ?(res>0?Math.min(res/deficit,24):0)      // losing: how long reserves bridge the gap
+    :(burn>0?Math.min(res/burn,24):24);      // profitable: how long reserves last if revenue stops
+
+  var ls=50;
+  if(dscr>=2)ls+=25;else if(dscr>=1.5)ls+=18;else if(dscr>=1.2)ls+=10;else if(dscr>=1)ls+=2;else if(emi>0)ls-=18;
+  if(rmo>=6)ls+=15;else if(rmo>=3)ls+=5;else ls-=8;
+  if(er<0.65)ls+=10;else if(er<0.75)ls+=4;else if(er>=1)ls-=12;
+  ls=clamp(Math.round(ls),5,100);
+  var lv=ls>=70?'SAFE':ls>=45?'RISKY':'DANGEROUS';
+
+  var rDisp=rmo>=24?'24+':(Math.round(rmo*10)/10).toString();
+  // Runway verdict considers WHETHER the business is profitable. A
+  // profitable business with a thin reserve has a BUFFER concern, not a
+  // survival crisis — reserve labels reflect that nuance.
+  // ncf = net cash flow per month (rev - exp, before debt service)
+  // (Use cashLeft = ncf - emi for true bottom-line surplus.)
+  var cashLeft = ncf - emi;  // monthly surplus after debt service
+  var rStat;
+  if (cashLeft >= 0) {
+    // Profitable — assess as emergency-fund buffer only
+    rStat = rmo >= 6 ? 'STRONG' : rmo >= 3 ? 'ADEQUATE' : 'BUFFER LOW';
+  } else {
+    // Losing money — true survival runway
+    rStat = rmo >= 6 ? 'STRONG' : rmo >= 3 ? 'WARNING' : 'CRITICAL';
+  }
+
+  var hs=0;
+  hs+=pm>0.2?25:pm>0.1?18:pm>0.05?12:pm>0?6:0;
+  hs+=(dscr===99||dscr>=1.5)?25:dscr>=1.2?18:dscr>=1?10:0;
+  hs+=rmo>=6?25:rmo>=3?15:rmo>=1?6:0;
+  hs+=er<0.65?25:er<0.75?18:er<0.85?12:er<1?5:0;
+  hs=clamp(hs,0,100);
+  var grade=hs>=85?'A':hs>=70?'B':hs>=52?'C':hs>=36?'D':'F';
+  var glabel={A:'Excellent',B:'Good',C:'Fair',D:'Needs Work',F:'Critical'}[grade];
+
+  var p2=null;try{p2=JSON.parse(localStorage.getItem('fw_profile')||'null')}catch(e){}
+  var gc=3;
+  if(p2){
+    if(['CA','TX','NY','FL','IL'].includes(p2.state))gc+=2;
+    if(['Health & Wellness','Technology / Software'].includes(p2.industry))gc+=2;
+    else if(p2.industry)gc+=1;
+  }
+  R={ncf,dscr,er,pm,rmo,rDisp,rStat,loanScore:ls,loanVerdict:lv,hs,grade,glabel,grantCount:gc};
+}
+
+function fillLoan(){
+  var r=R,b=$('loanBadge');
+  b.textContent=r.loanVerdict;
+  b.className='verd '+{SAFE:'v-safe',RISKY:'v-risky',DANGEROUS:'v-danger'}[r.loanVerdict];
+  $('ms_dscr').textContent=r.dscr>=99?'8':r.dscr.toFixed(2);
+  $('ms_ncf').textContent=(r.ncf>=0?'+':'-')+'$'+fmt(Math.abs(r.ncf));
+  $('ms_er').textContent=Math.round(r.er*100)+'%';
+  var pts=[];
+  if(r.dscr>=1.5)pts.push({i:'✓',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> — each $1 of debt is covered by $'+r.dscr.toFixed(2)+' of income. Well above the safe 1.2x threshold.'});
+  else if(r.dscr>=1.2)pts.push({i:'✓',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is above the 1.2x minimum but leaves limited buffer.'});
+  else if(r.dscr>=1)pts.push({i:'⚠️',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is just above 1.0. One slow month could put repayments at risk.'});
+  else if(D.emi===0)pts.push({i:'✓',t:'No current loan repayments — zero debt burden is a positive signal for your score.'});
+  else pts.push({i:'⚠️',t:'DSCR of <strong>'+r.dscr.toFixed(2)+'x</strong> is below 1.0 — income does not fully cover loan repayments.'});
+  if(r.rmo>=6)pts.push({i:'✓',t:'Cash reserve gives you <strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of runway — a strong safety buffer.'});
+  else if(r.rmo>=3)pts.push({i:'⚠️',t:'<strong>'+Math.round(r.rmo)+' months</strong> of reserves — below the 6-month target. Aim to build it up; this currently shaves points off your loan safety score.'});
+  else if(r.ncf>=D.emi)pts.push({i:'⚠️',t:'Emergency reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. Your cash flow is healthy, but lenders prefer 6+ months as a safety cushion.'});
+  else pts.push({i:'⚠️',t:'Reserves cover only <strong>'+Math.round(r.rmo)+' month(s)</strong>. An emergency could leave you unable to repay.'});
+  if(r.er<0.75)pts.push({i:'✓',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — healthy cost control.'});
+  else if(r.er<0.85)pts.push({i:'⚠️',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong>. Trimming costs by 10—15% would improve your score.'});
+  else pts.push({i:'⚠️',t:'Expense ratio of <strong>'+Math.round(r.er*100)+'%</strong> — expenses consuming nearly all revenue, leaving no buffer.'});
+  $('loanBullets').innerHTML=pts.map(function(p){return '<li><span class="bi">'+p.i+'</span><span>'+p.t+'</span></li>'}).join('');
+}
+
+function fillRunway(){
+  var r=R;
+  $('rwNum').textContent=r.rDisp;
+  var b=$('rwBadge');
+  b.textContent=r.rStat;
+  // Map verdict label → badge color class. ADEQUATE / BUFFER LOW use amber
+  // (warning), not red, because the business itself is healthy when those
+  // appear — only CRITICAL truly means crisis.
+  var badgeCls = {
+    'STRONG':     'v-strong',
+    'ADEQUATE':   'v-warning',
+    'BUFFER LOW': 'v-warning',
+    'WARNING':    'v-warning',
+    'CRITICAL':   'v-critical'
+  };
+  b.className='verd '+(badgeCls[r.rStat] || 'v-warning');
+
+  var pct=clamp((Math.min(r.rmo,12)/12)*100,0,100);
+  var barCls = {
+    'STRONG':     'mb-g',
+    'ADEQUATE':   'mb-y',
+    'BUFFER LOW': 'mb-y',
+    'WARNING':    'mb-y',
+    'CRITICAL':   'mb-r'
+  };
+  setTimeout(function(){
+    $('rwFill').style.width=pct+'%';
+    $('rwFill').className='rw-fill '+(barCls[r.rStat] || 'mb-y');
+  },200);
+
+  // Bullets — differentiate profitable vs losing money. Avoids the
+  // contradictory "cash-flow positive" + "one bad month = failure" combo.
+  var pts=[];
+  var cashLeft = r.ncf - D.emi;  // surplus after debt service
+
+  if (cashLeft >= 0) {
+    // PROFITABLE PATH
+    pts.push({i:'✓', t:'Business is <strong>cash-flow positive</strong> (surplus +$'+fmt(cashLeft)+'/mo after EMIs). Reserves are growing, not shrinking.'});
+    if (r.rmo >= 6) {
+      pts.push({i:'✓', t:'<strong>'+(r.rmo>=24?'24+':Math.round(r.rmo))+' months</strong> of reserves meets the 6-month emergency-fund minimum. Solid safety position.'});
+    } else if (r.rmo >= 3) {
+      pts.push({i:'⚠️', t:'Reserves cover <strong>'+Math.round(r.rmo)+' months</strong> if revenue stopped. This is your <em>emergency buffer</em>, not your runway — you\'re profitable, so reserves keep growing. Target: build to 6 months for full safety.'});
+    } else {
+      var monthsToTarget = Math.max(1, Math.ceil(((D.res>0?6*D.exp:0) - D.res) / cashLeft));
+      pts.push({i:'⚠️', t:'Emergency buffer is thin: <strong>'+r.rDisp+' month(s)</strong> if revenue stopped. <strong>Not a crisis</strong> — you\'re cash-flow positive — but build to 6 months for safety. At your current +$'+fmt(cashLeft)+'/mo surplus, you\'ll reach a 6-month buffer in ~<strong>'+monthsToTarget+' months</strong> if you save the surplus.'});
+    }
+  } else {
+    // LOSING MONEY PATH — true survival runway
+    pts.push({i:'⚠️', t:'Business is <strong>losing $'+fmt(-cashLeft)+'/mo</strong> after EMIs. Reserves are shrinking each month.'});
+    if (r.rmo >= 6) {
+      pts.push({i:'⚠️', t:'<strong>'+Math.round(r.rmo)+' months</strong> of runway at current burn rate. Use this window to fix profitability (cut expenses or grow revenue).'});
+    } else if (r.rmo >= 3) {
+      pts.push({i:'⚠️', t:'Only <strong>'+Math.round(r.rmo)+' months</strong> of runway. Take action this quarter — cut expenses or boost revenue.'});
+    } else if (r.rmo > 0) {
+      pts.push({i:'⚠️', t:'<strong>'+r.rDisp+' month(s)</strong> until reserves run out. Immediate action required: reduce expenses, defer non-essential payments, accelerate receivables.'});
+    } else {
+      pts.push({i:'⚠️', t:'No cash reserve entered. Add your savings to get an accurate runway figure.'});
+    }
+  }
+  $('rwBullets').innerHTML=pts.map(function(p){return '<li><span class="bi">'+p.i+'</span><span>'+p.t+'</span></li>'}).join('');
+}
+
+function fillHealth(){
+  var r=R;
+  var gc=$('gradeCircle');
+  gc.textContent=r.grade; gc.className='gc g'+r.grade;
+  var gb=$('gradeBadge');
+  gb.textContent=r.glabel.toUpperCase();
+  gb.className='verd '+(['A','B'].includes(r.grade)?'v-good':r.grade==='C'?'v-fair':'v-poor');
+  var pmPct=clamp(r.pm>0?r.pm*300:0,0,100);
+  var dcPct=clamp(r.dscr===99?100:(r.dscr/3)*100,0,100);
+  var rwPct=clamp((Math.min(r.rmo,12)/12)*100,0,100);
+  var cePct=clamp((1-r.er)*200,0,100);
+  function setBar(id,pct,g,m){
+    setTimeout(function(){
+      $('bar_'+id).style.width=pct+'%';
+      $('bar_'+id).className='mb-fill '+(pct>=g?'mb-g':pct>=m?'mb-y':'mb-r');
+    },250);
+  }
+  setBar('pm',pmPct,50,25); setBar('dc',dcPct,60,35);
+  setBar('rw',rwPct,50,25); setBar('ce',cePct,50,25);
+  $('val_pm').textContent=(r.pm*100).toFixed(1)+'%';
+  $('val_dc').textContent=r.dscr===99?'8':r.dscr.toFixed(2)+'x';
+  $('val_rw').textContent=(r.rmo>=24?'24+':Math.round(r.rmo))+' mo';
+  $('val_ce').textContent=Math.round(r.er*100)+'%';
+}
+
+function fillReport(){
+  var r=R;
+  $('repDate').textContent='Generated '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  /* load history for deltas */
+  var hist=[]; try{hist=JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){}
+  var prev=hist[0]||null;
+  var GO={A:5,B:4,C:3,D:2,F:1};
+  function mkDelta(val,unit,prevVal){
+    if(prevVal==null) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
+    var d=Math.round((val-prevVal)*10)/10;
+    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">No change</div>';
+    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'▲':'▼';
+    return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+(up?'+':'')+d+' '+unit+'</div>';
+  }
+  function mkGradeDelta(g,pg){
+    if(!pg) return '<div style="font-size:.67rem;color:#94a3b8;margin-top:5px">First checkup</div>';
+    var d=GO[g]-GO[pg];
+    if(d===0) return '<div style="font-size:.67rem;color:#64748b;margin-top:5px">Same as before</div>';
+    var up=d>0,col=up?'#15803d':'#991b1b',arrow=up?'▲':'▼';
+    return '<div style="font-size:.69rem;font-weight:700;color:'+col+';margin-top:5px">'+arrow+' '+pg+'→'+g+'</div>';
+  }
+
+  var C={SAFE:'#15803d',RISKY:'#854d0e',DANGEROUS:'#991b1b',STRONG:'#15803d',WARNING:'#854d0e',CRITICAL:'#991b1b'};
+  var BG={SAFE:'#dcfce7',RISKY:'#fef9c3',DANGEROUS:'#fee2e2',STRONG:'#dcfce7',WARNING:'#fef9c3',CRITICAL:'#fee2e2'};
+  var BO={SAFE:'#86efac',RISKY:'#fde68a',DANGEROUS:'#fca5a5',STRONG:'#86efac',WARNING:'#fde68a',CRITICAL:'#fca5a5'};
+  var gc=['A','B'].includes(r.grade)?'#15803d':r.grade==='C'?'#854d0e':'#991b1b';
+  var gb=['A','B'].includes(r.grade)?'#dcfce7':r.grade==='C'?'#fef9c3':'#fee2e2';
+  var gbo=['A','B'].includes(r.grade)?'#86efac':r.grade==='C'?'#fde68a':'#fca5a5';
+
+  var cards=[
+    {ic:'🔒',lb:'Loan Safety',vl:r.loanScore+'/100',sb:r.loanVerdict,c:C[r.loanVerdict],bg:BG[r.loanVerdict],bo:BO[r.loanVerdict],
+     delta:mkDelta(r.loanScore,'pts',prev?prev.loanScore:null)},
+    {ic:'💰',lb:'Cash Runway',vl:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',sb:r.rStat,c:C[r.rStat],bg:BG[r.rStat],bo:BO[r.rStat],
+     delta:mkDelta(r.rmo,'mo',prev?prev.runway:null)},
+    {ic:'📊',lb:'Health Grade',vl:'Grade '+r.grade,sb:r.glabel,c:gc,bg:gb,bo:gbo,
+     delta:mkGradeDelta(r.grade,prev?prev.grade:null)},
+    {ic:'🎯',lb:'Funding Matches',vl:r.grantCount+'+',sb:'programs found',c:'#1d4ed8',bg:'#eff6ff',bo:'#bfdbfe',delta:''}
+  ];
+  $('repGrid').innerHTML=cards.map(function(c){
+    return '<div class="rc2" style="background:'+c.bg+';border-color:'+c.bo+'"><div class="rc2-ic">'+c.ic+'</div><div class="rc2-lb">'+c.lb+'</div><div class="rc2-vl" style="color:'+c.c+'">'+c.vl+'</div><div class="rc2-sb">'+c.sb+'</div>'+c.delta+'</div>';
+  }).join('');
+
+  /* ── V3 DASHBOARD-STYLE REPORT (replaces visual layout, JS targets above remain in #v1Report for downstream code) ── */
+  var v3P = document.getElementById('v3RepPrimary');
+  var v3S = document.getElementById('v3RepSecondary');
+  if (v3P && v3S) {
+    function stateLoan(s){return s>=70?'is-good':s>=45?'is-warn':'is-crit';}
+    function stateRmo(m){return m>=6?'is-good':m>=3?'is-warn':'is-crit';}
+    function stateGrade(g){return ['A','B'].includes(g)?'is-good':g==='C'?'is-warn':g?'is-crit':'';}
+    function stateDscr(d){return d>=1.5?'is-good':d>=1.2?'is-warn':'is-crit';}
+    var primary=[
+      {ic:'🔒',lb:'Loan Score',val:r.loanScore+'/100',sub:r.loanVerdict,state:stateLoan(r.loanScore)},
+      {ic:'📊',lb:'Health Grade',val:r.grade,sub:r.hs+'/100 · '+(r.glabel||''),state:stateGrade(r.grade)},
+      {ic:'💰',lb:'Cash Runway',val:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',sub:r.rStat,state:stateRmo(r.rmo)},
+      {ic:'📈',lb:'DSCR',val:(r.dscr>=99?'∞':r.dscr.toFixed(2)+'x'),sub:'Income vs. debt coverage',state:stateDscr(r.dscr)}
+    ];
+    v3P.innerHTML = primary.map(function(c){
+      return '<div class="v3-card '+c.state+'">'
+        + '<span class="v3-ic">'+c.ic+'</span>'
+        + '<div class="v3-lbl">'+c.lb+'</div>'
+        + '<div class="v3-val">'+c.val+'</div>'
+        + '<div class="v3-sub">'+c.sub+'</div>'
+        + '</div>';
+    }).join('');
+    var ncf = r.ncf||0;
+    var sym = (function(){try{var p=JSON.parse(localStorage.getItem('fw_profile')||'{}');return p.country==='India'?'₹':'$';}catch(_e){return '$';}})();
+    var fmtV = function(n){return n.toLocaleString('en-US',{maximumFractionDigits:0});};
+    var secondary=[
+      {lb:'Net Cash Flow',val:(ncf>=0?'+':'-')+sym+fmtV(Math.abs(ncf)),sub:'Monthly surplus before debt',state:ncf>=0?'is-good':'is-crit'},
+      {lb:'Expense Ratio',val:Math.round(r.er*100)+'%',sub:r.er<0.75?'Healthy':r.er<0.9?'Tight':'High',state:r.er<0.75?'is-good':r.er<0.9?'is-warn':'is-crit'},
+      {lb:'Profit Margin',val:Math.round(r.pm*100)+'%',sub:r.pm>0.15?'Strong':r.pm>0.05?'OK':'Thin',state:r.pm>0.15?'is-good':r.pm>0.05?'is-warn':'is-crit'},
+      {lb:'Funding Matches',val:r.grantCount+'+',sub:'programs found',state:''}
+    ];
+    v3S.innerHTML = secondary.map(function(c){
+      return '<div class="v3-mini '+c.state+'">'
+        + '<div class="v3-lbl">'+c.lb+'</div>'
+        + '<div class="v3-val">'+c.val+'</div>'
+        + '<div class="v3-sub">'+c.sub+'</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  /* ── V2 DEMO LAYOUT RENDERING ── */
+  if(document.getElementById('v2SummaryGrid')){
+    var v2Tones = {SAFE:'good',STRONG:'good',ADEQUATE:'info',
+                   RISKY:'warn','BUFFER LOW':'warn',WARNING:'warn',
+                   DANGEROUS:'bad',CRITICAL:'bad'};
+    var v2Badges= {SAFE:'v2-bg-safe',STRONG:'v2-bg-safe',ADEQUATE:'v2-bg-info',
+                   RISKY:'v2-bg-warn','BUFFER LOW':'v2-bg-warn',WARNING:'v2-bg-warn',
+                   DANGEROUS:'v2-bg-bad',CRITICAL:'v2-bg-bad'};
+    var gradeTone = {A:'good',B:'good',C:'warn',D:'bad',F:'bad'}[r.grade] || 'info';
+    var gradeBadge= {A:'v2-bg-safe',B:'v2-bg-safe',C:'v2-bg-warn',D:'v2-bg-bad',F:'v2-bg-bad'}[r.grade] || 'v2-bg-info';
+
+    var v2 = [
+      {ic:'🔒', lb:'Loan Safety',     vl:r.loanScore+'/100',
+       sub:'Bank lending probability', tone:v2Tones[r.loanVerdict]||'info',
+       badge:r.loanVerdict, bcls:v2Badges[r.loanVerdict]||'v2-bg-info'},
+      {ic:'💰', lb:'Cash Runway',     vl:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',
+       sub:'Months reserves last if revenue stops', tone:v2Tones[r.rStat]||'info',
+       badge:r.rStat, bcls:v2Badges[r.rStat]||'v2-bg-info'},
+      {ic:'📊', lb:'Health Grade',    vl:'Grade '+r.grade,
+       sub:'Overall business strength', tone:gradeTone,
+       badge:r.glabel, bcls:gradeBadge},
+      {ic:'🎯', lb:'Funding Matches', vl:r.grantCount+'+',
+       sub:'Grants matching your profile', tone:'info',
+       badge:'EXPLORE', bcls:'v2-bg-info'},
+      {ic:'📈', lb:'DSCR',            vl:(r.dscr>=99?'∞':r.dscr.toFixed(2)+'x'),
+       sub:'Income vs. debt coverage', tone:r.dscr>=1.5?'good':r.dscr>=1.2?'warn':'bad',
+       badge:r.dscr>=1.5?'STRONG':r.dscr>=1.2?'WATCH':'WEAK',
+       bcls:r.dscr>=1.5?'v2-bg-safe':r.dscr>=1.2?'v2-bg-warn':'v2-bg-bad'},
+      {ic:'📉', lb:'Expense Ratio',   vl:Math.round(r.er*100)+'%',
+       sub:'Expenses as share of revenue', tone:r.er<0.75?'good':r.er<0.9?'warn':'bad',
+       badge:r.er<0.75?'HEALTHY':r.er<0.9?'TIGHT':'HIGH',
+       bcls:r.er<0.75?'v2-bg-safe':r.er<0.9?'v2-bg-warn':'v2-bg-bad'},
+      {ic:'💵', lb:'Net Cash Flow',   vl:(r.ncf>=0?'+':'-')+'$'+fmt(Math.abs(r.ncf)),
+       sub:'Monthly operating surplus', tone:r.ncf>=0?'good':'bad',
+       badge:r.ncf>=0?'POSITIVE':'NEGATIVE',
+       bcls:r.ncf>=0?'v2-bg-safe':'v2-bg-bad'},
+      {ic:'📅', lb:'Profit Margin',   vl:Math.round(r.pm*100)+'%',
+       sub:'Margin after expenses', tone:r.pm>0.15?'good':r.pm>0.05?'warn':'bad',
+       badge:r.pm>0.15?'STRONG':r.pm>0.05?'OK':'THIN',
+       bcls:r.pm>0.15?'v2-bg-safe':r.pm>0.05?'v2-bg-warn':'v2-bg-bad'}
+    ];
+    $('v2SummaryGrid').innerHTML = v2.map(function(c){
+      return '<div class="v2-tile '+c.tone+'">'+
+        '<div class="v2-tile-ic">'+c.ic+'</div>'+
+        '<div class="v2-tile-bd">'+
+          '<div class="v2-tile-lbl">'+c.lb+'</div>'+
+          '<div class="v2-tile-val">'+c.vl+'</div>'+
+          '<div class="v2-tile-sub">'+c.sub+'</div>'+
+          (c.badge?'<span class="v2-tile-badge '+c.bcls+'">'+c.badge+'</span>':'')+
+        '</div></div>';
+    }).join('');
+
+    /* Bottom totals banner — surface 4 key headline numbers */
+    var totals = [
+      {v:r.loanScore+'/100',                          l:'Loan Safety Score'},
+      {v:(r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo', l:'Cash Runway'},
+      {v:r.hs+'/100',                                 l:'Health Score (Grade '+r.grade+')'},
+      {v:'$'+fmt(Math.abs(r.ncf))+'/mo',              l:r.ncf>=0?'Net Cash Flow':'Monthly Shortfall'}
+    ];
+    $('v2TotalsGrid').innerHTML = totals.map(function(t){
+      return '<div class="v2-tt"><div class="v2-tt-val">'+t.v+'</div><div class="v2-tt-lbl">'+t.l+'</div></div>';
+    }).join('');
+  }
+
+  var ins=[];
+  if(r.loanVerdict==='SAFE'&&r.rStat==='STRONG')
+    ins.push({t:'ok',i:'✅',m:'<strong>Strong financial position.</strong> Loan safety and cash runway are both healthy — a good time to consider growth, whether that\'s expanding inventory, hiring, or applying for a business loan on favourable terms.'});
+  if(r.loanVerdict==='DANGEROUS')
+    ins.push({t:'bad',i:'❌',m:'<strong>Debt load is unsustainable.</strong> Your DSCR of '+r.dscr.toFixed(2)+'x means income doesn\'t fully cover repayments. Before taking on more debt, focus on cutting expenses or increasing revenue.'});
+  else if(r.loanVerdict==='RISKY')
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Loan position is borderline.</strong> DSCR of '+r.dscr.toFixed(2)+'x is below the safe 1.5x threshold. Any revenue dip could put repayments at risk.'});
+  if(r.rStat==='CRITICAL')
+    ins.push({t:'bad',i:'❌',m:'<strong>Cash reserves critically low ('+r.rDisp+' months).</strong> A single slow month or emergency could trigger a crisis. Prioritise building reserves before any new spending.'});
+  else if(r.rStat==='WARNING')
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Build your cash buffer.</strong> '+Math.round(r.rmo)+' months runway is below the recommended 6. The Cash Runway tool can show exactly how much to set aside each month.'});
+  if(r.pm<0)
+    ins.push({t:'bad',i:'❌',m:'<strong>Operating at a loss.</strong> Expenses exceed revenue by $'+fmt(-r.ncf)+'/mo. The Break-Even Analyzer can show you the exact changes needed to return to profitability.'});
+  else if(r.pm<0.05&&r.pm>=0)
+    ins.push({t:'warn',i:'⚠️',m:'<strong>Thin profit margins ('+( r.pm*100).toFixed(1)+'%).</strong> Small cost increases or revenue dips could push you into loss. Check the Break-Even Analyzer.'});
+  if(r.grantCount>3)
+    ins.push({t:'ok',i:'💰',m:'<strong>'+r.grantCount+'+ grant programs</strong> likely match your profile. Most owners leave free funding unclaimed simply because they don\'t know where to look.'});
+  if(ins.length===0)
+    ins.push({t:'ok',i:'✅',m:'<strong>Solid overall health (Grade '+r.grade+').</strong> Fundamentals are sound. Focus on maintaining expenses below 75% of revenue and keeping 6+ months of reserves.'});
+  $('insightsList').innerHTML=ins.slice(0,3).map(function(x){
+    return '<div class="ins '+x.t+'"><div class="ins-ic">'+x.i+'</div><div>'+x.m+'</div></div>';
+  }).join('');
+
+  var steps=[];
+  /* Priority 1 — fix the worst thing first */
+  if(r.loanVerdict==='DANGEROUS')
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'🔒',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'DSCR below 1.0 — fix this before any loan application'});
+  else if(r.loanVerdict==='RISKY')
+    steps.push({priority:'Fix First',badge:'#fef9c3',bc:'#854d0e',i:'🔒',n:'Loan Score Engine',h:'modules/loanDecisionScoreEngine.test.html',why:'Borderline DSCR — understand what it takes to reach SAFE'});
+  if(r.rStat==='CRITICAL')
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'💰',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Runway under 2 months — build reserves immediately'});
+  if(r.pm<0)
+    steps.push({priority:'Fix First',badge:'#fee2e2',bc:'#991b1b',i:'📊',n:'Break-Even Analyzer',h:'modules/breakEven.test.html',why:'Operating at a loss — find the minimum revenue needed'});
+
+  /* Priority 2 — things to improve */
+  if(r.rStat==='WARNING')
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'💰',n:'Cash Runway',h:'modules/cashRunway.test.html',why:'Build from '+Math.round(r.rmo)+' to 6+ months buffer'});
+  if(['C','D','F'].includes(r.grade))
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'📊',n:'Business Health Score',h:'modules/businessHealthScore.test.html',why:'Detailed breakdown of your Grade '+r.grade+' — see each component'});
+  if(r.loanVerdict!=='SAFE')
+    steps.push({priority:'Improve',badge:'#fef9c3',bc:'#854d0e',i:'🏦',n:'Loan Eligibility',h:'modules/loanEligibility.test.html',why:'Check which lenders will approve you at current score'});
+
+  /* Always include */
+  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'🎯',n:'What-If Scenarios',h:'whatif.html',why:'Model revenue/expense changes and see impact on your score'});
+  if(r.grantCount>2)
+    steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'💰',n:'Grant Finder',h:'modules/grantFinder.test.html',why:r.grantCount+'+ programs matched — free funding you may not know about'});
+  steps.push({priority:'Explore',badge:'#eff6ff',bc:'#1d4ed8',i:'📈',n:'Score History',h:'history.html',why:'Track your progress over time as you make improvements'});
+
+  var seen={}, deduped=[];
+  steps.forEach(function(s){if(!seen[s.h]){seen[s.h]=1;deduped.push(s);}});
+
+  $('nextTools').innerHTML=deduped.slice(0,6).map(function(t){
+    return '<div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9">'
+      +'<span style="font-size:1.15rem;flex-shrink:0;margin-top:2px">'+t.i+'</span>'
+      +'<div style="flex:1">'
+        +'<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">'
+          +'<span style="font-size:.8rem;font-weight:800;color:#0f172a">'+t.n+'</span>'
+          +'<span style="font-size:.62rem;font-weight:700;background:'+t.badge+';color:'+t.bc+';padding:1px 7px;border-radius:20px">'+t.priority+'</span>'
+        +'</div>'
+        +'<div style="font-size:.74rem;color:#64748b;line-height:1.4">'+t.why+'</div>'
+      +'</div>'
+      +'<a href="'+t.h+'" style="font-size:.76rem;font-weight:800;color:#2563eb;text-decoration:none;flex-shrink:0;padding-top:3px">Open &rarr;</a>'
+    +'</div>';
+  }).join('')+'<div style="border-bottom:none"></div>';
+
+  var ui=[];
+  if(r.loanVerdict!=='SAFE')ui.push({tier:'Starter',n:'Loan Eligibility Checker',d:'See which lenders will approve you now'});
+  if(r.rStat!=='STRONG')ui.push({tier:'Starter',n:'Invoice Tracker',d:'Track receivables to improve cash flow'});
+  if(['C','D','F'].includes(r.grade))ui.push({tier:'Pro',n:'AI CFO Advisor',d:'AI-powered advice on your exact situation'});
+  ui.push({tier:'Pro',n:'Revenue Forecast',d:'Predict your next 12 months'});
+  ui.push({tier:'Pro',n:'Debt Consolidation',d:'Find better terms on existing loans'});
+  $('upgItems').innerHTML=ui.slice(0,4).map(function(u){
+    return '<div class="upg-i"><span class="upg-tier">'+u.tier+'</span>'+u.n+'<br><span style="font-size:.72rem;color:#64748b">'+u.d+'</span></div>';
+  }).join('');
+
+  /* save to history */
+  var asOfMonth = (typeof window.getAsOfMonth === 'function')
+    ? window.getAsOfMonth()
+    : new Date().toISOString().substring(0,7);
+
+  var entry={date:new Date().toISOString(),asOfMonth:asOfMonth,loanScore:r.loanScore,loanVerdict:r.loanVerdict,
+    runway:r.rmo,runwayStatus:r.rStat,grade:r.grade,healthScore:r.hs,grantCount:r.grantCount};
+  var h2=[]; try{h2=JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){}
+  h2.unshift(entry); h2=h2.slice(0,12);
+  localStorage.setItem('fw_score_history',JSON.stringify(h2));
+  localStorage.setItem('fw_last_checkup',JSON.stringify(entry));
+
+  /* Mirror to fw_monthly_snapshots so the new Score History page
+     (monthlyHistory.html) picks up checkup runs as data points. */
+  try {
+    var snaps = JSON.parse(localStorage.getItem('fw_monthly_snapshots') || '{}');
+    if (!snaps[asOfMonth]) snaps[asOfMonth] = {};
+    snaps[asOfMonth].rev         = D.rev;
+    snaps[asOfMonth].exp         = D.exp;
+    snaps[asOfMonth].emi         = D.emi;
+    snaps[asOfMonth].reserve     = D.res;
+    snaps[asOfMonth].healthScore = r.hs;
+    snaps[asOfMonth].grade       = r.grade;
+    snaps[asOfMonth].asOfMonth   = asOfMonth;
+    snaps[asOfMonth].savedAt     = new Date().toISOString();
+    localStorage.setItem('fw_monthly_snapshots', JSON.stringify(snaps));
+  } catch (e) {}
+
+  /* save snapshot to Supabase */
+  if(window.fwAuth&&fwAuth.user&&fwAuth.client){
+    var today=new Date().toISOString().slice(0,10);
+    fwAuth.client.from('financial_data').insert({user_id:fwAuth.user.id,revenue:D.rev,expenses:D.exp,emi:D.emi,snapshot_date:today,as_of_month:asOfMonth}).then(function(){});
+  }
+
+  /* Period Comparison — use the record that was [0] before this run (now [1]) */
+  renderPeriodComparison(r, h2.length > 1 ? h2[1] : null);
+}
+
+function renderPeriodComparison(r, prev){
+  var card=$('periodCmpCard');
+  if(!prev){ card.style.display='none'; return; }
+  card.style.display='block';
+  var prevDate=new Date(prev.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  $('cmpSubtitle').textContent='Compared to your last checkup on '+prevDate;
+
+  var GO={A:5,B:4,C:3,D:2,F:1};
+  function deltaClass(d){ return d>0?'up':d<0?'down':'flat'; }
+  function deltaArrow(d){ return d>0?'▲':d<0?'▼':'—'; }
+
+  var rows=[
+    {
+      metric:'Loan Safety Score',
+      then: prev.loanScore+' / 100',
+      thenSub: prev.loanVerdict||'',
+      now: r.loanScore+' / 100',
+      nowSub: r.loanVerdict,
+      delta: r.loanScore - prev.loanScore,
+      unit: 'pts',
+      fmtDelta: function(d){ return (d>0?'+':'')+Math.round(d)+' pts'; }
+    },
+    {
+      metric:'Cash Runway',
+      then: (prev.runway>=24?'24+':Math.round(prev.runway*10)/10)+' mo',
+      thenSub: prev.runwayStatus||'',
+      now: (r.rmo>=24?'24+':Math.round(r.rmo*10)/10)+' mo',
+      nowSub: r.rStat,
+      delta: r.rmo - prev.runway,
+      unit: 'mo',
+      fmtDelta: function(d){ return (d>0?'+':'')+Math.round(d*10)/10+' mo'; }
+    },
+    {
+      metric:'Health Grade',
+      then: 'Grade '+prev.grade,
+      thenSub: {A:'Excellent',B:'Good',C:'Fair',D:'Needs Work',F:'Critical'}[prev.grade]||'',
+      now: 'Grade '+r.grade,
+      nowSub: r.glabel,
+      delta: GO[r.grade] - GO[prev.grade],
+      unit: '',
+      fmtDelta: function(d){ return d===0?'Same':(d>0?'▲':'▼')+' '+prev.grade+' → '+r.grade; }
+    }
+  ];
+
+  var html='<table class="cmp-table"><thead><tr><th>Metric</th><th>Last Checkup</th><th class="cmp-arrow"></th><th>This Checkup</th><th>Change</th></tr></thead><tbody>';
+  rows.forEach(function(row){
+    var d=row.delta, cls=deltaClass(d), arrow=row.metric==='Health Grade'?'':deltaArrow(d)+' ';
+    html+='<tr>';
+    html+='<td><div class="cmp-metric">'+row.metric+'</div></td>';
+    html+='<td><span class="cmp-val">'+row.then+'</span> <span class="cmp-sub">'+row.thenSub+'</span></td>';
+    html+='<td class="cmp-arrow">→</td>';
+    html+='<td><span class="cmp-val">'+row.now+'</span> <span class="cmp-sub">'+row.nowSub+'</span></td>';
+    html+='<td><span class="cmp-delta '+cls+'">'+(d!==0?arrow:'')+row.fmtDelta(d)+'</span></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  $('periodCmpBody').innerHTML=html;
+}
+
+function goScreen(n){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  $('screen'+n).classList.add('active');
+  for(var i=1;i<=5;i++){
+    var si=$('si'+i),sd=$('sd'+i);
+    if(!si)continue;
+    if(i<n){si.className='si done';sd.textContent='✓'}
+    else if(i===n){si.className='si active';sd.textContent=i}
+    else{si.className='si';sd.textContent=i}
+  }
+  window.scrollTo(0,0);
+}
+
+function animNum(id,from,to,dur){
+  var el=$(id),start=null;
+  function step(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/dur,1);
+    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* -- SHARE CARD -- */
+function openShare(){
+  $('shareMdl').style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(renderCard,80);
+}
+function closeShare(){
+  $('shareMdl').style.display='none';
+  document.body.style.overflow='';
+}
+
+function renderCard(){
+  var cv=$('scoreCanvas'), W=900, H=500;
+  cv.width=W; cv.height=H;
+  var ctx=cv.getContext('2d');
+
+  /* background */
+  ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+
+  /* top gradient bar */
+  var g=ctx.createLinearGradient(0,0,W,0);
+  g.addColorStop(0,'#2563eb'); g.addColorStop(1,'#7c3aed');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,5);
+
+  /* BizSco logo */
+  ctx.textBaseline='middle';
+  ctx.font='bold 19px system-ui,sans-serif';
+  ctx.fillStyle='#f1f5f9'; ctx.fillText('Fin',44,46);
+  ctx.fillStyle='#60a5fa'; ctx.fillText('Wise',44+ctx.measureText('Fin').width,46);
+
+  /* date */
+  ctx.font='12px system-ui,sans-serif'; ctx.fillStyle='#475569'; ctx.textAlign='right';
+  ctx.fillText(new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),W-40,46);
+  ctx.textAlign='left';
+
+  /* heading */
+  ctx.font='bold 26px system-ui,sans-serif'; ctx.fillStyle='#f1f5f9';
+  ctx.fillText('Financial Health Report',44,95);
+
+  /* biz name */
+  var bn=''; try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp)bn=pp.bizName||'';}catch(e){}
+  if(bn){ctx.font='14px system-ui,sans-serif';ctx.fillStyle='#64748b';ctx.fillText(bn,44,118);}
+
+  /* 4 metric tiles */
+  var tiles=[
+    {lbl:'Loan Safety',val:R.loanScore+'/100',sub:R.loanVerdict,
+     bg:R.loanVerdict==='SAFE'?'#14532d':R.loanVerdict==='RISKY'?'#713f12':'#7f1d1d'},
+    {lbl:'Cash Runway',val:(R.rmo>=24?'24+':Math.round(R.rmo*10)/10)+' mo',sub:R.rStat,
+     bg:R.rStat==='STRONG'?'#14532d':R.rStat==='WARNING'?'#713f12':'#7f1d1d'},
+    {lbl:'Health Grade',val:'Grade '+R.grade,sub:R.glabel,
+     bg:['A','B'].includes(R.grade)?'#14532d':R.grade==='C'?'#713f12':'#7f1d1d'},
+    {lbl:'Funding',val:R.grantCount+'+ Programs',sub:'grant matches',bg:'#1e3a8a'}
+  ];
+  var tW=190,tH=200,gap=16,sx=44,sy=148;
+  tiles.forEach(function(t,i){
+    var x=sx+i*(tW+gap),y=sy;
+    rrect(ctx,x,y,tW,tH,10,t.bg);
+    ctx.textAlign='center';
+    ctx.font='bold 24px system-ui,sans-serif'; ctx.fillStyle='#fff';
+    ctx.fillText(t.val,x+tW/2,y+72);
+    ctx.font='bold 11px system-ui,sans-serif'; ctx.fillStyle='rgba(255,255,255,.8)';
+    ctx.fillText(t.sub,x+tW/2,y+96);
+    ctx.font='11px system-ui,sans-serif'; ctx.fillStyle='rgba(255,255,255,.45)';
+    ctx.fillText(t.lbl,x+tW/2,y+tH-22);
+    ctx.textAlign='left';
+  });
+
+  /* footer */
+  ctx.fillStyle='#1e293b'; ctx.fillRect(0,H-56,W,56);
+  ctx.font='13px system-ui,sans-serif'; ctx.fillStyle='#64748b'; ctx.textAlign='center';
+  ctx.fillText('Get your free financial checkup ?',W/2,H-32);
+  ctx.font='bold 13px system-ui,sans-serif'; ctx.fillStyle='#60a5fa';
+  ctx.fillText('BizSco.app/checkup.html',W/2,H-13);
+  ctx.textAlign='left';
+}
+
+function rrect(ctx,x,y,w,h,r,fill){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
+}
+
+function downloadCard(){
+  var cv=$('scoreCanvas'), a=document.createElement('a');
+  a.download='BizSco-health-report.png';
+  a.href=cv.toDataURL('image/png');
+  a.click();
+}
+
+function buildShareUrl(){
+  var base=window.location.href.split('?')[0];
+  var q=new URLSearchParams({share:'1',ls:R.loanScore,lv:R.loanVerdict,
+    rmo:Math.round(R.rmo*10)/10,rs:R.rStat,grade:R.grade,gc:R.grantCount});
+  var bn=''; try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp)bn=pp.bizName||'';}catch(e){}
+  if(bn) q.set('biz',bn);
+  return base+'?'+q.toString();
+}
+
+function copyShareLink(){
+  var url=buildShareUrl(), btn=$('copyBtn');
+  var done=function(){btn.textContent='✓ Copied!';btn.style.background='#dcfce7';btn.style.color='#15803d';
+    setTimeout(function(){btn.textContent='🔗 Copy Link';btn.style.background='';btn.style.color='';},2500);};
+  if(navigator.clipboard){navigator.clipboard.writeText(url).then(done);}
+  else{var t=document.createElement('textarea');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);done();}
+}
+
+function shareWA(){
+  var url=buildShareUrl(), bn='My business';
+  try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp&&pp.bizName)bn=pp.bizName;}catch(e){}
+  var msg=bn+' scored '+R.loanScore+'/100 on BizSco — '+R.loanVerdict+' loan position, Grade '+R.grade+' health.\nSee full report: '+url;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+function shareLI(){
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(buildShareUrl()),'_blank');
+}
+function shareEmail(){
+  var url=buildShareUrl(), bn='my business';
+  try{var pp=JSON.parse(localStorage.getItem('fw_profile')||'null');if(pp&&pp.bizName)bn=pp.bizName;}catch(e){}
+  var sub=encodeURIComponent('My BizSco Financial Health Report — Grade '+R.grade);
+  var body=encodeURIComponent('Hi,\n\nI ran a free financial checkup on '+bn+' and wanted to share the results:\n\n— Loan Safety: '+R.loanScore+'/100 ('+R.loanVerdict+')\n— Cash Runway: '+(R.rmo>=24?'24+':Math.round(R.rmo))+' months ('+R.rStat+')\n— Health Grade: '+R.grade+' ('+R.glabel+')\n— Funding Matches: '+R.grantCount+'+ programs\n\nView the full report: '+url+'\n\nGenerated free by BizSco — BizSco.app');
+  window.location.href='mailto:?subject='+sub+'&body='+body;
+}
+
+/* -- INCOMING SHARED LINK -- */
+function loadShared(){
+  var q=new URLSearchParams(window.location.search);
+  if(q.get('share')!=='1') return false;
+  R={
+    loanScore:parseInt(q.get('ls'))||50,loanVerdict:q.get('lv')||'RISKY',
+    rmo:parseFloat(q.get('rmo'))||0,rStat:q.get('rs')||'WARNING',
+    grade:q.get('grade')||'C',
+    glabel:{A:'Excellent',B:'Good',C:'Fair',D:'Needs Work',F:'Critical'}[q.get('grade')]||'Fair',
+    grantCount:parseInt(q.get('gc'))||3,
+    ncf:0,dscr:0,er:0,pm:0
+  };
+  var biz=q.get('biz');
+  $('progWrap').style.display='block';
+  fillReport();
+  goScreen(5);
+  if(biz){
+    var el=document.createElement('div');
+    el.style.cssText='background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#854d0e;margin-bottom:16px;display:flex;align-items:center;gap:8px';
+    el.innerHTML='<span>&#9679;</span> You are viewing <strong>'+biz.replace(/[<>"&]/g,function(c){return{'<':'&lt;','>':'&gt;','"':'&quot;','&':'&amp;'}[c]})+'\'s</strong> financial checkup results — <a href="checkup.html" style="color:#854d0e;font-weight:800">Run yours free &rarr;</a>';
+    $('screen5').insertBefore(el,$('screen5').firstChild);
+  }
+  return true;
+}
+
+window.addEventListener('load',function(){
+  if(loadShared()) return;
+  function tryPrefill(){
+    var p=null;try{p=JSON.parse(localStorage.getItem('fw_profile')||'null')}catch(e){}
+    if(!p&&window.fwAuth&&fwAuth.profile&&fwAuth.profile.biz_profile){
+      try{var biz=JSON.parse(fwAuth.profile.biz_profile||'{}');if(biz.rev||biz.exp)p={rev:biz.rev,exp:biz.exp,emi:biz.emi,reserve:0};}catch(e){}
+    }
+    if(p&&(p.rev||p.exp)){
+      $('ck_rev').value=p.rev||'';$('ck_exp').value=p.exp||'';
+      $('ck_emi').value=p.emi||'';$('ck_res').value=p.reserve||'';
+      $('profNotice').style.display='flex';
+      refreshCF();
+      $('progWrap').style.display='block';
+      goScreen(1);
+    }
+  }
+  if(window.fwAuth){fwAuth.init(tryPrefill);}else{tryPrefill();}
+});
+</script>
+<script src="modules/fw-auth.js"></script>
+</body>
+</html>

@@ -388,62 +388,15 @@ function explainHtml(bullets,example){
 
 // ----------------------------------------------------------------
 // SHARED fw_loans STORE
-// Schema (v3): [{id, name, type, balance, originalBalance, rate, minPay,
-//                lender, notes, addedDate, status, replacesLoanId}]
-// status: 'active' | 'planned' | 'refinance_target' | 'paid_off'
-// replacesLoanId is only meaningful when status === 'refinance_target'
+// Schema: [{id, name, type, balance, originalBalance, rate, minPay, lender, notes, addedDate}]
 // ----------------------------------------------------------------
 var LS_KEY = 'fw_loans';
-var V3_MIGRATION_KEY = 'fw_debt_center_v3_migrated';
-
-/* V3 migration — runs once per user.
-   - Existing loans default to 'active'
-   - Loans whose notes mention "Saved from Loan Safety Score" or
-     "Saved from New Loan Stress Test" are tagged 'planned' (they were
-     auto-injected during Stress Test runs, not actual debt). */
-function migrateLoansV3() {
-  if (localStorage.getItem(V3_MIGRATION_KEY) === '1') return;
-  if (localStorage.getItem('fw_debt_center_v3_disable_migration') === '1') return;
-  try {
-    var loans = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-    var changed = false;
-    loans.forEach(function(L){
-      if (!L.status) {
-        var note = (L.notes || '').toLowerCase();
-        if (note.indexOf('saved from loan safety score') !== -1 ||
-            note.indexOf('saved from new loan stress test') !== -1) {
-          L.status = 'planned';
-        } else {
-          L.status = 'active';
-        }
-        changed = true;
-      }
-    });
-    if (changed) localStorage.setItem(LS_KEY, JSON.stringify(loans));
-    localStorage.setItem(V3_MIGRATION_KEY, '1');
-  } catch(e) { /* don't break the page if migration fails */ }
-}
-migrateLoansV3();
 
 function loadLoans() {
-  try {
-    var loans = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-    /* defensive: if status is missing on any read (race with another tab),
-       default to 'active' rather than treat the entry as malformed */
-    loans.forEach(function(L){ if (!L.status) L.status = 'active'; });
-    return loans;
-  } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e) { return []; }
 }
 function saveLoans(loans) {
   localStorage.setItem(LS_KEY, JSON.stringify(loans));
-}
-/* Helper used by downstream consumers (profile.emi recompute,
-   Repayment Optimizer, etc.) */
-function loadActiveLoans() {
-  return loadLoans().filter(function(L){ return L.status === 'active'; });
-}
-function loadPlannedLoans() {
-  return loadLoans().filter(function(L){ return L.status === 'planned'; });
 }
 
 // -- Loan type display labels -------------------------------------

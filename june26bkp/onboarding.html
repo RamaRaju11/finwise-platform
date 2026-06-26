@@ -253,44 +253,12 @@ input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px 
       <div>
         <label>Monthly Loan / EMI ($)</label>
         <input type="number" id="emi" placeholder="e.g. 1500"/>
-        <!-- V3: read-only indicator + edit-loans link, shown only when fw_profile.emiSource = 'debt_center' -->
-        <div id="emiSourceNote" style="display:none;font-size:.7rem;color:#475569;margin-top:4px;line-height:1.4">
-          <span id="emiSourceCount"></span>
-          <a href="modules/debtCommandCenter.test.html" style="color:#7c3aed;font-weight:700;text-decoration:none">Edit loans →</a>
-        </div>
       </div>
       <div>
         <label>Cash Reserve ($)</label>
         <input type="number" id="reserve" placeholder="e.g. 32000"/>
       </div>
     </div>
-    <script>
-    (function(){
-      /* When Debt Center has active loans, profile EMI is computed —
-         make the field read-only and show a small explainer. */
-      try {
-        var p = JSON.parse(localStorage.getItem('fw_profile')||'{}');
-        if (p && p.emiSource === 'debt_center') {
-          var loans = JSON.parse(localStorage.getItem('fw_loans')||'[]');
-          var activeCount = loans.filter(function(L){return L.status==='active'||!L.status;}).length;
-          var emiEl = document.getElementById('emi');
-          var noteEl = document.getElementById('emiSourceNote');
-          var countEl = document.getElementById('emiSourceCount');
-          if (emiEl) {
-            emiEl.readOnly = true;
-            emiEl.style.background = '#f8fafc';
-            emiEl.style.color = '#475569';
-            emiEl.style.cursor = 'not-allowed';
-            emiEl.title = 'Sum of active loans in Debt Center. Edit individual loans there to change this.';
-          }
-          if (noteEl && countEl) {
-            countEl.textContent = 'Computed from ' + activeCount + ' active loan' + (activeCount===1?'':'s') + ' · ';
-            noteEl.style.display = 'block';
-          }
-        }
-      } catch(_e){}
-    })();
-    </script>
 
     <label>Loan Amount You Need ($) <span style="font-size:.72rem;font-weight:400;color:#94a3b8">if any</span></label>
     <input type="number" id="loanNeed" placeholder="e.g. 75000"/>

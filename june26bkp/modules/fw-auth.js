@@ -134,25 +134,6 @@
           }
           localStorage.setItem('fw_uid', self.user.id);
 
-          /* V3: Debt Center is the source of truth for itemised debt.
-             If the user has at least one ACTIVE loan tracked, fw_profile.emi
-             becomes the sum of those active EMIs. If Debt Center is empty,
-             the user-typed aggregate from onboarding remains authoritative. */
-          try {
-            var loansArr = JSON.parse(localStorage.getItem('fw_loans') || '[]');
-            var activeEmi = loansArr
-              .filter(function(L){ return L.status === 'active' || !L.status; })
-              .reduce(function(sum, L){ return sum + (parseFloat(L.minPay) || 0); }, 0);
-            if (activeEmi > 0) {
-              var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
-              if (prof && prof.bizName) {
-                prof.emi = activeEmi;
-                prof.emiSource = 'debt_center';   /* tag so UI can show read-only state */
-                localStorage.setItem('fw_profile', JSON.stringify(prof));
-              }
-            }
-          } catch(_e){}
-
           /* Sync last 12 months of financial_data → fw_monthly_snapshots so
              the as-of-month picker auto-populates without re-running checkup.
              Replace, do not merge — Supabase is the source of truth, so old

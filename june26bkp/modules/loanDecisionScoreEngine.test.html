@@ -803,7 +803,7 @@ function renderConsequence(r) {
       '<div class="cq-title" style="color:#15803d">Your Business Is Ready — Consider Applying</div>' +
       '<p style="font-size:0.9rem;color:#166534;margin-bottom:12px">Your cash flow can absorb this loan comfortably. A buffer of ' + fmt(r.cashLeft) + '/month remains after all EMIs. Now is a good time to explore lenders.</p>' +
       '<a href="lenderMarketplace.html" style="display:inline-block;padding:9px 20px;background:#16a34a;color:#fff;border-radius:6px;font-size:0.88rem;font-weight:700;text-decoration:none">Explore Lenders &rarr;</a>' +
-      '<button onclick="saveApprovedLoanToDebtCenter()" style="margin-left:10px;padding:9px 18px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit" title="Saves as Planned in Debt Center. Mark it as taken once you actually borrow.">&#128184; Save as Planned</button>' +
+      '<button onclick="saveApprovedLoanToDebtCenter()" style="margin-left:10px;padding:9px 18px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit">&#128184; Save to Debt Center</button>' +
       '</div>';
 
   } else {
@@ -1314,13 +1314,10 @@ function renderBreakEvenInline(r) {
   el.style.display = 'block';
 }
 
-// -- Save modeled loan to fw_loans (Debt Command Center) ----------
-// V3: always saves as status='planned'. This is a loan the user is
-// CONSIDERING — not active debt. They can flip to 'active' from Debt
-// Center after they actually take the loan ("Mark as taken").
+// -- Save SAFE-scored loan to fw_loans (Debt Command Center) ------
 function saveApprovedLoanToDebtCenter() {
   if(!lastResult) return;
-  var name = prompt('Name for this planned loan (you can rename later in Debt Center):', 'Planned Business Loan');
+  var name = prompt('Enter a name for this loan in your Debt Center:', 'New Business Loan');
   if(!name || !name.trim()) return;
   var loans = [];
   try{ loans = JSON.parse(localStorage.getItem('fw_loans')||'[]'); }catch(e){}
@@ -1332,17 +1329,15 @@ function saveApprovedLoanToDebtCenter() {
     originalBalance: lastResult.loanAmount,
     rate: lastResult.rate,
     minPay: Math.round(lastResult.newEMI),
-    lender: '',
-    notes: 'Saved from New Loan Stress Test on '+new Date().toISOString().split('T')[0]+' (score: '+lastResult.total+')',
-    addedDate: new Date().toISOString().split('T')[0],
-    status: 'planned'   /* V3: never auto-counted as active debt */
+    lender: '', notes: 'Saved from New Loan Stress Test (score: '+lastResult.total+')',
+    addedDate: new Date().toISOString().split('T')[0]
   });
   localStorage.setItem('fw_loans', JSON.stringify(loans));
   var t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:340px;line-height:1.45';
-  t.innerHTML = '&#10003; Saved as <b>Planned</b> in Debt Center.<br><span style="font-size:.78rem;font-weight:500;color:#cbd5e1">Mark it as taken there once you actually borrow.</span><br><a href="debtCommandCenter.test.html" style="color:#a78bfa;font-size:.8rem">View Debt Center &#8594;</a>';
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
+  t.innerHTML = '&#10003; Saved to Debt Center &mdash; <a href="debtCommandCenter.test.html" style="color:#93c5fd">View all loans &#8594;</a>';
   document.body.appendChild(t);
-  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 4000);
 }
 
 // -- Auto-fill from profile + saved inputs ------------------------
