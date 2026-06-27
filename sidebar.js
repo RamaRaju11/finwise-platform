@@ -223,6 +223,7 @@
         lnk(M+'lenderMarketplace.html',            '&#127963;', 'Lender Marketplace',   'lenderMarketplace.html')+
         lnk(M+'debtCommandCenter.test.html',       '&#128184;', 'Debt Command Center',  'debtCommandCenter.test.html')+
         lnk(M+'loanRepaymentOptimizer.test.html',  '&#10054;',  'Repayment Optimizer',  'loanRepaymentOptimizer.test.html')+
+        lnk(M+'loanRefinanceAnalyzer.test.html',   '&#128260;', 'Refinance Analyzer',   'loanRefinanceAnalyzer.test.html')+
         lnk(M+'grantFinder.test.html',             '&#127919;', 'Grant Finder',         'grantFinder.test.html')+
 
         /* 5. Tools — collapsible list; only top 5 shown by default */
