@@ -438,18 +438,38 @@ function drawChart(hist){
   wrap.onmouseleave=function(){document.getElementById('tooltip').style.display='none';};
 }
 
-/* V3 — Clean-up modal: review and delete suspicious entries */
+/* V3 — Clean-up modal: review and delete suspicious entries.
+   IMPORTANT: re-run detectSuspicious against the current hist because the
+   Supabase sync in fw-auth may have rewritten fw_score_history (with
+   different date string format) AFTER the initial page render. Using the
+   stale window.__suspicious would mismatch dates and show 0 entries. */
 function openCleanupModal(){
   var existing = document.getElementById('cleanupModal');
   if (existing) existing.remove();
   var hist = loadHistory();
-  var flagged = window.__suspicious || {};
+  var flagged = detectSuspicious(hist);
+  window.__suspicious = flagged;
   var keys = Object.keys(flagged);
-  if (!keys.length) return;
+  if (!keys.length) {
+    /* refresh the chart to remove any stale halo, then bail */
+    render();
+    alert('No suspicious entries detected.');
+    return;
+  }
 
   var rows = hist
     .map(function(h, idx){ return {idx:idx, h:h, reason:flagged[h.date]}; })
     .filter(function(r){ return !!r.reason; });
+
+  /* Defensive fallback: if dates still don't line up for some reason,
+     iterate flagged directly so we don't show "0 entries" with an
+     active flag. */
+  if (rows.length === 0 && keys.length > 0) {
+    rows = keys.map(function(k){
+      var h = hist.find(function(x){return x.date===k;}) || {date:k, grade:'?', healthScore:null};
+      return {h:h, reason:flagged[k]};
+    });
+  }
 
   var fmtN = function(v){return v==null?'—':Number(v).toLocaleString('en-US');};
   var html = '<div style="background:#fff;border-radius:12px;max-width:680px;width:100%;padding:24px 26px;max-height:90vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)">' +
