@@ -582,13 +582,17 @@ function saveProfile(){
 
   /* Backup profile to Supabase so it survives localStorage clears.
      Returns a Promise so the navigation flow can AWAIT the upsert.
-     Without this, navigating immediately after save races with the
-     next page's fw-auth sync, which then overwrites the just-saved
-     local profile with the stale Supabase row — silently reverting
-     the user's edit. */
+
+     V3.1: switched from upsert to explicit UPDATE because upsert via
+     the JS client requires both INSERT and UPDATE RLS policies; if the
+     INSERT policy is missing (common in projects that only created the
+     update policy) the upsert silently fails with permission denied.
+     The profile row already exists for any logged-in user (created by
+     the handle_new_user trigger), so UPDATE is the right op. */
   if(window.fwAuth && window.fwAuth.client && window.fwAuth.user){
     return window.fwAuth.client.from('profiles')
-      .upsert({ id: window.fwAuth.user.id, biz_profile: JSON.stringify(p) });
+      .update({ biz_profile: JSON.stringify(p), updated_at: new Date().toISOString() })
+      .eq('id', window.fwAuth.user.id);
   }
   return Promise.resolve();
 }
