@@ -476,34 +476,142 @@ function renderSaveRefinanceButton(){
   verdictEl.parentNode.insertBefore(wrap, verdictEl.nextSibling);
 }
 
-/* V3 Step 8 — save the refinance analysis as a refinance_target loan */
+/* V3 Step 8 — entry point for saving the refinance to Debt Center.
+   Asks the user whether they're CONSIDERING this refinance or have
+   ALREADY taken it, then routes to the appropriate write. */
 function saveRefinanceTarget(){
   var r = window.__refiLastResult;
   var replaceId = window.__refiReplaceLoanId;
+  var replaceName = window.__refiReplaceLoanName || 'existing loan';
   if (!r || !replaceId) return;
+
+  /* Build a small modal overlay with two clear choices */
+  var existing = document.getElementById('refiSaveModal');
+  if (existing) existing.remove();
+
+  var savings = Math.round(Math.abs(r.monthlySav));
+  var modal = document.createElement('div');
+  modal.id = 'refiSaveModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML =
+    '<div style="background:#fff;border-radius:12px;max-width:520px;width:100%;padding:24px 26px;box-shadow:0 20px 50px rgba(0,0,0,.3)">' +
+      '<div style="font-size:1.1rem;font-weight:800;color:#0f172a;margin-bottom:6px">How should we save this refinance?</div>' +
+      '<p style="font-size:.84rem;color:#475569;margin-bottom:18px;line-height:1.5">Refinance of <b>'+escapeHtml(replaceName)+'</b> — new rate '+r.rRate+'%, saves $'+savings+'/mo. Pick the option that matches your situation:</p>' +
+
+      '<button onclick="confirmRefiSave(\'considering\')" style="display:block;width:100%;text-align:left;background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:9px;padding:14px 16px;cursor:pointer;margin-bottom:10px;font-family:inherit;transition:background .14s" onmouseover="this.style.background=\'#ede9fe\'" onmouseout="this.style.background=\'#f5f3ff\'">' +
+        '<div style="font-size:.95rem;font-weight:800;color:#6d28d9;margin-bottom:4px">🤔 I\'m CONSIDERING it</div>' +
+        '<div style="font-size:.78rem;color:#5b21b6;line-height:1.45">Model the savings as a what-if. Your current debt stays the same; the refinance appears only in the "After refinance" scenario.</div>' +
+      '</button>' +
+
+      '<button onclick="confirmRefiSave(\'taken\')" style="display:block;width:100%;text-align:left;background:#dcfce7;border:1.5px solid #86efac;border-radius:9px;padding:14px 16px;cursor:pointer;margin-bottom:14px;font-family:inherit;transition:background .14s" onmouseover="this.style.background=\'#bbf7d0\'" onmouseout="this.style.background=\'#dcfce7\'">' +
+        '<div style="font-size:.95rem;font-weight:800;color:#15803d;margin-bottom:4px">✓ I\'ve ALREADY refinanced</div>' +
+        '<div style="font-size:.78rem;color:#166534;line-height:1.45">Your old loan is closed and the new lender has taken over. We\'ll mark <b>'+escapeHtml(replaceName)+'</b> as paid off and add the new loan as active.</div>' +
+      '</button>' +
+
+      '<button onclick="document.getElementById(\'refiSaveModal\').remove()" style="background:transparent;border:none;color:#64748b;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit">Cancel</button>' +
+    '</div>';
+  document.body.appendChild(modal);
+}
+
+/* Helper used by the modal — escape user-provided loan names */
+function escapeHtml(s){var d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
+
+/* Branch logic: 'considering' = save as refinance_target (replacing any
+   prior refinance_target for the same source loan); 'taken' = mark old
+   loan paid_off and add new loan as active. */
+function confirmRefiSave(mode){
+  var modal = document.getElementById('refiSaveModal');
+  if (modal) modal.remove();
+  var r = window.__refiLastResult;
+  var replaceId = window.__refiReplaceLoanId;
+  var replaceName = window.__refiReplaceLoanName || 'existing loan';
+  if (!r || !replaceId) return;
+
   var loans = [];
   try { loans = JSON.parse(localStorage.getItem('fw_loans') || '[]'); } catch(_e){}
-  loans.push({
-    id: 'loan_' + Date.now(),
-    name: 'Refinance: ' + (window.__refiReplaceLoanName || 'existing loan'),
-    type: 'business',
-    balance: r.eBal,
-    originalBalance: r.eBal,
-    rate: r.rRate,
-    minPay: Math.round(r.newEmi),
-    lender: '',
-    notes: 'Refinance analysis on ' + new Date().toISOString().split('T')[0] +
-           ' — saves $' + Math.round(Math.abs(r.monthlySav)) + '/mo over current loan.',
-    addedDate: new Date().toISOString().split('T')[0],
-    status: 'refinance_target',
-    replacesLoanId: replaceId
-  });
-  localStorage.setItem('fw_loans', JSON.stringify(loans));
+  var savings = Math.round(Math.abs(r.monthlySav));
+  var today = new Date().toISOString().split('T')[0];
+
+  if (mode === 'considering') {
+    /* Replace any existing refinance_target for this source loan, then push the new one */
+    var beforeLen = loans.length;
+    loans = loans.filter(function(L){
+      return !(L.status === 'refinance_target' && L.replacesLoanId === replaceId);
+    });
+    var removed = beforeLen - loans.length;
+
+    loans.push({
+      id: 'loan_' + Date.now(),
+      name: 'Refinance: ' + replaceName,
+      type: 'business',
+      balance: r.eBal,
+      originalBalance: r.eBal,
+      rate: r.rRate,
+      minPay: Math.round(r.newEmi),
+      lender: '',
+      notes: 'Refinance analysis on ' + today + ' — saves $' + savings + '/mo over current loan.',
+      addedDate: today,
+      status: 'refinance_target',
+      replacesLoanId: replaceId
+    });
+    localStorage.setItem('fw_loans', JSON.stringify(loans));
+    toastRefi('Saved as <b>Refinance Target</b>' +
+      (removed > 0 ? ' — replaced ' + removed + ' older draft' + (removed>1?'s':'') : '') +
+      '.<br><span style="font-size:.78rem;font-weight:500;color:#cbd5e1">Use the "After refinance" toggle in Debt Center to see the swap.</span>',
+      '#1e293b');
+    return;
+  }
+
+  if (mode === 'taken') {
+    /* 1. Mark the source loan as paid_off (its lender has taken over) */
+    var src = loans.find(function(L){ return L.id === replaceId; });
+    if (src) {
+      src.status = 'paid_off';
+      src.notes = (src.notes ? src.notes + ' · ' : '') + 'Refinanced ' + today + ' — see new loan';
+    }
+    /* 2. Add the new loan as active */
+    loans.push({
+      id: 'loan_' + Date.now(),
+      name: 'Refinanced loan (was ' + replaceName + ')',
+      type: 'business',
+      balance: r.eBal,
+      originalBalance: r.eBal,
+      rate: r.rRate,
+      minPay: Math.round(r.newEmi),
+      lender: '',
+      notes: 'Refinanced on ' + today + ' — saves $' + savings + '/mo over previous lender.',
+      addedDate: today,
+      status: 'active'
+    });
+    /* 3. Drop any older refinance_target for this source — no longer hypothetical */
+    loans = loans.filter(function(L){
+      return !(L.status === 'refinance_target' && L.replacesLoanId === replaceId);
+    });
+    localStorage.setItem('fw_loans', JSON.stringify(loans));
+
+    /* 4. Recompute profile.emi from active loans (Step 3 sync) */
+    try {
+      var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
+      var activeSum = loans.filter(function(L){return (L.status||'active')==='active';})
+                           .reduce(function(s,L){return s + (parseFloat(L.minPay)||0);},0);
+      if (activeSum > 0 && prof.bizName) {
+        prof.emi = activeSum;
+        prof.emiSource = 'debt_center';
+        localStorage.setItem('fw_profile', JSON.stringify(prof));
+      }
+    } catch(_e){}
+
+    toastRefi('✓ Refinance recorded. Old loan marked paid off; new loan is active.<br><span style="font-size:.78rem;font-weight:500;color:#bbf7d0">Your Dashboard EMI will reflect the new lower payment on next load.</span>', '#15803d');
+    return;
+  }
+}
+
+function toastRefi(html, bg){
   var t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:12px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:340px;line-height:1.45';
-  t.innerHTML = '✓ Saved as <b>Refinance Target</b>. Use the "After refinance" toggle in Debt Center to model the swap.<br><a href="debtCommandCenter.test.html" style="color:#a78bfa">View Debt Center →</a>';
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:'+bg+';color:#fff;padding:12px 18px;border-radius:8px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:360px;line-height:1.5';
+  t.innerHTML = html + '<br><a href="debtCommandCenter.test.html" style="color:#a78bfa;font-size:.8rem">View Debt Center →</a>';
   document.body.appendChild(t);
-  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 7000);
 }
 
 /* Populate picker on load + when localStorage changes */

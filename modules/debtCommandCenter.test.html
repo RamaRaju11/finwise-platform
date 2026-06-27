@@ -464,6 +464,29 @@ function migrateLoansV3() {
         }
       }
     });
+    /* V3 dedupe pass — collapse duplicate refinance_target rows for the
+       same source loan down to the most recent one. Older Refinance
+       Analyzer builds allowed unlimited duplicates per source. */
+    var byReplaces = {};
+    var dedupedOut = [];
+    loans.forEach(function(L){
+      if (L.status === 'refinance_target' && L.replacesLoanId) {
+        var key = L.replacesLoanId;
+        var prev = byReplaces[key];
+        var newer = !prev || (L.addedDate || '') >= (prev.addedDate || '');
+        if (newer) {
+          byReplaces[key] = L;
+        }
+      } else {
+        dedupedOut.push(L);
+      }
+    });
+    Object.keys(byReplaces).forEach(function(k){ dedupedOut.push(byReplaces[k]); });
+    if (dedupedOut.length !== loans.length) {
+      loans = dedupedOut;
+      changed = true;
+    }
+
     if (changed) localStorage.setItem(LS_KEY, JSON.stringify(loans));
     if (firstRun) localStorage.setItem(V3_MIGRATION_KEY, '1');
   } catch(e) { /* don't break the page if migration fails */ }
