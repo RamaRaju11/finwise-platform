@@ -551,22 +551,43 @@ function saveProfile(){
   localStorage.setItem('fw_onboarded','1');
   localStorage.setItem('fw_setup_done','1');
 
-  /* Backup profile to Supabase so it survives localStorage clears */
+  /* Backup profile to Supabase so it survives localStorage clears.
+     Returns a Promise so the navigation flow can AWAIT the upsert.
+     Without this, navigating immediately after save races with the
+     next page's fw-auth sync, which then overwrites the just-saved
+     local profile with the stale Supabase row — silently reverting
+     the user's edit. */
   if(window.fwAuth && window.fwAuth.client && window.fwAuth.user){
-    window.fwAuth.client.from('profiles')
-      .upsert({ id: window.fwAuth.user.id, biz_profile: JSON.stringify(p) })
-      .then(function(){}).catch(function(){});
+    return window.fwAuth.client.from('profiles')
+      .upsert({ id: window.fwAuth.user.id, biz_profile: JSON.stringify(p) });
+  }
+  return Promise.resolve();
+}
+
+function navigateAfterSave(href){
+  /* Disable any in-flight click while we wait so user can't double-submit */
+  document.body.style.cursor = 'wait';
+  var saveResult;
+  try { saveResult = saveProfile(); } catch(e){ saveResult = Promise.resolve(); }
+  var done = function(){ window.location.href = href; };
+  /* Hard 2-second cap so a slow / failed Supabase write does not block
+     navigation forever — localStorage already has the new values, and
+     the next sync will reconcile. */
+  var safety = setTimeout(done, 2000);
+  if (saveResult && typeof saveResult.then === 'function') {
+    saveResult.then(function(){ clearTimeout(safety); done(); })
+              .catch(function(){ clearTimeout(safety); done(); });
+  } else {
+    clearTimeout(safety); done();
   }
 }
 
 function finish(){
-  saveProfile();
-  window.location.href = selectedHref;
+  navigateAfterSave(selectedHref);
 }
 
 function saveAndSkip(){
-  saveProfile();
-  window.location.href = 'dashboard.html';
+  navigateAfterSave('dashboard.html');
 }
 
 function skipOnboarding(){
