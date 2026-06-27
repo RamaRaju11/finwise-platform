@@ -137,17 +137,37 @@
           /* V3: Debt Center is the source of truth for itemised debt.
              If the user has at least one ACTIVE loan tracked, fw_profile.emi
              becomes the sum of those active EMIs. If Debt Center is empty,
-             the user-typed aggregate from onboarding remains authoritative. */
+             the user-typed aggregate from onboarding remains authoritative.
+
+             Sanity guard: exclude any loan whose minPay clearly cannot be
+             a real monthly EMI. Bad data from earlier testing (e.g. balance
+             pasted into the minPay field) used to inflate profile.emi by
+             10-100x, which broke every downstream tool. Skipped loans are
+             logged for the Debt Center UI to flag. */
           try {
             var loansArr = JSON.parse(localStorage.getItem('fw_loans') || '[]');
+            var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
+            var revLimit = parseFloat(prof && prof.rev) || 0;
+            var bad = [];
             var activeEmi = loansArr
               .filter(function(L){ return L.status === 'active' || !L.status; })
-              .reduce(function(sum, L){ return sum + (parseFloat(L.minPay) || 0); }, 0);
+              .reduce(function(sum, L){
+                var pay = parseFloat(L.minPay) || 0;
+                var bal = parseFloat(L.balance) || 0;
+                /* implausible cases: EMI > 50% of revenue, OR > 20% of balance */
+                if ((revLimit > 0 && pay > revLimit * 0.5) ||
+                    (bal > 0 && pay > bal * 0.2)) {
+                  bad.push({id: L.id, name: L.name, minPay: pay, balance: bal});
+                  return sum;
+                }
+                return sum + pay;
+              }, 0);
+            /* expose what got skipped so Debt Center can warn the user */
+            localStorage.setItem('fw_emi_skipped', JSON.stringify(bad));
             if (activeEmi > 0) {
-              var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
               if (prof && prof.bizName) {
                 prof.emi = activeEmi;
-                prof.emiSource = 'debt_center';   /* tag so UI can show read-only state */
+                prof.emiSource = 'debt_center';
                 localStorage.setItem('fw_profile', JSON.stringify(prof));
               }
             }

@@ -627,6 +627,26 @@ function renderDashboard() {
   var loans = applyScenario(allLoans);
   var el = document.getElementById('dashboard-content');
 
+  /* V3 sanity warning — fw-auth + change handlers leave a `fw_emi_skipped`
+     list when they refuse to include implausible loans in profile.emi.
+     Surface it at the top so the user can fix the bad row. */
+  var skippedBanner = '';
+  try {
+    var skipped = JSON.parse(localStorage.getItem('fw_emi_skipped') || '[]');
+    if (skipped.length) {
+      var items = skipped.map(function(L){
+        return '<li><b>'+escHtml(L.name||'(unnamed loan)')+'</b> — Min Pay '+fmt(L.minPay)+'/mo, balance '+fmt(L.balance)+'. Likely a typo.</li>';
+      }).join('');
+      skippedBanner =
+        '<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 16px;margin-bottom:12px">' +
+          '<div style="font-weight:800;color:#991b1b;margin-bottom:4px;font-size:.92rem">⚠️ '+skipped.length+' loan'+(skipped.length===1?'':'s')+' excluded from your totals</div>' +
+          '<p style="font-size:.78rem;color:#7f1d1d;margin-bottom:8px;line-height:1.5">Their <b>Min Pay/mo</b> looks impossible (more than 50% of revenue, or more than 20% of the loan balance). Likely you pasted the balance into the Min Pay field. Edit them in the <b>My Loans</b> tab to include them in DSCR + dashboard.</p>' +
+          '<ul style="font-size:.78rem;color:#991b1b;margin:0 0 8px 18px;padding:0">'+items+'</ul>' +
+          '<button onclick="goToTab(\'loans\')" style="background:#dc2626;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit">Open My Loans →</button>' +
+        '</div>';
+    }
+  } catch(_e){}
+
   if(allLoans.length === 0) {
     /* V3 Step 7: detect state B — user has profile.emi > 0 but no
        itemised loans. Show reconciliation banner instead of plain empty state. */
@@ -849,7 +869,7 @@ function renderDashboard() {
       '<a href="loanRepaymentOptimizer.test.html"  class="conn-pill conn-optimizer">&#10054; Repayment Optimizer</a>' +
     '</div>';
 
-  el.innerHTML = connHtml + summaryHtml + loansHtml + stackHtml + optHtml;
+  el.innerHTML = skippedBanner + connHtml + summaryHtml + loansHtml + stackHtml + optHtml;
 }
 
 // ⋯ Loan card menu toggle
@@ -1100,11 +1120,25 @@ function changeLoanStatus(id, newStatus) {
   l.status = newStatus;
   saveLoans(loans);
 
-  /* Profile.emi changes whenever active loans change — recompute now */
+  /* Profile.emi changes whenever active loans change — recompute with
+     the same sanity guard fw-auth uses (skip loans where minPay looks
+     pasted in by mistake, e.g. > 50% of revenue or > 20% of balance). */
   try {
     var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
+    var revLimit = parseFloat(prof && prof.rev) || 0;
+    var bad = [];
     var activeSum = loans.filter(function(L){return L.status==='active'||!L.status;})
-                         .reduce(function(s,L){return s + (parseFloat(L.minPay)||0);},0);
+                         .reduce(function(s,L){
+                           var pay = parseFloat(L.minPay) || 0;
+                           var bal = parseFloat(L.balance) || 0;
+                           if ((revLimit > 0 && pay > revLimit * 0.5) ||
+                               (bal > 0 && pay > bal * 0.2)) {
+                             bad.push({id:L.id, name:L.name, minPay:pay, balance:bal});
+                             return s;
+                           }
+                           return s + pay;
+                         },0);
+    localStorage.setItem('fw_emi_skipped', JSON.stringify(bad));
     if (activeSum > 0 && prof.bizName) {
       prof.emi = activeSum;
       prof.emiSource = 'debt_center';

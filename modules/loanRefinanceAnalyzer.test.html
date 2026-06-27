@@ -589,11 +589,24 @@ function confirmRefiSave(mode){
     });
     localStorage.setItem('fw_loans', JSON.stringify(loans));
 
-    /* 4. Recompute profile.emi from active loans (Step 3 sync) */
+    /* 4. Recompute profile.emi from active loans with the sanity guard
+       (skip loans whose minPay looks implausible — see fw-auth.js comment). */
     try {
       var prof = JSON.parse(localStorage.getItem('fw_profile') || '{}');
+      var revLimit = parseFloat(prof && prof.rev) || 0;
+      var bad = [];
       var activeSum = loans.filter(function(L){return (L.status||'active')==='active';})
-                           .reduce(function(s,L){return s + (parseFloat(L.minPay)||0);},0);
+                           .reduce(function(s,L){
+                             var pay = parseFloat(L.minPay) || 0;
+                             var bal = parseFloat(L.balance) || 0;
+                             if ((revLimit > 0 && pay > revLimit * 0.5) ||
+                                 (bal > 0 && pay > bal * 0.2)) {
+                               bad.push({id:L.id, name:L.name, minPay:pay, balance:bal});
+                               return s;
+                             }
+                             return s + pay;
+                           },0);
+      localStorage.setItem('fw_emi_skipped', JSON.stringify(bad));
       if (activeSum > 0 && prof.bizName) {
         prof.emi = activeSum;
         prof.emiSource = 'debt_center';
