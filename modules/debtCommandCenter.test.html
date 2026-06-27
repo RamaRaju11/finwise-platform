@@ -419,31 +419,53 @@ function explainHtml(bullets,example){
 var LS_KEY = 'fw_loans';
 var V3_MIGRATION_KEY = 'fw_debt_center_v3_migrated';
 
-/* V3 migration — runs once per user.
+/* V3 migration — runs once per user, plus a small ongoing repair pass.
    - Existing loans default to 'active'
    - Loans whose notes mention "Saved from Loan Safety Score" or
      "Saved from New Loan Stress Test" are tagged 'planned' (they were
-     auto-injected during Stress Test runs, not actual debt). */
+     auto-injected during Stress Test runs, not actual debt).
+   - Loans whose name starts with "Refinance:" or notes start with
+     "Refinance analysis" but lack a status are tagged 'refinance_target'.
+     This catches rows saved by an older build of Refinance Analyzer that
+     didn't set status. */
 function migrateLoansV3() {
-  if (localStorage.getItem(V3_MIGRATION_KEY) === '1') return;
   if (localStorage.getItem('fw_debt_center_v3_disable_migration') === '1') return;
   try {
     var loans = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    var firstRun = localStorage.getItem(V3_MIGRATION_KEY) !== '1';
     var changed = false;
     loans.forEach(function(L){
+      var note = (L.notes || '').toLowerCase();
+      var nm = (L.name || '').toLowerCase();
+
+      /* Repair pass — runs on every load, but only touches rows whose
+         status is missing AND that match one of the unambiguous patterns.
+         Idempotent: any loan already tagged is left alone. */
       if (!L.status) {
-        var note = (L.notes || '').toLowerCase();
-        if (note.indexOf('saved from loan safety score') !== -1 ||
-            note.indexOf('saved from new loan stress test') !== -1) {
+        if (nm.indexOf('refinance:') === 0 || note.indexOf('refinance analysis') === 0) {
+          L.status = 'refinance_target';
+          /* If we know the source loan's name, find it and link */
+          var sourceName = (L.name||'').replace(/^Refinance:\s*/i,'').trim().toLowerCase();
+          if (sourceName) {
+            var match = loans.find(function(X){
+              return X.id !== L.id && (X.status||'active')==='active' &&
+                     (X.name||'').toLowerCase() === sourceName;
+            });
+            if (match && !L.replacesLoanId) L.replacesLoanId = match.id;
+          }
+          changed = true;
+        } else if (note.indexOf('saved from loan safety score') !== -1 ||
+                   note.indexOf('saved from new loan stress test') !== -1) {
           L.status = 'planned';
-        } else {
+          changed = true;
+        } else if (firstRun) {
           L.status = 'active';
+          changed = true;
         }
-        changed = true;
       }
     });
     if (changed) localStorage.setItem(LS_KEY, JSON.stringify(loans));
-    localStorage.setItem(V3_MIGRATION_KEY, '1');
+    if (firstRun) localStorage.setItem(V3_MIGRATION_KEY, '1');
   } catch(e) { /* don't break the page if migration fails */ }
 }
 migrateLoansV3();
@@ -843,11 +865,25 @@ function renderLoansList() {
     el.innerHTML = '<p style="color:#94a3b8;font-size:.88rem;padding:8px 0">No loans added yet. Use the form above to add your first loan.</p>';
     return;
   }
+  /* V3: every row carries a Status column so the table cannot mislead about
+     which entries are real debt vs planned vs refinance scenarios. */
   var html = '<div class="loans-table-wrap"><table class="loans-table">' +
-    '<thead><tr><th>Name</th><th>Type</th><th>Balance</th><th>Rate</th><th>Min Pay/mo</th><th>Lender</th><th>Actions</th></tr></thead><tbody>';
+    '<thead><tr><th>Name</th><th>Status</th><th>Type</th><th>Balance</th><th>Rate</th><th>Min Pay/mo</th><th>Lender</th><th>Actions</th></tr></thead><tbody>';
+
+  /* Find the loan name each refinance_target is replacing so we can show
+     a clear "→ replaces X" indicator on the row. */
+  var byId = {};
+  loans.forEach(function(L){ byId[L.id] = L; });
+
   loans.forEach(function(l) {
+    var status = l.status || 'active';
+    var noteExtra = '';
+    if (status === 'refinance_target' && l.replacesLoanId && byId[l.replacesLoanId]) {
+      noteExtra = '<div style="font-size:.7rem;color:#7c3aed;margin-top:2px;font-weight:600">Would replace: '+escHtml(byId[l.replacesLoanId].name)+'</div>';
+    }
     html += '<tr>' +
-      '<td><strong>'+escHtml(l.name)+'</strong>'+(l.notes?'<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+escHtml(l.notes)+'</div>':'')+'</td>' +
+      '<td><strong>'+escHtml(l.name)+'</strong>'+(l.notes?'<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+escHtml(l.notes)+'</div>':'')+noteExtra+'</td>' +
+      '<td><span class="lc-status '+status+'">'+STATUS_LABEL[status]+'</span></td>' +
       '<td><span class="lc-type type-'+(l.type||'other')+'">'+(TYPE_LABEL[l.type||'other']||'Other')+'</span></td>' +
       '<td>'+fmt(l.balance)+'</td>' +
       '<td>'+l.rate+'%</td>' +
@@ -856,17 +892,34 @@ function renderLoansList() {
       '<td style="white-space:nowrap">' +
         '<button class="btn-edit"   onclick="editLoan(\''+l.id+'\')">Edit</button>' +
         '<button class="btn-danger" onclick="deleteLoan(\''+l.id+'\')">Delete</button>' +
-        '<button style="padding:5px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #86efac;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;margin-left:4px" onclick="markLoanPaid(\''+l.id+'\')">&#10003; Mark Paid</button>' +
+        (status==='active' ? '<button style="padding:5px 10px;background:#f0fdf4;color:#16a34a;border:1px solid #86efac;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;margin-left:4px" onclick="markLoanPaid(\''+l.id+'\')">&#10003; Mark Paid</button>' : '') +
+        (status==='planned' ? '<button style="padding:5px 10px;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;margin-left:4px" onclick="changeLoanStatus(\''+l.id+'\',\'active\')">&#10003; Mark as Taken</button>' : '') +
       '</td>' +
     '</tr>';
   });
   html += '</tbody></table></div>';
-  // Total row
-  var totalBal = loans.reduce(function(s,l){ return s+l.balance; },0);
-  var totalPay = loans.reduce(function(s,l){ return s+l.minPay; },0);
-  html += '<div style="margin-top:10px;font-size:.83rem;color:#475569;display:flex;gap:20px">' +
-    '<span><strong>Total Balance:</strong> '+fmt(totalBal)+'</span>' +
-    '<span><strong>Total Monthly Min:</strong> '+fmt(totalPay)+'/mo</span>' +
+
+  /* V3: totals split by status. Active is the only "real debt" total.
+     Planned and refinance_target shown separately so user sees the
+     hypothetical balances clearly labelled. */
+  var active = loans.filter(function(L){return (L.status||'active')==='active';});
+  var planned = loans.filter(function(L){return L.status==='planned';});
+  var refis = loans.filter(function(L){return L.status==='refinance_target';});
+
+  var activeBal = active.reduce(function(s,l){return s+l.balance;},0);
+  var activePay = active.reduce(function(s,l){return s+l.minPay;},0);
+  var plannedBal = planned.reduce(function(s,l){return s+l.balance;},0);
+  var plannedPay = planned.reduce(function(s,l){return s+l.minPay;},0);
+  var refiBal = refis.reduce(function(s,l){return s+l.balance;},0);
+  var refiPay = refis.reduce(function(s,l){return s+l.minPay;},0);
+
+  html += '<div style="margin-top:14px;font-size:.83rem;color:#475569">' +
+    '<div style="display:flex;gap:20px;flex-wrap:wrap;padding:8px 0;border-top:1px solid #e2e8f0">' +
+      '<span><strong>Active total:</strong> '+fmt(activeBal)+' · '+fmt(activePay)+'/mo</span>' +
+      '<span style="color:#94a3b8;font-size:.78rem">'+active.length+' active loan'+(active.length===1?'':'s')+' — counted in your DSCR + dashboard</span>' +
+    '</div>' +
+    (planned.length ? '<div style="display:flex;gap:20px;flex-wrap:wrap;padding:5px 0;color:#92400e"><span><em>Planned (not yet taken):</em> '+fmt(plannedBal)+' · '+fmt(plannedPay)+'/mo</span></div>' : '') +
+    (refis.length ? '<div style="display:flex;gap:20px;flex-wrap:wrap;padding:5px 0;color:#6d28d9"><span><em>Refinance targets (hypothetical):</em> '+fmt(refiBal)+' · '+fmt(refiPay)+'/mo</span></div>' : '') +
     '</div>';
   el.innerHTML = html;
 }
