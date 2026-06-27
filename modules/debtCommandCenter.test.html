@@ -370,7 +370,13 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
       <input type="number" id="strat-extra" value="200" min="0" placeholder="e.g. 200"/>
       <p class="hint">Even $50—$100/month extra makes a dramatic difference. This amount is applied to the priority loan on top of all minimum payments.</p>
     </div>
-    <button class="btn-primary" onclick="runStrategy()">&#9654; Calculate Best Payoff Strategy</button>
+    <!-- V3 Step 9 follow-up: include planned loans in the strategy too -->
+    <label style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;max-width:fit-content;cursor:pointer;font-size:.84rem;font-weight:600;color:#78350f">
+      <input type="checkbox" id="strat-includePlanned" style="width:16px;height:16px;accent-color:#7c3aed;cursor:pointer"/>
+      Also include <b>planned</b> loans in the payoff strategy
+      <span style="font-size:.7rem;font-weight:500;color:#92400e" id="strat-plannedCount">— 0 planned</span>
+    </label>
+    <button class="btn-primary" onclick="runStrategy()" style="margin-top:12px">&#9654; Calculate Best Payoff Strategy</button>
   </div>
   <div id="strategy-results"></div>
 </div>
@@ -484,6 +490,14 @@ function showTab(id, btn) {
     if(loans.length === 0) {
       document.getElementById('strategy-results').innerHTML =
         '<div class="warn-box">&#128184; No loans found. Go to the <strong>My Loans</strong> tab to add your loans, then come back here.</div>';
+    }
+    /* V3: update the planned-count helper next to the checkbox */
+    var planCountEl = document.getElementById('strat-plannedCount');
+    if (planCountEl) {
+      var pn = loans.filter(function(L){ return L.status === 'planned'; }).length;
+      planCountEl.textContent = pn ? '— ' + pn + ' planned available' : '— no planned loans';
+      var cbEl = document.getElementById('strat-includePlanned');
+      if (cbEl) cbEl.disabled = (pn === 0);
     }
   }
 }
@@ -1045,10 +1059,24 @@ function clearLoanForm() {
 // TAB 3: PAYOFF STRATEGY
 // ----------------------------------------------------------------
 function runStrategy() {
-  var loans = loadLoans().filter(function(l){ return l.balance > 0; });
+  /* V3: respect the include-planned checkbox.  Active loans always count;
+     planned loans are opt-in.  Paid_off and refinance_target are excluded. */
+  var includePlanned = (document.getElementById('strat-includePlanned')||{}).checked;
+  var allLoans = loadLoans();
+  var loans = allLoans.filter(function(l){
+    if (l.balance <= 0) return false;
+    if (l.status === 'paid_off' || l.status === 'refinance_target') return false;
+    if (l.status === 'planned') return includePlanned;
+    return true;   /* active or undefined status */
+  });
   if(loans.length === 0) {
-    document.getElementById('strategy-results').innerHTML =
-      '<div class="warn-box">No loans found. Go to <strong>My Loans</strong> and add your loans first.</div>';
+    var msg = '<div class="warn-box">No loans found. Go to <strong>My Loans</strong> and add your loans first.</div>';
+    if (includePlanned && allLoans.length > 0) {
+      msg = '<div class="warn-box">No loans available for the payoff strategy. Even with planned loans included, there are no loans with a positive balance.</div>';
+    } else if (!includePlanned && allLoans.some(function(l){ return l.status === 'planned'; })) {
+      msg = '<div class="warn-box">You have only <b>planned</b> loans, no active ones. Tick the <b>Also include planned loans</b> checkbox above to run the strategy.</div>';
+    }
+    document.getElementById('strategy-results').innerHTML = msg;
     return;
   }
   if(loans.every(function(l){ return l.minPay <= 0; })) {
@@ -1059,29 +1087,38 @@ function runStrategy() {
   var extra = parseFloat(document.getElementById('strat-extra').value) || 0;
   var snow  = simulateFull(loans, extra, function(a,b){ return a.balance - b.balance; });
   var aval  = simulateFull(loans, extra, function(a,b){ return b.rate - a.rate; });
-  renderStrategy(snow, aval);
+  renderStrategy(snow, aval, {includePlanned: includePlanned, plannedCount: loans.filter(function(l){return l.status==='planned';}).length});
 }
 
 function simulateFull(loans, extra, sortFn) {
   return fwSimulateFull(loans, extra, sortFn);
 }
 
-function renderStrategy(snow, aval) {
+function renderStrategy(snow, aval, opts) {
+  opts = opts || {};
   var avSaves  = snow.totalInterest - aval.totalInterest;
   var avFaster = snow.months - aval.months;
   var winner   = avSaves >= 0 ? 'avalanche' : 'snowball';
 
-  var winHtml = '';
+  /* V3: small banner showing which loan set the strategy ran on */
+  var scopeNote = '';
+  if (opts.includePlanned && opts.plannedCount > 0) {
+    scopeNote = '<div style="background:#fffbeb;border:1px solid #fde68a;color:#78350f;padding:10px 14px;border-radius:7px;margin-bottom:12px;font-size:.84rem;font-weight:600">📋 Strategy includes <b>' + opts.plannedCount + ' planned loan' + (opts.plannedCount===1?'':'s') + '</b> alongside your active debt. Results show what your payoff would look like IF you took those loans.</div>';
+  } else if (opts.includePlanned === false) {
+    scopeNote = '<div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:8px 14px;border-radius:7px;margin-bottom:12px;font-size:.82rem">✓ Strategy based on <b>current active loans only</b>. Tick the checkbox above to also model planned loans.</div>';
+  }
+
+  var winHtml = scopeNote;
   if(avSaves === 0 && avFaster === 0) {
-    winHtml = '<div class="winner-banner">Both strategies are identical for your loan mix. Either approach works perfectly!<span>This happens when loan priorities align in both sort orders.</span></div>';
+    winHtml += '<div class="winner-banner">Both strategies are identical for your loan mix. Either approach works perfectly!<span>This happens when loan priorities align in both sort orders.</span></div>';
   } else if(winner === 'avalanche') {
-    winHtml = '<div class="winner-banner">&#9650; Avalanche Strategy wins!' +
+    winHtml += '<div class="winner-banner">&#9650; Avalanche Strategy wins!' +
       (avSaves>0?' Saves <strong>'+fmt(avSaves)+'</strong> in interest.':'') +
       (avFaster>0?' <strong>'+avFaster+' months faster.</strong>':'') +
       '<span>Pay your highest-interest loan first to minimize total cost.</span></div>';
   } else {
     var ss=-avSaves, sf=-avFaster;
-    winHtml = '<div class="winner-banner">&#10052; Snowball Strategy wins!' +
+    winHtml += '<div class="winner-banner">&#10052; Snowball Strategy wins!' +
       (ss>0?' Saves <strong>'+fmt(ss)+'</strong> in interest.':'') +
       (sf>0?' <strong>'+sf+' months faster.</strong>':'') +
       '<span>Knock out your smallest balance first for quick psychological wins and momentum.</span></div>';
