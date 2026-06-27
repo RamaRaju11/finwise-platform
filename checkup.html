@@ -1045,8 +1045,12 @@ function fillReport(){
     ? window.getAsOfMonth()
     : new Date().toISOString().substring(0,7);
 
+  /* V3: capture the input numbers that produced this score so the Score
+     History page can show "what numbers drove this dot" and flag any
+     entries with anomalous inputs (likely test data). */
   var entry={date:new Date().toISOString(),asOfMonth:asOfMonth,loanScore:r.loanScore,loanVerdict:r.loanVerdict,
-    runway:r.rmo,runwayStatus:r.rStat,grade:r.grade,healthScore:r.hs,grantCount:r.grantCount};
+    runway:r.rmo,runwayStatus:r.rStat,grade:r.grade,healthScore:r.hs,grantCount:r.grantCount,
+    inputs:{rev:D.rev,exp:D.exp,emi:D.emi,reserve:D.res}};
   var h2=[]; try{h2=JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){}
   h2.unshift(entry); h2=h2.slice(0,12);
   localStorage.setItem('fw_score_history',JSON.stringify(h2));

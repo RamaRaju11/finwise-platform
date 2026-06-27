@@ -184,8 +184,72 @@ function loadHistory(){
   try{return JSON.parse(localStorage.getItem('fw_score_history')||'[]');}catch(e){return [];}
 }
 
+/* V3 — flag entries with anomalous inputs or score swings.
+   "Suspicious" = produced by likely-bad test data:
+   - healthScore is more than 20 pts below the median, OR
+   - EMI input is more than 2x the median EMI of entries that have inputs, OR
+   - revenue input is less than 50% of median revenue, OR
+   - reserve input is less than 25% of median reserve.
+   Returns: a map of { entryDate: reason } so we can render warnings. */
+function detectSuspicious(hist){
+  if (hist.length < 3) return {};
+  var med = function(arr){
+    var s=arr.slice().sort(function(a,b){return a-b;});
+    return s.length ? s[Math.floor(s.length/2)] : 0;
+  };
+  var medHs   = med(hist.map(function(h){return h.healthScore||0;}));
+  var withIn  = hist.filter(function(h){return h.inputs;});
+  var medEmi  = med(withIn.map(function(h){return parseFloat(h.inputs.emi)||0;}));
+  var medRev  = med(withIn.map(function(h){return parseFloat(h.inputs.rev)||0;}));
+  var medRes  = med(withIn.map(function(h){return parseFloat(h.inputs.reserve)||0;}));
+
+  var flagged = {};
+  hist.forEach(function(h){
+    var reasons = [];
+    if (medHs && h.healthScore != null && (medHs - h.healthScore) > 20) {
+      reasons.push('score ' + h.healthScore + ' is >20 pts below the median ' + medHs);
+    }
+    if (h.inputs) {
+      if (medEmi && h.inputs.emi > medEmi * 2) {
+        reasons.push('EMI ' + h.inputs.emi + ' is >2x the median ' + medEmi);
+      }
+      if (medRev && h.inputs.rev < medRev * 0.5) {
+        reasons.push('revenue ' + h.inputs.rev + ' is <50% of the median ' + medRev);
+      }
+      if (medRes && h.inputs.reserve < medRes * 0.25) {
+        reasons.push('reserves ' + h.inputs.reserve + ' is <25% of the median ' + medRes);
+      }
+    }
+    if (reasons.length) flagged[h.date] = reasons.join(' · ');
+  });
+  return flagged;
+}
+
+window.__suspicious = {};
+
 function render(){
   var hist=loadHistory();
+  window.__suspicious = detectSuspicious(hist);
+
+  /* Render Clean-up banner if any flagged entries */
+  var nFlagged = Object.keys(window.__suspicious).length;
+  var hostEl = document.getElementById('cleanupBanner') || (function(){
+    var b = document.createElement('div');
+    b.id = 'cleanupBanner';
+    var heroBlock = document.getElementById('heroBlock');
+    if (heroBlock) heroBlock.parentNode.insertBefore(b, heroBlock.nextSibling);
+    return b;
+  })();
+  if (nFlagged > 0) {
+    hostEl.style.cssText = 'background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:12px 16px;margin:0 0 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap';
+    hostEl.innerHTML = '<span style="font-size:1.4rem">⚠️</span>' +
+      '<div style="flex:1;min-width:200px;font-size:.86rem;color:#92400e"><b>' + nFlagged + ' suspicious ' +
+      (nFlagged===1?'entry':'entries') + '</b> detected — likely test data with abnormal inputs.' +
+      '<div style="font-size:.74rem;margin-top:2px;color:#a16207">Hover any flagged dot to see why, or clean them up to fix the trend.</div></div>' +
+      '<button onclick="openCleanupModal()" style="background:#7c3aed;color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit">Clean up history →</button>';
+  } else {
+    hostEl.style.display = 'none';
+  }
 
   if(hist.length===0){
     document.getElementById('chartCard').style.display='none';
@@ -296,10 +360,18 @@ function drawChart(hist){
     }
   }
 
-  /* dots */
+  /* dots — flagged entries get an amber ring */
   for(var i=0;i<n;i++){
     var s=scores[i];
     var dotColor=s>=70?'#22c55e':s>=52?'#f59e0b':'#ef4444';
+    var isFlagged = window.__suspicious && window.__suspicious[data[i].date];
+    if (isFlagged) {
+      /* outer amber halo on flagged dots */
+      ctx.beginPath();
+      ctx.arc(px(i),py(s),9,0,Math.PI*2);
+      ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2; ctx.setLineDash([3,3]); ctx.stroke();
+      ctx.setLineDash([]);
+    }
     ctx.beginPath();
     ctx.arc(px(i),py(s),i===n-1?5.5:4,0,Math.PI*2);
     ctx.fillStyle=i===n-1?dotColor:'#fff';
@@ -339,13 +411,102 @@ function drawChart(hist){
     var h=data[best];
     var tip=document.getElementById('tooltip');
     var dateStr=new Date(h.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    tip.innerHTML='<strong>'+dateStr+'</strong><br>Health: '+( h.healthScore||'—')+'/100 — Grade '+h.grade+'<br>Loan: '+h.loanScore+'/100 ('+h.loanVerdict+')<br>Runway: '+(h.runway>=24?'24+':Math.round(h.runway*10)/10)+' mo ('+h.runwayStatus+')';
-    var tipX=px(best)-40, tipY=py(scores[best])-80;
-    if(tipX<0)tipX=4; if(tipX+180>W)tipX=W-184;
+    var html = '<strong>'+dateStr+'</strong>'+
+      '<br>Health: '+( h.healthScore||'—')+'/100 — Grade '+h.grade+
+      '<br>Loan: '+h.loanScore+'/100 ('+h.loanVerdict+')'+
+      '<br>Runway: '+(h.runway>=24?'24+':Math.round(h.runway*10)/10)+' mo ('+h.runwayStatus+')';
+    /* V3: if inputs are stored, show what numbers produced this dot */
+    if (h.inputs) {
+      var fmt = function(v){return v==null?'—':Number(v).toLocaleString('en-US');};
+      html += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #cbd5e1;font-size:.8em">' +
+        'Inputs: Rev '+fmt(h.inputs.rev)+' · Exp '+fmt(h.inputs.exp)+
+        ' · EMI '+fmt(h.inputs.emi)+' · Reserve '+fmt(h.inputs.reserve)+
+        '</div>';
+    } else {
+      html += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #cbd5e1;font-size:.8em;color:#94a3b8">Inputs not captured (pre-v3 checkup)</div>';
+    }
+    /* V3 flag */
+    if (window.__suspicious && window.__suspicious[h.date]) {
+      html += '<div style="margin-top:6px;padding:4px 7px;background:#fef3c7;color:#92400e;border-radius:4px;font-size:.78em">⚠️ Flagged: '+window.__suspicious[h.date]+'</div>';
+    }
+    tip.innerHTML = html;
+    var tipX=px(best)-40, tipY=py(scores[best])-100;
+    if(tipX<0)tipX=4; if(tipX+220>W)tipX=W-224;
     if(tipY<0)tipY=4;
     tip.style.left=tipX+'px'; tip.style.top=tipY+'px'; tip.style.display='block';
   };
   wrap.onmouseleave=function(){document.getElementById('tooltip').style.display='none';};
+}
+
+/* V3 — Clean-up modal: review and delete suspicious entries */
+function openCleanupModal(){
+  var existing = document.getElementById('cleanupModal');
+  if (existing) existing.remove();
+  var hist = loadHistory();
+  var flagged = window.__suspicious || {};
+  var keys = Object.keys(flagged);
+  if (!keys.length) return;
+
+  var rows = hist
+    .map(function(h, idx){ return {idx:idx, h:h, reason:flagged[h.date]}; })
+    .filter(function(r){ return !!r.reason; });
+
+  var fmtN = function(v){return v==null?'—':Number(v).toLocaleString('en-US');};
+  var html = '<div style="background:#fff;border-radius:12px;max-width:680px;width:100%;padding:24px 26px;max-height:90vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)">' +
+    '<div style="font-size:1.1rem;font-weight:800;color:#0f172a;margin-bottom:4px">Clean up suspicious history</div>' +
+    '<p style="font-size:.84rem;color:#64748b;margin-bottom:14px;line-height:1.5">' + rows.length + ' entr' + (rows.length===1?'y':'ies') + ' look like test data. Tick the ones to remove. Trend chart will recompute after delete.</p>';
+
+  rows.forEach(function(r){
+    var d = new Date(r.h.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var inputsLine = r.h.inputs
+      ? 'Rev '+fmtN(r.h.inputs.rev)+' · Exp '+fmtN(r.h.inputs.exp)+' · EMI '+fmtN(r.h.inputs.emi)+' · Reserve '+fmtN(r.h.inputs.reserve)
+      : '<em>Inputs not captured</em>';
+    html += '<label style="display:block;border:1px solid #fde68a;background:#fffbeb;border-radius:8px;padding:10px 14px;margin-bottom:8px;cursor:pointer">' +
+      '<input type="checkbox" class="cleanup-cb" data-date="'+r.h.date+'" checked style="margin-right:8px">' +
+      '<b>'+d+'</b> · Grade <b>'+r.h.grade+'</b> · Health '+(r.h.healthScore||'—')+'/100' +
+      '<div style="font-size:.78rem;color:#475569;margin-top:3px;margin-left:22px">'+inputsLine+'</div>' +
+      '<div style="font-size:.74rem;color:#a16207;margin-top:3px;margin-left:22px">⚠️ '+r.reason+'</div>' +
+      '</label>';
+  });
+
+  html += '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">' +
+    '<button onclick="confirmCleanup()" style="background:#dc2626;color:#fff;border:none;padding:9px 18px;border-radius:7px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:inherit">Delete selected</button>' +
+    '<button onclick="document.getElementById(\'cleanupModal\').remove()" style="background:#fff;color:#64748b;border:1px solid #e2e8f0;padding:9px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;font-family:inherit">Cancel</button>' +
+    '</div></div>';
+
+  var modal = document.createElement('div');
+  modal.id = 'cleanupModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
+}
+
+function confirmCleanup(){
+  var datesToRemove = {};
+  document.querySelectorAll('.cleanup-cb:checked').forEach(function(cb){
+    datesToRemove[cb.dataset.date] = true;
+  });
+  var n = Object.keys(datesToRemove).length;
+  if (!n) { document.getElementById('cleanupModal').remove(); return; }
+  if (!confirm('Delete '+n+' history entr'+(n===1?'y':'ies')+'? This cannot be undone.')) return;
+
+  var hist = loadHistory();
+  var kept = hist.filter(function(h){ return !datesToRemove[h.date]; });
+  localStorage.setItem('fw_score_history', JSON.stringify(kept));
+
+  /* Also drop the matching financial_data row from Supabase if signed in.
+     Best-effort; failures are non-fatal. */
+  try {
+    if (window.fwAuth && fwAuth.user && fwAuth.client) {
+      Object.keys(datesToRemove).forEach(function(d){
+        var dt = d.substring(0,10);
+        fwAuth.client.from('financial_data').delete().eq('user_id', fwAuth.user.id).eq('snapshot_date', dt).then(function(){});
+      });
+    }
+  } catch(_e){}
+
+  document.getElementById('cleanupModal').remove();
+  render();
 }
 
 /* -- TABLE -- */
