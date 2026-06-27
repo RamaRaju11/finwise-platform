@@ -340,6 +340,21 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
         <label>Notes <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
         <input type="text" id="ln-notes" placeholder="e.g. Balloon payment in month 36"/>
       </div>
+      <div>
+        <label>Loan Status *</label>
+        <select id="ln-status" onchange="onStatusChange()">
+          <option value="active">Active — I'm paying this now</option>
+          <option value="planned">Planned — not yet taken</option>
+          <option value="refinance_target">Refinance target — would replace an existing loan</option>
+          <option value="paid_off">Paid off — historical only</option>
+        </select>
+        <p class="hint" id="ln-status-hint">Active loans count toward your dashboard EMI &amp; DSCR. Planned and refinance targets are hypothetical until you mark them as taken.</p>
+      </div>
+      <div id="ln-replaces-wrap" style="display:none">
+        <label>Replaces which active loan? *</label>
+        <select id="ln-replaces"></select>
+        <p class="hint">The active loan this refinance would close out and replace.</p>
+      </div>
     </div>
     <input type="hidden" id="ln-edit-id" value=""/>
     <button class="btn-primary" onclick="saveLoan()">&#128190; Save Loan</button>
@@ -976,10 +991,17 @@ function saveLoan() {
   var minPay     = parseFloat(document.getElementById('ln-minpay').value)       || 0;
   var lender     = document.getElementById('ln-lender').value.trim();
   var notes      = document.getElementById('ln-notes').value.trim();
+  var status     = document.getElementById('ln-status').value || 'active';
+  var replacesId = document.getElementById('ln-replaces').value || '';
   var editId     = document.getElementById('ln-edit-id').value;
 
   if(!name)    { document.getElementById('ln-name').style.borderColor='#dc2626';    document.getElementById('ln-name').focus();    return; }
   if(!balance) { document.getElementById('ln-balance').style.borderColor='#dc2626'; document.getElementById('ln-balance').focus(); return; }
+  if(status==='refinance_target' && !replacesId){
+    document.getElementById('ln-replaces').style.borderColor='#dc2626';
+    showToast('Select which active loan this refinance would replace');
+    return;
+  }
 
   var loans = loadLoans();
   if(editId) {
@@ -991,7 +1013,9 @@ function saveLoan() {
         balance: balance,
         originalBalance: origBal || loans[idx].originalBalance || balance,
         rate: rate, minPay: minPay, lender: lender, notes: notes,
-        addedDate: loans[idx].addedDate
+        addedDate: loans[idx].addedDate,
+        status: status,
+        replacesLoanId: status==='refinance_target' ? replacesId : undefined
       };
     }
     document.getElementById('ln-edit-id').value = '';
@@ -1005,7 +1029,9 @@ function saveLoan() {
       originalBalance: origBal || balance,
       rate: rate, minPay: minPay,
       lender: lender, notes: notes,
-      addedDate: new Date().toISOString().split('T')[0]
+      addedDate: new Date().toISOString().split('T')[0],
+      status: status,
+      replacesLoanId: status==='refinance_target' ? replacesId : undefined
     });
     showToast('&#10003; Loan saved to Debt Center');
   }
@@ -1034,12 +1060,50 @@ function editLoan(id) {
   document.getElementById('ln-minpay').value       = l.minPay;
   document.getElementById('ln-lender').value       = l.lender||'';
   document.getElementById('ln-notes').value        = l.notes||'';
+  document.getElementById('ln-status').value       = l.status || 'active';
+  populateReplacesDropdown(l.replacesLoanId || '', l.id);
+  onStatusChange();   /* show / hide replaces dropdown */
   document.getElementById('ln-edit-id').value      = id;
   document.getElementById('cancel-edit-btn').style.display = 'inline-block';
-  // Brief delay so the tab switch finishes rendering before we scroll
   setTimeout(function(){
     document.getElementById('add-loan-card').scrollIntoView({behavior:'smooth'});
   }, 50);
+}
+
+/* V3 — handler for the status dropdown. Show "Replaces which active
+   loan?" only when status === 'refinance_target'. */
+function onStatusChange(){
+  var st = document.getElementById('ln-status').value;
+  var wrap = document.getElementById('ln-replaces-wrap');
+  var hint = document.getElementById('ln-status-hint');
+  if (st === 'refinance_target') {
+    wrap.style.display = '';
+    populateReplacesDropdown('', null);
+    if(hint) hint.textContent = 'Pick the active loan this refinance would replace. When you flip the scenario toggle to After refinance, the old loan disappears and this new one takes its place.';
+  } else {
+    wrap.style.display = 'none';
+    if(hint) {
+      if (st === 'active') hint.textContent = 'Active loans count toward your dashboard EMI & DSCR.';
+      else if (st === 'planned') hint.textContent = 'Planned loans are hypothetical — they appear in Including-planned scenarios only, until you flip them to Active.';
+      else hint.textContent = 'Paid off loans are kept for history but excluded from all calculations.';
+    }
+  }
+}
+
+function populateReplacesDropdown(selectedId, excludeId){
+  var sel = document.getElementById('ln-replaces');
+  var loans = loadLoans().filter(function(L){
+    return (L.status||'active') === 'active' && L.id !== excludeId;
+  });
+  if (!loans.length) {
+    sel.innerHTML = '<option value="">No active loans yet — add one as Active first</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">— Select an active loan —</option>' +
+    loans.map(function(L){
+      var sel = (L.id === selectedId) ? ' selected' : '';
+      return '<option value="'+L.id+'"'+sel+'>'+escHtml(L.name)+' · '+fmt(L.balance)+' at '+L.rate+'%</option>';
+    }).join('');
 }
 
 function deleteLoan(id) {
@@ -1163,6 +1227,14 @@ function clearLoanForm() {
     document.getElementById(id).value = '';
   });
   document.getElementById('ln-type').value = 'business';
+  /* V3 — reset status defaults */
+  var st = document.getElementById('ln-status');
+  if (st) st.value = 'active';
+  var rWrap = document.getElementById('ln-replaces-wrap');
+  if (rWrap) rWrap.style.display = 'none';
+  var rSel = document.getElementById('ln-replaces');
+  if (rSel) rSel.style.borderColor = '';
+  onStatusChange();
 }
 
 // ----------------------------------------------------------------
