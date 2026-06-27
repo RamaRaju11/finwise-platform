@@ -333,6 +333,11 @@ input:focus,select:focus{outline:none;border-color:#2563eb}
         <p class="hint">The minimum you must pay each month to stay current</p>
       </div>
       <div>
+        <label>Original Term (months) <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
+        <input type="number" id="ln-tenure" placeholder="e.g. 36" min="0" max="600" step="1"/>
+        <p class="hint">The original loan length you signed for. Used to compare contract terms vs your actual payoff pace.</p>
+      </div>
+      <div>
         <label>Lender / Bank <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
         <input type="text" id="ln-lender" placeholder="e.g. Chase Bank"/>
       </div>
@@ -940,18 +945,26 @@ function renderLoansList() {
     if (status === 'refinance_target' && l.replacesLoanId && byId[l.replacesLoanId]) {
       noteExtra = '<div style="font-size:.7rem;color:#7c3aed;margin-top:2px;font-weight:600">Would replace: '+escHtml(byId[l.replacesLoanId].name)+'</div>';
     }
-    /* V3.1 — Tenure: months left until the loan is paid off if the user
-       only ever pays minPay. paid_off rows show — since there's nothing
-       to amortise. If minPay <= monthly interest the loan never pays off;
-       fmtMonths returns 'Never (negative amort.)' which surfaces the
-       danger. */
+    /* V3.1 — Tenure cell shows TWO data points:
+       1. Original term the user signed for (if provided)
+       2. Months left at current minPay (computed)
+       When the two differ the user can see they're going faster or slower
+       than the contract pace. */
     var tenureCell;
     if (status === 'paid_off') {
       tenureCell = '<span style="color:#94a3b8">—</span>';
     } else {
       var months = estimatePayoffMonths([l], 0);
       var tenureColor = months > 60 ? '#dc2626' : months > 36 ? '#d97706' : '#16a34a';
-      tenureCell = '<span style="color:'+tenureColor+';font-weight:700" title="At current minimum payment of '+fmt(l.minPay)+'/mo">'+fmtMonths(months)+'</span>';
+      var origLine = '';
+      if (l.originalTenure && l.originalTenure > 0) {
+        origLine = '<div style="font-size:.7rem;color:#94a3b8;font-weight:500">Signed: '+fmtMonths(l.originalTenure)+'</div>';
+      }
+      tenureCell =
+        '<div title="Signed term vs months left at current min payment of '+fmt(l.minPay)+'/mo">' +
+          origLine +
+          '<div style="color:'+tenureColor+';font-weight:700">'+fmtMonths(months)+' @ min</div>' +
+        '</div>';
     }
     html += '<tr>' +
       '<td><strong>'+escHtml(l.name)+'</strong>'+(l.notes?'<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+escHtml(l.notes)+'</div>':'')+noteExtra+'</td>' +
@@ -1006,6 +1019,9 @@ function saveLoan() {
   var minPay     = parseFloat(document.getElementById('ln-minpay').value)       || 0;
   var lender     = document.getElementById('ln-lender').value.trim();
   var notes      = document.getElementById('ln-notes').value.trim();
+  var tenureEl   = document.getElementById('ln-tenure');
+  var tenure     = tenureEl ? parseInt(tenureEl.value,10) : 0;
+  if (!tenure || tenure < 1) tenure = 0;
   var status     = document.getElementById('ln-status').value || 'active';
   var replacesId = document.getElementById('ln-replaces').value || '';
   var editId     = document.getElementById('ln-edit-id').value;
@@ -1030,6 +1046,7 @@ function saveLoan() {
         rate: rate, minPay: minPay, lender: lender, notes: notes,
         addedDate: loans[idx].addedDate,
         status: status,
+        originalTenure: tenure || loans[idx].originalTenure || 0,
         replacesLoanId: status==='refinance_target' ? replacesId : undefined
       };
     }
@@ -1046,6 +1063,7 @@ function saveLoan() {
       lender: lender, notes: notes,
       addedDate: new Date().toISOString().split('T')[0],
       status: status,
+      originalTenure: tenure || 0,
       replacesLoanId: status==='refinance_target' ? replacesId : undefined
     });
     showToast('&#10003; Loan saved to Debt Center');
@@ -1076,6 +1094,8 @@ function editLoan(id) {
   document.getElementById('ln-lender').value       = l.lender||'';
   document.getElementById('ln-notes').value        = l.notes||'';
   document.getElementById('ln-status').value       = l.status || 'active';
+  var tEl = document.getElementById('ln-tenure');
+  if (tEl) tEl.value = l.originalTenure || '';
   populateReplacesDropdown(l.replacesLoanId || '', l.id);
   onStatusChange();   /* show / hide replaces dropdown */
   document.getElementById('ln-edit-id').value      = id;
@@ -1238,8 +1258,9 @@ function cancelEdit() {
 }
 
 function clearLoanForm() {
-  ['ln-name','ln-balance','ln-orig-balance','ln-rate','ln-minpay','ln-lender','ln-notes'].forEach(function(id){
-    document.getElementById(id).value = '';
+  ['ln-name','ln-balance','ln-orig-balance','ln-rate','ln-minpay','ln-lender','ln-notes','ln-tenure'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.value = '';
   });
   document.getElementById('ln-type').value = 'business';
   /* V3 — reset status defaults */
