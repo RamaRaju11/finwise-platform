@@ -924,9 +924,10 @@ function renderLoansList() {
     return;
   }
   /* V3: every row carries a Status column so the table cannot mislead about
-     which entries are real debt vs planned vs refinance scenarios. */
+     which entries are real debt vs planned vs refinance scenarios.
+     V3.1 adds a Tenure column showing months-to-payoff at current minPay. */
   var html = '<div class="loans-table-wrap"><table class="loans-table">' +
-    '<thead><tr><th>Name</th><th>Status</th><th>Type</th><th>Balance</th><th>Rate</th><th>Min Pay/mo</th><th>Lender</th><th>Actions</th></tr></thead><tbody>';
+    '<thead><tr><th>Name</th><th>Status</th><th>Type</th><th>Balance</th><th>Rate</th><th>Min Pay/mo</th><th>Tenure</th><th>Lender</th><th>Actions</th></tr></thead><tbody>';
 
   /* Find the loan name each refinance_target is replacing so we can show
      a clear "→ replaces X" indicator on the row. */
@@ -939,6 +940,19 @@ function renderLoansList() {
     if (status === 'refinance_target' && l.replacesLoanId && byId[l.replacesLoanId]) {
       noteExtra = '<div style="font-size:.7rem;color:#7c3aed;margin-top:2px;font-weight:600">Would replace: '+escHtml(byId[l.replacesLoanId].name)+'</div>';
     }
+    /* V3.1 — Tenure: months left until the loan is paid off if the user
+       only ever pays minPay. paid_off rows show — since there's nothing
+       to amortise. If minPay <= monthly interest the loan never pays off;
+       fmtMonths returns 'Never (negative amort.)' which surfaces the
+       danger. */
+    var tenureCell;
+    if (status === 'paid_off') {
+      tenureCell = '<span style="color:#94a3b8">—</span>';
+    } else {
+      var months = estimatePayoffMonths([l], 0);
+      var tenureColor = months > 60 ? '#dc2626' : months > 36 ? '#d97706' : '#16a34a';
+      tenureCell = '<span style="color:'+tenureColor+';font-weight:700" title="At current minimum payment of '+fmt(l.minPay)+'/mo">'+fmtMonths(months)+'</span>';
+    }
     html += '<tr>' +
       '<td><strong>'+escHtml(l.name)+'</strong>'+(l.notes?'<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+escHtml(l.notes)+'</div>':'')+noteExtra+'</td>' +
       '<td><span class="lc-status '+status+'">'+STATUS_LABEL[status]+'</span></td>' +
@@ -946,6 +960,7 @@ function renderLoansList() {
       '<td>'+fmt(l.balance)+'</td>' +
       '<td>'+l.rate+'%</td>' +
       '<td>'+fmt(l.minPay)+'</td>' +
+      '<td>'+tenureCell+'</td>' +
       '<td>'+escHtml(l.lender||'—')+'</td>' +
       '<td style="white-space:nowrap">' +
         '<button class="btn-edit"   onclick="editLoan(\''+l.id+'\')">Edit</button>' +
