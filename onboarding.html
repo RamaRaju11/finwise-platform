@@ -399,15 +399,44 @@ function goStep2(){
   goStep(2);
 }
 
-function goStep3(){
-  saveProfile();
-  goStep(3);
+/* V3: every step advance MUST await the Supabase upsert before moving
+   on. Otherwise fw-auth on the next page load races the upsert and may
+   read stale biz_profile, silently reverting the user's edits.
+   Also surface Supabase errors so a silent reject is no longer silent. */
+function awaitSaveThen(cb){
+  var saveResult;
+  try { saveResult = saveProfile(); } catch(e){ console.warn('saveProfile threw', e); saveResult = Promise.resolve(); }
+  var done = false;
+  var doneOnce = function(err){
+    if (done) return; done = true;
+    if (err) {
+      console.warn('Supabase upsert error:', err);
+      try { window.fwToastShow && window.fwToastShow('Save failed — see console', 'err'); } catch(_e){}
+      /* still proceed — localStorage holds the new values, next sync will reconcile */
+    } else {
+      try { window.fwToastShow && window.fwToastShow('Saved', 'ok'); } catch(_e){}
+    }
+    cb();
+  };
+  /* hard 2s safety so a hanging Supabase write can't block the user */
+  setTimeout(function(){ doneOnce(null); }, 2000);
+  if (saveResult && typeof saveResult.then === 'function') {
+    saveResult.then(function(res){
+      if (res && res.error) return doneOnce(res.error);
+      doneOnce(null);
+    }).catch(function(e){ doneOnce(e); });
+  } else {
+    doneOnce(null);
+  }
 }
 
+function goStep3(){ awaitSaveThen(function(){ goStep(3); }); }
+
 function goStep4(){
-  saveProfile();
-  buildRecommendations();
-  goStep(4);
+  awaitSaveThen(function(){
+    buildRecommendations();
+    goStep(4);
+  });
 }
 
 var INDUSTRY_RECS = {
@@ -565,30 +594,12 @@ function saveProfile(){
 }
 
 function navigateAfterSave(href){
-  /* Disable any in-flight click while we wait so user can't double-submit */
   document.body.style.cursor = 'wait';
-  var saveResult;
-  try { saveResult = saveProfile(); } catch(e){ saveResult = Promise.resolve(); }
-  var done = function(){ window.location.href = href; };
-  /* Hard 2-second cap so a slow / failed Supabase write does not block
-     navigation forever — localStorage already has the new values, and
-     the next sync will reconcile. */
-  var safety = setTimeout(done, 2000);
-  if (saveResult && typeof saveResult.then === 'function') {
-    saveResult.then(function(){ clearTimeout(safety); done(); })
-              .catch(function(){ clearTimeout(safety); done(); });
-  } else {
-    clearTimeout(safety); done();
-  }
+  awaitSaveThen(function(){ window.location.href = href; });
 }
 
-function finish(){
-  navigateAfterSave(selectedHref);
-}
-
-function saveAndSkip(){
-  navigateAfterSave('dashboard.html');
-}
+function finish(){ navigateAfterSave(selectedHref); }
+function saveAndSkip(){ navigateAfterSave('dashboard.html'); }
 
 function skipOnboarding(){
   localStorage.setItem('fw_onboarded','1');
@@ -596,6 +607,16 @@ function skipOnboarding(){
 }
 
 /* Pre-fill form from saved profile and auth */
+/* V3 — minimal toast for save success/failure visibility */
+window.fwToastShow = function(msg, kind){
+  var t = document.createElement('div');
+  var bg = kind==='err' ? '#dc2626' : (kind==='ok' ? '#16a34a' : '#1e293b');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:'+bg+';color:#fff;padding:9px 16px;border-radius:7px;font-size:.84rem;font-weight:700;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,.25);font-family:Arial,sans-serif';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
+};
+
 window.addEventListener('load', function(){
   if(!window.fwAuth) return;
   window.fwAuth.init(function(){
